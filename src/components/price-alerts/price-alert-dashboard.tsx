@@ -4,11 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, Plus, TrendingDown, TrendingUp, Bell, Loader2, RefreshCw } from 'lucide-react';
+import { AlertCircle, Plus, TrendingDown, TrendingUp, Bell, Loader2, RefreshCw, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useAuth } from '@/components/auth/auth-provider';
 import { supabase as supabaseClient } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 const supabase: any = supabaseClient;
 
 
@@ -53,6 +54,7 @@ export const PriceAlertDashboard = () => {
   });
   const { toast } = useToast();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   // Load alerts and notifications from Supabase
   useEffect(() => {
@@ -282,9 +284,20 @@ export const PriceAlertDashboard = () => {
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Alertas de Preços</h1>
-          <p className="text-muted-foreground">Monitore os preços dos seus produtos favoritos</p>
+        <div className="flex items-center gap-4">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Voltar ao Dashboard
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold">Alertas de Preços</h1>
+            <p className="text-muted-foreground">Monitore os preços dos seus produtos favoritos</p>
+          </div>
         </div>
         
         <div className="flex gap-2">
