@@ -5,7 +5,9 @@ import {
   Users, 
   Plane, 
   Building, 
-  BarChart3, 
+  BarChart3,
+  Calendar,
+  FileText,
   Settings,
   Bell,
   Search,
@@ -26,7 +28,9 @@ const navigationItems: NavigationItem[] = [
   { id: 'hr', label: 'Recursos Humanos', icon: Users, href: '/hr' },
   { id: 'flights', label: 'Passagens Aéreas', icon: Plane, href: '/flights' },
   { id: 'hotels', label: 'Hospedagem', icon: Building, href: '/hotels' },
+  { id: 'reservations', label: 'Reservas', icon: Calendar, href: '/reservations' },
   { id: 'analytics', label: 'Analytics', icon: BarChart3, href: '/analytics' },
+  { id: 'reports', label: 'Relatórios', icon: FileText, href: '/reports' },
   { id: 'settings', label: 'Configurações', icon: Settings, href: '/settings' },
 ];
 
