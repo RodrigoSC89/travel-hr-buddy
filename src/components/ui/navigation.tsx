@@ -9,11 +9,11 @@ import {
   Calendar,
   FileText,
   Settings,
-  Bell,
   Search,
   Menu,
   X
 } from 'lucide-react';
+import { NotificationSystem } from '@/components/ui/notification-system';
 
 interface NavigationItem {
   id: string;
@@ -127,7 +127,7 @@ export const Navigation = ({ activeItem = 'dashboard', onItemChange, className }
               <p className="text-white font-medium text-sm">Admin Master</p>
               <p className="text-white/70 text-xs">Gestor Geral</p>
             </div>
-            <Bell className="text-white/70 hover:text-white cursor-pointer" size={18} />
+            <NotificationSystem />
           </div>
         </div>
       </nav>

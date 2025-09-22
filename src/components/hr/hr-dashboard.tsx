@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { StatsCard } from '@/components/ui/stats-card';
+import { DataTable, Column } from '@/components/ui/data-table';
 import { 
   Users, 
   UserPlus, 
@@ -92,6 +93,77 @@ export const HRDashboard = () => {
   const [employees] = useState<Employee[]>(mockEmployees);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [showTable, setShowTable] = useState(false);
+
+  // Colunas para a tabela de funcionários
+  const employeeColumns: Column[] = [
+    {
+      key: 'name',
+      header: 'Nome',
+      sortable: true,
+      render: (value, row) => (
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 rounded-full gradient-ocean flex items-center justify-center text-white font-bold text-sm">
+            {value.split(' ').map((n: string) => n[0]).join('')}
+          </div>
+          <div>
+            <div className="font-medium">{value}</div>
+            <div className="text-sm text-muted-foreground">{row.position}</div>
+          </div>
+        </div>
+      )
+    },
+    {
+      key: 'department',
+      header: 'Departamento',
+      sortable: true
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      render: (value) => (
+        <Badge 
+          className={
+            value === 'active' ? 'bg-success/10 text-success border-success/20' :
+            value === 'vacation' ? 'bg-warning/10 text-warning border-warning/20' :
+            value === 'travel' ? 'bg-info/10 text-info border-info/20' :
+            'bg-muted text-muted-foreground border-muted'
+          }
+        >
+          {value === 'active' ? 'Ativo' :
+           value === 'vacation' ? 'Férias' :
+           value === 'travel' ? 'Viagem' : 'Inativo'}
+        </Badge>
+      )
+    },
+    {
+      key: 'rating',
+      header: 'Avaliação',
+      align: 'center' as const,
+      render: (value) => (
+        <div className="flex items-center justify-center">
+          <Star size={16} className="mr-1 text-warning" fill="currentColor" />
+          {value}
+        </div>
+      )
+    },
+    {
+      key: 'certifications',
+      header: 'Certificações',
+      align: 'center' as const,
+      render: (value) => (
+        <div className="flex items-center justify-center">
+          <Award size={16} className="mr-1 text-primary" />
+          {value.length}
+        </div>
+      )
+    },
+    {
+      key: 'location',
+      header: 'Localização',
+      sortable: true
+    }
+  ];
 
   const stats = [
     {
@@ -163,10 +235,19 @@ export const HRDashboard = () => {
             Gestão completa de funcionários e competências
           </p>
         </div>
-        <Button className="mt-4 md:mt-0 gradient-ocean">
-          <UserPlus className="mr-2" size={18} />
-          Novo Funcionário
-        </Button>
+        <div className="flex items-center space-x-2 mt-4 md:mt-0">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowTable(!showTable)}
+            className={showTable ? "bg-accent" : ""}
+          >
+            {showTable ? 'Ver Cards' : 'Ver Tabela'}
+          </Button>
+          <Button className="gradient-ocean">
+            <UserPlus className="mr-2" size={18} />
+            Novo Funcionário
+          </Button>
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -204,90 +285,109 @@ export const HRDashboard = () => {
         </div>
       </Card>
 
-      {/* Employee Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredEmployees.map((employee) => (
-          <Card key={employee.id} className="p-6 hover:shadow-nautical transition-all duration-300">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 rounded-full gradient-ocean flex items-center justify-center text-white font-bold text-lg">
-                  {employee.name.split(' ').map(n => n[0]).join('')}
+      {/* Employee Content */}
+      {showTable ? (
+        <DataTable
+          data={filteredEmployees}
+          columns={employeeColumns}
+          title="Lista de Funcionários"
+          description="Gestão completa da equipe"
+          searchable={false}
+          sortable={true}
+          pagination={true}
+          pageSize={10}
+          actions={{
+            view: (employee) => console.log('Visualizar:', employee),
+            edit: (employee) => console.log('Editar:', employee),
+            delete: (employee) => console.log('Excluir:', employee)
+          }}
+          onRowClick={(employee) => console.log('Clicou em:', employee)}
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredEmployees.map((employee) => (
+            <Card key={employee.id} className="p-6 hover:shadow-nautical transition-all duration-300">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 rounded-full gradient-ocean flex items-center justify-center text-white font-bold text-lg">
+                    {employee.name.split(' ').map(n => n[0]).join('')}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">{employee.name}</h3>
+                    <p className="text-sm text-muted-foreground">{employee.position}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-lg">{employee.name}</h3>
-                  <p className="text-sm text-muted-foreground">{employee.position}</p>
+                <Badge className={getStatusColor(employee.status)}>
+                  {getStatusLabel(employee.status)}
+                </Badge>
+              </div>
+
+              <div className="space-y-3 mb-4">
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Briefcase size={16} className="mr-2" />
+                  {employee.department}
+                </div>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Mail size={16} className="mr-2" />
+                  {employee.email}
+                </div>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Phone size={16} className="mr-2" />
+                  {employee.phone}
+                </div>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <MapPin size={16} className="mr-2" />
+                  {employee.location}
+                </div>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Calendar size={16} className="mr-2" />
+                  Desde {new Date(employee.startDate).toLocaleDateString('pt-BR')}
                 </div>
               </div>
-              <Badge className={getStatusColor(employee.status)}>
-                {getStatusLabel(employee.status)}
-              </Badge>
-            </div>
 
-            <div className="space-y-3 mb-4">
-              <div className="flex items-center text-sm text-muted-foreground">
-                <Briefcase size={16} className="mr-2" />
-                {employee.department}
+              {/* Rating */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <Star className="text-warning mr-1" size={16} fill="currentColor" />
+                  <span className="font-semibold">{employee.rating}</span>
+                  <span className="text-muted-foreground text-sm ml-1">/5.0</span>
+                </div>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Award size={16} className="mr-1" />
+                  {employee.certifications.length} certificações
+                </div>
               </div>
-              <div className="flex items-center text-sm text-muted-foreground">
-                <Mail size={16} className="mr-2" />
-                {employee.email}
-              </div>
-              <div className="flex items-center text-sm text-muted-foreground">
-                <Phone size={16} className="mr-2" />
-                {employee.phone}
-              </div>
-              <div className="flex items-center text-sm text-muted-foreground">
-                <MapPin size={16} className="mr-2" />
-                {employee.location}
-              </div>
-              <div className="flex items-center text-sm text-muted-foreground">
-                <Calendar size={16} className="mr-2" />
-                Desde {new Date(employee.startDate).toLocaleDateString('pt-BR')}
-              </div>
-            </div>
 
-            {/* Rating */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <Star className="text-warning mr-1" size={16} fill="currentColor" />
-                <span className="font-semibold">{employee.rating}</span>
-                <span className="text-muted-foreground text-sm ml-1">/5.0</span>
+              {/* Certifications */}
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Certificações:</p>
+                <div className="flex flex-wrap gap-1">
+                  {employee.certifications.slice(0, 2).map((cert, index) => (
+                    <Badge key={index} variant="secondary" className="text-xs">
+                      {cert}
+                    </Badge>
+                  ))}
+                  {employee.certifications.length > 2 && (
+                    <Badge variant="outline" className="text-xs">
+                      +{employee.certifications.length - 2} mais
+                    </Badge>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center text-sm text-muted-foreground">
-                <Award size={16} className="mr-1" />
-                {employee.certifications.length} certificações
-              </div>
-            </div>
 
-            {/* Certifications */}
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Certificações:</p>
-              <div className="flex flex-wrap gap-1">
-                {employee.certifications.slice(0, 2).map((cert, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
-                    {cert}
-                  </Badge>
-                ))}
-                {employee.certifications.length > 2 && (
-                  <Badge variant="outline" className="text-xs">
-                    +{employee.certifications.length - 2} mais
-                  </Badge>
-                )}
+              {/* Actions */}
+              <div className="flex space-x-2 mt-4 pt-4 border-t border-border">
+                <Button variant="outline" size="sm" className="flex-1">
+                  Ver Perfil
+                </Button>
+                <Button size="sm" className="flex-1 gradient-ocean">
+                  Editar
+                </Button>
               </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex space-x-2 mt-4 pt-4 border-t border-border">
-              <Button variant="outline" size="sm" className="flex-1">
-                Ver Perfil
-              </Button>
-              <Button size="sm" className="flex-1 gradient-ocean">
-                Editar
-              </Button>
-            </div>
-          </Card>
-        ))}
-      </div>
+            </Card>
+          ))}
+        </div>
+      )}
 
       {/* No results */}
       {filteredEmployees.length === 0 && (

@@ -1,5 +1,7 @@
 import React from 'react';
 import { StatsCard } from '@/components/ui/stats-card';
+import { RealTimeMonitor } from '@/components/ui/real-time-monitor';
+import { PerformanceMetrics } from '@/components/ui/performance-metrics';
 import { Card } from '@/components/ui/card';
 import { 
   Users, 
@@ -186,6 +188,17 @@ export const GlobalDashboard = () => {
             ))}
           </div>
         </Card>
+      </div>
+
+      {/* Monitoramento em Tempo Real */}
+      <div className="space-y-6">
+        <h3 className="text-xl font-semibold">Monitoramento em Tempo Real</h3>
+        <RealTimeMonitor />
+      </div>
+
+      {/* Métricas de Performance */}
+      <div className="space-y-6">
+        <PerformanceMetrics compact={true} />
       </div>
     </div>
   );
