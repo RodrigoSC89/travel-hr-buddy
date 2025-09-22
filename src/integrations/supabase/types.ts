@@ -14,7 +14,109 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      price_alerts: {
+        Row: {
+          created_at: string
+          current_price: number | null
+          id: string
+          is_active: boolean
+          last_checked_at: string | null
+          product_name: string
+          product_url: string
+          target_price: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_price?: number | null
+          id?: string
+          is_active?: boolean
+          last_checked_at?: string | null
+          product_name: string
+          product_url: string
+          target_price: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_price?: number | null
+          id?: string
+          is_active?: boolean
+          last_checked_at?: string | null
+          product_name?: string
+          product_url?: string
+          target_price?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      price_history: {
+        Row: {
+          alert_id: string
+          checked_at: string
+          id: string
+          price: number
+        }
+        Insert: {
+          alert_id: string
+          checked_at?: string
+          id?: string
+          price: number
+        }
+        Update: {
+          alert_id?: string
+          checked_at?: string
+          id?: string
+          price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_history_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "price_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      price_notifications: {
+        Row: {
+          alert_id: string
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          user_id: string
+        }
+        Insert: {
+          alert_id: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          user_id: string
+        }
+        Update: {
+          alert_id?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_notifications_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "price_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
