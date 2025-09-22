@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { StatsCard } from '@/components/ui/stats-card';
 import { DataTable, Column } from '@/components/ui/data-table';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
@@ -20,7 +21,9 @@ import {
   Phone,
   Mail,
   Briefcase,
-  Star
+  Star,
+  UserMinus,
+  Trash2
 } from 'lucide-react';
 
 interface Employee {
@@ -103,6 +106,7 @@ export const HRDashboard = () => {
   const [newEmployeeOpen, setNewEmployeeOpen] = useState(false);
   const [employeeProfileOpen, setEmployeeProfileOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [employeeToRemove, setEmployeeToRemove] = useState<Employee | null>(null);
   const [newEmployee, setNewEmployee] = useState<Partial<Employee>>({
     name: '',
     position: '',
@@ -176,6 +180,15 @@ export const HRDashboard = () => {
   const handleViewProfile = (employee: Employee) => {
     setSelectedEmployee(employee);
     setEmployeeProfileOpen(true);
+  };
+
+  const handleRemoveEmployee = (employee: Employee) => {
+    setEmployees(prev => prev.filter(emp => emp.id !== employee.id));
+    setEmployeeToRemove(null);
+    toast({
+      title: "Funcionário removido",
+      description: `${employee.name} foi removido do sistema`,
+    });
   };
 
   // Colunas para a tabela de funcionários
@@ -475,13 +488,7 @@ export const HRDashboard = () => {
           actions={{
             view: (employee) => handleViewProfile(employee),
             edit: (employee) => handleViewProfile(employee),
-            delete: (employee) => {
-              setEmployees(prev => prev.filter(emp => emp.id !== employee.id));
-              toast({
-                title: "Funcionário removido",
-                description: `${employee.name} foi removido do sistema`,
-              });
-            }
+            delete: (employee) => setEmployeeToRemove(employee)
           }}
           onRowClick={(employee) => handleViewProfile(employee)}
         />
@@ -576,6 +583,36 @@ export const HRDashboard = () => {
                 >
                   {selectedEmployees.includes(employee.id) ? 'Selecionado ✓' : 'Selecionar'}
                 </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button 
+                      size="sm" 
+                      variant="destructive"
+                      className="ml-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <UserMinus size={16} />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Remover Funcionário</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Tem certeza que deseja remover <strong>{employee.name}</strong> do sistema? 
+                        Esta ação não pode ser desfeita.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                      <AlertDialogAction 
+                        onClick={() => handleRemoveEmployee(employee)}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        Remover
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </Card>
           ))}
@@ -679,9 +716,62 @@ export const HRDashboard = () => {
             }}>
               Editar Funcionário
             </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Remover Funcionário
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Remover Funcionário</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Tem certeza que deseja remover <strong>{selectedEmployee?.name}</strong> do sistema? 
+                    Esta ação não pode ser desfeita.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction 
+                    onClick={() => {
+                      if (selectedEmployee) {
+                        handleRemoveEmployee(selectedEmployee);
+                        setEmployeeProfileOpen(false);
+                      }
+                    }}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Remover
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Remove Employee Confirmation Dialog */}
+      <AlertDialog open={!!employeeToRemove} onOpenChange={() => setEmployeeToRemove(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remover Funcionário</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja remover <strong>{employeeToRemove?.name}</strong> do sistema? 
+              Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={() => employeeToRemove && handleRemoveEmployee(employeeToRemove)}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Remover
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
