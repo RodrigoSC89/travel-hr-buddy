@@ -46,6 +46,83 @@ export type Database = {
           },
         ]
       }
+      certificate_alerts: {
+        Row: {
+          alert_date: string
+          alert_type: string
+          certificate_id: string
+          created_at: string
+          id: string
+          is_read: boolean | null
+        }
+        Insert: {
+          alert_date?: string
+          alert_type: string
+          certificate_id: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+        }
+        Update: {
+          alert_date?: string
+          alert_type?: string
+          certificate_id?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificate_alerts_certificate_id_fkey"
+            columns: ["certificate_id"]
+            isOneToOne: false
+            referencedRelation: "employee_certificates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      employee_certificates: {
+        Row: {
+          certificate_name: string
+          certificate_type: string
+          created_at: string
+          employee_id: string
+          expiry_date: string
+          file_path: string
+          id: string
+          issue_date: string
+          issuer: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          certificate_name: string
+          certificate_type: string
+          created_at?: string
+          employee_id: string
+          expiry_date: string
+          file_path: string
+          id?: string
+          issue_date: string
+          issuer?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          certificate_name?: string
+          certificate_type?: string
+          created_at?: string
+          employee_id?: string
+          expiry_date?: string
+          file_path?: string
+          id?: string
+          issue_date?: string
+          issuer?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       notification_settings: {
         Row: {
           created_at: string | null

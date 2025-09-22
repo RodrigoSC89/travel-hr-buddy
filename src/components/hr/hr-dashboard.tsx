@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CertificateManager } from './certificate-manager';
+import { CertificateAlerts } from './certificate-alerts';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Users, 
@@ -23,7 +25,8 @@ import {
   Briefcase,
   Star,
   UserMinus,
-  Trash2
+  Trash2,
+  FileText
 } from 'lucide-react';
 
 interface Employee {
@@ -107,6 +110,8 @@ export const HRDashboard = () => {
   const [employeeProfileOpen, setEmployeeProfileOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [employeeToRemove, setEmployeeToRemove] = useState<Employee | null>(null);
+  const [certificateManagerOpen, setCertificateManagerOpen] = useState(false);
+  const [selectedEmployeeForCertificates, setSelectedEmployeeForCertificates] = useState<Employee | null>(null);
   const [newEmployee, setNewEmployee] = useState<Partial<Employee>>({
     name: '',
     position: '',
@@ -175,6 +180,11 @@ export const HRDashboard = () => {
       title: "Funcionário criado",
       description: `${employee.name} foi adicionado ao sistema`,
     });
+  };
+
+  const handleOpenCertificates = (employee: Employee) => {
+    setSelectedEmployeeForCertificates(employee);
+    setCertificateManagerOpen(true);
   };
 
   const handleViewProfile = (employee: Employee) => {
@@ -446,6 +456,13 @@ export const HRDashboard = () => {
         ))}
       </div>
 
+      {/* Certificate Alerts */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <CertificateAlerts />
+        </div>
+      </div>
+
       {/* Filters and Search */}
       <Card className="p-6">
         <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
@@ -573,6 +590,14 @@ export const HRDashboard = () => {
                   onClick={() => handleViewProfile(employee)}
                 >
                   Ver Perfil
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="ml-2"
+                  onClick={() => handleOpenCertificates(employee)}
+                >
+                  <FileText size={16} />
                 </Button>
                 <Button 
                   size="sm" 
@@ -772,6 +797,17 @@ export const HRDashboard = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Certificate Manager */}
+      {certificateManagerOpen && selectedEmployeeForCertificates && (
+        <CertificateManager 
+          employee={selectedEmployeeForCertificates} 
+          onClose={() => {
+            setCertificateManagerOpen(false);
+            setSelectedEmployeeForCertificates(null);
+          }} 
+        />
+      )}
     </div>
   );
 };
