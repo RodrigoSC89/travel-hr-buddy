@@ -178,7 +178,10 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
           ...vessel,
           lastSeen: new Date(),
           sensors: vessel.sensors.map(sensor => {
-            if (sensor.status === 'offline') return sensor;
+            // Se sensor está offline, manter como está
+            if (sensor.status === 'offline') {
+              return sensor;
+            }
             
             // Simular variação nos valores
             let newValue = sensor.value;
@@ -202,11 +205,9 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
                 break;
             }
             
-            // Determinar status baseado no valor
-            let newStatus: 'normal' | 'warning' | 'critical' | 'offline' = 'normal';
-            if (sensor.status === 'offline') {
-              return sensor; // Manter offline
-            } else if (sensor.type === 'fuel' && newValue < 20) {
+            // Determinar novo status baseado no valor
+            let newStatus: SensorData['status'] = 'normal';
+            if (sensor.type === 'fuel' && newValue < 20) {
               newStatus = 'critical';
             } else if (sensor.type === 'fuel' && newValue < 30) {
               newStatus = 'warning';
