@@ -97,7 +97,10 @@ const mockHotels: Hotel[] = [
 ];
 
 export const HotelSearch = () => {
-  const [hotels] = useState<Hotel[]>(mockHotels);
+  const [hotels, setHotels] = useState<Hotel[]>(mockHotels);
+  const [filteredHotels, setFilteredHotels] = useState<Hotel[]>(mockHotels);
+  const [isSearching, setIsSearching] = useState(false);
+  const [selectedHotel, setSelectedHotel] = useState<string | null>(null);
   const [searchParams, setSearchParams] = useState({
     destination: 'Rio de Janeiro',
     checkIn: '2024-01-15',
@@ -106,28 +109,51 @@ export const HotelSearch = () => {
     rooms: 1
   });
 
+  // Função para buscar hotéis
+  const handleSearch = async () => {
+    setIsSearching(true);
+    
+    // Simular delay de busca
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Simular novos resultados
+    const newHotels = mockHotels.map(hotel => ({
+      ...hotel,
+      pricePerNight: hotel.pricePerNight + Math.floor(Math.random() * 200) - 100,
+      city: searchParams.destination
+    }));
+    
+    setHotels(newHotels);
+    setFilteredHotels(newHotels);
+    setIsSearching(false);
+  };
+
+  const handleSelectHotel = (hotelId: string) => {
+    setSelectedHotel(selectedHotel === hotelId ? null : hotelId);
+  };
+
   const stats = [
     {
       title: "Melhor Preço",
-      value: `R$ ${Math.min(...hotels.map(h => h.pricePerNight))}/noite`,
+      value: filteredHotels.length > 0 ? `R$ ${Math.min(...filteredHotels.map(h => h.pricePerNight))}/noite` : "R$ 0/noite",
       icon: DollarSign,
       variant: 'success' as const
     },
     {
       title: "Economia Média",
-      value: `R$ ${Math.round(hotels.reduce((acc, h) => acc + (h.savings || 0), 0) / hotels.length)}`,
+      value: filteredHotels.length > 0 ? `R$ ${Math.round(filteredHotels.reduce((acc, h) => acc + (h.savings || 0), 0) / filteredHotels.length)}` : "R$ 0",
       icon: Building,
       variant: 'ocean' as const
     },
     {
       title: "Hotéis Disponíveis",
-      value: hotels.length.toString(),
+      value: filteredHotels.length.toString(),
       icon: Search,
       variant: 'default' as const
     },
     {
       title: "Melhor Avaliação",
-      value: Math.max(...hotels.map(h => h.rating)).toFixed(1),
+      value: filteredHotels.length > 0 ? Math.max(...filteredHotels.map(h => h.rating)).toFixed(1) : "0.0",
       icon: Star,
       variant: 'warning' as const
     }
@@ -236,9 +262,22 @@ export const HotelSearch = () => {
           </div>
           
           <div className="flex items-end">
-            <Button className="w-full gradient-ocean">
-              <Search className="mr-2" size={18} />
-              Buscar
+            <Button 
+              className="w-full gradient-ocean"
+              onClick={handleSearch}
+              disabled={isSearching}
+            >
+              {isSearching ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Buscando...
+                </>
+              ) : (
+                <>
+                  <Search className="mr-2" size={18} />
+                  Buscar
+                </>
+              )}
             </Button>
           </div>
         </div>
@@ -268,14 +307,21 @@ export const HotelSearch = () => {
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">Resultados da Busca</h2>
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-            <span>{hotels.length} hotéis encontrados</span>
+            <span>{filteredHotels.length} hotéis encontrados</span>
             <span>•</span>
             <span>{calculateNights()} noite(s)</span>
+            {selectedHotel && <span>• 1 hotel selecionado</span>}
           </div>
         </div>
 
-        {hotels.map((hotel) => (
-          <Card key={hotel.id} className="p-6 hover:shadow-nautical transition-all duration-300">
+        {filteredHotels.map((hotel) => (
+          <Card 
+            key={hotel.id} 
+            className={`p-6 hover:shadow-nautical transition-all duration-300 cursor-pointer ${
+              selectedHotel === hotel.id ? 'ring-2 ring-primary shadow-nautical' : ''
+            }`}
+            onClick={() => handleSelectHotel(hotel.id)}
+          >
             <div className="flex flex-col lg:flex-row lg:space-x-6">
               {/* Hotel Image Placeholder */}
               <div className="lg:w-64 h-48 lg:h-32 rounded-lg gradient-ocean flex items-center justify-center mb-4 lg:mb-0">
@@ -364,8 +410,16 @@ export const HotelSearch = () => {
                   <Button variant="outline" className="w-full">
                     Ver Detalhes
                   </Button>
-                  <Button className="w-full gradient-ocean">
-                    Reservar Agora
+                  <Button 
+                    className={`w-full ${
+                      selectedHotel === hotel.id ? 'bg-success hover:bg-success/90' : 'gradient-ocean'
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectHotel(hotel.id);
+                    }}
+                  >
+                    {selectedHotel === hotel.id ? 'Selecionado ✓' : 'Selecionar'}
                   </Button>
                 </div>
               </div>
@@ -375,7 +429,7 @@ export const HotelSearch = () => {
       </div>
 
       {/* No results message */}
-      {hotels.length === 0 && (
+      {filteredHotels.length === 0 && (
         <Card className="p-12 text-center">
           <Building className="mx-auto mb-4 text-muted-foreground" size={48} />
           <h3 className="text-lg font-semibold mb-2">Nenhum hotel encontrado</h3>

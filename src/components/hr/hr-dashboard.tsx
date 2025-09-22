@@ -90,10 +90,25 @@ const mockEmployees: Employee[] = [
 ];
 
 export const HRDashboard = () => {
-  const [employees] = useState<Employee[]>(mockEmployees);
+  const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
   const [showTable, setShowTable] = useState(false);
+  const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
+
+  const handleEmployeeSelect = (employeeId: string) => {
+    setSelectedEmployees(prev => 
+      prev.includes(employeeId) 
+        ? prev.filter(id => id !== employeeId)
+        : [...prev, employeeId]
+    );
+  };
+
+  const handleStatusChange = (employeeId: string, newStatus: Employee['status']) => {
+    setEmployees(prev => prev.map(emp => 
+      emp.id === employeeId ? { ...emp, status: newStatus } : emp
+    ));
+  };
 
   // Colunas para a tabela de funcionários
   const employeeColumns: Column[] = [
@@ -377,11 +392,22 @@ export const HRDashboard = () => {
 
               {/* Actions */}
               <div className="flex space-x-2 mt-4 pt-4 border-t border-border">
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => console.log('Ver perfil:', employee.name)}
+                >
                   Ver Perfil
                 </Button>
-                <Button size="sm" className="flex-1 gradient-ocean">
-                  Editar
+                <Button 
+                  size="sm" 
+                  className={`flex-1 ${
+                    selectedEmployees.includes(employee.id) ? 'bg-success hover:bg-success/90' : 'gradient-ocean'
+                  }`}
+                  onClick={() => handleEmployeeSelect(employee.id)}
+                >
+                  {selectedEmployees.includes(employee.id) ? 'Selecionado ✓' : 'Selecionar'}
                 </Button>
               </div>
             </Card>

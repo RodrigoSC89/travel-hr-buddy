@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { StatsCard } from '@/components/ui/stats-card';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Plane, 
   Search, 
@@ -123,7 +124,11 @@ const mockFlights: FlightOption[] = [
 ];
 
 export const FlightSearch = () => {
-  const [flights] = useState<FlightOption[]>(mockFlights);
+  const { toast } = useToast();
+  const [flights, setFlights] = useState<FlightOption[]>(mockFlights);
+  const [filteredFlights, setFilteredFlights] = useState<FlightOption[]>(mockFlights);
+  const [isSearching, setIsSearching] = useState(false);
+  const [selectedFlight, setSelectedFlight] = useState<string | null>(null);
   const [searchParams, setSearchParams] = useState({
     from: 'São Paulo (GRU)',
     to: 'Rio de Janeiro (SDU)',
@@ -133,28 +138,74 @@ export const FlightSearch = () => {
     class: 'economy'
   });
 
+  // Função para buscar voos
+  const handleSearch = async () => {
+    setIsSearching(true);
+    
+    // Simular delay de busca
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Simular novos resultados baseados na busca
+    const newFlights = mockFlights.map(flight => ({
+      ...flight,
+      price: flight.price + Math.floor(Math.random() * 100) - 50,
+      departure: {
+        ...flight.departure,
+        city: searchParams.from.split('(')[0].trim(),
+        airport: searchParams.from.includes('(') ? searchParams.from.match(/\(([^)]+)\)/)?.[1] || 'N/A' : 'N/A'
+      },
+      arrival: {
+        ...flight.arrival,
+        city: searchParams.to.split('(')[0].trim(),
+        airport: searchParams.to.includes('(') ? searchParams.to.match(/\(([^)]+)\)/)?.[1] || 'N/A' : 'N/A'
+      }
+    }));
+    
+    setFlights(newFlights);
+    setFilteredFlights(newFlights);
+    setIsSearching(false);
+    
+    toast({
+      title: "Busca concluída",
+      description: `${newFlights.length} voos encontrados para ${searchParams.from} → ${searchParams.to}`
+    });
+  };
+
+  const handleSelectFlight = (flightId: string) => {
+    const newSelection = selectedFlight === flightId ? null : flightId;
+    setSelectedFlight(newSelection);
+    
+    if (newSelection) {
+      const flight = flights.find(f => f.id === flightId);
+      toast({
+        title: "Voo selecionado",
+        description: `${flight?.airline} ${flight?.flightNumber} - R$ ${flight?.price}`
+      });
+    }
+  };
+
   const stats = [
     {
       title: "Melhor Preço",
-      value: `R$ ${Math.min(...flights.map(f => f.price))}`,
+      value: filteredFlights.length > 0 ? `R$ ${Math.min(...filteredFlights.map(f => f.price))}` : "R$ 0",
       icon: DollarSign,
       variant: 'success' as const
     },
     {
       title: "Economia Média",
-      value: `R$ ${Math.round(flights.reduce((acc, f) => acc + (f.savings || 0), 0) / flights.length)}`,
+      value: filteredFlights.length > 0 ? `R$ ${Math.round(filteredFlights.reduce((acc, f) => acc + (f.savings || 0), 0) / filteredFlights.length)}` : "R$ 0",
       icon: Plane,
       variant: 'ocean' as const
     },
     {
       title: "Opções Disponíveis",
-      value: flights.length.toString(),
+      value: filteredFlights.length.toString(),
       icon: Search,
       variant: 'default' as const
     },
     {
       title: "Melhor Avaliação",
-      value: Math.max(...flights.map(f => f.rating)).toFixed(1),
+      value: filteredFlights.length > 0 ? Math.max(...filteredFlights.map(f => f.rating)).toFixed(1) : "0.0",
       icon: Star,
       variant: 'warning' as const
     }
@@ -259,9 +310,22 @@ export const FlightSearch = () => {
             </div>
           </div>
           
-          <Button className="gradient-ocean">
-            <Search className="mr-2" size={18} />
-            Buscar Voos
+          <Button 
+            className="gradient-ocean"
+            onClick={handleSearch}
+            disabled={isSearching}
+          >
+            {isSearching ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Buscando...
+              </>
+            ) : (
+              <>
+                <Search className="mr-2" size={18} />
+                Buscar Voos
+              </>
+            )}
           </Button>
         </div>
       </Card>
@@ -274,16 +338,22 @@ export const FlightSearch = () => {
       </div>
 
       {/* Flight Results */}
-      <div className="space-y-4">
+        <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">Resultados da Busca</h2>
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-            <span>{flights.length} voos encontrados</span>
+            <span>{filteredFlights.length} voos encontrados</span>
+            {selectedFlight && <span>• 1 voo selecionado</span>}
           </div>
         </div>
 
-        {flights.map((flight) => (
-          <Card key={flight.id} className="p-6 hover:shadow-nautical transition-all duration-300">
+        {filteredFlights.map((flight) => (
+          <Card 
+            key={flight.id} 
+            className={`p-6 hover:shadow-nautical transition-all duration-300 cursor-pointer ${
+              selectedFlight === flight.id ? 'ring-2 ring-primary shadow-nautical' : ''
+            }`}
+            onClick={() => handleSelectFlight(flight.id)}>
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               {/* Flight Info */}
               <div className="flex-1 space-y-4 lg:space-y-0 lg:flex lg:items-center lg:space-x-8">
@@ -369,8 +439,16 @@ export const FlightSearch = () => {
                   <Button variant="outline" className="w-full lg:w-auto">
                     Detalhes
                   </Button>
-                  <Button className="w-full lg:w-auto gradient-ocean">
-                    Reservar
+                  <Button 
+                    className={`w-full lg:w-auto ${
+                      selectedFlight === flight.id ? 'bg-success hover:bg-success/90' : 'gradient-ocean'
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectFlight(flight.id);
+                    }}
+                  >
+                    {selectedFlight === flight.id ? 'Selecionado ✓' : 'Selecionar'}
                   </Button>
                 </div>
               </div>
@@ -380,7 +458,7 @@ export const FlightSearch = () => {
       </div>
 
       {/* No results message */}
-      {flights.length === 0 && (
+      {filteredFlights.length === 0 && (
         <Card className="p-12 text-center">
           <Plane className="mx-auto mb-4 text-muted-foreground" size={48} />
           <h3 className="text-lg font-semibold mb-2">Nenhum voo encontrado</h3>
