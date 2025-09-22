@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { Navigation } from '@/components/ui/navigation';
+import { Header } from '@/components/layout/header';
+import { useAuth } from '@/components/auth/auth-provider';
 import { GlobalDashboard } from '@/components/dashboard/global-dashboard';
 import { HRDashboard } from '@/components/hr/hr-dashboard';
 import { FlightSearch } from '@/components/travel/flight-search';
@@ -10,6 +13,24 @@ import { ReportsDashboard } from '@/components/reports/reports-dashboard';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState('dashboard');
+  const { user, isLoading } = useAuth();
+
+  // Mostrar loading enquanto verifica autenticação
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirecionar para login se não estiver autenticado
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
 
   const renderContent = () => {
     switch (activeModule) {
@@ -41,6 +62,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       <Navigation 
         activeItem={activeModule} 
         onItemChange={setActiveModule}
