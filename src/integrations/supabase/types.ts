@@ -14,39 +14,128 @@ export type Database = {
   }
   public: {
     Tables: {
+      alert_votes: {
+        Row: {
+          created_at: string | null
+          id: string
+          shared_alert_id: string
+          user_id: string
+          vote_type: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          shared_alert_id: string
+          user_id: string
+          vote_type?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          shared_alert_id?: string
+          user_id?: string
+          vote_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_votes_shared_alert_id_fkey"
+            columns: ["shared_alert_id"]
+            isOneToOne: false
+            referencedRelation: "shared_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_settings: {
+        Row: {
+          created_at: string | null
+          daily_summary: boolean | null
+          email_enabled: boolean | null
+          id: string
+          price_drop_threshold: number | null
+          push_enabled: boolean | null
+          updated_at: string | null
+          user_id: string
+          weekly_report: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          daily_summary?: boolean | null
+          email_enabled?: boolean | null
+          id?: string
+          price_drop_threshold?: number | null
+          push_enabled?: boolean | null
+          updated_at?: string | null
+          user_id: string
+          weekly_report?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          daily_summary?: boolean | null
+          email_enabled?: boolean | null
+          id?: string
+          price_drop_threshold?: number | null
+          push_enabled?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+          weekly_report?: boolean | null
+        }
+        Relationships: []
+      }
       price_alerts: {
         Row: {
+          availability_status: string | null
+          category: string | null
+          check_frequency_minutes: number | null
           created_at: string
           current_price: number | null
+          description: string | null
+          discount_percentage: number | null
           id: string
+          image_url: string | null
           is_active: boolean
           last_checked_at: string | null
           product_name: string
           product_url: string
+          store_name: string | null
           target_price: number
           updated_at: string
           user_id: string
         }
         Insert: {
+          availability_status?: string | null
+          category?: string | null
+          check_frequency_minutes?: number | null
           created_at?: string
           current_price?: number | null
+          description?: string | null
+          discount_percentage?: number | null
           id?: string
+          image_url?: string | null
           is_active?: boolean
           last_checked_at?: string | null
           product_name: string
           product_url: string
+          store_name?: string | null
           target_price: number
           updated_at?: string
           user_id: string
         }
         Update: {
+          availability_status?: string | null
+          category?: string | null
+          check_frequency_minutes?: number | null
           created_at?: string
           current_price?: number | null
+          description?: string | null
+          discount_percentage?: number | null
           id?: string
+          image_url?: string | null
           is_active?: boolean
           last_checked_at?: string | null
           product_name?: string
           product_url?: string
+          store_name?: string | null
           target_price?: number
           updated_at?: string
           user_id?: string
@@ -116,6 +205,83 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      shared_alerts: {
+        Row: {
+          alert_id: string
+          created_at: string | null
+          description: string | null
+          downvotes: number | null
+          id: string
+          is_featured: boolean | null
+          shared_by: string
+          title: string
+          upvotes: number | null
+        }
+        Insert: {
+          alert_id: string
+          created_at?: string | null
+          description?: string | null
+          downvotes?: number | null
+          id?: string
+          is_featured?: boolean | null
+          shared_by: string
+          title: string
+          upvotes?: number | null
+        }
+        Update: {
+          alert_id?: string
+          created_at?: string | null
+          description?: string | null
+          downvotes?: number | null
+          id?: string
+          is_featured?: boolean | null
+          shared_by?: string
+          title?: string
+          upvotes?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shared_alerts_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "price_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_statistics: {
+        Row: {
+          active_alerts: number | null
+          alerts_triggered: number | null
+          created_at: string | null
+          id: string
+          total_alerts: number | null
+          total_savings: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          active_alerts?: number | null
+          alerts_triggered?: number | null
+          created_at?: string | null
+          id?: string
+          total_alerts?: number | null
+          total_savings?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          active_alerts?: number | null
+          alerts_triggered?: number | null
+          created_at?: string | null
+          id?: string
+          total_alerts?: number | null
+          total_savings?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {
