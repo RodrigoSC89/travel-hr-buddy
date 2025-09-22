@@ -69,11 +69,11 @@ const Index = () => {
           onItemChange={setActiveModule}
         />
         
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col overflow-hidden">
           <Header />
           
-          <main className="flex-1 p-6 space-y-6 animate-fade-in">
-            <div className="container mx-auto">
+          <main className="flex-1 overflow-auto">
+            <div className="container mx-auto p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in">
               {renderContent()}
             </div>
           </main>

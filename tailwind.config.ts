@@ -105,6 +105,10 @@ export default {
         "bounce-subtle": "bounce-subtle 0.6s ease-out",
         "wave": "wave 2s ease-in-out infinite",
       },
+      fontFamily: {
+        'sans': ['Inter', 'system-ui', 'sans-serif'],
+        'display': ['Orbitron', 'system-ui', 'sans-serif'],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

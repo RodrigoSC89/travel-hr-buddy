@@ -11,7 +11,7 @@ import {
   ChevronDown,
   Home
 } from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
+import nautilousLogo from '@/assets/nautilus-logo.jpg';
 
 import {
   Sidebar,
@@ -86,7 +86,6 @@ interface AppSidebarProps {
 
 export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const { open } = useSidebar();
-  const location = useLocation();
   const [expandedGroups, setExpandedGroups] = useState<string[]>(["Viagens"]);
 
   const toggleGroup = (groupTitle: string) => {
@@ -108,7 +107,28 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
 
   return (
     <Sidebar className="border-r">
-      <SidebarContent>
+      {/* Logo Header */}
+      <div className="p-6 border-b border-border">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-lg overflow-hidden bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+            <img 
+              src={nautilousLogo} 
+              alt="Nautilus One" 
+              className="w-8 h-8 object-contain filter brightness-0 invert"
+            />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-lg font-display font-bold bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
+              NAUTILUS
+            </h1>
+            <p className="text-xs text-muted-foreground font-medium tracking-wider">
+              ONE SYSTEM
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <SidebarContent className="px-3 py-4">
         <SidebarGroup>
           <SidebarGroupLabel className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
             Menu Principal

@@ -1,6 +1,6 @@
 import React from 'react';
-import { InteractiveDashboard } from './interactive-dashboard';
+import { ResponsiveDashboard } from './responsive-dashboard';
 
 export const GlobalDashboard = () => {
-  return <InteractiveDashboard />;
+  return <ResponsiveDashboard />;
 };
