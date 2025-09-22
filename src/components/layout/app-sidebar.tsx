@@ -116,15 +116,15 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
       {/* Logo Header */}
       <div className="p-6 border-b border-border">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-lg overflow-hidden bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg overflow-hidden bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-sm">
             <img 
               src={nautilousLogo} 
               alt="Nautilus One" 
-              className="w-8 h-8 object-contain filter brightness-0 invert"
+              className="w-6 h-6 object-cover rounded"
             />
           </div>
           <div className="flex flex-col">
-            <h1 className="text-lg font-display font-bold bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
+            <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
               NAUTILUS
             </h1>
             <p className="text-xs text-muted-foreground font-medium tracking-wider">
