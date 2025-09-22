@@ -62,8 +62,8 @@ export const Header: React.FC = () => {
             size="icon" 
             className="h-9 w-9 md:hidden"
             onClick={() => {
-              console.log('Busca mobile ativada');
               // Implementar modal de busca para mobile
+              window.alert('Busca mobile em desenvolvimento');
             }}
           >
             <Search className="h-4 w-4" />
@@ -116,8 +116,8 @@ export const Header: React.FC = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={() => {
-                  console.log('Abrindo perfil...');
                   // Implementar navegação para perfil
+                  window.alert('Perfil em desenvolvimento');
                 }}
               >
                 <User className="mr-2 h-4 w-4" />
@@ -125,8 +125,8 @@ export const Header: React.FC = () => {
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => {
-                  console.log('Abrindo configurações...');
                   // Implementar navegação para configurações
+                  window.alert('Configurações em desenvolvimento');
                 }}
               >
                 <Settings className="mr-2 h-4 w-4" />

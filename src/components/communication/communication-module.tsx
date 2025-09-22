@@ -153,6 +153,16 @@ export const CommunicationModule: React.FC = () => {
   };
 
   const handleSaveSettings = () => {
+    if (!settings.emailApiKey || !settings.whatsappApiKey) {
+      toast({
+        title: "Erro",
+        description: "Preencha todas as chaves de API obrigatórias",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Simular salvamento das configurações
     toast({
       title: "Configurações salvas",
       description: "Configurações de API atualizadas com sucesso",
@@ -181,7 +191,10 @@ export const CommunicationModule: React.FC = () => {
             Envio automático de emails e WhatsApp para reservas
           </p>
         </div>
-        <Button className="w-full sm:w-auto hover-scale">
+        <Button 
+          className="w-full sm:w-auto hover-scale"
+          onClick={() => setActiveTab('settings')}
+        >
           <Settings className="mr-2 h-4 w-4" />
           Configurar APIs
         </Button>
@@ -249,7 +262,16 @@ export const CommunicationModule: React.FC = () => {
         <TabsContent value="templates" className="space-y-4">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Templates de Mensagem</h2>
-            <Button size="sm" className="hover-scale">
+            <Button 
+              size="sm" 
+              className="hover-scale"
+              onClick={() => {
+                toast({
+                  title: "Em desenvolvimento",
+                  description: "Funcionalidade de criação de template será implementada em breve",
+                });
+              }}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Novo Template
             </Button>
@@ -304,7 +326,17 @@ export const CommunicationModule: React.FC = () => {
                   )}
 
                   <div className="flex space-x-2">
-                    <Button size="sm" variant="outline" className="hover-scale">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="hover-scale"
+                      onClick={() => {
+                        toast({
+                          title: "Em desenvolvimento",
+                          description: "Funcionalidade de edição será implementada em breve",
+                        });
+                      }}
+                    >
                       <Edit className="h-4 w-4 mr-1" />
                       Editar
                     </Button>
@@ -327,7 +359,16 @@ export const CommunicationModule: React.FC = () => {
         <TabsContent value="automations" className="space-y-4">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Regras de Automação</h2>
-            <Button size="sm" className="hover-scale">
+            <Button 
+              size="sm" 
+              className="hover-scale"
+              onClick={() => {
+                toast({
+                  title: "Em desenvolvimento",
+                  description: "Funcionalidade de criação de regra será implementada em breve",
+                });
+              }}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Nova Regra
             </Button>
@@ -385,11 +426,31 @@ export const CommunicationModule: React.FC = () => {
                   )}
 
                   <div className="flex space-x-2">
-                    <Button size="sm" variant="outline" className="hover-scale">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="hover-scale"
+                      onClick={() => {
+                        toast({
+                          title: "Em desenvolvimento",
+                          description: "Funcionalidade de edição será implementada em breve",
+                        });
+                      }}
+                    >
                       <Edit className="h-4 w-4 mr-1" />
                       Editar
                     </Button>
-                    <Button size="sm" variant="outline" className="hover-scale">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="hover-scale"
+                      onClick={() => {
+                        toast({
+                          title: "Regra executada",
+                          description: `Executando regra "${rule.name}"...`,
+                        });
+                      }}
+                    >
                       <Send className="h-4 w-4 mr-1" />
                       Executar Agora
                     </Button>

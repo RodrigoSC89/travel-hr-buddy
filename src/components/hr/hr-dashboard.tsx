@@ -5,6 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { StatsCard } from '@/components/ui/stats-card';
 import { DataTable, Column } from '@/components/ui/data-table';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Users, 
   UserPlus, 
@@ -90,11 +94,26 @@ const mockEmployees: Employee[] = [
 ];
 
 export const HRDashboard = () => {
+  const { toast } = useToast();
   const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
   const [showTable, setShowTable] = useState(false);
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
+  const [newEmployeeOpen, setNewEmployeeOpen] = useState(false);
+  const [employeeProfileOpen, setEmployeeProfileOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [newEmployee, setNewEmployee] = useState<Partial<Employee>>({
+    name: '',
+    position: '',
+    department: '',
+    email: '',
+    phone: '',
+    location: '',
+    status: 'active',
+    certifications: [],
+    rating: 0
+  });
 
   const handleEmployeeSelect = (employeeId: string) => {
     setSelectedEmployees(prev => 
@@ -108,6 +127,55 @@ export const HRDashboard = () => {
     setEmployees(prev => prev.map(emp => 
       emp.id === employeeId ? { ...emp, status: newStatus } : emp
     ));
+  };
+
+  const handleCreateEmployee = () => {
+    if (!newEmployee.name || !newEmployee.position || !newEmployee.department || !newEmployee.email) {
+      toast({
+        title: "Erro",
+        description: "Preencha todos os campos obrigatórios",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const employee: Employee = {
+      id: `EMP${(employees.length + 1).toString().padStart(3, '0')}`,
+      name: newEmployee.name!,
+      position: newEmployee.position!,
+      department: newEmployee.department!,
+      email: newEmployee.email!,
+      phone: newEmployee.phone || '',
+      location: newEmployee.location || '',
+      startDate: new Date().toISOString().split('T')[0],
+      status: newEmployee.status as Employee['status'] || 'active',
+      certifications: newEmployee.certifications || [],
+      rating: newEmployee.rating || 4.0
+    };
+
+    setEmployees(prev => [...prev, employee]);
+    setNewEmployee({
+      name: '',
+      position: '',
+      department: '',
+      email: '',
+      phone: '',
+      location: '',
+      status: 'active',
+      certifications: [],
+      rating: 0
+    });
+    setNewEmployeeOpen(false);
+    
+    toast({
+      title: "Funcionário criado",
+      description: `${employee.name} foi adicionado ao sistema`,
+    });
+  };
+
+  const handleViewProfile = (employee: Employee) => {
+    setSelectedEmployee(employee);
+    setEmployeeProfileOpen(true);
   };
 
   // Colunas para a tabela de funcionários
@@ -258,10 +326,103 @@ export const HRDashboard = () => {
           >
             {showTable ? 'Ver Cards' : 'Ver Tabela'}
           </Button>
-          <Button className="gradient-ocean">
-            <UserPlus className="mr-2" size={18} />
-            Novo Funcionário
-          </Button>
+          <Dialog open={newEmployeeOpen} onOpenChange={setNewEmployeeOpen}>
+            <DialogTrigger asChild>
+              <Button className="gradient-ocean">
+                <UserPlus className="mr-2" size={18} />
+                Novo Funcionário
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Novo Funcionário</DialogTitle>
+                <DialogDescription>
+                  Adicione um novo funcionário ao sistema
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Nome *
+                  </Label>
+                  <Input
+                    id="name"
+                    value={newEmployee.name || ''}
+                    onChange={(e) => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="position" className="text-right">
+                    Cargo *
+                  </Label>
+                  <Input
+                    id="position"
+                    value={newEmployee.position || ''}
+                    onChange={(e) => setNewEmployee(prev => ({ ...prev, position: e.target.value }))}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="department" className="text-right">
+                    Departamento *
+                  </Label>
+                  <Select value={newEmployee.department || ''} onValueChange={(value) => setNewEmployee(prev => ({ ...prev, department: value }))}>
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Selecione o departamento" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Operações">Operações</SelectItem>
+                      <SelectItem value="Travel Management">Travel Management</SelectItem>
+                      <SelectItem value="Recursos Humanos">Recursos Humanos</SelectItem>
+                      <SelectItem value="Accommodation">Accommodation</SelectItem>
+                      <SelectItem value="Analytics">Analytics</SelectItem>
+                      <SelectItem value="Marketing">Marketing</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="email" className="text-right">
+                    Email *
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={newEmployee.email || ''}
+                    onChange={(e) => setNewEmployee(prev => ({ ...prev, email: e.target.value }))}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="phone" className="text-right">
+                    Telefone
+                  </Label>
+                  <Input
+                    id="phone"
+                    value={newEmployee.phone || ''}
+                    onChange={(e) => setNewEmployee(prev => ({ ...prev, phone: e.target.value }))}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="location" className="text-right">
+                    Localização
+                  </Label>
+                  <Input
+                    id="location"
+                    value={newEmployee.location || ''}
+                    onChange={(e) => setNewEmployee(prev => ({ ...prev, location: e.target.value }))}
+                    className="col-span-3"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit" onClick={handleCreateEmployee}>
+                  Criar Funcionário
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -312,11 +473,17 @@ export const HRDashboard = () => {
           pagination={true}
           pageSize={10}
           actions={{
-            view: (employee) => console.log('Visualizar:', employee),
-            edit: (employee) => console.log('Editar:', employee),
-            delete: (employee) => console.log('Excluir:', employee)
+            view: (employee) => handleViewProfile(employee),
+            edit: (employee) => handleViewProfile(employee),
+            delete: (employee) => {
+              setEmployees(prev => prev.filter(emp => emp.id !== employee.id));
+              toast({
+                title: "Funcionário removido",
+                description: `${employee.name} foi removido do sistema`,
+              });
+            }
           }}
-          onRowClick={(employee) => console.log('Clicou em:', employee)}
+          onRowClick={(employee) => handleViewProfile(employee)}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -396,7 +563,7 @@ export const HRDashboard = () => {
                   variant="outline" 
                   size="sm" 
                   className="flex-1"
-                  onClick={() => console.log('Ver perfil:', employee.name)}
+                  onClick={() => handleViewProfile(employee)}
                 >
                   Ver Perfil
                 </Button>
@@ -425,6 +592,96 @@ export const HRDashboard = () => {
           </p>
         </Card>
       )}
+
+      {/* Employee Profile Dialog */}
+      <Dialog open={employeeProfileOpen} onOpenChange={setEmployeeProfileOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Perfil do Funcionário</DialogTitle>
+            <DialogDescription>
+              Informações detalhadas do funcionário
+            </DialogDescription>
+          </DialogHeader>
+          {selectedEmployee && (
+            <div className="grid gap-6 py-4">
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 rounded-full gradient-ocean flex items-center justify-center text-white font-bold text-xl">
+                  {selectedEmployee.name.split(' ').map(n => n[0]).join('')}
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold">{selectedEmployee.name}</h3>
+                  <p className="text-muted-foreground">{selectedEmployee.position}</p>
+                  <Badge className={getStatusColor(selectedEmployee.status)}>
+                    {getStatusLabel(selectedEmployee.status)}
+                  </Badge>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-medium mb-2">Informações de Contato</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center">
+                      <Mail size={16} className="mr-2 text-muted-foreground" />
+                      {selectedEmployee.email}
+                    </div>
+                    <div className="flex items-center">
+                      <Phone size={16} className="mr-2 text-muted-foreground" />
+                      {selectedEmployee.phone}
+                    </div>
+                    <div className="flex items-center">
+                      <MapPin size={16} className="mr-2 text-muted-foreground" />
+                      {selectedEmployee.location}
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium mb-2">Informações Profissionais</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center">
+                      <Briefcase size={16} className="mr-2 text-muted-foreground" />
+                      {selectedEmployee.department}
+                    </div>
+                    <div className="flex items-center">
+                      <Calendar size={16} className="mr-2 text-muted-foreground" />
+                      Desde {new Date(selectedEmployee.startDate).toLocaleDateString('pt-BR')}
+                    </div>
+                    <div className="flex items-center">
+                      <Star size={16} className="mr-2 text-warning" fill="currentColor" />
+                      {selectedEmployee.rating}/5.0
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="font-medium mb-2">Certificações ({selectedEmployee.certifications.length})</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedEmployee.certifications.map((cert, index) => (
+                    <Badge key={index} variant="secondary">
+                      {cert}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEmployeeProfileOpen(false)}>
+              Fechar
+            </Button>
+            <Button onClick={() => {
+              toast({
+                title: "Edição em desenvolvimento",
+                description: "Funcionalidade de edição será implementada em breve",
+              });
+            }}>
+              Editar Funcionário
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

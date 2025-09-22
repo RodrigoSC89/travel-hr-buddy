@@ -192,10 +192,9 @@ export const ResponsiveDashboard: React.FC = () => {
         <Button 
           className="hover-scale w-full sm:w-auto"
           onClick={() => {
-            console.log('Gerando relatório...');
             // Simular geração de relatório
             setTimeout(() => {
-              alert('Relatório gerado com sucesso!');
+              window.alert('Relatório gerado com sucesso!');
             }, 1000);
           }}
         >
