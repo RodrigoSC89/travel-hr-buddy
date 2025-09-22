@@ -12,6 +12,7 @@ import { AnalyticsDashboard } from '@/components/analytics/analytics-dashboard';
 import { ReservationsDashboard } from '@/components/reservations/reservations-dashboard';
 import { ReportsDashboard } from '@/components/reports/reports-dashboard';
 import { CommunicationModule } from '@/components/communication/communication-module';
+import { PriceAlertDashboard } from '@/components/price-alerts/price-alert-dashboard';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState('dashboard');
@@ -44,6 +45,8 @@ const Index = () => {
         return <FlightSearch />;
       case 'hotels':
         return <HotelSearch />;
+      case 'price-alerts':
+        return <PriceAlertDashboard />;
       case 'analytics':
         return <AnalyticsDashboard />;
       case 'reservations':

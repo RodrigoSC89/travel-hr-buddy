@@ -10,7 +10,8 @@ import {
   Settings,
   ChevronDown,
   Home,
-  MessageSquare
+  MessageSquare,
+  Bell
 } from "lucide-react";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
 
@@ -57,6 +58,11 @@ const navigationItems: SidebarItem[] = [
       { title: "Buscar Voos", url: "flights" },
       { title: "Buscar Hotéis", url: "hotels" },
     ],
+  },
+  {
+    title: "Alertas de Preços",
+    url: "price-alerts",
+    icon: Bell,
   },
   {
     title: "Analytics",
