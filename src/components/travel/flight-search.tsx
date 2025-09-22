@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { StatsCard } from '@/components/ui/stats-card';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   Plane, 
   Search, 
@@ -144,35 +145,110 @@ export const FlightSearch = () => {
 
   // Função para buscar voos
   const handleSearch = async () => {
+    if (!searchParams.from || !searchParams.to || !searchParams.departure) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha origem, destino e data de partida",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsSearching(true);
     
-    // Simular delay de busca
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Simular novos resultados baseados na busca
-    const newFlights = mockFlights.map(flight => ({
-      ...flight,
-      price: flight.price + Math.floor(Math.random() * 100) - 50,
-      departure: {
-        ...flight.departure,
-        city: searchParams.from.split('(')[0].trim(),
-        airport: searchParams.from.includes('(') ? searchParams.from.match(/\(([^)]+)\)/)?.[1] || 'N/A' : 'N/A'
-      },
-      arrival: {
-        ...flight.arrival,
-        city: searchParams.to.split('(')[0].trim(),
-        airport: searchParams.to.includes('(') ? searchParams.to.match(/\(([^)]+)\)/)?.[1] || 'N/A' : 'N/A'
+    try {
+      // Extrair códigos de aeroporto dos campos de origem e destino
+      const originCode = searchParams.from.includes('(') 
+        ? searchParams.from.match(/\(([^)]+)\)/)?.[1] || searchParams.from.slice(0, 3).toUpperCase()
+        : searchParams.from.slice(0, 3).toUpperCase();
+      
+      const destinationCode = searchParams.to.includes('(') 
+        ? searchParams.to.match(/\(([^)]+)\)/)?.[1] || searchParams.to.slice(0, 3).toUpperCase()
+        : searchParams.to.slice(0, 3).toUpperCase();
+
+      const { data, error } = await supabase.functions.invoke('amadeus-search', {
+        body: {
+          searchType: 'flights',
+          origin: originCode,
+          destination: destinationCode,
+          departureDate: searchParams.departure,
+          adults: searchParams.passengers,
+        }
+      });
+
+      if (error) {
+        console.error('Amadeus search error:', error);
+        throw error;
       }
-    }));
-    
-    setFlights(newFlights);
-    setFilteredFlights(newFlights);
-    setIsSearching(false);
-    
-    toast({
-      title: "Busca concluída",
-      description: `${newFlights.length} voos encontrados para ${searchParams.from} → ${searchParams.to}`
-    });
+      
+      if (data.success && data.data?.data) {
+        // Transform Amadeus data to our format
+        const transformedFlights = data.data.data.map((offer: any, index: number) => ({
+          id: offer.id || `flight-${index}`,
+          airline: offer.itineraries[0]?.segments[0]?.carrierCode || 'XX',
+          flightNumber: offer.itineraries[0]?.segments[0]?.number || '0000',
+          departure: {
+            airport: offer.itineraries[0]?.segments[0]?.departure?.iataCode || originCode,
+            time: offer.itineraries[0]?.segments[0]?.departure?.at?.split('T')[1]?.substring(0, 5) || '00:00',
+            city: searchParams.from.split('(')[0].trim(),
+            date: offer.itineraries[0]?.segments[0]?.departure?.at?.split('T')[0] || searchParams.departure,
+          },
+          arrival: {
+            airport: offer.itineraries[0]?.segments[0]?.arrival?.iataCode || destinationCode,
+            time: offer.itineraries[0]?.segments[0]?.arrival?.at?.split('T')[1]?.substring(0, 5) || '00:00',
+            city: searchParams.to.split('(')[0].trim(),
+            date: offer.itineraries[0]?.segments[0]?.arrival?.at?.split('T')[0] || searchParams.departure,
+          },
+          duration: offer.itineraries[0]?.duration?.replace('PT', '').replace('H', 'h ').replace('M', 'm') || '2h 30m',
+          price: Math.round(parseFloat(offer.price?.total || '299')),
+          originalPrice: Math.round(parseFloat(offer.price?.total || '299') * 1.2),
+          savings: Math.round(parseFloat(offer.price?.total || '299') * 0.2),
+          class: offer.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin?.toLowerCase() || 'economy',
+          amenities: ['wifi', 'snack'],
+          rating: 4.0 + Math.random() * 1.0,
+          stops: offer.itineraries[0]?.segments?.length - 1 || 0,
+          bookingUrl: `https://www.amadeus.com/booking/${offer.id}`,
+        }));
+
+        if (transformedFlights.length > 0) {
+          setFlights(transformedFlights);
+          setFilteredFlights(transformedFlights);
+          toast({
+            title: "Busca concluída",
+            description: `${transformedFlights.length} voos reais encontrados!`
+          });
+        } else {
+          throw new Error('Nenhum voo encontrado na API');
+        }
+      } else {
+        throw new Error('Resposta inválida da API');
+      }
+    } catch (error) {
+      console.error('Flight search error:', error);
+      // Fallback para dados mock
+      const newFlights = mockFlights.map(flight => ({
+        ...flight,
+        price: flight.price + Math.floor(Math.random() * 100) - 50,
+        departure: {
+          ...flight.departure,
+          city: searchParams.from.split('(')[0].trim(),
+        },
+        arrival: {
+          ...flight.arrival,
+          city: searchParams.to.split('(')[0].trim(),
+        }
+      }));
+      
+      setFlights(newFlights);
+      setFilteredFlights(newFlights);
+      toast({
+        title: "Dados de demonstração",
+        description: `Erro na API. Exibindo ${newFlights.length} voos de exemplo`,
+        variant: "destructive"
+      });
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const handleSelectFlight = (flightId: string) => {
