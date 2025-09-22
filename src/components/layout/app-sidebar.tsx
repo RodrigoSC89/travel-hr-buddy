@@ -41,40 +41,40 @@ interface SidebarItem {
 const navigationItems: SidebarItem[] = [
   {
     title: "Dashboard",
-    url: "/dashboard",
+    url: "dashboard",
     icon: LayoutDashboard,
   },
   {
     title: "Recursos Humanos",
-    url: "/hr",
+    url: "hr",
     icon: Users,
   },
   {
     title: "Viagens",
     icon: Plane,
     items: [
-      { title: "Buscar Voos", url: "/flights" },
-      { title: "Buscar Hotéis", url: "/hotels" },
+      { title: "Buscar Voos", url: "flights" },
+      { title: "Buscar Hotéis", url: "hotels" },
     ],
   },
   {
     title: "Analytics",
-    url: "/analytics",
+    url: "analytics",
     icon: BarChart3,
   },
   {
     title: "Reservas",
-    url: "/reservations",
+    url: "reservations",
     icon: Calendar,
   },
   {
     title: "Relatórios",
-    url: "/reports",
+    url: "reports",
     icon: FileText,
   },
   {
     title: "Configurações",
-    url: "/settings",
+    url: "settings",
     icon: Settings,
   },
 ];
@@ -97,28 +97,13 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
     );
   };
 
-  const getModuleFromUrl = (url: string) => {
-    const moduleMap: { [key: string]: string } = {
-      "/dashboard": "dashboard",
-      "/hr": "hr",
-      "/flights": "flights",
-      "/hotels": "hotels",
-      "/analytics": "analytics",
-      "/reservations": "reservations",
-      "/reports": "reports",
-      "/settings": "settings",
-    };
-    return moduleMap[url] || "dashboard";
+  const handleItemClick = (moduleKey: string) => {
+    console.log('Navegando para módulo:', moduleKey);
+    onItemChange(moduleKey);
   };
 
-  const handleItemClick = (url: string) => {
-    const module = getModuleFromUrl(url);
-    onItemChange(module);
-  };
-
-  const isItemActive = (url: string) => {
-    const module = getModuleFromUrl(url);
-    return activeItem === module;
+  const isItemActive = (moduleKey: string) => {
+    return activeItem === moduleKey;
   };
 
   return (
@@ -156,7 +141,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                             <SidebarMenuSubItem key={subItem.title}>
                               <SidebarMenuSubButton
                                 onClick={() => handleItemClick(subItem.url)}
-                                className={isItemActive(subItem.url) ? 'bg-primary text-primary-foreground' : ''}
+                                className={`cursor-pointer ${isItemActive(subItem.url) ? 'bg-primary text-primary-foreground' : 'hover:bg-accent hover:text-accent-foreground'}`}
                               >
                                 <span>{subItem.title}</span>
                               </SidebarMenuSubButton>
@@ -172,7 +157,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       onClick={() => item.url && handleItemClick(item.url)}
-                      className={isItemActive(item.url!) ? 'bg-primary text-primary-foreground' : ''}
+                      className={`cursor-pointer ${isItemActive(item.url!) ? 'bg-primary text-primary-foreground' : 'hover:bg-accent hover:text-accent-foreground'}`}
                     >
                       <item.icon className="mr-3 h-4 w-4" />
                       <span>{item.title}</span>
