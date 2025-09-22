@@ -15,9 +15,11 @@ import {
 import { LogOut, Settings, User, Bell, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { useNavigate } from 'react-router-dom';
 
 export const Header: React.FC = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   if (!user) return null;
 
@@ -73,10 +75,7 @@ export const Header: React.FC = () => {
             variant="ghost" 
             size="icon" 
             className="h-9 w-9 relative"
-            onClick={() => {
-              console.log('Abrindo notificações...');
-              // Implementar painel de notificações
-            }}
+            onClick={() => navigate('/price-alerts')}
           >
             <Bell className="h-4 w-4" />
             <Badge 
