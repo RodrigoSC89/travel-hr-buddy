@@ -1,0 +1,53 @@
+{
+  "name": "Nautilus One - Sistema de Gestão Empresarial",
+  "short_name": "Nautilus One",
+  "description": "Sistema revolucionário de gestão empresarial com módulos de RH, viagens e hospedagem",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity", "travel"],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/placeholder.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/placeholder.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Acesse o dashboard principal",
+      "url": "/?module=dashboard",
+      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Recursos Humanos",
+      "short_name": "RH",
+      "description": "Gestão de pessoas e certificados",
+      "url": "/?module=hr",
+      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Viagens",
+      "short_name": "Viagens",
+      "description": "Buscar passagens e hotéis",
+      "url": "/?module=flights",
+      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+    }
+  ]
+}

@@ -22,7 +22,11 @@ export const TravelMap: React.FC<TravelMapProps> = ({ locations, className = "" 
     // Get token from Supabase Edge Function
     const initializeMap = async () => {
       try {
-        const response = await fetch('/api/mapbox-token');
+        const response = await fetch('https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/mapbox-token', {
+          headers: {
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE`
+          }
+        });
         const { token } = await response.json();
         
         mapboxgl.accessToken = token;
