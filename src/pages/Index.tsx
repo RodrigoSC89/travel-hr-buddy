@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Navigation } from '@/components/ui/navigation';
+import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Header } from '@/components/layout/header';
 import { useAuth } from '@/components/auth/auth-provider';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { GlobalDashboard } from '@/components/dashboard/global-dashboard';
 import { HRDashboard } from '@/components/hr/hr-dashboard';
 import { FlightSearch } from '@/components/travel/flight-search';
@@ -61,20 +62,24 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <Navigation 
-        activeItem={activeModule} 
-        onItemChange={setActiveModule}
-      />
-      
-      {/* Main Content */}
-      <div className="lg:pl-64">
-        <main className="p-6 lg:p-8 pt-20 lg:pt-8">
-          {renderContent()}
-        </main>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        <AppSidebar 
+          activeItem={activeModule} 
+          onItemChange={setActiveModule}
+        />
+        
+        <div className="flex-1 flex flex-col">
+          <Header />
+          
+          <main className="flex-1 p-6 space-y-6 animate-fade-in">
+            <div className="container mx-auto">
+              {renderContent()}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 
