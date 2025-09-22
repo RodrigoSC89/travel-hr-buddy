@@ -9,7 +9,8 @@ import {
   FileText, 
   Settings,
   ChevronDown,
-  Home
+  Home,
+  MessageSquare
 } from "lucide-react";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
 
@@ -71,6 +72,11 @@ const navigationItems: SidebarItem[] = [
     title: "Relatórios",
     url: "reports",
     icon: FileText,
+  },
+  {
+    title: "Comunicação",
+    url: "communication",
+    icon: MessageSquare,
   },
   {
     title: "Configurações",

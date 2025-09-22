@@ -11,6 +11,7 @@ import { HotelSearch } from '@/components/travel/hotel-search';
 import { AnalyticsDashboard } from '@/components/analytics/analytics-dashboard';
 import { ReservationsDashboard } from '@/components/reservations/reservations-dashboard';
 import { ReportsDashboard } from '@/components/reports/reports-dashboard';
+import { CommunicationModule } from '@/components/communication/communication-module';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState('dashboard');
@@ -49,11 +50,13 @@ const Index = () => {
         return <ReservationsDashboard />;
       case 'reports':
         return <ReportsDashboard />;
+      case 'communication':
+        return <CommunicationModule />;
       case 'settings':
         return (
           <div className="text-center py-20">
-            <h2 className="text-2xl font-bold mb-4">Settings Module</h2>
-            <p className="text-muted-foreground">Em desenvolvimento...</p>
+            <h2 className="text-2xl font-bold mb-4">Configurações</h2>
+            <p className="text-muted-foreground">Módulo de configurações em desenvolvimento...</p>
           </div>
         );
       default:
