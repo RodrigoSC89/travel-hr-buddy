@@ -10,11 +10,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useAuth } from '@/components/auth/auth-provider';
 import { createClient } from '@supabase/supabase-js';
 
-// Initialize Supabase client
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL || '',
-  import.meta.env.VITE_SUPABASE_ANON_KEY || ''
-);
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+// Initialize Supabase client only if configured to avoid runtime error
+const supabase: any = (supabaseUrl && supabaseAnonKey)
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 interface PriceAlert {
   id: string;
@@ -60,11 +62,11 @@ export const PriceAlertDashboard = () => {
 
   // Load alerts and notifications from Supabase
   useEffect(() => {
-    if (user) {
+    if (user && supabase) {
       loadAlerts();
       loadNotifications();
     }
-  }, [user]);
+  }, [user, supabase]);
 
   const loadAlerts = async () => {
     try {
@@ -270,6 +272,29 @@ export const PriceAlertDashboard = () => {
   const getPriceChange = (alert: PriceAlert) => {
     return Math.random() * 200 - 100; // Random change for demo
   };
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return (
+      <div className="container mx-auto p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Configuração do Supabase necessária</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <p className="text-muted-foreground">Conecte seu projeto ao Supabase para usar os alertas de preço.</p>
+            <a
+              href="https://docs.lovable.dev/integrations/supabase/"
+              target="_blank"
+              rel="noreferrer"
+              className="underline text-primary"
+            >
+              Ver como conectar ao Supabase
+            </a>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
