@@ -20,7 +20,7 @@ async function getAmadeusToken(): Promise<string> {
   }
 
   const apiKey = Deno.env.get('AMADEUS_API_KEY');
-  const apiSecret = Deno.env.get('AMADEUS_API_SECRET') || apiKey; // Use same key if secret not provided
+  const apiSecret = Deno.env.get('AMADEUS_API_SECRET') || apiKey; // Use secret if available
   
   if (!apiKey) {
     throw new Error('Amadeus API key not configured');

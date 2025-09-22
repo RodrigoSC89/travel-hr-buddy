@@ -13,6 +13,7 @@ import { ReservationsDashboard } from '@/components/reservations/reservations-da
 import { ReportsDashboard } from '@/components/reports/reports-dashboard';
 import { CommunicationModule } from '@/components/communication/communication-module';
 import { PriceAlertDashboard } from '@/components/price-alerts/price-alert-dashboard';
+import { SettingsModule } from '@/components/settings/settings-module';
 import { MobileNavigation } from '@/components/mobile/mobile-navigation';
 import { MobileHeader } from '@/components/mobile/mobile-header';
 import { MobileSplash } from '@/components/ui/mobile-splash';
@@ -94,12 +95,7 @@ const Index = () => {
       case 'communication':
         return <CommunicationModule />;
       case 'settings':
-        return (
-          <div className="text-center py-20">
-            <h2 className="text-2xl font-bold mb-4">Configurações</h2>
-            <p className="text-muted-foreground">Módulo de configurações em desenvolvimento...</p>
-          </div>
-        );
+        return <SettingsModule />;
       default:
         return <GlobalDashboard />;
     }
