@@ -2,41 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Nautilus One v4 Design System - Professional Maritime Interface */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base System Colors */
+    --background: 210 25% 98%;
+    --foreground: 210 40% 8%;
 
+    /* Card & Surface Colors */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --card-foreground: 210 40% 15%;
+    
+    /* Ocean-Inspired Primary Palette */
+    --primary: 210 100% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 210 100% 55%;
+    --primary-dark: 210 100% 35%;
+    
+    /* Secondary Ocean Tones */
+    --secondary: 195 100% 50%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 195 100% 60%;
+    
+    /* Professional Accent Colors */
+    --accent: 200 100% 40%;
+    --accent-foreground: 0 0% 100%;
+    --accent-light: 200 100% 50%;
+    
+    /* Nautical Navy for Important Elements */
+    --nautical: 225 73% 25%;
+    --nautical-foreground: 0 0% 100%;
+    
+    /* Success & Status Colors */
+    --success: 142 76% 36%;
+    --warning: 48 96% 53%;
+    --danger: 0 84% 60%;
+    --info: 210 100% 56%;
+    
+    /* Muted & Subtle Tones */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    
+    /* Interactive Elements */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 210 100% 45%;
+    
+    /* Gradients */
+    --gradient-ocean: linear-gradient(135deg, hsl(210 100% 45%), hsl(195 100% 50%));
+    --gradient-depth: linear-gradient(180deg, hsl(210 100% 45%), hsl(225 73% 25%));
+    --gradient-wave: linear-gradient(90deg, hsl(195 100% 50%), hsl(210 100% 45%), hsl(200 100% 40%));
+    
+    /* Shadows */
+    --shadow-nautical: 0 4px 20px hsl(210 100% 45% / 0.15);
+    --shadow-depth: 0 8px 30px hsl(225 73% 25% / 0.2);
+    --shadow-wave: 0 2px 15px hsl(195 100% 50% / 0.1);
+    
+    /* Layout */
+    --radius: 12px;
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,33 +80,37 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark Maritime Theme */
+    --background: 225 25% 8%;
+    --foreground: 210 40% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --card: 225 25% 10%;
+    --card-foreground: 210 40% 90%;
+    
+    --primary: 210 100% 55%;
+    --primary-foreground: 225 25% 8%;
+    --primary-light: 210 100% 65%;
+    --primary-dark: 210 100% 45%;
+    
+    --secondary: 195 100% 60%;
+    --secondary-foreground: 225 25% 8%;
+    
+    --accent: 200 100% 50%;
+    --accent-foreground: 225 25% 8%;
+    
+    --nautical: 225 73% 35%;
+    --nautical-foreground: 0 0% 100%;
+    
+    --muted: 225 25% 15%;
+    --muted-foreground: 215 16% 65%;
+    
+    --border: 225 25% 20%;
+    --input: 225 25% 20%;
+    --ring: 210 100% 55%;
+    
+    --gradient-ocean: linear-gradient(135deg, hsl(210 100% 55%), hsl(195 100% 60%));
+    --gradient-depth: linear-gradient(180deg, hsl(210 100% 55%), hsl(225 73% 35%));
+    --gradient-wave: linear-gradient(90deg, hsl(195 100% 60%), hsl(210 100% 55%), hsl(200 100% 50%));
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -94,12 +122,72 @@ All colors MUST be HSL.
   }
 }
 
+/* Custom Utility Classes */
+@layer components {
+  .gradient-ocean {
+    background: var(--gradient-ocean);
+  }
+  
+  .gradient-depth {
+    background: var(--gradient-depth);
+  }
+  
+  .gradient-wave {
+    background: var(--gradient-wave);
+  }
+  
+  .shadow-nautical {
+    box-shadow: var(--shadow-nautical);
+  }
+  
+  .shadow-depth {
+    box-shadow: var(--shadow-depth);
+  }
+  
+  .shadow-wave {
+    box-shadow: var(--shadow-wave);
+  }
+  
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .dark .glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+  
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/20 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/30;
   }
 }
