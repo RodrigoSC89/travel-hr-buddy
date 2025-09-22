@@ -43,6 +43,7 @@ interface FlightOption {
   amenities: string[];
   rating: number;
   stops: number;
+  bookingUrl?: string;
 }
 
 const mockFlights: FlightOption[] = [
@@ -69,7 +70,8 @@ const mockFlights: FlightOption[] = [
     class: 'economy',
     amenities: ['wifi', 'snack'],
     rating: 4.5,
-    stops: 0
+    stops: 0,
+    bookingUrl: 'https://www.latam.com'
   },
   {
     id: '2',
@@ -94,7 +96,8 @@ const mockFlights: FlightOption[] = [
     class: 'economy',
     amenities: ['wifi'],
     rating: 4.2,
-    stops: 0
+    stops: 0,
+    bookingUrl: 'https://www.voegol.com.br'
   },
   {
     id: '3',
@@ -119,7 +122,8 @@ const mockFlights: FlightOption[] = [
     class: 'economy',
     amenities: ['wifi', 'snack', 'entertainment'],
     rating: 4.7,
-    stops: 0
+    stops: 0,
+    bookingUrl: 'https://www.voeazul.com.br'
   }
 ];
 
@@ -439,17 +443,29 @@ export const FlightSearch = () => {
                   <Button variant="outline" className="w-full lg:w-auto">
                     Detalhes
                   </Button>
-                  <Button 
-                    className={`w-full lg:w-auto ${
-                      selectedFlight === flight.id ? 'bg-success hover:bg-success/90' : 'gradient-ocean'
-                    }`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSelectFlight(flight.id);
-                    }}
-                  >
-                    {selectedFlight === flight.id ? 'Selecionado ✓' : 'Selecionar'}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant={selectedFlight === flight.id ? "secondary" : "outline"}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectFlight(flight.id);
+                      }}
+                      className="flex-1"
+                    >
+                      {selectedFlight === flight.id ? 'Selecionado ✓' : 'Selecionar'}
+                    </Button>
+                    {flight.bookingUrl && (
+                      <Button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(flight.bookingUrl, '_blank');
+                        }}
+                        className="flex-1 gradient-ocean"
+                      >
+                        Ver no Site
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

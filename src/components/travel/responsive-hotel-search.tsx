@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { Search, Calendar, MapPin, Star, Wifi, Car, Utensils, Plus } from 'lucide-react';
+import { TravelMap } from './travel-map';
 
 interface Hotel {
   id: string;
@@ -16,6 +17,7 @@ interface Hotel {
   image: string;
   amenities: string[];
   distance: string;
+  bookingUrl?: string;
 }
 
 export const ResponsiveHotelSearch: React.FC = () => {
@@ -33,9 +35,10 @@ export const ResponsiveHotelSearch: React.FC = () => {
       location: 'Rio de Janeiro, RJ',
       rating: 4.8,
       price: 450,
-      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
+      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       amenities: ['WiFi', 'Piscina', 'Spa', 'Restaurante'],
-      distance: '200m da praia'
+      distance: '200m da praia',
+      bookingUrl: 'https://www.booking.com/hotel/br/copacabana-palace.html'
     },
     {
       id: '2',
@@ -43,9 +46,10 @@ export const ResponsiveHotelSearch: React.FC = () => {
       location: 'São Paulo, SP',
       rating: 4.6,
       price: 320,
-      image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400',
+      image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       amenities: ['WiFi', 'Academia', 'Business Center'],
-      distance: '5km do centro'
+      distance: '5km do centro',
+      bookingUrl: 'https://www.booking.com/hotel/br/unique-garden.html'
     },
     {
       id: '3',
@@ -53,9 +57,10 @@ export const ResponsiveHotelSearch: React.FC = () => {
       location: 'Salvador, BA',
       rating: 4.4,
       price: 180,
-      image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400',
+      image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       amenities: ['WiFi', 'Café da manhã', 'Vista para o mar'],
-      distance: '100m do centro histórico'
+      distance: '100m do centro histórico',
+      bookingUrl: 'https://www.booking.com/hotel/br/villa-bahia.html'
     }
   ]);
 
@@ -196,10 +201,12 @@ export const ResponsiveHotelSearch: React.FC = () => {
       </Card>
 
       {/* Results */}
-      <div className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-semibold">Hotéis Disponíveis</h2>
-        
-        <div className="grid gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4">Hotéis Disponíveis</h2>
+            
+            <div className="grid gap-4 sm:gap-6">
           {hotels.map((hotel) => (
             <Card key={hotel.id} className="overflow-hidden hover-scale transition-all">
               <div className="flex flex-col lg:flex-row">
@@ -251,11 +258,11 @@ export const ResponsiveHotelSearch: React.FC = () => {
 
                     {/* Action Button */}
                     <Button 
-                      onClick={() => handleBooking(hotel)}
+                      onClick={() => hotel.bookingUrl ? window.open(hotel.bookingUrl, '_blank') : handleBooking(hotel)}
                       disabled={selectedHotel === hotel.id}
                       className="w-full sm:w-auto hover-scale"
                     >
-                      {selectedHotel === hotel.id ? 'Processando...' : 'Reservar Agora'}
+                      {hotel.bookingUrl ? 'Ver no Booking.com' : (selectedHotel === hotel.id ? 'Processando...' : 'Reservar Agora')}
                     </Button>
                   </div>
                 </div>
@@ -264,11 +271,28 @@ export const ResponsiveHotelSearch: React.FC = () => {
           ))}
         </div>
 
-        {/* Load More */}
-        <div className="text-center pt-4">
-          <Button variant="outline" className="hover-scale">
-            Carregar mais hotéis
-          </Button>
+            {/* Load More */}
+            <div className="text-center pt-4">
+              <Button variant="outline" className="hover-scale">
+                Carregar mais hotéis
+              </Button>
+            </div>
+          </div>
+        </div>
+        
+        <div className="space-y-6">
+          <Card className="p-4">
+            <h3 className="text-lg font-semibold mb-4">Localização dos Hotéis</h3>
+            <TravelMap 
+              locations={hotels.map(hotel => ({
+                id: hotel.id,
+                name: hotel.name,
+                coordinates: [-43.2096 + Math.random() * 0.1, -22.9035 + Math.random() * 0.1] as [number, number],
+                type: 'hotel' as const
+              }))}
+              className="h-96"
+            />
+          </Card>
         </div>
       </div>
     </div>
