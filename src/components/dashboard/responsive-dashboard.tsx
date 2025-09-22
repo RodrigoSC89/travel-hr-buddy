@@ -189,7 +189,16 @@ export const ResponsiveDashboard: React.FC = () => {
             Acompanhe o progresso e métricas em tempo real
           </p>
         </div>
-        <Button className="hover-scale w-full sm:w-auto">
+        <Button 
+          className="hover-scale w-full sm:w-auto"
+          onClick={() => {
+            console.log('Gerando relatório...');
+            // Simular geração de relatório
+            setTimeout(() => {
+              alert('Relatório gerado com sucesso!');
+            }, 1000);
+          }}
+        >
           <Calendar className="mr-2 h-4 w-4" />
           Ver Relatório
         </Button>

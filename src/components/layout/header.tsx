@@ -55,13 +55,29 @@ export const Header: React.FC = () => {
         {/* Right side actions */}
         <div className="flex items-center space-x-2">
           {/* Mobile search button */}
-          <Button variant="ghost" size="icon" className="h-9 w-9 md:hidden">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-9 w-9 md:hidden"
+            onClick={() => {
+              console.log('Busca mobile ativada');
+              // Implementar modal de busca para mobile
+            }}
+          >
             <Search className="h-4 w-4" />
             <span className="sr-only">Buscar</span>
           </Button>
 
           {/* Notifications */}
-          <Button variant="ghost" size="icon" className="h-9 w-9 relative">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-9 w-9 relative"
+            onClick={() => {
+              console.log('Abrindo notificações...');
+              // Implementar painel de notificações
+            }}
+          >
             <Bell className="h-4 w-4" />
             <Badge 
               variant="destructive" 
@@ -99,11 +115,21 @@ export const Header: React.FC = () => {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => {
+                  console.log('Abrindo perfil...');
+                  // Implementar navegação para perfil
+                }}
+              >
                 <User className="mr-2 h-4 w-4" />
                 <span>Perfil</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => {
+                  console.log('Abrindo configurações...');
+                  // Implementar navegação para configurações
+                }}
+              >
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Configurações</span>
               </DropdownMenuItem>
