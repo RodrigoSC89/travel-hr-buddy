@@ -45,6 +45,14 @@
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
     
+    /* Destructive Colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Popover Colors */
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 40% 15%;
+    
     /* Interactive Elements */
     --border: 214 32% 91%;
     --input: 214 32% 91%;
@@ -97,6 +105,14 @@
     
     --muted: 225 25% 15%;
     --muted-foreground: 215 16% 65%;
+    
+    /* Destructive Colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Popover Colors */
+    --popover: 225 25% 12%;
+    --popover-foreground: 210 40% 90%;
     
     --border: 225 25% 20%;
     --input: 225 25% 20%;

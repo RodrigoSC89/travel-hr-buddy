@@ -27,13 +27,13 @@ export const NotificationCenter: React.FC = () => {
     const iconClass = "h-4 w-4";
     switch (type) {
       case 'success':
-        return <Check className={`${iconClass} text-green-500`} />;
+        return <Check className={`${iconClass} text-success`} />;
       case 'warning':
-        return <Bell className={`${iconClass} text-yellow-500`} />;
+        return <Bell className={`${iconClass} text-warning`} />;
       case 'error':
-        return <Bell className={`${iconClass} text-red-500`} />;
+        return <Bell className={`${iconClass} text-danger`} />;
       default:
-        return <Bell className={`${iconClass} text-blue-500`} />;
+        return <Bell className={`${iconClass} text-info`} />;
     }
   };
 
@@ -66,16 +66,16 @@ export const NotificationCenter: React.FC = () => {
           <span className="sr-only">Notificações</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-0" align="end">
-        <div className="border-b p-4">
+      <PopoverContent className="w-80 p-0 bg-popover text-popover-foreground border-border" align="end">
+        <div className="border-b border-border p-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-sm">Notificações</h3>
+            <h3 className="font-semibold text-sm text-popover-foreground">Notificações</h3>
             {unreadCount > 0 && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={markAllAsRead}
-                className="text-xs h-7"
+                className="text-xs h-7 text-popover-foreground hover:bg-muted"
               >
                 Marcar todas como lidas
               </Button>
@@ -108,24 +108,24 @@ export const NotificationCenter: React.FC = () => {
                   <div className="flex items-start gap-3">
                     {getNotificationIcon(notification.type)}
                     <div className="flex-1 space-y-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium leading-none">
-                          {notification.title}
-                        </p>
-                        <div className="flex items-center gap-1">
-                          <Badge variant={getNotificationBadgeVariant(notification.type)} className="text-xs">
-                            {notification.type}
-                          </Badge>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-5 w-5 p-0"
-                            onClick={() => removeNotification(notification.id)}
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      </div>
+                       <div className="flex items-center justify-between">
+                         <p className="text-sm font-medium leading-none text-popover-foreground">
+                           {notification.title}
+                         </p>
+                         <div className="flex items-center gap-1">
+                           <Badge variant={getNotificationBadgeVariant(notification.type)} className="text-xs">
+                             {notification.type}
+                           </Badge>
+                           <Button
+                             variant="ghost"
+                             size="sm"
+                             className="h-5 w-5 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                             onClick={() => removeNotification(notification.id)}
+                           >
+                             <X className="h-3 w-3" />
+                           </Button>
+                         </div>
+                       </div>
                       <p className="text-xs text-muted-foreground">
                         {notification.message}
                       </p>
@@ -135,31 +135,33 @@ export const NotificationCenter: React.FC = () => {
                             locale: ptBR
                           })}
                         </span>
-                        <div className="flex items-center gap-1">
-                          {notification.action && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-6 text-xs"
-                              asChild
-                            >
-                              <Link to={notification.action.href}>
-                                {notification.action.label}
-                                <ExternalLink className="h-3 w-3 ml-1" />
-                              </Link>
-                            </Button>
-                          )}
-                          {!notification.read && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-6 text-xs"
-                              onClick={() => markAsRead(notification.id)}
-                            >
-                              Marcar lida
-                            </Button>
-                          )}
-                        </div>
+                         <div className="flex items-center gap-1">
+                           {notification.action && (
+                             <Button
+                               variant="outline"
+                               size="sm"
+                               className="h-6 text-xs border-border text-popover-foreground hover:bg-muted"
+                               onClick={() => {
+                                 if (notification.action?.href) {
+                                   window.open(notification.action.href, '_blank');
+                                 }
+                               }}
+                             >
+                               {notification.action.label}
+                               <ExternalLink className="h-3 w-3 ml-1" />
+                             </Button>
+                           )}
+                           {!notification.read && (
+                             <Button
+                               variant="ghost"
+                               size="sm"
+                               className="h-6 text-xs text-primary hover:bg-primary/10"
+                               onClick={() => markAsRead(notification.id)}
+                             >
+                               Marcar lida
+                             </Button>
+                           )}
+                         </div>
                       </div>
                     </div>
                   </div>
@@ -170,8 +172,14 @@ export const NotificationCenter: React.FC = () => {
         </ScrollArea>
 
         {notifications.length > 0 && (
-          <div className="border-t p-2">
-            <Button variant="ghost" className="w-full text-xs h-8">
+          <div className="border-t border-border p-2">
+            <Button 
+              variant="ghost" 
+              className="w-full text-xs h-8 text-popover-foreground hover:bg-muted"
+              onClick={() => {
+                console.log('Navegando para página completa de notificações');
+              }}
+            >
               Ver todas as notificações
             </Button>
           </div>
