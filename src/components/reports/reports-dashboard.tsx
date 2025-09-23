@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSystemActions } from '@/hooks/use-system-actions';
 import { 
   BarChart3, 
   Download, 
@@ -42,9 +43,10 @@ const alertsData = [
 export const ReportsDashboard: React.FC = () => {
   const [dateRange, setDateRange] = useState('7d');
   const [reportType, setReportType] = useState('overview');
+  const { handleExportData } = useSystemActions();
 
   const handleExport = (format: string) => {
-    console.log(`Exportando relatório em formato ${format}`);
+    handleExportData(format);
   };
 
   return (

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSystemActions } from '@/hooks/use-system-actions';
 import { 
   Settings, 
   User, 
@@ -25,6 +26,7 @@ import { TwoFactorSettings } from '@/components/auth/two-factor-settings';
 export const SettingsModule: React.FC = () => {
   const { toast } = useToast();
   const { profile } = useProfile();
+  const { handleBackup, handleRefreshData } = useSystemActions();
   const [settings, setSettings] = useState({
     notifications: {
       email: true,
@@ -424,11 +426,11 @@ export const SettingsModule: React.FC = () => {
                 <div className="space-y-4">
                   <h4 className="font-medium">Ações do Sistema</h4>
                   <div className="space-y-2">
-                    <Button variant="outline" className="w-full justify-start">
+                    <Button variant="outline" className="w-full justify-start" onClick={handleRefreshData}>
                       <Globe className="h-4 w-4 mr-2" />
                       Verificar Atualizações
                     </Button>
-                    <Button variant="outline" className="w-full justify-start">
+                    <Button variant="outline" className="w-full justify-start" onClick={handleBackup}>
                       <Database className="h-4 w-4 mr-2" />
                       Backup dos Dados
                     </Button>

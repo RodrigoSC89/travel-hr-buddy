@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { QuickActions } from '@/components/ui/quick-actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -142,15 +143,12 @@ export const InteractiveDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard Interativo</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard Principal</h1>
           <p className="text-muted-foreground">
             Acompanhe o progresso e métricas em tempo real
           </p>
         </div>
-        <Button className="hover-scale">
-          <Calendar className="mr-2 h-4 w-4" />
-          Ver Relatório
-        </Button>
+        <QuickActions />
       </div>
 
       {/* Metrics Grid */}

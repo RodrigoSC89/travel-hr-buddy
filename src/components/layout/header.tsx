@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSystemActions } from '@/hooks/use-system-actions';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
@@ -20,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import { NotificationCenter } from '@/components/notifications/notification-center';
 
 export const Header: React.FC = () => {
+  const { handleGlobalSearch, handleNavigateToSettings } = useSystemActions();
   const { user, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
@@ -67,10 +69,7 @@ export const Header: React.FC = () => {
             variant="ghost" 
             size="icon" 
             className="h-9 w-9 md:hidden"
-            onClick={() => {
-              // Implementar modal de busca para mobile
-              window.alert('Busca mobile em desenvolvimento');
-            }}
+            onClick={handleGlobalSearch}
           >
             <Search className="h-4 w-4" />
             <span className="sr-only">Buscar</span>
@@ -108,24 +107,24 @@ export const Header: React.FC = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={() => {
-                  // Implementar navegação para perfil
-                  window.alert('Perfil em desenvolvimento');
+                  handleNavigateToSettings();
                 }}
               >
                 <User className="mr-2 h-4 w-4" />
                 <span>Perfil</span>
               </DropdownMenuItem>
-              <DropdownMenuItem 
-                onClick={() => {
-                  // Implementar navegação para configurações
-                  window.alert('Configurações em desenvolvimento');
-                }}
-              >
+              <DropdownMenuItem onClick={handleNavigateToSettings}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Configurações</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={signOut}>
+              <DropdownMenuItem 
+                onClick={async () => {
+                  if (confirm("Tem certeza que deseja sair?")) {
+                    await signOut();
+                  }
+                }}
+              >
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Sair</span>
               </DropdownMenuItem>

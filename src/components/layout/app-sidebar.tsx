@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSidebarActions } from '@/hooks/use-sidebar-actions';
 import { 
   LayoutDashboard, 
   Users, 
@@ -118,6 +119,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const collapsed = state === 'collapsed';
   const navigate = useNavigate();
   const { canAccessModule, hasPermission, getRoleDisplayName, userRole } = usePermissions();
+  const { handleNavigation } = useSidebarActions();
 
   const toggleItem = (itemUrl: string) => {
     setOpenItems(prev => 
@@ -140,12 +142,8 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   };
 
   const handleItemClick = (item: string) => {
+    handleNavigation(item);
     onItemChange?.(item);
-    
-    // Navegação especial para alguns módulos
-    if (item === "price-alerts") {
-      navigate("/price-alerts");
-    }
   };
 
   // Determinar se o grupo de navegação principal deve estar aberto
