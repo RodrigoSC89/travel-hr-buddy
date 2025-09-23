@@ -21,12 +21,17 @@ import { useNotifications } from '@/hooks/use-notifications';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Toaster } from '@/components/ui/toaster';
 import { OfflineIndicator } from '@/components/ui/offline-indicator';
+import VoiceInterface from '@/components/voice/VoiceInterface';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState('dashboard');
   const { user, isLoading } = useAuth();
   const isMobile = useIsMobile();
   const { permissionGranted, scheduleNotification } = useNotifications();
+
+  const handleVoiceNavigation = (module: string) => {
+    setActiveModule(module);
+  };
 
   useEffect(() => {
     // Schedule a welcome notification for mobile users
@@ -127,6 +132,7 @@ const Index = () => {
           onItemChange={setActiveModule}
         />
         
+        <VoiceInterface onNavigate={handleVoiceNavigation} />
         <Toaster />
       </div>
       </>
@@ -154,6 +160,7 @@ const Index = () => {
         </div>
       </div>
       
+      <VoiceInterface onNavigate={handleVoiceNavigation} />
       <Toaster />
     </SidebarProvider>
     </>
