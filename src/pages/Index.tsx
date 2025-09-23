@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { LogIn } from 'lucide-react';
@@ -25,6 +25,13 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Toaster } from '@/components/ui/toaster';
 import { OfflineIndicator } from '@/components/ui/offline-indicator';
 import VoiceInterface from '@/components/voice/VoiceInterface';
+
+// Lazy loading do componente administrativo
+const UserManagementDashboard = lazy(() => 
+  import('@/components/admin/user-management-dashboard').then(module => ({
+    default: module.UserManagementDashboard
+  }))
+);
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState('dashboard');
@@ -110,6 +117,14 @@ const Index = () => {
         return <GlobalDashboard />;
       case 'hr':
         return <HRDashboard />;
+      case 'admin':
+        return (
+          <Suspense fallback={<div className="flex items-center justify-center h-48">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>}>
+            <UserManagementDashboard />
+          </Suspense>
+        );
       case 'flights':
         return <FlightSearch />;
       case 'hotels':

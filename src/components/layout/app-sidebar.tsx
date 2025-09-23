@@ -11,52 +11,63 @@ import {
   ChevronDown,
   Home,
   MessageSquare,
-  Bell
+  Bell,
+  UserCog
 } from "lucide-react";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
+import { usePermissions } from "@/hooks/use-permissions";
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  useSidebar,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 
-interface SidebarItem {
-  title: string;
-  url?: string;
-  icon: React.ComponentType<any>;
-  items?: Array<{
-    title: string;
-    url: string;
-  }>;
-}
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
-const navigationItems: SidebarItem[] = [
+// Navigation items
+const navigationItems = [
   {
     title: "Dashboard",
     url: "dashboard",
     icon: LayoutDashboard,
   },
   {
-    title: "Recursos Humanos",
-    url: "hr",
+    title: "RH",
+    url: "hr", 
     icon: Users,
+    permission: "certificates" as const,
   },
   {
     title: "Viagens",
+    url: "travel",
     icon: Plane,
     items: [
-      { title: "Buscar Voos", url: "flights" },
-      { title: "Buscar Hotéis", url: "hotels" },
+      {
+        title: "Voos",
+        url: "flights",
+        icon: Plane,
+      },
+      {
+        title: "Hotéis",
+        url: "hotels", 
+        icon: Hotel,
+      },
     ],
   },
   {
@@ -68,6 +79,7 @@ const navigationItems: SidebarItem[] = [
     title: "Analytics",
     url: "analytics",
     icon: BarChart3,
+    permission: "analytics" as const,
   },
   {
     title: "Reservas",
@@ -78,6 +90,7 @@ const navigationItems: SidebarItem[] = [
     title: "Relatórios",
     url: "reports",
     icon: FileText,
+    permission: "reports" as const,
   },
   {
     title: "Comunicação",
@@ -92,35 +105,37 @@ const navigationItems: SidebarItem[] = [
 ];
 
 interface AppSidebarProps {
-  activeItem: string;
-  onItemChange: (item: string) => void;
+  activeItem?: string;
+  onItemChange?: (item: string) => void;
 }
 
 export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
-  const { open } = useSidebar();
-  const [expandedGroups, setExpandedGroups] = useState<string[]>(["Viagens"]);
+  const [openItems, setOpenItems] = useState<string[]>([]);
+  const { canAccessModule, hasPermission, userRole } = usePermissions();
 
-  const toggleGroup = (groupTitle: string) => {
-    setExpandedGroups(prev =>
-      prev.includes(groupTitle)
-        ? prev.filter(g => g !== groupTitle)
-        : [...prev, groupTitle]
+  const toggleItem = (itemUrl: string) => {
+    setOpenItems(prev => 
+      prev.includes(itemUrl) 
+        ? prev.filter(item => item !== itemUrl)
+        : [...prev, itemUrl]
     );
-  };
-
-  const handleItemClick = (moduleKey: string) => {
-    console.log('Navegando para módulo:', moduleKey);
-    onItemChange(moduleKey);
   };
 
   const isItemActive = (moduleKey: string) => {
     return activeItem === moduleKey;
   };
 
+  const canAccessItem = (item: any) => {
+    if (item.permission) {
+      return hasPermission(item.permission, 'read');
+    }
+    return true;
+  };
+
   return (
     <Sidebar className="border-r">
       {/* Logo Header */}
-      <div className="p-6 border-b border-border">
+      <SidebarHeader className="p-6 border-b border-border">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-lg overflow-hidden bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-sm">
             <img 
@@ -133,74 +148,101 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
               NAUTILUS
             </h1>
-            <p className="text-xs text-muted-foreground font-medium tracking-wider">
-              ONE SYSTEM
-            </p>
+            <span className="text-xs text-muted-foreground font-medium">
+              Sistema Corporativo
+            </span>
           </div>
         </div>
-      </div>
+      </SidebarHeader>
 
-      <SidebarContent className="px-3 py-4">
+      {/* Navigation Content */}
+      <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
-            Menu Principal
-          </SidebarGroupLabel>
+          <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => {
+                // Verificar permissões para exibir o item
+                if (!canAccessItem(item)) {
+                  return null;
+                }
+
+                // Item com subitens
                 if (item.items) {
-                  const isExpanded = expandedGroups.includes(item.title);
-                  const hasActiveChild = item.items.some(child => isItemActive(child.url));
-                  
                   return (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton
-                        onClick={() => toggleGroup(item.title)}
-                        className={`w-full justify-between ${hasActiveChild ? 'bg-accent text-accent-foreground' : ''}`}
-                      >
-                        <div className="flex items-center">
-                          <item.icon className="mr-3 h-4 w-4" />
-                          <span>{item.title}</span>
-                        </div>
-                        <ChevronDown 
-                          className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
-                        />
-                      </SidebarMenuButton>
-                      
-                      {isExpanded && (
-                        <SidebarMenuSub className="animate-accordion-down">
-                          {item.items.map((subItem) => (
-                            <SidebarMenuSubItem key={subItem.title}>
-                              <SidebarMenuSubButton
-                                onClick={() => handleItemClick(subItem.url)}
-                                className={`cursor-pointer ${isItemActive(subItem.url) ? 'bg-primary text-primary-foreground' : 'hover:bg-accent hover:text-accent-foreground'}`}
-                              >
-                                <span>{subItem.title}</span>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                          ))}
-                        </SidebarMenuSub>
-                      )}
-                    </SidebarMenuItem>
+                    <Collapsible 
+                      key={item.url}
+                      open={openItems.includes(item.url)}
+                      onOpenChange={() => toggleItem(item.url)}
+                    >
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton className="w-full">
+                            <item.icon />
+                            <span>{item.title}</span>
+                            <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {item.items.map((subItem) => (
+                              <SidebarMenuSubItem key={subItem.url}>
+                                <SidebarMenuSubButton 
+                                  onClick={() => onItemChange?.(subItem.url)}
+                                  isActive={isItemActive(subItem.url)}
+                                >
+                                  <subItem.icon />
+                                  <span>{subItem.title}</span>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
                   );
                 }
 
+                // Item simples
                 return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      onClick={() => item.url && handleItemClick(item.url)}
-                      className={`cursor-pointer ${isItemActive(item.url!) ? 'bg-primary text-primary-foreground' : 'hover:bg-accent hover:text-accent-foreground'}`}
+                  <SidebarMenuItem key={item.url}>
+                    <SidebarMenuButton 
+                      onClick={() => onItemChange?.(item.url)}
+                      isActive={isItemActive(item.url)}
                     >
-                      <item.icon className="mr-3 h-4 w-4" />
+                      <item.icon />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
               })}
+
+              {/* Administração - Apenas para admins e gerentes de RH */}
+              {canAccessModule('admin') && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton 
+                    onClick={() => onItemChange?.("admin")}
+                    isActive={isItemActive("admin")}
+                  >
+                    <UserCog />
+                    <span>Administração</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {/* Footer */}
+      <SidebarFooter className="p-4 border-t border-border">
+        <div className="text-xs text-muted-foreground text-center">
+          <p>Versão 2.0.0</p>
+          <p className="mt-1">© 2024 Nautilus</p>
+        </div>
+      </SidebarFooter>
+      
+      <SidebarRail />
     </Sidebar>
   );
 }
