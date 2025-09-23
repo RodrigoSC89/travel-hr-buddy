@@ -1,213 +1,207 @@
-import React, { useState } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import React, { useState, useEffect } from 'react';
+import { Search, Filter, SortAsc, SortDesc, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Slider } from '@/components/ui/slider';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Filter,
-  X,
-  Star,
-  Plane,
-  Clock,
-  DollarSign
-} from 'lucide-react';
-
-interface FilterOptions {
-  priceRange: [number, number];
-  airlines: string[];
-  rating: number;
-  stops: 'any' | 'direct' | '1stop';
-  departureTime: 'any' | 'morning' | 'afternoon' | 'evening';
-  duration: number;
-}
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 interface SearchFiltersProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onApplyFilters: (filters: FilterOptions) => void;
-  availableAirlines: string[];
-  maxPrice: number;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  filters?: {
+    categories?: string[];
+    status?: string[];
+    dateRange?: { start: Date; end: Date };
+  };
+  onFiltersChange?: (filters: any) => void;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  onSortChange?: (sortBy: string, order: 'asc' | 'desc') => void;
+  placeholder?: string;
+  enabledFilters?: ('categories' | 'status' | 'dateRange')[];
 }
 
-export const SearchFilters = ({ 
-  isOpen, 
-  onClose, 
-  onApplyFilters, 
-  availableAirlines,
-  maxPrice 
-}: SearchFiltersProps) => {
-  const [filters, setFilters] = useState<FilterOptions>({
-    priceRange: [0, maxPrice],
-    airlines: [],
-    rating: 0,
-    stops: 'any',
-    departureTime: 'any',
-    duration: 24
-  });
+export const SearchFilters: React.FC<SearchFiltersProps> = ({
+  searchQuery,
+  onSearchChange,
+  filters = {},
+  onFiltersChange,
+  sortBy = 'name',
+  sortOrder = 'asc',
+  onSortChange,
+  placeholder = "Buscar...",
+  enabledFilters = ['categories', 'status']
+}) => {
+  const [localFilters, setLocalFilters] = useState(filters);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const handleAirlineToggle = (airline: string) => {
-    setFilters(prev => ({
-      ...prev,
-      airlines: prev.airlines.includes(airline)
-        ? prev.airlines.filter(a => a !== airline)
-        : [...prev.airlines, airline]
-    }));
+  const activeFilterCount = Object.values(localFilters).filter(Boolean).length;
+
+  const handleFilterChange = (key: string, value: any) => {
+    const newFilters = { ...localFilters, [key]: value };
+    setLocalFilters(newFilters);
+    onFiltersChange?.(newFilters);
   };
 
-  const handleApply = () => {
-    onApplyFilters(filters);
-    onClose();
+  const clearFilters = () => {
+    const clearedFilters = {};
+    setLocalFilters(clearedFilters);
+    onFiltersChange?.(clearedFilters);
   };
 
-  const handleClear = () => {
-    setFilters({
-      priceRange: [0, maxPrice],
-      airlines: [],
-      rating: 0,
-      stops: 'any',
-      departureTime: 'any',
-      duration: 24
-    });
+  const toggleSort = () => {
+    const newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    onSortChange?.(sortBy, newOrder);
   };
-
-  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="p-6 space-y-6">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold flex items-center gap-2">
-              <Filter size={20} />
-              Filtros Avançados
-            </h2>
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X size={20} />
-            </Button>
-          </div>
+    <div className="flex items-center gap-2 p-4 bg-background border rounded-lg">
+      {/* Search Input */}
+      <div className="relative flex-1">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder={placeholder}
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+          className="pl-10"
+        />
+        {searchQuery && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7 w-7 p-0"
+            onClick={() => onSearchChange('')}
+          >
+            <X className="h-3 w-3" />
+          </Button>
+        )}
+      </div>
 
-          {/* Price Range */}
-          <div className="space-y-3">
-            <Label className="text-base font-medium">Faixa de Preço</Label>
-            <div className="px-3">
-              <Slider
-                value={filters.priceRange}
-                onValueChange={(value) => setFilters(prev => ({ ...prev, priceRange: value as [number, number] }))}
-                max={maxPrice}
-                min={0}
-                step={50}
-                className="w-full"
-              />
+      {/* Filters */}
+      <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline" className="relative">
+            <Filter className="h-4 w-4 mr-2" />
+            Filtros
+            {activeFilterCount > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -top-2 -right-2 h-5 w-5 text-xs p-0 flex items-center justify-center"
+              >
+                {activeFilterCount}
+              </Badge>
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-80 p-4">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h4 className="font-medium">Filtros</h4>
+              {activeFilterCount > 0 && (
+                <Button variant="ghost" size="sm" onClick={clearFilters}>
+                  Limpar
+                </Button>
+              )}
             </div>
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <span>R$ {filters.priceRange[0]}</span>
-              <span>R$ {filters.priceRange[1]}</span>
-            </div>
-          </div>
 
-          {/* Airlines */}
-          <div className="space-y-3">
-            <Label className="text-base font-medium">Companhias Aéreas</Label>
-            <div className="grid grid-cols-2 gap-3">
-              {availableAirlines.map((airline) => (
-                <div key={airline} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={airline}
-                    checked={filters.airlines.includes(airline)}
-                    onCheckedChange={() => handleAirlineToggle(airline)}
-                  />
-                  <Label htmlFor={airline} className="text-sm cursor-pointer">
-                    {airline}
-                  </Label>
+            {/* Categories Filter */}
+            {enabledFilters.includes('categories') && (
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Categorias</Label>
+                <div className="space-y-2">
+                  {['RH', 'Financeiro', 'Vendas', 'Marketing', 'TI'].map((category) => (
+                    <div key={category} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={category}
+                        checked={localFilters.categories?.includes(category) || false}
+                        onCheckedChange={(checked) => {
+                          const current = localFilters.categories || [];
+                          const updated = checked
+                            ? [...current, category]
+                            : current.filter(c => c !== category);
+                          handleFilterChange('categories', updated);
+                        }}
+                      />
+                      <Label htmlFor={category} className="text-sm">
+                        {category}
+                      </Label>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            )}
 
-          {/* Rating */}
-          <div className="space-y-3">
-            <Label className="text-base font-medium">Avaliação Mínima</Label>
-            <div className="flex items-center space-x-2">
-              {[1, 2, 3, 4, 5].map((rating) => (
-                <Button
-                  key={rating}
-                  variant={filters.rating >= rating ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setFilters(prev => ({ ...prev, rating }))}
-                  className="p-2"
-                >
-                  <Star size={16} fill={filters.rating >= rating ? "currentColor" : "none"} />
-                </Button>
-              ))}
-              <span className="text-sm text-muted-foreground ml-2">
-                {filters.rating > 0 ? `${filters.rating}+ estrelas` : 'Qualquer avaliação'}
-              </span>
-            </div>
+            {/* Status Filter */}
+            {enabledFilters.includes('status') && (
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Status</Label>
+                <div className="space-y-2">
+                  {['Ativo', 'Inativo', 'Pendente', 'Concluído'].map((status) => (
+                    <div key={status} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={status}
+                        checked={localFilters.status?.includes(status) || false}
+                        onCheckedChange={(checked) => {
+                          const current = localFilters.status || [];
+                          const updated = checked
+                            ? [...current, status]
+                            : current.filter(s => s !== status);
+                          handleFilterChange('status', updated);
+                        }}
+                      />
+                      <Label htmlFor={status} className="text-sm">
+                        {status}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
+        </PopoverContent>
+      </Popover>
 
-          {/* Stops */}
-          <div className="space-y-3">
-            <Label className="text-base font-medium">Conexões</Label>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { value: 'any', label: 'Qualquer' },
-                { value: 'direct', label: 'Voo Direto' },
-                { value: '1stop', label: 'Até 1 Conexão' }
-              ].map((option) => (
-                <Button
-                  key={option.value}
-                  variant={filters.stops === option.value ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setFilters(prev => ({ ...prev, stops: option.value as any }))}
-                >
-                  {option.label}
-                </Button>
-              ))}
-            </div>
-          </div>
+      {/* Sort */}
+      <Button variant="outline" onClick={toggleSort}>
+        {sortOrder === 'asc' ? (
+          <SortAsc className="h-4 w-4 mr-2" />
+        ) : (
+          <SortDesc className="h-4 w-4 mr-2" />
+        )}
+        Ordenar
+      </Button>
 
-          {/* Departure Time */}
-          <div className="space-y-3">
-            <Label className="text-base font-medium">Horário de Partida</Label>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { value: 'any', label: 'Qualquer Horário' },
-                { value: 'morning', label: 'Manhã (06:00-12:00)' },
-                { value: 'afternoon', label: 'Tarde (12:00-18:00)' },
-                { value: 'evening', label: 'Noite (18:00-24:00)' }
-              ].map((option) => (
-                <Button
-                  key={option.value}
-                  variant={filters.departureTime === option.value ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setFilters(prev => ({ ...prev, departureTime: option.value as any }))}
-                >
-                  {option.label}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center justify-between pt-4 border-t">
-            <Button variant="outline" onClick={handleClear}>
-              Limpar Filtros
-            </Button>
-            <div className="flex space-x-2">
-              <Button variant="outline" onClick={onClose}>
-                Cancelar
-              </Button>
-              <Button onClick={handleApply} className="gradient-ocean">
-                Aplicar Filtros
-              </Button>
-            </div>
-          </div>
+      {/* Active Filters Display */}
+      {activeFilterCount > 0 && (
+        <div className="flex items-center gap-1 max-w-xs overflow-x-auto">
+          {localFilters.categories?.map((category) => (
+            <Badge key={category} variant="secondary" className="text-xs">
+              {category}
+              <X
+                className="h-3 w-3 ml-1 cursor-pointer"
+                onClick={() => {
+                  const updated = localFilters.categories?.filter(c => c !== category) || [];
+                  handleFilterChange('categories', updated);
+                }}
+              />
+            </Badge>
+          ))}
+          {localFilters.status?.map((status) => (
+            <Badge key={status} variant="outline" className="text-xs">
+              {status}
+              <X
+                className="h-3 w-3 ml-1 cursor-pointer"
+                onClick={() => {
+                  const updated = localFilters.status?.filter(s => s !== status) || [];
+                  handleFilterChange('status', updated);
+                }}
+              />
+            </Badge>
+          ))}
         </div>
-      </Card>
+      )}
     </div>
   );
 };

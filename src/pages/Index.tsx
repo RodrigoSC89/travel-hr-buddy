@@ -25,6 +25,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Toaster } from '@/components/ui/toaster';
 import { OfflineIndicator } from '@/components/ui/offline-indicator';
 import VoiceInterface from '@/components/voice/VoiceInterface';
+import { ScrollToTop } from '@/components/ui/scroll-to-top';
+import { PageTransition } from '@/components/ui/page-transition';
 import { ErrorBoundary } from '@/components/layout/error-boundary';
 
 // Lazy loading dos componentes administrativos
@@ -201,14 +203,17 @@ const Index = () => {
           
           <main className="flex-1 overflow-auto">
             <ErrorBoundary>
-              <div className="container mx-auto p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in">
-                {renderContent()}
-              </div>
+              <PageTransition>
+                <div className="container mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+                  {renderContent()}
+                </div>
+              </PageTransition>
             </ErrorBoundary>
           </main>
         </div>
       </div>
       
+      <ScrollToTop />
       <VoiceInterface onNavigate={handleVoiceNavigation} />
       <Toaster />
     </SidebarProvider>
