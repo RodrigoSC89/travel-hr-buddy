@@ -3,11 +3,13 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { RealtimeChat } from '@/utils/RealtimeAudio';
-import { Mic, MicOff, MessageSquare, Settings, HelpCircle, BarChart3, History } from 'lucide-react';
+import { Mic, MicOff, MessageSquare, Settings, HelpCircle, BarChart3, History, Brain, Link } from 'lucide-react';
 import VoiceCommands from './VoiceCommands';
 import VoiceSettings from './VoiceSettings';
 import VoiceAnalytics from './VoiceAnalytics';
 import VoiceHistory from './VoiceHistory';
+import VoicePersonality from './VoicePersonality';
+import VoiceIntegrations from './VoiceIntegrations';
 
 interface Message {
   type: string;
@@ -30,8 +32,18 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [showPersonality, setShowPersonality] = useState(false);
+  const [showIntegrations, setShowIntegrations] = useState(false);
   const [sessionStart, setSessionStart] = useState<Date | null>(null);
   const [responseTime, setResponseTime] = useState(0);
+  const [personalitySettings, setPersonalitySettings] = useState({
+    tone: 'friendly' as 'formal' | 'casual' | 'friendly' | 'professional',
+    responseLength: 'balanced' as 'concise' | 'balanced' | 'detailed',
+    expertise: ['Recursos Humanos', 'Viagens Corporativas'],
+    customInstructions: '',
+    contextAwareness: true,
+    proactiveHelp: true
+  });
   const chatRef = useRef<RealtimeChat | null>(null);
 
   const handleMessage = (event: any) => {
@@ -237,12 +249,13 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
             )}
 
             {/* Quick actions */}
-            <div className="grid grid-cols-3 gap-1">
+            <div className="grid grid-cols-5 gap-1">
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={() => setShowCommands(!showCommands)}
-                className="text-xs"
+                className="text-xs p-1"
+                title="Comandos"
               >
                 <HelpCircle className="h-3 w-3" />
               </Button>
@@ -250,7 +263,8 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
                 variant="outline" 
                 size="sm" 
                 onClick={() => setShowAnalytics(!showAnalytics)}
-                className="text-xs"
+                className="text-xs p-1"
+                title="Analytics"
               >
                 <BarChart3 className="h-3 w-3" />
               </Button>
@@ -258,9 +272,28 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
                 variant="outline" 
                 size="sm" 
                 onClick={() => setShowHistory(!showHistory)}
-                className="text-xs"
+                className="text-xs p-1"
+                title="Histórico"
               >
                 <History className="h-3 w-3" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setShowPersonality(true)}
+                className="text-xs p-1"
+                title="Personalidade"
+              >
+                <Brain className="h-3 w-3" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setShowIntegrations(true)}
+                className="text-xs p-1"
+                title="Integrações"
+              >
+                <Link className="h-3 w-3" />
               </Button>
             </div>
 
@@ -271,7 +304,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
               className="w-full"
             >
               <Settings className="h-3 w-3 mr-2" />
-              Configurações
+              Configurações Avançadas
             </Button>
 
             {/* Quick text input */}
@@ -364,6 +397,26 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
           </div>
         </div>
       )}
+
+      {/* Personality Modal */}
+      <VoicePersonality
+        isOpen={showPersonality}
+        onClose={() => setShowPersonality(false)}
+        currentSettings={personalitySettings}
+        onSave={setPersonalitySettings}
+      />
+
+      {/* Integrations Modal */}
+      <VoiceIntegrations
+        isOpen={showIntegrations}
+        onClose={() => setShowIntegrations(false)}
+        onNavigate={(module) => {
+          if (onNavigate) {
+            onNavigate(module);
+          }
+          setShowIntegrations(false);
+        }}
+      />
 
       {/* Settings Modal */}
       <VoiceSettings 
