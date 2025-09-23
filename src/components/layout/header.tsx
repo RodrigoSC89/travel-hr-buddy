@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useAuth } from '@/components/auth/auth-provider';
+import { useAuth } from '@/contexts/AuthContext';
+import { useProfile } from '@/hooks/use-profile';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import {
@@ -18,10 +19,14 @@ import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 
 export const Header: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
+  const { profile } = useProfile();
   const navigate = useNavigate();
 
   if (!user) return null;
+
+  const displayName = profile?.full_name || user.email?.split('@')[0] || 'Usuário';
+  const userEmail = user.email || '';
 
   const getInitials = (name: string) => {
     return name
@@ -91,7 +96,7 @@ export const Header: React.FC = () => {
           
           {/* User name - Hidden on mobile */}
           <span className="text-sm text-muted-foreground hidden lg:inline font-medium">
-            {user.name}
+            {displayName}
           </span>
           
           <DropdownMenu>
@@ -99,7 +104,7 @@ export const Header: React.FC = () => {
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                 <Avatar className="h-9 w-9">
                   <AvatarFallback className="text-sm font-medium bg-primary text-primary-foreground">
-                    {getInitials(user.name)}
+                    {getInitials(displayName)}
                   </AvatarFallback>
                 </Avatar>
               </Button>
@@ -107,9 +112,9 @@ export const Header: React.FC = () => {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user.name}</p>
+                  <p className="text-sm font-medium leading-none">{displayName}</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    {user.email}
+                    {userEmail}
                   </p>
                 </div>
               </DropdownMenuLabel>
@@ -133,7 +138,7 @@ export const Header: React.FC = () => {
                 <span>Configurações</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={logout}>
+              <DropdownMenuItem onClick={signOut}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Sair</span>
               </DropdownMenuItem>

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { LogIn } from 'lucide-react';
+import { ThemeProvider } from '@/components/layout/theme-provider';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Header } from '@/components/layout/header';
-import { useAuth } from '@/components/auth/auth-provider';
+import { useAuth } from '@/contexts/AuthContext';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { GlobalDashboard } from '@/components/dashboard/global-dashboard';
 import { HRDashboard } from '@/components/hr/hr-dashboard';
@@ -56,9 +59,31 @@ const Index = () => {
     );
   }
 
-  // Redirecionar para login se não estiver autenticado
+  // Mostrar página de boas-vindas se não estiver autenticado
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    return (
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 via-background to-secondary/20">
+          <div className="text-center space-y-6 p-8">
+            <div className="mx-auto w-16 h-16 bg-primary rounded-full flex items-center justify-center">
+              <LogIn className="w-8 h-8 text-primary-foreground" />
+            </div>
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold">Sistema Corporativo</h1>
+              <p className="text-muted-foreground">
+                Acesse sua conta para utilizar o sistema
+              </p>
+            </div>
+            <Button asChild size="lg">
+              <Link to="/auth">
+                <LogIn className="mr-2 h-4 w-4" />
+                Fazer Login
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </ThemeProvider>
+    );
   }
 
   const getTitleAndSubtitle = () => {
@@ -110,7 +135,7 @@ const Index = () => {
 
   if (isMobile) {
     return (
-      <>
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
         <OfflineIndicator />
         <MobileSplash />
         <div className="min-h-screen bg-background pb-20">
@@ -135,12 +160,12 @@ const Index = () => {
         <VoiceInterface onNavigate={handleVoiceNavigation} />
         <Toaster />
       </div>
-      </>
+      </ThemeProvider>
     );
   }
 
   return (
-    <>
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <OfflineIndicator />
       <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
@@ -163,7 +188,7 @@ const Index = () => {
       <VoiceInterface onNavigate={handleVoiceNavigation} />
       <Toaster />
     </SidebarProvider>
-    </>
+    </ThemeProvider>
   );
 };
 

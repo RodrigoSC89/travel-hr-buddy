@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { useAuth } from '@/components/auth/auth-provider';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Settings, 
@@ -67,7 +67,7 @@ const settingsSections: SettingsSection[] = [
 export const SettingsModule: React.FC = () => {
   const [activeSection, setActiveSection] = useState('profile');
   const [isLoading, setIsLoading] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
   const { toast } = useToast();
 
   const handleSaveSettings = async () => {
@@ -91,7 +91,7 @@ export const SettingsModule: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="name">Nome Completo</Label>
-            <Input id="name" defaultValue={user?.name || ''} />
+            <Input id="name" defaultValue={user?.email?.split('@')[0] || ''} />
           </div>
           <div>
             <Label htmlFor="email">Email</Label>
@@ -238,7 +238,7 @@ export const SettingsModule: React.FC = () => {
       </div>
       
       <div className="pt-4">
-        <Button variant="outline" onClick={logout} className="w-full md:w-auto">
+        <Button variant="outline" onClick={signOut} className="w-full md:w-auto">
           Encerrar Todas as Sessões
         </Button>
       </div>
