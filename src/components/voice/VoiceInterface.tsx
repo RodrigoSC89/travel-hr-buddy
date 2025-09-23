@@ -10,6 +10,7 @@ import VoiceAnalytics from './VoiceAnalytics';
 import VoiceHistory from './VoiceHistory';
 import VoicePersonality from './VoicePersonality';
 import VoiceIntegrations from './VoiceIntegrations';
+import VoiceConnectionMonitor from './VoiceConnectionMonitor';
 
 interface Message {
   type: string;
@@ -306,6 +307,16 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
               <Settings className="h-3 w-3 mr-2" />
               Configurações Avançadas
             </Button>
+
+            {/* Connection Monitor */}
+            <VoiceConnectionMonitor
+              isActive={isConnected}
+              onReconnect={startConversation}
+              connectionData={{
+                isConnected,
+                responseTime
+              }}
+            />
 
             {/* Quick text input */}
             <div className="flex gap-2">

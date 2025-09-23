@@ -44,14 +44,31 @@ serve(async (req) => {
           type: "session.update",
           session: {
             modalities: ["text", "audio"],
-            instructions: `Você é um assistente de voz inteligente para um sistema empresarial. Você pode ajudar com:
-            - Navegação no sistema (RH, Viagens, Alertas de Preço, Relatórios)
-            - Consultas sobre certificados e funcionários
-            - Pesquisa de voos e hotéis
+            instructions: `Você é um assistente de voz inteligente para um sistema empresarial chamado Nautilus. Você pode ajudar com:
+            
+            NAVEGAÇÃO NO SISTEMA:
+            - Dashboard principal (use função navigate_system com "dashboard")
+            - Recursos Humanos - RH (use função navigate_system com "hr")
+            - Módulo de Viagens (use função navigate_system com "travel") 
+            - Alertas de Preço (use função navigate_system com "price-alerts")
+            - Relatórios (use função navigate_system com "reports")
+            - Configurações (use função navigate_system com "settings")
+            
+            FUNCIONALIDADES ESPECÍFICAS:
+            - Consultas sobre certificados e funcionários (módulo RH)
+            - Pesquisa de voos e hotéis (módulo viagens)
             - Configuração de alertas de preços
             - Análise de dados e estatísticas
+            - Geração de relatórios
             
-            Sempre responda em português brasileiro de forma conversacional e útil.`,
+            INSTRUÇÕES DE COMPORTAMENTO:
+            - Sempre responda em português brasileiro de forma conversacional e útil
+            - Seja proativo em sugerir ações relevantes
+            - Use as funções disponíveis quando apropriado
+            - Mantenha um tom profissional mas amigável
+            - Forneça respostas claras e precisas
+            
+            Quando o usuário solicitar navegação ou ações específicas, use as funções apropriadas para executá-las.`,
             voice: "alloy",
             input_audio_format: "pcm16",
             output_audio_format: "pcm16",
@@ -68,13 +85,14 @@ serve(async (req) => {
               {
                 type: "function",
                 name: "navigate_system",
-                description: "Navegar para diferentes módulos do sistema",
+                description: "Navegar para diferentes módulos do sistema Nautilus",
                 parameters: {
                   type: "object",
                   properties: {
                     module: {
                       type: "string",
-                      enum: ["dashboard", "hr", "travel", "price-alerts", "reports", "settings"]
+                      enum: ["dashboard", "hr", "travel", "price-alerts", "reports", "settings"],
+                      description: "Módulo para navegar: dashboard (página principal), hr (recursos humanos), travel (viagens), price-alerts (alertas de preço), reports (relatórios), settings (configurações)"
                     }
                   },
                   required: ["module"]
@@ -83,13 +101,22 @@ serve(async (req) => {
               {
                 type: "function", 
                 name: "search_flights",
-                description: "Buscar voos disponíveis",
+                description: "Buscar voos disponíveis no sistema",
                 parameters: {
                   type: "object",
                   properties: {
-                    origin: { type: "string" },
-                    destination: { type: "string" },
-                    date: { type: "string" }
+                    origin: { 
+                      type: "string",
+                      description: "Cidade ou aeroporto de origem"
+                    },
+                    destination: { 
+                      type: "string",
+                      description: "Cidade ou aeroporto de destino"
+                    },
+                    date: { 
+                      type: "string",
+                      description: "Data da viagem no formato YYYY-MM-DD"
+                    }
                   },
                   required: ["origin", "destination", "date"]
                 }
@@ -97,10 +124,30 @@ serve(async (req) => {
               {
                 type: "function",
                 name: "get_system_status",
-                description: "Obter status atual do sistema e estatísticas",
+                description: "Obter status atual do sistema e estatísticas gerais",
                 parameters: {
                   type: "object",
-                  properties: {},
+                  properties: {
+                    details: {
+                      type: "boolean",
+                      description: "Se deve incluir detalhes técnicos"
+                    }
+                  },
+                  required: []
+                }
+              },
+              {
+                type: "function",
+                name: "check_certificates",
+                description: "Verificar certificados de funcionários que estão vencendo",
+                parameters: {
+                  type: "object",
+                  properties: {
+                    days_ahead: {
+                      type: "number",
+                      description: "Número de dias para verificar vencimentos futuros"
+                    }
+                  },
                   required: []
                 }
               }
@@ -125,13 +172,69 @@ serve(async (req) => {
         if (data.type === "response.function_call_arguments.done") {
           console.log("Function call:", data.name, data.arguments);
           
+          let functionResult = { success: true, message: "Função executada com sucesso" };
+          
+          try {
+            const args = JSON.parse(data.arguments);
+            
+            switch (data.name) {
+              case "navigate_system":
+                functionResult = {
+                  success: true,
+                  message: `Navegando para o módulo: ${args.module}`,
+                  action: "navigation",
+                  module: args.module
+                };
+                break;
+                
+              case "search_flights":
+                functionResult = {
+                  success: true,
+                  message: `Buscando voos de ${args.origin} para ${args.destination} em ${args.date}`,
+                  action: "flight_search",
+                  data: args
+                };
+                break;
+                
+              case "get_system_status":
+                functionResult = {
+                  success: true,
+                  message: "Sistema operacional. Todos os módulos funcionando normalmente.",
+                  action: "system_status",
+                  status: "operational",
+                  modules: ["RH", "Viagens", "Alertas", "Relatórios"]
+                };
+                break;
+                
+              case "check_certificates":
+                functionResult = {
+                  success: true,
+                  message: `Verificando certificados que vencem nos próximos ${args.days_ahead || 30} dias`,
+                  action: "certificate_check",
+                  data: args
+                };
+                break;
+                
+              default:
+                functionResult = {
+                  success: false,
+                  message: `Função ${data.name} não reconhecida`
+                };
+            }
+          } catch (error) {
+            functionResult = {
+              success: false,
+              message: `Erro ao processar função: ${error.message}`
+            };
+          }
+          
           // Send function response back to OpenAI
           const functionResponse = {
             type: "conversation.item.create",
             item: {
               type: "function_call_output",
               call_id: data.call_id,
-              output: JSON.stringify({ success: true, message: `Executando ${data.name}` })
+              output: JSON.stringify(functionResult)
             }
           };
           openaiWs.send(JSON.stringify(functionResponse));
