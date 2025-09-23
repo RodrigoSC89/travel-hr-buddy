@@ -171,21 +171,13 @@ const Index = () => {
         <div className="min-h-screen bg-background pb-20">
         <MobileHeader
           title={title}
-          subtitle={subtitle}
-          notificationCount={3}
-          onNotificationClick={() => console.log('Notifications clicked')}
-          onSearchClick={() => console.log('Search clicked')}
-          onProfileClick={() => console.log('Profile clicked')}
         />
         
         <main className="px-4 py-6">
           {renderContent()}
         </main>
         
-        <MobileNavigation
-          activeItem={activeModule}
-          onItemChange={setActiveModule}
-        />
+        <MobileNavigation />
         
         <VoiceInterface onNavigate={handleVoiceNavigation} />
         <Toaster />

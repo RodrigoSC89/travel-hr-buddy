@@ -1,87 +1,105 @@
 import React from 'react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { NavLink, useLocation } from 'react-router-dom';
 import { 
   Home, 
-  Users, 
-  Plane, 
-  AlertTriangle, 
-  MessageCircle, 
-  BarChart3,
-  Calendar,
-  Menu
+  BarChart3, 
+  Bell, 
+  Settings, 
+  User,
+  AlertTriangle,
+  Users,
+  Plane
 } from 'lucide-react';
-
-interface MobileNavigationProps {
-  activeItem: string;
-  onItemChange: (item: string) => void;
-  className?: string;
-}
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { useEnhancedNotifications } from '@/hooks/use-enhanced-notifications';
 
 const navigationItems = [
-  { id: 'dashboard', label: 'Início', icon: Home },
-  { id: 'hr', label: 'RH', icon: Users },
-  { id: 'travel', label: 'Viagens', icon: Plane },
-  { id: 'alerts', label: 'Alertas', icon: AlertTriangle },
-  { id: 'reservations', label: 'Reservas', icon: Calendar },
+  {
+    href: '/',
+    icon: Home,
+    label: 'Início',
+    end: true
+  },
+  {
+    href: '/price-alerts',
+    icon: AlertTriangle,
+    label: 'Alertas'
+  },
+  {
+    href: '/hr',
+    icon: Users,
+    label: 'RH'
+  },
+  {
+    href: '/travel',
+    icon: Plane,
+    label: 'Viagens'
+  },
+  {
+    href: '/reports',
+    icon: BarChart3,
+    label: 'Relatórios'
+  }
 ];
 
-export const MobileNavigation: React.FC<MobileNavigationProps> = ({
-  activeItem,
-  onItemChange,
-  className
-}) => {
+export const MobileNavigation: React.FC = () => {
+  const location = useLocation();
+  const { unreadCount } = useEnhancedNotifications();
+
+  const isActive = (href: string, end?: boolean) => {
+    if (end) {
+      return location.pathname === href;
+    }
+    return location.pathname.startsWith(href);
+  };
+
   return (
-    <div className={cn(
-      "fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t border-border",
-      "md:hidden",
-      className
-    )}>
-      <div className="flex items-center justify-around px-2 py-2">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border lg:hidden">
+      <div className="grid grid-cols-5 h-16">
         {navigationItems.map((item) => {
           const Icon = item.icon;
-          const isActive = activeItem === item.id;
+          const active = isActive(item.href, item.end);
           
           return (
-            <Button
-              key={item.id}
-              variant="ghost"
-              size="sm"
-              onClick={() => onItemChange(item.id)}
+            <NavLink
+              key={item.href}
+              to={item.href}
               className={cn(
-                "flex flex-col items-center justify-center h-16 w-16 p-2 rounded-xl transition-all",
-                isActive 
-                  ? "bg-primary/10 text-primary" 
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                "flex flex-col items-center justify-center gap-1 py-2 px-1 text-xs font-medium transition-colors relative",
+                active 
+                  ? "text-primary bg-primary/10" 
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
               <Icon 
-                size={20} 
                 className={cn(
-                  "mb-1 transition-transform",
-                  isActive && "scale-110"
+                  "h-5 w-5",
+                  active && "scale-110"
                 )} 
               />
-              <span className="text-xs font-medium truncate">
+              <span className="truncate max-w-full">
                 {item.label}
               </span>
-              {isActive && (
-                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full" />
+              
+              {/* Badge para notificações na navegação de alertas */}
+              {item.href === '/price-alerts' && unreadCount > 0 && (
+                <Badge 
+                  variant="destructive" 
+                  className="absolute -top-1 -right-1 h-4 w-4 text-xs p-0 flex items-center justify-center scale-75"
+                >
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </Badge>
               )}
-            </Button>
+              
+              {/* Indicador visual para item ativo */}
+              {active && (
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full" />
+              )}
+            </NavLink>
           );
         })}
-        
-        {/* Menu button for additional options */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="flex flex-col items-center justify-center h-16 w-16 p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted"
-        >
-          <Menu size={20} className="mb-1" />
-          <span className="text-xs font-medium">Mais</span>
-        </Button>
       </div>
-    </div>
+    </nav>
   );
 };
