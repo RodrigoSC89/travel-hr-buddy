@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { useProfile } from '@/hooks/use-profile';
+import { TwoFactorSettings } from '@/components/auth/two-factor-settings';
 
 export const SettingsModule: React.FC = () => {
   const { toast } = useToast();
@@ -95,6 +96,10 @@ export const SettingsModule: React.FC = () => {
             <User className="h-4 w-4" />
             Perfil
           </TabsTrigger>
+          <TabsTrigger value="security" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            Segurança
+          </TabsTrigger>
           <TabsTrigger value="notifications" className="flex items-center gap-2">
             <Bell className="h-4 w-4" />
             Notificações
@@ -159,6 +164,13 @@ export const SettingsModule: React.FC = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="security" className="space-y-6">
+          <TwoFactorSettings />
+        </TabsContent>
+        <TabsContent value="security" className="space-y-6">
+          <TwoFactorSettings />
         </TabsContent>
 
         <TabsContent value="notifications" className="space-y-6">
