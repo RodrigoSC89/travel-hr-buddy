@@ -289,10 +289,14 @@ export type Database = {
           created_at: string | null
           department: string | null
           email: string
+          employee_id: string | null
           full_name: string | null
+          hire_date: string | null
           id: string
+          manager_id: string | null
           phone: string | null
           position: string | null
+          status: string | null
           updated_at: string | null
         }
         Insert: {
@@ -300,10 +304,14 @@ export type Database = {
           created_at?: string | null
           department?: string | null
           email: string
+          employee_id?: string | null
           full_name?: string | null
+          hire_date?: string | null
           id: string
+          manager_id?: string | null
           phone?: string | null
           position?: string | null
+          status?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -311,11 +319,56 @@ export type Database = {
           created_at?: string | null
           department?: string | null
           email?: string
+          employee_id?: string | null
           full_name?: string | null
+          hire_date?: string | null
           id?: string
+          manager_id?: string | null
           phone?: string | null
           position?: string | null
+          status?: string | null
           updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_manager_id_fkey"
+            columns: ["manager_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      role_permissions: {
+        Row: {
+          can_delete: boolean | null
+          can_manage: boolean | null
+          can_read: boolean | null
+          can_write: boolean | null
+          created_at: string | null
+          id: string
+          permission_name: string
+          role: Database["public"]["Enums"]["user_role"]
+        }
+        Insert: {
+          can_delete?: boolean | null
+          can_manage?: boolean | null
+          can_read?: boolean | null
+          can_write?: boolean | null
+          created_at?: string | null
+          id?: string
+          permission_name: string
+          role: Database["public"]["Enums"]["user_role"]
+        }
+        Update: {
+          can_delete?: boolean | null
+          can_manage?: boolean | null
+          can_read?: boolean | null
+          can_write?: boolean | null
+          created_at?: string | null
+          id?: string
+          permission_name?: string
+          role?: Database["public"]["Enums"]["user_role"]
         }
         Relationships: []
       }
@@ -435,6 +488,14 @@ export type Database = {
       get_user_role: {
         Args: { user_uuid?: string }
         Returns: Database["public"]["Enums"]["user_role"]
+      }
+      has_permission: {
+        Args: {
+          permission_name: string
+          permission_type?: string
+          user_uuid?: string
+        }
+        Returns: boolean
       }
     }
     Enums: {
