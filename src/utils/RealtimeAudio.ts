@@ -193,9 +193,18 @@ export class RealtimeChat {
       // Connect to our Supabase edge function WebSocket
       const projectId = "vnbptmixvwropvanyhdb";
       this.ws = new WebSocket(`wss://${projectId}.functions.supabase.co/realtime-voice`);
+      
+      // Add connection timeout
+      const connectionTimeout = setTimeout(() => {
+        if (this.ws?.readyState !== WebSocket.OPEN) {
+          this.ws?.close();
+          throw new Error('Timeout na conexão com o servidor');
+        }
+      }, 10000);
 
       this.ws.onopen = () => {
         console.log('Connected to voice assistant');
+        clearTimeout(connectionTimeout);
         this.isConnected = true;
         this.onMessage({ type: 'connected' });
       };

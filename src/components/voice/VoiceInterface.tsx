@@ -107,6 +107,14 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
     }
   };
 
+  const toggleMicrophone = () => {
+    if (isConnected) {
+      endConversation();
+    } else {
+      startConversation();
+    }
+  };
+
   useEffect(() => {
     return () => {
       chatRef.current?.disconnect();
@@ -114,86 +122,107 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
   }, []);
 
   return (
-    <Card className="fixed bottom-6 right-6 w-80 p-4 shadow-lg border-primary/20 bg-background/95 backdrop-blur">
-      <div className="flex flex-col gap-4">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <MessageSquare className="h-5 w-5 text-primary" />
-            <span className="font-medium">Assistente de Voz</span>
-          </div>
-          <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-500' : 'bg-muted'}`} />
-        </div>
+    <div className="fixed bottom-6 right-6 z-50">
+      {/* Main Voice Button */}
+      <div className="relative">
+        <Button
+          onClick={toggleMicrophone}
+          disabled={isLoading}
+          size="lg"
+          className={`h-16 w-16 rounded-full shadow-lg transition-all duration-300 ${
+            isConnected 
+              ? 'bg-destructive hover:bg-destructive/90 text-white' 
+              : 'bg-primary hover:bg-primary/90 text-white'
+          } ${isSpeaking ? 'animate-pulse ring-4 ring-primary/30' : ''}`}
+        >
+          {isLoading ? (
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" />
+          ) : isConnected ? (
+            <MicOff className="h-6 w-6" />
+          ) : (
+            <Mic className="h-6 w-6" />
+          )}
+        </Button>
+        
+        {/* Status indicator */}
+        <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-background ${
+          isConnected ? 'bg-emerald-500' : 'bg-muted'
+        }`} />
+      </div>
 
-        {/* Messages */}
-        {messages.length > 0 && (
-          <div className="max-h-40 overflow-y-auto space-y-2">
-            {messages.slice(-3).map((message, index) => (
-              <div key={index} className={`text-sm p-2 rounded ${
-                message.role === 'user' 
-                  ? 'bg-primary/10 text-primary' 
-                  : 'bg-muted text-muted-foreground'
-              }`}>
-                {message.text}
+      {/* Expanded Interface */}
+      {isConnected && (
+        <Card className="absolute bottom-20 right-0 w-80 p-4 shadow-lg border-primary/20 bg-background/95 backdrop-blur">
+          <div className="flex flex-col gap-4">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5 text-primary" />
+                <span className="font-medium">Assistente de Voz</span>
               </div>
-            ))}
-          </div>
-        )}
+              <div className="text-xs text-muted-foreground">
+                {isSpeaking ? 'Falando...' : 'Ouvindo...'}
+              </div>
+            </div>
 
-        {/* Status */}
-        {isConnected && (
-          <div className="text-center">
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
-              isSpeaking 
-                ? 'bg-primary/20 text-primary animate-pulse' 
-                : 'bg-muted text-muted-foreground'
-            }`}>
-              <Mic className="h-3 w-3" />
-              {isSpeaking ? 'Falando...' : 'Aguardando...'}
+            {/* Messages */}
+            {messages.length > 0 && (
+              <div className="max-h-40 overflow-y-auto space-y-2">
+                {messages.slice(-3).map((message, index) => (
+                  <div key={index} className={`text-sm p-3 rounded-lg ${
+                    message.role === 'user' 
+                      ? 'bg-primary text-primary-foreground ml-4' 
+                      : 'bg-muted text-foreground mr-4'
+                  }`}>
+                    <div className="flex items-start gap-2">
+                      {message.role === 'assistant' && (
+                        <MessageSquare className="h-3 w-3 mt-0.5 opacity-60" />
+                      )}
+                      <span>{message.text}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Quick actions */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => sendTextMessage("Abrir dashboard")}
+                className="text-xs"
+              >
+                Dashboard
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => sendTextMessage("Mostrar relatórios")}
+                className="text-xs"
+              >
+                Relatórios
+              </Button>
+            </div>
+
+            {/* Quick text input */}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Digite ou fale sua pergunta..."
+                className="flex-1 px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 bg-background"
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    sendTextMessage(e.currentTarget.value);
+                    e.currentTarget.value = '';
+                  }
+                }}
+              />
             </div>
           </div>
-        )}
-
-        {/* Controls */}
-        <div className="flex gap-2">
-          {!isConnected ? (
-            <Button 
-              onClick={startConversation}
-              disabled={isLoading}
-              className="flex-1"
-            >
-              {isLoading ? 'Conectando...' : 'Iniciar Conversa'}
-            </Button>
-          ) : (
-            <Button 
-              onClick={endConversation}
-              variant="outline"
-              className="flex-1"
-            >
-              <MicOff className="h-4 w-4 mr-2" />
-              Encerrar
-            </Button>
-          )}
-        </div>
-
-        {/* Quick text input */}
-        {isConnected && (
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Digite uma mensagem..."
-              className="flex-1 px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  sendTextMessage(e.currentTarget.value);
-                  e.currentTarget.value = '';
-                }
-              }}
-            />
-          </div>
-        )}
-      </div>
-    </Card>
+        </Card>
+      )}
+    </div>
   );
 };
 
