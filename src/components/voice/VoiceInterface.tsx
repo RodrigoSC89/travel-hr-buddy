@@ -3,9 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { RealtimeChat } from '@/utils/RealtimeAudio';
-import { Mic, MicOff, MessageSquare, Settings, HelpCircle } from 'lucide-react';
+import { Mic, MicOff, MessageSquare, Settings, HelpCircle, BarChart3, History } from 'lucide-react';
 import VoiceCommands from './VoiceCommands';
 import VoiceSettings from './VoiceSettings';
+import VoiceAnalytics from './VoiceAnalytics';
+import VoiceHistory from './VoiceHistory';
 
 interface Message {
   type: string;
@@ -26,6 +28,10 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showCommands, setShowCommands] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [sessionStart, setSessionStart] = useState<Date | null>(null);
+  const [responseTime, setResponseTime] = useState(0);
   const chatRef = useRef<RealtimeChat | null>(null);
 
   const handleMessage = (event: any) => {
@@ -59,9 +65,14 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
   const startConversation = async () => {
     try {
       setIsLoading(true);
+      setSessionStart(new Date());
+      const startTime = Date.now();
+      
       chatRef.current = new RealtimeChat(handleMessage, setIsSpeaking);
       await chatRef.current.init();
       setIsConnected(true);
+      
+      setResponseTime(Date.now() - startTime);
       
       // Add welcome message
       setMessages([{
@@ -87,7 +98,8 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
     chatRef.current?.disconnect();
     setIsConnected(false);
     setIsSpeaking(false);
-    setMessages([]);
+    setSessionStart(null);
+    // Keep messages for history but mark session as ended
   };
 
   const sendTextMessage = async (text: string) => {
@@ -111,12 +123,39 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
     }
   };
 
-  const toggleMicrophone = () => {
-    if (isConnected) {
-      endConversation();
-    } else {
-      startConversation();
-    }
+  const clearHistory = () => {
+    setMessages([]);
+  };
+
+  const exportHistory = () => {
+    const data = {
+      timestamp: new Date().toISOString(),
+      messages: messages.map(m => ({
+        type: m.type,
+        text: m.text,
+        role: m.role,
+        timestamp: m.timestamp.toISOString()
+      }))
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `voice-conversation-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const getSessionDuration = () => {
+    if (!sessionStart) return 0;
+    return Math.floor((Date.now() - sessionStart.getTime()) / 1000);
+  };
+
+  const getConnectionQuality = (): 'excellent' | 'good' | 'poor' => {
+    if (responseTime < 500) return 'excellent';
+    if (responseTime < 1500) return 'good';
+    return 'poor';
   };
 
   useEffect(() => {
@@ -124,6 +163,14 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
       chatRef.current?.disconnect();
     };
   }, []);
+
+  const toggleMicrophone = () => {
+    if (isConnected) {
+      endConversation();
+    } else {
+      startConversation();
+    }
+  };
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -190,24 +237,42 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
             )}
 
             {/* Quick actions */}
-            <div className="flex gap-2">
+            <div className="grid grid-cols-3 gap-1">
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={() => setShowCommands(!showCommands)}
-                className="flex-1"
+                className="text-xs"
               >
-                <HelpCircle className="h-3 w-3 mr-1" />
-                Comandos
+                <HelpCircle className="h-3 w-3" />
               </Button>
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => setShowSettings(true)}
+                onClick={() => setShowAnalytics(!showAnalytics)}
+                className="text-xs"
               >
-                <Settings className="h-3 w-3" />
+                <BarChart3 className="h-3 w-3" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setShowHistory(!showHistory)}
+                className="text-xs"
+              >
+                <History className="h-3 w-3" />
               </Button>
             </div>
+
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setShowSettings(true)}
+              className="w-full"
+            >
+              <Settings className="h-3 w-3 mr-2" />
+              Configurações
+            </Button>
 
             {/* Quick text input */}
             <div className="flex gap-2">
@@ -245,6 +310,56 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
                 setShowCommands(false);
               }}
               isConnected={isConnected}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Analytics Panel */}
+      {showAnalytics && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="relative">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setShowAnalytics(false)}
+              className="absolute -top-2 -right-2 z-10"
+            >
+              ✕
+            </Button>
+            <VoiceAnalytics
+              isConnected={isConnected}
+              totalMessages={messages.length}
+              sessionDuration={getSessionDuration()}
+              responseTime={responseTime}
+              connectionQuality={getConnectionQuality()}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* History Panel */}
+      {showHistory && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="relative">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setShowHistory(false)}
+              className="absolute -top-2 -right-2 z-10"
+            >
+              ✕
+            </Button>
+            <VoiceHistory
+              messages={messages.map(m => ({
+                id: `${m.timestamp.getTime()}`,
+                type: m.role === 'user' ? 'user' : m.role === 'assistant' ? 'assistant' : 'system',
+                content: m.text || '',
+                timestamp: m.timestamp,
+                action: m.type === 'response.function_call_arguments.done' ? 'Navigation' : undefined
+              }))}
+              onClear={clearHistory}
+              onExport={exportHistory}
             />
           </div>
         </div>
