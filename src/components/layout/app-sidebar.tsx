@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 import { 
   LayoutDashboard, 
   Users, 
@@ -9,11 +9,11 @@ import {
   FileText, 
   Settings,
   ChevronDown,
-  Home,
   MessageSquare,
   Bell,
   UserCog
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
 import { usePermissions } from "@/hooks/use-permissions";
 
@@ -32,6 +32,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
+  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 import {
@@ -40,12 +42,13 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-// Navigation items
+// Navigation items with improved structure
 const navigationItems = [
   {
     title: "Dashboard",
     url: "dashboard",
     icon: LayoutDashboard,
+    alwaysVisible: true
   },
   {
     title: "RH",
@@ -111,7 +114,10 @@ interface AppSidebarProps {
 
 export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const [openItems, setOpenItems] = useState<string[]>([]);
-  const { canAccessModule, hasPermission, userRole } = usePermissions();
+  const { state } = useSidebar();
+  const collapsed = state === 'collapsed';
+  const navigate = useNavigate();
+  const { canAccessModule, hasPermission, getRoleDisplayName, userRole } = usePermissions();
 
   const toggleItem = (itemUrl: string) => {
     setOpenItems(prev => 
@@ -126,39 +132,59 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   };
 
   const canAccessItem = (item: any) => {
+    if (item.alwaysVisible) return true;
     if (item.permission) {
       return hasPermission(item.permission, 'read');
     }
     return true;
   };
 
+  const handleItemClick = (item: string) => {
+    onItemChange?.(item);
+    
+    // Navegação especial para alguns módulos
+    if (item === "price-alerts") {
+      navigate("/price-alerts");
+    }
+  };
+
+  // Determinar se o grupo de navegação principal deve estar aberto
+  const isMainGroupOpen = navigationItems.some(item => 
+    item.items ? item.items.some(subItem => isItemActive(subItem.url)) : isItemActive(item.url)
+  );
+
   return (
-    <Sidebar className="border-r">
-      {/* Logo Header */}
-      <SidebarHeader className="p-6 border-b border-border">
+    <Sidebar 
+      className={`border-r transition-all duration-300`}
+      collapsible="icon"
+    >
+      {/* Header */}
+      <SidebarHeader className="p-4 border-b border-border">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-lg overflow-hidden bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-sm">
+          <div className="w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-sm flex-shrink-0">
             <img 
               src={nautilousLogo} 
               alt="Nautilus One" 
-              className="w-6 h-6 object-cover rounded"
+              className="w-5 h-5 object-cover rounded"
             />
           </div>
-          <div className="flex flex-col">
-            <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-              NAUTILUS
-            </h1>
-            <span className="text-xs text-muted-foreground font-medium">
-              Sistema Corporativo
-            </span>
-          </div>
+          {!collapsed && (
+            <div className="flex flex-col min-w-0">
+              <h1 className="text-sm font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent truncate">
+                NAUTILUS
+              </h1>
+              <span className="text-xs text-muted-foreground font-medium truncate">
+                Sistema Corporativo
+              </span>
+            </div>
+          )}
         </div>
       </SidebarHeader>
 
-      {/* Navigation Content */}
+      {/* Content */}
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
+          {!collapsed && <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>}
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => {
@@ -177,27 +203,34 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                     >
                       <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
-                          <SidebarMenuButton className="w-full">
-                            <item.icon />
-                            <span>{item.title}</span>
-                            <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                          <SidebarMenuButton className="w-full justify-between">
+                            <div className="flex items-center">
+                              <item.icon className="h-4 w-4" />
+                              {!collapsed && <span className="ml-2">{item.title}</span>}
+                            </div>
+                            {!collapsed && (
+                              <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                            )}
                           </SidebarMenuButton>
                         </CollapsibleTrigger>
-                        <CollapsibleContent>
-                          <SidebarMenuSub>
-                            {item.items.map((subItem) => (
-                              <SidebarMenuSubItem key={subItem.url}>
-                                <SidebarMenuSubButton 
-                                  onClick={() => onItemChange?.(subItem.url)}
-                                  isActive={isItemActive(subItem.url)}
-                                >
-                                  <subItem.icon />
-                                  <span>{subItem.title}</span>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
+                        {!collapsed && (
+                          <CollapsibleContent>
+                            <SidebarMenuSub>
+                              {item.items.map((subItem) => (
+                                <SidebarMenuSubItem key={subItem.url}>
+                                  <SidebarMenuSubButton 
+                                    onClick={() => handleItemClick(subItem.url)}
+                                    isActive={isItemActive(subItem.url)}
+                                    className="w-full"
+                                  >
+                                    <subItem.icon className="h-4 w-4" />
+                                    <span className="ml-2">{subItem.title}</span>
+                                  </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        )}
                       </SidebarMenuItem>
                     </Collapsible>
                   );
@@ -207,11 +240,13 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                 return (
                   <SidebarMenuItem key={item.url}>
                     <SidebarMenuButton 
-                      onClick={() => onItemChange?.(item.url)}
+                      onClick={() => handleItemClick(item.url)}
                       isActive={isItemActive(item.url)}
+                      className="w-full justify-start"
+                      title={collapsed ? item.title : undefined}
                     >
-                      <item.icon />
-                      <span>{item.title}</span>
+                      <item.icon className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">{item.title}</span>}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
@@ -221,11 +256,28 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
               {canAccessModule('admin') && (
                 <SidebarMenuItem>
                   <SidebarMenuButton 
-                    onClick={() => onItemChange?.("admin")}
+                    onClick={() => handleItemClick("admin")}
                     isActive={isItemActive("admin")}
+                    className="w-full justify-start"
+                    title={collapsed ? "Administração" : undefined}
                   >
-                    <UserCog />
-                    <span>Administração</span>
+                    <UserCog className="h-4 w-4" />
+                    {!collapsed && <span className="ml-2">Administração</span>}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+
+              {/* Dashboard Executivo - Para admins e gerentes */}
+              {(userRole === 'admin' || userRole === 'hr_manager' || userRole === 'department_manager') && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton 
+                    onClick={() => handleItemClick("executive")}
+                    isActive={isItemActive("executive")}
+                    className="w-full justify-start"
+                    title={collapsed ? "Dashboard Executivo" : undefined}
+                  >
+                    <BarChart3 className="h-4 w-4" />
+                    {!collapsed && <span className="ml-2">Dashboard Executivo</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               )}
@@ -235,11 +287,18 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
       </SidebarContent>
 
       {/* Footer */}
-      <SidebarFooter className="p-4 border-t border-border">
-        <div className="text-xs text-muted-foreground text-center">
-          <p>Versão 2.0.0</p>
-          <p className="mt-1">© 2024 Nautilus</p>
-        </div>
+      <SidebarFooter className="p-3 border-t border-border">
+        {!collapsed && (
+          <div className="space-y-2">
+            <div className="text-xs text-muted-foreground">
+              <p className="font-medium">Você é: {getRoleDisplayName(userRole || 'employee')}</p>
+            </div>
+            <div className="text-xs text-muted-foreground text-center">
+              <p>Versão 2.1.0</p>
+              <p className="mt-1">© 2024 Nautilus</p>
+            </div>
+          </div>
+        )}
       </SidebarFooter>
       
       <SidebarRail />

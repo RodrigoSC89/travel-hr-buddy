@@ -25,11 +25,18 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Toaster } from '@/components/ui/toaster';
 import { OfflineIndicator } from '@/components/ui/offline-indicator';
 import VoiceInterface from '@/components/voice/VoiceInterface';
+import { ErrorBoundary } from '@/components/layout/error-boundary';
 
-// Lazy loading do componente administrativo
+// Lazy loading dos componentes administrativos
 const UserManagementDashboard = lazy(() => 
   import('@/components/admin/user-management-dashboard').then(module => ({
     default: module.UserManagementDashboard
+  }))
+);
+
+const ExecutiveDashboard = lazy(() => 
+  import('@/components/dashboard/executive-dashboard').then(module => ({
+    default: module.ExecutiveDashboard
   }))
 );
 
@@ -125,6 +132,14 @@ const Index = () => {
             <UserManagementDashboard />
           </Suspense>
         );
+      case 'executive':
+        return (
+          <Suspense fallback={<div className="flex items-center justify-center h-48">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>}>
+            <ExecutiveDashboard />
+          </Suspense>
+        );
       case 'flights':
         return <FlightSearch />;
       case 'hotels':
@@ -193,9 +208,11 @@ const Index = () => {
           <Header />
           
           <main className="flex-1 overflow-auto">
-            <div className="container mx-auto p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in">
-              {renderContent()}
-            </div>
+            <ErrorBoundary>
+              <div className="container mx-auto p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in">
+                {renderContent()}
+              </div>
+            </ErrorBoundary>
           </main>
         </div>
       </div>
