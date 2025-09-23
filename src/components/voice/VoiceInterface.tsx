@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { RealtimeChat } from '@/utils/RealtimeAudio';
-import { Mic, MicOff, MessageSquare } from 'lucide-react';
+import { Mic, MicOff, MessageSquare, Settings, HelpCircle } from 'lucide-react';
+import VoiceCommands from './VoiceCommands';
+import VoiceSettings from './VoiceSettings';
 
 interface Message {
   type: string;
@@ -22,6 +24,8 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showCommands, setShowCommands] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const chatRef = useRef<RealtimeChat | null>(null);
 
   const handleMessage = (event: any) => {
@@ -186,22 +190,22 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
             )}
 
             {/* Quick actions */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="flex gap-2">
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => sendTextMessage("Abrir dashboard")}
-                className="text-xs"
+                onClick={() => setShowCommands(!showCommands)}
+                className="flex-1"
               >
-                Dashboard
+                <HelpCircle className="h-3 w-3 mr-1" />
+                Comandos
               </Button>
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => sendTextMessage("Mostrar relatórios")}
-                className="text-xs"
+                onClick={() => setShowSettings(true)}
               >
-                Relatórios
+                <Settings className="h-3 w-3" />
               </Button>
             </div>
 
@@ -222,6 +226,35 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onNavigate }) => {
           </div>
         </Card>
       )}
+
+      {/* Commands Panel */}
+      {showCommands && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="relative">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setShowCommands(false)}
+              className="absolute -top-2 -right-2 z-10"
+            >
+              ✕
+            </Button>
+            <VoiceCommands 
+              onCommand={(command) => {
+                sendTextMessage(command);
+                setShowCommands(false);
+              }}
+              isConnected={isConnected}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Settings Modal */}
+      <VoiceSettings 
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+      />
     </div>
   );
 };
