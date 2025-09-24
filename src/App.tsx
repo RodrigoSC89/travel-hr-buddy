@@ -33,6 +33,9 @@ import Gamification from "./pages/Gamification";
 import PredictiveAnalytics from "./pages/PredictiveAnalytics";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/protected-route";
+import { WorkflowAutomationHub } from "./components/automation/workflow-automation-hub";
+import { AdvancedDocumentCenter } from "./components/documents/advanced-document-center";
+import { MobileOptimizationCenter } from "./components/mobile/mobile-optimization-center";
 
 const queryClient = new QueryClient();
 
@@ -166,6 +169,27 @@ const App = () => {
                 <Route path="/predictive-analytics" element={
                   <ProtectedRoute>
                     <PredictiveAnalytics />
+                  </ProtectedRoute>
+                } />
+                <Route path="/workflow" element={
+                  <ProtectedRoute>
+                    <div className="container mx-auto p-6">
+                      <WorkflowAutomationHub />
+                    </div>
+                  </ProtectedRoute>
+                } />
+                <Route path="/documents" element={
+                  <ProtectedRoute>
+                    <div className="container mx-auto p-6">
+                      <AdvancedDocumentCenter />
+                    </div>
+                  </ProtectedRoute>
+                } />
+                <Route path="/mobile-optimization" element={
+                  <ProtectedRoute>
+                    <div className="container mx-auto p-6">
+                      <MobileOptimizationCenter />
+                    </div>
                   </ProtectedRoute>
                 } />
                 <Route path="*" element={<NotFound />} />
