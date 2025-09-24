@@ -22,7 +22,8 @@ import {
   Brain,
   Globe,
   UserCheck,
-  UserX
+  UserX,
+  FileText
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
