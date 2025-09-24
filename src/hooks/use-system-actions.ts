@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useKeyboardShortcuts } from './use-keyboard-shortcuts';
+import { useOfflineStorage } from './use-offline-storage';
 
 // Hook para funcionalidades globais do sistema
 export const useSystemActions = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { isOnline, saveToCache, addPendingChange } = useOfflineStorage();
 
   const handleGlobalSearch = () => {
     setIsSearchOpen(true);
@@ -68,10 +70,20 @@ export const useSystemActions = () => {
   };
 
   const handleRefreshData = () => {
+    if (!isOnline) {
+      toast({
+        title: "Modo Offline",
+        description: "Dados salvos localmente serão sincronizados quando online",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     toast({
       title: "Atualizando",
       description: "Carregando dados mais recentes",
     });
+    
     // Implementar refresh dos dados
     setTimeout(() => {
       window.location.reload();
@@ -86,6 +98,16 @@ export const useSystemActions = () => {
     window.print();
   };
 
+  const handleOfflineAction = (action: string, data: any) => {
+    if (!isOnline) {
+      addPendingChange(action, data);
+      toast({
+        title: "Ação Salva",
+        description: "Será sincronizada quando voltar online",
+      });
+    }
+  };
+
   return {
     handleGlobalSearch,
     handleNavigateToSettings,
@@ -95,7 +117,9 @@ export const useSystemActions = () => {
     handleBackup,
     handleRefreshData,
     handlePrintReport,
+    handleOfflineAction,
     isSearchOpen,
     setIsSearchOpen,
+    isOnline,
   };
 };
