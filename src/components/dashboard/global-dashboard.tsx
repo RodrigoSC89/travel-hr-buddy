@@ -6,12 +6,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Brain, Bell, BarChart3, Sparkles } from 'lucide-react';
 
+import { RealTimeCollaboration } from '@/components/innovation/RealTimeCollaboration';
+import { AIAssistantPanel } from '@/components/innovation/AIAssistantPanel';
+import { SmartWorkflow } from '@/components/innovation/SmartWorkflow';
+
 interface GlobalDashboardProps {
   onNavigate?: (module: string) => void;
 }
 
 export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
+
+  const tabs = [
+    { id: "overview", label: "Visão Geral", icon: BarChart3 },
+    { id: "collaboration", label: "Colaboração", icon: Brain },
+    { id: "ai-assistant", label: "Assistente IA", icon: Sparkles },
+    { id: "workflows", label: "Workflows", icon: Bell },
+    { id: "recommendations", label: "Recomendações", icon: Sparkles },
+    { id: "notifications", label: "Notificações", icon: Bell },
+    { id: "insights", label: "Insights IA", icon: Brain }
+  ];
 
   return (
     <div className="space-y-6">
@@ -25,27 +39,36 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid grid-cols-4 w-fit">
-          <TabsTrigger value="overview" className="flex items-center gap-2">
-            <BarChart3 className="w-4 h-4" />
-            Visão Geral
-          </TabsTrigger>
-          <TabsTrigger value="recommendations" className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4" />
-            Recomendações
-          </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center gap-2">
-            <Bell className="w-4 h-4" />
-            Notificações
-          </TabsTrigger>
-          <TabsTrigger value="insights" className="flex items-center gap-2">
-            <Brain className="w-4 h-4" />
-            Insights IA
-          </TabsTrigger>
+        <TabsList className="grid grid-cols-7 w-fit bg-muted/50">
+          {tabs.map((tab) => {
+            const IconComponent = tab.icon;
+            return (
+              <TabsTrigger 
+                key={tab.id} 
+                value={tab.id} 
+                className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200"
+              >
+                <IconComponent className="w-4 h-4" />
+                <span className="hidden sm:inline">{tab.label}</span>
+              </TabsTrigger>
+            );
+          })}
         </TabsList>
 
-        <TabsContent value="overview">
+        <TabsContent value="overview" className="space-y-6">
           <ResponsiveDashboard />
+        </TabsContent>
+
+        <TabsContent value="collaboration" className="space-y-6">
+          <RealTimeCollaboration />
+        </TabsContent>
+
+        <TabsContent value="ai-assistant" className="space-y-6">
+          <AIAssistantPanel />
+        </TabsContent>
+
+        <TabsContent value="workflows" className="space-y-6">
+          <SmartWorkflow />
         </TabsContent>
 
         <TabsContent value="recommendations">
