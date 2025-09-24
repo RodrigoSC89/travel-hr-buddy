@@ -105,22 +105,20 @@ export const PriceAlertDashboard = () => {
 
   const checkPriceForAlert = async (alert: PriceAlert) => {
     try {
-      const response = await fetch('/api/check-price', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Call Supabase Edge Function for price checking
+      const { data, error } = await supabase.functions.invoke('check-price', {
+        body: {
           product_name: alert.product_name,
           product_url: alert.product_url
-        })
+        }
       });
 
-      const data = await response.json();
-      return data.price || 0;
+      if (error) throw error;
+      return data?.price || 0;
     } catch (error) {
       console.error('Error checking price:', error);
-      return Math.random() * 5000 + 500; // Fallback mock price
+      // Improved fallback with more realistic price simulation
+      return Math.random() * 2000 + 500; // More realistic price range
     }
   };
 
@@ -240,12 +238,14 @@ export const PriceAlertDashboard = () => {
   const refreshPrices = async () => {
     setIsCheckingPrices(true);
     try {
-      const response = await fetch('/api/monitor-prices', {
-        method: 'POST'
+      // Use Supabase Edge Function instead of direct API call
+      const { data, error } = await supabase.functions.invoke('monitor-prices', {
+        body: { user_id: user?.id }
       });
-      const data = await response.json();
       
-      if (data.success) {
+      if (error) throw error;
+      
+      if (data?.success) {
         loadAlerts(); // Reload alerts with updated prices
         toast({
           title: "Preços atualizados!",

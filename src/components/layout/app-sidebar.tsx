@@ -64,6 +64,50 @@ const navigationItems = [
     permission: "certificates" as const,
   },
   {
+    title: "RH Marítimo",
+    url: "maritime-hr",
+    icon: Users,
+    items: [
+      {
+        title: "Tripulação",
+        url: "crew-management",
+        icon: Users,
+      },
+      {
+        title: "Certificações",
+        url: "maritime-certifications",
+        icon: UserCog,
+      },
+      {
+        title: "Bem-estar",
+        url: "crew-wellness",
+        icon: Users,
+      },
+    ],
+  },
+  {
+    title: "Logística Marítima",
+    url: "maritime-logistics",
+    icon: Plane,
+    items: [
+      {
+        title: "Gestão de Frota",
+        url: "fleet-management",
+        icon: Plane,
+      },
+      {
+        title: "Operações Portuárias",
+        url: "port-operations", 
+        icon: Hotel,
+      },
+      {
+        title: "IA Logística",
+        url: "logistics-ai",
+        icon: Plane,
+      },
+    ],
+  },
+  {
     title: "Viagens",
     url: "travel",
     icon: Plane,
