@@ -13,6 +13,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import PriceAlerts from "./pages/PriceAlerts";
 import Reports from "./pages/Reports";
+import Reservations from "./pages/Reservations";
 import Settings from "./pages/Settings";
 import Travel from "./pages/Travel";
 import Analytics from "./pages/Analytics";
@@ -24,6 +25,12 @@ import Innovation from "./pages/Innovation";
 import Optimization from "./pages/Optimization";
 import Strategic from "./pages/Strategic";
 import Voice from "./pages/Voice";
+import Portal from "./pages/Portal";
+import AR from "./pages/AR";
+import IoT from "./pages/IoT";
+import Blockchain from "./pages/Blockchain";
+import Gamification from "./pages/Gamification";
+import PredictiveAnalytics from "./pages/PredictiveAnalytics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +65,7 @@ const App = () => {
                 <Route path="/travel" element={<Travel />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/hr" element={<HumanResources />} />
+                <Route path="/reservations" element={<Reservations />} />
                 <Route path="/maritime" element={<Maritime />} />
                 <Route path="/communication" element={<Communication />} />
                 <Route path="/intelligence" element={<Intelligence />} />
@@ -65,6 +73,12 @@ const App = () => {
                 <Route path="/innovation" element={<Innovation />} />
                 <Route path="/strategic" element={<Strategic />} />
                 <Route path="/voice" element={<Voice />} />
+                <Route path="/portal" element={<Portal />} />
+                <Route path="/ar" element={<AR />} />
+                <Route path="/iot" element={<IoT />} />
+                <Route path="/blockchain" element={<Blockchain />} />
+                <Route path="/gamification" element={<Gamification />} />
+                <Route path="/predictive-analytics" element={<PredictiveAnalytics />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <IntelligentChatbot />

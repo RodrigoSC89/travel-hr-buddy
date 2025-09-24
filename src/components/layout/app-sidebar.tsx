@@ -19,7 +19,12 @@ import {
   Zap,
   Target,
   Brain,
-  Mic
+  Mic,
+  Eye,
+  Shield,
+  Radio,
+  Trophy,
+  User
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -110,14 +115,34 @@ const navigationItems = [
       {
         title: "Análise Preditiva",
         url: "predictive-analytics",
-        icon: BarChart3,
+        icon: Brain,
       },
       {
-        title: "Automação",
-        url: "automation",
-        icon: Settings,
+        title: "Gamificação",
+        url: "gamification",
+        icon: Trophy,
+      },
+      {
+        title: "Realidade Aumentada",
+        url: "ar",
+        icon: Eye,
+      },
+      {
+        title: "IoT Dashboard",
+        url: "iot",
+        icon: Radio,
+      },
+      {
+        title: "Blockchain",
+        url: "blockchain",
+        icon: Shield,
       },
     ],
+  },
+  {
+    title: "Portal do Funcionário",
+    url: "portal",
+    icon: User,
   },
   {
     title: "Viagens",
@@ -167,29 +192,23 @@ const navigationItems = [
     title: "Configurações",
     url: "settings",
     icon: Settings,
-    },
-    {
-      title: "Otimização",
-      url: "optimization",
-      icon: Zap,
-    },
-    {
-      title: "Centro Estratégico",
-      url: "strategic",
-      icon: Target,
-      permission: "analytics" as const,
-    },
-    {
-      title: "Centro de Inovação",
-      url: "innovation", 
-      icon: Brain,
-      permission: "analytics" as const,
-    },
-    {
-      title: "Assistente de Voz",
-      url: "voice",
-      icon: Mic,
-    },
+  },
+  {
+    title: "Otimização",
+    url: "optimization",
+    icon: Zap,
+  },
+  {
+    title: "Centro Estratégico",
+    url: "strategic",
+    icon: Target,
+    permission: "analytics" as const,
+  },
+  {
+    title: "Assistente de Voz",
+    url: "voice",
+    icon: Mic,
+  },
 ];
 
 interface AppSidebarProps {

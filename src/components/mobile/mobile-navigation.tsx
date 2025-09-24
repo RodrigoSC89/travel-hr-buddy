@@ -8,7 +8,9 @@ import {
   User,
   AlertTriangle,
   Users,
-  Plane
+  Plane,
+  Bot,
+  Trophy
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
@@ -22,24 +24,24 @@ const navigationItems = [
     end: true
   },
   {
+    href: '/portal',
+    icon: User,
+    label: 'Portal'
+  },
+  {
+    href: '/innovation',
+    icon: Bot,
+    label: 'IA'
+  },
+  {
+    href: '/gamification',
+    icon: Trophy,
+    label: 'Ranking'
+  },
+  {
     href: '/price-alerts',
     icon: AlertTriangle,
     label: 'Alertas'
-  },
-  {
-    href: '/hr',
-    icon: Users,
-    label: 'RH'
-  },
-  {
-    href: '/travel',
-    icon: Plane,
-    label: 'Viagens'
-  },
-  {
-    href: '/reports',
-    icon: BarChart3,
-    label: 'Relatórios'
   }
 ];
 
