@@ -10,6 +10,9 @@ import { RealTimeCollaboration } from '@/components/innovation/RealTimeCollabora
 import { AIAssistantPanel } from '@/components/innovation/AIAssistantPanel';
 import { SmartWorkflow } from '@/components/innovation/SmartWorkflow';
 import { SystemHealthDashboard } from '@/components/innovation/SystemHealthDashboard';
+import { Gamification } from '@/components/innovation/Gamification';
+import { AdvancedAIAssistant } from '@/components/innovation/AdvancedAIAssistant';
+import { BusinessIntelligence } from '@/components/innovation/BusinessIntelligence';
 
 interface GlobalDashboardProps {
   onNavigate?: (module: string) => void;
@@ -22,7 +25,10 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
     { id: "overview", label: "Visão Geral", icon: BarChart3 },
     { id: "collaboration", label: "Colaboração", icon: Brain },
     { id: "ai-assistant", label: "Assistente IA", icon: Sparkles },
+    { id: "advanced-ai", label: "IA Avançada", icon: Brain },
     { id: "workflows", label: "Workflows", icon: Bell },
+    { id: "business-intelligence", label: "BI Analytics", icon: BarChart3 },
+    { id: "gamification", label: "Gamificação", icon: Brain },
     { id: "system-health", label: "Status Sistema", icon: Brain },
     { id: "recommendations", label: "Recomendações", icon: Sparkles },
     { id: "notifications", label: "Notificações", icon: Bell },
@@ -41,7 +47,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid grid-cols-8 w-fit bg-muted/50">
+        <TabsList className="grid grid-cols-11 w-fit bg-muted/50">
           {tabs.map((tab) => {
             const IconComponent = tab.icon;
             return (
@@ -69,8 +75,20 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
           <AIAssistantPanel />
         </TabsContent>
 
+        <TabsContent value="advanced-ai" className="space-y-6">
+          <AdvancedAIAssistant />
+        </TabsContent>
+
         <TabsContent value="workflows" className="space-y-6">
           <SmartWorkflow />
+        </TabsContent>
+
+        <TabsContent value="business-intelligence" className="space-y-6">
+          <BusinessIntelligence />
+        </TabsContent>
+
+        <TabsContent value="gamification" className="space-y-6">
+          <Gamification />
         </TabsContent>
 
         <TabsContent value="system-health" className="space-y-6">
