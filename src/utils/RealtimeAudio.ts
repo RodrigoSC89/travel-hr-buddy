@@ -62,7 +62,7 @@ export class AudioRecorder {
 
 export class RealtimeChat {
   private pc: RTCPeerConnection | null = null;
-  private dc: RTCDataChannel | null = null;
+  public dc: RTCDataChannel | null = null; // Tornado público para acesso externo
   private audioEl: HTMLAudioElement;
   private recorder: AudioRecorder | null = null;
   private conversationId: string | null = null;
@@ -116,7 +116,15 @@ export class RealtimeChat {
       this.dc = this.pc.createDataChannel("oai-events");
       this.dc.addEventListener("message", (e) => {
         const event = JSON.parse(e.data);
-        console.log("Received event:", event.type);
+        console.log("Received event:", event.type, event);
+        
+        // Processo de navegação por comandos de voz
+        if (event.type === 'conversation.item.input_audio_transcription.completed') {
+          console.log("User said:", event.transcript);
+          // Processar comando de navegação
+          this.processVoiceNavigation(event.transcript);
+        }
+        
         this.onMessage(event);
       });
 
@@ -205,6 +213,99 @@ export class RealtimeChat {
 
     this.dc.send(JSON.stringify(event));
     this.dc.send(JSON.stringify({type: 'response.create'}));
+  }
+
+  // Processar comandos de navegação por voz
+  private processVoiceNavigation(transcript: string) {
+    if (!transcript || !this.onNavigate) return;
+    
+    const text = transcript.toLowerCase().trim();
+    console.log("Processing voice navigation for:", text);
+    
+    // Mapeamento de comandos para módulos
+    const navigationMap: Record<string, string> = {
+      'dashboard': 'dashboard',
+      'painel': 'dashboard',
+      'início': 'dashboard',
+      'home': 'dashboard',
+      
+      'recursos humanos': 'hr',
+      'rh': 'hr',
+      'funcionários': 'hr',
+      'tripulação': 'hr',
+      
+      'viagens': 'travel',
+      'travel': 'travel',
+      'voos': 'travel',
+      'voo': 'travel',
+      'hotéis': 'travel',
+      'hotel': 'travel',
+      'passagens': 'travel',
+      'passagem': 'travel',
+      
+      'marítimo': 'maritime',
+      'maritime': 'maritime',
+      'frota': 'maritime',
+      'navios': 'maritime',
+      'navio': 'maritime',
+      'embarcações': 'maritime',
+      
+      'alertas': 'price-alerts',
+      'preços': 'price-alerts',
+      'monitoramento': 'price-alerts',
+      
+      'analytics': 'analytics',
+      'análises': 'analytics',
+      'estatísticas': 'analytics',
+      'métricas': 'analytics',
+      
+      'relatórios': 'reports',
+      'reports': 'reports',
+      'relatório': 'reports',
+      
+      'comunicação': 'communication',
+      'communication': 'communication',
+      'mensagens': 'communication',
+      'chat': 'communication',
+      
+      'configurações': 'settings',
+      'settings': 'settings',
+      'preferências': 'settings',
+      
+      'inovação': 'innovation',
+      'innovation': 'innovation',
+      'automação': 'innovation',
+      
+      'inteligência': 'intelligence',
+      'intelligence': 'intelligence',
+      'documentos': 'intelligence',
+      
+      'otimização': 'optimization',
+      'optimization': 'optimization',
+      'performance': 'optimization',
+      
+      'estratégico': 'strategic',
+      'strategic': 'strategic',
+      'estratégia': 'strategic'
+    };
+    
+    // Procurar correspondência
+    for (const [command, module] of Object.entries(navigationMap)) {
+      if (text.includes(command)) {
+        console.log(`Voice navigation: ${command} -> ${module}`);
+        this.onNavigate(module);
+        return;
+      }
+    }
+    
+    // Verificar palavras-chave adicionais
+    if (text.includes('buscar') && (text.includes('voo') || text.includes('passagem'))) {
+      this.onNavigate('travel');
+    } else if (text.includes('buscar') && text.includes('hotel')) {
+      this.onNavigate('travel');
+    } else if (text.includes('certificado')) {
+      this.onNavigate('hr');
+    }
   }
 
   disconnect() {

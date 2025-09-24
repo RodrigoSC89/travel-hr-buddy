@@ -26,6 +26,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { OfflineIndicator } from '@/components/ui/offline-indicator';
 import VoiceInterface from '@/components/voice/VoiceInterface';
 import IntelligentChatbot from '@/components/voice/IntelligentChatbot';
+import VoiceTestingPanel from '@/components/voice/VoiceTestingPanel';
 import SmartTooltipSystem from '@/components/ui/smart-tooltip-system';
 import { ScrollToTop } from '@/components/ui/scroll-to-top';
 import { PageTransition } from '@/components/ui/page-transition';
@@ -164,6 +165,7 @@ const Index = () => {
         
         <VoiceInterface onNavigate={handleVoiceNavigation} />
         <IntelligentChatbot />
+        <VoiceTestingPanel onNavigate={handleVoiceNavigation} />
         <SmartTooltipSystem />
         <Toaster />
       </div>
@@ -199,6 +201,7 @@ const Index = () => {
       <ScrollToTop />
       <VoiceInterface onNavigate={handleVoiceNavigation} />
       <IntelligentChatbot />
+      <VoiceTestingPanel onNavigate={handleVoiceNavigation} />
       <SmartTooltipSystem />
       <Toaster />
     </SidebarProvider>

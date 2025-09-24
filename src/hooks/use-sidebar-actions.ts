@@ -85,27 +85,68 @@ export const useSidebarActions = () => {
       case 'hotels':
       case 'travel':
         navigate('/travel');
+        toast({
+          title: "Viagens",
+          description: "Abrindo sistema de viagens corporativas",
+        });
         break;
       case 'fleet-management':
       case 'crew-management':
       case 'maritime-certifications':
+      case 'maritime':
         navigate('/maritime');
+        toast({
+          title: "Sistema Marítimo",
+          description: "Abrindo gestão marítima",
+        });
         break;
       case 'predictive-analytics':
       case 'automation':
         navigate('/innovation');
+        toast({
+          title: "Inovação",
+          description: "Abrindo centro de inovação",
+        });
         break;
       case 'intelligence':
         navigate('/intelligence');
+        toast({
+          title: "Inteligência",
+          description: "Abrindo sistema de inteligência",
+        });
         break;
       case 'optimization':
         navigate('/optimization');
+        toast({
+          title: "Otimização",
+          description: "Abrindo sistema de otimização",
+        });
+        break;
+      case 'strategic':
+        navigate('/strategic');
+        toast({
+          title: "Estratégico",
+          description: "Abrindo central estratégica",
+        });
         break;
       default:
-        toast({
-          title: "Módulo",
-          description: `Carregando ${module}`,
-        });
+        // Verificar se existe rota correspondente
+        const validRoutes = ['dashboard', 'hr', 'maritime', 'innovation', 'price-alerts', 'analytics', 'reservations', 'reports', 'communication', 'settings', 'admin', 'intelligence', 'optimization', 'strategic', 'travel'];
+        
+        if (validRoutes.includes(module)) {
+          navigate(`/${module}`);
+          toast({
+            title: "Navegação",
+            description: `Abrindo ${module}`,
+          });
+        } else {
+          console.log('Unknown module:', module);
+          toast({
+            title: "Módulo não encontrado",
+            description: `O módulo "${module}" não foi encontrado`,
+            variant: "destructive",
+          });
+        }
         break;
     }
   };

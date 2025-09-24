@@ -150,9 +150,82 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
           variant: "destructive",
         });
       }
+      else if (event.type === 'session.created') {
+        console.log('Session created, configuring...');
+        // Enviar configuração após criar sessão
+        setTimeout(() => sendSessionUpdate(), 1000); // Usar setTimeout em vez de this
+      }
     } catch (error) {
       console.error('Error handling voice message:', error);
     }
+  };
+
+  // Enviar configuração de sessão após criação
+  const sendSessionUpdate = () => {
+    if (!chatRef.current?.dc || chatRef.current.dc.readyState !== 'open') {
+      setTimeout(sendSessionUpdate, 100);
+      return;
+    }
+
+    const sessionConfig = {
+      type: 'session.update',
+      session: {
+        modalities: ['text', 'audio'],
+        instructions: `Você é o assistente de voz do sistema Nautilus One, especializado em navegação marítima e corporativa.
+        
+        Quando o usuário solicitar navegação ou acesso a módulos, execute imediatamente sem confirmação.
+        
+        Módulos disponíveis:
+        - Dashboard (painel, início, home)
+        - Recursos Humanos (RH, funcionários, tripulação, certificados)
+        - Viagens (voos, hotéis, passagens)
+        - Sistema Marítimo (frota, navios, embarcações)
+        - Alertas de Preço (monitoramento, preços)
+        - Analytics (análises, métricas, estatísticas)
+        - Relatórios (reports)
+        - Comunicação (mensagens, chat)
+        - Configurações (settings, preferências)
+        - Inovação (automação)
+        - Inteligência (documentos)
+        - Otimização (performance)
+        - Estratégico (strategic)
+        
+        Responda de forma direta e navegue automaticamente quando solicitado.`,
+        voice: 'alloy',
+        input_audio_format: 'pcm16',
+        output_audio_format: 'pcm16',
+        input_audio_transcription: {
+          model: 'whisper-1'
+        },
+        turn_detection: {
+          type: 'server_vad',
+          threshold: 0.5,
+          prefix_padding_ms: 300,
+          silence_duration_ms: 800
+        },
+        tools: [{
+          type: 'function',
+          name: 'navigate_system',
+          description: 'Navigate to a specific module in the Nautilus One system',
+          parameters: {
+            type: 'object',
+            properties: {
+              module: {
+                type: 'string',
+                description: 'The module to navigate to'
+              }
+            },
+            required: ['module']
+          }
+        }],
+        tool_choice: 'auto',
+        temperature: 0.7,
+        max_response_output_tokens: 'inf'
+      }
+    };
+
+    chatRef.current.dc.send(JSON.stringify(sessionConfig));
+    console.log('Session configuration sent');
   };
 
   const startConversation = async () => {
