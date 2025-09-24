@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_insights: {
+        Row: {
+          actionable: boolean
+          category: string
+          confidence: number
+          created_at: string
+          description: string
+          id: string
+          impact_value: string | null
+          metadata: Json | null
+          priority: string
+          related_module: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actionable?: boolean
+          category: string
+          confidence?: number
+          created_at?: string
+          description: string
+          id?: string
+          impact_value?: string | null
+          metadata?: Json | null
+          priority?: string
+          related_module?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          actionable?: boolean
+          category?: string
+          confidence?: number
+          created_at?: string
+          description?: string
+          id?: string
+          impact_value?: string | null
+          metadata?: Json | null
+          priority?: string
+          related_module?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_reports: {
         Row: {
           content: string
@@ -403,6 +454,87 @@ export type Database = {
         }
         Relationships: []
       }
+      optimization_actions: {
+        Row: {
+          applied_at: string | null
+          category: string
+          created_at: string
+          description: string
+          effort: string
+          estimated_improvement: string | null
+          id: string
+          impact: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          applied_at?: string | null
+          category: string
+          created_at?: string
+          description: string
+          effort: string
+          estimated_improvement?: string | null
+          id?: string
+          impact: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          applied_at?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          effort?: string
+          estimated_improvement?: string | null
+          id?: string
+          impact?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      performance_metrics: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          metric_name: string
+          metric_unit: string
+          metric_value: number
+          recorded_at: string
+          status: string
+          target_value: number | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          metric_name: string
+          metric_unit: string
+          metric_value: number
+          recorded_at?: string
+          status: string
+          target_value?: number | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          metric_name?: string
+          metric_unit?: string
+          metric_value?: number
+          recorded_at?: string
+          status?: string
+          target_value?: number | null
+        }
+        Relationships: []
+      }
       price_alerts: {
         Row: {
           availability_status: string | null
@@ -526,6 +658,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      processed_documents: {
+        Row: {
+          category: string | null
+          created_at: string
+          entities: string[] | null
+          file_name: string
+          file_size: number | null
+          file_type: string | null
+          id: string
+          key_points: string[] | null
+          original_text: string | null
+          processed_at: string | null
+          processing_status: string
+          sentiment: string | null
+          summary: string | null
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          entities?: string[] | null
+          file_name: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          key_points?: string[] | null
+          original_text?: string | null
+          processed_at?: string | null
+          processing_status?: string
+          sentiment?: string | null
+          summary?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          entities?: string[] | null
+          file_name?: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          key_points?: string[] | null
+          original_text?: string | null
+          processed_at?: string | null
+          processing_status?: string
+          sentiment?: string | null
+          summary?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -660,6 +843,51 @@ export type Database = {
           },
         ]
       }
+      user_achievements: {
+        Row: {
+          achievement_id: string
+          category: string
+          created_at: string
+          description: string
+          id: string
+          max_progress: number
+          points: number
+          progress: number
+          title: string
+          unlocked: boolean
+          unlocked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          achievement_id: string
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          max_progress?: number
+          points?: number
+          progress?: number
+          title: string
+          unlocked?: boolean
+          unlocked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          achievement_id?: string
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          max_progress?: number
+          points?: number
+          progress?: number
+          title?: string
+          unlocked?: boolean
+          unlocked_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_recommendations: {
         Row: {
           context: string
@@ -750,6 +978,45 @@ export type Database = {
           total_savings?: number | null
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      ux_metrics: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          metric_name: string
+          metric_unit: string
+          metric_value: number
+          recorded_at: string
+          status: string
+          target_value: number | null
+          user_id: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          metric_name: string
+          metric_unit: string
+          metric_value: number
+          recorded_at?: string
+          status: string
+          target_value?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          metric_name?: string
+          metric_unit?: string
+          metric_value?: number
+          recorded_at?: string
+          status?: string
+          target_value?: number | null
+          user_id?: string | null
         }
         Relationships: []
       }
