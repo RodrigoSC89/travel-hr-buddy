@@ -14,7 +14,6 @@ import {
   MessageSquare,
   Navigation,
   Zap,
-  Brain,
   Anchor,
   Compass
 } from 'lucide-react';
@@ -259,7 +258,7 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
       <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-xl">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
-            <Brain className="w-5 h-5 text-primary" />
+            <Settings className="w-5 h-5 text-primary" />
             Teste de Comando de Voz
             <Badge variant="outline" className="ml-auto mr-2">
               {isListening ? 'Ouvindo' : 'Inativo'}

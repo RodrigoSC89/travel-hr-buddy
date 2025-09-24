@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { LogIn, Brain } from 'lucide-react';
+import { LogIn, Settings } from 'lucide-react';
 import { ThemeProvider } from '@/components/layout/theme-provider';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Header } from '@/components/layout/header';
@@ -213,7 +213,7 @@ const Index = () => {
         size="icon"
         title={showVoiceTesting ? "Fechar testes de voz" : "Abrir testes de voz"}
       >
-        <Brain className="h-5 w-5" />
+        <Settings className="h-5 w-5" />
       </Button>
       
       <VoiceInterface onNavigate={handleVoiceNavigation} />
