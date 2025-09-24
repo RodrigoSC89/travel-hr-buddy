@@ -3,6 +3,7 @@ import { SettingsModule } from '@/components/settings/settings-module';
 import { ThemeProvider } from '@/components/layout/theme-provider';
 import { Header } from '@/components/layout/header';
 import { Settings as SettingsIcon } from 'lucide-react';
+import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 
 const Settings = () => {
   return (
@@ -10,6 +11,7 @@ const Settings = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <main className="container mx-auto p-6 space-y-6">
+          <BackToDashboard />
           <div className="flex items-center gap-4 mb-8">
             <div className="p-3 rounded-lg bg-primary/10">
               <SettingsIcon className="h-8 w-8 text-primary" />
