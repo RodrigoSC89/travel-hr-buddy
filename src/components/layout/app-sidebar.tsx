@@ -15,7 +15,8 @@ import {
   UserCog,
   Ship,
   Anchor,
-  Bot
+  Bot,
+  Zap
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -163,6 +164,12 @@ const navigationItems = [
     title: "Configurações",
     url: "settings",
     icon: Settings,
+  },
+  {
+    title: "Otimização",
+    url: "optimization",
+    icon: Zap,
+    permission: "analytics" as const,
   },
 ];
 
