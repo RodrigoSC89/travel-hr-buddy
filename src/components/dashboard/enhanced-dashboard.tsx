@@ -364,19 +364,39 @@ export const EnhancedDashboard = () => {
                     Ações Rápidas
                   </h4>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <Button variant="outline" size="sm" className="justify-start hover-lift hover-glow group h-12">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="justify-start hover-lift hover-glow group h-12"
+                      onClick={() => window.open('/reports', '_blank')}
+                    >
                       <Eye className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                       Ver Relatório
                     </Button>
-                    <Button variant="outline" size="sm" className="justify-start hover-lift hover-glow group h-12">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="justify-start hover-lift hover-glow group h-12"
+                      onClick={() => window.open('/analytics', '_blank')}
+                    >
                       <Zap className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                       Otimizar
                     </Button>
-                    <Button variant="outline" size="sm" className="justify-start hover-lift hover-glow group h-12">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="justify-start hover-lift hover-glow group h-12"
+                      onClick={() => window.open('/analytics', '_blank')}
+                    >
                       <Brain className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                       Análise IA
                     </Button>
-                    <Button variant="outline" size="sm" className="justify-start hover-lift hover-glow group h-12">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="justify-start hover-lift hover-glow group h-12"
+                      onClick={() => window.open('/settings', '_blank')}
+                    >
                       <ArrowRight className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                       Expandir
                     </Button>

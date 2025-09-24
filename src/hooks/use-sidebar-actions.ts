@@ -13,21 +13,13 @@ export const useSidebarActions = () => {
         navigate('/');
         break;
       case 'hr':
-        navigate('/');
-        toast({
-          title: "RH",
-          description: "Carregando módulo de Recursos Humanos",
-        });
+        navigate('/hr');
         break;
       case 'price-alerts':
         navigate('/price-alerts');
         break;
       case 'analytics':
-        navigate('/');
-        toast({
-          title: "Analytics",
-          description: "Carregando dados analíticos",
-        });
+        navigate('/analytics');
         break;
       case 'reservations':
         navigate('/');
@@ -64,18 +56,9 @@ export const useSidebarActions = () => {
         });
         break;
       case 'flights':
-        navigate('/');
-        toast({
-          title: "Viagens - Voos",
-          description: "Carregando busca de voos",
-        });
-        break;
       case 'hotels':
-        navigate('/');
-        toast({
-          title: "Viagens - Hotéis", 
-          description: "Carregando busca de hotéis",
-        });
+      case 'travel':
+        navigate('/travel');
         break;
       default:
         toast({
