@@ -39,6 +39,8 @@ const Index = () => {
   const isMobile = useIsMobile();
   const { permissionGranted, scheduleNotification } = useNotifications();
 
+  console.log('Index: user', user, 'isLoading', isLoading);
+
   const handleVoiceNavigation = (module: string) => {
     setActiveModule(module);
   };
