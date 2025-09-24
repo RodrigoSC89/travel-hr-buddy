@@ -24,7 +24,8 @@ import {
   Shield,
   Radio,
   Trophy,
-  User
+  User,
+  Activity
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -182,6 +183,18 @@ const navigationItems = [
     url: "reports",
     icon: FileText,
     permission: "reports" as const,
+    items: [
+      {
+        title: "Relatórios Básicos",
+        url: "reports",
+        icon: FileText,
+      },
+      {
+        title: "Relatórios Avançados",
+        url: "advanced-reports",
+        icon: BarChart3,
+      },
+    ],
   },
   {
     title: "Comunicação",
@@ -208,6 +221,16 @@ const navigationItems = [
     title: "Assistente de Voz",
     url: "voice",
     icon: Mic,
+  },
+  {
+    title: "Centro de Notificações",
+    url: "notification-center",
+    icon: Bell,
+  },
+  {
+    title: "Monitor de Sistema",
+    url: "system-monitor",
+    icon: Activity,
   },
 ];
 

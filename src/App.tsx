@@ -36,6 +36,10 @@ import ProtectedRoute from "./components/auth/protected-route";
 import { WorkflowAutomationHub } from "./components/automation/workflow-automation-hub";
 import { AdvancedDocumentCenter } from "./components/documents/advanced-document-center";
 import { MobileOptimizationCenter } from "./components/mobile/mobile-optimization-center";
+import AdvancedReports from "./pages/AdvancedReports";
+import Executive from "./pages/Executive";
+import SystemMonitor from "./pages/SystemMonitor";
+import NotificationCenter from "./pages/NotificationCenter";
 
 const queryClient = new QueryClient();
 
@@ -190,6 +194,26 @@ const App = () => {
                     <div className="container mx-auto p-6">
                       <MobileOptimizationCenter />
                     </div>
+                  </ProtectedRoute>
+                } />
+                <Route path="/advanced-reports" element={
+                  <ProtectedRoute>
+                    <AdvancedReports />
+                  </ProtectedRoute>
+                } />
+                <Route path="/executive" element={
+                  <ProtectedRoute>
+                    <Executive />
+                  </ProtectedRoute>
+                } />
+                <Route path="/system-monitor" element={
+                  <ProtectedRoute>
+                    <SystemMonitor />
+                  </ProtectedRoute>
+                } />
+                <Route path="/notification-center" element={
+                  <ProtectedRoute>
+                    <NotificationCenter />
                   </ProtectedRoute>
                 } />
                 <Route path="*" element={<NotFound />} />
