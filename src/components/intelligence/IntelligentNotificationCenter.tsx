@@ -39,7 +39,7 @@ interface IntelligentNotificationCenterProps {
   onNavigate?: (module: string) => void;
 }
 
-const IntelligentNotificationCenter: React.FC<IntelligentNotificationCenterProps> = ({ onNavigate }) => {
+export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCenterProps> = ({ onNavigate }) => {
   const [notifications, setNotifications] = useState<IntelligentNotification[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<'all' | 'unread' | 'high'>('all');

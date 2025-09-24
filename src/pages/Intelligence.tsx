@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DocumentProcessor from "@/components/intelligence/DocumentProcessor";
 import IntelligentNotificationCenter from "@/components/intelligence/IntelligentNotificationCenter";
 import PersonalizedRecommendations from "@/components/intelligence/PersonalizedRecommendations";
+import AIAnalyticsDashboard from "@/components/intelligence/ai-analytics-dashboard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Brain, 
@@ -91,7 +92,7 @@ const Intelligence = () => {
 
               {/* Intelligence Tabs */}
               <Tabs defaultValue="documents" className="space-y-6">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="documents" className="flex items-center gap-2">
                     <FileText className="h-4 w-4" />
                     <span className="hidden sm:inline">Processamento</span>
@@ -103,6 +104,10 @@ const Intelligence = () => {
                   <TabsTrigger value="recommendations" className="flex items-center gap-2">
                     <Target className="h-4 w-4" />
                     <span className="hidden sm:inline">Recomendações</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="analytics" className="flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4" />
+                    <span className="hidden sm:inline">Analytics</span>
                   </TabsTrigger>
                 </TabsList>
 
@@ -116,6 +121,10 @@ const Intelligence = () => {
 
                 <TabsContent value="recommendations">
                   <PersonalizedRecommendations />
+                </TabsContent>
+
+                <TabsContent value="analytics">
+                  <AIAnalyticsDashboard />
                 </TabsContent>
               </Tabs>
             </div>

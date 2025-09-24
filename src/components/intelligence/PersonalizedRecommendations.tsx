@@ -47,7 +47,7 @@ interface PersonalizedRecommendationsProps {
   onNavigate?: (module: string) => void;
 }
 
-const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsProps> = ({ 
+export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsProps> = ({ 
   context = 'general',
   onNavigate
 }) => {

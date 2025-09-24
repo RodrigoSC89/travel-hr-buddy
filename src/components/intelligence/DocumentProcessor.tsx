@@ -30,7 +30,7 @@ interface ProcessedDocument {
   originalText: string;
 }
 
-const DocumentProcessor: React.FC = () => {
+export const DocumentProcessor: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [processedDocs, setProcessedDocs] = useState<ProcessedDocument[]>([]);
