@@ -79,6 +79,12 @@ export const useSidebarActions = () => {
       case 'automation':
         navigate('/innovation');
         break;
+      case 'intelligence':
+        navigate('/intelligence');
+        break;
+      case 'optimization':
+        navigate('/optimization');
+        break;
       default:
         toast({
           title: "Módulo",

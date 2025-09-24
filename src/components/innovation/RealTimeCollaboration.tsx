@@ -14,7 +14,8 @@ import {
   Bell,
   Activity,
   Zap,
-  Eye
+  Eye,
+  Plus
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 

@@ -4,6 +4,10 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AIAssistantPanel } from "@/components/innovation/AIAssistantPanel";
 import { BusinessIntelligence } from "@/components/innovation/BusinessIntelligence";
+import { RealTimeCollaboration } from "@/components/innovation/RealTimeCollaboration";
+import { SmartWorkflow } from "@/components/innovation/SmartWorkflow";
+import { SystemHealthDashboard } from "@/components/innovation/SystemHealthDashboard";
+import { Gamification } from "@/components/innovation/Gamification";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Brain, 
@@ -92,14 +96,30 @@ const Innovation = () => {
 
               {/* Innovation Tabs */}
               <Tabs defaultValue="ai-assistant" className="space-y-6">
-                <TabsList className="grid w-full grid-cols-2 lg:grid-cols-2">
+                <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6">
                   <TabsTrigger value="ai-assistant" className="flex items-center gap-2">
                     <Brain className="h-4 w-4" />
                     <span className="hidden sm:inline">IA Assistant</span>
                   </TabsTrigger>
                   <TabsTrigger value="business-intelligence" className="flex items-center gap-2">
                     <BarChart3 className="h-4 w-4" />
-                    <span className="hidden sm:inline">Business Intelligence</span>
+                    <span className="hidden sm:inline">BI</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="collaboration" className="flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    <span className="hidden sm:inline">Colaboração</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="workflow" className="flex items-center gap-2">
+                    <Workflow className="h-4 w-4" />
+                    <span className="hidden sm:inline">Workflow</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="health" className="flex items-center gap-2">
+                    <Activity className="h-4 w-4" />
+                    <span className="hidden sm:inline">Sistema</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="gamification" className="flex items-center gap-2">
+                    <Trophy className="h-4 w-4" />
+                    <span className="hidden sm:inline">Gamificação</span>
                   </TabsTrigger>
                 </TabsList>
 
@@ -109,6 +129,22 @@ const Innovation = () => {
 
                 <TabsContent value="business-intelligence">
                   <BusinessIntelligence />
+                </TabsContent>
+
+                <TabsContent value="collaboration">
+                  <RealTimeCollaboration />
+                </TabsContent>
+
+                <TabsContent value="workflow">
+                  <SmartWorkflow />
+                </TabsContent>
+
+                <TabsContent value="health">
+                  <SystemHealthDashboard />
+                </TabsContent>
+
+                <TabsContent value="gamification">
+                  <Gamification />
                 </TabsContent>
               </Tabs>
             </div>
