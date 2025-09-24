@@ -324,7 +324,7 @@ export const UserExperienceEnhancer: React.FC = () => {
                 </div>
                 {getTrendIcon(metric.trend)}
               </div>
-              <div className="text-2xl font-bold mb-1 {getStatusColor(metric.status)}">
+              <div className={`text-2xl font-bold mb-1 ${getStatusColor(metric.status)}`}>
                 {metric.value}{metric.unit}
               </div>
               <div className="text-sm text-muted-foreground mb-2">
