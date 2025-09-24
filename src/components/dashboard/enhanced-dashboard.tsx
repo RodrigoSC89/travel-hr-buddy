@@ -55,13 +55,13 @@ const QuickStatsCard = ({ icon: Icon, title, value, change, trend, description, 
   };
 
   return (
-    <Card className={`relative overflow-hidden bg-gradient-to-br ${colorClasses[color]} hover-lift hover-glow group cursor-pointer animate-bounce-in border backdrop-blur-sm`}>
+    <Card className={`relative overflow-hidden bg-gradient-to-br ${colorClasses[color]} hover:shadow-lg group cursor-pointer border backdrop-blur-sm transition-all duration-300`}>
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       <CardContent className="p-6 relative z-10">
         <div className="flex items-center justify-between">
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Icon className={`w-5 h-5 ${iconColors[color]} group-hover:animate-wiggle`} />
+              <Icon className={`w-5 h-5 ${iconColors[color]}`} />
               <span className="text-sm font-medium text-muted-foreground">{title}</span>
             </div>
             <div className="text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
@@ -74,7 +74,7 @@ const QuickStatsCard = ({ icon: Icon, title, value, change, trend, description, 
               </span>
             </div>
           </div>
-          <div className={`p-4 rounded-2xl ${bgColors[color]} backdrop-blur-sm group-hover:scale-110 transition-all duration-300 animate-float`}>
+          <div className={`p-4 rounded-2xl ${bgColors[color]} backdrop-blur-sm group-hover:scale-105 transition-all duration-300`}>
             <Icon className={`w-8 h-8 ${iconColors[color]}`} />
           </div>
         </div>
@@ -106,7 +106,7 @@ const ActivityCard = ({ title, description, time, status, icon: Icon, priority =
   };
 
   return (
-    <div className={`group p-4 border rounded-xl glass-card hover:scale-[1.02] transition-all duration-300 border-l-4 ${priorityColors[priority]} hover:shadow-lg animate-slide-in-up`}>
+    <div className={`group p-4 border rounded-xl bg-card hover:scale-[1.01] transition-all duration-300 border-l-4 ${priorityColors[priority]} hover:shadow-lg`}>
       <div className="flex items-start gap-3">
         <div className={`p-2.5 rounded-xl backdrop-blur-sm ${iconColors[priority]} group-hover:scale-110 transition-transform duration-300`}>
           <Icon className="w-4 h-4" />
@@ -208,11 +208,11 @@ export const EnhancedDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen gradient-mesh">
+    <div className="min-h-screen bg-background">
       <div className="space-y-8 p-6">
         {/* Hero Section */}
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 p-8 backdrop-blur-sm border border-white/10">
-          <div className="absolute inset-0 animate-gradient-shift bg-gradient-to-r from-primary/5 via-transparent to-secondary/5 opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5 opacity-50" />
           <div className="relative z-10">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
               Dashboard Inteligente
@@ -226,13 +226,7 @@ export const EnhancedDashboard = () => {
         {/* Quick Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {quickStats.map((stat, index) => (
-            <div 
-              key={index} 
-              style={{ animationDelay: `${index * 0.1}s` }}
-              className="animate-bounce-in"
-            >
-              <QuickStatsCard {...stat} />
-            </div>
+            <QuickStatsCard key={index} {...stat} />
           ))}
         </div>
 
@@ -240,13 +234,13 @@ export const EnhancedDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Performance Overview */}
         <div className="lg:col-span-2">
-          <Card className="glass-card bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 hover-lift overflow-hidden group">
+          <Card className="bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 hover:shadow-lg overflow-hidden group transition-all duration-300">
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             <CardHeader className="relative z-10">
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="flex items-center gap-3 text-2xl">
-                    <div className="p-2 rounded-xl bg-primary/10 animate-pulse-glow">
+                    <div className="p-2 rounded-xl bg-primary/10">
                       <BarChart3 className="w-6 h-6 text-primary" />
                     </div>
                     <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
@@ -299,7 +293,7 @@ export const EnhancedDashboard = () => {
                     </div>
                     <div className="relative">
                       <Progress value={95} className="h-4 bg-muted/30" />
-                      <div className="absolute inset-0 h-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full animate-shimmer shimmer-bg opacity-20" />
+                      <div className="absolute inset-0 h-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full opacity-20" />
                     </div>
                     <p className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
                       R$ 285k de R$ 300k meta mensal • Faltam R$ 15k
@@ -316,7 +310,7 @@ export const EnhancedDashboard = () => {
                     </div>
                     <div className="relative">
                       <Progress value={98} className="h-4 bg-muted/30" />
-                      <div className="absolute inset-0 h-4 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full animate-shimmer shimmer-bg opacity-20" />
+                      <div className="absolute inset-0 h-4 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full opacity-20" />
                     </div>
                     <p className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
                       Excelente feedback • 4.9/5 avaliação média
@@ -333,7 +327,7 @@ export const EnhancedDashboard = () => {
                     </div>
                     <div className="relative">
                       <Progress value={87} className="h-4 bg-muted/30" />
-                      <div className="absolute inset-0 h-4 bg-gradient-to-r from-purple-400 to-violet-500 rounded-full animate-shimmer shimmer-bg opacity-20" />
+                      <div className="absolute inset-0 h-4 bg-gradient-to-r from-purple-400 to-violet-500 rounded-full opacity-20" />
                     </div>
                     <p className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
                       Automação ativa • 23% melhoria este mês
@@ -350,7 +344,7 @@ export const EnhancedDashboard = () => {
                     </div>
                     <div className="relative">
                       <Progress value={92} className="h-4 bg-muted/30" />
-                      <div className="absolute inset-0 h-4 bg-gradient-to-r from-orange-400 to-red-500 rounded-full animate-shimmer shimmer-bg opacity-20" />
+                      <div className="absolute inset-0 h-4 bg-gradient-to-r from-orange-400 to-red-500 rounded-full opacity-20" />
                     </div>
                     <p className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
                       IA integrada • 15 modelos ativos
@@ -368,7 +362,7 @@ export const EnhancedDashboard = () => {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="justify-start hover-lift hover-glow group h-12"
+                      className="justify-start hover:scale-105 group h-12 transition-all duration-200"
                       onClick={() => window.open('/reports', '_blank')}
                     >
                       <Eye className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
@@ -377,7 +371,7 @@ export const EnhancedDashboard = () => {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="justify-start hover-lift hover-glow group h-12"
+                      className="justify-start hover:scale-105 group h-12 transition-all duration-200"
                       onClick={() => window.open('/analytics', '_blank')}
                     >
                       <Zap className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
@@ -386,7 +380,7 @@ export const EnhancedDashboard = () => {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="justify-start hover-lift hover-glow group h-12"
+                      className="justify-start hover:scale-105 group h-12 transition-all duration-200"
                       onClick={() => window.open('/analytics', '_blank')}
                     >
                       <Brain className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
@@ -395,7 +389,7 @@ export const EnhancedDashboard = () => {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="justify-start hover-lift hover-glow group h-12"
+                      className="justify-start hover:scale-105 group h-12 transition-all duration-200"
                       onClick={() => window.open('/settings', '_blank')}
                     >
                       <ArrowRight className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
