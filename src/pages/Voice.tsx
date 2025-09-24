@@ -14,6 +14,7 @@ import {
   Bot
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import VoiceInterface from '@/components/voice/VoiceInterface';
 
 export default function Voice() {
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -38,6 +39,7 @@ export default function Voice() {
       navigate(route);
     }
   };
+
 
   return (
     <SidebarProvider>
@@ -108,10 +110,12 @@ export default function Voice() {
             </TabsList>
 
             <TabsContent value="settings">
-              <VoiceSettings 
-                isOpen={true}
-                onClose={() => {}}
-              />
+              <div className="grid gap-6">
+                <VoiceSettings 
+                  isOpen={true}
+                  onClose={() => {}}
+                />
+              </div>
             </TabsContent>
 
             <TabsContent value="history">
@@ -123,16 +127,23 @@ export default function Voice() {
             </TabsContent>
 
             <TabsContent value="analytics">
-              <VoiceAnalytics 
-                isConnected={!isSpeaking}
-                totalMessages={messages.length}
-                sessionDuration={247}
-                responseTime={1200}
-                connectionQuality="excellent"
-              />
+              <div className="grid gap-6">
+                <VoiceAnalytics 
+                  isConnected={!isSpeaking}
+                  totalMessages={messages.length}
+                  sessionDuration={247}
+                  responseTime={1200}
+                  connectionQuality="excellent"
+                />
+              </div>
             </TabsContent>
           </Tabs>
         </main>
+        
+        <VoiceInterface 
+          onSpeakingChange={setIsSpeaking}
+          onNavigate={handleNavigate}
+        />
       </div>
     </SidebarProvider>
   );
