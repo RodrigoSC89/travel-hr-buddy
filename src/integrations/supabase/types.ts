@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_reports: {
+        Row: {
+          content: string
+          created_at: string
+          date_range_end: string | null
+          date_range_start: string | null
+          format: string
+          generated_at: string
+          id: string
+          modules: string[] | null
+          raw_data: Json | null
+          title: string
+          type: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          date_range_end?: string | null
+          date_range_start?: string | null
+          format: string
+          generated_at?: string
+          id?: string
+          modules?: string[] | null
+          raw_data?: Json | null
+          title: string
+          type: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          date_range_end?: string | null
+          date_range_start?: string | null
+          format?: string
+          generated_at?: string
+          id?: string
+          modules?: string[] | null
+          raw_data?: Json | null
+          title?: string
+          type?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       alert_votes: {
         Row: {
           created_at: string | null
