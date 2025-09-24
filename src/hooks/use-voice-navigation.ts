@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useSidebarActions } from '@/hooks/use-sidebar-actions';
 
@@ -91,7 +91,17 @@ const ACTION_KEYWORDS = {
 };
 
 export const useVoiceNavigation = () => {
-  const navigate = useNavigate();
+  // Usar hooks de router de forma segura
+  let navigate: ReturnType<typeof useNavigate> | null = null;
+  let location: ReturnType<typeof useLocation> | null = null;
+  
+  try {
+    navigate = useNavigate();
+    location = useLocation();
+  } catch (error) {
+    console.warn('Router hooks not available, voice navigation will use fallback methods');
+  }
+  
   const { toast } = useToast();
   const { handleNavigation } = useSidebarActions();
 

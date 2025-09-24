@@ -67,9 +67,9 @@ const App = () => {
                 <Route path="/voice" element={<Voice />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <VoiceInterface />
+              <IntelligentChatbot />
             </BrowserRouter>
-            <VoiceInterface />
-            <IntelligentChatbot />
             <Toaster />
             <Sonner />
           </TooltipProvider>

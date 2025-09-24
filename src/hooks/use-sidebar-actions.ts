@@ -6,12 +6,28 @@ import { usePermissions } from '@/hooks/use-permissions';
 
 // Hook para ações da navegação lateral
 export const useSidebarActions = () => {
-  const navigate = useNavigate();
+  // Usar hook de navegação de forma segura
+  let navigate: any = null;
+  try {
+    navigate = useNavigate();
+  } catch (error) {
+    console.warn('useNavigate not available in current context');
+  }
+  
   const { toast } = useToast();
   const { user } = useAuth();
   const { canAccessModule } = usePermissions();
 
   const handleNavigation = (module: string) => {
+    if (!navigate) {
+      toast({
+        title: "Navegação não disponível",
+        description: "Sistema de navegação não está disponível neste contexto.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     switch (module) {
       case 'dashboard':
         navigate('/');

@@ -2,20 +2,18 @@ import React from 'react';
 import { FlightSearch } from '@/components/travel/flight-search';
 import { HotelSearch } from '@/components/travel/hotel-search';
 import { TravelMap } from '@/components/travel/travel-map';
-import { ThemeProvider } from '@/components/layout/theme-provider';
-import { Header } from '@/components/layout/header';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plane, Building, Map, Calendar } from 'lucide-react';
-import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 
 const Travel = () => {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-      <div className="min-h-screen bg-background">
-        <Header />
-        <main className="container mx-auto p-6 space-y-6">
-          <BackToDashboard />
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        <AppSidebar />
+        <main className="flex-1 p-6 space-y-6">
           <div className="flex items-center gap-4 mb-8">
             <div className="p-3 rounded-lg bg-primary/10">
               <Plane className="h-8 w-8 text-primary" />
@@ -98,7 +96,7 @@ const Travel = () => {
           </Tabs>
         </main>
       </div>
-    </ThemeProvider>
+    </SidebarProvider>
   );
 };
 
