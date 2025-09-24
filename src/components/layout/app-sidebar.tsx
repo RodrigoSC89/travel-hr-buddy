@@ -26,7 +26,8 @@ import {
   Trophy,
   User,
   Activity,
-  Globe
+  Globe,
+  HelpCircle
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -237,6 +238,21 @@ const navigationItems = [
     title: "Monitor de Sistema",
     url: "system-monitor",
     icon: Activity,
+  },
+  {
+    title: "Backup e Auditoria",
+    url: "backup-audit",
+    icon: Shield,
+  },
+  {
+    title: "Templates",
+    url: "templates",
+    icon: FileText,
+  },
+  {
+    title: "Centro de Ajuda",
+    url: "help",
+    icon: HelpCircle,
   },
 ];
 

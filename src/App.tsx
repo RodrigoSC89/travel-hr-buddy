@@ -41,6 +41,9 @@ import Executive from "./pages/Executive";
 import SystemMonitor from "./pages/SystemMonitor";
 import NotificationCenter from "./pages/NotificationCenter";
 import IntegrationsHub from "./components/integration/integrations-hub";
+import BackupAudit from "./pages/BackupAudit";
+import Help from "./pages/Help";
+import Templates from "./pages/Templates";
 
 const queryClient = new QueryClient();
 
@@ -222,6 +225,21 @@ const App = () => {
                     <div className="container mx-auto p-6">
                       <IntegrationsHub />
                     </div>
+                  </ProtectedRoute>
+                } />
+                <Route path="/backup-audit" element={
+                  <ProtectedRoute>
+                    <BackupAudit />
+                  </ProtectedRoute>
+                } />
+                <Route path="/help" element={
+                  <ProtectedRoute>
+                    <Help />
+                  </ProtectedRoute>
+                } />
+                <Route path="/templates" element={
+                  <ProtectedRoute>
+                    <Templates />
                   </ProtectedRoute>
                 } />
                 <Route path="*" element={<NotFound />} />
