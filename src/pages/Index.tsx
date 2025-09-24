@@ -31,6 +31,8 @@ import SmartTooltipSystem from '@/components/ui/smart-tooltip-system';
 import { ScrollToTop } from '@/components/ui/scroll-to-top';
 import { PageTransition } from '@/components/ui/page-transition';
 import { ErrorBoundary } from '@/components/layout/error-boundary';
+import { QuickActionsPanel } from '@/components/ui/quick-actions-panel';
+import { SystemMonitoringDashboard } from '@/components/ui/system-monitoring-dashboard';
 
 // Import direto dos componentes administrativos
 import { UserManagementDashboard } from '@/components/admin/user-management-dashboard';
@@ -118,7 +120,13 @@ const Index = () => {
   const renderContent = () => {
     switch (activeModule) {
       case 'dashboard':
-        return <GlobalDashboard onNavigate={setActiveModule} />;
+        return (
+          <div className="space-y-6">
+            <QuickActionsPanel />
+            <SystemMonitoringDashboard />
+            <GlobalDashboard onNavigate={setActiveModule} />
+          </div>
+        );
       case 'hr':
         return <HRDashboard />;
       case 'admin':

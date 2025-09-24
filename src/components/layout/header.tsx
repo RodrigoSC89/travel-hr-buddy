@@ -21,6 +21,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import { NotificationCenter } from '@/components/notifications/notification-center';
+import { NotificationCenter as RealtimeNotifications } from '@/components/ui/real-time-notifications';
 import { AdvancedSearch } from '@/components/ui/advanced-search';
 import { QuickActionsBar } from '@/components/ui/quick-actions-bar';
 
