@@ -9,6 +9,7 @@ import { Brain, Bell, BarChart3, Sparkles } from 'lucide-react';
 import { RealTimeCollaboration } from '@/components/innovation/RealTimeCollaboration';
 import { AIAssistantPanel } from '@/components/innovation/AIAssistantPanel';
 import { SmartWorkflow } from '@/components/innovation/SmartWorkflow';
+import { SystemHealthDashboard } from '@/components/innovation/SystemHealthDashboard';
 
 interface GlobalDashboardProps {
   onNavigate?: (module: string) => void;
@@ -22,6 +23,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
     { id: "collaboration", label: "Colaboração", icon: Brain },
     { id: "ai-assistant", label: "Assistente IA", icon: Sparkles },
     { id: "workflows", label: "Workflows", icon: Bell },
+    { id: "system-health", label: "Status Sistema", icon: Brain },
     { id: "recommendations", label: "Recomendações", icon: Sparkles },
     { id: "notifications", label: "Notificações", icon: Bell },
     { id: "insights", label: "Insights IA", icon: Brain }
@@ -39,7 +41,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid grid-cols-7 w-fit bg-muted/50">
+        <TabsList className="grid grid-cols-8 w-fit bg-muted/50">
           {tabs.map((tab) => {
             const IconComponent = tab.icon;
             return (
@@ -69,6 +71,10 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
 
         <TabsContent value="workflows" className="space-y-6">
           <SmartWorkflow />
+        </TabsContent>
+
+        <TabsContent value="system-health" className="space-y-6">
+          <SystemHealthDashboard />
         </TabsContent>
 
         <TabsContent value="recommendations">
