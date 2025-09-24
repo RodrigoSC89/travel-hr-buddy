@@ -1,14 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AIAssistantPanel } from "@/components/innovation/AIAssistantPanel";
-import { BusinessIntelligence } from "@/components/innovation/BusinessIntelligence";
-import { RealTimeCollaboration } from "@/components/innovation/RealTimeCollaboration";
-import { SmartWorkflow } from "@/components/innovation/SmartWorkflow";
-import { SystemHealthDashboard } from "@/components/innovation/SystemHealthDashboard";
-import { Gamification } from "@/components/innovation/Gamification";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import VoiceInterface from "@/components/voice/VoiceInterface";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { 
   Brain, 
   BarChart3, 
@@ -21,6 +17,38 @@ import {
   Target,
   Globe
 } from "lucide-react";
+
+// Lazy loading dos componentes para melhor performance
+const AIAssistantPanel = React.lazy(() => 
+  import("@/components/innovation/AIAssistantPanel").then(module => ({
+    default: module.AIAssistantPanel
+  }))
+);
+const BusinessIntelligence = React.lazy(() => 
+  import("@/components/innovation/BusinessIntelligence").then(module => ({
+    default: module.BusinessIntelligence
+  }))
+);
+const RealTimeCollaboration = React.lazy(() => 
+  import("@/components/innovation/RealTimeCollaboration").then(module => ({
+    default: module.RealTimeCollaboration
+  }))
+);
+const SmartWorkflow = React.lazy(() => 
+  import("@/components/innovation/SmartWorkflow").then(module => ({
+    default: module.SmartWorkflow
+  }))
+);
+const SystemHealthDashboard = React.lazy(() => 
+  import("@/components/innovation/SystemHealthDashboard").then(module => ({
+    default: module.SystemHealthDashboard
+  }))
+);
+const Gamification = React.lazy(() => 
+  import("@/components/innovation/Gamification").then(module => ({
+    default: module.Gamification
+  }))
+);
 
 const Innovation = () => {
   return (
@@ -124,32 +152,69 @@ const Innovation = () => {
                 </TabsList>
 
                 <TabsContent value="ai-assistant">
-                  <AIAssistantPanel />
+                  <Suspense fallback={
+                    <div className="flex items-center justify-center p-8">
+                      <LoadingSpinner size="lg" />
+                    </div>
+                  }>
+                    <AIAssistantPanel />
+                  </Suspense>
                 </TabsContent>
 
                 <TabsContent value="business-intelligence">
-                  <BusinessIntelligence />
+                  <Suspense fallback={
+                    <div className="flex items-center justify-center p-8">
+                      <LoadingSpinner size="lg" />
+                    </div>
+                  }>
+                    <BusinessIntelligence />
+                  </Suspense>
                 </TabsContent>
 
                 <TabsContent value="collaboration">
-                  <RealTimeCollaboration />
+                  <Suspense fallback={
+                    <div className="flex items-center justify-center p-8">
+                      <LoadingSpinner size="lg" />
+                    </div>
+                  }>
+                    <RealTimeCollaboration />
+                  </Suspense>
                 </TabsContent>
 
                 <TabsContent value="workflow">
-                  <SmartWorkflow />
+                  <Suspense fallback={
+                    <div className="flex items-center justify-center p-8">
+                      <LoadingSpinner size="lg" />
+                    </div>
+                  }>
+                    <SmartWorkflow />
+                  </Suspense>
                 </TabsContent>
 
                 <TabsContent value="health">
-                  <SystemHealthDashboard />
+                  <Suspense fallback={
+                    <div className="flex items-center justify-center p-8">
+                      <LoadingSpinner size="lg" />
+                    </div>
+                  }>
+                    <SystemHealthDashboard />
+                  </Suspense>
                 </TabsContent>
 
                 <TabsContent value="gamification">
-                  <Gamification />
+                  <Suspense fallback={
+                    <div className="flex items-center justify-center p-8">
+                      <LoadingSpinner size="lg" />
+                    </div>
+                  }>
+                    <Gamification />
+                  </Suspense>
                 </TabsContent>
               </Tabs>
             </div>
           </main>
         </div>
+        <VoiceInterface />
       </div>
     </SidebarProvider>
   );

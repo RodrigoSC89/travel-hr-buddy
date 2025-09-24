@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { VesselManagement } from './vessel-management';
-import { CrewRotationPlanner } from './crew-rotation-planner';
-import { CertificationManager } from './certification-manager';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { 
   Ship, 
   Users, 
@@ -23,19 +21,85 @@ import {
   Zap
 } from 'lucide-react';
 
+// Lazy loading dos componentes pesados
+const VesselManagement = React.lazy(() => 
+  import('./vessel-management').then(module => ({
+    default: module.VesselManagement
+  }))
+);
+const CrewRotationPlanner = React.lazy(() => 
+  import('./crew-rotation-planner').then(module => ({
+    default: module.CrewRotationPlanner
+  }))
+);
+const CertificationManager = React.lazy(() => 
+  import('./certification-manager').then(module => ({
+    default: module.CertificationManager
+  }))
+);
+
 export const MaritimeDashboard: React.FC = () => {
   const [activeModule, setActiveModule] = useState('overview');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleModuleChange = async (module: string) => {
+    if (module !== 'overview') {
+      setIsLoading(true);
+      // Simular delay para mostrar o loading
+      setTimeout(() => {
+        setActiveModule(module);
+        setIsLoading(false);
+      }, 300);
+    } else {
+      setActiveModule(module);
+    }
+  };
 
   const renderModuleContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center p-12">
+          <div className="text-center">
+            <LoadingSpinner size="lg" />
+            <p className="mt-4 text-muted-foreground">Carregando módulo marítimo...</p>
+          </div>
+        </div>
+      );
+    }
+
     switch (activeModule) {
       case 'vessels':
-        return <VesselManagement />;
+        return (
+          <Suspense fallback={
+            <div className="flex items-center justify-center p-8">
+              <LoadingSpinner size="lg" />
+            </div>
+          }>
+            <VesselManagement />
+          </Suspense>
+        );
       case 'crew':
-        return <CrewRotationPlanner />;
+        return (
+          <Suspense fallback={
+            <div className="flex items-center justify-center p-8">
+              <LoadingSpinner size="lg" />
+            </div>
+          }>
+            <CrewRotationPlanner />
+          </Suspense>
+        );
       case 'certifications':
-        return <CertificationManager />;
+        return (
+          <Suspense fallback={
+            <div className="flex items-center justify-center p-8">
+              <LoadingSpinner size="lg" />
+            </div>
+          }>
+            <CertificationManager />
+          </Suspense>
+        );
       default:
-        return <OverviewDashboard onNavigate={setActiveModule} />;
+        return <OverviewDashboard onNavigate={handleModuleChange} />;
     }
   };
 
@@ -64,41 +128,29 @@ export const MaritimeDashboard: React.FC = () => {
         </div>
       </div>
 
-      <Tabs value={activeModule} onValueChange={setActiveModule}>
+      <Tabs value={activeModule} onValueChange={handleModuleChange}>
         <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-blue-50 to-cyan-50">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4" />
             Overview
           </TabsTrigger>
-          <TabsTrigger value="vessels" className="flex items-center gap-2">
+          <TabsTrigger value="vessels" className="flex items-center gap-2" disabled={isLoading}>
             <Ship className="h-4 w-4" />
             Embarcações
           </TabsTrigger>
-          <TabsTrigger value="crew" className="flex items-center gap-2">
+          <TabsTrigger value="crew" className="flex items-center gap-2" disabled={isLoading}>
             <Users className="h-4 w-4" />
             Tripulação
           </TabsTrigger>
-          <TabsTrigger value="certifications" className="flex items-center gap-2">
+          <TabsTrigger value="certifications" className="flex items-center gap-2" disabled={isLoading}>
             <Shield className="h-4 w-4" />
             Certificações
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview">
-          <OverviewDashboard onNavigate={setActiveModule} />
-        </TabsContent>
-
-        <TabsContent value="vessels">
-          <VesselManagement />
-        </TabsContent>
-
-        <TabsContent value="crew">
-          <CrewRotationPlanner />
-        </TabsContent>
-
-        <TabsContent value="certifications">
-          <CertificationManager />
-        </TabsContent>
+        <div className="mt-6">
+          {renderModuleContent()}
+        </div>
       </Tabs>
     </div>
   );
