@@ -25,7 +25,8 @@ import {
   Radio,
   Trophy,
   User,
-  Activity
+  Activity,
+  Globe
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -166,6 +167,11 @@ const navigationItems = [
     title: "Alertas de Preços",
     url: "price-alerts",
     icon: Bell,
+  },
+  {
+    title: "Hub de Integrações",
+    url: "integrations",
+    icon: Globe,
   },
   {
     title: "Analytics",

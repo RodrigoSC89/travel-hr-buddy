@@ -40,6 +40,7 @@ import AdvancedReports from "./pages/AdvancedReports";
 import Executive from "./pages/Executive";
 import SystemMonitor from "./pages/SystemMonitor";
 import NotificationCenter from "./pages/NotificationCenter";
+import IntegrationsHub from "./components/integration/integrations-hub";
 
 const queryClient = new QueryClient();
 
@@ -214,6 +215,13 @@ const App = () => {
                 <Route path="/notification-center" element={
                   <ProtectedRoute>
                     <NotificationCenter />
+                  </ProtectedRoute>
+                } />
+                <Route path="/integrations" element={
+                  <ProtectedRoute>
+                    <div className="container mx-auto p-6">
+                      <IntegrationsHub />
+                    </div>
                   </ProtectedRoute>
                 } />
                 <Route path="*" element={<NotFound />} />
