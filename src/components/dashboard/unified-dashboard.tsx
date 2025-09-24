@@ -259,19 +259,19 @@ const UnifiedDashboard = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickActions.map((action, index) => (
-              <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer border-l-4" style={{ borderLeftColor: action.color.replace('bg-', '#') }}>
+              <Card key={index} className="hover:shadow-lg hover-lift transition-all cursor-pointer border-l-4 border-l-primary">
                 <CardContent className="p-4" onClick={() => navigate(action.path)}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${action.color} text-white`}>
+                      <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary-light text-primary-foreground shadow-lg">
                         <action.icon className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="font-semibold">{action.title}</h4>
+                        <h4 className="font-semibold text-foreground">{action.title}</h4>
                         <p className="text-sm text-muted-foreground">{action.description}</p>
                       </div>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground" />
+                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                   </div>
                 </CardContent>
               </Card>

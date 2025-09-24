@@ -435,6 +435,19 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               )}
+
+              {/* Visão Geral do Sistema */}
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  onClick={() => handleItemClick("system-overview")}
+                  isActive={isItemActive("system-overview")}
+                  className="w-full justify-start"
+                  title={collapsed ? "Visão Geral" : undefined}
+                >
+                  <Activity className="h-4 w-4" />
+                  {!collapsed && <span className="ml-2">Visão Geral</span>}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -11,6 +11,7 @@ import IntelligentChatbot from "@/components/voice/IntelligentChatbot";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import EnterpriseLayout from "./components/layout/enterprise-layout";
 import PriceAlerts from "./pages/PriceAlerts";
 import Reports from "./pages/Reports";
 import Reservations from "./pages/Reservations";
@@ -44,6 +45,7 @@ import IntegrationsHub from "./components/integration/integrations-hub";
 import BackupAudit from "./pages/BackupAudit";
 import Help from "./pages/Help";
 import Templates from "./pages/Templates";
+import SystemOverviewPage from "./pages/SystemOverview";
 
 const queryClient = new QueryClient();
 
@@ -71,180 +73,62 @@ const App = () => {
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/" element={
                   <ProtectedRoute>
-                    <Index />
+                    <EnterpriseLayout />
                   </ProtectedRoute>
-                } />
-                <Route path="/admin" element={
-                  <ProtectedRoute>
-                    <Admin />
-                  </ProtectedRoute>
-                } />
-                <Route path="/price-alerts" element={
-                  <ProtectedRoute>
-                    <PriceAlerts />
-                  </ProtectedRoute>
-                } />
-                <Route path="/reports" element={
-                  <ProtectedRoute>
-                    <Reports />
-                  </ProtectedRoute>
-                } />
-                <Route path="/settings" element={
-                  <ProtectedRoute>
-                    <Settings />
-                  </ProtectedRoute>
-                } />
-                <Route path="/travel" element={
-                  <ProtectedRoute>
-                    <Travel />
-                  </ProtectedRoute>
-                } />
-                <Route path="/analytics" element={
-                  <ProtectedRoute>
-                    <Analytics />
-                  </ProtectedRoute>
-                } />
-                <Route path="/hr" element={
-                  <ProtectedRoute>
-                    <HumanResources />
-                  </ProtectedRoute>
-                } />
-                <Route path="/reservations" element={
-                  <ProtectedRoute>
-                    <Reservations />
-                  </ProtectedRoute>
-                } />
-                <Route path="/maritime" element={
-                  <ProtectedRoute>
-                    <Maritime />
-                  </ProtectedRoute>
-                } />
-                <Route path="/communication" element={
-                  <ProtectedRoute>
-                    <Communication />
-                  </ProtectedRoute>
-                } />
-                <Route path="/intelligence" element={
-                  <ProtectedRoute>
-                    <Intelligence />
-                  </ProtectedRoute>
-                } />
-                <Route path="/optimization" element={
-                  <ProtectedRoute>
-                    <Optimization />
-                  </ProtectedRoute>
-                } />
-                <Route path="/innovation" element={
-                  <ProtectedRoute>
-                    <Innovation />
-                  </ProtectedRoute>
-                } />
-                <Route path="/strategic" element={
-                  <ProtectedRoute>
-                    <Strategic />
-                  </ProtectedRoute>
-                } />
-                <Route path="/voice" element={
-                  <ProtectedRoute>
-                    <Voice />
-                  </ProtectedRoute>
-                } />
-                <Route path="/portal" element={
-                  <ProtectedRoute>
-                    <Portal />
-                  </ProtectedRoute>
-                } />
-                <Route path="/ar" element={
-                  <ProtectedRoute>
-                    <AR />
-                  </ProtectedRoute>
-                } />
-                <Route path="/iot" element={
-                  <ProtectedRoute>
-                    <IoT />
-                  </ProtectedRoute>
-                } />
-                <Route path="/blockchain" element={
-                  <ProtectedRoute>
-                    <Blockchain />
-                  </ProtectedRoute>
-                } />
-                <Route path="/gamification" element={
-                  <ProtectedRoute>
-                    <Gamification />
-                  </ProtectedRoute>
-                } />
-                <Route path="/predictive-analytics" element={
-                  <ProtectedRoute>
-                    <PredictiveAnalytics />
-                  </ProtectedRoute>
-                } />
-                <Route path="/workflow" element={
-                  <ProtectedRoute>
+                }>
+                  <Route index element={<Index />} />
+                  <Route path="admin" element={<Admin />} />
+                  <Route path="price-alerts" element={<PriceAlerts />} />
+                  <Route path="reports" element={<Reports />} />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="travel" element={<Travel />} />
+                  <Route path="analytics" element={<Analytics />} />
+                  <Route path="hr" element={<HumanResources />} />
+                  <Route path="reservations" element={<Reservations />} />
+                  <Route path="maritime" element={<Maritime />} />
+                  <Route path="communication" element={<Communication />} />
+                  <Route path="intelligence" element={<Intelligence />} />
+                  <Route path="optimization" element={<Optimization />} />
+                  <Route path="innovation" element={<Innovation />} />
+                  <Route path="strategic" element={<Strategic />} />
+                  <Route path="voice" element={<Voice />} />
+                  <Route path="portal" element={<Portal />} />
+                  <Route path="ar" element={<AR />} />
+                  <Route path="iot" element={<IoT />} />
+                  <Route path="blockchain" element={<Blockchain />} />
+                  <Route path="gamification" element={<Gamification />} />
+                  <Route path="predictive-analytics" element={<PredictiveAnalytics />} />
+                  <Route path="workflow" element={
                     <div className="container mx-auto p-6">
                       <WorkflowAutomationHub />
                     </div>
-                  </ProtectedRoute>
-                } />
-                <Route path="/documents" element={
-                  <ProtectedRoute>
+                  } />
+                  <Route path="documents" element={
                     <div className="container mx-auto p-6">
                       <AdvancedDocumentCenter />
                     </div>
-                  </ProtectedRoute>
-                } />
-                <Route path="/mobile-optimization" element={
-                  <ProtectedRoute>
+                  } />
+                  <Route path="mobile-optimization" element={
                     <div className="container mx-auto p-6">
                       <MobileOptimizationCenter />
                     </div>
-                  </ProtectedRoute>
-                } />
-                <Route path="/advanced-reports" element={
-                  <ProtectedRoute>
-                    <AdvancedReports />
-                  </ProtectedRoute>
-                } />
-                <Route path="/executive" element={
-                  <ProtectedRoute>
-                    <Executive />
-                  </ProtectedRoute>
-                } />
-                <Route path="/system-monitor" element={
-                  <ProtectedRoute>
-                    <SystemMonitor />
-                  </ProtectedRoute>
-                } />
-                <Route path="/notification-center" element={
-                  <ProtectedRoute>
-                    <NotificationCenter />
-                  </ProtectedRoute>
-                } />
-                <Route path="/integrations" element={
-                  <ProtectedRoute>
+                  } />
+                  <Route path="advanced-reports" element={<AdvancedReports />} />
+                  <Route path="executive" element={<Executive />} />
+                  <Route path="system-monitor" element={<SystemMonitor />} />
+                  <Route path="notification-center" element={<NotificationCenter />} />
+                  <Route path="integrations" element={
                     <div className="container mx-auto p-6">
                       <IntegrationsHub />
                     </div>
-                  </ProtectedRoute>
-                } />
-                <Route path="/backup-audit" element={
-                  <ProtectedRoute>
-                    <BackupAudit />
-                  </ProtectedRoute>
-                } />
-                <Route path="/help" element={
-                  <ProtectedRoute>
-                    <Help />
-                  </ProtectedRoute>
-                } />
-                <Route path="/templates" element={
-                  <ProtectedRoute>
-                    <Templates />
-                  </ProtectedRoute>
-                } />
+                  } />
+                  <Route path="backup-audit" element={<BackupAudit />} />
+                  <Route path="help" element={<Help />} />
+                  <Route path="templates" element={<Templates />} />
+                  <Route path="system-overview" element={<SystemOverviewPage />} />
+                </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
-              <IntelligentChatbot />
             </BrowserRouter>
             <Toaster />
             <Sonner />
