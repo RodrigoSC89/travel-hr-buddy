@@ -139,5 +139,3 @@ const VoiceSettings: React.FC<VoiceSettingsProps> = ({ isOpen, onClose }) => {
 };
 
 export default VoiceSettings;
-
-export default VoiceSettings;

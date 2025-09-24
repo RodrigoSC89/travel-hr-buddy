@@ -100,7 +100,7 @@ export const RealTimeCollaboration = () => {
       
       const formattedMessages = data?.map(msg => ({
         id: msg.id,
-        user: msg.sender_profile?.full_name || 'Usuário',
+        user: `Usuário ${msg.sender_id?.slice(0, 8) || 'Anônimo'}`,
         message: msg.content,
         time: new Date(msg.created_at).toLocaleTimeString('pt-BR', { 
           hour: '2-digit', 

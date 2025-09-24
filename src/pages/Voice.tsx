@@ -17,6 +17,8 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Voice() {
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
 
   const handleNavigate = (module: string) => {
@@ -106,15 +108,28 @@ export default function Voice() {
             </TabsList>
 
             <TabsContent value="settings">
-              <VoiceSettings />
+              <VoiceSettings 
+                isOpen={true}
+                onClose={() => {}}
+              />
             </TabsContent>
 
             <TabsContent value="history">
-              <VoiceHistory />
+              <VoiceHistory 
+                messages={messages}
+                onClear={() => setMessages([])}
+                onExport={() => console.log('Export functionality')}
+              />
             </TabsContent>
 
             <TabsContent value="analytics">
-              <VoiceAnalytics />
+              <VoiceAnalytics 
+                isConnected={!isSpeaking}
+                totalMessages={messages.length}
+                sessionDuration={247}
+                responseTime={1200}
+                connectionQuality="excellent"
+              />
             </TabsContent>
           </Tabs>
         </main>
