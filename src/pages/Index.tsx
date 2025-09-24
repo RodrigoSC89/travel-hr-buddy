@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { LogIn } from 'lucide-react';
+import { LogIn, Brain } from 'lucide-react';
 import { ThemeProvider } from '@/components/layout/theme-provider';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Header } from '@/components/layout/header';
@@ -38,6 +38,7 @@ import { ExecutiveDashboard } from '@/components/dashboard/executive-dashboard';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState('dashboard');
+  const [showVoiceTesting, setShowVoiceTesting] = useState(false);
   const { user, isLoading } = useAuth();
   const isMobile = useIsMobile();
   const { permissionGranted, scheduleNotification } = useNotifications();
@@ -165,7 +166,11 @@ const Index = () => {
         
         <VoiceInterface onNavigate={handleVoiceNavigation} />
         <IntelligentChatbot />
-        <VoiceTestingPanel onNavigate={handleVoiceNavigation} />
+        <VoiceTestingPanel 
+          onNavigate={handleVoiceNavigation} 
+          isVisible={showVoiceTesting}
+          onClose={() => setShowVoiceTesting(false)}
+        />
         <SmartTooltipSystem />
         <Toaster />
       </div>
@@ -199,9 +204,25 @@ const Index = () => {
       </div>
       
       <ScrollToTop />
+      
+      {/* Botão para ativar testes de voz */}
+      <Button
+        onClick={() => setShowVoiceTesting(!showVoiceTesting)}
+        className="fixed bottom-4 left-4 z-40 h-12 w-12 rounded-full shadow-lg"
+        variant={showVoiceTesting ? "destructive" : "default"}
+        size="icon"
+        title={showVoiceTesting ? "Fechar testes de voz" : "Abrir testes de voz"}
+      >
+        <Brain className="h-5 w-5" />
+      </Button>
+      
       <VoiceInterface onNavigate={handleVoiceNavigation} />
       <IntelligentChatbot />
-      <VoiceTestingPanel onNavigate={handleVoiceNavigation} />
+      <VoiceTestingPanel 
+        onNavigate={handleVoiceNavigation} 
+        isVisible={showVoiceTesting}
+        onClose={() => setShowVoiceTesting(false)}
+      />
       <SmartTooltipSystem />
       <Toaster />
     </SidebarProvider>

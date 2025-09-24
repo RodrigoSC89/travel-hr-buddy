@@ -29,9 +29,11 @@ declare global {
 
 interface VoiceTestingProps {
   onNavigate?: (module: string) => void;
+  isVisible?: boolean;
+  onClose?: () => void;
 }
 
-const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate }) => {
+const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible = false, onClose }) => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -250,16 +252,28 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate }) => {
     }
   };
 
+  if (!isVisible) return null;
+
   return (
-    <div className="fixed bottom-4 right-4 z-40 w-96">
+    <div className="fixed bottom-4 right-4 z-50 w-96">
       <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-xl">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Brain className="w-5 h-5 text-primary" />
             Teste de Comando de Voz
-            <Badge variant="outline" className="ml-auto">
+            <Badge variant="outline" className="ml-auto mr-2">
               {isListening ? 'Ouvindo' : 'Inativo'}
             </Badge>
+            {onClose && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={onClose}
+                className="h-6 w-6 p-0 hover:bg-destructive/10"
+              >
+                ×
+              </Button>
+            )}
           </CardTitle>
         </CardHeader>
         
