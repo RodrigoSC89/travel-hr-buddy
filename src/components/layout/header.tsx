@@ -19,9 +19,10 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import { NotificationCenter } from '@/components/notifications/notification-center';
+import { GlobalSearch } from '@/components/ui/global-search';
 
 export const Header: React.FC = () => {
-  const { handleGlobalSearch, handleNavigateToSettings } = useSystemActions();
+  const { handleGlobalSearch, handleNavigateToSettings, isSearchOpen, setIsSearchOpen } = useSystemActions();
   const { user, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
@@ -132,6 +133,11 @@ export const Header: React.FC = () => {
           </DropdownMenu>
         </div>
       </div>
+      
+      <GlobalSearch 
+        open={isSearchOpen} 
+        onOpenChange={setIsSearchOpen} 
+      />
     </header>
   );
 };

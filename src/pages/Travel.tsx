@@ -1,19 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlightSearch } from '@/components/travel/flight-search';
 import { HotelSearch } from '@/components/travel/hotel-search';
+import { TravelMap } from '@/components/travel/travel-map';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plane, Building, Map, Calendar } from 'lucide-react';
+import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import VoiceInterface from '@/components/voice/VoiceInterface';
 
 const Travel = () => {
+  const [sampleLocations] = useState([
+    {
+      id: '1',
+      name: 'Aeroporto Internacional do Galeão',
+      coordinates: [-43.2502, -22.8099] as [number, number],
+      type: 'airport' as const
+    },
+    {
+      id: '2', 
+      name: 'Hotel Copacabana Palace',
+      coordinates: [-43.1729, -22.9068] as [number, number],
+      type: 'hotel' as const
+    },
+    {
+      id: '3',
+      name: 'Aeroporto de Congonhas',
+      coordinates: [-46.6566, -23.6262] as [number, number],
+      type: 'airport' as const
+    }
+  ]);
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <main className="flex-1 p-6 space-y-6">
+          <Breadcrumbs
+            items={[
+              { label: 'Viagens', current: true }
+            ]}
+            className="mb-4"
+          />
+          
           <div className="flex items-center gap-4 mb-8">
             <div className="p-3 rounded-lg bg-primary/10">
               <Plane className="h-8 w-8 text-primary" />
@@ -63,12 +93,8 @@ const Travel = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-12">
-                    <Map className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">Mapa interativo</h3>
-                    <p className="text-muted-foreground">
-                      Funcionalidade de mapa será disponibilizada em breve
-                    </p>
+                  <div className="h-96">
+                    <TravelMap locations={sampleLocations} className="h-full" />
                   </div>
                 </CardContent>
               </Card>

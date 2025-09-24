@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useKeyboardShortcuts } from './use-keyboard-shortcuts';
 
 // Hook para funcionalidades globais do sistema
 export const useSystemActions = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleGlobalSearch = () => {
-    const searchQuery = prompt("Digite sua busca:");
-    if (searchQuery) {
-      toast({
-        title: "Busca Global",
-        description: `Buscando por: "${searchQuery}"`,
-      });
-      // Aqui você pode implementar a lógica de busca global
-      console.log("Buscando por:", searchQuery);
-    }
+    setIsSearchOpen(true);
   };
+
+  useKeyboardShortcuts(handleGlobalSearch);
 
   const handleNavigateToSettings = () => {
     navigate('/settings');
@@ -98,6 +94,8 @@ export const useSystemActions = () => {
     handleExportData,
     handleBackup,
     handleRefreshData,
-    handlePrintReport
+    handlePrintReport,
+    isSearchOpen,
+    setIsSearchOpen,
   };
 };
