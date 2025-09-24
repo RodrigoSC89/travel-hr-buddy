@@ -1,5 +1,5 @@
 import React from 'react';
-import { IntelligentNotificationCenter } from '@/components/intelligence/IntelligentNotificationCenter';
+import IntelligentNotificationCenter from '@/components/intelligence/IntelligentNotificationCenter';
 import { AdvancedAIAssistant } from '@/components/innovation/AdvancedAIAssistant';
 import PersonalizedRecommendations from '@/components/intelligence/PersonalizedRecommendations';
 import DocumentProcessor from '@/components/intelligence/DocumentProcessor';
