@@ -23,6 +23,7 @@ import Maritime from "./pages/Maritime";
 import Innovation from "./pages/Innovation";
 import Optimization from "./pages/Optimization";
 import Strategic from "./pages/Strategic";
+import Voice from "./pages/Voice";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -63,6 +64,7 @@ const App = () => {
                 <Route path="/optimization" element={<Optimization />} />
                 <Route path="/innovation" element={<Innovation />} />
                 <Route path="/strategic" element={<Strategic />} />
+                <Route path="/voice" element={<Voice />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

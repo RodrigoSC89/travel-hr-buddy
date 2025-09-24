@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Brain, 
   MessageSquare, 
@@ -40,6 +42,9 @@ interface AIInsight {
 export const AIAssistantPanel = () => {
   const [query, setQuery] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [aiInsights, setAiInsights] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   const activeTasks: AITask[] = [
     {
@@ -125,14 +130,57 @@ export const AIAssistantPanel = () => {
     }
   };
 
-  const handleQuery = () => {
+  useEffect(() => {
+    fetchAIInsights();
+  }, []);
+
+  const fetchAIInsights = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('ai_insights')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5);
+      
+      if (error) throw error;
+      setAiInsights(data || []);
+    } catch (error) {
+      console.error('Error fetching AI insights:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleQuery = async () => {
     if (query.trim()) {
       setIsProcessing(true);
-      // Simular processamento
-      setTimeout(() => {
-        setIsProcessing(false);
+      try {
+        const { data, error } = await supabase.functions.invoke('smart-insights-generator', {
+          body: { 
+            query: query,
+            context: 'ai_assistant_query'
+          }
+        });
+        
+        if (error) throw error;
+        
+        toast({
+          title: "Análise concluída!",
+          description: "Nova análise foi gerada com base em sua consulta.",
+        });
+        
         setQuery('');
-      }, 2000);
+        fetchAIInsights(); // Refresh insights
+      } catch (error) {
+        console.error('Error processing query:', error);
+        toast({
+          title: "Erro na análise",
+          description: "Não foi possível processar sua consulta.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsProcessing(false);
+      }
     }
   };
 

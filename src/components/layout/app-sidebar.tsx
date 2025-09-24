@@ -18,7 +18,8 @@ import {
   Bot,
   Zap,
   Target,
-  Brain
+  Brain,
+  Mic
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -183,6 +184,11 @@ const navigationItems = [
       url: "innovation", 
       icon: Brain,
       permission: "analytics" as const,
+    },
+    {
+      title: "Assistente de Voz",
+      url: "voice",
+      icon: Mic,
     },
 ];
 

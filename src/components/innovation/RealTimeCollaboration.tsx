@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { 
   Users, 
   MessageCircle, 
@@ -20,38 +22,168 @@ import {
 import { useToast } from '@/hooks/use-toast';
 
 export const RealTimeCollaboration = () => {
-  const [activeUsers, setActiveUsers] = useState([
-    { id: 1, name: 'Ana Silva', avatar: '', status: 'online', activity: 'Editando relatório financeiro' },
-    { id: 2, name: 'Carlos Santos', avatar: '', status: 'online', activity: 'Analisando dados de vendas' },
-    { id: 3, name: 'Maria Costa', avatar: '', status: 'away', activity: 'Em reunião' },
-    { id: 4, name: 'João Pedro', avatar: '', status: 'online', activity: 'Criando campanha de marketing' }
-  ]);
-  
-  const [realtimeMessages, setRealtimeMessages] = useState([
-    { id: 1, user: 'Ana Silva', message: 'Relatório Q4 atualizado!', time: '10:32', type: 'update' },
-    { id: 2, user: 'Sistema', message: 'Novo contrato aprovado - $50k', time: '10:28', type: 'alert' },
-    { id: 3, user: 'Carlos Santos', message: 'Meta de vendas atingida! 🎉', time: '10:25', type: 'achievement' }
-  ]);
-
+  const [activeUsers, setActiveUsers] = useState([]);
+  const [realtimeMessages, setRealtimeMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [currentConversation, setCurrentConversation] = useState(null);
   const { toast } = useToast();
+  const { user } = useAuth();
 
-  const sendMessage = () => {
-    if (newMessage.trim()) {
-      const message = {
-        id: Date.now(),
-        user: 'Você',
-        message: newMessage,
-        time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-        type: 'message'
-      };
-      setRealtimeMessages(prev => [message, ...prev]);
-      setNewMessage('');
+  useEffect(() => {
+    if (user) {
+      initializeCollaboration();
+      setupRealtimeSubscriptions();
+    }
+    
+    return () => {
+      // Cleanup subscriptions
+    };
+  }, [user]);
+
+  const initializeCollaboration = async () => {
+    try {
+      // Get or create a general conversation
+      const { data: conversations, error: convError } = await supabase
+        .from('conversations')
+        .select('*')
+        .eq('type', 'general')
+        .limit(1);
       
-      toast({
-        title: "Mensagem enviada",
-        description: "Sua mensagem foi compartilhada com a equipe."
-      });
+      if (convError) throw convError;
+      
+      let conversationId;
+      if (conversations && conversations.length > 0) {
+        conversationId = conversations[0].id;
+      } else {
+        // Create general conversation
+        const { data: newConv, error: createError } = await supabase
+          .from('conversations')
+          .insert({
+            title: 'Colaboração Geral',
+            type: 'general',
+            created_by: user.id
+          })
+          .select()
+          .single();
+        
+        if (createError) throw createError;
+        conversationId = newConv.id;
+        
+        // Add user as participant
+        await supabase
+          .from('conversation_participants')
+          .insert({
+            conversation_id: conversationId,
+            user_id: user.id,
+            role: 'member'
+          });
+      }
+      
+      setCurrentConversation(conversationId);
+      fetchMessages(conversationId);
+      fetchActiveUsers();
+    } catch (error) {
+      console.error('Error initializing collaboration:', error);
+    }
+  };
+
+  const fetchMessages = async (conversationId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*, sender_profile:profiles!messages_sender_id_fkey(full_name)')
+        .eq('conversation_id', conversationId)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      
+      if (error) throw error;
+      
+      const formattedMessages = data?.map(msg => ({
+        id: msg.id,
+        user: msg.sender_profile?.full_name || 'Usuário',
+        message: msg.content,
+        time: new Date(msg.created_at).toLocaleTimeString('pt-BR', { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        }),
+        type: msg.message_type || 'message'
+      })) || [];
+      
+      setRealtimeMessages(formattedMessages);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
+  const fetchActiveUsers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, full_name, avatar_url, status')
+        .limit(10);
+      
+      if (error) throw error;
+      
+      const formattedUsers = data?.map(profile => ({
+        id: profile.id,
+        name: profile.full_name || 'Usuário',
+        avatar: profile.avatar_url || '',
+        status: 'online', // Mock status for now
+        activity: 'Ativo no sistema'
+      })) || [];
+      
+      setActiveUsers(formattedUsers);
+    } catch (error) {
+      console.error('Error fetching active users:', error);
+    }
+  };
+
+  const setupRealtimeSubscriptions = () => {
+    // Subscribe to new messages
+    const messagesSubscription = supabase
+      .channel('messages')
+      .on('postgres_changes', 
+        { event: 'INSERT', schema: 'public', table: 'messages' },
+        (payload) => {
+          // Handle new message
+          fetchMessages(currentConversation);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(messagesSubscription);
+    };
+  };
+
+  const sendMessage = async () => {
+    if (newMessage.trim() && currentConversation && user) {
+      try {
+        const { error } = await supabase
+          .from('messages')
+          .insert({
+            conversation_id: currentConversation,
+            sender_id: user.id,
+            content: newMessage,
+            message_type: 'text'
+          });
+        
+        if (error) throw error;
+        
+        setNewMessage('');
+        
+        toast({
+          title: "Mensagem enviada",
+          description: "Sua mensagem foi compartilhada com a equipe."
+        });
+      } catch (error) {
+        console.error('Error sending message:', error);
+        toast({
+          title: "Erro",
+          description: "Não foi possível enviar a mensagem.",
+          variant: "destructive"
+        });
+      }
     }
   };
 

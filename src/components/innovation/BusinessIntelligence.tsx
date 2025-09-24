@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 import { 
   BarChart3, 
   TrendingUp, 
@@ -52,6 +54,58 @@ interface Benchmark {
 export const BusinessIntelligence = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('monthly');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [aiReports, setAiReports] = useState([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchReports();
+  }, []);
+
+  const fetchReports = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('ai_reports')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      setAiReports(data || []);
+    } catch (error) {
+      console.error('Error fetching reports:', error);
+    }
+  };
+
+  const generateReport = async (type: string) => {
+    setIsGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-ai-report', {
+        body: { 
+          type,
+          period: selectedPeriod,
+          department: selectedDepartment 
+        }
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Relatório gerado!",
+        description: "Novo relatório de BI foi criado com sucesso.",
+      });
+      
+      fetchReports();
+    } catch (error) {
+      console.error('Error generating report:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível gerar o relatório.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const kpiMetrics: KPIMetric[] = [
     {
