@@ -3,6 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { MaritimeDashboard } from '@/components/maritime/maritime-dashboard';
 import { Anchor } from 'lucide-react';
+import VoiceInterface from '@/components/voice/VoiceInterface';
 
 const Maritime = () => {
   return (
@@ -23,6 +24,7 @@ const Maritime = () => {
           </div>
           <MaritimeDashboard />
         </main>
+        <VoiceInterface />
       </div>
     </SidebarProvider>
   );

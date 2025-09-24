@@ -1,12 +1,12 @@
 import React from 'react';
 import { FlightSearch } from '@/components/travel/flight-search';
 import { HotelSearch } from '@/components/travel/hotel-search';
-import { TravelMap } from '@/components/travel/travel-map';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plane, Building, Map, Calendar } from 'lucide-react';
+import VoiceInterface from '@/components/voice/VoiceInterface';
 
 const Travel = () => {
   return (
@@ -95,6 +95,7 @@ const Travel = () => {
             </TabsContent>
           </Tabs>
         </main>
+        <VoiceInterface />
       </div>
     </SidebarProvider>
   );

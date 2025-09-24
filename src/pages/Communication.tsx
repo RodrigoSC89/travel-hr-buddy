@@ -3,6 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { CommunicationModule } from '@/components/communication/communication-module';
 import { MessageSquare } from 'lucide-react';
+import VoiceInterface from '@/components/voice/VoiceInterface';
 
 const Communication = () => {
   return (
@@ -23,6 +24,7 @@ const Communication = () => {
           </div>
           <CommunicationModule />
         </main>
+        <VoiceInterface />
       </div>
     </SidebarProvider>
   );

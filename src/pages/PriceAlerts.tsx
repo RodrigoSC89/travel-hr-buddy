@@ -3,6 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { PriceAlertDashboard } from '@/components/price-alerts/price-alert-dashboard';
 import { TrendingUp } from 'lucide-react';
+import VoiceInterface from '@/components/voice/VoiceInterface';
 
 const PriceAlerts = () => {
   return (
@@ -23,6 +24,7 @@ const PriceAlerts = () => {
           </div>
           <PriceAlertDashboard />
         </main>
+        <VoiceInterface />
       </div>
     </SidebarProvider>
   );
