@@ -16,6 +16,8 @@ import Settings from "./pages/Settings";
 import Travel from "./pages/Travel";
 import Analytics from "./pages/Analytics";
 import HumanResources from "./pages/HumanResources";
+import Communication from "./pages/Communication";
+import Intelligence from "./pages/Intelligence";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +51,8 @@ const App = () => {
                 <Route path="/travel" element={<Travel />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/hr" element={<HumanResources />} />
+                <Route path="/communication" element={<Communication />} />
+                <Route path="/intelligence" element={<Intelligence />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

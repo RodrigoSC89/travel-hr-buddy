@@ -32,11 +32,7 @@ export const useSidebarActions = () => {
         navigate('/reports');
         break;
       case 'communication':
-        navigate('/');
-        toast({
-          title: "Comunicação",
-          description: "Carregando módulo de comunicação",
-        });
+        navigate('/communication');
         break;
       case 'settings':
         navigate('/settings');
