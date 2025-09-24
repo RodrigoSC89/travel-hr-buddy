@@ -1,53 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,200;0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,200;1,14..32,300;1,14..32,400;1,14..32,500;1,14..32,600;1,14..32,700;1,14..32,800;1,14..32,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Nautilus One v4 Design System - Professional Maritime Interface */
+/* === NAUTILUS ONE - SISTEMA MARÍTIMO REVOLUCIONÁRIO === */
 
 @layer base {
   :root {
-    /* Base System Colors */
-    --background: 210 25% 98%;
-    --foreground: 210 40% 8%;
+    /* === DESIGN TOKENS NAUTILUS ONE - SISTEMA MARÍTIMO === */
+    --background: 210 20% 98%;
+    --foreground: 220 90% 5%;
 
-    /* Card & Surface Colors */
     --card: 0 0% 100%;
-    --card-foreground: 210 40% 15%;
+    --card-foreground: 220 90% 5%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 90% 5%;
+
+    /* Paleta Náutica Principal */
+    --primary: 205 100% 45%;        /* Azul Oceano */
+    --primary-foreground: 210 20% 98%;
+    --primary-light: 205 100% 65%;  /* Azul Claro */
+    --primary-dark: 205 100% 25%;   /* Azul Profundo */
+    --primary-glow: 200 100% 60%;   /* Cyan Náutico */
+
+    --secondary: 25 95% 53%;        /* Âmbar Portuário */
+    --secondary-foreground: 220 90% 5%;
+    --secondary-light: 30 100% 70%; /* Dourado Suave */
+
+    --accent: 160 84% 39%;          /* Verde Marítimo */
+    --accent-foreground: 210 20% 98%;
+    --accent-light: 160 60% 50%;    /* Verde Água */
+
+    /* Cores Náuticas Especializadas */
+    --nautical: 210 100% 30%;       /* Azul Naval */
+    --nautical-foreground: 210 20% 98%;
     
-    /* Ocean-Inspired Primary Palette */
-    --primary: 210 100% 45%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 210 100% 55%;
-    --primary-dark: 210 100% 35%;
-    
-    /* Secondary Ocean Tones */
-    --secondary: 195 100% 50%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-light: 195 100% 60%;
-    
-    /* Professional Accent Colors */
-    --accent: 200 100% 40%;
-    --accent-foreground: 0 0% 100%;
-    --accent-light: 200 100% 50%;
-    
-    /* Nautical Navy for Important Elements */
-    --nautical: 225 73% 25%;
-    --nautical-foreground: 0 0% 100%;
-    
-    /* Success & Status Colors */
-    --success: 142 76% 36%;
-    --warning: 48 96% 53%;
-    --danger: 0 84% 60%;
-    --info: 210 100% 56%;
-    
-    /* Muted & Subtle Tones */
+    --success: 142 76% 36%;         /* Verde Esmerald */
+    --warning: 38 92% 50%;          /* Laranja Portuário */
+    --danger: 348 83% 47%;          /* Vermelho Sinalização */
+    --info: 199 89% 48%;            /* Azul Informativo */
+
     --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    
-    /* Destructive Colors */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --muted-foreground: 215 25% 27%;
+
+    --destructive: 348 83% 47%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 205 100% 45%;
+
+    --radius: 0.75rem;
     
     /* Popover Colors */
     --popover: 0 0% 100%;
