@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { LogIn } from 'lucide-react';
@@ -29,18 +29,9 @@ import { ScrollToTop } from '@/components/ui/scroll-to-top';
 import { PageTransition } from '@/components/ui/page-transition';
 import { ErrorBoundary } from '@/components/layout/error-boundary';
 
-// Lazy loading dos componentes administrativos
-const UserManagementDashboard = lazy(() => 
-  import('@/components/admin/user-management-dashboard').then(module => ({
-    default: module.UserManagementDashboard
-  }))
-);
-
-const ExecutiveDashboard = lazy(() => 
-  import('@/components/dashboard/executive-dashboard').then(module => ({
-    default: module.ExecutiveDashboard
-  }))
-);
+// Import direto dos componentes administrativos
+import { UserManagementDashboard } from '@/components/admin/user-management-dashboard';
+import { ExecutiveDashboard } from '@/components/dashboard/executive-dashboard';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState('dashboard');
@@ -127,21 +118,9 @@ const Index = () => {
       case 'hr':
         return <HRDashboard />;
       case 'admin':
-        return (
-          <Suspense fallback={<div className="flex items-center justify-center h-48">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>}>
-            <UserManagementDashboard />
-          </Suspense>
-        );
+        return <UserManagementDashboard />;
       case 'executive':
-        return (
-          <Suspense fallback={<div className="flex items-center justify-center h-48">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>}>
-            <ExecutiveDashboard />
-          </Suspense>
-        );
+        return <ExecutiveDashboard />;
       case 'flights':
         return <FlightSearch />;
       case 'hotels':
