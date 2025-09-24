@@ -122,7 +122,7 @@ serve(async (req) => {
           alert_id: alert.id,
           product_name: alert.product_name,
           success: false,
-          error: error.message
+          error: error instanceof Error ? error.message : 'Unknown error occurred'
         })
       }
     }
@@ -145,7 +145,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: error.message 
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

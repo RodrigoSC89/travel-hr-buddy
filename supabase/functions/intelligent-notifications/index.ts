@@ -177,7 +177,7 @@ Crie uma notificação personalizada e acionável baseada nestes dados.`;
     console.error('Error generating intelligent notification:', error);
     return new Response(JSON.stringify({ 
       success: false,
-      error: error.message 
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -276,7 +276,7 @@ async function getPerformanceData(supabase: any, userId: string) {
       .select('*')
       .eq('user_id', userId);
 
-    const activeAlerts = alerts?.filter(a => a.is_active).length || 0;
+    const activeAlerts = alerts?.filter((a: any) => a.is_active).length || 0;
     const totalAlerts = alerts?.length || 0;
 
     return {

@@ -84,7 +84,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in ai-chat function:', error);
     return new Response(JSON.stringify({ 
-      error: error.message,
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
       timestamp: new Date().toISOString()
     }), {
       status: 500,

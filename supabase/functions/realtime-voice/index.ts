@@ -184,7 +184,7 @@ serve(async (req) => {
                   message: `Navegando para o módulo: ${args.module}`,
                   action: "navigation",
                   module: args.module
-                };
+                } as any;
                 break;
                 
               case "search_flights":
@@ -193,7 +193,7 @@ serve(async (req) => {
                   message: `Buscando voos de ${args.origin} para ${args.destination} em ${args.date}`,
                   action: "flight_search",
                   data: args
-                };
+                } as any;
                 break;
                 
               case "get_system_status":
@@ -203,7 +203,7 @@ serve(async (req) => {
                   action: "system_status",
                   status: "operational",
                   modules: ["RH", "Viagens", "Alertas", "Relatórios"]
-                };
+                } as any;
                 break;
                 
               case "check_certificates":
@@ -212,7 +212,7 @@ serve(async (req) => {
                   message: `Verificando certificados que vencem nos próximos ${args.days_ahead || 30} dias`,
                   action: "certificate_check",
                   data: args
-                };
+                } as any;
                 break;
                 
               default:
@@ -224,7 +224,7 @@ serve(async (req) => {
           } catch (error) {
             functionResult = {
               success: false,
-              message: `Erro ao processar função: ${error.message}`
+              message: `Erro ao processar função: ${error instanceof Error ? error.message : 'Unknown error'}`
             };
           }
           
@@ -257,7 +257,7 @@ serve(async (req) => {
       console.error("Error handling message:", error);
       socket.send(JSON.stringify({ 
         type: "error", 
-        error: error.message 
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
       }));
     }
   };

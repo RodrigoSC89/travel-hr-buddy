@@ -20,10 +20,13 @@ async function getAmadeusToken(): Promise<string> {
   }
 
   const apiKey = Deno.env.get('AMADEUS_API_KEY');
-  const apiSecret = Deno.env.get('AMADEUS_API_SECRET') || apiKey; // Use secret if available
+  const apiSecret = Deno.env.get('AMADEUS_API_SECRET');
   
   if (!apiKey) {
     throw new Error('Amadeus API key not configured');
+  }
+  if (!apiSecret) {
+    throw new Error('Amadeus API secret not configured');
   }
 
   const tokenResponse = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
@@ -154,7 +157,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: error.message,
+        error: error instanceof Error ? error.message : 'Unknown error occurred',
         details: 'Check function logs for more details'
       }),
       {
