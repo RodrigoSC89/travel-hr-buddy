@@ -29,7 +29,7 @@ export const ScrollToTop: React.FC = () => {
   return (
     <Button
       className={cn(
-        "fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full shadow-lg transition-all duration-300",
+        "fixed bottom-36 right-6 z-45 h-12 w-12 rounded-full shadow-lg transition-all duration-300",
         isVisible 
           ? "opacity-100 translate-y-0" 
           : "opacity-0 translate-y-2 pointer-events-none"

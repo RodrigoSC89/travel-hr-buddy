@@ -240,7 +240,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
   }, []);
 
   return (
-    <div className="fixed bottom-8 right-8 z-50">
+    <div className="fixed bottom-8 left-8 z-30">
       <Card className="w-80 bg-card/95 backdrop-blur-sm border-border/50">
         <CardContent className="p-4">
           <div className="flex flex-col items-center gap-4">

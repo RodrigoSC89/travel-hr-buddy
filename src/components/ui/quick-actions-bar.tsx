@@ -96,7 +96,7 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
         variant="outline"
         size="sm"
         onClick={() => setIsVisible(true)}
-        className="fixed bottom-4 right-4 z-40 shadow-lg"
+        className="fixed bottom-20 right-4 z-40 shadow-lg"
       >
         <Zap className="h-4 w-4" />
       </Button>
@@ -104,7 +104,7 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
   }
 
   return (
-    <Card className="fixed bottom-4 right-4 z-40 p-3 shadow-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 max-w-xs">
+    <Card className="fixed bottom-20 right-4 z-40 p-3 shadow-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 max-w-xs">
       <div className="flex items-center gap-2 mb-2">
         <Zap className="h-4 w-4 text-primary" />
         <span className="text-sm font-medium">Ações Rápidas</span>
