@@ -17,7 +17,8 @@ import {
   Anchor,
   Bot,
   Zap,
-  Target
+  Target,
+  Brain
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -175,8 +176,14 @@ const navigationItems = [
       title: "Centro Estratégico",
       url: "strategic",
       icon: Target,
-    permission: "analytics" as const,
-  },
+      permission: "analytics" as const,
+    },
+    {
+      title: "Centro de Inovação",
+      url: "innovation", 
+      icon: Brain,
+      permission: "analytics" as const,
+    },
 ];
 
 interface AppSidebarProps {
