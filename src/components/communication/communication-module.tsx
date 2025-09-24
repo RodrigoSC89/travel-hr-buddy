@@ -1,474 +1,451 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/hooks/use-toast';
+import { ChatInterface } from './chat-interface';
 import { 
-  Mail, 
-  MessageCircle, 
-  Send, 
-  Settings, 
-  Calendar,
-  Plane,
-  Building,
-  Users,
+  MessageSquare, 
+  Users, 
+  Bell, 
+  Settings,
+  TrendingUp,
   Clock,
-  Check,
+  CheckCircle,
   AlertTriangle,
-  Plus,
-  Edit,
-  Trash2
+  Video,
+  Phone,
+  Mail,
+  Calendar,
+  FileText,
+  Zap,
+  Globe,
+  Shield
 } from 'lucide-react';
 
-interface NotificationTemplate {
-  id: string;
-  name: string;
-  type: 'email' | 'whatsapp';
-  trigger: 'flight_booked' | 'hotel_booked' | 'checkin_reminder' | 'checkout_reminder';
-  subject?: string;
-  message: string;
-  enabled: boolean;
-  timing: number; // horas antes do evento
-}
+export const CommunicationModule = () => {
+  const [activeTab, setActiveTab] = useState('chat');
 
-interface AutomationRule {
-  id: string;
-  name: string;
-  enabled: boolean;
-  conditions: string[];
-  templates: string[];
-  lastTriggered?: string;
-  totalSent: number;
-}
-
-export const CommunicationModule: React.FC = () => {
-  const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('templates');
-  const [isConfiguring, setIsConfiguring] = useState(false);
-
-  const [templates, setTemplates] = useState<NotificationTemplate[]>([
+  const communicationStats = [
     {
-      id: '1',
-      name: 'Confirmação de Voo',
-      type: 'email',
-      trigger: 'flight_booked',
-      subject: 'Confirmação de Reserva - Voo {{flight_number}}',
-      message: 'Olá {{passenger_name}},\n\nSua reserva de voo foi confirmada!\n\n✈️ Voo: {{flight_number}}\n📅 Data: {{flight_date}}\n🕐 Horário: {{flight_time}}\n🛫 Origem: {{origin}}\n🛬 Destino: {{destination}}\n\nObrigado por escolher nossos serviços!',
-      enabled: true,
-      timing: 0
+      icon: MessageSquare,
+      title: "Mensagens Ativas",
+      value: "24",
+      change: "+12%",
+      trend: "up",
+      description: "Conversas em andamento",
+      color: "blue"
     },
     {
-      id: '2',
-      name: 'WhatsApp Voo Confirmado',
-      type: 'whatsapp',
-      trigger: 'flight_booked',
-      message: '✈️ *VOO CONFIRMADO* ✈️\n\nOlá {{passenger_name}}!\n\n✅ Seu voo foi confirmado\n🎫 Código: {{flight_number}}\n📍 {{origin}} → {{destination}}\n📅 {{flight_date}} às {{flight_time}}\n\nBoa viagem!',
-      enabled: true,
-      timing: 0
+      icon: Users,
+      title: "Usuários Online",
+      value: "18",
+      change: "+3",
+      trend: "up", 
+      description: "Conectados agora",
+      color: "green"
     },
     {
-      id: '3',
-      name: 'Confirmação Hotel',
-      type: 'email',
-      trigger: 'hotel_booked',
-      subject: 'Reserva Confirmada - {{hotel_name}}',
-      message: 'Prezado(a) {{guest_name}},\n\nSua reserva de hotel foi confirmada!\n\n🏨 Hotel: {{hotel_name}}\n📍 Endereço: {{hotel_address}}\n📅 Check-in: {{checkin_date}}\n📅 Check-out: {{checkout_date}}\n👥 Hóspedes: {{guest_count}}\n\nAguardamos sua chegada!',
-      enabled: true,
-      timing: 0
+      icon: Clock,
+      title: "Tempo de Resposta",
+      value: "2.3min",
+      change: "-15%",
+      trend: "up",
+      description: "Média de resposta",
+      color: "purple"
     },
     {
-      id: '4',
-      name: 'Lembrete Check-in Hotel',
-      type: 'whatsapp',
-      trigger: 'checkin_reminder',
-      message: '🏨 *LEMBRETE CHECK-IN* 🏨\n\nOlá {{guest_name}}!\n\n⏰ Seu check-in é amanhã!\n🏨 {{hotel_name}}\n📍 {{hotel_address}}\n🕐 Check-in: {{checkin_time}}\n\nTem alguma dúvida? Estamos aqui para ajudar!',
-      enabled: true,
-      timing: 24
+      icon: CheckCircle,
+      title: "Taxa de Resolução",
+      value: "94%",
+      change: "+5%",
+      trend: "up",
+      description: "Solicitações resolvidas",
+      color: "orange"
     }
-  ]);
+  ];
 
-  const [automationRules, setAutomationRules] = useState<AutomationRule[]>([
+  const quickActions = [
     {
-      id: '1',
-      name: 'Confirmações Automáticas',
-      enabled: true,
-      conditions: ['Reserva confirmada', 'Pagamento aprovado'],
-      templates: ['1', '2', '3'],
-      lastTriggered: '2024-01-15 14:30',
-      totalSent: 1247
+      icon: MessageSquare,
+      label: "Nova Conversa",
+      description: "Iniciar chat direto",
+      color: "bg-blue-500"
     },
     {
-      id: '2',
-      name: 'Lembretes de Viagem',
-      enabled: true,
-      conditions: ['24h antes do check-in', '2h antes do voo'],
-      templates: ['4'],
-      lastTriggered: '2024-01-15 10:15',
-      totalSent: 543
+      icon: Users,
+      label: "Criar Grupo",
+      description: "Chat em grupo",
+      color: "bg-green-500"
+    },
+    {
+      icon: Video,
+      label: "Videochamada",
+      description: "Reunião virtual",
+      color: "bg-purple-500"
+    },
+    {
+      icon: Bell,
+      label: "Notificações",
+      description: "Centro de alertas",
+      color: "bg-orange-500"
     }
-  ]);
+  ];
 
-  const [settings, setSettings] = useState({
-    emailProvider: 'resend',
-    whatsappProvider: 'twilio',
-    emailApiKey: '',
-    whatsappApiKey: '',
-    whatsappNumber: '',
-    testMode: true
-  });
-
-  const [stats] = useState({
-    emailsSent: 2847,
-    whatsappSent: 1923,
-    successRate: 98.5,
-    avgDeliveryTime: '2.3s'
-  });
-
-  const handleSaveTemplate = (template: NotificationTemplate) => {
-    setTemplates(prev => 
-      prev.map(t => t.id === template.id ? template : t)
-    );
-    toast({
-      title: "Template salvo",
-      description: `Template "${template.name}" foi atualizado com sucesso`,
-    });
-  };
-
-  const handleTestMessage = async (template: NotificationTemplate) => {
-    setIsConfiguring(true);
-    
-    // Simular envio de teste
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    toast({
-      title: "Teste enviado",
-      description: `Mensagem de teste enviada via ${template.type}`,
-    });
-    
-    setIsConfiguring(false);
-  };
-
-  const handleSaveSettings = () => {
-    if (!settings.emailApiKey || !settings.whatsappApiKey) {
-      toast({
-        title: "Erro",
-        description: "Preencha todas as chaves de API obrigatórias",
-        variant: "destructive"
-      });
-      return;
+  const recentActivities = [
+    {
+      type: "message",
+      user: "Maria Silva",
+      action: "enviou uma mensagem",
+      content: "Preciso do relatório até hoje...",
+      time: "2 min atrás",
+      icon: MessageSquare,
+      priority: "high"
+    },
+    {
+      type: "group",
+      user: "João Santos",
+      action: "criou um grupo",
+      content: "Equipe de Desenvolvimento",
+      time: "15 min atrás",
+      icon: Users,
+      priority: "medium"
+    },
+    {
+      type: "call",
+      user: "Ana Costa",
+      action: "iniciou uma chamada",
+      content: "Reunião de planejamento",
+      time: "1 hora atrás",
+      icon: Video,
+      priority: "medium"
+    },
+    {
+      type: "system",
+      user: "Sistema",
+      action: "enviou notificação",
+      content: "Backup concluído com sucesso",
+      time: "2 horas atrás",
+      icon: CheckCircle,
+      priority: "low"
     }
+  ];
 
-    // Simular salvamento das configurações
-    toast({
-      title: "Configurações salvas",
-      description: "Configurações de API atualizadas com sucesso",
-    });
-  };
+  const renderOverview = () => (
+    <div className="space-y-8">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-900 p-8 text-white">
+        <div className="relative z-10">
+          <h2 className="text-3xl font-bold mb-4">
+            Centro de Comunicação Inteligente
+          </h2>
+          <p className="text-lg opacity-90 mb-6 max-w-3xl">
+            Sistema avançado de comunicação em tempo real com IA integrada para otimizar 
+            a colaboração e produtividade da equipe.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg">
+              <Zap className="h-5 w-5" />
+              <span>Tempo Real</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg">
+              <Shield className="h-5 w-5" />
+              <span>Segurança Avançada</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg">
+              <Globe className="h-5 w-5" />
+              <span>Multi-plataforma</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  const getTriggerLabel = (trigger: string) => {
-    const labels = {
-      flight_booked: 'Voo Reservado',
-      hotel_booked: 'Hotel Reservado',
-      checkin_reminder: 'Lembrete Check-in',
-      checkout_reminder: 'Lembrete Check-out'
-    };
-    return labels[trigger as keyof typeof labels] || trigger;
-  };
+      {/* Estatísticas */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {communicationStats.map((stat, index) => {
+          const Icon = stat.icon;
+          const colorClasses = {
+            blue: "from-blue-500/20 via-blue-400/10 to-cyan-500/20 border-blue-200/50 text-blue-600",
+            green: "from-green-500/20 via-green-400/10 to-emerald-500/20 border-green-200/50 text-green-600",
+            purple: "from-purple-500/20 via-purple-400/10 to-violet-500/20 border-purple-200/50 text-purple-600",
+            orange: "from-orange-500/20 via-orange-400/10 to-red-500/20 border-orange-200/50 text-orange-600"
+          };
+
+          return (
+            <Card key={index} className={`relative overflow-hidden bg-gradient-to-br ${colorClasses[stat.color]} hover:shadow-lg group cursor-pointer border backdrop-blur-sm transition-all duration-300`}>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Icon className={`w-5 h-5 ${colorClasses[stat.color].split(' ')[5]}`} />
+                      <span className="text-sm font-medium text-muted-foreground">{stat.title}</span>
+                    </div>
+                    <div className="text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                      {stat.value}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className={`w-4 h-4 ${stat.trend === 'up' ? 'text-green-500' : 'text-red-500'} group-hover:scale-110 transition-transform`} />
+                      <span className={`text-sm font-medium ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                        {stat.change}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={`p-4 rounded-2xl ${colorClasses[stat.color].split(' ')[5]?.replace('text-', 'bg-').replace('-600', '-500/10')} backdrop-blur-sm group-hover:scale-105 transition-all duration-300`}>
+                    <Icon className={`w-8 h-8 ${colorClasses[stat.color].split(' ')[5]}`} />
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground mt-3 opacity-70 group-hover:opacity-100 transition-opacity">
+                  {stat.description}
+                </p>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Ações Rápidas e Atividades */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Ações Rápidas */}
+        <Card className="lg:col-span-1">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Zap className="h-5 w-5" />
+              Ações Rápidas
+            </CardTitle>
+            <CardDescription>
+              Acesso direto às funcionalidades principais
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {quickActions.map((action, index) => {
+                const Icon = action.icon;
+                return (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    className="w-full justify-start h-auto p-4 hover:scale-105 transition-all duration-200"
+                    onClick={() => setActiveTab('chat')}
+                  >
+                    <div className={`p-2 rounded-lg ${action.color} mr-3`}>
+                      <Icon className="h-4 w-4 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="font-medium">{action.label}</div>
+                      <div className="text-xs text-muted-foreground">{action.description}</div>
+                    </div>
+                  </Button>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Atividades Recentes */}
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5" />
+              Atividades Recentes
+            </CardTitle>
+            <CardDescription>
+              Últimas interações e eventos do sistema
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentActivities.map((activity, index) => {
+                const Icon = activity.icon;
+                const priorityColors = {
+                  high: "border-l-red-500 bg-red-50 dark:bg-red-900/10",
+                  medium: "border-l-blue-500 bg-blue-50 dark:bg-blue-900/10",
+                  low: "border-l-green-500 bg-green-50 dark:bg-green-900/10"
+                };
+
+                return (
+                  <div
+                    key={index}
+                    className={`p-4 border-l-4 rounded-lg ${priorityColors[activity.priority]} hover:scale-[1.02] transition-all duration-300`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-lg bg-white dark:bg-gray-800">
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-medium text-sm">{activity.user}</span>
+                          <span className="text-xs text-muted-foreground">{activity.time}</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-1">
+                          {activity.action}
+                        </p>
+                        <p className="text-sm font-medium">{activity.content}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Recursos Avançados */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="h-5 w-5" />
+            Recursos Avançados de Comunicação
+          </CardTitle>
+          <CardDescription>
+            Funcionalidades inovadoras para comunicação empresarial
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-lg">
+              <h4 className="font-semibold text-blue-800 mb-2">🤖 IA Conversacional</h4>
+              <p className="text-sm text-blue-600">
+                Assistente inteligente para tradução, resumos e análise de sentimentos em tempo real
+              </p>
+            </div>
+            
+            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg">
+              <h4 className="font-semibold text-green-800 mb-2">🔒 Criptografia Ponta a Ponta</h4>
+              <p className="text-sm text-green-600">
+                Segurança máxima com criptografia avançada e verificação de identidade
+              </p>
+            </div>
+            
+            <div className="p-4 bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-lg">
+              <h4 className="font-semibold text-purple-800 mb-2">📊 Analytics de Comunicação</h4>
+              <p className="text-sm text-purple-600">
+                Métricas detalhadas de engajamento, produtividade e eficiência da equipe
+              </p>
+            </div>
+            
+            <div className="p-4 bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200 rounded-lg">
+              <h4 className="font-semibold text-orange-800 mb-2">🎥 Conferências HD</h4>
+              <p className="text-sm text-orange-600">
+                Videochamadas de alta qualidade com compartilhamento de tela e gravação
+              </p>
+            </div>
+            
+            <div className="p-4 bg-gradient-to-br from-teal-50 to-cyan-50 border border-teal-200 rounded-lg">
+              <h4 className="font-semibold text-teal-800 mb-2">📋 Integração com Tarefas</h4>
+              <p className="text-sm text-teal-600">
+                Criação automática de tarefas e lembretes a partir das conversas
+              </p>
+            </div>
+            
+            <div className="p-4 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-200 rounded-lg">
+              <h4 className="font-semibold text-indigo-800 mb-2">🌐 Tradução Instantânea</h4>
+              <p className="text-sm text-indigo-600">
+                Comunicação global com tradução automática em mais de 100 idiomas
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 
   return (
-    <div className="space-y-4 sm:space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display tracking-tight bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
-            Comunicação Automática
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-800 bg-clip-text text-transparent flex items-center gap-3">
+            <MessageSquare className="h-10 w-10 text-blue-600" />
+            CENTRO DE COMUNICAÇÃO
           </h1>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Envio automático de emails e WhatsApp para reservas
+          <p className="text-xl text-muted-foreground mt-2">
+            Plataforma Inteligente de Comunicação Empresarial em Tempo Real
           </p>
+          <div className="flex items-center gap-4 mt-4">
+            <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-300">
+              💬 Chat Instantâneo
+            </Badge>
+            <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-300">
+              🤖 IA Integrada
+            </Badge>
+            <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-300">
+              🔒 Segurança Total
+            </Badge>
+          </div>
         </div>
-        <Button 
-          className="w-full sm:w-auto hover-scale"
-          onClick={() => setActiveTab('settings')}
-        >
-          <Settings className="mr-2 h-4 w-4" />
-          Configurar APIs
-        </Button>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="hover-scale transition-all">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Mail className="h-5 w-5 text-blue-500" />
-              <div>
-                <p className="text-lg font-bold font-display">{stats.emailsSent.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">Emails Enviados</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover-scale transition-all">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <MessageCircle className="h-5 w-5 text-green-500" />
-              <div>
-                <p className="text-lg font-bold font-display">{stats.whatsappSent.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">WhatsApp Enviados</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover-scale transition-all">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Check className="h-5 w-5 text-green-500" />
-              <div>
-                <p className="text-lg font-bold font-display">{stats.successRate}%</p>
-                <p className="text-xs text-muted-foreground">Taxa de Sucesso</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover-scale transition-all">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Clock className="h-5 w-5 text-orange-500" />
-              <div>
-                <p className="text-lg font-bold font-display">{stats.avgDeliveryTime}</p>
-                <p className="text-xs text-muted-foreground">Tempo Médio</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Main Content */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="templates" className="text-xs sm:text-sm">Templates</TabsTrigger>
-          <TabsTrigger value="automations" className="text-xs sm:text-sm">Automações</TabsTrigger>
-          <TabsTrigger value="settings" className="text-xs sm:text-sm">Configurações</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-blue-50 to-cyan-50">
+          <TabsTrigger value="overview" className="flex items-center gap-2">
+            <TrendingUp className="h-4 w-4" />
+            Visão Geral
+          </TabsTrigger>
+          <TabsTrigger value="chat" className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" />
+            Chat
+          </TabsTrigger>
+          <TabsTrigger value="notifications" className="flex items-center gap-2">
+            <Bell className="h-4 w-4" />
+            Notificações
+          </TabsTrigger>
+          <TabsTrigger value="settings" className="flex items-center gap-2">
+            <Settings className="h-4 w-4" />
+            Configurações
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="templates" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Templates de Mensagem</h2>
-            <Button 
-              size="sm" 
-              className="hover-scale"
-              onClick={() => {
-                toast({
-                  title: "Em desenvolvimento",
-                  description: "Funcionalidade de criação de template será implementada em breve",
-                });
-              }}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Novo Template
-            </Button>
-          </div>
-
-          <div className="grid gap-4">
-            {templates.map((template) => (
-              <Card key={template.id} className="hover-scale transition-all">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-lg ${
-                        template.type === 'email' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'
-                      }`}>
-                        {template.type === 'email' ? <Mail className="h-4 w-4" /> : <MessageCircle className="h-4 w-4" />}
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">{template.name}</CardTitle>
-                        <CardDescription>
-                          {getTriggerLabel(template.trigger)} • {template.type.toUpperCase()}
-                        </CardDescription>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Switch checked={template.enabled} />
-                      <Badge variant={template.enabled ? 'default' : 'secondary'}>
-                        {template.enabled ? 'Ativo' : 'Inativo'}
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {template.subject && (
-                    <div>
-                      <label className="text-sm font-medium">Assunto:</label>
-                      <p className="text-sm text-muted-foreground">{template.subject}</p>
-                    </div>
-                  )}
-                  
-                  <div>
-                    <label className="text-sm font-medium">Mensagem:</label>
-                    <div className="bg-muted/50 p-3 rounded-lg mt-1">
-                      <p className="text-sm whitespace-pre-wrap">{template.message}</p>
-                    </div>
-                  </div>
-
-                  {template.timing > 0 && (
-                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                      <Clock className="h-4 w-4" />
-                      <span>Enviar {template.timing}h antes do evento</span>
-                    </div>
-                  )}
-
-                  <div className="flex space-x-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      className="hover-scale"
-                      onClick={() => {
-                        toast({
-                          title: "Em desenvolvimento",
-                          description: "Funcionalidade de edição será implementada em breve",
-                        });
-                      }}
-                    >
-                      <Edit className="h-4 w-4 mr-1" />
-                      Editar
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      onClick={() => handleTestMessage(template)}
-                      disabled={isConfiguring}
-                    >
-                      <Send className="h-4 w-4 mr-1" />
-                      {isConfiguring ? 'Enviando...' : 'Testar'}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        <TabsContent value="overview">
+          {renderOverview()}
         </TabsContent>
 
-        <TabsContent value="automations" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Regras de Automação</h2>
-            <Button 
-              size="sm" 
-              className="hover-scale"
-              onClick={() => {
-                toast({
-                  title: "Em desenvolvimento",
-                  description: "Funcionalidade de criação de regra será implementada em breve",
-                });
-              }}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Nova Regra
-            </Button>
-          </div>
-
-          <div className="grid gap-4">
-            {automationRules.map((rule) => (
-              <Card key={rule.id} className="hover-scale transition-all">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-lg">{rule.name}</CardTitle>
-                      <CardDescription>
-                        {rule.totalSent.toLocaleString()} mensagens enviadas
-                      </CardDescription>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Switch checked={rule.enabled} />
-                      <Badge variant={rule.enabled ? 'default' : 'secondary'}>
-                        {rule.enabled ? 'Ativa' : 'Inativa'}
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium">Condições:</label>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {rule.conditions.map((condition, index) => (
-                        <Badge key={index} variant="outline">
-                          {condition}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium">Templates Vinculados:</label>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {rule.templates.map((templateId, index) => {
-                        const template = templates.find(t => t.id === templateId);
-                        return template ? (
-                          <Badge key={index} variant="secondary">
-                            {template.name}
-                          </Badge>
-                        ) : null;
-                      })}
-                    </div>
-                  </div>
-
-                  {rule.lastTriggered && (
-                    <div className="text-sm text-muted-foreground">
-                      Última execução: {rule.lastTriggered}
-                    </div>
-                  )}
-
-                  <div className="flex space-x-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      className="hover-scale"
-                      onClick={() => {
-                        toast({
-                          title: "Em desenvolvimento",
-                          description: "Funcionalidade de edição será implementada em breve",
-                        });
-                      }}
-                    >
-                      <Edit className="h-4 w-4 mr-1" />
-                      Editar
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      className="hover-scale"
-                      onClick={() => {
-                        toast({
-                          title: "Regra executada",
-                          description: `Executando regra "${rule.name}"...`,
-                        });
-                      }}
-                    >
-                      <Send className="h-4 w-4 mr-1" />
-                      Executar Agora
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        <TabsContent value="chat">
+          <ChatInterface />
         </TabsContent>
 
-        <TabsContent value="settings" className="space-y-4">
+        <TabsContent value="notifications">
           <Card>
             <CardHeader>
-              <CardTitle>Configurações de API</CardTitle>
+              <CardTitle>Centro de Notificações</CardTitle>
               <CardDescription>
-                Configure as integrações com provedores de email e WhatsApp
+                Gerencie alertas e notificações do sistema
               </CardDescription>
             </CardHeader>
+            <CardContent>
+              <div className="text-center py-12">
+                <Bell className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium mb-2">Funcionalidade em Desenvolvimento</h3>
+                <p className="text-muted-foreground">
+                  O centro de notificações será implementado em breve
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="settings">
+          <Card>
+            <CardHeader>
+              <CardTitle>Configurações de Comunicação</CardTitle>
+              <CardDescription>
+                Personalize suas preferências de comunicação
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-12">
+                <Settings className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium mb-2">Configurações em Desenvolvimento</h3>
+                <p className="text-muted-foreground">
+                  As configurações avançadas serão implementadas em breve
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
             <CardContent className="space-y-6">
               {/* Email Settings */}
               <div className="space-y-4">
@@ -567,7 +544,6 @@ export const CommunicationModule: React.FC = () => {
                 Salvar Configurações
               </Button>
             </CardContent>
-          </Card>
         </TabsContent>
       </Tabs>
     </div>
