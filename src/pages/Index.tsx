@@ -33,6 +33,8 @@ import { PageTransition } from '@/components/ui/page-transition';
 import { ErrorBoundary } from '@/components/layout/error-boundary';
 import { QuickActionsPanel } from '@/components/ui/quick-actions-panel';
 import { SystemMonitoringDashboard } from '@/components/ui/system-monitoring-dashboard';
+import { SystemHealthMonitor } from '@/components/monitoring/system-health-monitor';
+import { BusinessKPIDashboard } from '@/components/dashboard/business-kpi-dashboard';
 
 // Import direto dos componentes administrativos
 import { UserManagementDashboard } from '@/components/admin/user-management-dashboard';
@@ -123,6 +125,8 @@ const Index = () => {
         return (
           <div className="space-y-6">
             <QuickActionsPanel />
+            <BusinessKPIDashboard />
+            <SystemHealthMonitor />
             <SystemMonitoringDashboard />
             <GlobalDashboard onNavigate={setActiveModule} />
           </div>

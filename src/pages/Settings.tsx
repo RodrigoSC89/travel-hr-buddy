@@ -1,5 +1,5 @@
 import React from 'react';
-import { SettingsModule } from '@/components/settings/settings-module';
+import { AdvancedSettings } from '@/components/settings/advanced-settings';
 import { ThemeProvider } from '@/components/layout/theme-provider';
 import { Header } from '@/components/layout/header';
 import { Settings as SettingsIcon } from 'lucide-react';
@@ -24,7 +24,7 @@ const Settings = () => {
             </div>
           </div>
           
-          <SettingsModule />
+          <AdvancedSettings />
         </main>
       </div>
     </ThemeProvider>
