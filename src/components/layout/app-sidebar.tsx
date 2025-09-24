@@ -52,6 +52,12 @@ const navigationItems = [
     alwaysVisible: true
   },
   {
+    title: "Administração",
+    url: "admin",
+    icon: UserCog,
+    requiresRole: ["admin", "hr_manager"] as const,
+  },
+  {
     title: "RH",
     url: "hr", 
     icon: Users,
@@ -135,9 +141,17 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
 
   const canAccessItem = (item: any) => {
     if (item.alwaysVisible) return true;
+    
+    // Verificar se requer role específico
+    if (item.requiresRole) {
+      return userRole && item.requiresRole.includes(userRole);
+    }
+    
+    // Verificar permissão específica
     if (item.permission) {
       return hasPermission(item.permission, 'read');
     }
+    
     return true;
   };
 

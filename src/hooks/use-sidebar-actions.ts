@@ -1,11 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { usePermissions } from '@/hooks/use-permissions';
 
 // Hook para ações da navegação lateral
 export const useSidebarActions = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { canAccessModule } = usePermissions();
 
   const handleNavigation = (module: string) => {
     switch (module) {
@@ -38,11 +42,15 @@ export const useSidebarActions = () => {
         navigate('/settings');
         break;
       case 'admin':
-        navigate('/');
-        toast({
-          title: "Administração",
-          description: "Carregando painel administrativo",
-        });
+        if (!canAccessModule('admin')) {
+          toast({
+            title: "Acesso negado",
+            description: "Você não tem permissão para acessar o painel administrativo.",
+            variant: "destructive",
+          });
+          return;
+        }
+        navigate('/admin');
         break;
       case 'executive':
         navigate('/');

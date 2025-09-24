@@ -10,6 +10,7 @@ import VoiceInterface from "@/components/voice/VoiceInterface";
 import IntelligentChatbot from "@/components/voice/IntelligentChatbot";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import Admin from "./pages/Admin";
 import PriceAlerts from "./pages/PriceAlerts";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
@@ -45,6 +46,7 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/admin" element={<Admin />} />
                 <Route path="/price-alerts" element={<PriceAlerts />} />
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/settings" element={<Settings />} />
