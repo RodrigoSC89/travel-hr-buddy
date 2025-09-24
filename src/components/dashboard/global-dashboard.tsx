@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { ResponsiveDashboard } from './responsive-dashboard';
+import { EnhancedDashboard } from './enhanced-dashboard';
 import PersonalizedRecommendations from '../intelligence/PersonalizedRecommendations';
 import IntelligentNotificationCenter from '../intelligence/IntelligentNotificationCenter';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Brain, Bell, BarChart3, Sparkles } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Brain, Bell, BarChart3, Sparkles, Users, Target } from 'lucide-react';
 
 import { RealTimeCollaboration } from '@/components/innovation/RealTimeCollaboration';
 import { AIAssistantPanel } from '@/components/innovation/AIAssistantPanel';
@@ -36,157 +39,385 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard Inteligente</h1>
-          <p className="text-muted-foreground">
-            Visão geral com IA, recomendações personalizadas e insights inteligentes
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/30">
+      {/* Enhanced Header */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
+        <div className="relative px-6 py-8">
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                Nautilus One
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Sistema Corporativo Inteligente com IA Avançada
+              </p>
+              <div className="flex items-center gap-4 mt-4">
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  Sistema Online
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium">
+                  <Brain className="w-4 h-4" />
+                  IA Ativa
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-medium">
+                  <Sparkles className="w-4 h-4" />
+                  11 Módulos
+                </div>
+              </div>
+            </div>
+            <div className="hidden lg:flex items-center gap-6">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-primary">99.8%</div>
+                <div className="text-xs text-muted-foreground">Uptime</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">1.2M</div>
+                <div className="text-xs text-muted-foreground">Transações</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">45</div>
+                <div className="text-xs text-muted-foreground">Usuários Ativos</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid grid-cols-11 w-fit bg-muted/50">
-          {tabs.map((tab) => {
-            const IconComponent = tab.icon;
-            return (
-              <TabsTrigger 
-                key={tab.id} 
-                value={tab.id} 
-                className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200"
-              >
-                <IconComponent className="w-4 h-4" />
-                <span className="hidden sm:inline">{tab.label}</span>
-              </TabsTrigger>
-            );
-          })}
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-6">
-          <ResponsiveDashboard />
-        </TabsContent>
-
-        <TabsContent value="collaboration" className="space-y-6">
-          <RealTimeCollaboration />
-        </TabsContent>
-
-        <TabsContent value="ai-assistant" className="space-y-6">
-          <AIAssistantPanel />
-        </TabsContent>
-
-        <TabsContent value="advanced-ai" className="space-y-6">
-          <AdvancedAIAssistant />
-        </TabsContent>
-
-        <TabsContent value="workflows" className="space-y-6">
-          <SmartWorkflow />
-        </TabsContent>
-
-        <TabsContent value="business-intelligence" className="space-y-6">
-          <BusinessIntelligence />
-        </TabsContent>
-
-        <TabsContent value="gamification" className="space-y-6">
-          <Gamification />
-        </TabsContent>
-
-        <TabsContent value="system-health" className="space-y-6">
-          <SystemHealthDashboard />
-        </TabsContent>
-
-        <TabsContent value="recommendations">
-          <PersonalizedRecommendations 
-            context="dashboard" 
-            onNavigate={onNavigate}
-          />
-        </TabsContent>
-
-        <TabsContent value="notifications">
-          <IntelligentNotificationCenter onNavigate={onNavigate} />
-        </TabsContent>
-
-        <TabsContent value="insights">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="w-5 h-5 text-primary" />
-                Insights Avançados com IA
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-6 md:grid-cols-2">
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-green-600">🚀 Oportunidades de Crescimento</h3>
-                      <ul className="space-y-2 text-sm">
-                        <li>• Automatizar 3 processos pode economizar 12h semanais</li>
-                        <li>• Implementar alertas inteligentes reduzirá gastos em 15%</li>
-                        <li>• Capacitação em IA pode aumentar produtividade em 28%</li>
-                      </ul>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-blue-600">📊 Análise de Padrões</h3>
-                      <ul className="space-y-2 text-sm">
-                        <li>• Pico de uso entre 9h-11h (otimizar recursos)</li>
-                        <li>• Terças-feiras: 34% mais produtivas</li>
-                        <li>• Módulo de viagens tem 89% de satisfação</li>
-                      </ul>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-purple-600">🎯 Recomendações Estratégicas</h3>
-                      <ul className="space-y-2 text-sm">
-                        <li>• Expandir uso de IA para 80% dos processos</li>
-                        <li>• Implementar dashboard executivo personalizado</li>
-                        <li>• Criar fluxos de aprovação automatizados</li>
-                      </ul>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-orange-600">⚡ Ações Prioritárias</h3>
-                      <ul className="space-y-2 text-sm">
-                        <li>• Revisar certificados expiram em 15 dias</li>
-                        <li>• Otimizar alertas de preço ativos</li>
-                        <li>• Configurar backup automático semanal</li>
-                      </ul>
-                    </div>
-                  </CardContent>
-                </Card>
+      {/* Enhanced Tabs */}
+      <div className="px-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+          {/* Modern Tab Navigation */}
+          <div className="relative">
+            <ScrollArea className="w-full">
+              <div className="flex gap-2 p-2 bg-card/50 backdrop-blur-sm rounded-2xl border border-border/50 shadow-lg">
+                {tabs.map((tab) => {
+                  const IconComponent = tab.icon;
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`
+                        relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 min-w-fit
+                        ${isActive 
+                          ? 'bg-primary text-primary-foreground shadow-lg transform scale-105' 
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-102'
+                        }
+                      `}
+                    >
+                      <IconComponent className={`w-5 h-5 ${isActive ? 'animate-pulse' : ''}`} />
+                      <span className="font-medium whitespace-nowrap">{tab.label}</span>
+                      {isActive && (
+                        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-primary-foreground rounded-full" />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
+            </ScrollArea>
+          </div>
 
-              <div className="mt-6 p-6 border rounded-lg bg-gradient-to-r from-primary/10 to-secondary/10">
-                <h3 className="font-semibold mb-3">💡 Insight Principal da Semana</h3>
-                <p className="text-sm leading-relaxed">
-                  A implementação completa das funcionalidades de IA disponíveis pode resultar em:
-                  <strong> 40% de redução no tempo de tarefas administrativas</strong>, 
-                  <strong> 25% de economia em custos operacionais</strong> e 
-                  <strong> 60% de melhoria na tomada de decisões</strong> baseadas em dados.
-                </p>
-                <div className="mt-4">
-                  <span className="text-xs text-muted-foreground">
-                    Baseado na análise de uso dos últimos 30 dias • Confiança: 92%
-                  </span>
+          {/* Enhanced Tab Content */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/2 via-transparent to-secondary/2 rounded-3xl" />
+            <div className="relative backdrop-blur-sm rounded-3xl border border-border/50 bg-card/30 p-6 shadow-xl">
+              
+              <TabsContent value="overview" className="mt-0 space-y-6 animate-fade-in">
+                <EnhancedDashboard />
+                <ResponsiveDashboard />
+              </TabsContent>
+
+              <TabsContent value="collaboration" className="mt-0 space-y-6 animate-fade-in">
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
+                      <Users className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Colaboração em Tempo Real</h2>
+                      <p className="text-muted-foreground">Conecte-se e trabalhe junto com sua equipe</p>
+                    </div>
+                  </div>
+                  <RealTimeCollaboration />
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+              </TabsContent>
+
+              <TabsContent value="ai-assistant" className="mt-0 space-y-6 animate-fade-in">
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20">
+                      <Sparkles className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Assistente IA Inteligente</h2>
+                      <p className="text-muted-foreground">Insights automáticos e recomendações personalizadas</p>
+                    </div>
+                  </div>
+                  <AIAssistantPanel />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="advanced-ai" className="mt-0 space-y-6 animate-fade-in">
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500/20 to-blue-500/20">
+                      <Brain className="w-6 h-6 text-indigo-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">IA Executiva Avançada</h2>
+                      <p className="text-muted-foreground">Análise estratégica e insights de negócio</p>
+                    </div>
+                  </div>
+                  <AdvancedAIAssistant />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="workflows" className="mt-0 space-y-6 animate-fade-in">
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20">
+                      <Bell className="w-6 h-6 text-green-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Workflows Inteligentes</h2>
+                      <p className="text-muted-foreground">Automação avançada de processos</p>
+                    </div>
+                  </div>
+                  <SmartWorkflow />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="business-intelligence" className="mt-0 space-y-6 animate-fade-in">
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20">
+                      <BarChart3 className="w-6 h-6 text-orange-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Business Intelligence</h2>
+                      <p className="text-muted-foreground">Analytics avançados e insights preditivos</p>
+                    </div>
+                  </div>
+                  <BusinessIntelligence />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="gamification" className="mt-0 space-y-6 animate-fade-in">
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20">
+                      <Brain className="w-6 h-6 text-yellow-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Gamificação Corporativa</h2>
+                      <p className="text-muted-foreground">Engajamento e produtividade através de jogos</p>
+                    </div>
+                  </div>
+                  <Gamification />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="system-health" className="mt-0 space-y-6 animate-fade-in">
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-teal-500/20 to-cyan-500/20">
+                      <Brain className="w-6 h-6 text-teal-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Status do Sistema</h2>
+                      <p className="text-muted-foreground">Monitoramento em tempo real de todos os módulos</p>
+                    </div>
+                  </div>
+                  <SystemHealthDashboard />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="recommendations" className="mt-0 space-y-6 animate-fade-in">
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20">
+                      <Sparkles className="w-6 h-6 text-violet-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Recomendações IA</h2>
+                      <p className="text-muted-foreground">Sugestões personalizadas baseadas em seu uso</p>
+                    </div>
+                  </div>
+                  <PersonalizedRecommendations 
+                    context="dashboard" 
+                    onNavigate={onNavigate}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="notifications" className="mt-0 space-y-6 animate-fade-in">
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-rose-500/20 to-pink-500/20">
+                      <Bell className="w-6 h-6 text-rose-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Centro de Notificações</h2>
+                      <p className="text-muted-foreground">Alertas inteligentes e comunicações importantes</p>
+                    </div>
+                  </div>
+                  <IntelligentNotificationCenter onNavigate={onNavigate} />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="insights" className="mt-0 space-y-6 animate-fade-in">
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-slate-500/20 to-gray-500/20">
+                      <Brain className="w-6 h-6 text-slate-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Insights Avançados</h2>
+                      <p className="text-muted-foreground">Análises profundas e tendências de mercado</p>
+                    </div>
+                  </div>
+                  
+                  <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 border-border/50">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Brain className="w-5 h-5 text-primary" />
+                        Insights Avançados com IA
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-6 md:grid-cols-2">
+                        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200/50">
+                          <CardContent className="p-6">
+                            <div className="space-y-4">
+                              <h3 className="font-semibold text-green-700 flex items-center gap-2">
+                                <Sparkles className="w-5 h-5" />
+                                🚀 Oportunidades de Crescimento
+                              </h3>
+                              <ul className="space-y-3 text-sm">
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                  Automatizar 3 processos pode economizar 12h semanais
+                                </li>
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                  Implementar alertas inteligentes reduzirá gastos em 15%
+                                </li>
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                  Capacitação em IA pode aumentar produtividade em 28%
+                                </li>
+                              </ul>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200/50">
+                          <CardContent className="p-6">
+                            <div className="space-y-4">
+                              <h3 className="font-semibold text-blue-700 flex items-center gap-2">
+                                <BarChart3 className="w-5 h-5" />
+                                📊 Análise de Padrões
+                              </h3>
+                              <ul className="space-y-3 text-sm">
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                  Pico de uso entre 9h-11h (otimizar recursos)
+                                </li>
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                  Terças-feiras: 34% mais produtivas
+                                </li>
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                  Módulo de viagens tem 89% de satisfação
+                                </li>
+                              </ul>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200/50">
+                          <CardContent className="p-6">
+                            <div className="space-y-4">
+                              <h3 className="font-semibold text-purple-700 flex items-center gap-2">
+                                <Target className="w-5 h-5" />
+                                🎯 Recomendações Estratégicas
+                              </h3>
+                              <ul className="space-y-3 text-sm">
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                                  Expandir uso de IA para 80% dos processos
+                                </li>
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                                  Implementar dashboard executivo personalizado
+                                </li>
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                                  Criar fluxos de aprovação automatizados
+                                </li>
+                              </ul>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="bg-gradient-to-br from-orange-50 to-red-50 border-orange-200/50">
+                          <CardContent className="p-6">
+                            <div className="space-y-4">
+                              <h3 className="font-semibold text-orange-700 flex items-center gap-2">
+                                <Bell className="w-5 h-5" />
+                                ⚡ Ações Prioritárias
+                              </h3>
+                              <ul className="space-y-3 text-sm">
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                                  Revisar certificados expiram em 15 dias
+                                </li>
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                                  Otimizar alertas de preço ativos
+                                </li>
+                                <li className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                                  Configurar backup automático semanal
+                                </li>
+                              </ul>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="mt-8 p-6 border rounded-xl bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10 border-primary/20">
+                        <h3 className="font-bold mb-3 flex items-center gap-2">
+                          <Sparkles className="w-5 h-5 text-primary" />
+                          💡 Insight Principal da Semana
+                        </h3>
+                        <p className="text-sm leading-relaxed">
+                          A implementação completa das funcionalidades de IA disponíveis pode resultar em:
+                          <strong className="text-primary"> 40% de redução no tempo de tarefas administrativas</strong>, 
+                          <strong className="text-green-600"> 25% de economia em custos operacionais</strong> e 
+                          <strong className="text-blue-600"> 60% de melhoria na tomada de decisões</strong> baseadas em dados.
+                        </p>
+                        <div className="mt-4 flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">
+                            Baseado na análise de uso dos últimos 30 dias • Confiança: 92%
+                          </span>
+                          <div className="flex gap-2">
+                            <Badge variant="outline" className="text-xs">IA Validado</Badge>
+                            <Badge variant="outline" className="text-xs">Alta Confiança</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+            </div>
+          </div>
+        </Tabs>
+      </div>
     </div>
   );
 };
