@@ -22,6 +22,7 @@ import Intelligence from "./pages/Intelligence";
 import Maritime from "./pages/Maritime";
 import Innovation from "./pages/Innovation";
 import Optimization from "./pages/Optimization";
+import Strategic from "./pages/Strategic";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -61,6 +62,7 @@ const App = () => {
                 <Route path="/communication" element={<Communication />} />
                 <Route path="/intelligence" element={<Intelligence />} />
                 <Route path="/optimization" element={<Optimization />} />
+                <Route path="/strategic" element={<Strategic />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
