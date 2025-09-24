@@ -6,6 +6,10 @@ import { ProductRoadmap } from "@/components/strategic/ProductRoadmap";
 import { AnalyticsDashboard } from "@/components/strategic/AnalyticsDashboard";
 import { PublicAPI } from "@/components/strategic/PublicAPI";
 import { ClientCustomization } from "@/components/strategic/ClientCustomization";
+import { SecurityCompliance } from "@/components/strategic/SecurityCompliance";
+import { CopilotAI } from "@/components/strategic/CopilotAI";
+import { FeedbackSystem } from "@/components/strategic/FeedbackSystem";
+import { MobileSpecifications } from "@/components/strategic/MobileSpecifications";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Rocket, 
@@ -15,7 +19,11 @@ import {
   Target,
   TrendingUp,
   Users,
-  Zap
+  Zap,
+  Shield,
+  Bot,
+  MessageSquare,
+  Smartphone
 } from "lucide-react";
 
 const Strategic = () => {
@@ -92,22 +100,38 @@ const Strategic = () => {
 
               {/* Strategic Tabs */}
               <Tabs defaultValue="roadmap" className="space-y-6">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
                   <TabsTrigger value="roadmap" className="flex items-center gap-2">
                     <Rocket className="h-4 w-4" />
-                    Roadmap
+                    <span className="hidden sm:inline">Roadmap</span>
                   </TabsTrigger>
                   <TabsTrigger value="analytics" className="flex items-center gap-2">
                     <BarChart3 className="h-4 w-4" />
-                    Analytics & BI
+                    <span className="hidden sm:inline">Analytics</span>
                   </TabsTrigger>
                   <TabsTrigger value="api" className="flex items-center gap-2">
                     <Globe className="h-4 w-4" />
-                    API Pública
+                    <span className="hidden sm:inline">API</span>
                   </TabsTrigger>
                   <TabsTrigger value="customization" className="flex items-center gap-2">
                     <Palette className="h-4 w-4" />
-                    Customizações
+                    <span className="hidden sm:inline">Custom</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="security" className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    <span className="hidden sm:inline">Segurança</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="copilot" className="flex items-center gap-2">
+                    <Bot className="h-4 w-4" />
+                    <span className="hidden sm:inline">Copiloto</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="feedback" className="flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4" />
+                    <span className="hidden sm:inline">Feedback</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="mobile" className="flex items-center gap-2">
+                    <Smartphone className="h-4 w-4" />
+                    <span className="hidden sm:inline">Mobile</span>
                   </TabsTrigger>
                 </TabsList>
 
@@ -125,6 +149,22 @@ const Strategic = () => {
 
                 <TabsContent value="customization">
                   <ClientCustomization />
+                </TabsContent>
+
+                <TabsContent value="security">
+                  <SecurityCompliance />
+                </TabsContent>
+
+                <TabsContent value="copilot">
+                  <CopilotAI />
+                </TabsContent>
+
+                <TabsContent value="feedback">
+                  <FeedbackSystem />
+                </TabsContent>
+
+                <TabsContent value="mobile">
+                  <MobileSpecifications />
                 </TabsContent>
               </Tabs>
             </div>
