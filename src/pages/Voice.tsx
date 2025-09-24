@@ -119,11 +119,7 @@ export default function Voice() {
             </TabsContent>
 
             <TabsContent value="history">
-              <VoiceHistory 
-                messages={messages}
-                onClear={() => setMessages([])}
-                onExport={() => console.log('Export functionality')}
-              />
+              <VoiceHistory />
             </TabsContent>
 
             <TabsContent value="analytics">

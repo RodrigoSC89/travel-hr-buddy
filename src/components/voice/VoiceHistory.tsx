@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -12,6 +12,7 @@ import {
   Trash2,
   Clock
 } from 'lucide-react';
+import { useVoiceConversation } from '@/hooks/use-voice-conversation';
 
 interface Message {
   id: string;
@@ -22,16 +23,23 @@ interface Message {
 }
 
 interface VoiceHistoryProps {
-  messages: Message[];
-  onClear: () => void;
-  onExport: () => void;
+  conversationId?: string;
 }
 
-const VoiceHistory: React.FC<VoiceHistoryProps> = ({ 
-  messages, 
-  onClear, 
-  onExport 
-}) => {
+const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
+  const { 
+    messages, 
+    clearHistory, 
+    exportConversation,
+    loadConversationHistory 
+  } = useVoiceConversation();
+
+  // Carregar histórico quando o componente for montado ou conversationId mudar
+  useEffect(() => {
+    if (conversationId) {
+      loadConversationHistory(conversationId);
+    }
+  }, [conversationId, loadConversationHistory]);
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
   };
@@ -74,11 +82,11 @@ const VoiceHistory: React.FC<VoiceHistoryProps> = ({
         </div>
         
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={onExport}>
+          <Button variant="outline" size="sm" onClick={exportConversation}>
             <Download className="h-3 w-3 mr-1" />
             Exportar
           </Button>
-          <Button variant="outline" size="sm" onClick={onClear}>
+          <Button variant="outline" size="sm" onClick={clearHistory}>
             <Trash2 className="h-3 w-3 mr-1" />
             Limpar
           </Button>

@@ -1020,6 +1020,218 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_commands: {
+        Row: {
+          action_executed: string | null
+          command_text: string
+          created_at: string
+          id: string
+          intent: string
+          module_target: string | null
+          response_time: number | null
+          success: boolean | null
+          user_id: string
+        }
+        Insert: {
+          action_executed?: string | null
+          command_text: string
+          created_at?: string
+          id?: string
+          intent: string
+          module_target?: string | null
+          response_time?: number | null
+          success?: boolean | null
+          user_id: string
+        }
+        Update: {
+          action_executed?: string | null
+          command_text?: string
+          created_at?: string
+          id?: string
+          intent?: string
+          module_target?: string | null
+          response_time?: number | null
+          success?: boolean | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      voice_conversations: {
+        Row: {
+          created_at: string
+          ended_at: string | null
+          id: string
+          session_id: string | null
+          started_at: string
+          status: string
+          title: string | null
+          total_duration: number | null
+          total_messages: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          session_id?: string | null
+          started_at?: string
+          status?: string
+          title?: string | null
+          total_duration?: number | null
+          total_messages?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          session_id?: string | null
+          started_at?: string
+          status?: string
+          title?: string | null
+          total_duration?: number | null
+          total_messages?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      voice_messages: {
+        Row: {
+          action_data: Json | null
+          action_type: string | null
+          audio_url: string | null
+          content: string
+          conversation_id: string
+          created_at: string
+          duration: number | null
+          id: string
+          transcript: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          action_data?: Json | null
+          action_type?: string | null
+          audio_url?: string | null
+          content: string
+          conversation_id: string
+          created_at?: string
+          duration?: number | null
+          id?: string
+          transcript?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          action_data?: Json | null
+          action_type?: string | null
+          audio_url?: string | null
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          duration?: number | null
+          id?: string
+          transcript?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voice_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "voice_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      voice_metrics: {
+        Row: {
+          id: string
+          metadata: Json | null
+          metric_type: string
+          metric_value: number
+          recorded_at: string
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          id?: string
+          metadata?: Json | null
+          metric_type: string
+          metric_value: number
+          recorded_at?: string
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          metadata?: Json | null
+          metric_type?: string
+          metric_value?: number
+          recorded_at?: string
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      voice_settings: {
+        Row: {
+          auto_listen: boolean | null
+          context_awareness: boolean | null
+          created_at: string
+          custom_instructions: string | null
+          expertise: string[] | null
+          id: string
+          language: string | null
+          microphone_sensitivity: number | null
+          proactive_help: boolean | null
+          response_length: string | null
+          tone: string | null
+          updated_at: string
+          user_id: string
+          voice_id: string | null
+          volume: number | null
+        }
+        Insert: {
+          auto_listen?: boolean | null
+          context_awareness?: boolean | null
+          created_at?: string
+          custom_instructions?: string | null
+          expertise?: string[] | null
+          id?: string
+          language?: string | null
+          microphone_sensitivity?: number | null
+          proactive_help?: boolean | null
+          response_length?: string | null
+          tone?: string | null
+          updated_at?: string
+          user_id: string
+          voice_id?: string | null
+          volume?: number | null
+        }
+        Update: {
+          auto_listen?: boolean | null
+          context_awareness?: boolean | null
+          created_at?: string
+          custom_instructions?: string | null
+          expertise?: string[] | null
+          id?: string
+          language?: string | null
+          microphone_sensitivity?: number | null
+          proactive_help?: boolean | null
+          response_length?: string | null
+          tone?: string | null
+          updated_at?: string
+          user_id?: string
+          voice_id?: string | null
+          volume?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

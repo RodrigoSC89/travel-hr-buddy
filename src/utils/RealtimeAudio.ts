@@ -65,8 +65,13 @@ export class RealtimeChat {
   private dc: RTCDataChannel | null = null;
   private audioEl: HTMLAudioElement;
   private recorder: AudioRecorder | null = null;
+  private conversationId: string | null = null;
+  private currentSessionId: string | null = null;
 
-  constructor(private onMessage: (message: any) => void) {
+  constructor(
+    private onMessage: (message: any) => void,
+    private onNavigate?: (module: string) => void
+  ) {
     this.audioEl = document.createElement("audio");
     this.audioEl.autoplay = true;
   }
