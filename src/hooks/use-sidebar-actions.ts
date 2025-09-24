@@ -100,7 +100,6 @@ export const useSidebarActions = () => {
           description: "Abrindo gestão marítima",
         });
         break;
-      case 'predictive-analytics':
       case 'automation':
         navigate('/innovation');
         toast({
@@ -129,9 +128,63 @@ export const useSidebarActions = () => {
           description: "Abrindo central estratégica",
         });
         break;
+      case 'voice':
+        navigate('/voice');
+        toast({
+          title: "Assistente de Voz",
+          description: "Abrindo interface de voz",
+        });
+        break;
+      case 'portal':
+        navigate('/portal');
+        toast({
+          title: "Portal do Funcionário",
+          description: "Abrindo portal do funcionário",
+        });
+        break;
+      case 'gamification':
+        navigate('/gamification');
+        toast({
+          title: "Gamificação",
+          description: "Abrindo sistema de gamificação",
+        });
+        break;
+      case 'ar':
+        navigate('/ar');
+        toast({
+          title: "Realidade Aumentada",
+          description: "Abrindo interface AR",
+        });
+        break;
+      case 'iot':
+        navigate('/iot');
+        toast({
+          title: "IoT Dashboard",
+          description: "Abrindo dashboard IoT",
+        });
+        break;
+      case 'blockchain':
+        navigate('/blockchain');
+        toast({
+          title: "Blockchain",
+          description: "Abrindo sistema blockchain",
+        });
+        break;
+      case 'predictive-analytics':
+        navigate('/predictive-analytics');
+        toast({
+          title: "Análise Preditiva",
+          description: "Abrindo análise preditiva",
+        });
+        break;
       default:
         // Verificar se existe rota correspondente
-        const validRoutes = ['dashboard', 'hr', 'maritime', 'innovation', 'price-alerts', 'analytics', 'reservations', 'reports', 'communication', 'settings', 'admin', 'intelligence', 'optimization', 'strategic', 'travel'];
+        const validRoutes = [
+          'dashboard', 'hr', 'maritime', 'innovation', 'price-alerts', 'analytics', 
+          'reservations', 'reports', 'communication', 'settings', 'admin', 
+          'intelligence', 'optimization', 'strategic', 'travel', 'voice', 'portal',
+          'gamification', 'ar', 'iot', 'blockchain', 'predictive-analytics'
+        ];
         
         if (validRoutes.includes(module)) {
           navigate(`/${module}`);
