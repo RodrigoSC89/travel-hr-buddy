@@ -281,15 +281,15 @@ export const ChatInterface = () => {
             .eq('id', payload.new.id)
             .single();
 
-          if (newMessage && newMessage.profiles) {
+          if (newMessage) {
             const messageWithSender = {
               id: newMessage.id,
               content: newMessage.content,
               sender_id: newMessage.sender_id,
               created_at: newMessage.created_at,
               sender: {
-                full_name: newMessage.profiles.full_name || '',
-                email: newMessage.profiles.email || ''
+                full_name: (newMessage as any).profiles?.full_name || '',
+                email: (newMessage as any).profiles?.email || ''
               }
             };
             setMessages(prev => [...prev, messageWithSender]);

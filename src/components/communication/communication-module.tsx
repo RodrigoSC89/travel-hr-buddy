@@ -12,12 +12,6 @@ import {
   TrendingUp,
   Clock,
   CheckCircle,
-  AlertTriangle,
-  Video,
-  Phone,
-  Mail,
-  Calendar,
-  FileText,
   Zap,
   Globe,
   Shield
@@ -79,12 +73,6 @@ export const CommunicationModule = () => {
       color: "bg-green-500"
     },
     {
-      icon: Video,
-      label: "Videochamada",
-      description: "Reunião virtual",
-      color: "bg-purple-500"
-    },
-    {
       icon: Bell,
       label: "Notificações",
       description: "Centro de alertas",
@@ -117,17 +105,8 @@ export const CommunicationModule = () => {
       action: "iniciou uma chamada",
       content: "Reunião de planejamento",
       time: "1 hora atrás",
-      icon: Video,
-      priority: "medium"
-    },
-    {
-      type: "system",
-      user: "Sistema",
-      action: "enviou notificação",
-      content: "Backup concluído com sucesso",
-      time: "2 horas atrás",
       icon: CheckCircle,
-      priority: "low"
+      priority: "medium"
     }
   ];
 
@@ -190,7 +169,7 @@ export const CommunicationModule = () => {
                       </span>
                     </div>
                   </div>
-                  <div className={`p-4 rounded-2xl ${colorClasses[stat.color].split(' ')[5]?.replace('text-', 'bg-').replace('-600', '-500/10')} backdrop-blur-sm group-hover:scale-105 transition-all duration-300`}>
+                  <div className={`p-4 rounded-2xl bg-opacity-10 backdrop-blur-sm group-hover:scale-105 transition-all duration-300`}>
                     <Icon className={`w-8 h-8 ${colorClasses[stat.color].split(' ')[5]}`} />
                   </div>
                 </div>
@@ -441,109 +420,6 @@ export const CommunicationModule = () => {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-};
-            <CardContent className="space-y-6">
-              {/* Email Settings */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center">
-                  <Mail className="mr-2 h-5 w-5" />
-                  Configurações de Email
-                </h3>
-                
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Provedor</label>
-                    <select 
-                      className="w-full p-2 border rounded-lg bg-background"
-                      value={settings.emailProvider}
-                      onChange={(e) => setSettings({...settings, emailProvider: e.target.value})}
-                    >
-                      <option value="resend">Resend</option>
-                      <option value="sendgrid">SendGrid</option>
-                      <option value="mailgun">Mailgun</option>
-                    </select>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">API Key</label>
-                    <Input
-                      type="password"
-                      placeholder="Sua API key..."
-                      value={settings.emailApiKey}
-                      onChange={(e) => setSettings({...settings, emailApiKey: e.target.value})}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* WhatsApp Settings */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center">
-                  <MessageCircle className="mr-2 h-5 w-5" />
-                  Configurações do WhatsApp
-                </h3>
-                
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Provedor</label>
-                    <select 
-                      className="w-full p-2 border rounded-lg bg-background"
-                      value={settings.whatsappProvider}
-                      onChange={(e) => setSettings({...settings, whatsappProvider: e.target.value})}
-                    >
-                      <option value="twilio">Twilio</option>
-                      <option value="whatsapp-business">WhatsApp Business API</option>
-                    </select>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">API Key</label>
-                    <Input
-                      type="password"
-                      placeholder="Sua API key..."
-                      value={settings.whatsappApiKey}
-                      onChange={(e) => setSettings({...settings, whatsappApiKey: e.target.value})}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Número WhatsApp Business</label>
-                  <Input
-                    placeholder="+5511999999999"
-                    value={settings.whatsappNumber}
-                    onChange={(e) => setSettings({...settings, whatsappNumber: e.target.value})}
-                  />
-                </div>
-              </div>
-
-              {/* General Settings */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Configurações Gerais</h3>
-                
-                <div className="flex items-center justify-between">
-                  <div>
-                    <label className="text-sm font-medium">Modo de Teste</label>
-                    <p className="text-sm text-muted-foreground">
-                      Ativar para enviar mensagens apenas para números/emails de teste
-                    </p>
-                  </div>
-                  <Switch 
-                    checked={settings.testMode}
-                    onCheckedChange={(checked) => setSettings({...settings, testMode: checked})}
-                  />
-                </div>
-              </div>
-
-              <Button onClick={handleSaveSettings} className="w-full hover-scale">
-                <Settings className="mr-2 h-4 w-4" />
-                Salvar Configurações
-              </Button>
-            </CardContent>
         </TabsContent>
       </Tabs>
     </div>
