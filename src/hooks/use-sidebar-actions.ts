@@ -19,6 +19,12 @@ export const useSidebarActions = () => {
       case 'hr':
         navigate('/hr');
         break;
+      case 'maritime':
+        navigate('/maritime');
+        break;
+      case 'innovation':
+        navigate('/innovation');
+        break;
       case 'price-alerts':
         navigate('/price-alerts');
         break;
@@ -63,6 +69,15 @@ export const useSidebarActions = () => {
       case 'hotels':
       case 'travel':
         navigate('/travel');
+        break;
+      case 'fleet-management':
+      case 'crew-management':
+      case 'maritime-certifications':
+        navigate('/maritime');
+        break;
+      case 'predictive-analytics':
+      case 'automation':
+        navigate('/innovation');
         break;
       default:
         toast({

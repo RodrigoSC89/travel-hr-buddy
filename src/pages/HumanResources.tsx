@@ -21,9 +21,9 @@ const HumanResources = () => {
               <Users className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold">Recursos Humanos</h1>
+              <h1 className="text-3xl font-bold gradient-text">Recursos Humanos</h1>
               <p className="text-muted-foreground">
-                Gestão completa de pessoas e certificações
+                Gestão completa de pessoas e certificações corporativas
               </p>
             </div>
           </div>
@@ -53,7 +53,7 @@ const HumanResources = () => {
             </TabsContent>
 
             <TabsContent value="certificates">
-              <Card>
+              <Card className="glass-effect">
                 <CardHeader>
                   <CardTitle>Gerenciamento de Certificados</CardTitle>
                   <CardDescription>
@@ -77,7 +77,7 @@ const HumanResources = () => {
             </TabsContent>
 
             <TabsContent value="employees">
-              <Card>
+              <Card className="glass-effect">
                 <CardHeader>
                   <CardTitle>Gestão de Funcionários</CardTitle>
                   <CardDescription>

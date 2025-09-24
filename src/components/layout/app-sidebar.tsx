@@ -12,7 +12,10 @@ import {
   ChevronDown,
   MessageSquare,
   Bell,
-  UserCog
+  UserCog,
+  Ship,
+  Anchor,
+  Bot
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -64,10 +67,20 @@ const navigationItems = [
     permission: "certificates" as const,
   },
   {
-    title: "RH Marítimo",
-    url: "maritime-hr",
-    icon: Users,
+    title: "Sistema Marítimo",
+    url: "maritime",
+    icon: Ship,
     items: [
+      {
+        title: "Dashboard Marítimo",
+        url: "maritime",
+        icon: Ship,
+      },
+      {
+        title: "Gestão de Frota",
+        url: "fleet-management",
+        icon: Anchor,
+      },
       {
         title: "Tripulação",
         url: "crew-management",
@@ -78,32 +91,27 @@ const navigationItems = [
         url: "maritime-certifications",
         icon: UserCog,
       },
-      {
-        title: "Bem-estar",
-        url: "crew-wellness",
-        icon: Users,
-      },
     ],
   },
   {
-    title: "Logística Marítima",
-    url: "maritime-logistics",
-    icon: Plane,
+    title: "IA & Inovação",
+    url: "innovation",
+    icon: Bot,
     items: [
       {
-        title: "Gestão de Frota",
-        url: "fleet-management",
-        icon: Plane,
+        title: "Assistente IA",
+        url: "innovation",
+        icon: Bot,
       },
       {
-        title: "Operações Portuárias",
-        url: "port-operations", 
-        icon: Hotel,
+        title: "Análise Preditiva",
+        url: "predictive-analytics",
+        icon: BarChart3,
       },
       {
-        title: "IA Logística",
-        url: "logistics-ai",
-        icon: Plane,
+        title: "Automação",
+        url: "automation",
+        icon: Settings,
       },
     ],
   },
