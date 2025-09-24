@@ -171,6 +171,54 @@ export type Database = {
         }
         Relationships: []
       }
+      intelligent_notifications: {
+        Row: {
+          action_data: Json | null
+          action_text: string | null
+          action_type: string | null
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          metadata: Json | null
+          priority: string
+          title: string
+          type: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          action_data?: Json | null
+          action_text?: string | null
+          action_type?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          metadata?: Json | null
+          priority: string
+          title: string
+          type: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          action_data?: Json | null
+          action_text?: string | null
+          action_type?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          metadata?: Json | null
+          priority?: string
+          title?: string
+          type?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       notification_settings: {
         Row: {
           created_at: string | null
@@ -463,6 +511,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_recommendations: {
+        Row: {
+          context: string
+          created_at: string
+          generated_at: string
+          id: string
+          insights: Json | null
+          quick_actions: Json | null
+          recommendations: Json
+          user_id: string | null
+        }
+        Insert: {
+          context: string
+          created_at?: string
+          generated_at?: string
+          id?: string
+          insights?: Json | null
+          quick_actions?: Json | null
+          recommendations?: Json
+          user_id?: string | null
+        }
+        Update: {
+          context?: string
+          created_at?: string
+          generated_at?: string
+          id?: string
+          insights?: Json | null
+          quick_actions?: Json | null
+          recommendations?: Json
+          user_id?: string | null
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
