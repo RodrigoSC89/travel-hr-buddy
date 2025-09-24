@@ -114,7 +114,7 @@ const Index = () => {
   const renderContent = () => {
     switch (activeModule) {
       case 'dashboard':
-        return <GlobalDashboard />;
+        return <GlobalDashboard onNavigate={setActiveModule} />;
       case 'hr':
         return <HRDashboard />;
       case 'admin':
