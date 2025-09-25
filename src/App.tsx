@@ -46,6 +46,9 @@ import BackupAudit from "./pages/BackupAudit";
 import Help from "./pages/Help";
 import Templates from "./pages/Templates";
 import SystemOverviewPage from "./pages/SystemOverview";
+import EnhancedMetrics from "./pages/EnhancedMetrics";
+import PerformanceOptimizerPage from "./pages/PerformanceOptimizer";
+import AIInsights from "./pages/AIInsights";
 
 const queryClient = new QueryClient();
 
@@ -126,6 +129,9 @@ const App = () => {
                   <Route path="help" element={<Help />} />
                   <Route path="templates" element={<Templates />} />
                   <Route path="system-overview" element={<SystemOverviewPage />} />
+                  <Route path="enhanced-metrics" element={<EnhancedMetrics />} />
+                  <Route path="performance-optimizer" element={<PerformanceOptimizerPage />} />
+                  <Route path="ai-insights" element={<AIInsights />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

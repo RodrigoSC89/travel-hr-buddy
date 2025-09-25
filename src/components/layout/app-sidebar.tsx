@@ -179,6 +179,23 @@ const navigationItems = [
     url: "analytics",
     icon: BarChart3,
     permission: "analytics" as const,
+    items: [
+      {
+        title: "Analytics Básico",
+        url: "analytics",
+        icon: BarChart3,
+      },
+      {
+        title: "Métricas Avançadas",
+        url: "enhanced-metrics",
+        icon: Activity,
+      },
+      {
+        title: "IA Insights",
+        url: "ai-insights",
+        icon: Brain,
+      },
+    ],
   },
   {
     title: "Reservas",
@@ -217,6 +234,18 @@ const navigationItems = [
     title: "Otimização",
     url: "optimization",
     icon: Zap,
+    items: [
+      {
+        title: "Otimização Geral",
+        url: "optimization",
+        icon: Zap,
+      },
+      {
+        title: "Performance",
+        url: "performance-optimizer",
+        icon: Target,
+      },
+    ],
   },
   {
     title: "Centro Estratégico",
