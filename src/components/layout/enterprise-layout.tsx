@@ -4,6 +4,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Header } from '@/components/layout/header';
 import { QuickActionsBar } from '@/components/ui/quick-actions-bar';
+import { NotificationSystem } from '@/components/ui/notification-system';
 import VoiceInterface from '@/components/voice/VoiceInterface';
 import IntelligentChatbot from '@/components/voice/IntelligentChatbot';
 import { useSystemActions } from '@/hooks/use-system-actions';
@@ -58,9 +59,12 @@ export const EnterpriseLayout: React.FC = () => {
                     </div>
                   </div>
                   
-                  <div className="text-xs text-muted-foreground">
-                    Usuário: {user?.email?.split('@')[0] || 'Anonimo'} | Sessão Ativa
-                  </div>
+                   <div className="flex items-center gap-4">
+                     <div className="text-xs text-muted-foreground">
+                       Usuário: {user?.email?.split('@')[0] || 'Anonimo'} | Sessão Ativa
+                     </div>
+                     <NotificationSystem />
+                   </div>
                 </div>
               </div>
               
