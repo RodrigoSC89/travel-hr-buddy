@@ -72,6 +72,8 @@ import KnowledgeManagement from "@/components/admin/knowledge-management";
 import FleetManagement from "./pages/FleetManagement";
 import CrewManagement from "./pages/CrewManagement";
 import MaritimeCertifications from "./pages/MaritimeCertifications";
+import OrganizationSettings from "./pages/OrganizationSettings";
+import SuperAdmin from "./pages/SuperAdmin";
 
 const queryClient = new QueryClient();
 
@@ -94,9 +96,10 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
           <AuthProvider>
-            <TooltipProvider>
-              <OfflineIndicator />
-              <BrowserRouter>
+            <OrganizationProvider>
+              <TooltipProvider>
+                <OfflineIndicator />
+                <BrowserRouter>
               <Routes>
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/" element={
@@ -175,6 +178,12 @@ const App = () => {
                   <Route path="fleet-management" element={<FleetManagement />} />
                   <Route path="crew-management" element={<CrewManagement />} />
                   <Route path="maritime-certifications" element={<MaritimeCertifications />} />
+                  <Route path="organization-settings" element={
+                    <div className="container mx-auto p-6">
+                      <OrganizationSettings />
+                    </div>
+                  } />
+                  <Route path="super-admin" element={<SuperAdmin />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
@@ -182,6 +191,7 @@ const App = () => {
               <Toaster />
               <Sonner />
             </TooltipProvider>
+            </OrganizationProvider>
           </AuthProvider>
         </ThemeProvider>
       </QueryClientProvider>
