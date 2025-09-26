@@ -111,11 +111,15 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
 
   useEffect(() => {
     // Load recent searches and favorites from cache
-    const cached = getFromCache('search_data');
-    if (cached) {
-      setRecentSearches(cached.recent || []);
-      setFavorites(cached.favorites || []);
-    }
+    const loadCachedData = async () => {
+      const cached = await getFromCache('search_data');
+      if (cached) {
+        setRecentSearches(cached.recent || []);
+        setFavorites(cached.favorites || []);
+      }
+    };
+    
+    loadCachedData();
   }, [getFromCache]);
 
   useEffect(() => {
