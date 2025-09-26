@@ -2112,49 +2112,71 @@ export type Database = {
         Row: {
           audit_date: string
           audit_period: string
+          audit_type: string
           auditor_name: string | null
+          compliance_score: number | null
           created_at: string
           created_by: string
           final_score: number | null
           id: string
           metadata: Json | null
+          non_conformities_count: number | null
           organization_id: string | null
           predicted_score: number | null
+          shore_location: string | null
           status: string
+          template_id: string | null
           updated_at: string
           vessel_id: string | null
         }
         Insert: {
           audit_date: string
           audit_period: string
+          audit_type?: string
           auditor_name?: string | null
+          compliance_score?: number | null
           created_at?: string
           created_by: string
           final_score?: number | null
           id?: string
           metadata?: Json | null
+          non_conformities_count?: number | null
           organization_id?: string | null
           predicted_score?: number | null
+          shore_location?: string | null
           status?: string
+          template_id?: string | null
           updated_at?: string
           vessel_id?: string | null
         }
         Update: {
           audit_date?: string
           audit_period?: string
+          audit_type?: string
           auditor_name?: string | null
+          compliance_score?: number | null
           created_at?: string
           created_by?: string
           final_score?: number | null
           id?: string
           metadata?: Json | null
+          non_conformities_count?: number | null
           organization_id?: string | null
           predicted_score?: number | null
+          shore_location?: string | null
           status?: string
+          template_id?: string | null
           updated_at?: string
           vessel_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "peotram_audits_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_templates"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "peotram_audits_vessel_id_fkey"
             columns: ["vessel_id"]
@@ -2232,6 +2254,81 @@ export type Database = {
           },
         ]
       }
+      peotram_non_conformities: {
+        Row: {
+          area_department: string | null
+          audit_id: string | null
+          corrective_action: string | null
+          created_at: string
+          created_by: string | null
+          description: string
+          element_name: string
+          element_number: string
+          evidence_urls: string[] | null
+          id: string
+          non_conformity_type: string
+          responsible_person: string | null
+          severity_score: number | null
+          status: string
+          target_date: string | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          area_department?: string | null
+          audit_id?: string | null
+          corrective_action?: string | null
+          created_at?: string
+          created_by?: string | null
+          description: string
+          element_name: string
+          element_number: string
+          evidence_urls?: string[] | null
+          id?: string
+          non_conformity_type: string
+          responsible_person?: string | null
+          severity_score?: number | null
+          status?: string
+          target_date?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          area_department?: string | null
+          audit_id?: string | null
+          corrective_action?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          element_name?: string
+          element_number?: string
+          evidence_urls?: string[] | null
+          id?: string
+          non_conformity_type?: string
+          responsible_person?: string | null
+          severity_score?: number | null
+          status?: string
+          target_date?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_non_conformities_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_audits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peotram_non_conformities_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peotram_score_predictions: {
         Row: {
           audit_id: string
@@ -2284,6 +2381,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      peotram_templates: {
+        Row: {
+          checklist_type: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          template_data: Json
+          updated_at: string
+          version: string
+          year: number
+        }
+        Insert: {
+          checklist_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          template_data?: Json
+          updated_at?: string
+          version?: string
+          year: number
+        }
+        Update: {
+          checklist_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          template_data?: Json
+          updated_at?: string
+          version?: string
+          year?: number
+        }
+        Relationships: []
       }
       performance_metrics: {
         Row: {
@@ -3110,6 +3243,59 @@ export type Database = {
         }
         Relationships: []
       }
+      user_feature_permissions: {
+        Row: {
+          area_access: string[] | null
+          expires_at: string | null
+          feature_module: string
+          granted_at: string
+          granted_by: string | null
+          id: string
+          is_active: boolean
+          location_type: string
+          organization_id: string | null
+          permission_level: string
+          user_id: string | null
+          vessel_access: string[] | null
+        }
+        Insert: {
+          area_access?: string[] | null
+          expires_at?: string | null
+          feature_module: string
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean
+          location_type?: string
+          organization_id?: string | null
+          permission_level?: string
+          user_id?: string | null
+          vessel_access?: string[] | null
+        }
+        Update: {
+          area_access?: string[] | null
+          expires_at?: string | null
+          feature_module?: string
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean
+          location_type?: string
+          organization_id?: string | null
+          permission_level?: string
+          user_id?: string | null
+          vessel_access?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_feature_permissions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_feedback: {
         Row: {
           attachments: Json | null
@@ -3732,6 +3918,14 @@ export type Database = {
       get_user_role: {
         Args: { user_uuid?: string }
         Returns: Database["public"]["Enums"]["user_role"]
+      }
+      has_feature_permission: {
+        Args: {
+          feature_name: string
+          required_level?: string
+          target_vessel_id?: string
+        }
+        Returns: boolean
       }
       has_permission: {
         Args: {
