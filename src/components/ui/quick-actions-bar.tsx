@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 
 import DraggableFloating from '@/components/ui/draggable-floating';
+import { LiveSearch } from '@/components/ui/live-search';
 
 interface QuickActionsBarProps {
   onOpenSearch: () => void;
@@ -30,6 +31,7 @@ interface QuickActionsBarProps {
 export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [expandedButton, setExpandedButton] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -38,7 +40,7 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
       id: 'search',
       label: 'Buscar',
       icon: <Search className="h-4 w-4" />,
-      action: onOpenSearch,
+      hasDropdown: true,
       shortcut: 'Ctrl+K'
     },
     {
@@ -175,25 +177,40 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
             ))}
           </div>
           
-          {/* Expanded Dropdown Content */}
+          {/* Expanded Content */}
           {expandedButton && (
-            <div className="bg-muted/50 border rounded-lg p-2 space-y-1">
-              {quickActions
-                .find(action => action.id === expandedButton)
-                ?.items?.map((item, index) => (
-                  <Button
-                    key={index}
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      item.action();
-                      setExpandedButton(null);
-                    }}
-                    className="w-full justify-start h-7 text-xs"
-                  >
-                    {item.label}
-                  </Button>
-                ))}
+            <div className="bg-card border rounded-lg p-2 space-y-2">
+              {expandedButton === 'search' ? (
+                <div>
+                  <LiveSearch
+                    placeholder="Buscar em todo o sistema..."
+                    value={searchQuery}
+                    onChange={setSearchQuery}
+                  />
+                  <div className="flex justify-end gap-2 mt-2">
+                    <Button variant="outline" size="sm" onClick={() => setExpandedButton(null)}>
+                      Minimizar
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                quickActions
+                  .find(action => action.id === expandedButton)
+                  ?.items?.map((item, index) => (
+                    <Button
+                      key={index}
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        item.action();
+                        setExpandedButton(null);
+                      }}
+                      className="w-full justify-start h-7 text-xs"
+                    >
+                      {item.label}
+                    </Button>
+                  ))
+              )}
             </div>
           )}
         </div>
