@@ -75,10 +75,12 @@ import FleetManagement from "./pages/FleetManagement";
 import CrewManagement from "./pages/CrewManagement";
 import MaritimeCertifications from "./pages/MaritimeCertifications";
 import OrganizationSettings from "./pages/OrganizationSettings";
+import OrganizationSetup from "./pages/OrganizationSetup";
 import SuperAdmin from "./pages/SuperAdmin";
 import TaskManagement from "./pages/TaskManagement";
 import DocumentManagement from "./pages/DocumentManagement";
 import FleetDashboard from "./pages/FleetDashboard";
+import FleetTracking from "./pages/FleetTracking";
 import ExecutiveDashboard from "./pages/ExecutiveDashboard";
 import IntelligentAlerts from "./pages/IntelligentAlerts";
 
@@ -186,6 +188,7 @@ const App = () => {
                   } />
                   <Route path="fleet-management" element={<FleetManagement />} />
                   <Route path="fleet-dashboard" element={<FleetDashboard />} />
+                  <Route path="fleet-tracking" element={<FleetTracking />} />
                   <Route path="crew-management" element={<CrewManagement />} />
                   <Route path="maritime-certifications" element={<MaritimeCertifications />} />
                   <Route path="organization-settings" element={
@@ -193,6 +196,7 @@ const App = () => {
                       <OrganizationSettings />
                     </div>
                   } />
+                  <Route path="organization-setup" element={<OrganizationSetup />} />
                   <Route path="super-admin" element={<SuperAdmin />} />
                   <Route path="executive-dashboard" element={<ExecutiveDashboard />} />
                   <Route path="intelligent-alerts" element={<IntelligentAlerts />} />
