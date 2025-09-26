@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { OrganizationLayout } from '@/components/layout/organization-layout';
 import { 
   Ship, 
   Anchor, 
@@ -103,7 +104,8 @@ export default function FleetManagement() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <OrganizationLayout title="Gestão de Frota Marítima">
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -458,6 +460,8 @@ export default function FleetManagement() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+        </div>
+      </div>
+    </OrganizationLayout>
   );
 }

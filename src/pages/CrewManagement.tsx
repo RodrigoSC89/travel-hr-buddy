@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { OrganizationLayout } from '@/components/layout/organization-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -139,7 +140,8 @@ export default function CrewManagement() {
   );
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <OrganizationLayout title="Gestão de Tripulação">
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -507,6 +509,8 @@ export default function CrewManagement() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+        </div>
+      </div>
+    </OrganizationLayout>
   );
 }

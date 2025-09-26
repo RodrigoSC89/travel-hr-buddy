@@ -1,12 +1,11 @@
 import React from 'react';
-import UserManagementDashboard from '@/components/admin/user-management-dashboard';
+import { UserManagementMultiTenant } from '@/components/admin/user-management-multi-tenant';
+import { OrganizationLayout } from '@/components/layout/organization-layout';
 
-const UsersPage = () => {
+export default function Users() {
   return (
-    <div className="min-h-screen bg-background">
-      <UserManagementDashboard />
-    </div>
+    <OrganizationLayout title="Gestão de Usuários">
+      <UserManagementMultiTenant />
+    </OrganizationLayout>
   );
-};
-
-export default UsersPage;
+}
