@@ -1,12 +1,12 @@
 import React from 'react';
 import SystemBackupAudit from '@/components/admin/system-backup-audit';
 
-const BackupAudit = () => {
+const BackupAuditPage = () => {
   return (
-    <div className="container mx-auto p-6">
+    <div className="min-h-screen bg-background">
       <SystemBackupAudit />
     </div>
   );
 };
 
-export default BackupAudit;
+export default BackupAuditPage;
