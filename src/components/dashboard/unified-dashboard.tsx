@@ -25,12 +25,17 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { EnhancedDashboardFilters } from './enhanced-dashboard-filters';
 
 const UnifiedDashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [selectedKPIs, setSelectedKPIs] = useState(['revenue', 'employees', 'efficiency', 'satisfaction']);
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [isAutoUpdate, setIsAutoUpdate] = useState(true);
+  const [filterPeriod, setFilterPeriod] = useState('30d');
 
   // Dados simulados consolidados
   const [dashboardData, setDashboardData] = useState({
@@ -129,12 +134,29 @@ const UnifiedDashboard = () => {
       }
     }));
     
+    setLastUpdated(new Date());
     setIsRefreshing(false);
     toast({
       title: "Dashboard atualizado",
       description: "Dados atualizados com sucesso",
     });
   };
+
+  const handleKPIToggle = (kpi: string) => {
+    setSelectedKPIs(prev => 
+      prev.includes(kpi) 
+        ? prev.filter(k => k !== kpi)
+        : [...prev, kpi]
+    );
+  };
+
+  // Auto-update effect
+  React.useEffect(() => {
+    if (isAutoUpdate) {
+      const interval = setInterval(refreshData, 60000); // Update every minute
+      return () => clearInterval(interval);
+    }
+  }, [isAutoUpdate]);
 
   const getStatusIcon = (type: string) => {
     switch (type) {
@@ -153,8 +175,25 @@ const UnifiedDashboard = () => {
     }
   };
 
+  const availableKPIs = {
+    revenue: dashboardData.kpis.revenue,
+    employees: dashboardData.kpis.employees,
+    efficiency: dashboardData.kpis.efficiency,
+    satisfaction: dashboardData.kpis.satisfaction
+  };
+
   return (
     <div className="space-y-6 p-6">
+      {/* Enhanced Dashboard Filters */}
+      <EnhancedDashboardFilters
+        selectedKPIs={selectedKPIs}
+        onKPIToggle={handleKPIToggle}
+        filterPeriod={filterPeriod}
+        onPeriodChange={setFilterPeriod}
+        isAutoUpdate={isAutoUpdate}
+        onAutoUpdateToggle={setIsAutoUpdate}
+        lastUpdated={lastUpdated}
+      />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -183,71 +222,79 @@ const UnifiedDashboard = () => {
         </div>
       </div>
 
-      {/* KPIs Principais */}
+      {/* KPIs Principais - Filtered by user selection */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Receita Total</p>
-                <p className="text-2xl font-bold">R$ {(dashboardData.kpis.revenue.value / 1000000).toFixed(1)}M</p>
-                <div className="flex items-center gap-1 mt-1">
-                  <TrendingUp className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-green-600">+{dashboardData.kpis.revenue.change}%</span>
+        {selectedKPIs.includes('revenue') && (
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Receita Total</p>
+                  <p className="text-2xl font-bold">R$ {(availableKPIs.revenue.value / 1000000).toFixed(1)}M</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <TrendingUp className="w-4 h-4 text-green-600" />
+                    <span className="text-sm text-green-600">+{availableKPIs.revenue.change}%</span>
+                  </div>
                 </div>
+                <DollarSign className="w-8 h-8 text-green-600" />
               </div>
-              <DollarSign className="w-8 h-8 text-green-600" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Funcionários</p>
-                <p className="text-2xl font-bold">{dashboardData.kpis.employees.value}</p>
-                <div className="flex items-center gap-1 mt-1">
-                  <TrendingUp className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm text-blue-600">+{dashboardData.kpis.employees.change}%</span>
+        {selectedKPIs.includes('employees') && (
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Funcionários</p>
+                  <p className="text-2xl font-bold">{availableKPIs.employees.value}</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <TrendingUp className="w-4 h-4 text-blue-600" />
+                    <span className="text-sm text-blue-600">+{availableKPIs.employees.change}%</span>
+                  </div>
                 </div>
+                <Users className="w-8 h-8 text-blue-600" />
               </div>
-              <Users className="w-8 h-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Eficiência</p>
-                <p className="text-2xl font-bold">{dashboardData.kpis.efficiency.value.toFixed(1)}%</p>
-                <div className="flex items-center gap-1 mt-1">
-                  <TrendingUp className="w-4 h-4 text-orange-600" />
-                  <span className="text-sm text-orange-600">+{dashboardData.kpis.efficiency.change}%</span>
+        {selectedKPIs.includes('efficiency') && (
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Eficiência</p>
+                  <p className="text-2xl font-bold">{availableKPIs.efficiency.value.toFixed(1)}%</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <TrendingUp className="w-4 h-4 text-orange-600" />
+                    <span className="text-sm text-orange-600">+{availableKPIs.efficiency.change}%</span>
+                  </div>
                 </div>
+                <Activity className="w-8 h-8 text-orange-600" />
               </div>
-              <Activity className="w-8 h-8 text-orange-600" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Satisfação</p>
-                <p className="text-2xl font-bold">{dashboardData.kpis.satisfaction.value}/5</p>
-                <div className="flex items-center gap-1 mt-1">
-                  <TrendingUp className="w-4 h-4 text-purple-600" />
-                  <span className="text-sm text-purple-600">+{dashboardData.kpis.satisfaction.change}%</span>
+        {selectedKPIs.includes('satisfaction') && (
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Satisfação</p>
+                  <p className="text-2xl font-bold">{availableKPIs.satisfaction.value}/5</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <TrendingUp className="w-4 h-4 text-purple-600" />
+                    <span className="text-sm text-purple-600">+{availableKPIs.satisfaction.change}%</span>
+                  </div>
                 </div>
+                <Target className="w-8 h-8 text-purple-600" />
               </div>
-              <Target className="w-8 h-8 text-purple-600" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Ações Rápidas */}

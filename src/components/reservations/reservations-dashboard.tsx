@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
+import { EnhancedReservationsCalendar } from './enhanced-reservations-calendar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -195,6 +196,14 @@ export const ReservationsDashboard = () => {
 
   return (
     <div className="space-y-6">
+      <Tabs defaultValue="list" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="list">Lista</TabsTrigger>
+          <TabsTrigger value="calendar">Calendário</TabsTrigger>
+          <TabsTrigger value="timeline">Timeline</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="list" className="space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
@@ -392,6 +401,22 @@ export const ReservationsDashboard = () => {
           </p>
         </Card>
       )}
+        </TabsContent>
+
+        <TabsContent value="calendar">
+          <EnhancedReservationsCalendar />
+        </TabsContent>
+
+        <TabsContent value="timeline" className="space-y-6">
+          <Card className="p-12 text-center">
+            <Calendar className="mx-auto mb-4 text-muted-foreground" size={48} />
+            <h3 className="text-lg font-semibold mb-2">Visualização Timeline</h3>
+            <p className="text-muted-foreground">
+              Em desenvolvimento - Linha do tempo interativa das reservas
+            </p>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

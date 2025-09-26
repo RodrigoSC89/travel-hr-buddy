@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EnhancedAlertManagement } from './enhanced-alert-management';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,6 +42,14 @@ interface Notification {
 }
 
 export const PriceAlertDashboard = () => {
+  return (
+    <div className="space-y-6">
+      <EnhancedAlertManagement />
+    </div>
+  );
+};
+
+export const PriceAlertDashboardLegacy = () => {
   const [alerts, setAlerts] = useState<PriceAlert[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isAddingAlert, setIsAddingAlert] = useState(false);

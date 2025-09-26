@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { CrewScheduleVisualizer } from './crew-schedule-visualizer';
 
 interface CrewMember {
   id: string;
@@ -368,7 +369,7 @@ export const MaritimeHRDashboard: React.FC = () => {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Visão Geral
@@ -376,6 +377,10 @@ export const MaritimeHRDashboard: React.FC = () => {
           <TabsTrigger value="crew" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             Tripulação
+          </TabsTrigger>
+          <TabsTrigger value="schedule" className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            Escalas
           </TabsTrigger>
           <TabsTrigger value="certifications" className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
@@ -821,6 +826,10 @@ export const MaritimeHRDashboard: React.FC = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="schedule" className="space-y-6">
+          <CrewScheduleVisualizer />
         </TabsContent>
       </Tabs>
     </div>
