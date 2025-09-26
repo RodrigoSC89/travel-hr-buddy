@@ -48,6 +48,9 @@ import SecurityPage from "./pages/Security";
 import UsersPage from "./pages/Users";
 import CollaborationPage from "./pages/Collaboration";
 import MobileOptimizationPage from "./pages/MobileOptimization";
+import AdvancedAnalyticsPage from "./pages/AdvancedAnalytics";
+import AdvancedSystemMonitorPage from "./pages/AdvancedSystemMonitor";
+import IntelligentDocumentsPage from "./pages/IntelligentDocuments";
 import Help from "./pages/Help";
 import Templates from "./pages/Templates";
 import SystemOverviewPage from "./pages/SystemOverview";
@@ -126,6 +129,9 @@ const App = () => {
                   <Route path="security" element={<SecurityPage />} />
                   <Route path="users" element={<UsersPage />} />
                   <Route path="collaboration" element={<CollaborationPage />} />
+                  <Route path="advanced-analytics" element={<AdvancedAnalyticsPage />} />
+                  <Route path="advanced-system-monitor" element={<AdvancedSystemMonitorPage />} />
+                  <Route path="intelligent-documents" element={<IntelligentDocumentsPage />} />
                   <Route path="help" element={<Help />} />
                   <Route path="templates" element={<Templates />} />
                   <Route path="system-overview" element={<SystemOverviewPage />} />

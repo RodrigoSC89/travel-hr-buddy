@@ -19,7 +19,6 @@ import {
   Bot,
   Zap,
   Target,
-  Brain,
   Mic,
   Eye,
   Shield,
@@ -28,7 +27,9 @@ import {
   User,
   Activity,
   Globe,
-  HelpCircle
+  HelpCircle,
+  TrendingUp,
+  Brain
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -300,9 +301,24 @@ const navigationItems = [
     icon: FileText,
   },
   {
+    title: "Analytics Avançado",
+    url: "/advanced-analytics",
+    icon: TrendingUp
+  },
+  {
+    title: "Monitor Avançado",
+    url: "/advanced-system-monitor",
+    icon: Activity
+  },
+  {
+    title: "Documentos IA",
+    url: "/intelligent-documents",
+    icon: Brain
+  },
+  {
     title: "Centro de Ajuda",
     url: "/help",
-    icon: Smartphone,
+    icon: HelpCircle,
   },
 ];
 
