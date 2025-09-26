@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SystemHealthCheck } from '@/components/testing/system-health-check';
 import { TestEnvironmentConfig } from '@/components/testing/test-environment-config';
 import { PerformanceMonitor } from '@/components/performance/performance-monitor';
+import { PWAStatus } from '@/components/mobile/pwa-status';
 
 const TestingDashboard = () => {
   return (
@@ -15,10 +16,11 @@ const TestingDashboard = () => {
       </div>
 
       <Tabs defaultValue="health" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="health">Saúde do Sistema</TabsTrigger>
           <TabsTrigger value="config">Configuração</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
+          <TabsTrigger value="mobile">Mobile & PWA</TabsTrigger>
         </TabsList>
 
         <TabsContent value="health" className="space-y-6">
@@ -39,6 +41,10 @@ const TestingDashboard = () => {
             </div>
             <PerformanceMonitor />
           </div>
+        </TabsContent>
+
+        <TabsContent value="mobile" className="space-y-6">
+          <PWAStatus />
         </TabsContent>
       </Tabs>
     </div>

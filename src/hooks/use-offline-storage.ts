@@ -1,103 +1,276 @@
-import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect, useCallback } from 'react';
 
 interface OfflineData {
-  [key: string]: any;
+  id: string;
+  action: string;
+  data: any;
+  timestamp: number;
+  synced: boolean;
 }
 
-export const useOfflineStorage = () => {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [offlineData, setOfflineData] = useState<OfflineData>({});
-  const { toast } = useToast();
+interface UseOfflineStorageReturn {
+  isOnline: boolean;
+  saveToCache: (key: string, data: any) => Promise<void>;
+  getFromCache: (key: string) => Promise<any>;
+  addPendingChange: (action: string, data: any) => Promise<void>;
+  getPendingChanges: () => Promise<OfflineData[]>;
+  syncPendingChanges: () => Promise<void>;
+  clearCache: () => Promise<void>;
+  cacheSize: number;
+}
 
+const DB_NAME = 'NautilusOfflineDB';
+const DB_VERSION = 1;
+const CACHE_STORE = 'cache';
+const OFFLINE_STORE = 'offline_actions';
+
+export const useOfflineStorage = (): UseOfflineStorageReturn => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [cacheSize, setCacheSize] = useState(0);
+
+  // Initialize IndexedDB
+  const initDB = useCallback(() => {
+    return new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve(request.result);
+      
+      request.onupgradeneeded = (event) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        
+        // Create cache store
+        if (!db.objectStoreNames.contains(CACHE_STORE)) {
+          const cacheStore = db.createObjectStore(CACHE_STORE, { keyPath: 'key' });
+          cacheStore.createIndex('timestamp', 'timestamp', { unique: false });
+        }
+        
+        // Create offline actions store
+        if (!db.objectStoreNames.contains(OFFLINE_STORE)) {
+          const offlineStore = db.createObjectStore(OFFLINE_STORE, { keyPath: 'id' });
+          offlineStore.createIndex('timestamp', 'timestamp', { unique: false });
+          offlineStore.createIndex('synced', 'synced', { unique: false });
+        }
+      };
+    });
+  }, []);
+
+  // Save data to cache
+  const saveToCache = useCallback(async (key: string, data: any) => {
+    try {
+      const db = await initDB();
+      const transaction = db.transaction([CACHE_STORE], 'readwrite');
+      const store = transaction.objectStore(CACHE_STORE);
+      
+      await store.put({
+        key,
+        data,
+        timestamp: Date.now()
+      });
+      
+      updateCacheSize();
+    } catch (error) {
+      console.error('Error saving to cache:', error);
+    }
+  }, [initDB]);
+
+  // Get data from cache
+  const getFromCache = useCallback(async (key: string) => {
+    try {
+      const db = await initDB();
+      const transaction = db.transaction([CACHE_STORE], 'readonly');
+      const store = transaction.objectStore(CACHE_STORE);
+      
+      return new Promise((resolve, reject) => {
+        const request = store.get(key);
+        request.onsuccess = () => {
+          const result = request.result;
+          resolve(result ? result.data : null);
+        };
+        request.onerror = () => reject(request.error);
+      });
+    } catch (error) {
+      console.error('Error getting from cache:', error);
+      return null;
+    }
+  }, [initDB]);
+
+  // Add pending change for offline sync
+  const addPendingChange = useCallback(async (action: string, data: any) => {
+    try {
+      const db = await initDB();
+      const transaction = db.transaction([OFFLINE_STORE], 'readwrite');
+      const store = transaction.objectStore(OFFLINE_STORE);
+      
+      const offlineData: OfflineData = {
+        id: `${action}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        action,
+        data,
+        timestamp: Date.now(),
+        synced: false
+      };
+      
+      await store.add(offlineData);
+      console.log('Added pending change:', offlineData);
+    } catch (error) {
+      console.error('Error adding pending change:', error);
+    }
+  }, [initDB]);
+
+  // Get pending changes
+  const getPendingChanges = useCallback(async (): Promise<OfflineData[]> => {
+    try {
+      const db = await initDB();
+      const transaction = db.transaction([OFFLINE_STORE], 'readonly');
+      const store = transaction.objectStore(OFFLINE_STORE);
+      const index = store.index('synced');
+      
+      return new Promise((resolve, reject) => {
+        const request = index.getAll(IDBKeyRange.only(false));
+        request.onsuccess = () => resolve(request.result || []);
+        request.onerror = () => reject(request.error);
+      });
+    } catch (error) {
+      console.error('Error getting pending changes:', error);
+      return [];
+    }
+  }, [initDB]);
+
+  // Sync pending changes when online
+  const syncPendingChanges = useCallback(async () => {
+    if (!isOnline) return;
+    
+    try {
+      const pendingChanges = await getPendingChanges();
+      console.log('Syncing pending changes:', pendingChanges.length);
+      
+      const db = await initDB();
+      const transaction = db.transaction([OFFLINE_STORE], 'readwrite');
+      const store = transaction.objectStore(OFFLINE_STORE);
+      
+      for (const change of pendingChanges) {
+        try {
+          // Simulate API sync - replace with actual API calls
+          console.log('Syncing change:', change.action, change.data);
+          
+          // Mark as synced
+          change.synced = true;
+          await store.put(change);
+          
+          // In a real app, you would make actual API calls here
+          // await syncToAPI(change.action, change.data);
+          
+        } catch (error) {
+          console.error('Error syncing change:', change.id, error);
+        }
+      }
+      
+      console.log('Sync completed');
+    } catch (error) {
+      console.error('Error during sync:', error);
+    }
+  }, [isOnline, getPendingChanges, initDB]);
+
+  // Clear cache
+  const clearCache = useCallback(async () => {
+    try {
+      const db = await initDB();
+      
+      // Clear cache store
+      const cacheTransaction = db.transaction([CACHE_STORE], 'readwrite');
+      await cacheTransaction.objectStore(CACHE_STORE).clear();
+      
+      // Clear synced offline actions
+      const offlineTransaction = db.transaction([OFFLINE_STORE], 'readwrite');
+      const offlineStore = offlineTransaction.objectStore(OFFLINE_STORE);
+      const index = offlineStore.index('synced');
+      
+      const request = index.openCursor(IDBKeyRange.only(true));
+      request.onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest).result;
+        if (cursor) {
+          cursor.delete();
+          cursor.continue();
+        }
+      };
+      
+      updateCacheSize();
+      console.log('Cache cleared');
+    } catch (error) {
+      console.error('Error clearing cache:', error);
+    }
+  }, [initDB]);
+
+  // Update cache size
+  const updateCacheSize = useCallback(async () => {
+    try {
+      const db = await initDB();
+      const transaction = db.transaction([CACHE_STORE, OFFLINE_STORE], 'readonly');
+      
+      const cacheCount = await new Promise<number>((resolve) => {
+        const request = transaction.objectStore(CACHE_STORE).count();
+        request.onsuccess = () => resolve(request.result);
+      });
+      
+      const offlineCount = await new Promise<number>((resolve) => {
+        const request = transaction.objectStore(OFFLINE_STORE).count();
+        request.onsuccess = () => resolve(request.result);
+      });
+      
+      setCacheSize(cacheCount + offlineCount);
+    } catch (error) {
+      console.error('Error updating cache size:', error);
+    }
+  }, [initDB]);
+
+  // Listen for online/offline events
   useEffect(() => {
     const handleOnline = () => {
       setIsOnline(true);
-      toast({
-        title: "Conexão Restaurada",
-        description: "Sistema online novamente",
-      });
-      syncOfflineData();
+      // Auto-sync when coming online
+      setTimeout(() => {
+        syncPendingChanges();
+      }, 1000);
     };
-
-    const handleOffline = () => {
-      setIsOnline(false);
-      toast({
-        title: "Modo Offline",
-        description: "Dados serão salvos localmente",
-        variant: "destructive",
-      });
-    };
+    
+    const handleOffline = () => setIsOnline(false);
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Load cached data on mount
-    loadOfflineData();
+    // Initial cache size calculation
+    updateCacheSize();
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [toast]);
+  }, [syncPendingChanges, updateCacheSize]);
 
-  const saveToCache = (key: string, data: any) => {
-    try {
-      const cached = { ...offlineData, [key]: data };
-      setOfflineData(cached);
-      localStorage.setItem('nautilus_offline_data', JSON.stringify(cached));
-    } catch (error) {
-      console.error('Error saving to cache:', error);
-    }
-  };
-
-  const getFromCache = (key: string) => {
-    return offlineData[key] || null;
-  };
-
-  const loadOfflineData = () => {
-    try {
-      const cached = localStorage.getItem('nautilus_offline_data');
-      if (cached) {
-        setOfflineData(JSON.parse(cached));
+  // Listen for service worker messages
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === 'OFFLINE_SYNC_COMPLETE') {
+        console.log('Offline sync completed:', event.data.data);
+        updateCacheSize();
       }
-    } catch (error) {
-      console.error('Error loading cached data:', error);
-    }
-  };
+    };
 
-  const syncOfflineData = async () => {
-    // Sync offline changes when back online
-    try {
-      const pendingChanges = localStorage.getItem('nautilus_pending_sync');
-      if (pendingChanges) {
-        // Process pending changes here
-        localStorage.removeItem('nautilus_pending_sync');
-        toast({
-          title: "Sincronização Completa",
-          description: "Dados offline foram sincronizados",
-        });
-      }
-    } catch (error) {
-      console.error('Error syncing offline data:', error);
-    }
-  };
-
-  const addPendingChange = (action: string, data: any) => {
-    try {
-      const pending = JSON.parse(localStorage.getItem('nautilus_pending_sync') || '[]');
-      pending.push({ action, data, timestamp: Date.now() });
-      localStorage.setItem('nautilus_pending_sync', JSON.stringify(pending));
-    } catch (error) {
-      console.error('Error adding pending change:', error);
-    }
-  };
+    navigator.serviceWorker?.addEventListener('message', handleMessage);
+    
+    return () => {
+      navigator.serviceWorker?.removeEventListener('message', handleMessage);
+    };
+  }, [updateCacheSize]);
 
   return {
     isOnline,
     saveToCache,
     getFromCache,
     addPendingChange,
-    offlineData,
+    getPendingChanges,
+    syncPendingChanges,
+    clearCache,
+    cacheSize
   };
 };

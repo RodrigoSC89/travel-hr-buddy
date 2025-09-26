@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nautilus One - Offline</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .offline-container {
+      text-align: center;
+      max-width: 500px;
+      padding: 40px;
+      background: rgba(30, 41, 59, 0.8);
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      background: #0369a1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wifi-off {
+      width: 40px;
+      height: 40px;
+      color: white;
+    }
+    h1 {
+      color: #f1f5f9;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    .retry-btn {
+      background: #0369a1;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.2s;
+    }
+    .retry-btn:hover {
+      background: #0284c7;
+    }
+    .features {
+      margin-top: 30px;
+      text-align: left;
+    }
+    .feature {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      color: #cbd5e1;
+    }
+    .feature-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      color: #0369a1;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container">
+    <div class="logo">
+      <svg class="wifi-off" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18M10.5 14.5L12 16l1.5-1.5M7 10l5 5 5-5M3 6l3 3 3-3"></path>
+      </svg>
+    </div>
+    
+    <h1>Você está offline</h1>
+    <p>Não foi possível conectar-se ao Nautilus One. Verifique sua conexão com a internet e tente novamente.</p>
+    
+    <button class="retry-btn" onclick="window.location.reload()">
+      Tentar Novamente
+    </button>
+    
+    <div class="features">
+      <h3>Funcionalidades Offline Disponíveis:</h3>
+      <div class="feature">
+        <svg class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        Dados em cache local
+      </div>
+      <div class="feature">
+        <svg class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+        </svg>
+        Sincronização automática quando online
+      </div>
+      <div class="feature">
+        <svg class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 9l6-6"></path>
+        </svg>
+        Funcionalidades básicas disponíveis
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Auto-reload when connection is restored
+    window.addEventListener('online', () => {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
