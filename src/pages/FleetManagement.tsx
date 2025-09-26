@@ -1,7 +1,7 @@
 import React from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
-import { VesselManagement } from '@/components/fleet/vessel-management';
+import VesselManagement from '@/components/fleet/vessel-management';
 import VesselPerformanceMonitor from '@/components/fleet/vessel-performance-monitor';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Ship, Activity } from 'lucide-react';

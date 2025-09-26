@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { OrganizationLayout } from '@/components/layout/organization-layout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { VesselManagement } from '@/components/fleet/vessel-management';
+import VesselManagement from '@/components/fleet/vessel-management';
 import { VesselTracking } from '@/components/fleet/vessel-tracking';
 import { FleetAnalytics } from '@/components/analytics/fleet-analytics';
 import { 

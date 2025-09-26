@@ -36,7 +36,7 @@ interface Vessel {
   organization_id?: string;
 }
 
-export const VesselManagement: React.FC = () => {
+const VesselManagement: React.FC = () => {
   const [vessels, setVessels] = useState<Vessel[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -513,3 +513,5 @@ export const VesselManagement: React.FC = () => {
     </div>
   );
 };
+
+export default VesselManagement;

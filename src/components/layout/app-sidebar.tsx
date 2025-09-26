@@ -119,6 +119,7 @@ const navigationItems = [
         title: "Gestão de Frota",
         url: "/fleet-management",
         icon: Ship,
+      },
       {
         title: "Rastreamento",
         url: "/fleet-tracking",
