@@ -23,7 +23,7 @@ interface NonConformity {
   status: 'open' | 'in_progress' | 'closed' | 'verified';
   severity_score: number;
   peotram_audits?: {
-    audit_name: string;
+    audit_period: string;
     vessel_name?: string;
     shore_location?: string;
   };
@@ -114,7 +114,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
   const filteredNCs = nonConformities.filter(nc => {
     const matchesSearch = nc.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          nc.element_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         nc.peotram_audits?.audit_name.toLowerCase().includes(searchTerm.toLowerCase());
+                         nc.peotram_audits?.audit_period.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = selectedType === 'all' || nc.non_conformity_type === selectedType;
     const matchesStatus = selectedStatus === 'all' || nc.status === selectedStatus;
     
@@ -287,7 +287,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                 
                 <div className="flex flex-col justify-between items-end gap-2">
                   <Badge variant="outline" className="text-xs">
-                    Auditoria: {nc.peotram_audits?.audit_name}
+                    Auditoria: {nc.peotram_audits?.audit_period}
                   </Badge>
                   
                   <Button

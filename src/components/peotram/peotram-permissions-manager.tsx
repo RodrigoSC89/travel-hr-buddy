@@ -59,7 +59,7 @@ export const PeotramPermissionsManager: React.FC = () => {
     permission_level: 'read' as const,
     vessel_access: [] as string[],
     area_access: [] as string[],
-    location_type: 'both' as const,
+    location_type: 'vessel' as 'vessel' | 'shore' | 'both',
     expires_at: ''
   });
 

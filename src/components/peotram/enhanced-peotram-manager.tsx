@@ -37,8 +37,9 @@ interface PeotramTemplate {
 
 interface PeotramAudit {
   id: string;
-  audit_name: string;
   audit_date: string;
+  audit_period: string;
+  audit_type: 'vessel' | 'shore';
   vessel_name?: string;
   vessel_id?: string;
   shore_location?: string;
@@ -47,7 +48,6 @@ interface PeotramAudit {
   compliance_score: number;
   elements_evaluated: number;
   non_conformities_count: number;
-  audit_type: 'vessel' | 'shore';
   template_id?: string;
   created_at: string;
   vessels?: {
@@ -69,7 +69,7 @@ interface NonConformity {
   status: 'open' | 'in_progress' | 'closed' | 'verified';
   severity_score: number;
   peotram_audits?: {
-    audit_name: string;
+    audit_period: string;
     vessel_name?: string;
     shore_location?: string;
   };
@@ -120,7 +120,6 @@ export const EnhancedPeotramManager: React.FC = () => {
 
       const mappedAudits = (data || []).map((audit: any) => ({
         ...audit,
-        audit_name: audit.audit_name || audit.audit_period || 'Auditoria sem nome',
         elements_evaluated: audit.elements_evaluated || 0,
         non_conformities_count: audit.non_conformities_count || 0,
         compliance_score: audit.compliance_score || 0
@@ -182,7 +181,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         .select(`
           *,
           peotram_audits (
-            audit_name,
+            audit_period,
             vessel_name,
             shore_location
           )
@@ -220,7 +219,7 @@ export const EnhancedPeotramManager: React.FC = () => {
 
       const mappedAudit: PeotramAudit = {
         ...data,
-        audit_name: data.audit_name || data.audit_period || 'Nova Auditoria',
+        audit_type: data.audit_type as 'vessel' | 'shore',
         elements_evaluated: 0,
         non_conformities_count: 0,
         status: data.status as 'draft' | 'in_progress' | 'completed' | 'approved'
@@ -278,7 +277,7 @@ export const EnhancedPeotramManager: React.FC = () => {
   };
 
   const filteredAudits = audits.filter(audit => {
-    const matchesSearch = audit.audit_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = audit.audit_period.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          audit.vessel_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          audit.shore_location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          audit.auditor_name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -522,7 +521,7 @@ export const EnhancedPeotramManager: React.FC = () => {
                         <Building className="h-4 w-4 text-green-600" />
                       )}
                       <div>
-                        <p className="font-medium text-sm">{audit.audit_name}</p>
+                        <p className="font-medium text-sm">{audit.audit_period}</p>
                         <p className="text-xs text-muted-foreground">
                           {audit.vessel_name || audit.shore_location} • {audit.auditor_name}
                         </p>
@@ -615,7 +614,7 @@ export const EnhancedPeotramManager: React.FC = () => {
                       <div className="flex-1 space-y-3">
                         <div className="flex items-start justify-between">
                           <div className="space-y-1">
-                            <h3 className="font-semibold text-lg">{audit.audit_name}</h3>
+                            <h3 className="font-semibold text-lg">{audit.audit_period}</h3>
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                               {audit.vessel_name ? (
                                 <>
@@ -747,7 +746,7 @@ const CreateAuditForm: React.FC<{
   vessels: any[];
 }> = ({ onSubmit, onCancel, templates, vessels }) => {
   const [formData, setFormData] = useState({
-    audit_name: '',
+    audit_period: '',
     audit_type: 'vessel',
     vessel_id: '',
     shore_location: '',
@@ -762,12 +761,12 @@ const CreateAuditForm: React.FC<{
       <form className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="audit_name">Nome da Auditoria</Label>
+            <Label htmlFor="audit_period">Período da Auditoria</Label>
             <Input
-              id="audit_name"
-              value={formData.audit_name}
-              onChange={(e) => setFormData(prev => ({ ...prev, audit_name: e.target.value }))}
-              placeholder="Ex: Auditoria PEOTRAM Janeiro 2024"
+              id="audit_period"
+              value={formData.audit_period}
+              onChange={(e) => setFormData(prev => ({ ...prev, audit_period: e.target.value }))}
+              placeholder="Ex: Janeiro 2024"
             />
           </div>
           
@@ -875,7 +874,7 @@ const CreateAuditForm: React.FC<{
               });
             }}
             disabled={
-              !formData.audit_name || 
+              !formData.audit_period || 
               !formData.auditor_name || 
               !formData.template_id ||
               (formData.audit_type === 'vessel' && !formData.vessel_id) ||
