@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 import { 
   Bell, 
   CheckCircle, 
@@ -48,6 +50,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'unread' | 'priority'>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -281,13 +284,13 @@ export const RealTimeNotificationCenter: React.FC = () => {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case 'urgent':
-        return <Badge variant="destructive">Urgente</Badge>;
+        return <Badge variant="destructive" className="text-xs">Urgente</Badge>;
       case 'high':
-        return <Badge variant="secondary" className="bg-orange-500 text-white">Alto</Badge>;
+        return <Badge variant="secondary" className="bg-orange-500 text-white text-xs">Alto</Badge>;
       case 'medium':
-        return <Badge variant="outline">Médio</Badge>;
+        return <Badge variant="outline" className="text-xs">Médio</Badge>;
       default:
-        return <Badge variant="secondary">Baixo</Badge>;
+        return <Badge variant="secondary" className="text-xs">Baixo</Badge>;
     }
   };
 
@@ -296,228 +299,251 @@ export const RealTimeNotificationCenter: React.FC = () => {
   const totalUnread = unreadRegularCount + unreadIntelligentCount;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Centro de Notificações</h1>
-          <p className="text-muted-foreground">
-            Gerencie todas as suas notificações em tempo real
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="flex items-center gap-1">
-            <Bell className="h-3 w-3" />
-            {totalUnread} não lidas
-          </Badge>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button 
+          variant="ghost" 
+          size="sm"
+          className="relative p-2"
+          aria-label="Notificações"
+        >
+          <Bell className="h-5 w-5" />
           {totalUnread > 0 && (
-            <Button onClick={markAllAsRead} variant="outline" size="sm">
-              Marcar todas como lidas
-            </Button>
+            <Badge 
+              variant="destructive" 
+              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+            >
+              {totalUnread > 9 ? '9+' : totalUnread}
+            </Badge>
           )}
-        </div>
-      </div>
-
-      {/* Filtros */}
-      <Card className="p-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <input
-                type="text"
-                placeholder="Buscar notificações..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-background"
-              />
-            </div>
+        </Button>
+      </PopoverTrigger>
+      
+      <PopoverContent 
+        className="w-96 p-0 bg-background border shadow-lg z-50" 
+        align="end"
+        side="bottom"
+        sideOffset={5}
+      >
+        <div className="p-4 border-b">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-sm">Notificações</h3>
+            {totalUnread > 0 && (
+              <Button 
+                onClick={markAllAsRead} 
+                variant="ghost" 
+                size="sm"
+                className="text-xs h-auto p-1"
+              >
+                <CheckCircle className="h-3 w-3 mr-1" />
+                Marcar todas como lidas
+              </Button>
+            )}
           </div>
-          <div className="flex gap-2">
+          
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-3 w-3" />
+            <input
+              type="text"
+              placeholder="Buscar..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-7 pr-3 py-1.5 text-xs border border-border rounded bg-background"
+            />
+          </div>
+          
+          {/* Filters */}
+          <div className="flex gap-1 mt-2">
             <Button
-              variant={filter === 'all' ? 'default' : 'outline'}
+              variant={filter === 'all' ? 'default' : 'ghost'}
               onClick={() => setFilter('all')}
               size="sm"
+              className="text-xs h-6 px-2"
             >
               Todas
             </Button>
             <Button
-              variant={filter === 'unread' ? 'default' : 'outline'}
+              variant={filter === 'unread' ? 'default' : 'ghost'}
               onClick={() => setFilter('unread')}
               size="sm"
+              className="text-xs h-6 px-2"
             >
               Não lidas
             </Button>
             <Button
-              variant={filter === 'priority' ? 'default' : 'outline'}
+              variant={filter === 'priority' ? 'default' : 'ghost'}
               onClick={() => setFilter('priority')}
               size="sm"
+              className="text-xs h-6 px-2"
             >
               Prioridade
             </Button>
           </div>
         </div>
-      </Card>
 
-      <Tabs defaultValue="regular" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="regular">
-            Notificações Regulares ({unreadRegularCount})
-          </TabsTrigger>
-          <TabsTrigger value="intelligent">
-            Notificações Inteligentes ({unreadIntelligentCount})
-          </TabsTrigger>
-        </TabsList>
+        <Tabs defaultValue="regular" className="w-full">
+          <div className="px-4 pt-2">
+            <TabsList className="grid w-full grid-cols-2 h-8">
+              <TabsTrigger value="regular" className="text-xs">
+                Regulares ({unreadRegularCount})
+              </TabsTrigger>
+              <TabsTrigger value="intelligent" className="text-xs">
+                Inteligentes ({unreadIntelligentCount})
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-        <TabsContent value="regular" className="space-y-4">
-          {isLoading ? (
-            <div className="space-y-4">
-              {[1, 2, 3].map(i => (
-                <Card key={i} className="p-4">
-                  <div className="animate-pulse space-y-2">
-                    <div className="h-4 bg-muted rounded w-3/4"></div>
-                    <div className="h-3 bg-muted rounded w-1/2"></div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {getFilteredNotifications(notifications).map((notification) => (
-                <Card 
-                  key={notification.id} 
-                  className={`p-4 transition-all cursor-pointer hover:shadow-md ${
-                    !notification.read ? 'border-l-4 border-l-primary bg-accent/20' : ''
-                  }`}
-                  onClick={() => !notification.read && markAsRead(notification.id)}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-3 flex-1">
-                      {getNotificationIcon(notification.type)}
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className={`font-medium ${!notification.read ? 'font-semibold' : ''}`}>
-                            {notification.title}
-                          </h4>
-                          {getPriorityBadge(notification.priority)}
+          <TabsContent value="regular" className="mt-0">
+            <ScrollArea className="h-80">
+              <div className="p-4 pt-2 space-y-2">
+                {isLoading ? (
+                  <div className="space-y-2">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="p-2 border rounded">
+                        <div className="animate-pulse space-y-1">
+                          <div className="h-3 bg-muted rounded w-3/4"></div>
+                          <div className="h-2 bg-muted rounded w-1/2"></div>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-2">
-                          {notification.message}
-                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    {getFilteredNotifications(notifications).map((notification) => (
+                      <div 
+                        key={notification.id} 
+                        className={`p-2 border rounded text-xs transition-all cursor-pointer hover:bg-accent/50 ${
+                          !notification.read ? 'border-l-2 border-l-primary bg-accent/20' : ''
+                        }`}
+                        onClick={() => !notification.read && markAsRead(notification.id)}
+                      >
+                        <div className="flex items-start gap-2">
+                          {getNotificationIcon(notification.type)}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1 mb-1">
+                              <h4 className={`font-medium truncate ${!notification.read ? 'font-semibold' : ''}`}>
+                                {notification.title}
+                              </h4>
+                              {getPriorityBadge(notification.priority)}
+                            </div>
+                            <p className="text-muted-foreground line-clamp-2 mb-1">
+                              {notification.message}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(notification.created_at).toLocaleString('pt-BR')}
+                            </p>
+                          </div>
+                          {!notification.read && (
+                            <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1" />
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {getFilteredNotifications(notifications).length === 0 && (
+                      <div className="text-center py-8">
+                        <Bell className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+                        <h4 className="text-sm font-medium mb-1">Nenhuma notificação encontrada</h4>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(notification.created_at).toLocaleString('pt-BR')}
+                          {filter === 'unread' 
+                            ? 'Todas as notificações foram lidas!' 
+                            : 'Você não possui notificações no momento.'
+                          }
                         </p>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {!notification.read && (
-                        <Badge variant="default" className="bg-primary text-white">
-                          Nova
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </Card>
-              ))}
-              
-              {getFilteredNotifications(notifications).length === 0 && (
-                <Card className="p-8 text-center">
-                  <Bell className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Nenhuma notificação encontrada</h3>
-                  <p className="text-muted-foreground">
-                    {filter === 'unread' 
-                      ? 'Todas as notificações foram lidas!' 
-                      : 'Você não possui notificações no momento.'
-                    }
-                  </p>
-                </Card>
-              )}
-            </div>
-          )}
-        </TabsContent>
+                    )}
+                  </>
+                )}
+              </div>
+            </ScrollArea>
+          </TabsContent>
 
-        <TabsContent value="intelligent" className="space-y-4">
-          {isLoading ? (
-            <div className="space-y-4">
-              {[1, 2, 3].map(i => (
-                <Card key={i} className="p-4">
-                  <div className="animate-pulse space-y-2">
-                    <div className="h-4 bg-muted rounded w-3/4"></div>
-                    <div className="h-3 bg-muted rounded w-1/2"></div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {getFilteredNotifications(intelligentNotifications, true).map((notification) => (
-                <Card 
-                  key={notification.id} 
-                  className={`p-4 transition-all ${
-                    !notification.is_read ? 'border-l-4 border-l-primary bg-accent/20' : ''
-                  }`}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-3 flex-1">
-                      {getNotificationIcon(notification.type)}
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className={`font-medium ${!notification.is_read ? 'font-semibold' : ''}`}>
-                            {notification.title}
-                          </h4>
-                          {getPriorityBadge(notification.priority)}
+          <TabsContent value="intelligent" className="mt-0">
+            <ScrollArea className="h-80">
+              <div className="p-4 pt-2 space-y-2">
+                {isLoading ? (
+                  <div className="space-y-2">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="p-2 border rounded">
+                        <div className="animate-pulse space-y-1">
+                          <div className="h-3 bg-muted rounded w-3/4"></div>
+                          <div className="h-2 bg-muted rounded w-1/2"></div>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-2">
-                          {notification.message}
-                        </p>
-                        <p className="text-xs text-muted-foreground mb-3">
-                          {new Date(notification.created_at).toLocaleString('pt-BR')}
-                        </p>
-                        
-                        {notification.action_type && notification.action_text && (
-                          <Button 
-                            onClick={() => executeAction(notification)}
-                            size="sm"
-                            className="mr-2"
-                          >
-                            {notification.action_text}
-                          </Button>
-                        )}
-                        
-                        {!notification.is_read && (
-                          <Button 
-                            onClick={() => markAsRead(notification.id, true)}
-                            variant="outline"
-                            size="sm"
-                          >
-                            Marcar como lida
-                          </Button>
-                        )}
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {!notification.is_read && (
-                        <Badge variant="default" className="bg-primary text-white">
-                          Nova
-                        </Badge>
-                      )}
-                    </div>
+                    ))}
                   </div>
-                </Card>
-              ))}
-              
-              {getFilteredNotifications(intelligentNotifications, true).length === 0 && (
-                <Card className="p-8 text-center">
-                  <Bell className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Nenhuma notificação inteligente</h3>
-                  <p className="text-muted-foreground">
-                    As notificações inteligentes aparecerão aqui baseadas na sua atividade.
-                  </p>
-                </Card>
-              )}
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
-    </div>
+                ) : (
+                  <>
+                    {getFilteredNotifications(intelligentNotifications, true).map((notification) => (
+                      <div 
+                        key={notification.id} 
+                        className={`p-2 border rounded text-xs transition-all ${
+                          !notification.is_read ? 'border-l-2 border-l-primary bg-accent/20' : ''
+                        }`}
+                      >
+                        <div className="flex items-start gap-2">
+                          {getNotificationIcon(notification.type)}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1 mb-1">
+                              <h4 className={`font-medium truncate ${!notification.is_read ? 'font-semibold' : ''}`}>
+                                {notification.title}
+                              </h4>
+                              {getPriorityBadge(notification.priority)}
+                            </div>
+                            <p className="text-muted-foreground line-clamp-2 mb-1">
+                              {notification.message}
+                            </p>
+                            <p className="text-xs text-muted-foreground mb-2">
+                              {new Date(notification.created_at).toLocaleString('pt-BR')}
+                            </p>
+                            
+                            <div className="flex gap-1">
+                              {notification.action_type && notification.action_text && (
+                                <Button 
+                                  onClick={() => executeAction(notification)}
+                                  size="sm"
+                                  className="h-6 px-2 text-xs"
+                                >
+                                  {notification.action_text}
+                                </Button>
+                              )}
+                              
+                              {!notification.is_read && (
+                                <Button 
+                                  onClick={() => markAsRead(notification.id, true)}
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-6 px-2 text-xs"
+                                >
+                                  Marcar como lida
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                          {!notification.is_read && (
+                            <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1" />
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {getFilteredNotifications(intelligentNotifications, true).length === 0 && (
+                      <div className="text-center py-8">
+                        <Bell className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+                        <h4 className="text-sm font-medium mb-1">Nenhuma notificação inteligente</h4>
+                        <p className="text-xs text-muted-foreground">
+                          As notificações inteligentes aparecerão aqui baseadas na sua atividade.
+                        </p>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </ScrollArea>
+          </TabsContent>
+        </Tabs>
+      </PopoverContent>
+    </Popover>
   );
 };
