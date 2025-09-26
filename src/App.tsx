@@ -27,7 +27,7 @@ import Intelligence from "./pages/Intelligence";
 import Maritime from "./pages/Maritime";
 import Innovation from "./pages/Innovation";
 import Optimization from "./pages/Optimization";
-import Strategic from "./pages/Strategic";
+import FleetTracking from "./pages/FleetTracking";
 import Voice from "./pages/Voice";
 import Portal from "./pages/Portal";
 import AR from "./pages/AR";
@@ -126,7 +126,7 @@ const App = () => {
                   <Route path="intelligence" element={<Intelligence />} />
                   <Route path="optimization" element={<Optimization />} />
                   <Route path="innovation" element={<Innovation />} />
-                  <Route path="strategic" element={<Strategic />} />
+                  <Route path="fleet-tracking" element={<FleetTracking />} />
                   <Route path="voice" element={<Voice />} />
                   <Route path="portal" element={<Portal />} />
                   <Route path="ar" element={<AR />} />
