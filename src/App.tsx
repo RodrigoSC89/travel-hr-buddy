@@ -87,6 +87,7 @@ import IntelligentAlerts from "./pages/IntelligentAlerts";
 // Lazy load the new advanced pages
 const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
 const MobileApp = React.lazy(() => import("./pages/MobileApp"));
+const SaaSManager = React.lazy(() => import("./pages/SaaSManager"));
 
 const queryClient = new QueryClient();
 
@@ -108,8 +109,9 @@ const App = () => {
     <ErrorBoundaryWrapper>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-          <AuthProvider>
-            <OrganizationProvider>
+        <AuthProvider>
+          <OrganizationProvider>
+            <TenantProvider>
               <TooltipProvider>
                 <OfflineIndicator />
                 <BrowserRouter>
@@ -223,8 +225,9 @@ const App = () => {
               <Toaster />
               <Sonner />
             </TooltipProvider>
-            </OrganizationProvider>
-          </AuthProvider>
+            </TenantProvider>
+          </OrganizationProvider>
+        </AuthProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundaryWrapper>

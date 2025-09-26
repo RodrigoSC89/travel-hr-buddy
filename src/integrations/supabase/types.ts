@@ -2917,6 +2917,135 @@ export type Database = {
           },
         ]
       }
+      saas_plans: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          features: Json | null
+          id: string
+          is_active: boolean | null
+          is_popular: boolean | null
+          max_api_calls_per_month: number
+          max_storage_gb: number
+          max_users: number
+          max_vessels: number
+          name: string
+          price_monthly: number
+          price_yearly: number
+          slug: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_popular?: boolean | null
+          max_api_calls_per_month?: number
+          max_storage_gb?: number
+          max_users?: number
+          max_vessels?: number
+          name: string
+          price_monthly?: number
+          price_yearly?: number
+          slug: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_popular?: boolean | null
+          max_api_calls_per_month?: number
+          max_storage_gb?: number
+          max_users?: number
+          max_vessels?: number
+          name?: string
+          price_monthly?: number
+          price_yearly?: number
+          slug?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      saas_tenants: {
+        Row: {
+          billing_cycle: string | null
+          billing_email: string | null
+          created_at: string | null
+          custom_domain: string | null
+          description: string | null
+          features: Json | null
+          id: string
+          max_api_calls_per_month: number
+          max_storage_gb: number
+          max_users: number
+          max_vessels: number
+          metadata: Json | null
+          name: string
+          plan_type: string
+          slug: string
+          status: string
+          stripe_customer_id: string | null
+          subdomain: string | null
+          subscription_ends_at: string | null
+          subscription_starts_at: string | null
+          trial_ends_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          billing_cycle?: string | null
+          billing_email?: string | null
+          created_at?: string | null
+          custom_domain?: string | null
+          description?: string | null
+          features?: Json | null
+          id?: string
+          max_api_calls_per_month?: number
+          max_storage_gb?: number
+          max_users?: number
+          max_vessels?: number
+          metadata?: Json | null
+          name: string
+          plan_type?: string
+          slug: string
+          status?: string
+          stripe_customer_id?: string | null
+          subdomain?: string | null
+          subscription_ends_at?: string | null
+          subscription_starts_at?: string | null
+          trial_ends_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          billing_cycle?: string | null
+          billing_email?: string | null
+          created_at?: string | null
+          custom_domain?: string | null
+          description?: string | null
+          features?: Json | null
+          id?: string
+          max_api_calls_per_month?: number
+          max_storage_gb?: number
+          max_users?: number
+          max_vessels?: number
+          metadata?: Json | null
+          name?: string
+          plan_type?: string
+          slug?: string
+          status?: string
+          stripe_customer_id?: string | null
+          subdomain?: string | null
+          subscription_ends_at?: string | null
+          subscription_starts_at?: string | null
+          trial_ends_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       shared_alerts: {
         Row: {
           alert_id: string
@@ -3029,6 +3158,382 @@ export type Database = {
           uptime_percentage?: number | null
         }
         Relationships: []
+      }
+      tenant_audit_logs: {
+        Row: {
+          action: string
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          new_values: Json | null
+          old_values: Json | null
+          resource_id: string | null
+          resource_type: string
+          tenant_id: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          new_values?: Json | null
+          old_values?: Json | null
+          resource_id?: string | null
+          resource_type: string
+          tenant_id: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          new_values?: Json | null
+          old_values?: Json | null
+          resource_id?: string | null
+          resource_type?: string
+          tenant_id?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_audit_logs_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "saas_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenant_branding: {
+        Row: {
+          accent_color: string
+          background_color: string | null
+          business_rules: Json | null
+          button_style: Json | null
+          company_name: string
+          created_at: string | null
+          custom_fields: Json | null
+          date_format: string
+          default_currency: string
+          default_language: string
+          enabled_modules: Json | null
+          favicon_url: string | null
+          header_style: Json | null
+          id: string
+          logo_url: string | null
+          module_settings: Json | null
+          primary_color: string
+          secondary_color: string
+          sidebar_style: Json | null
+          tenant_id: string
+          text_color: string | null
+          theme_mode: string
+          timezone: string
+          updated_at: string | null
+        }
+        Insert: {
+          accent_color?: string
+          background_color?: string | null
+          business_rules?: Json | null
+          button_style?: Json | null
+          company_name: string
+          created_at?: string | null
+          custom_fields?: Json | null
+          date_format?: string
+          default_currency?: string
+          default_language?: string
+          enabled_modules?: Json | null
+          favicon_url?: string | null
+          header_style?: Json | null
+          id?: string
+          logo_url?: string | null
+          module_settings?: Json | null
+          primary_color?: string
+          secondary_color?: string
+          sidebar_style?: Json | null
+          tenant_id: string
+          text_color?: string | null
+          theme_mode?: string
+          timezone?: string
+          updated_at?: string | null
+        }
+        Update: {
+          accent_color?: string
+          background_color?: string | null
+          business_rules?: Json | null
+          button_style?: Json | null
+          company_name?: string
+          created_at?: string | null
+          custom_fields?: Json | null
+          date_format?: string
+          default_currency?: string
+          default_language?: string
+          enabled_modules?: Json | null
+          favicon_url?: string | null
+          header_style?: Json | null
+          id?: string
+          logo_url?: string | null
+          module_settings?: Json | null
+          primary_color?: string
+          secondary_color?: string
+          sidebar_style?: Json | null
+          tenant_id?: string
+          text_color?: string | null
+          theme_mode?: string
+          timezone?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_branding_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "saas_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenant_domains: {
+        Row: {
+          created_at: string | null
+          domain: string
+          id: string
+          is_verified: boolean | null
+          ssl_status: string | null
+          tenant_id: string
+          updated_at: string | null
+          verification_token: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          domain: string
+          id?: string
+          is_verified?: boolean | null
+          ssl_status?: string | null
+          tenant_id: string
+          updated_at?: string | null
+          verification_token?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          domain?: string
+          id?: string
+          is_verified?: boolean | null
+          ssl_status?: string | null
+          tenant_id?: string
+          updated_at?: string | null
+          verification_token?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_domains_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "saas_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenant_subscriptions: {
+        Row: {
+          amount: number
+          billing_cycle: string
+          cancelled_at: string | null
+          created_at: string | null
+          currency: string
+          current_period_end: string
+          current_period_start: string
+          id: string
+          plan_id: string
+          status: string
+          stripe_subscription_id: string | null
+          tenant_id: string
+          trial_end: string | null
+          trial_start: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          billing_cycle?: string
+          cancelled_at?: string | null
+          created_at?: string | null
+          currency?: string
+          current_period_end: string
+          current_period_start: string
+          id?: string
+          plan_id: string
+          status?: string
+          stripe_subscription_id?: string | null
+          tenant_id: string
+          trial_end?: string | null
+          trial_start?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          billing_cycle?: string
+          cancelled_at?: string | null
+          created_at?: string | null
+          currency?: string
+          current_period_end?: string
+          current_period_start?: string
+          id?: string
+          plan_id?: string
+          status?: string
+          stripe_subscription_id?: string | null
+          tenant_id?: string
+          trial_end?: string | null
+          trial_start?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "saas_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenant_subscriptions_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "saas_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenant_usage: {
+        Row: {
+          active_users: number | null
+          api_calls_made: number | null
+          created_at: string | null
+          documents_processed: number | null
+          id: string
+          metadata: Json | null
+          peotram_audits_created: number | null
+          period_end: string
+          period_start: string
+          reports_generated: number | null
+          storage_used_gb: number | null
+          tenant_id: string
+          total_logins: number | null
+          vessels_managed: number | null
+        }
+        Insert: {
+          active_users?: number | null
+          api_calls_made?: number | null
+          created_at?: string | null
+          documents_processed?: number | null
+          id?: string
+          metadata?: Json | null
+          peotram_audits_created?: number | null
+          period_end: string
+          period_start: string
+          reports_generated?: number | null
+          storage_used_gb?: number | null
+          tenant_id: string
+          total_logins?: number | null
+          vessels_managed?: number | null
+        }
+        Update: {
+          active_users?: number | null
+          api_calls_made?: number | null
+          created_at?: string | null
+          documents_processed?: number | null
+          id?: string
+          metadata?: Json | null
+          peotram_audits_created?: number | null
+          period_end?: string
+          period_start?: string
+          reports_generated?: number | null
+          storage_used_gb?: number | null
+          tenant_id?: string
+          total_logins?: number | null
+          vessels_managed?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_usage_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "saas_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenant_users: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          department: string | null
+          display_name: string | null
+          id: string
+          invited_at: string | null
+          job_title: string | null
+          joined_at: string | null
+          last_active_at: string | null
+          metadata: Json | null
+          permissions: Json | null
+          role: string
+          status: string
+          tenant_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          department?: string | null
+          display_name?: string | null
+          id?: string
+          invited_at?: string | null
+          job_title?: string | null
+          joined_at?: string | null
+          last_active_at?: string | null
+          metadata?: Json | null
+          permissions?: Json | null
+          role?: string
+          status?: string
+          tenant_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          department?: string | null
+          display_name?: string | null
+          id?: string
+          invited_at?: string | null
+          job_title?: string | null
+          joined_at?: string | null
+          last_active_at?: string | null
+          metadata?: Json | null
+          permissions?: Json | null
+          role?: string
+          status?: string
+          tenant_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_users_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "saas_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       travel_predictions: {
         Row: {
@@ -3907,7 +4412,15 @@ export type Database = {
         Args: { limit_type: string; org_id: string }
         Returns: boolean
       }
+      check_tenant_limits: {
+        Args: { limit_type: string; tenant_uuid: string }
+        Returns: boolean
+      }
       get_current_organization_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      get_current_tenant_id: {
         Args: Record<PropertyKey, never>
         Returns: string
       }
@@ -3918,6 +4431,10 @@ export type Database = {
       get_user_role: {
         Args: { user_uuid?: string }
         Returns: Database["public"]["Enums"]["user_role"]
+      }
+      get_user_tenant_role: {
+        Args: { tenant_uuid: string; user_uuid?: string }
+        Returns: string
       }
       has_feature_permission: {
         Args: {
@@ -3937,6 +4454,10 @@ export type Database = {
       }
       user_belongs_to_organization: {
         Args: { org_id: string; user_uuid?: string }
+        Returns: boolean
+      }
+      user_belongs_to_tenant: {
+        Args: { tenant_uuid: string; user_uuid?: string }
         Returns: boolean
       }
     }
