@@ -34,6 +34,7 @@ import Gamification from "./pages/Gamification";
 import PredictiveAnalytics from "./pages/PredictiveAnalytics";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/protected-route";
+import WorkflowPage from "./pages/Workflow";
 import { WorkflowAutomationHub } from "./components/automation/workflow-automation-hub";
 import { AdvancedDocumentCenter } from "./components/documents/advanced-document-center";
 import { MobileOptimizationCenter } from "./components/mobile/mobile-optimization-center";
@@ -43,6 +44,8 @@ import SystemMonitor from "./pages/SystemMonitor";
 import NotificationCenter from "./pages/NotificationCenter";
 import IntegrationsHub from "./components/integration/integrations-hub";
 import BackupAudit from "./pages/BackupAudit";
+import SecurityPage from "./pages/Security";
+import UsersPage from "./pages/Users";
 import Help from "./pages/Help";
 import Templates from "./pages/Templates";
 import SystemOverviewPage from "./pages/SystemOverview";
@@ -101,11 +104,7 @@ const App = () => {
                   <Route path="blockchain" element={<Blockchain />} />
                   <Route path="gamification" element={<Gamification />} />
                   <Route path="predictive-analytics" element={<PredictiveAnalytics />} />
-                  <Route path="workflow" element={
-                    <div className="container mx-auto p-6">
-                      <WorkflowAutomationHub />
-                    </div>
-                  } />
+                  <Route path="workflow" element={<WorkflowPage />} />
                   <Route path="documents" element={
                     <div className="container mx-auto p-6">
                       <AdvancedDocumentCenter />
@@ -126,6 +125,8 @@ const App = () => {
                     </div>
                   } />
                   <Route path="backup-audit" element={<BackupAudit />} />
+                  <Route path="security" element={<SecurityPage />} />
+                  <Route path="users" element={<UsersPage />} />
                   <Route path="help" element={<Help />} />
                   <Route path="templates" element={<Templates />} />
                   <Route path="system-overview" element={<SystemOverviewPage />} />

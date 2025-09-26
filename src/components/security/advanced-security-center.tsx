@@ -584,3 +584,5 @@ export const AdvancedSecurityCenter: React.FC = () => {
     </div>
   );
 };
+
+export default SecurityDashboard;

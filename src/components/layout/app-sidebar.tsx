@@ -5,8 +5,9 @@ import {
   Users, 
   Plane, 
   Hotel, 
-  BarChart3, 
-  Calendar, 
+  BarChart3,
+  Calendar,
+  Database,
   FileText, 
   Settings,
   ChevronDown,
@@ -269,18 +270,28 @@ const navigationItems = [
     icon: Activity,
   },
   {
-    title: "Backup e Auditoria",
-    url: "backup-audit",
-    icon: Shield,
+    title: "Administração",
+    items: [
+      { title: "Painel Admin", url: "/admin", icon: Settings },
+      { title: "Backup & Auditoria", url: "/backup-audit", icon: Database },
+      { title: "Segurança", url: "/security", icon: Shield },
+      { title: "Usuários", url: "/users", icon: Users },
+    ],
+    requiresRole: ['admin']
+  },
+  {
+    title: "Documentos",
+    url: "/documents",
+    icon: FileText
   },
   {
     title: "Templates",
-    url: "templates",
+    url: "/templates",
     icon: FileText,
   },
   {
     title: "Centro de Ajuda",
-    url: "help",
+    url: "/help",
     icon: HelpCircle,
   },
 ];
