@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { RealtimeChat } from '@/utils/RealtimeAudio';
-import { Mic, MicOff, Loader2, MessageSquare } from 'lucide-react';
+import { Mic, MicOff, Loader2, MessageSquare, ChevronDown, Minimize2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useVoiceConversation } from '@/hooks/use-voice-conversation';
 import { useVoiceNavigation } from '@/hooks/use-voice-navigation';
@@ -20,6 +20,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [userTranscript, setUserTranscript] = useState('');
+  const [isMinimized, setIsMinimized] = useState(true);
   const chatRef = useRef<RealtimeChat | null>(null);
   
   // Hooks para persistência e navegação
@@ -313,21 +314,52 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
     };
   }, []);
 
+  if (isMinimized) {
+    return (
+      <DraggableFloating
+        storageKey="voice_interface_toggle_pos"
+        defaultPosition={() => ({ x: 16, y: Math.max(12, window.innerHeight - 48 - 96) })}
+        zIndex={30}
+        ariaLabel="Botão Assistente de Voz"
+      >
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setIsMinimized(false)}
+          className="shadow-lg"
+        >
+          <Mic className="h-4 w-4" />
+        </Button>
+      </DraggableFloating>
+    );
+  }
+
   return (
     <DraggableFloating
-      storageKey="voice_interface_pos"
-      defaultPosition={() => ({ x: 16, y: Math.max(12, window.innerHeight - 220) })}
+      storageKey="voice_interface_panel_pos"
+      defaultPosition={() => ({ x: 16, y: Math.max(12, window.innerHeight - 280 - 120) })}
       zIndex={30}
-      ariaLabel="Interface de Voz"
+      ariaLabel="Painel Assistente de Voz"
     >
       <Card className="w-80 bg-card/95 backdrop-blur-sm border-border/50">
         <CardContent className="p-4">
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-muted'}`} />
-              <span className="text-sm font-medium">
-                {isConnecting ? 'Conectando...' : isConnected ? 'Assistente Ativo' : 'Assistente Inativo'}
-              </span>
+          <div className="flex flex-col gap-4">
+            {/* Header with minimize button */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-muted'}`} />
+                <span className="text-sm font-medium">
+                  {isConnecting ? 'Conectando...' : isConnected ? 'Assistente Ativo' : 'Assistente Inativo'}
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMinimized(true)}
+                className="h-6 w-6 p-0"
+              >
+                <ChevronDown className="h-3 w-3" />
+              </Button>
             </div>
             
             {!isConnected ? (
