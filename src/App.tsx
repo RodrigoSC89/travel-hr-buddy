@@ -51,6 +51,9 @@ import MobileOptimizationPage from "./pages/MobileOptimization";
 import AdvancedAnalyticsPage from "./pages/AdvancedAnalytics";
 import AdvancedSystemMonitorPage from "./pages/AdvancedSystemMonitor";
 import IntelligentDocumentsPage from "./pages/IntelligentDocuments";
+import AIAssistantPage from "./pages/AIAssistant";
+import BusinessIntelligencePage from "./pages/BusinessIntelligence";
+import SmartWorkflowPage from "./pages/SmartWorkflow";
 import Help from "./pages/Help";
 import Templates from "./pages/Templates";
 import SystemOverviewPage from "./pages/SystemOverview";
@@ -132,6 +135,9 @@ const App = () => {
                   <Route path="advanced-analytics" element={<AdvancedAnalyticsPage />} />
                   <Route path="advanced-system-monitor" element={<AdvancedSystemMonitorPage />} />
                   <Route path="intelligent-documents" element={<IntelligentDocumentsPage />} />
+                  <Route path="ai-assistant" element={<AIAssistantPage />} />
+                  <Route path="business-intelligence" element={<BusinessIntelligencePage />} />
+                  <Route path="smart-workflow" element={<SmartWorkflowPage />} />
                   <Route path="help" element={<Help />} />
                   <Route path="templates" element={<Templates />} />
                   <Route path="system-overview" element={<SystemOverviewPage />} />

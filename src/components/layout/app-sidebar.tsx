@@ -11,7 +11,6 @@ import {
   FileText, 
   Settings,
   ChevronDown,
-  MessageSquare,
   Bell,
   UserCog,
   Ship,
@@ -29,7 +28,9 @@ import {
   Globe,
   HelpCircle,
   TrendingUp,
-  Brain
+  Brain,
+  MessageSquare,
+  Workflow
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -314,6 +315,21 @@ const navigationItems = [
     title: "Documentos IA",
     url: "/intelligent-documents",
     icon: Brain
+  },
+  {
+    title: "Assistente IA",
+    url: "/ai-assistant",
+    icon: MessageSquare
+  },
+  {
+    title: "Business Intelligence",
+    url: "/business-intelligence",
+    icon: BarChart3
+  },
+  {
+    title: "Smart Workflow",
+    url: "/smart-workflow",
+    icon: Workflow
   },
   {
     title: "Centro de Ajuda",
