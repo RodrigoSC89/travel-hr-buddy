@@ -74,6 +74,9 @@ import CrewManagement from "./pages/CrewManagement";
 import MaritimeCertifications from "./pages/MaritimeCertifications";
 import OrganizationSettings from "./pages/OrganizationSettings";
 import SuperAdmin from "./pages/SuperAdmin";
+import TaskManagement from "./pages/TaskManagement";
+import DocumentManagement from "./pages/DocumentManagement";
+import FleetDashboard from "./pages/FleetDashboard";
 
 const queryClient = new QueryClient();
 
@@ -176,6 +179,7 @@ const App = () => {
                     </div>
                   } />
                   <Route path="fleet-management" element={<FleetManagement />} />
+                  <Route path="fleet-dashboard" element={<FleetDashboard />} />
                   <Route path="crew-management" element={<CrewManagement />} />
                   <Route path="maritime-certifications" element={<MaritimeCertifications />} />
                   <Route path="organization-settings" element={
@@ -184,6 +188,8 @@ const App = () => {
                     </div>
                   } />
                   <Route path="super-admin" element={<SuperAdmin />} />
+                  <Route path="task-management" element={<TaskManagement />} />
+                  <Route path="document-management" element={<DocumentManagement />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

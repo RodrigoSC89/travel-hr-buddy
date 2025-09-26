@@ -105,9 +105,14 @@ const navigationItems = [
         icon: Ship,
       },
       {
+        title: "Dashboard da Frota",
+        url: "/fleet-dashboard",
+        icon: Anchor,
+      },
+      {
         title: "Gestão de Frota",
         url: "/fleet-management",
-        icon: Anchor,
+        icon: Ship,
       },
       {
         title: "Tripulação",
@@ -118,6 +123,16 @@ const navigationItems = [
         title: "Certificações",
         url: "/maritime-certifications",
         icon: UserCog,
+      },
+      {
+        title: "Gestão de Tarefas",
+        url: "/task-management",
+        icon: Target,
+      },
+      {
+        title: "Documentos",
+        url: "/document-management",
+        icon: FileText,
       },
     ],
   },

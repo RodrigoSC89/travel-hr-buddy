@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   CheckSquare, 
   Plus, 
@@ -43,6 +44,7 @@ export const TaskManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   // Form state for new task
@@ -63,64 +65,68 @@ export const TaskManagement: React.FC = () => {
 
   const loadTasks = async () => {
     try {
-      // Mock data for demonstration
-      const mockTasks: Task[] = [
-        {
-          id: '1',
-          title: 'Inspeção de Segurança - MV Atlântico',
-          description: 'Realizar inspeção completa dos equipamentos de segurança',
-          priority: 'high',
-          status: 'pending',
-          assigned_to: 'Carlos Silva',
-          created_by: 'Admin',
-          due_date: '2024-01-20T10:00:00Z',
-          tags: ['segurança', 'inspeção'],
-          related_vessel: 'MV Atlântico',
-          created_at: '2024-01-10T09:00:00Z'
-        },
-        {
-          id: '2',
-          title: 'Manutenção Preventiva - Motor Principal',
-          description: 'Verificar óleo, filtros e componentes do motor principal',
-          priority: 'medium',
-          status: 'in_progress',
-          assigned_to: 'João Santos',
-          created_by: 'Admin',
-          due_date: '2024-01-18T14:00:00Z',
-          tags: ['manutenção', 'motor'],
-          related_vessel: 'MV Pacífico',
-          created_at: '2024-01-08T11:00:00Z'
-        },
-        {
-          id: '3',
-          title: 'Renovação de Certificados STCW',
-          description: 'Verificar e renovar certificados STCW da tripulação',
-          priority: 'high',
-          status: 'pending',
-          assigned_to: 'Maria Oliveira',
-          created_by: 'RH',
-          due_date: '2024-01-25T16:00:00Z',
-          tags: ['certificação', 'rh'],
-          related_crew: 'Ana Costa',
-          created_at: '2024-01-05T08:00:00Z'
-        },
-        {
-          id: '4',
-          title: 'Abastecimento - Porto de Santos',
-          description: 'Coordenar abastecimento de combustível e água potável',
-          priority: 'medium',
-          status: 'completed',
-          assigned_to: 'Pedro Lima',
-          created_by: 'Operações',
-          due_date: '2024-01-15T12:00:00Z',
-          completed_at: '2024-01-15T11:30:00Z',
-          tags: ['abastecimento', 'porto'],
-          related_vessel: 'MV Atlântico',
-          created_at: '2024-01-12T07:00:00Z'
-        }
-      ];
+      setIsLoading(true);
       
-      setTasks(mockTasks);
+      // Using mock data for now - database integration will be added later
+      console.log('Loading tasks with mock data');
+      // Mock data
+        const mockTasks: Task[] = [
+          {
+            id: '1',
+            title: 'Inspeção de Segurança - MV Atlântico',
+            description: 'Realizar inspeção completa dos equipamentos de segurança',
+            priority: 'high',
+            status: 'pending',
+            assigned_to: 'Carlos Silva',
+            created_by: 'Admin',
+            due_date: '2024-01-20T10:00:00Z',
+            tags: ['segurança', 'inspeção'],
+            related_vessel: 'MV Atlântico',
+            created_at: '2024-01-10T09:00:00Z'
+          },
+          {
+            id: '2',
+            title: 'Manutenção Preventiva - Motor Principal',
+            description: 'Verificar óleo, filtros e componentes do motor principal',
+            priority: 'medium',
+            status: 'in_progress',
+            assigned_to: 'João Santos',
+            created_by: 'Admin',
+            due_date: '2024-01-18T14:00:00Z',
+            tags: ['manutenção', 'motor'],
+            related_vessel: 'MV Pacífico',
+            created_at: '2024-01-08T11:00:00Z'
+          },
+          {
+            id: '3',
+            title: 'Renovação de Certificados STCW',
+            description: 'Verificar e renovar certificados STCW da tripulação',
+            priority: 'high',
+            status: 'pending',
+            assigned_to: 'Maria Oliveira',
+            created_by: 'RH',
+            due_date: '2024-01-25T16:00:00Z',
+            tags: ['certificação', 'rh'],
+            related_crew: 'Ana Costa',
+            created_at: '2024-01-05T08:00:00Z'
+          },
+          {
+            id: '4',
+            title: 'Abastecimento - Porto de Santos',
+            description: 'Coordenar abastecimento de combustível e água potável',
+            priority: 'medium',
+            status: 'completed',
+            assigned_to: 'Pedro Lima',
+            created_by: 'Operações',
+            due_date: '2024-01-15T12:00:00Z',
+            completed_at: '2024-01-15T11:30:00Z',
+            tags: ['abastecimento', 'porto'],
+            related_vessel: 'MV Atlântico',
+            created_at: '2024-01-12T07:00:00Z'
+          }
+        ];
+        
+        setTasks(mockTasks);
     } catch (error) {
       console.error('Erro ao carregar tarefas:', error);
       toast({
@@ -128,6 +134,8 @@ export const TaskManagement: React.FC = () => {
         description: "Não foi possível carregar as tarefas",
         variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 

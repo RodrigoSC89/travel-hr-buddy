@@ -27,12 +27,13 @@ interface Vessel {
   name: string;
   imo_number?: string;
   vessel_type: string;
-  flag_state?: string;
+  flag_state: string;
   status: string;
-  current_location?: any;
+  current_location?: string;
   next_port?: string;
   eta?: string;
   created_at: string;
+  organization_id?: string;
 }
 
 export const VesselManagement: React.FC = () => {
@@ -61,8 +62,16 @@ export const VesselManagement: React.FC = () => {
     try {
       setIsLoading(true);
       
-      // Mock data for now since vessels table is newly created
-      const mockVessels: Vessel[] = [
+      // Try to load from database, fallback to mock data
+      const { data: vessels, error } = await supabase
+        .from('vessels')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.log('Database not ready, using mock data:', error);
+        // Fallback mock data
+        const mockVessels: Vessel[] = [
         {
           id: '1',
           name: 'MV Atlântico',
@@ -70,7 +79,7 @@ export const VesselManagement: React.FC = () => {
           vessel_type: 'Container Ship',
           flag_state: 'Brasil',
           status: 'active',
-          current_location: { port: 'Santos', country: 'Brasil' },
+          current_location: 'Santos, Brasil',
           next_port: 'Rio de Janeiro',
           eta: '2024-01-15T10:00:00Z',
           created_at: '2024-01-01T00:00:00Z'
@@ -82,7 +91,7 @@ export const VesselManagement: React.FC = () => {
           vessel_type: 'Bulk Carrier',
           flag_state: 'Brasil',
           status: 'active',
-          current_location: { port: 'Paranaguá', country: 'Brasil' },
+          current_location: 'Paranaguá, Brasil',
           next_port: 'Salvador',
           eta: '2024-01-18T14:30:00Z',
           created_at: '2024-01-01T00:00:00Z'
@@ -94,7 +103,7 @@ export const VesselManagement: React.FC = () => {
           vessel_type: 'Tanker',
           flag_state: 'Brasil',
           status: 'maintenance',
-          current_location: { port: 'Suape', country: 'Brasil' },
+          current_location: 'Suape, Brasil',
           next_port: 'Fortaleza',
           eta: '2024-01-22T08:00:00Z',
           created_at: '2024-01-01T00:00:00Z'
@@ -102,6 +111,9 @@ export const VesselManagement: React.FC = () => {
       ];
       
       setVessels(mockVessels);
+      } else {
+        setVessels(vessels || []);
+      }
     } catch (error) {
       console.error('Erro ao carregar embarcações:', error);
       toast({
@@ -116,15 +128,39 @@ export const VesselManagement: React.FC = () => {
 
   const handleAddVessel = async () => {
     try {
-      // Mock implementation - in production this would create in database
-      const vessel: Vessel = {
-        id: Math.random().toString(),
-        ...newVessel,
+      // Try to insert into database
+      const vesselData = {
+        name: newVessel.name,
+        imo_number: newVessel.imo_number,
+        vessel_type: newVessel.vessel_type,
+        flag_state: newVessel.flag_state,
+        next_port: newVessel.next_port,
+        eta: newVessel.eta ? new Date(newVessel.eta).toISOString() : null,
         status: 'active',
-        created_at: new Date().toISOString()
+        current_location: 'Unknown Location'
       };
+
+      const { data, error } = await supabase
+        .from('vessels')
+        .insert([vesselData])
+        .select()
+        .single();
+
+      if (error) {
+        console.log('Database insert failed, adding locally:', error);
+        // Fallback to local state
+        const vessel: Vessel = {
+          id: Math.random().toString(),
+          ...newVessel,
+          status: 'active',
+          created_at: new Date().toISOString()
+        };
+        setVessels([...vessels, vessel]);
+      } else {
+        // Successfully added to database
+        setVessels([...vessels, data]);
+      }
       
-      setVessels([...vessels, vessel]);
       setNewVessel({
         name: '',
         imo_number: '',
@@ -137,7 +173,7 @@ export const VesselManagement: React.FC = () => {
       
       toast({
         title: "Embarcação Adicionada",
-        description: `${vessel.name} foi adicionada com sucesso`
+        description: `${newVessel.name} foi adicionada com sucesso`
       });
     } catch (error) {
       toast({
@@ -380,7 +416,7 @@ export const VesselManagement: React.FC = () => {
                         <div className="flex items-center gap-1">
                           <MapPin className="h-4 w-4 text-muted-foreground" />
                           <span>
-                            {vessel.current_location?.port || 'Localização não informada'}
+                            {vessel.current_location || 'Localização não informada'}
                           </span>
                         </div>
                         <div className="flex items-center gap-1">
@@ -438,7 +474,7 @@ export const VesselManagement: React.FC = () => {
                 <div>
                   <p className="text-sm font-medium mb-2">Localização Atual</p>
                   <p className="text-sm text-muted-foreground">
-                    {selectedVessel.current_location?.port}, {selectedVessel.current_location?.country}
+                    {selectedVessel.current_location || 'Localização não informada'}
                   </p>
                 </div>
 
@@ -454,6 +490,10 @@ export const VesselManagement: React.FC = () => {
                   <Button variant="outline" className="w-full">
                     <Activity className="h-4 w-4 mr-2" />
                     Histórico
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Configurações
                   </Button>
                 </div>
               </CardContent>

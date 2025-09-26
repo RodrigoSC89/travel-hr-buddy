@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   FileText, 
   Plus, 
@@ -57,6 +58,7 @@ export const DocumentManagement: React.FC = () => {
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showAddCategoryDialog, setShowAddCategoryDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   // Form state for new document
@@ -157,6 +159,7 @@ export const DocumentManagement: React.FC = () => {
         description: "Não foi possível carregar os documentos",
         variant: "destructive"
       });
+      setIsLoading(false);
     }
   };
 
