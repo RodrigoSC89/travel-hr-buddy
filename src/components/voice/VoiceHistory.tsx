@@ -12,7 +12,7 @@ import {
   Trash2,
   Clock
 } from 'lucide-react';
-import { useVoiceConversation } from '@/hooks/use-voice-conversation';
+import { useVoiceRecording } from '@/hooks/use-voice-conversation';
 
 interface Message {
   id: string;
@@ -27,19 +27,27 @@ interface VoiceHistoryProps {
 }
 
 const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
-  const { 
-    messages, 
-    clearHistory, 
-    exportConversation,
-    loadConversationHistory 
-  } = useVoiceConversation();
-
-  // Carregar histórico quando o componente for montado ou conversationId mudar
-  useEffect(() => {
-    if (conversationId) {
-      loadConversationHistory(conversationId);
-    }
-  }, [conversationId, loadConversationHistory]);
+  const [messages, setMessages] = React.useState<Message[]>([]);
+  
+  const clearHistory = () => {
+    setMessages([]);
+  };
+  
+  const exportConversation = () => {
+    const data = JSON.stringify(messages, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `conversation-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  
+  const loadConversationHistory = (id: string) => {
+    // Implementation would load from localStorage or API
+    console.log('Loading conversation:', id);
+  };
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
   };

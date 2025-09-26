@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,49 +21,131 @@ import {
   Download,
   Brain,
   Compass,
-  Navigation
+  Navigation,
+  Volume2,
+  VolumeX,
+  Loader2
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useVoiceRecording, useTextToSpeech, useAIChat } from '@/hooks/use-voice-conversation';
 
 const FloatingActionButtons = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isListening, setIsListening] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [conversationMode, setConversationMode] = useState(false);
+  
+  // Voice hooks
+  const { isRecording, isProcessing, startRecording, stopRecording } = useVoiceRecording();
+  const { isSpeaking, speak, stopSpeaking } = useTextToSpeech();
+  const { isThinking, sendMessage } = useAIChat();
 
-  const handleVoiceCommand = () => {
-    setIsListening(!isListening);
-    
-    if (!isListening) {
-      // Simular reconhecimento de voz
-      toast({
-        title: "🎤 Comando de Voz Ativado",
-        description: "Diga um comando: 'Abrir PEOTRAM', 'Mostrar relatórios', 'Status da frota'...",
-      });
-      
-      // Simular processamento após 3 segundos
-      setTimeout(() => {
-        setIsListening(false);
+  const handleVoiceCommand = async () => {
+    try {
+      if (isRecording) {
+        // Stop recording and process
         toast({
-          title: "✅ Comando Processado",
-          description: "Navegando para o módulo solicitado...",
+          title: "🎙️ Processando comando...",
+          description: "Analisando seu comando de voz",
         });
-      }, 3000);
-    } else {
+
+        const transcribedText = await stopRecording();
+        
+        if (transcribedText) {
+          toast({
+            title: "✅ Comando reconhecido",
+            description: `"${transcribedText}"`,
+          });
+
+          // Process voice command
+          await processVoiceCommand(transcribedText);
+        } else {
+          toast({
+            title: "❌ Erro",
+            description: "Não foi possível processar o áudio",
+            variant: "destructive"
+          });
+        }
+      } else {
+        // Start recording
+        await startRecording();
+        toast({
+          title: "🎤 Comando de Voz Ativado",
+          description: "Fale agora... Diga 'Abrir PEOTRAM', 'Mostrar relatórios', etc.",
+        });
+      }
+    } catch (error) {
+      console.error('Voice command error:', error);
       toast({
-        title: "🔇 Comando de Voz Desativado",
-        description: "Reconhecimento de voz interrompido",
+        title: "❌ Erro no comando de voz",
+        description: "Verifique as permissões do microfone",
+        variant: "destructive"
       });
     }
   };
 
-  const handleAIAssistant = () => {
-    toast({
-      title: "🚀 IA Nautilus Ativada",
-      description: "Assistente inteligente pronto para ajudar com análises e insights",
-    });
-    navigate('/ai-assistant');
+  const processVoiceCommand = async (command: string) => {
+    const lowerCommand = command.toLowerCase();
+    
+    // Navigation commands
+    if (lowerCommand.includes('peotram') || lowerCommand.includes('auditoria')) {
+      navigate('/peotram');
+      await speak('Abrindo módulo PEOTRAM de auditorias marítimas');
+    } else if (lowerCommand.includes('frota') || lowerCommand.includes('embarcaç')) {
+      navigate('/fleet-dashboard');
+      await speak('Abrindo painel de gestão da frota');
+    } else if (lowerCommand.includes('relatório') || lowerCommand.includes('analytics')) {
+      navigate('/advanced-analytics');
+      await speak('Abrindo centro de relatórios e analytics');
+    } else if (lowerCommand.includes('documento') || lowerCommand.includes('scanner')) {
+      navigate('/advanced-documents');
+      await speak('Abrindo scanner inteligente de documentos');
+    } else if (lowerCommand.includes('marítim') || lowerCommand.includes('navegação')) {
+      navigate('/maritime');
+      await speak('Abrindo centro de operações marítimas');
+    } else if (lowerCommand.includes('dashboard') || lowerCommand.includes('painel')) {
+      navigate('/');
+      await speak('Voltando ao dashboard principal');
+    } else {
+      // If no specific navigation, use AI to respond
+      const context = 'Sistema Nautilus One - Dashboard principal com módulos PEOTRAM, frota, analytics, documentos e operações marítimas';
+      const aiResponse = await sendMessage(command, context);
+      await speak(aiResponse);
+    }
+  };
+
+  const handleAIAssistant = async () => {
+    try {
+      if (conversationMode) {
+        // Turn off conversation mode
+        setConversationMode(false);
+        if (isSpeaking) stopSpeaking();
+        
+        toast({
+          title: "🤖 Modo Conversa Desativado",
+          description: "Assistente IA em modo texto",
+        });
+      } else {
+        // Turn on conversation mode
+        setConversationMode(true);
+        
+        toast({
+          title: "🚀 IA Nautilus Ativada",
+          description: "Modo conversa ativado - Use o microfone para falar comigo",
+        });
+
+        // Welcome message
+        await speak('Olá! Sou o Nautilus IA, seu assistente marítimo inteligente. Como posso ajudá-lo hoje?');
+      }
+    } catch (error) {
+      console.error('AI Assistant error:', error);
+      toast({
+        title: "❌ Erro",
+        description: "Falha ao ativar assistente IA",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleQuickAction = (action: string, path?: string) => {
@@ -73,32 +155,37 @@ const FloatingActionButtons = () => {
           title: "🔍 Busca Global",
           description: "Ativando busca inteligente no sistema",
         });
+        // Focus on search input if available
+        const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
+        if (searchInput) {
+          searchInput.focus();
+        }
         break;
       case 'emergency':
         toast({
-          title: "🚨 Emergência",
-          description: "Protocolo de emergência ativado",
+          title: "🚨 Protocolo de Emergência",
+          description: "Ativando protocolos de segurança marítima",
           variant: "destructive"
         });
         navigate('/emergency-alerts');
         break;
       case 'reports':
         toast({
-          title: "📊 Relatórios",
-          description: "Acessando centro de relatórios",
+          title: "📊 Centro de Relatórios",
+          description: "Acessando analytics e Business Intelligence",
         });
-        navigate('/reports');
+        navigate('/advanced-analytics');
         break;
       case 'scan':
         toast({
-          title: "📱 Scanner IA",
-          description: "Ativando scanner inteligente de documentos",
+          title: "📱 Scanner IA Ativado",
+          description: "Pronto para análise inteligente de documentos",
         });
         navigate('/advanced-documents');
         break;
       case 'navigation':
         toast({
-          title: "🧭 Navegação",
+          title: "🧭 Centro de Navegação",
           description: "Abrindo sistema de navegação marítima",
         });
         navigate('/maritime');
@@ -115,6 +202,38 @@ const FloatingActionButtons = () => {
     { icon: Camera, label: 'Scanner IA', action: 'scan', color: 'bg-purple-500 hover:bg-purple-600' },
     { icon: Compass, label: 'Navegação', action: 'navigation', color: 'bg-cyan-500 hover:bg-cyan-600' },
   ];
+
+  // Auto-handle conversation mode
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    
+    if (conversationMode && !isRecording && !isProcessing && !isSpeaking && !isThinking) {
+      // Auto-start listening after 2 seconds in conversation mode
+      timeout = setTimeout(() => {
+        handleVoiceCommand();
+      }, 2000);
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [conversationMode, isRecording, isProcessing, isSpeaking, isThinking]);
+
+  const getVoiceButtonStatus = () => {
+    if (isProcessing) return { icon: Loader2, color: 'bg-yellow-500', label: 'Processando...', spinning: true };
+    if (isRecording) return { icon: MicOff, color: 'bg-red-500 animate-pulse', label: 'Gravando - Clique para parar', spinning: false };
+    return { icon: Mic, color: 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700', label: 'Comando de Voz', spinning: false };
+  };
+
+  const getAIButtonStatus = () => {
+    if (isThinking) return { icon: Loader2, color: 'bg-yellow-500', label: 'Pensando...', spinning: true };
+    if (isSpeaking) return { icon: VolumeX, color: 'bg-orange-500 hover:bg-orange-600', label: 'Falando - Clique para parar', spinning: false };
+    if (conversationMode) return { icon: MessageSquare, color: 'bg-green-500 hover:bg-green-600', label: 'Modo Conversa Ativo', spinning: false };
+    return { icon: Brain, color: 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700', label: 'IA Nautilus Assistant', spinning: false };
+  };
+
+  const voiceStatus = getVoiceButtonStatus();
+  const aiStatus = getAIButtonStatus();
 
   return (
     <TooltipProvider>
@@ -149,22 +268,15 @@ const FloatingActionButtons = () => {
             <TooltipTrigger asChild>
               <Button
                 size="lg"
-                className={`${
-                  isListening 
-                    ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
-                    : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
-                } text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
+                className={`${voiceStatus.color} text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
                 onClick={handleVoiceCommand}
+                disabled={isProcessing}
               >
-                {isListening ? (
-                  <MicOff className="w-8 h-8" />
-                ) : (
-                  <Mic className="w-8 h-8" />
-                )}
+                <voiceStatus.icon className={`w-8 h-8 ${voiceStatus.spinning ? 'animate-spin' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="left" className="bg-black text-white">
-              <p>{isListening ? 'Parar Comando de Voz' : 'Comando de Voz'}</p>
+              <p>{voiceStatus.label}</p>
             </TooltipContent>
           </Tooltip>
 
@@ -173,14 +285,15 @@ const FloatingActionButtons = () => {
             <TooltipTrigger asChild>
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16"
-                onClick={handleAIAssistant}
+                className={`${aiStatus.color} text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
+                onClick={isSpeaking ? stopSpeaking : handleAIAssistant}
+                disabled={isThinking}
               >
-                <Brain className="w-8 h-8" />
+                <aiStatus.icon className={`w-8 h-8 ${aiStatus.spinning ? 'animate-spin' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="left" className="bg-black text-white">
-              <p>IA Nautilus Assistant</p>
+              <p>{aiStatus.label}</p>
             </TooltipContent>
           </Tooltip>
 
@@ -205,13 +318,25 @@ const FloatingActionButtons = () => {
           </Tooltip>
         </div>
 
-        {/* Voice Status Indicator */}
-        {isListening && (
-          <div className="absolute -top-16 right-0 animate-bounce-in">
-            <Card className="bg-red-500 text-white border-red-400">
+        {/* Status Indicators */}
+        {(isRecording || isProcessing || isSpeaking || isThinking || conversationMode) && (
+          <div className="absolute -top-20 right-0 animate-bounce-in">
+            <Card className={`${
+              isRecording ? 'bg-red-500' :
+              isProcessing ? 'bg-yellow-500' :
+              isSpeaking ? 'bg-green-500' :
+              isThinking ? 'bg-purple-500' :
+              'bg-blue-500'
+            } text-white border-0`}>
               <CardContent className="p-3 flex items-center gap-2">
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                <span className="text-sm font-medium">Ouvindo...</span>
+                <span className="text-sm font-medium">
+                  {isRecording ? 'Ouvindo...' :
+                   isProcessing ? 'Processando...' :
+                   isSpeaking ? 'Falando...' :
+                   isThinking ? 'Pensando...' :
+                   'Modo Conversa'}
+                </span>
               </CardContent>
             </Card>
           </div>

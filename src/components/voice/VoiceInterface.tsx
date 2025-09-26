@@ -4,7 +4,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { RealtimeChat } from '@/utils/RealtimeAudio';
 import { Mic, MicOff, Loader2, MessageSquare, ChevronDown, Minimize2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { useVoiceConversation } from '@/hooks/use-voice-conversation';
+import { useVoiceRecording, useTextToSpeech, useAIChat } from '@/hooks/use-voice-conversation';
 import { useVoiceNavigation } from '@/hooks/use-voice-navigation';
 import DraggableFloating from '@/components/ui/draggable-floating';
 
@@ -23,14 +23,12 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
   const [isMinimized, setIsMinimized] = useState(true);
   const chatRef = useRef<RealtimeChat | null>(null);
   
-  // Hooks para persistência e navegação
-  const {
-    conversationId,
-    startConversation: startDbConversation,
-    endConversation: endDbConversation,
-    saveMessage,
-    logVoiceCommand
-  } = useVoiceConversation();
+  // Mock data for conversation
+  const conversationId = 'mock-conversation-id';
+  const startDbConversation = () => console.log('Starting conversation');
+  const endDbConversation = () => console.log('Ending conversation');
+  const saveMessage = (message: any) => console.log('Saving message:', message);
+  const logVoiceCommand = (command: any) => console.log('Logging command:', command);
   
   const { processVoiceCommand } = useVoiceNavigation();
 

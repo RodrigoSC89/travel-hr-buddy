@@ -1,341 +1,251 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
 
-interface VoiceMessage {
-  id: string;
-  type: 'user' | 'assistant' | 'system';
-  content: string;
-  timestamp: Date;
-  action?: string;
-  actionData?: any;
-}
+export class VoiceRecorder {
+  private mediaRecorder: MediaRecorder | null = null;
+  private audioChunks: Blob[] = [];
+  private stream: MediaStream | null = null;
 
-interface VoiceSettings {
-  voice_id: string;
-  language: string;
-  auto_listen: boolean;
-  volume: number;
-  microphone_sensitivity: number;
-  tone: string;
-  response_length: string;
-  expertise: string[];
-  custom_instructions?: string;
-  context_awareness: boolean;
-  proactive_help: boolean;
-}
-
-export const useVoiceConversation = () => {
-  const { user } = useAuth();
-  const { toast } = useToast();
-  const [conversationId, setConversationId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<VoiceMessage[]>([]);
-  const [settings, setSettings] = useState<VoiceSettings | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Carregar configurações do usuário
-  const loadUserSettings = useCallback(async () => {
-    if (!user) return;
-
+  async startRecording(): Promise<void> {
     try {
-      const { data, error } = await supabase
-        .from('voice_settings')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error loading voice settings:', error);
-        return;
-      }
-
-      if (data) {
-        setSettings(data);
-      } else {
-        // Criar configurações padrão se não existirem
-        const defaultSettings = {
-          user_id: user.id,
-          voice_id: 'alloy',
-          language: 'pt-BR',
-          auto_listen: true,
-          volume: 0.8,
-          microphone_sensitivity: 0.5,
-          tone: 'friendly',
-          response_length: 'balanced',
-          expertise: ['Recursos Humanos', 'Viagens Corporativas'],
-          context_awareness: true,
-          proactive_help: true
-        };
-
-        const { data: newSettings, error: createError } = await supabase
-          .from('voice_settings')
-          .insert(defaultSettings)
-          .select()
-          .single();
-
-        if (createError) {
-          console.error('Error creating default settings:', createError);
-        } else {
-          setSettings(newSettings);
+      this.stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          sampleRate: 44100,
+          channelCount: 1,
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        } 
+      });
+      
+      this.mediaRecorder = new MediaRecorder(this.stream, {
+        mimeType: 'audio/webm;codecs=opus'
+      });
+      
+      this.audioChunks = [];
+      
+      this.mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          this.audioChunks.push(event.data);
         }
-      }
+      };
+      
+      this.mediaRecorder.start(1000); // Collect data every second
+      console.log('Recording started');
     } catch (error) {
-      console.error('Error in loadUserSettings:', error);
+      console.error('Error starting recording:', error);
+      throw error;
     }
-  }, [user]);
+  }
 
-  // Criar nova conversa
-  const startConversation = useCallback(async () => {
-    if (!user) return null;
-
-    try {
-      setIsLoading(true);
-      const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-      const { data, error } = await supabase
-        .from('voice_conversations')
-        .insert({
-          user_id: user.id,
-          session_id: sessionId,
-          title: `Conversa ${new Date().toLocaleString('pt-BR')}`,
-          status: 'active'
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error creating conversation:', error);
-        toast({
-          title: "Erro",
-          description: "Não foi possível iniciar a conversa.",
-          variant: "destructive",
-        });
-        return null;
-      }
-
-      setConversationId(data.id);
-      setMessages([]);
-      return data.id;
-    } catch (error) {
-      console.error('Error in startConversation:', error);
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user, toast]);
-
-  // Finalizar conversa
-  const endConversation = useCallback(async () => {
-    if (!conversationId || !user) return;
-
-    try {
-      const totalDuration = messages.reduce((acc, msg) => acc + (msg.actionData?.duration || 0), 0);
-
-      await supabase
-        .from('voice_conversations')
-        .update({
-          ended_at: new Date().toISOString(),
-          total_messages: messages.length,
-          total_duration: Math.floor(totalDuration / 1000),
-          status: 'completed'
-        })
-        .eq('id', conversationId);
-
-      setConversationId(null);
-    } catch (error) {
-      console.error('Error ending conversation:', error);
-    }
-  }, [conversationId, messages, user]);
-
-  // Salvar mensagem
-  const saveMessage = useCallback(async (message: Omit<VoiceMessage, 'id'>) => {
-    if (!conversationId || !user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('voice_messages')
-        .insert({
-          conversation_id: conversationId,
-          user_id: user.id,
-          type: message.type,
-          content: message.content,
-          action_type: message.action || null,
-          action_data: message.actionData || {},
-          duration: message.actionData?.duration || null
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error saving message:', error);
+  async stopRecording(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (!this.mediaRecorder) {
+        reject(new Error('No media recorder'));
         return;
       }
 
-      // Adicionar à lista local de mensagens
-      const newMessage: VoiceMessage = {
-        id: data.id,
-        type: message.type,
-        content: message.content,
-        timestamp: new Date(data.created_at),
-        action: message.action,
-        actionData: message.actionData
+      this.mediaRecorder.onstop = async () => {
+        try {
+          const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+          const base64Audio = await this.blobToBase64(audioBlob);
+          
+          // Cleanup
+          if (this.stream) {
+            this.stream.getTracks().forEach(track => track.stop());
+            this.stream = null;
+          }
+          
+          resolve(base64Audio);
+        } catch (error) {
+          reject(error);
+        }
       };
 
-      setMessages(prev => [...prev, newMessage]);
-    } catch (error) {
-      console.error('Error in saveMessage:', error);
-    }
-  }, [conversationId, user]);
+      this.mediaRecorder.stop();
+      console.log('Recording stopped');
+    });
+  }
 
-  // Registrar comando de voz
-  const logVoiceCommand = useCallback(async (
-    commandText: string,
-    intent: string,
-    moduleTarget?: string,
-    actionExecuted?: string,
-    success: boolean = true,
-    responseTime?: number
-  ) => {
-    if (!user) return;
+  private async blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.split(',')[1]; // Remove data:audio/webm;base64, prefix
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
 
+  isRecording(): boolean {
+    return this.mediaRecorder?.state === 'recording';
+  }
+}
+
+export const useVoiceRecording = () => {
+  const [isRecording, setIsRecording] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const recorderRef = useRef<VoiceRecorder | null>(null);
+
+  const startRecording = async () => {
     try {
-      await supabase
-        .from('voice_commands')
-        .insert({
-          user_id: user.id,
-          command_text: commandText,
-          intent,
-          module_target: moduleTarget,
-          action_executed: actionExecuted,
-          success,
-          response_time: responseTime
-        });
+      if (!recorderRef.current) {
+        recorderRef.current = new VoiceRecorder();
+      }
+      
+      await recorderRef.current.startRecording();
+      setIsRecording(true);
     } catch (error) {
-      console.error('Error logging voice command:', error);
+      console.error('Failed to start recording:', error);
+      throw error;
     }
-  }, [user]);
+  };
 
-  // Salvar configurações
-  const saveSettings = useCallback(async (newSettings: Partial<VoiceSettings>) => {
-    if (!user || !settings) return;
-
+  const stopRecording = async (): Promise<string | null> => {
     try {
-      const { data, error } = await supabase
-        .from('voice_settings')
-        .update(newSettings)
-        .eq('user_id', user.id)
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error saving settings:', error);
-        toast({
-          title: "Erro",
-          description: "Não foi possível salvar as configurações.",
-          variant: "destructive",
-        });
-        return;
+      if (!recorderRef.current) {
+        throw new Error('No recorder available');
       }
 
-      setSettings(data);
-      toast({
-        title: "Configurações salvas",
-        description: "Suas preferências foram atualizadas com sucesso.",
+      setIsProcessing(true);
+      const audioBase64 = await recorderRef.current.stopRecording();
+      setIsRecording(false);
+
+      // Send to Supabase Edge Function for transcription
+      const { data, error } = await supabase.functions.invoke('voice-to-text', {
+        body: { 
+          audio: audioBase64,
+          language: 'pt'
+        }
       });
-    } catch (error) {
-      console.error('Error in saveSettings:', error);
-    }
-  }, [user, settings, toast]);
-
-  // Carregar histórico da conversa
-  const loadConversationHistory = useCallback(async (convId: string) => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('voice_messages')
-        .select('*')
-        .eq('conversation_id', convId)
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: true });
 
       if (error) {
-        console.error('Error loading conversation history:', error);
-        return;
+        console.error('Transcription error:', error);
+        throw error;
       }
 
-      const loadedMessages: VoiceMessage[] = data.map(msg => ({
-        id: msg.id,
-        type: msg.type as 'user' | 'assistant' | 'system',
-        content: msg.content,
-        timestamp: new Date(msg.created_at),
-        action: msg.action_type,
-        actionData: msg.action_data
-      }));
-
-      setMessages(loadedMessages);
+      console.log('Transcription result:', data);
+      return data?.text || null;
     } catch (error) {
-      console.error('Error in loadConversationHistory:', error);
+      console.error('Failed to stop recording:', error);
+      throw error;
+    } finally {
+      setIsProcessing(false);
     }
-  }, [user]);
-
-  // Limpar histórico
-  const clearHistory = useCallback(() => {
-    setMessages([]);
-  }, []);
-
-  // Exportar conversa
-  const exportConversation = useCallback(() => {
-    if (messages.length === 0) return;
-
-    const conversationData = {
-      timestamp: new Date().toISOString(),
-      totalMessages: messages.length,
-      messages: messages.map(msg => ({
-        type: msg.type,
-        content: msg.content,
-        timestamp: msg.timestamp.toISOString(),
-        action: msg.action
-      }))
-    };
-
-    const blob = new Blob([JSON.stringify(conversationData, null, 2)], {
-      type: 'application/json'
-    });
-    
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `conversa-voz-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    toast({
-      title: "Conversa exportada",
-      description: "O arquivo foi baixado com sucesso.",
-    });
-  }, [messages, toast]);
-
-  // Carregar configurações quando o usuário fizer login
-  useEffect(() => {
-    loadUserSettings();
-  }, [loadUserSettings]);
+  };
 
   return {
-    conversationId,
-    messages,
-    settings,
-    isLoading,
-    startConversation,
-    endConversation,
-    saveMessage,
-    logVoiceCommand,
-    saveSettings,
-    loadConversationHistory,
-    clearHistory,
-    exportConversation
+    isRecording,
+    isProcessing,
+    startRecording,
+    stopRecording
+  };
+};
+
+export const useTextToSpeech = () => {
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const speak = async (text: string, voice: string = 'alloy'): Promise<void> => {
+    try {
+      setIsSpeaking(true);
+      console.log('Generating speech for:', text.substring(0, 50) + '...');
+
+      const { data, error } = await supabase.functions.invoke('text-to-speech', {
+        body: { 
+          text,
+          voice,
+          speed: 1.0
+        }
+      });
+
+      if (error) {
+        console.error('Text-to-speech error:', error);
+        throw error;
+      }
+
+      if (data?.audioContent) {
+        // Create audio from base64
+        const audioBlob = new Blob([
+          new Uint8Array(
+            atob(data.audioContent).split('').map(c => c.charCodeAt(0))
+          )
+        ], { type: 'audio/mp3' });
+
+        const audioUrl = URL.createObjectURL(audioBlob);
+        
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.src = '';
+        }
+
+        audioRef.current = new Audio(audioUrl);
+        audioRef.current.onended = () => {
+          setIsSpeaking(false);
+          URL.revokeObjectURL(audioUrl);
+        };
+
+        await audioRef.current.play();
+        console.log('Speech playback started');
+      }
+    } catch (error) {
+      console.error('Failed to generate speech:', error);
+      setIsSpeaking(false);
+      throw error;
+    }
+  };
+
+  const stopSpeaking = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsSpeaking(false);
+    }
+  };
+
+  return {
+    isSpeaking,
+    speak,
+    stopSpeaking
+  };
+};
+
+export const useAIChat = () => {
+  const [isThinking, setIsThinking] = useState(false);
+
+  const sendMessage = async (message: string, context: string = ''): Promise<string> => {
+    try {
+      setIsThinking(true);
+      console.log('Sending message to AI:', message);
+
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { 
+          message,
+          context,
+          language: 'pt'
+        }
+      });
+
+      if (error) {
+        console.error('AI chat error:', error);
+        throw error;
+      }
+
+      console.log('AI response received:', data?.response);
+      return data?.response || 'Desculpe, não consegui processar sua solicitação.';
+    } catch (error) {
+      console.error('Failed to send message to AI:', error);
+      throw error;
+    } finally {
+      setIsThinking(false);
+    }
+  };
+
+  return {
+    isThinking,
+    sendMessage
   };
 };
