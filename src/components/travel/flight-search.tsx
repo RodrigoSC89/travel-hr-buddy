@@ -183,32 +183,37 @@ export const FlightSearch = () => {
       
       if (data.success && data.data?.data) {
         // Transform Amadeus data to our format
-        const transformedFlights = data.data.data.map((offer: any, index: number) => ({
-          id: offer.id || `flight-${index}`,
-          airline: offer.itineraries[0]?.segments[0]?.carrierCode || 'XX',
-          flightNumber: offer.itineraries[0]?.segments[0]?.number || '0000',
-          departure: {
-            airport: offer.itineraries[0]?.segments[0]?.departure?.iataCode || originCode,
-            time: offer.itineraries[0]?.segments[0]?.departure?.at?.split('T')[1]?.substring(0, 5) || '00:00',
-            city: searchParams.from.split('(')[0].trim(),
-            date: offer.itineraries[0]?.segments[0]?.departure?.at?.split('T')[0] || searchParams.departure,
-          },
-          arrival: {
-            airport: offer.itineraries[0]?.segments[0]?.arrival?.iataCode || destinationCode,
-            time: offer.itineraries[0]?.segments[0]?.arrival?.at?.split('T')[1]?.substring(0, 5) || '00:00',
-            city: searchParams.to.split('(')[0].trim(),
-            date: offer.itineraries[0]?.segments[0]?.arrival?.at?.split('T')[0] || searchParams.departure,
-          },
-          duration: offer.itineraries[0]?.duration?.replace('PT', '').replace('H', 'h ').replace('M', 'm') || '2h 30m',
-          price: Math.round(parseFloat(offer.price?.total || '299')),
-          originalPrice: Math.round(parseFloat(offer.price?.total || '299') * 1.2),
-          savings: Math.round(parseFloat(offer.price?.total || '299') * 0.2),
-          class: offer.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin?.toLowerCase() || 'economy',
-          amenities: ['wifi', 'snack'],
-          rating: 4.0 + Math.random() * 1.0,
-          stops: offer.itineraries[0]?.segments?.length - 1 || 0,
-          bookingUrl: `https://www.amadeus.com/booking/${offer.id}`,
-        }));
+        const transformedFlights = data.data.data.map((offer: any, index: number) => {
+          // Gerar URL específica de booking com parâmetros do voo
+          const bookingUrl = generateFlightBookingUrl(offer, searchParams);
+          
+          return {
+            id: offer.id || `flight-${index}`,
+            airline: offer.itineraries[0]?.segments[0]?.carrierCode || 'XX',
+            flightNumber: offer.itineraries[0]?.segments[0]?.number || '0000',
+            departure: {
+              airport: offer.itineraries[0]?.segments[0]?.departure?.iataCode || originCode,
+              time: offer.itineraries[0]?.segments[0]?.departure?.at?.split('T')[1]?.substring(0, 5) || '00:00',
+              city: searchParams.from.split('(')[0].trim(),
+              date: offer.itineraries[0]?.segments[0]?.departure?.at?.split('T')[0] || searchParams.departure,
+            },
+            arrival: {
+              airport: offer.itineraries[0]?.segments[0]?.arrival?.iataCode || destinationCode,
+              time: offer.itineraries[0]?.segments[0]?.arrival?.at?.split('T')[1]?.substring(0, 5) || '00:00',
+              city: searchParams.to.split('(')[0].trim(),
+              date: offer.itineraries[0]?.segments[0]?.arrival?.at?.split('T')[0] || searchParams.departure,
+            },
+            duration: offer.itineraries[0]?.duration?.replace('PT', '').replace('H', 'h ').replace('M', 'm') || '2h 30m',
+            price: Math.round(parseFloat(offer.price?.total || '299')),
+            originalPrice: Math.round(parseFloat(offer.price?.total || '299') * 1.2),
+            savings: Math.round(parseFloat(offer.price?.total || '299') * 0.2),
+            class: offer.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin?.toLowerCase() || 'economy',
+            amenities: ['wifi', 'snack'],
+            rating: 4.0 + Math.random() * 1.0,
+            stops: offer.itineraries[0]?.segments?.length - 1 || 0,
+            bookingUrl: bookingUrl,
+          };
+        });
 
         if (transformedFlights.length > 0) {
           setFlights(transformedFlights);
@@ -225,7 +230,7 @@ export const FlightSearch = () => {
       }
     } catch (error) {
       console.error('Flight search error:', error);
-      // Fallback para dados mock
+      // Fallback para dados mock com URLs específicas
       const newFlights = mockFlights.map(flight => ({
         ...flight,
         price: flight.price + Math.floor(Math.random() * 100) - 50,
@@ -236,7 +241,8 @@ export const FlightSearch = () => {
         arrival: {
           ...flight.arrival,
           city: searchParams.to.split('(')[0].trim(),
-        }
+        },
+        bookingUrl: generateMockFlightBookingUrl(flight, searchParams)
       }));
       
       setFlights(newFlights);
@@ -308,6 +314,47 @@ export const FlightSearch = () => {
       case 'luggage': return <Luggage size={16} />;
       default: return null;
     }
+  };
+
+  // Função para gerar URL específica de booking com parâmetros do voo
+  const generateFlightBookingUrl = (offer: any, searchParams: any) => {
+    const airline = offer.itineraries[0]?.segments[0]?.carrierCode || 'XX';
+    const flightNumber = offer.itineraries[0]?.segments[0]?.number || '0000';
+    const originCode = offer.itineraries[0]?.segments[0]?.departure?.iataCode || '';
+    const destinationCode = offer.itineraries[0]?.segments[0]?.arrival?.iataCode || '';
+    const departureDate = offer.itineraries[0]?.segments[0]?.departure?.at?.split('T')[0] || searchParams.departure;
+    
+    // URLs específicas por companhia aérea
+    switch (airline.toUpperCase()) {
+      case 'LA':
+      case 'LATAM':
+        return `https://www.latam.com/pt_br/apps/personas?fecha1_dia=${departureDate}&from=${originCode}&to=${destinationCode}&auAvailability=1&ida_vuelta=ida&vuelos_origen=${originCode}&vuelos_destino=${destinationCode}&flex=1&pax=1`;
+      case 'G3':
+      case 'GOL':
+        return `https://www.voegol.com.br/pt/passagens-aereas?origem=${originCode}&destino=${destinationCode}&ida=${departureDate}&volta=&adultos=${searchParams.passengers}&criancas=0&bebes=0&classeServico=ECONOMIC`;
+      case 'AD':
+      case 'AZUL':
+        return `https://www.voeazul.com.br/reservas/selecionar-voos?origem=${originCode}&destino=${destinationCode}&dataida=${departureDate}&volta=&adultos=${searchParams.passengers}&criancas=0&bebes=0&promocional=false`;
+      default:
+        return `https://www.kayak.com.br/flights/${originCode}-${destinationCode}/${departureDate}/${searchParams.passengers}adults?sort=bestflight_a&fs=airlines=${airline};stops=0`;
+    }
+  };
+
+  const generateMockFlightBookingUrl = (flight: FlightOption, searchParams: any) => {
+    const originCode = flight.departure.airport;
+    const destinationCode = flight.arrival.airport;
+    const departureDate = searchParams.departure;
+    
+    // URLs específicas baseadas na companhia aérea
+    if (flight.airline === 'LATAM') {
+      return `https://www.latam.com/pt_br/apps/personas?fecha1_dia=${departureDate}&from=${originCode}&to=${destinationCode}&auAvailability=1&ida_vuelta=ida&vuelos_origen=${originCode}&vuelos_destino=${destinationCode}&flex=1&pax=${searchParams.passengers}`;
+    } else if (flight.airline === 'GOL') {
+      return `https://www.voegol.com.br/pt/passagens-aereas?origem=${originCode}&destino=${destinationCode}&ida=${departureDate}&volta=&adultos=${searchParams.passengers}&criancas=0&bebes=0&classeServico=ECONOMIC`;
+    } else if (flight.airline === 'Azul') {
+      return `https://www.voeazul.com.br/reservas/selecionar-voos?origem=${originCode}&destino=${destinationCode}&dataida=${departureDate}&volta=&adultos=${searchParams.passengers}&criancas=0&bebes=0&promocional=false`;
+    }
+    
+    return flight.bookingUrl || `https://www.kayak.com.br/flights/${originCode}-${destinationCode}/${departureDate}/${searchParams.passengers}adults`;
   };
 
   return (
@@ -538,7 +585,7 @@ export const FlightSearch = () => {
                         }}
                         className="flex-1 gradient-ocean"
                       >
-                        Ver no Site
+                        Comprar Passagem
                       </Button>
                     )}
                   </div>

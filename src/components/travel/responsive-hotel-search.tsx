@@ -149,6 +149,37 @@ export const ResponsiveHotelSearch: React.FC = () => {
     }, 2000);
   };
 
+  // Função para gerar URL específica de booking de hotel
+  const generateHotelBookingUrl = (offer: any, searchParams: any) => {
+    const hotelId = offer.hotel?.hotelId || '';
+    const cityName = encodeURIComponent(offer.hotel?.address?.cityName || searchParams.destination);
+    const checkinFormatted = searchParams.checkin;
+    const checkoutFormatted = searchParams.checkout;
+    const guests = searchParams.guests;
+    
+    // URL específica do Booking.com com parâmetros do hotel
+    return `https://www.booking.com/hotel/br/${hotelId.toLowerCase()}.html?checkin=${checkinFormatted}&checkout=${checkoutFormatted}&group_adults=${guests}&group_children=0&selected_currency=BRL&changed_currency=1&top_ufis=1`;
+  };
+
+  const generateMockHotelBookingUrl = (hotel: Hotel, searchParams: any) => {
+    const hotelName = encodeURIComponent(hotel.name.toLowerCase().replace(/\s+/g, '-'));
+    const cityName = encodeURIComponent(searchParams.destination);
+    const checkinFormatted = searchParams.checkin;
+    const checkoutFormatted = searchParams.checkout;
+    const guests = searchParams.guests;
+    
+    // Gerar URLs específicas baseadas no nome do hotel
+    if (hotel.name.includes('Copacabana')) {
+      return `https://www.booking.com/hotel/br/copacabana-palace.html?checkin=${checkinFormatted}&checkout=${checkoutFormatted}&group_adults=${guests}&group_children=0&selected_currency=BRL`;
+    } else if (hotel.name.includes('Unique')) {
+      return `https://www.booking.com/hotel/br/unique-garden.html?checkin=${checkinFormatted}&checkout=${checkoutFormatted}&group_adults=${guests}&group_children=0&selected_currency=BRL`;
+    } else if (hotel.name.includes('Villa Bahia')) {
+      return `https://www.booking.com/hotel/br/villa-bahia.html?checkin=${checkinFormatted}&checkout=${checkoutFormatted}&group_adults=${guests}&group_children=0&selected_currency=BRL`;
+    }
+    
+    return `https://www.booking.com/searchresults.html?ss=${cityName}&checkin=${checkinFormatted}&checkout=${checkoutFormatted}&group_adults=${guests}&group_children=0&selected_currency=BRL&order=popularity`;
+  };
+
   const getAmenityIcon = (amenity: string) => {
     switch (amenity.toLowerCase()) {
       case 'wifi':
@@ -315,7 +346,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
                       disabled={selectedHotel === hotel.id}
                       className="w-full sm:w-auto hover-scale"
                     >
-                      {hotel.bookingUrl ? 'Ver no Booking.com' : (selectedHotel === hotel.id ? 'Processando...' : 'Reservar Agora')}
+                      {hotel.bookingUrl ? 'Reservar Hotel' : (selectedHotel === hotel.id ? 'Processando...' : 'Reservar Agora')}
                     </Button>
                   </div>
                 </div>
