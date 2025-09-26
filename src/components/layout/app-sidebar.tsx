@@ -23,7 +23,7 @@ import {
   Mic,
   Eye,
   Shield,
-  Radio,
+  Smartphone,
   Trophy,
   User,
   Activity,
@@ -134,7 +134,7 @@ const navigationItems = [
       {
         title: "IoT Dashboard",
         url: "iot",
-        icon: Radio,
+        icon: Smartphone,
       },
       {
         title: "Blockchain",
@@ -285,6 +285,16 @@ const navigationItems = [
     icon: FileText
   },
   {
+    title: "Colaboração",
+    url: "/collaboration",
+    icon: Users
+  },
+  {
+    title: "Otimização Mobile",
+    url: "/mobile-optimization",
+    icon: Smartphone
+  },
+  {
     title: "Templates",
     url: "/templates",
     icon: FileText,
@@ -292,7 +302,7 @@ const navigationItems = [
   {
     title: "Centro de Ajuda",
     url: "/help",
-    icon: HelpCircle,
+    icon: Smartphone,
   },
 ];
 

@@ -46,6 +46,8 @@ import IntegrationsHub from "./components/integration/integrations-hub";
 import BackupAudit from "./pages/BackupAudit";
 import SecurityPage from "./pages/Security";
 import UsersPage from "./pages/Users";
+import CollaborationPage from "./pages/Collaboration";
+import MobileOptimizationPage from "./pages/MobileOptimization";
 import Help from "./pages/Help";
 import Templates from "./pages/Templates";
 import SystemOverviewPage from "./pages/SystemOverview";
@@ -110,11 +112,7 @@ const App = () => {
                       <AdvancedDocumentCenter />
                     </div>
                   } />
-                  <Route path="mobile-optimization" element={
-                    <div className="container mx-auto p-6">
-                      <MobileOptimizationCenter />
-                    </div>
-                  } />
+                  <Route path="mobile-optimization" element={<MobileOptimizationPage />} />
                   <Route path="advanced-reports" element={<AdvancedReports />} />
                   <Route path="executive" element={<Executive />} />
                   <Route path="system-monitor" element={<SystemMonitor />} />
@@ -127,6 +125,7 @@ const App = () => {
                   <Route path="backup-audit" element={<BackupAudit />} />
                   <Route path="security" element={<SecurityPage />} />
                   <Route path="users" element={<UsersPage />} />
+                  <Route path="collaboration" element={<CollaborationPage />} />
                   <Route path="help" element={<Help />} />
                   <Route path="templates" element={<Templates />} />
                   <Route path="system-overview" element={<SystemOverviewPage />} />
