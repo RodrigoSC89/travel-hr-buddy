@@ -11,8 +11,17 @@ export const useOrganizationPermissions = () => {
   const canManageData = () => checkPermission('manage_data');
 
   const hasFeature = (feature: string) => {
-    if (!currentOrganization?.features) return true; // Default allow for demo
-    return currentOrganization.features[feature] === true;
+    // Para demo, sempre permitir recursos se a organização existe
+    if (!currentOrganization) return false;
+    
+    // Verificar nas features da organização
+    if (currentOrganization.features && typeof currentOrganization.features === 'object') {
+      return currentOrganization.features[feature] === true;
+    }
+    
+    // Fallback para recursos padrão da demo
+    const defaultFeatures = ['peotram', 'fleet_management', 'analytics', 'ai_analysis'];
+    return defaultFeatures.includes(feature);
   };
 
   const isWithinLimits = (type: 'users' | 'vessels' | 'storage') => {

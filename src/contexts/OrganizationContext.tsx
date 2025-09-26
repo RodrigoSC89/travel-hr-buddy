@@ -35,17 +35,6 @@ interface OrganizationBranding {
   module_settings: any;
 }
 
-interface OrganizationUser {
-  id: string;
-  organization_id: string;
-  user_id: string;
-  role: string;
-  status: string;
-  permissions: any;
-  departments?: string[];
-  joined_at: string;
-}
-
 interface OrganizationContextType {
   currentOrganization: Organization | null;
   currentBranding: OrganizationBranding | null;
@@ -81,73 +70,92 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Carregar organização do usuário atual
+  // Carregar organização demo
   useEffect(() => {
-    if (user) {
-      loadUserOrganization();
-    } else {
-      setCurrentOrganization(null);
-      setCurrentBranding(null);
-      setUserRole(null);
-      setIsLoading(false);
-    }
-  }, [user]);
+    loadDemoOrganization();
+  }, []);
 
-  const loadUserOrganization = async () => {
+  const loadDemoOrganization = async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      // Buscar organização do usuário
-      const { data: orgUser, error: orgUserError } = await supabase
-        .from('organization_users')
-        .select(`
-          role,
-          status,
-          organization:organizations(*)
-        `)
-        .eq('user_id', user?.id)
-        .eq('status', 'active')
-        .maybeSingle();
-
-      if (orgUserError) {
-        console.error('Erro ao buscar organização:', orgUserError);
-        setCurrentOrganization(null);
-        setUserRole(null);
-        return;
-      }
-
-      if (!orgUser) {
-        // Para demo, criar organização padrão
-        const defaultOrg = {
-          id: '550e8400-e29b-41d4-a716-446655440000',
-          name: 'Nautilus Demo',
-          features: { peotram: true, fleet_management: true, analytics: true }
-        };
-        setCurrentOrganization(defaultOrg as any);
-        setUserRole('admin');
-        return;
-      }
-
-      setCurrentOrganization(orgUser.organization as any);
-      setUserRole(orgUser.role);
-
+      // Usar organização demo
+      const demoOrg: Organization = {
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        name: 'Nautilus Demo',
+        slug: 'nautilus-demo',
+        status: 'active',
+        plan_type: 'enterprise',
+        max_users: 100,
+        max_vessels: 50,
+        max_storage_gb: 5,
+        features: { peotram: true, fleet_management: true, analytics: true, ai_analysis: true },
+        trial_ends_at: null,
+        subscription_ends_at: null,
+        created_at: new Date().toISOString()
+      };
+      
+      setCurrentOrganization(demoOrg);
+      setUserRole('admin');
+      
       // Carregar branding da organização
-      if (orgUser.organization) {
+      try {
         const { data: branding, error: brandingError } = await supabase
           .from('organization_branding')
           .select('*')
-          .eq('organization_id', (orgUser.organization as any).id)
+          .eq('organization_id', '550e8400-e29b-41d4-a716-446655440000')
           .maybeSingle();
 
-        if (brandingError) {
-          console.error('Erro ao carregar branding:', brandingError);
-        } else if (branding) {
+        if (!brandingError && branding) {
           setCurrentBranding(branding as any);
-          
-          // Aplicar tema personalizado
           applyBrandingTheme(branding as any);
+        } else {
+          // Usar branding demo
+          const demoBranding: OrganizationBranding = {
+            id: 'demo-branding',
+            organization_id: '550e8400-e29b-41d4-a716-446655440000',
+            company_name: 'Nautilus Demo',
+            logo_url: null,
+            primary_color: '#2563eb',
+            secondary_color: '#64748b',
+            accent_color: '#7c3aed',
+            theme_mode: 'light',
+            default_language: 'pt-BR',
+            default_currency: 'BRL',
+            timezone: 'America/Sao_Paulo',
+            custom_fields: {},
+            business_rules: {},
+            enabled_modules: { peotram: true, fleet_management: true, analytics: true, hr: true },
+            module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
+          };
+          
+          setCurrentBranding(demoBranding);
+          applyBrandingTheme(demoBranding);
         }
+      } catch (err) {
+        console.error('Erro ao carregar branding:', err);
+        // Usar branding demo em caso de erro
+        const demoBranding: OrganizationBranding = {
+          id: 'demo-branding',
+          organization_id: '550e8400-e29b-41d4-a716-446655440000',
+          company_name: 'Nautilus Demo',
+          logo_url: null,
+          primary_color: '#2563eb',
+          secondary_color: '#64748b',
+          accent_color: '#7c3aed',
+          theme_mode: 'light',
+          default_language: 'pt-BR',
+          default_currency: 'BRL',
+          timezone: 'America/Sao_Paulo',
+          custom_fields: {},
+          business_rules: {},
+          enabled_modules: { peotram: true, fleet_management: true, analytics: true, hr: true },
+          module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
+        };
+        
+        setCurrentBranding(demoBranding);
+        applyBrandingTheme(demoBranding);
       }
     } catch (err) {
       console.error('Erro ao carregar organização:', err);
@@ -177,35 +185,8 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   const switchOrganization = async (orgId: string) => {
-    try {
-      setIsLoading(true);
-      
-      // Verificar se o usuário tem acesso à organização
-      const { data: orgUser, error } = await supabase
-        .from('organization_users')
-        .select(`
-          role,
-          status,
-          organization:organizations(*)
-        `)
-        .eq('organization_id', orgId)
-        .eq('user_id', user?.id)
-        .eq('status', 'active')
-        .maybeSingle();
-
-      if (error || !orgUser) throw new Error('Acesso negado');
-
-      setCurrentOrganization(orgUser.organization as any);
-      setUserRole(orgUser.role);
-
-      // Recarregar branding
-      await loadUserOrganization();
-    } catch (err) {
-      console.error('Erro ao trocar organização:', err);
-      setError('Erro ao trocar de organização');
-    } finally {
-      setIsLoading(false);
-    }
+    // Por enquanto, manter a organização demo
+    return;
   };
 
   const updateBranding = async (brandingUpdate: Partial<OrganizationBranding>) => {
@@ -230,9 +211,10 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   const checkPermission = (permission: string): boolean => {
-    if (!userRole) return true; // Default allow for demo
+    // Para demo, admin tem todas as permissões
+    if (userRole === 'admin') return true;
     
-    // Hierarquia de permissões
+    // Hierarquia de permissões simplificada
     const roleHierarchy = {
       owner: ['all'],
       admin: ['manage_users', 'manage_settings', 'view_analytics', 'manage_data'],
@@ -242,18 +224,16 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       viewer: ['view_data']
     };
 
-    const userPermissions = roleHierarchy[userRole as keyof typeof roleHierarchy] || ['view_data'];
+    const userPermissions = roleHierarchy[userRole as keyof typeof roleHierarchy] || [];
     return userPermissions.includes(permission) || userPermissions.includes('all');
   };
 
   const getCurrentOrganizationUsers = async (): Promise<any[]> => {
-    if (!currentOrganization) return [];
-
-    // Mock data for now since profiles table may not exist yet
+    // Mock data para demo
     const mockUsers = [
       {
         id: '1',
-        email: 'admin@example.com',
+        email: 'admin@nautilus.com',
         role: 'admin',
         status: 'active',
         full_name: 'Administrador',
@@ -262,10 +242,10 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       },
       {
         id: '2', 
-        email: 'user@example.com',
+        email: 'user@nautilus.com',
         role: 'member',
         status: 'active',
-        full_name: 'Usuário Exemplo',
+        full_name: 'Usuário Demo',
         joined_at: new Date().toISOString(),
         last_active_at: new Date().toISOString()
       }
@@ -276,34 +256,15 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const inviteUser = async (email: string, role: string) => {
     if (!currentOrganization) throw new Error('Nenhuma organização selecionada');
-    
-    // TODO: Implementar sistema de convite por email
-    // Por enquora, apenas criar o registro na organização
     console.log('Funcionalidade de convite será implementada em breve');
   };
 
   const removeUser = async (userId: string) => {
-    if (!currentOrganization) return;
-
-    const { error } = await supabase
-      .from('organization_users')
-      .update({ status: 'inactive' })
-      .eq('organization_id', currentOrganization.id)
-      .eq('user_id', userId);
-
-    if (error) throw error;
+    console.log('Funcionalidade de remoção será implementada em breve');
   };
 
   const updateUserRole = async (userId: string, role: string) => {
-    if (!currentOrganization) return;
-
-    const { error } = await supabase
-      .from('organization_users')
-      .update({ role })
-      .eq('organization_id', currentOrganization.id)
-      .eq('user_id', userId);
-
-    if (error) throw error;
+    console.log('Funcionalidade de atualização de role será implementada em breve');
   };
 
   const value: OrganizationContextType = {
