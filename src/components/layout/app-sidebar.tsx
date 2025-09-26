@@ -126,6 +126,11 @@ const navigationItems = [
         icon: Map,
       },
       {
+        title: "Colaboração",
+        url: "/collaboration",
+        icon: Users,
+      },
+      {
         title: "Tripulação",
         url: "/crew-management",
         icon: Users,

@@ -1,463 +1,598 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 import { 
   Users, 
-  MessageCircle, 
-  Share2, 
+  MessageSquare, 
+  Send, 
+  Phone, 
   Video, 
-  Mic, 
-  MicOff,
-  Monitor,
-  MoreHorizontal,
-  UserPlus,
-  Settings,
-  Activity
+  Share2,
+  Activity,
+  Clock,
+  CheckCircle,
+  Circle,
+  FileText,
+  Calendar,
+  MapPin,
+  AlertTriangle
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
-interface Participant {
-  id: string;
+interface UserPresence {
+  user_id: string;
   name: string;
-  avatar?: string;
-  role: 'owner' | 'admin' | 'member';
-  status: 'online' | 'away' | 'busy' | 'offline';
-  cursor?: {
-    x: number;
-    y: number;
-  };
+  email: string;
+  avatar_url?: string;
+  status: 'online' | 'busy' | 'away' | 'offline';
+  last_seen: string;
+  current_page?: string;
+  vessel_id?: string;
 }
 
-interface WorkspaceMessage {
+interface ChatMessage {
   id: string;
-  userId: string;
-  userName: string;
-  content: string;
-  timestamp: Date;
-  type: 'text' | 'file' | 'system';
+  user_id: string;
+  user_name: string;
+  message: string;
+  timestamp: string;
+  type: 'text' | 'system' | 'file' | 'location';
+  metadata?: any;
 }
 
-interface RealTimeWorkspaceProps {
-  workspaceId: string;
-  title?: string;
-  onInviteUser?: () => void;
+interface WorkspaceUpdate {
+  id: string;
+  user_id: string;
+  user_name: string;
+  action: string;
+  description: string;
+  timestamp: string;
+  priority: 'low' | 'medium' | 'high';
+  vessel_id?: string;
+  related_data?: any;
 }
 
-export const RealTimeWorkspace: React.FC<RealTimeWorkspaceProps> = ({
-  workspaceId,
-  title = "Workspace Colaborativo",
-  onInviteUser
-}) => {
-  const [participants, setParticipants] = useState<Participant[]>([]);
-  const [messages, setMessages] = useState<WorkspaceMessage[]>([]);
+const RealTimeWorkspace: React.FC = () => {
+  const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [workspaceUpdates, setWorkspaceUpdates] = useState<WorkspaceUpdate[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [isConnected, setIsConnected] = useState(false);
-  const [currentUser, setCurrentUser] = useState<Participant | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
-  const [isVideoEnabled, setIsVideoEnabled] = useState(false);
-  const channelRef = useRef<any>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
+  const [selectedRoom, setSelectedRoom] = useState('general');
+  const [myStatus, setMyStatus] = useState<'online' | 'busy' | 'away'>('online');
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
+  const { toast } = useToast();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const channelRef = useRef<any>(null);
 
-  useEffect(() => {
-    if (!user) return;
-
-    // Initialize current user
-    const userParticipant: Participant = {
-      id: user.id,
-      name: user.email?.split('@')[0] || 'Usuário',
-      role: 'member',
-      status: 'online'
-    };
-    setCurrentUser(userParticipant);
-
-    // Set up Supabase channel for real-time collaboration
-    const channel = supabase.channel(`workspace-${workspaceId}`, {
-      config: {
-        presence: {
-          key: user.id,
-        },
-      },
-    });
-
-    // Track presence (who's online)
-    channel
-      .on('presence', { event: 'sync' }, () => {
-        const state = channel.presenceState();
-        const participantsList: Participant[] = [];
-        
-        Object.keys(state).forEach((userId) => {
-          const presences = state[userId];
-          if (presences.length > 0) {
-            const presence = presences[0] as any;
-            participantsList.push({
-              id: userId,
-              name: presence.name || 'Usuário',
-              avatar: presence.avatar,
-              role: presence.role || 'member',
-              status: 'online',
-              cursor: presence.cursor
-            });
-          }
-        });
-        
-        setParticipants(participantsList);
-      })
-      .on('presence', { event: 'join' }, ({ key, newPresences }) => {
-        console.log('User joined:', key, newPresences);
-        toast({
-          title: "Novo participante",
-          description: `${newPresences[0]?.name || 'Usuário'} entrou no workspace`,
-        });
-      })
-      .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
-        console.log('User left:', key, leftPresences);
-        toast({
-          title: "Participante saiu",
-          description: `${leftPresences[0]?.name || 'Usuário'} saiu do workspace`,
-        });
-      })
-      .on('broadcast', { event: 'message' }, ({ payload }) => {
-        const message: WorkspaceMessage = {
-          id: payload.id,
-          userId: payload.userId,
-          userName: payload.userName,
-          content: payload.content,
-          timestamp: new Date(payload.timestamp),
-          type: payload.type || 'text'
-        };
-        setMessages(prev => [...prev, message]);
-      })
-      .on('broadcast', { event: 'cursor' }, ({ payload }) => {
-        setParticipants(prev => prev.map(p => 
-          p.id === payload.userId 
-            ? { ...p, cursor: payload.cursor }
-            : p
-        ));
-      })
-      .subscribe(async (status) => {
-        if (status === 'SUBSCRIBED') {
-          // Track presence when connected
-          await channel.track({
-            name: userParticipant.name,
-            avatar: userParticipant.avatar,
-            role: userParticipant.role,
-            status: 'online'
-          });
-          setIsConnected(true);
-          
-          // Send system message
-          const systemMessage: WorkspaceMessage = {
-            id: `system-${Date.now()}`,
-            userId: 'system',
-            userName: 'Sistema',
-            content: `${userParticipant.name} entrou no workspace`,
-            timestamp: new Date(),
-            type: 'system'
-          };
-          setMessages(prev => [...prev, systemMessage]);
-        }
-      });
-
-    channelRef.current = channel;
-
-    // Track mouse movement for cursor sharing
-    const handleMouseMove = (e: MouseEvent) => {
-      const newPosition = { x: e.clientX, y: e.clientY };
-      setMousePosition(newPosition);
-      
-      // Throttle cursor updates
-      if (channelRef.current && Date.now() % 100 === 0) {
-        channelRef.current.send({
-          type: 'broadcast',
-          event: 'cursor',
-          payload: {
-            userId: user.id,
-            cursor: newPosition
-          }
-        });
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (channelRef.current) {
-        supabase.removeChannel(channelRef.current);
-      }
-    };
-  }, [user, workspaceId, toast]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
+  // Scroll para última mensagem
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const sendMessage = () => {
-    if (!newMessage.trim() || !channelRef.current || !currentUser) return;
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatMessages]);
 
-    const message = {
-      id: `msg-${Date.now()}`,
-      userId: currentUser.id,
-      userName: currentUser.name,
-      content: newMessage.trim(),
-      timestamp: new Date().toISOString(),
-      type: 'text'
+  // Configurar presença e chat em tempo real
+  useEffect(() => {
+    if (!user) return;
+
+    const setupRealtime = async () => {
+      try {
+        setIsLoading(true);
+
+        // Canal principal do workspace
+        const channel = supabase.channel('maritime_workspace', {
+          config: {
+            presence: {
+              key: user.id,
+            },
+          },
+        });
+
+        channelRef.current = channel;
+
+        // Configurar presença
+        channel
+          .on('presence', { event: 'sync' }, () => {
+            const presenceState = channel.presenceState();
+            const users: UserPresence[] = [];
+            
+            Object.keys(presenceState).forEach(userId => {
+              const presences = presenceState[userId];
+              if (presences && presences.length > 0) {
+                const presence = presences[0] as any;
+                users.push({
+                  user_id: userId,
+                  name: presence.name || 'Usuário',
+                  email: presence.email || '',
+                  avatar_url: presence.avatar_url,
+                  status: presence.status || 'online',
+                  last_seen: presence.last_seen || new Date().toISOString(),
+                  current_page: presence.current_page,
+                  vessel_id: presence.vessel_id
+                });
+              }
+            });
+            
+            setOnlineUsers(users);
+          })
+          .on('presence', { event: 'join' }, ({ key, newPresences }) => {
+            const newUser = newPresences[0];
+            toast({
+              title: `${newUser.name} entrou no workspace`,
+              description: 'Usuário conectado',
+            });
+          })
+          .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
+            const leftUser = leftPresences[0];
+            toast({
+              title: `${leftUser.name} saiu do workspace`,
+              description: 'Usuário desconectado',
+            });
+          });
+
+        // Configurar mensagens de chat
+        channel.on('broadcast', { event: 'chat_message' }, (payload) => {
+          const message: ChatMessage = {
+            id: Date.now().toString(),
+            user_id: payload.payload.user_id,
+            user_name: payload.payload.user_name,
+            message: payload.payload.message,
+            timestamp: payload.payload.timestamp,
+            type: payload.payload.type || 'text',
+            metadata: payload.payload.metadata
+          };
+          
+          setChatMessages(prev => [...prev, message]);
+        });
+
+        // Configurar atualizações do workspace
+        channel.on('broadcast', { event: 'workspace_update' }, (payload) => {
+          const update: WorkspaceUpdate = {
+            id: Date.now().toString(),
+            user_id: payload.user_id,
+            user_name: payload.user_name,
+            action: payload.action,
+            description: payload.description,
+            timestamp: payload.timestamp,
+            priority: payload.priority || 'low',
+            vessel_id: payload.vessel_id,
+            related_data: payload.related_data
+          };
+          
+          setWorkspaceUpdates(prev => [update, ...prev.slice(0, 49)]);
+        });
+
+        // Fazer subscribe
+        await channel.subscribe(async (status) => {
+          if (status === 'SUBSCRIBED') {
+            // Trackear presença
+            await channel.track({
+              user_id: user.id,
+              name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuário',
+              email: user.email,
+              avatar_url: user.user_metadata?.avatar_url,
+              status: myStatus,
+              last_seen: new Date().toISOString(),
+              current_page: window.location.pathname,
+              vessel_id: null
+            });
+
+            // Carregar mensagens iniciais (simulado)
+            loadInitialData();
+          }
+        });
+
+      } catch (error) {
+        console.error('Error setting up realtime:', error);
+        toast({
+          title: 'Erro',
+          description: 'Falha ao conectar ao workspace em tempo real',
+          variant: 'destructive'
+        });
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    channelRef.current.send({
-      type: 'broadcast',
-      event: 'message',
-      payload: message
-    });
+    setupRealtime();
 
-    setNewMessage('');
+    // Cleanup
+    return () => {
+      if (channelRef.current) {
+        channelRef.current.unsubscribe();
+      }
+    };
+  }, [user, myStatus]);
+
+  // Carregar dados iniciais
+  const loadInitialData = () => {
+    // Simular mensagens iniciais
+    const initialMessages: ChatMessage[] = [
+      {
+        id: '1',
+        user_id: 'system',
+        user_name: 'Sistema',
+        message: 'Bem-vindo ao workspace marítimo em tempo real!',
+        timestamp: new Date().toISOString(),
+        type: 'system'
+      }
+    ];
+
+    // Simular atualizações do workspace
+    const initialUpdates: WorkspaceUpdate[] = [
+      {
+        id: '1',
+        user_id: 'system',
+        user_name: 'Sistema',
+        action: 'workspace_started',
+        description: 'Workspace iniciado com sucesso',
+        timestamp: new Date().toISOString(),
+        priority: 'low'
+      }
+    ];
+
+    setChatMessages(initialMessages);
+    setWorkspaceUpdates(initialUpdates);
   };
 
-  const toggleAudio = () => {
-    setIsAudioEnabled(!isAudioEnabled);
-    toast({
-      title: isAudioEnabled ? "Áudio desabilitado" : "Áudio habilitado",
-      description: `Microfone ${isAudioEnabled ? 'desligado' : 'ligado'}`,
-    });
+  // Enviar mensagem
+  const sendMessage = async () => {
+    if (!newMessage.trim() || !user || !channelRef.current) return;
+
+    try {
+      await channelRef.current.send({
+        type: 'broadcast',
+        event: 'chat_message',
+        payload: {
+          user_id: user.id,
+          user_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuário',
+          message: newMessage,
+          timestamp: new Date().toISOString(),
+          type: 'text',
+          room: selectedRoom
+        }
+      });
+
+      setNewMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast({
+        title: 'Erro',
+        description: 'Falha ao enviar mensagem',
+        variant: 'destructive'
+      });
+    }
   };
 
-  const toggleVideo = () => {
-    setIsVideoEnabled(!isVideoEnabled);
-    toast({
-      title: isVideoEnabled ? "Vídeo desabilitado" : "Vídeo habilitado",
-      description: `Câmera ${isVideoEnabled ? 'desligada' : 'ligada'}`,
-    });
+  // Enviar atualização do workspace
+  const sendWorkspaceUpdate = async (action: string, description: string, priority: 'low' | 'medium' | 'high' = 'medium') => {
+    if (!user || !channelRef.current) return;
+
+    try {
+      await channelRef.current.send({
+        type: 'broadcast',
+        event: 'workspace_update',
+        payload: {
+          user_id: user.id,
+          user_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuário',
+          action,
+          description,
+          timestamp: new Date().toISOString(),
+          priority
+        }
+      });
+    } catch (error) {
+      console.error('Error sending workspace update:', error);
+    }
   };
 
-  const getStatusColor = (status: Participant['status']) => {
+  // Alterar status
+  const changeStatus = async (newStatus: 'online' | 'busy' | 'away') => {
+    if (!channelRef.current) return;
+
+    setMyStatus(newStatus);
+    
+    try {
+      await channelRef.current.track({
+        user_id: user?.id,
+        name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuário',
+        email: user?.email,
+        avatar_url: user?.user_metadata?.avatar_url,
+        status: newStatus,
+        last_seen: new Date().toISOString(),
+        current_page: window.location.pathname
+      });
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
+  };
+
+  // Obter cor do status
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'online': return 'bg-green-500';
-      case 'away': return 'bg-yellow-500';
       case 'busy': return 'bg-red-500';
+      case 'away': return 'bg-yellow-500';
       default: return 'bg-gray-400';
     }
   };
 
-  const renderMessage = (message: WorkspaceMessage) => {
-    const isCurrentUser = message.userId === currentUser?.id;
-    const isSystem = message.type === 'system';
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'online': return <Circle className="h-3 w-3 fill-current" />;
+      case 'busy': return <AlertTriangle className="h-3 w-3" />;
+      case 'away': return <Clock className="h-3 w-3" />;
+      default: return <Circle className="h-3 w-3" />;
+    }
+  };
 
-    return (
-      <div key={message.id} className={`flex gap-3 mb-4 ${isCurrentUser && !isSystem ? 'flex-row-reverse' : ''}`}>
-        {!isSystem && (
-          <Avatar className="w-8 h-8">
-            <AvatarFallback>
-              {message.userName.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        )}
-        
-        <div className={`flex-1 ${isCurrentUser && !isSystem ? 'text-right' : ''}`}>
-          {!isSystem && (
-            <p className="text-xs text-muted-foreground mb-1">
-              {message.userName}
-            </p>
-          )}
-          
-          <div className={`inline-block p-3 rounded-lg max-w-[80%] ${
-            isSystem 
-              ? 'bg-muted text-muted-foreground text-center w-full'
-              : isCurrentUser 
-                ? 'bg-primary text-primary-foreground' 
-                : 'bg-accent text-accent-foreground'
-          }`}>
-            <p className="text-sm">{message.content}</p>
-          </div>
-          
-          <p className="text-xs text-muted-foreground mt-1">
-            {message.timestamp.toLocaleTimeString('pt-BR', { 
-              hour: '2-digit', 
-              minute: '2-digit' 
-            })}
-          </p>
-        </div>
-      </div>
-    );
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'text-red-600 bg-red-50 border-red-200';
+      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+      default: return 'text-blue-600 bg-blue-50 border-blue-200';
+    }
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[800px]">
-      {/* Main Workspace Area */}
-      <div className="lg:col-span-2">
-        <Card className="h-full flex flex-col">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="w-5 h-5" />
-                {title}
-                <Badge variant={isConnected ? "default" : "destructive"}>
-                  {isConnected ? "Conectado" : "Desconectado"}
-                </Badge>
-              </CardTitle>
-              
-              <div className="flex items-center gap-2">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-screen">
+      {/* Users Online Panel */}
+      <div className="lg:col-span-1 space-y-4">
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Users className="h-5 w-5" />
+              Equipe Online ({onlineUsers.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 mb-4">
+              <div className="text-sm font-medium">Seu Status:</div>
+              <div className="flex gap-1">
                 <Button
-                  variant="outline"
+                  variant={myStatus === 'online' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={toggleAudio}
-                  className={isAudioEnabled ? 'bg-green-100' : ''}
+                  onClick={() => changeStatus('online')}
+                  className="text-xs"
                 >
-                  {isAudioEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
+                  <Circle className="h-3 w-3 mr-1 fill-current text-green-500" />
+                  Online
                 </Button>
-                
                 <Button
-                  variant="outline"
+                  variant={myStatus === 'busy' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={toggleVideo}
-                  className={isVideoEnabled ? 'bg-green-100' : ''}
+                  onClick={() => changeStatus('busy')}
+                  className="text-xs"
                 >
-                  <Video className="w-4 h-4" />
+                  <AlertTriangle className="h-3 w-3 mr-1 text-red-500" />
+                  Ocupado
                 </Button>
-                
-                <Button variant="outline" size="sm">
-                  <Monitor className="w-4 h-4" />
-                </Button>
-                
-                <Button variant="outline" size="sm">
-                  <Share2 className="w-4 h-4" />
+                <Button
+                  variant={myStatus === 'away' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => changeStatus('away')}
+                  className="text-xs"
+                >
+                  <Clock className="h-3 w-3 mr-1 text-yellow-500" />
+                  Ausente
                 </Button>
               </div>
             </div>
-          </CardHeader>
-          
-          <CardContent className="flex-1 relative">
-            {/* Collaborative Canvas Area */}
-            <div className="h-full bg-muted/30 rounded-lg border-2 border-dashed border-muted-foreground/20 flex items-center justify-center relative overflow-hidden">
-              <div className="text-center">
-                <Activity className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-muted-foreground mb-2">
-                  Área de Trabalho Colaborativo
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Compartilhe documentos, faça anotações e colabore em tempo real
-                </p>
-              </div>
-
-              {/* Render other participants' cursors */}
-              {participants.map(participant => 
-                participant.id !== currentUser?.id && participant.cursor && (
-                  <div
-                    key={participant.id}
-                    className="absolute pointer-events-none z-10"
-                    style={{
-                      left: participant.cursor.x,
-                      top: participant.cursor.y,
-                      transform: 'translate(-50%, -50%)'
-                    }}
-                  >
-                    <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs">
-                      {participant.name}
+            
+            <Separator className="my-3" />
+            
+            <ScrollArea className="h-64">
+              <div className="space-y-2">
+                {onlineUsers.map((user) => (
+                  <div key={user.user_id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/50">
+                    <div className="relative">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={user.avatar_url} />
+                        <AvatarFallback className="text-xs">
+                          {user.name.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(user.status)}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-sm truncate">{user.name}</div>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        {getStatusIcon(user.status)}
+                        <span className="capitalize">{user.status}</span>
+                      </div>
                     </div>
                   </div>
-                )
-              )}
-            </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        {/* Quick Actions */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Ações Rápidas</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <Button 
+              size="sm" 
+              className="w-full justify-start"
+              onClick={() => sendWorkspaceUpdate('emergency_drill', 'Simulado de emergência iniciado', 'high')}
+            >
+              <AlertTriangle className="h-4 w-4 mr-2" />
+              Simulado de Emergência
+            </Button>
+            <Button 
+              size="sm" 
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => sendWorkspaceUpdate('shift_change', 'Troca de turno em andamento', 'medium')}
+            >
+              <Clock className="h-4 w-4 mr-2" />
+              Troca de Turno
+            </Button>
+            <Button 
+              size="sm" 
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => sendWorkspaceUpdate('maintenance_alert', 'Manutenção programada', 'low')}
+            >
+              <Activity className="h-4 w-4 mr-2" />
+              Alerta de Manutenção
+            </Button>
           </CardContent>
         </Card>
       </div>
 
-      {/* Sidebar */}
-      <div className="space-y-6">
-        {/* Participants */}
-        <Card>
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center justify-between">
-              <span className="flex items-center gap-2">
-                <Users className="w-4 h-4" />
-                Participantes ({participants.length})
-              </span>
-              <Button variant="outline" size="sm" onClick={onInviteUser}>
-                <UserPlus className="w-4 h-4" />
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          
-          <CardContent>
-            <div className="space-y-3">
-              {participants.map(participant => (
-                <div key={participant.id} className="flex items-center gap-3">
-                  <div className="relative">
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src={participant.avatar} />
-                      <AvatarFallback>
-                        {participant.name.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(participant.status)}`} />
+      {/* Main Collaboration Area */}
+      <div className="lg:col-span-3">
+        <Tabs defaultValue="chat" className="h-full">
+          <div className="flex items-center justify-between mb-4">
+            <TabsList>
+              <TabsTrigger value="chat" className="flex items-center gap-2">
+                <MessageSquare className="h-4 w-4" />
+                Chat em Tempo Real
+              </TabsTrigger>
+              <TabsTrigger value="updates" className="flex items-center gap-2">
+                <Activity className="h-4 w-4" />
+                Atualizações do Workspace
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
+          <TabsContent value="chat" className="h-[calc(100vh-200px)]">
+            <Card className="h-full flex flex-col">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg">Canal: #{selectedRoom}</CardTitle>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline">
+                      <Phone className="h-4 w-4 mr-2" />
+                      Chamada
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      <Video className="h-4 w-4 mr-2" />
+                      Vídeo
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Compartilhar
+                    </Button>
                   </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {participant.name}
-                      {participant.id === currentUser?.id && ' (Você)'}
-                    </p>
-                    <Badge variant="outline" className="text-xs">
-                      {participant.role}
-                    </Badge>
-                  </div>
-                  
-                  <Button variant="ghost" size="sm">
-                    <MoreHorizontal className="w-4 h-4" />
-                  </Button>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Chat */}
-        <Card className="flex-1 flex flex-col h-[400px]">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2">
-              <MessageCircle className="w-4 h-4" />
-              Chat
-            </CardTitle>
-          </CardHeader>
-          
-          <CardContent className="flex-1 flex flex-col">
-            <ScrollArea className="flex-1 pr-4">
-              {messages.map(renderMessage)}
-              <div ref={messagesEndRef} />
-            </ScrollArea>
-
-            <div className="flex gap-2 pt-4 border-t">
-              <Input
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Digite uma mensagem..."
-                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                className="flex-1"
-              />
+              </CardHeader>
               
-              <Button 
-                onClick={sendMessage}
-                disabled={!newMessage.trim()}
-                size="icon"
-              >
-                <MessageCircle className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+              <CardContent className="flex-1 flex flex-col p-0">
+                {/* Messages Area */}
+                <ScrollArea className="flex-1 p-4">
+                  <div className="space-y-4">
+                    {chatMessages.map((message) => (
+                      <div key={message.id} className={`flex gap-3 ${message.type === 'system' ? 'justify-center' : ''}`}>
+                        {message.type !== 'system' && (
+                          <Avatar className="h-8 w-8 flex-shrink-0">
+                            <AvatarFallback className="text-xs">
+                              {message.user_name.substring(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                        )}
+                        <div className={`flex-1 ${message.type === 'system' ? 'text-center' : ''}`}>
+                          {message.type === 'system' ? (
+                            <Badge variant="secondary" className="text-xs">
+                              {message.message}
+                            </Badge>
+                          ) : (
+                            <>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-medium text-sm">{message.user_name}</span>
+                                <span className="text-xs text-muted-foreground">
+                                  {new Date(message.timestamp).toLocaleTimeString('pt-BR')}
+                                </span>
+                              </div>
+                              <div className="text-sm bg-accent/20 rounded-lg p-2">
+                                {message.message}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    <div ref={messagesEndRef} />
+                  </div>
+                </ScrollArea>
+
+                {/* Message Input */}
+                <div className="p-4 border-t">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Digite sua mensagem..."
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                      className="flex-1"
+                    />
+                    <Button onClick={sendMessage} disabled={!newMessage.trim()}>
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="updates" className="h-[calc(100vh-200px)]">
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Activity className="h-5 w-5" />
+                  Atualizações em Tempo Real
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-96">
+                  <div className="space-y-3">
+                    {workspaceUpdates.map((update) => (
+                      <div key={update.id} className={`p-3 rounded-lg border ${getPriorityColor(update.priority)}`}>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="font-medium text-sm">{update.user_name}</span>
+                              <Badge variant="outline" className="text-xs">
+                                {update.action}
+                              </Badge>
+                            </div>
+                            <p className="text-sm mb-2">{update.description}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(update.timestamp).toLocaleString('pt-BR')}
+                            </p>
+                          </div>
+                          <div className={`w-2 h-2 rounded-full ${
+                            update.priority === 'high' ? 'bg-red-500' :
+                            update.priority === 'medium' ? 'bg-yellow-500' : 'bg-blue-500'
+                          }`} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
 };
+
+export default RealTimeWorkspace;

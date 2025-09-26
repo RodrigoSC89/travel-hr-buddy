@@ -1,352 +1,449 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { KPICard } from './kpi-cards';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { ErrorBoundary } from '@/components/layout/error-boundary';
-import { Breadcrumbs } from '@/components/layout/breadcrumbs';
-import { usePermissions } from '@/hooks/use-permissions';
-import { supabase } from '@/integrations/supabase/client';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Users, 
-  FileCheck, 
-  AlertTriangle, 
   TrendingUp, 
-  Calendar,
-  Target,
-  Clock,
-  CheckCircle,
+  TrendingDown, 
+  Users, 
+  DollarSign, 
+  Ship, 
   BarChart3,
-  PieChart
+  Calendar,
+  Clock,
+  Target,
+  Award,
+  AlertTriangle,
+  CheckCircle
 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPI, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell } from 'recharts';
 
-interface DashboardStats {
-  totalEmployees: number;
-  activeCertificates: number;
-  expiringCertificates: number;
-  totalAlerts: number;
-  completionRate: number;
-  monthlyTrend: Array<{ month: string; certificates: number; alerts: number }>;
-  certificatesByType: Array<{ name: string; value: number; color: string }>;
+interface ExecutiveKPI {
+  id: string;
+  title: string;
+  value: number;
+  target: number;
+  unit: string;
+  trend: 'up' | 'down' | 'stable';
+  change: number;
+  changeType: 'percentage' | 'absolute';
+  status: 'excellent' | 'good' | 'warning' | 'critical';
 }
 
-export const ExecutiveDashboard: React.FC = () => {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const { hasPermission, userRole, getRoleDisplayName } = usePermissions();
+interface StrategicMetric {
+  category: string;
+  metrics: {
+    name: string;
+    current: number;
+    target: number;
+    trend: number;
+  }[];
+}
+
+const ExecutiveDashboard = () => {
+  const [kpis, setKpis] = useState<ExecutiveKPI[]>([]);
+  const [strategicMetrics, setStrategicMetrics] = useState<StrategicMetric[]>([]);
+  const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
 
   useEffect(() => {
-    fetchDashboardData();
-  }, []);
+    loadExecutiveData();
+  }, [selectedPeriod]);
 
-  const fetchDashboardData = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
+  const loadExecutiveData = () => {
+    // Simular dados KPIs executivos
+    const mockKPIs: ExecutiveKPI[] = [
+      {
+        id: '1',
+        title: 'Receita Operacional',
+        value: 12500000,
+        target: 15000000,
+        unit: 'R$',
+        trend: 'up',
+        change: 15.2,
+        changeType: 'percentage',
+        status: 'good'
+      },
+      {
+        id: '2',
+        title: 'Eficiência da Frota',
+        value: 87.5,
+        target: 95,
+        unit: '%',
+        trend: 'up',
+        change: 3.2,
+        changeType: 'percentage',
+        status: 'warning'
+      },
+      {
+        id: '3',
+        title: 'Satisfação do Cliente',
+        value: 94.2,
+        target: 98,
+        unit: '%',
+        trend: 'stable',
+        change: 0.8,
+        changeType: 'percentage',
+        status: 'excellent'
+      },
+      {
+        id: '4',
+        title: 'Tripulação Certificada',
+        value: 96.8,
+        target: 100,
+        unit: '%',
+        trend: 'up',
+        change: 2.1,
+        changeType: 'percentage',
+        status: 'good'
+      },
+      {
+        id: '5',
+        title: 'Tempo Médio de Entrega',
+        value: 14.2,
+        target: 12,
+        unit: 'dias',
+        trend: 'down',
+        change: -1.3,
+        changeType: 'absolute',
+        status: 'warning'
+      },
+      {
+        id: '6',
+        title: 'Incidentes de Segurança',
+        value: 2,
+        target: 0,
+        unit: 'casos',
+        trend: 'down',
+        change: -3,
+        changeType: 'absolute',
+        status: 'critical'
+      }
+    ];
 
-      // Buscar dados dos certificados
-      const { data: certificates, error: certError } = await supabase
-        .from('employee_certificates')
-        .select('*');
+    // Simular métricas estratégicas
+    const mockStrategicMetrics: StrategicMetric[] = [
+      {
+        category: 'Operações',
+        metrics: [
+          { name: 'Utilização da Frota', current: 87.5, target: 95, trend: 3.2 },
+          { name: 'Pontualidade das Entregas', current: 92.1, target: 98, trend: 1.8 },
+          { name: 'Consumo de Combustível', current: 12.5, target: 10.8, trend: -2.1 }
+        ]
+      },
+      {
+        category: 'Financeiro',
+        metrics: [
+          { name: 'Margem Operacional', current: 23.4, target: 28, trend: 2.1 },
+          { name: 'ROI de Investimentos', current: 18.7, target: 22, trend: 1.5 },
+          { name: 'Custo por Viagem', current: 45600, target: 42000, trend: -3.2 }
+        ]
+      },
+      {
+        category: 'Recursos Humanos',
+        metrics: [
+          { name: 'Retenção de Talentos', current: 89.3, target: 95, trend: 2.8 },
+          { name: 'Satisfação dos Funcionários', current: 8.4, target: 9.2, trend: 0.6 },
+          { name: 'Produtividade da Equipe', current: 94.2, target: 100, trend: 1.9 }
+        ]
+      }
+    ];
 
-      if (certError) throw certError;
+    setKpis(mockKPIs);
+    setStrategicMetrics(mockStrategicMetrics);
+  };
 
-      // Buscar dados dos alertas
-      const { data: alerts, error: alertsError } = await supabase
-        .from('certificate_alerts')
-        .select('*');
+  const formatValue = (kpi: ExecutiveKPI) => {
+    if (kpi.unit === 'R$') {
+      return `${kpi.unit} ${(kpi.value / 1000000).toFixed(1)}M`;
+    }
+    return `${kpi.value}${kpi.unit}`;
+  };
 
-      if (alertsError) throw alertsError;
-
-      // Buscar dados dos usuários
-      const { data: profiles, error: profilesError } = await supabase
-        .from('profiles')
-        .select('*');
-
-      if (profilesError) throw profilesError;
-
-      // Calcular estatísticas
-      const now = new Date();
-      const thirtyDaysFromNow = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000));
-
-      const activeCerts = certificates?.filter(cert => 
-        new Date(cert.expiry_date) > now
-      ).length || 0;
-
-      const expiringCerts = certificates?.filter(cert => {
-        const expiryDate = new Date(cert.expiry_date);
-        return expiryDate > now && expiryDate <= thirtyDaysFromNow;
-      }).length || 0;
-
-      // Agrupar certificados por tipo
-      const certTypes = certificates?.reduce((acc, cert) => {
-        acc[cert.certificate_type] = (acc[cert.certificate_type] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>) || {};
-
-      const certificatesByType = Object.entries(certTypes).map(([name, value], index) => ({
-        name,
-        value,
-        color: ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#0088fe'][index % 5]
-      }));
-
-      // Simular dados mensais (últimos 6 meses)
-      const monthlyTrend = Array.from({ length: 6 }, (_, i) => {
-        const date = new Date();
-        date.setMonth(date.getMonth() - (5 - i));
-        return {
-          month: date.toLocaleDateString('pt-BR', { month: 'short' }),
-          certificates: Math.floor(Math.random() * 20) + 10,
-          alerts: Math.floor(Math.random() * 8) + 2
-        };
-      });
-
-      const dashboardStats: DashboardStats = {
-        totalEmployees: profiles?.length || 0,
-        activeCertificates: activeCerts,
-        expiringCertificates: expiringCerts,
-        totalAlerts: alerts?.length || 0,
-        completionRate: certificates?.length ? Math.round((activeCerts / certificates.length) * 100) : 0,
-        monthlyTrend,
-        certificatesByType
-      };
-
-      setStats(dashboardStats);
-    } catch (err) {
-      console.error('Error fetching dashboard data:', err);
-      setError('Erro ao carregar dados do dashboard');
-    } finally {
-      setIsLoading(false);
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'excellent': return 'text-green-600 bg-green-50 border-green-200';
+      case 'good': return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'warning': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+      case 'critical': return 'text-red-600 bg-red-50 border-red-200';
+      default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
 
-  const breadcrumbItems = [
-    { label: 'Dashboard' },
-    { label: 'Executivo', current: true }
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'excellent': return <Award className="h-4 w-4 text-green-600" />;
+      case 'good': return <CheckCircle className="h-4 w-4 text-blue-600" />;
+      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
+      case 'critical': return <AlertTriangle className="h-4 w-4 text-red-600" />;
+      default: return <BarChart3 className="h-4 w-4" />;
+    }
+  };
+
+  const getTrendIcon = (trend: string, change: number) => {
+    if (trend === 'up' || change > 0) {
+      return <TrendingUp className="h-4 w-4 text-green-600" />;
+    } else if (trend === 'down' || change < 0) {
+      return <TrendingDown className="h-4 w-4 text-red-600" />;
+    }
+    return <BarChart3 className="h-4 w-4 text-gray-600" />;
+  };
+
+  // Dados para gráficos
+  const revenueData = [
+    { month: 'Jan', revenue: 10200000, target: 12000000 },
+    { month: 'Fev', revenue: 11500000, target: 12000000 },
+    { month: 'Mar', revenue: 12800000, target: 12000000 },
+    { month: 'Abr', revenue: 11900000, target: 12000000 },
+    { month: 'Mai', revenue: 13200000, target: 12000000 },
+    { month: 'Jun', revenue: 12500000, target: 12000000 },
   ];
 
-  if (!hasPermission('analytics', 'read')) {
-    return (
-      <div className="space-y-6">
-        <Breadcrumbs items={breadcrumbItems} />
-        <Card>
-          <CardContent className="flex items-center justify-center h-48">
-            <div className="text-center">
-              <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">Você não tem permissão para acessar este dashboard</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const fleetEfficiencyData = [
+    { name: 'Nautilus Explorer', efficiency: 92 },
+    { name: 'Atlantic Pioneer', efficiency: 88 },
+    { name: 'Pacific Star', efficiency: 85 },
+    { name: 'Ocean Guardian', efficiency: 91 },
+    { name: 'Sea Voyager', efficiency: 89 },
+  ];
 
-  if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <Breadcrumbs items={breadcrumbItems} />
-        <LoadingSpinner size="lg" text="Carregando dashboard executivo..." className="h-48" />
-      </div>
-    );
-  }
-
-  if (error || !stats) {
-    return (
-      <div className="space-y-6">
-        <Breadcrumbs items={breadcrumbItems} />
-        <Card>
-          <CardContent className="flex items-center justify-center h-48">
-            <div className="text-center">
-              <AlertTriangle className="w-12 h-12 text-destructive mx-auto mb-4" />
-              <p className="text-destructive">{error || 'Erro ao carregar dados'}</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
   return (
-    <ErrorBoundary>
-      <div className="space-y-6 animate-fade-in">
-        <div className="flex items-center justify-between">
-          <div>
-            <Breadcrumbs items={breadcrumbItems} />
-            <h1 className="text-3xl font-bold tracking-tight mt-2">Dashboard Executivo</h1>
-            <p className="text-muted-foreground">
-              Visão estratégica para {getRoleDisplayName(userRole || 'employee')}
-            </p>
-          </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Dashboard Executivo</h1>
+          <p className="text-muted-foreground">
+            Visão estratégica e KPIs críticos do negócio
+          </p>
         </div>
-
-        {/* KPI Cards */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <KPICard
-            title="Total de Funcionários"
-            value={stats.totalEmployees}
-            description="Cadastrados no sistema"
-            icon={Users}
-            trend={{
-              value: 5.2,
-              isPositive: true,
-              period: "mês anterior"
-            }}
-          />
-          
-          <KPICard
-            title="Certificados Ativos"
-            value={stats.activeCertificates}
-            description="Válidos atualmente"
-            icon={FileCheck}
-            trend={{
-              value: -2.1,
-              isPositive: false,
-              period: "mês anterior"
-            }}
-          />
-          
-          <KPICard
-            title="Expirando em 30 dias"
-            value={stats.expiringCertificates}
-            description="Requer atenção"
-            icon={AlertTriangle}
-            className="border-orange-200"
-          />
-          
-          <KPICard
-            title="Taxa de Conformidade"
-            value={`${stats.completionRate}%`}
-            description="Certificados válidos"
-            icon={CheckCircle}
-            trend={{
-              value: 3.8,
-              isPositive: true,
-              period: "mês anterior"
-            }}
-          />
+        <div className="flex gap-2">
+          <Button
+            variant={selectedPeriod === 'month' ? 'default' : 'outline'}
+            onClick={() => setSelectedPeriod('month')}
+            size="sm"
+          >
+            Mensal
+          </Button>
+          <Button
+            variant={selectedPeriod === 'quarter' ? 'default' : 'outline'}
+            onClick={() => setSelectedPeriod('quarter')}
+            size="sm"
+          >
+            Trimestral
+          </Button>
+          <Button
+            variant={selectedPeriod === 'year' ? 'default' : 'outline'}
+            onClick={() => setSelectedPeriod('year')}
+            size="sm"
+          >
+            Anual
+          </Button>
         </div>
-
-        {/* Gráficos */}
-        <div className="grid gap-4 md:grid-cols-2">
-          {/* Tendência Mensal */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
-                Tendência Mensal
-              </CardTitle>
-              <CardDescription>
-                Certificados emitidos e alertas gerados
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={stats.monthlyTrend}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line 
-                    type="monotone" 
-                    dataKey="certificates" 
-                    stroke="#8884d8" 
-                    strokeWidth={2}
-                    name="Certificados"
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="alerts" 
-                    stroke="#82ca9d" 
-                    strokeWidth={2}
-                    name="Alertas"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-
-          {/* Distribuição por Tipo */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <PieChart className="h-5 w-5" />
-                Certificados por Tipo
-              </CardTitle>
-              <CardDescription>
-                Distribuição dos tipos de certificados
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <RechartsPI>
-                  <Tooltip />
-                  {stats.certificatesByType.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </RechartsPI>
-              </ResponsiveContainer>
-              <div className="mt-4 space-y-2">
-                {stats.certificatesByType.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2">
-                      <div 
-                        className="w-3 h-3 rounded-full" 
-                        style={{ backgroundColor: item.color }}
-                      />
-                      <span>{item.name}</span>
-                    </div>
-                    <span className="font-medium">{item.value}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Resumo de Ações */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="h-5 w-5" />
-              Ações Recomendadas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <Clock className="h-4 w-4 text-orange-500" />
-                  <span className="font-medium">Urgente</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {stats.expiringCertificates} certificados expirando em 30 dias
-                </p>
-              </div>
-              
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <Users className="h-4 w-4 text-blue-500" />
-                  <span className="font-medium">Gestão</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Revisar políticas de certificação
-                </p>
-              </div>
-              
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="h-4 w-4 text-green-500" />
-                  <span className="font-medium">Planejamento</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Agendar treinamentos para Q1
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
-    </ErrorBoundary>
+
+      {/* KPIs Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {kpis.map((kpi) => (
+          <Card key={kpi.id} className={`border ${getStatusColor(kpi.status)}`}>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
+                {getStatusIcon(kpi.status)}
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex items-baseline gap-2">
+                  <div className="text-2xl font-bold">{formatValue(kpi)}</div>
+                  <div className="flex items-center gap-1 text-sm">
+                    {getTrendIcon(kpi.trend, kpi.change)}
+                    <span className={kpi.change >= 0 ? 'text-green-600' : 'text-red-600'}>
+                      {kpi.change >= 0 ? '+' : ''}{kpi.change}
+                      {kpi.changeType === 'percentage' ? '%' : ''}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Meta: {kpi.target}{kpi.unit}</span>
+                    <span>{((kpi.value / kpi.target) * 100).toFixed(1)}%</span>
+                  </div>
+                  <Progress 
+                    value={(kpi.value / kpi.target) * 100} 
+                    className="h-2"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Charts and Analytics */}
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList>
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="strategic">Métricas Estratégicas</TabsTrigger>
+          <TabsTrigger value="operational">Operacional</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Receita vs Meta</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <AreaChart data={revenueData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip 
+                      formatter={(value: number) => [`R$ ${(value / 1000000).toFixed(1)}M`, '']}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="revenue" 
+                      stroke="hsl(var(--primary))" 
+                      fill="hsl(var(--primary))"
+                      fillOpacity={0.3}
+                      name="Receita"
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="target" 
+                      stroke="hsl(var(--destructive))" 
+                      strokeDasharray="5 5"
+                      name="Meta"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Eficiência da Frota</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={fleetEfficiencyData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="efficiency"
+                      label={({ name, efficiency }) => `${name}: ${efficiency}%`}
+                    >
+                      {fleetEfficiencyData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="strategic" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {strategicMetrics.map((category) => (
+              <Card key={category.category}>
+                <CardHeader>
+                  <CardTitle>{category.category}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {category.metrics.map((metric) => (
+                    <div key={metric.name} className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium">{metric.name}</span>
+                        <div className="flex items-center gap-1">
+                          {getTrendIcon('', metric.trend)}
+                          <span className={`text-xs ${metric.trend >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {metric.trend >= 0 ? '+' : ''}{metric.trend}%
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>Atual: {metric.current}%</span>
+                        <span>Meta: {metric.target}%</span>
+                      </div>
+                      <Progress 
+                        value={(metric.current / metric.target) * 100} 
+                        className="h-2"
+                      />
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="operational" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-2">
+                  <Ship className="h-8 w-8 text-blue-600" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Embarcações Ativas</p>
+                    <p className="text-2xl font-bold">24</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-2">
+                  <Users className="h-8 w-8 text-green-600" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Tripulação Total</p>
+                    <p className="text-2xl font-bold">340</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-2">
+                  <Clock className="h-8 w-8 text-yellow-600" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Horas Navegadas</p>
+                    <p className="text-2xl font-bold">8,450</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-2">
+                  <Target className="h-8 w-8 text-purple-600" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Entregas no Prazo</p>
+                    <p className="text-2xl font-bold">92.1%</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
+
+export default ExecutiveDashboard;
