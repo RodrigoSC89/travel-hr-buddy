@@ -7,6 +7,7 @@ import { QuickActionsBar } from '@/components/ui/quick-actions-bar';
 import { NotificationSystem } from '@/components/ui/notification-system';
 import VoiceInterface from '@/components/voice/VoiceInterface';
 import IntelligentChatbot from '@/components/voice/IntelligentChatbot';
+import NautilusCopilot from '@/components/ai/nautilus-copilot';
 import { useSystemActions } from '@/hooks/use-system-actions';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/layout/theme-provider';
@@ -80,6 +81,7 @@ export const EnterpriseLayout: React.FC = () => {
             <QuickActionsBar onOpenSearch={() => setIsSearchOpen(true)} />
             <VoiceInterface />
             <IntelligentChatbot />
+            <NautilusCopilot />
             
             {/* Toast Notifications */}
             <Toaster />

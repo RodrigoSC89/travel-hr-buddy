@@ -168,6 +168,8 @@ const App = () => {
                       <KnowledgeManagement />
                     </div>
                   } />
+                  <Route path="fleet-management" element={<Maritime />} />
+                  <Route path="crew-management" element={<HumanResources />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
