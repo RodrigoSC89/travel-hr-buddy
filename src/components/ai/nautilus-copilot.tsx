@@ -361,18 +361,14 @@ export const NautilusCopilot: React.FC = () => {
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed right-6 bottom-24 md:right-6 md:bottom-24 z-50">
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-16 h-16 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-primary/80"
+          aria-label="Abrir Copiloto"
+          className="rounded-full w-12 h-12 shadow-md hover:shadow-lg transition-all duration-300 bg-primary text-primary-foreground"
         >
-          <Bot className="w-8 h-8" />
+          <Bot className="w-6 h-6" />
         </Button>
-        
-        {/* Indicador de novidades */}
-        <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-          <span className="text-white text-xs font-bold">!</span>
-        </div>
       </div>
     );
   }
@@ -380,8 +376,8 @@ export const NautilusCopilot: React.FC = () => {
   return (
     <Card className={`fixed right-6 z-50 bg-card/95 backdrop-blur-sm border-2 border-primary/20 shadow-2xl transition-all duration-300 ${
       isMinimized 
-        ? 'bottom-6 w-80 h-16' 
-        : 'bottom-6 w-96 h-[600px]'
+        ? 'bottom-24 w-72 md:w-80 h-14 md:h-16' 
+        : 'bottom-24 w-[min(92vw,26rem)] md:w-96 h-[70vh] md:h-[600px]'
     }`}>
       <CardHeader className="flex-shrink-0 pb-3 border-b">
         <div className="flex items-center justify-between">
