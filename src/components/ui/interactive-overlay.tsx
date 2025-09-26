@@ -72,7 +72,7 @@ const FloatingMenu = () => {
   ];
 
   return (
-    <div className="fixed bottom-8 right-96 z-35">
+    <div className="fixed bottom-8 right-80 z-35 hidden md:block">
       <div className={`flex flex-col gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         {actions.map((action, index) => (
           <div
