@@ -115,13 +115,13 @@ export const MaritimeDashboard: React.FC = () => {
             Sistema Inteligente de Gestão Marítima e Logística de Pessoal
           </p>
           <div className="flex items-center gap-4 mt-4">
-            <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-300">
+            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
               🌊 Maritime Excellence
             </Badge>
-            <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-300">
+            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
               🤖 AI-Powered
             </Badge>
-            <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-300">
+            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
               🛡️ Compliance Ready
             </Badge>
           </div>
@@ -129,7 +129,7 @@ export const MaritimeDashboard: React.FC = () => {
       </div>
 
       <Tabs value={activeModule} onValueChange={handleModuleChange}>
-        <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-blue-50 to-cyan-50">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4" />
             Overview

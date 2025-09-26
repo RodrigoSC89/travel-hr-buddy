@@ -119,11 +119,11 @@ export const VesselManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'at_sea': return 'bg-blue-500';
+      case 'at_sea': return 'bg-primary';
       case 'in_port': return 'bg-green-500';
       case 'maintenance': return 'bg-yellow-500';
-      case 'emergency': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'emergency': return 'bg-destructive';
+      default: return 'bg-muted';
     }
   };
 
@@ -139,8 +139,8 @@ export const VesselManagement: React.FC = () => {
 
   const getCertificationBadge = (status: string) => {
     switch (status) {
-      case 'valid': return <Badge variant="default" className="bg-green-500">Válido</Badge>;
-      case 'expiring': return <Badge variant="destructive" className="bg-yellow-500">Vencendo</Badge>;
+      case 'valid': return <Badge className="bg-green-500 text-white">Válido</Badge>;
+      case 'expiring': return <Badge className="bg-yellow-500 text-white">Vencendo</Badge>;
       case 'expired': return <Badge variant="destructive">Vencido</Badge>;
       default: return <Badge variant="secondary">N/A</Badge>;
     }

@@ -239,12 +239,12 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'at_sea': return 'text-blue-600 bg-blue-100';
+      case 'at_sea': return 'text-primary bg-primary/10';
       case 'in_port': return 'text-green-600 bg-green-100';
       case 'anchored': return 'text-yellow-600 bg-yellow-100';
       case 'maintenance': return 'text-orange-600 bg-orange-100';
-      case 'emergency': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'emergency': return 'text-destructive bg-destructive/10';
+      default: return 'text-muted-foreground bg-muted';
     }
   };
 
