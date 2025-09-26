@@ -45,7 +45,7 @@ serve(async (req) => {
       const marineResponse = await fetch(marineUrl)
       marineData = await marineResponse.json()
     } catch (error) {
-      console.log('Marine data not available:', error.message)
+      console.log('Marine data not available:', error instanceof Error ? error.message : 'Unknown error')
     }
 
     // Process and structure the weather data
@@ -74,7 +74,7 @@ serve(async (req) => {
         precipitation: item.rain?.['3h'] || 0,
         wave_height: null // Would need specialized marine API
       })),
-      alerts: [],
+      alerts: [] as any[],
       marine_conditions: {
         wave_height: null, // Would need specialized marine API
         wave_direction: null,
@@ -168,7 +168,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error'
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
