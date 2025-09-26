@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { FlightSearch } from '@/components/travel/flight-search';
 import { HotelSearch } from '@/components/travel/hotel-search';
 import { TravelMap } from '@/components/travel/travel-map';
+import { PredictiveTravelDashboard } from '@/components/travel/predictive-travel-dashboard';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plane, Building, Map, Calendar } from 'lucide-react';
+import { Plane, Building, Map, Calendar, BarChart3, Brain } from 'lucide-react';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import VoiceInterface from '@/components/voice/VoiceInterface';
 
@@ -56,8 +57,12 @@ const Travel = () => {
             </div>
           </div>
 
-          <Tabs defaultValue="flights" className="space-y-6">
-            <TabsList className="grid grid-cols-4 w-full max-w-lg">
+          <Tabs defaultValue="predictive" className="space-y-6">
+            <TabsList className="grid grid-cols-5 w-full max-w-2xl">
+              <TabsTrigger value="predictive" className="flex items-center gap-2">
+                <Brain className="h-4 w-4" />
+                IA Preditiva
+              </TabsTrigger>
               <TabsTrigger value="flights" className="flex items-center gap-2">
                 <Plane className="h-4 w-4" />
                 Voos
@@ -75,6 +80,10 @@ const Travel = () => {
                 Roteiro
               </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="predictive">
+              <PredictiveTravelDashboard />
+            </TabsContent>
 
             <TabsContent value="flights">
               <FlightSearch />

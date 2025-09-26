@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { StatsCard } from '@/components/ui/stats-card';
 import { useToast } from '@/hooks/use-toast';
+import { useTravelPredictions } from '@/hooks/use-travel-predictions';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Plane, 
@@ -17,7 +19,11 @@ import {
   Wifi,
   Coffee,
   Luggage,
-  Filter
+  Filter,
+  Brain,
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle
 } from 'lucide-react';
 
 interface FlightOption {
@@ -130,10 +136,19 @@ const mockFlights: FlightOption[] = [
 
 export const FlightSearch = () => {
   const { toast } = useToast();
+  const { 
+    loading: predictionLoading, 
+    predictions, 
+    generatePrediction, 
+    getInsights, 
+    formatPredictionSummary 
+  } = useTravelPredictions();
+  
   const [flights, setFlights] = useState<FlightOption[]>(mockFlights);
   const [filteredFlights, setFilteredFlights] = useState<FlightOption[]>(mockFlights);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedFlight, setSelectedFlight] = useState<string | null>(null);
+  const [showPredictions, setShowPredictions] = useState(false);
   const [searchParams, setSearchParams] = useState({
     from: 'São Paulo (GRU)',
     to: 'Rio de Janeiro (SDU)',
@@ -257,6 +272,22 @@ export const FlightSearch = () => {
     }
   };
 
+  // Função para gerar predição IA
+  const handleGeneratePrediction = async () => {
+    const originCode = searchParams.from.includes('(') 
+      ? searchParams.from.match(/\(([^)]+)\)/)?.[1] || searchParams.from.slice(0, 3).toUpperCase()
+      : searchParams.from.slice(0, 3).toUpperCase();
+    
+    const destinationCode = searchParams.to.includes('(') 
+      ? searchParams.to.match(/\(([^)]+)\)/)?.[1] || searchParams.to.slice(0, 3).toUpperCase()
+      : searchParams.to.slice(0, 3).toUpperCase();
+
+    const routeCode = `${originCode}-${destinationCode}`;
+    
+    await generatePrediction('flight', routeCode);
+    setShowPredictions(true);
+  };
+
   const handleSelectFlight = (flightId: string) => {
     const newSelection = selectedFlight === flightId ? null : flightId;
     setSelectedFlight(newSelection);
@@ -371,6 +402,44 @@ export const FlightSearch = () => {
         </div>
       </div>
 
+      {/* Predições IA */}
+      {showPredictions && predictions && (
+        <Card className="border-blue-200 bg-blue-50 dark:bg-blue-900/20">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="p-2 bg-blue-100 dark:bg-blue-800 rounded-lg">
+                <Brain className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                  🤖 Análise Preditiva com IA
+                </h3>
+                <p className="text-blue-800 dark:text-blue-200 mb-4">
+                  {formatPredictionSummary(predictions)}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant={predictions.price_trend === 'rising' ? 'destructive' : predictions.price_trend === 'falling' ? 'default' : 'secondary'}>
+                    {predictions.price_trend === 'rising' ? (
+                      <><TrendingUp className="h-3 w-3 mr-1" /> Preços Subindo</>
+                    ) : predictions.price_trend === 'falling' ? (
+                      <><TrendingDown className="h-3 w-3 mr-1" /> Preços Caindo</>
+                    ) : (
+                      <><AlertTriangle className="h-3 w-3 mr-1" /> Preços Estáveis</>
+                    )}
+                  </Badge>
+                  <Badge variant="outline">
+                    Confiança: {Math.round(predictions.confidence_score * 100)}%
+                  </Badge>
+                  <Badge variant="secondary">
+                    Economia Potencial: R$ {Math.abs(predictions.predicted_price - predictions.current_avg_price).toFixed(0)}
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Search Form */}
       <Card className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
@@ -425,36 +494,57 @@ export const FlightSearch = () => {
           </div>
         </div>
         
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center space-x-4 mb-4 md:mb-0">
-            <div className="flex items-center space-x-2">
-              <Filter size={16} className="text-muted-foreground" />
-              <select className="px-3 py-2 border border-border rounded-lg bg-background text-foreground">
-                <option value="economy">Econômica</option>
-                <option value="business">Executiva</option>
-                <option value="first">Primeira Classe</option>
-              </select>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Filter size={16} className="text-muted-foreground" />
+                <select className="px-3 py-2 border border-border rounded-lg bg-background text-foreground">
+                  <option value="economy">Econômica</option>
+                  <option value="business">Executiva</option>
+                  <option value="first">Primeira Classe</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex gap-2">
+              <Button 
+                variant="outline"
+                onClick={handleGeneratePrediction}
+                disabled={predictionLoading}
+                className="flex-1 md:flex-initial"
+              >
+                {predictionLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
+                    Analisando...
+                  </>
+                ) : (
+                  <>
+                    <Brain className="mr-2" size={18} />
+                    IA Preditiva
+                  </>
+                )}
+              </Button>
+              
+              <Button 
+                className="gradient-ocean flex-1 md:flex-initial"
+                onClick={handleSearch}
+                disabled={isSearching}
+              >
+                {isSearching ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Buscando...
+                  </>
+                ) : (
+                  <>
+                    <Search className="mr-2" size={18} />
+                    Buscar Voos
+                  </>
+                )}
+              </Button>
             </div>
           </div>
-          
-          <Button 
-            className="gradient-ocean"
-            onClick={handleSearch}
-            disabled={isSearching}
-          >
-            {isSearching ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Buscando...
-              </>
-            ) : (
-              <>
-                <Search className="mr-2" size={18} />
-                Buscar Voos
-              </>
-            )}
-          </Button>
-        </div>
       </Card>
 
       {/* Stats */}

@@ -827,6 +827,54 @@ export type Database = {
         }
         Relationships: []
       }
+      flight_price_history: {
+        Row: {
+          airline_code: string
+          booking_class: string
+          captured_at: string
+          created_at: string
+          currency: string
+          departure_date: string
+          flight_number: string | null
+          id: string
+          metadata: Json | null
+          passenger_count: number | null
+          price: number
+          route_code: string
+          source: string
+        }
+        Insert: {
+          airline_code: string
+          booking_class?: string
+          captured_at?: string
+          created_at?: string
+          currency?: string
+          departure_date: string
+          flight_number?: string | null
+          id?: string
+          metadata?: Json | null
+          passenger_count?: number | null
+          price: number
+          route_code: string
+          source?: string
+        }
+        Update: {
+          airline_code?: string
+          booking_class?: string
+          captured_at?: string
+          created_at?: string
+          currency?: string
+          departure_date?: string
+          flight_number?: string | null
+          id?: string
+          metadata?: Json | null
+          passenger_count?: number | null
+          price?: number
+          route_code?: string
+          source?: string
+        }
+        Relationships: []
+      }
       help_center_analytics: {
         Row: {
           action_type: string
@@ -886,6 +934,66 @@ export type Database = {
           setting_value?: Json
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      hotel_price_history: {
+        Row: {
+          captured_at: string
+          check_in_date: string
+          check_out_date: string
+          city: string
+          country: string
+          created_at: string
+          currency: string
+          guest_count: number | null
+          hotel_id: string
+          hotel_name: string
+          id: string
+          metadata: Json | null
+          price_per_night: number
+          rating: number | null
+          room_type: string | null
+          source: string
+          total_price: number
+        }
+        Insert: {
+          captured_at?: string
+          check_in_date: string
+          check_out_date: string
+          city: string
+          country?: string
+          created_at?: string
+          currency?: string
+          guest_count?: number | null
+          hotel_id: string
+          hotel_name: string
+          id?: string
+          metadata?: Json | null
+          price_per_night: number
+          rating?: number | null
+          room_type?: string | null
+          source?: string
+          total_price: number
+        }
+        Update: {
+          captured_at?: string
+          check_in_date?: string
+          check_out_date?: string
+          city?: string
+          country?: string
+          created_at?: string
+          currency?: string
+          guest_count?: number | null
+          hotel_id?: string
+          hotel_name?: string
+          id?: string
+          metadata?: Json | null
+          price_per_night?: number
+          rating?: number | null
+          room_type?: string | null
+          source?: string
+          total_price?: number
         }
         Relationships: []
       }
@@ -2319,6 +2427,174 @@ export type Database = {
           status?: string
           updated_at?: string
           uptime_percentage?: number | null
+        }
+        Relationships: []
+      }
+      travel_predictions: {
+        Row: {
+          best_booking_window_end: string | null
+          best_booking_window_start: string | null
+          confidence_score: number
+          created_at: string
+          current_avg_price: number
+          demand_level: string | null
+          id: string
+          metadata: Json | null
+          predicted_price: number
+          prediction_date: string
+          price_trend: string
+          recommendation: string | null
+          route_or_destination: string
+          seasonal_factor: number | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          best_booking_window_end?: string | null
+          best_booking_window_start?: string | null
+          confidence_score?: number
+          created_at?: string
+          current_avg_price: number
+          demand_level?: string | null
+          id?: string
+          metadata?: Json | null
+          predicted_price: number
+          prediction_date: string
+          price_trend: string
+          recommendation?: string | null
+          route_or_destination: string
+          seasonal_factor?: number | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          best_booking_window_end?: string | null
+          best_booking_window_start?: string | null
+          confidence_score?: number
+          created_at?: string
+          current_avg_price?: number
+          demand_level?: string | null
+          id?: string
+          metadata?: Json | null
+          predicted_price?: number
+          prediction_date?: string
+          price_trend?: string
+          recommendation?: string | null
+          route_or_destination?: string
+          seasonal_factor?: number | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      travel_price_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string
+          current_price: number | null
+          expires_at: string | null
+          id: string
+          metadata: Json | null
+          notification_sent: boolean | null
+          passengers_or_guests: number | null
+          route_or_destination: string
+          status: string
+          target_price: number | null
+          travel_date: string | null
+          triggered_at: string | null
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string
+          current_price?: number | null
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          notification_sent?: boolean | null
+          passengers_or_guests?: number | null
+          route_or_destination: string
+          status?: string
+          target_price?: number | null
+          travel_date?: string | null
+          triggered_at?: string | null
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string
+          current_price?: number | null
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          notification_sent?: boolean | null
+          passengers_or_guests?: number | null
+          route_or_destination?: string
+          status?: string
+          target_price?: number | null
+          travel_date?: string | null
+          triggered_at?: string | null
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      travel_recommendations: {
+        Row: {
+          action_deadline: string | null
+          created_at: string
+          description: string
+          estimated_savings: number | null
+          id: string
+          is_active: boolean | null
+          is_read: boolean | null
+          metadata: Json | null
+          priority: string
+          recommendation_type: string
+          route_or_destination: string | null
+          title: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action_deadline?: string | null
+          created_at?: string
+          description: string
+          estimated_savings?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_read?: boolean | null
+          metadata?: Json | null
+          priority?: string
+          recommendation_type: string
+          route_or_destination?: string | null
+          title: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action_deadline?: string | null
+          created_at?: string
+          description?: string
+          estimated_savings?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_read?: boolean | null
+          metadata?: Json | null
+          priority?: string
+          recommendation_type?: string
+          route_or_destination?: string | null
+          title?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
