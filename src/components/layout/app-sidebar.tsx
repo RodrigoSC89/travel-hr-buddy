@@ -30,7 +30,8 @@ import {
   TrendingUp,
   Brain,
   MessageSquare,
-  Workflow
+  Workflow,
+  TestTube
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilousLogo from '@/assets/nautilus-logo.jpg';
@@ -278,6 +279,7 @@ const navigationItems = [
       { title: "Backup & Auditoria", url: "/backup-audit", icon: Database },
       { title: "Segurança", url: "/security", icon: Shield },
       { title: "Usuários", url: "/users", icon: Users },
+      { title: "Testes & Homologação", url: "/testing", icon: TestTube },
     ],
     requiresRole: ['admin']
   },

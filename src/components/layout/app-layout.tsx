@@ -9,31 +9,36 @@ import IntelligentChatbot from '@/components/voice/IntelligentChatbot';
 import { useSystemActions } from '@/hooks/use-system-actions';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/layout/theme-provider';
+import { SEOWrapper } from '@/components/layout/seo-wrapper';
+import { OfflineIndicator } from '@/components/ui/offline-indicator';
 
 export const AppLayout: React.FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
-      <SidebarProvider>
-        <div className="min-h-screen flex w-full bg-background">
-          <AppSidebar />
-          <div className="flex-1 flex flex-col">
-            <Header />
-            <main className="flex-1 overflow-auto">
-              <Outlet />
-            </main>
+      <SEOWrapper>
+        <SidebarProvider>
+          <div className="min-h-screen flex w-full bg-background">
+            <OfflineIndicator />
+            <AppSidebar />
+            <div className="flex-1 flex flex-col">
+              <Header />
+              <main className="flex-1 overflow-auto">
+                <Outlet />
+              </main>
+            </div>
+            
+            {/* Floating Components */}
+            <QuickActionsBar onOpenSearch={() => setIsSearchOpen(true)} />
+            <VoiceInterface />
+            <IntelligentChatbot />
+            
+            {/* Toast Notifications */}
+            <Toaster />
           </div>
-          
-          {/* Floating Components */}
-          <QuickActionsBar onOpenSearch={() => setIsSearchOpen(true)} />
-          <VoiceInterface />
-          <IntelligentChatbot />
-          
-          {/* Toast Notifications */}
-          <Toaster />
-        </div>
-      </SidebarProvider>
+        </SidebarProvider>
+      </SEOWrapper>
     </ThemeProvider>
   );
 };

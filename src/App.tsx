@@ -62,6 +62,7 @@ import SystemOverviewPage from "./pages/SystemOverview";
 import EnhancedMetrics from "./pages/EnhancedMetrics";
 import PerformanceOptimizerPage from "./pages/PerformanceOptimizer";
 import AIInsights from "./pages/AIInsights";
+import TestingDashboard from "./pages/TestingDashboard";
 
 const queryClient = new QueryClient();
 
@@ -148,6 +149,7 @@ const App = () => {
                   <Route path="enhanced-metrics" element={<EnhancedMetrics />} />
                   <Route path="performance-optimizer" element={<PerformanceOptimizerPage />} />
                   <Route path="ai-insights" element={<AIInsights />} />
+                  <Route path="testing" element={<TestingDashboard />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
