@@ -329,6 +329,168 @@ export type Database = {
           },
         ]
       }
+      checklist_ai_analysis: {
+        Row: {
+          analysis_data: Json
+          analysis_type: string
+          checklist_id: string
+          confidence_level: number | null
+          created_at: string
+          created_by_ai_model: string
+          critical_issues: number | null
+          id: string
+          inconsistencies: string[] | null
+          issues_found: number | null
+          missing_fields: string[] | null
+          overall_score: number
+          recommendations: string[] | null
+        }
+        Insert: {
+          analysis_data?: Json
+          analysis_type: string
+          checklist_id: string
+          confidence_level?: number | null
+          created_at?: string
+          created_by_ai_model?: string
+          critical_issues?: number | null
+          id?: string
+          inconsistencies?: string[] | null
+          issues_found?: number | null
+          missing_fields?: string[] | null
+          overall_score: number
+          recommendations?: string[] | null
+        }
+        Update: {
+          analysis_data?: Json
+          analysis_type?: string
+          checklist_id?: string
+          confidence_level?: number | null
+          created_at?: string
+          created_by_ai_model?: string
+          critical_issues?: number | null
+          id?: string
+          inconsistencies?: string[] | null
+          issues_found?: number | null
+          missing_fields?: string[] | null
+          overall_score?: number
+          recommendations?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checklist_ai_analysis_checklist_id_fkey"
+            columns: ["checklist_id"]
+            isOneToOne: false
+            referencedRelation: "operational_checklists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      checklist_evidence: {
+        Row: {
+          captured_at: string
+          checklist_item_id: string
+          description: string | null
+          file_size: number | null
+          file_type: string
+          file_url: string
+          id: string
+          metadata: Json | null
+        }
+        Insert: {
+          captured_at?: string
+          checklist_item_id: string
+          description?: string | null
+          file_size?: number | null
+          file_type: string
+          file_url: string
+          id?: string
+          metadata?: Json | null
+        }
+        Update: {
+          captured_at?: string
+          checklist_item_id?: string
+          description?: string | null
+          file_size?: number | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          metadata?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checklist_evidence_checklist_item_id_fkey"
+            columns: ["checklist_item_id"]
+            isOneToOne: false
+            referencedRelation: "checklist_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      checklist_items: {
+        Row: {
+          ai_validation_result: Json | null
+          checklist_id: string
+          completed: boolean
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          criticality: string
+          description: string | null
+          evidence_urls: string[] | null
+          id: string
+          notes: string | null
+          order_index: number
+          required: boolean
+          title: string
+          updated_at: string
+          voice_note_url: string | null
+        }
+        Insert: {
+          ai_validation_result?: Json | null
+          checklist_id: string
+          completed?: boolean
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          criticality?: string
+          description?: string | null
+          evidence_urls?: string[] | null
+          id?: string
+          notes?: string | null
+          order_index?: number
+          required?: boolean
+          title: string
+          updated_at?: string
+          voice_note_url?: string | null
+        }
+        Update: {
+          ai_validation_result?: Json | null
+          checklist_id?: string
+          completed?: boolean
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          criticality?: string
+          description?: string | null
+          evidence_urls?: string[] | null
+          id?: string
+          notes?: string | null
+          order_index?: number
+          required?: boolean
+          title?: string
+          updated_at?: string
+          voice_note_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checklist_items_checklist_id_fkey"
+            columns: ["checklist_id"]
+            isOneToOne: false
+            referencedRelation: "operational_checklists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversation_participants: {
         Row: {
           conversation_id: string
@@ -1468,6 +1630,68 @@ export type Database = {
           },
         ]
       }
+      operational_checklists: {
+        Row: {
+          ai_analysis: Json | null
+          compliance_score: number | null
+          created_at: string
+          created_by: string
+          id: string
+          metadata: Json | null
+          offline_sync: boolean | null
+          organization_id: string | null
+          source_file_url: string | null
+          source_type: string
+          status: string
+          title: string
+          type: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          compliance_score?: number | null
+          created_at?: string
+          created_by: string
+          id?: string
+          metadata?: Json | null
+          offline_sync?: boolean | null
+          organization_id?: string | null
+          source_file_url?: string | null
+          source_type?: string
+          status?: string
+          title: string
+          type: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          compliance_score?: number | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          metadata?: Json | null
+          offline_sync?: boolean | null
+          organization_id?: string | null
+          source_file_url?: string | null
+          source_type?: string
+          status?: string
+          title?: string
+          type?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operational_checklists_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       optimization_actions: {
         Row: {
           applied_at: string | null
@@ -1817,6 +2041,249 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      peotram_ai_analysis: {
+        Row: {
+          ai_model_used: string
+          analysis_data: Json
+          analysis_type: string
+          audit_id: string
+          category_scores: Json | null
+          comparative_analysis: Json | null
+          confidence_level: number | null
+          created_at: string
+          critical_findings: string[] | null
+          document_id: string | null
+          id: string
+          overall_compliance: number | null
+          recommendations: string[] | null
+          risk_assessment: Json | null
+        }
+        Insert: {
+          ai_model_used?: string
+          analysis_data?: Json
+          analysis_type: string
+          audit_id: string
+          category_scores?: Json | null
+          comparative_analysis?: Json | null
+          confidence_level?: number | null
+          created_at?: string
+          critical_findings?: string[] | null
+          document_id?: string | null
+          id?: string
+          overall_compliance?: number | null
+          recommendations?: string[] | null
+          risk_assessment?: Json | null
+        }
+        Update: {
+          ai_model_used?: string
+          analysis_data?: Json
+          analysis_type?: string
+          audit_id?: string
+          category_scores?: Json | null
+          comparative_analysis?: Json | null
+          confidence_level?: number | null
+          created_at?: string
+          critical_findings?: string[] | null
+          document_id?: string | null
+          id?: string
+          overall_compliance?: number | null
+          recommendations?: string[] | null
+          risk_assessment?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_ai_analysis_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_audits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peotram_ai_analysis_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peotram_audits: {
+        Row: {
+          audit_date: string
+          audit_period: string
+          auditor_name: string | null
+          created_at: string
+          created_by: string
+          final_score: number | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          predicted_score: number | null
+          status: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          audit_date: string
+          audit_period: string
+          auditor_name?: string | null
+          created_at?: string
+          created_by: string
+          final_score?: number | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          predicted_score?: number | null
+          status?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          audit_date?: string
+          audit_period?: string
+          auditor_name?: string | null
+          created_at?: string
+          created_by?: string
+          final_score?: number | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          predicted_score?: number | null
+          status?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_audits_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peotram_documents: {
+        Row: {
+          ai_analysis_result: Json | null
+          ai_confidence: number | null
+          audit_id: string
+          category: string
+          compliance_status: string | null
+          created_at: string
+          document_name: string
+          document_type: string
+          file_url: string
+          id: string
+          issues_found: string[] | null
+          manual_verification: boolean | null
+          required: boolean
+          subcategory: string | null
+          uploaded_at: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          ai_analysis_result?: Json | null
+          ai_confidence?: number | null
+          audit_id: string
+          category: string
+          compliance_status?: string | null
+          created_at?: string
+          document_name: string
+          document_type: string
+          file_url: string
+          id?: string
+          issues_found?: string[] | null
+          manual_verification?: boolean | null
+          required?: boolean
+          subcategory?: string | null
+          uploaded_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          ai_analysis_result?: Json | null
+          ai_confidence?: number | null
+          audit_id?: string
+          category?: string
+          compliance_status?: string | null
+          created_at?: string
+          document_name?: string
+          document_type?: string
+          file_url?: string
+          id?: string
+          issues_found?: string[] | null
+          manual_verification?: boolean | null
+          required?: boolean
+          subcategory?: string | null
+          uploaded_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_documents_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_audits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peotram_score_predictions: {
+        Row: {
+          audit_id: string
+          based_on_documents: number | null
+          created_at: string
+          id: string
+          improvement_scenarios: Json | null
+          predicted_score: number
+          prediction_confidence: number | null
+          prediction_model: string
+          recommended_actions: string[] | null
+          risk_factors: string[] | null
+          score_breakdown: Json
+          updated_at: string
+        }
+        Insert: {
+          audit_id: string
+          based_on_documents?: number | null
+          created_at?: string
+          id?: string
+          improvement_scenarios?: Json | null
+          predicted_score: number
+          prediction_confidence?: number | null
+          prediction_model?: string
+          recommended_actions?: string[] | null
+          risk_factors?: string[] | null
+          score_breakdown?: Json
+          updated_at?: string
+        }
+        Update: {
+          audit_id?: string
+          based_on_documents?: number | null
+          created_at?: string
+          id?: string
+          improvement_scenarios?: Json | null
+          predicted_score?: number
+          prediction_confidence?: number | null
+          prediction_model?: string
+          recommended_actions?: string[] | null
+          risk_factors?: string[] | null
+          score_breakdown?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_score_predictions_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_audits"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       performance_metrics: {
         Row: {

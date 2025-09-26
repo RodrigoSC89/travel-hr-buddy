@@ -18,6 +18,8 @@ import EnterpriseLayout from "./components/layout/enterprise-layout";
 import PriceAlerts from "./pages/PriceAlerts";
 import Reports from "./pages/Reports";
 import Reservations from "./pages/Reservations";
+import ChecklistsInteligentes from "./pages/ChecklistsInteligentes";
+import PEOTRAM from "./pages/PEOTRAM";
 import Settings from "./pages/Settings";
 import Travel from "./pages/Travel";
 import Analytics from "./pages/Analytics";
@@ -160,8 +162,10 @@ const App = () => {
                   <Route path="ai-assistant" element={<AIAssistantPage />} />
                   <Route path="business-intelligence" element={<BusinessIntelligencePage />} />
                   <Route path="smart-workflow" element={<SmartWorkflowPage />} />
-                  <Route path="help" element={<Help />} />
-                  <Route path="templates" element={<Templates />} />
+                   <Route path="help" element={<Help />} />
+                   <Route path="checklists-inteligentes" element={<ChecklistsInteligentes />} />
+                   <Route path="peotram" element={<PEOTRAM />} />
+                   <Route path="templates" element={<Templates />} />
                   <Route path="system-overview" element={<SystemOverviewPage />} />
                   <Route path="enhanced-metrics" element={<EnhancedMetrics />} />
                   <Route path="performance-optimizer" element={<PerformanceOptimizerPage />} />

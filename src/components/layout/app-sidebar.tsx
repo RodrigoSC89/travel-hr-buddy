@@ -32,7 +32,8 @@ import {
   MessageSquare,
   Workflow,
   TestTube,
-  MapPin
+  MapPin,
+  CheckCircle
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilusOneLogo from '@/assets/nautilus-one-logo.png';
@@ -353,6 +354,16 @@ const navigationItems = [
     title: "Otimização Mobile",
     url: "/mobile-optimization",
     icon: Smartphone
+  },
+  {
+    title: "Checklists Inteligentes",
+    url: "/checklists-inteligentes", 
+    icon: CheckCircle
+  },
+  {
+    title: "PEOTRAM",
+    url: "/peotram",
+    icon: Shield
   },
   {
     title: "Templates",
