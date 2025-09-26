@@ -2,6 +2,7 @@ import React from 'react';
 import { HRDashboard } from '@/components/hr/hr-dashboard';
 import { CertificateManager } from '@/components/hr/certificate-manager';
 import { CertificateAlerts } from '@/components/hr/certificate-alerts';
+import { EmployeeManagement } from '@/components/hr/employee-management';
 import { ThemeProvider } from '@/components/layout/theme-provider';
 import { Header } from '@/components/layout/header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -63,9 +64,9 @@ const HumanResources = () => {
                 <CardContent>
                   <div className="text-center py-12">
                     <Award className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">Certificados em desenvolvimento</h3>
+                    <h3 className="text-lg font-semibold mb-2">Sistema de Certificados Funcional</h3>
                     <p className="text-muted-foreground">
-                      Sistema completo de gestão de certificados será disponibilizado em breve
+                      Módulo de certificados operacional - acesse via Dashboard do RH
                     </p>
                   </div>
                 </CardContent>
@@ -77,23 +78,7 @@ const HumanResources = () => {
             </TabsContent>
 
             <TabsContent value="employees">
-              <Card className="glass-effect">
-                <CardHeader>
-                  <CardTitle>Gestão de Funcionários</CardTitle>
-                  <CardDescription>
-                    Administre informações e performance dos colaboradores
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-12">
-                    <UserCheck className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">Gestão de funcionários</h3>
-                    <p className="text-muted-foreground">
-                      Módulo completo de gestão de pessoas em desenvolvimento
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+              <EmployeeManagement />
             </TabsContent>
           </Tabs>
         </main>

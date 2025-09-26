@@ -66,45 +66,45 @@ import {
 const navigationItems = [
   {
     title: "Dashboard",
-    url: "dashboard",
+    url: "/",
     icon: LayoutDashboard,
     alwaysVisible: true
   },
   {
     title: "Administração",
-    url: "admin",
+    url: "/admin",
     icon: UserCog,
     requiresRole: ["admin", "hr_manager"] as const,
   },
   {
     title: "RH",
-    url: "hr", 
+    url: "/hr", 
     icon: Users,
     permission: "certificates" as const,
   },
   {
     title: "Sistema Marítimo",
-    url: "maritime",
+    url: "/maritime",
     icon: Ship,
     items: [
       {
         title: "Dashboard Marítimo",
-        url: "maritime",
+        url: "/maritime",
         icon: Ship,
       },
       {
         title: "Gestão de Frota",
-        url: "fleet-management",
+        url: "/fleet-management",
         icon: Anchor,
       },
       {
         title: "Tripulação",
-        url: "crew-management",
+        url: "/crew-management",
         icon: Users,
       },
       {
         title: "Certificações",
-        url: "maritime-certifications",
+        url: "/maritime-certifications",
         icon: UserCog,
       },
     ],
@@ -148,90 +148,90 @@ const navigationItems = [
   },
   {
     title: "Portal do Funcionário",
-    url: "portal",
+    url: "/portal",
     icon: User,
   },
   {
     title: "Viagens",
-    url: "travel",
+    url: "/travel",
     icon: Plane,
     items: [
       {
         title: "Voos",
-        url: "flights",
+        url: "/travel",
         icon: Plane,
       },
       {
         title: "Hotéis",
-        url: "hotels", 
+        url: "/travel", 
         icon: Hotel,
       },
     ],
   },
   {
     title: "Alertas de Preços",
-    url: "price-alerts",
+    url: "/price-alerts",
     icon: Bell,
   },
   {
     title: "Hub de Integrações",
-    url: "integrations",
+    url: "/integrations",
     icon: Globe,
   },
   {
     title: "Analytics",
-    url: "analytics",
+    url: "/analytics",
     icon: BarChart3,
     permission: "analytics" as const,
     items: [
       {
         title: "Analytics Básico",
-        url: "analytics",
+        url: "/analytics",
         icon: BarChart3,
       },
       {
         title: "Métricas Avançadas",
-        url: "enhanced-metrics",
+        url: "/enhanced-metrics",
         icon: Activity,
       },
       {
         title: "IA Insights",
-        url: "ai-insights",
+        url: "/ai-insights",
         icon: Brain,
       },
     ],
   },
   {
     title: "Reservas",
-    url: "reservations",
+    url: "/reservations",
     icon: Calendar,
   },
   {
     title: "Relatórios",
-    url: "reports",
+    url: "/reports",
     icon: FileText,
     permission: "reports" as const,
     items: [
       {
         title: "Relatórios Básicos",
-        url: "reports",
+        url: "/reports",
         icon: FileText,
       },
       {
         title: "Relatórios Avançados",
-        url: "advanced-reports",
+        url: "/advanced-reports",
         icon: BarChart3,
       },
     ],
   },
   {
     title: "Comunicação",
-    url: "communication",
+    url: "/communication",
     icon: MessageSquare,
   },
   {
     title: "Configurações",
-    url: "settings",
+    url: "/settings",
     icon: Settings,
   },
   {
