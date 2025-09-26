@@ -21,6 +21,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import DraggableFloating from '@/components/ui/draggable-floating';
 
 interface QuickActionsBarProps {
   onOpenSearch: () => void;
@@ -92,20 +93,39 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
 
   if (!isVisible) {
     return (
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => setIsVisible(true)}
-        className="fixed right-4 bottom-20 md:right-6 md:bottom-6 z-40 shadow-lg"
+      <DraggableFloating
+        storageKey="quick_actions_toggle_pos"
+        defaultPosition={() => ({
+          x: Math.max(8, window.innerWidth - 48 - 16),
+          y: Math.max(8, window.innerHeight - 48 - 96),
+        })}
+        zIndex={40}
+        ariaLabel="Botão de Ações Rápidas"
       >
-        <Zap className="h-4 w-4" />
-      </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setIsVisible(true)}
+          className="shadow-lg"
+        >
+          <Zap className="h-4 w-4" />
+        </Button>
+      </DraggableFloating>
     );
   }
 
   return (
-    <Card className="fixed right-4 bottom-20 md:right-6 md:bottom-6 z-40 p-3 shadow-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 max-w-xs">
-      <div className="flex items-center gap-2 mb-2">
+    <DraggableFloating
+      storageKey="quick_actions_panel_pos"
+      defaultPosition={() => ({
+        x: Math.max(8, window.innerWidth - 280 - 16),
+        y: Math.max(8, window.innerHeight - 180 - 120),
+      })}
+      zIndex={40}
+      ariaLabel="Painel de Ações Rápidas"
+    >
+      <Card className="p-3 shadow-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 max-w-xs">
+        <div className="flex items-center gap-2 mb-2">
         <Zap className="h-4 w-4 text-primary" />
         <span className="text-sm font-medium">Ações Rápidas</span>
         <Button
@@ -182,6 +202,7 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
           </div>
         </div>
       </div>
-    </Card>
+      </Card>
+    </DraggableFloating>
   );
 };

@@ -15,6 +15,7 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+import DraggableFloating from '@/components/ui/draggable-floating';
 
 interface Message {
   id: string;
@@ -361,7 +362,15 @@ export const NautilusCopilot: React.FC = () => {
 
   if (!isOpen) {
     return (
-      <div className="fixed right-6 bottom-24 md:right-6 md:bottom-24 z-50">
+      <DraggableFloating
+        storageKey="copilot_fab_pos"
+        ariaLabel="Botão do Copiloto"
+        defaultPosition={() => ({
+          x: Math.max(12, window.innerWidth - 60 - 16),
+          y: Math.max(12, window.innerHeight - 60 - 96), // acima da barra inferior
+        })}
+        zIndex={50}
+      >
         <Button
           onClick={() => setIsOpen(true)}
           aria-label="Abrir Copiloto"
@@ -369,16 +378,25 @@ export const NautilusCopilot: React.FC = () => {
         >
           <Bot className="w-6 h-6" />
         </Button>
-      </div>
+      </DraggableFloating>
     );
   }
 
   return (
-    <Card className={`fixed right-6 z-50 bg-card/95 backdrop-blur-sm border-2 border-primary/20 shadow-2xl transition-all duration-300 ${
-      isMinimized 
-        ? 'bottom-24 w-72 md:w-80 h-14 md:h-16' 
-        : 'bottom-24 w-[min(92vw,26rem)] md:w-96 h-[70vh] md:h-[600px]'
-    }`}>
+    <DraggableFloating
+      storageKey="copilot_panel_pos"
+      ariaLabel="Janela do Copiloto"
+      defaultPosition={() => ({
+        x: Math.max(12, window.innerWidth - 360 - 16),
+        y: Math.max(12, window.innerHeight - 520 - 96),
+      })}
+      zIndex={50}
+    >
+      <Card className={`bg-card/95 backdrop-blur-sm border-2 border-primary/20 shadow-2xl transition-all duration-300 ${
+        isMinimized 
+          ? 'w-72 md:w-80 h-14 md:h-16' 
+          : 'w-[min(92vw,26rem)] md:w-96 h-[70vh] md:h-[600px]'
+      }`}>
       <CardHeader className="flex-shrink-0 pb-3 border-b">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -607,7 +625,8 @@ export const NautilusCopilot: React.FC = () => {
           </div>
         </>
       )}
-    </Card>
+      </Card>
+    </DraggableFloating>
   );
 };
 

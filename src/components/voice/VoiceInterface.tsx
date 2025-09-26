@@ -6,6 +6,7 @@ import { Mic, MicOff, Loader2, MessageSquare } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useVoiceConversation } from '@/hooks/use-voice-conversation';
 import { useVoiceNavigation } from '@/hooks/use-voice-navigation';
+import DraggableFloating from '@/components/ui/draggable-floating';
 
 interface VoiceInterfaceProps {
   onSpeakingChange?: (speaking: boolean) => void;
@@ -313,7 +314,12 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
   }, []);
 
   return (
-    <div className="fixed bottom-8 left-6 md:left-72 z-30">
+    <DraggableFloating
+      storageKey="voice_interface_pos"
+      defaultPosition={() => ({ x: 16, y: Math.max(12, window.innerHeight - 220) })}
+      zIndex={30}
+      ariaLabel="Interface de Voz"
+    >
       <Card className="w-80 bg-card/95 backdrop-blur-sm border-border/50">
         <CardContent className="p-4">
           <div className="flex flex-col items-center gap-4">
@@ -395,7 +401,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
           </div>
         </CardContent>
       </Card>
-    </div>
+    </DraggableFloating>
   );
 };
 
