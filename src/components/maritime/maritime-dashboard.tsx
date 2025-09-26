@@ -28,13 +28,13 @@ const VesselManagement = React.lazy(() =>
   }))
 );
 const CrewRotationPlanner = React.lazy(() => 
-  import('./crew-rotation-planner').then(module => ({
-    default: module.CrewRotationPlanner
+  import('./crew-management-dashboard').then(module => ({
+    default: module.CrewManagementDashboard
   }))
 );
 const CertificationManager = React.lazy(() => 
-  import('./certification-manager').then(module => ({
-    default: module.CertificationManager
+  import('./maritime-certification-manager').then(module => ({
+    default: module.MaritimeCertificationManager
   }))
 );
 

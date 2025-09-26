@@ -33,6 +33,11 @@ export const useSidebarActions = () => {
       admin: '/admin',
       hr: '/hr',
       maritime: '/maritime',
+      'maritime-certifications': '/maritime-certifications',
+      'fleet-tracking': '/fleet-tracking',
+      'fleet-management': '/fleet-management',
+      'fleet-dashboard': '/fleet-dashboard',
+      'crew-management': '/crew-management',
       portal: '/portal',
       travel: '/travel',
       'price-alerts': '/price-alerts',
@@ -44,7 +49,9 @@ export const useSidebarActions = () => {
       settings: '/settings',
       'enhanced-metrics': '/enhanced-metrics',
       'ai-insights': '/ai-insights',
-      'advanced-reports': '/advanced-reports'
+      'advanced-reports': '/advanced-reports',
+      'checklists-inteligentes': '/checklists-inteligentes',
+      peotram: '/peotram'
     };
 
     const route = moduleRoutes[moduleKey] || `/${moduleKey}`;
