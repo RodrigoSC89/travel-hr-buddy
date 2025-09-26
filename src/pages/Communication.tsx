@@ -22,7 +22,7 @@ const Communication = () => {
               </p>
             </div>
           </div>
-          <CommunicationModule />
+          <MaritimeCommunicationCenter />
         </main>
         <VoiceInterface />
       </div>
