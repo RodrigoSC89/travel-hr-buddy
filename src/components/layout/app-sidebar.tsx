@@ -280,6 +280,8 @@ const navigationItems = [
       { title: "Segurança", url: "/security", icon: Shield },
       { title: "Usuários", url: "/users", icon: Users },
       { title: "Testes & Homologação", url: "/testing", icon: TestTube },
+      { title: "Feedback Sistema", url: "/feedback", icon: MessageSquare },
+      { title: "Sync Offline", url: "/offline-sync", icon: Database },
     ],
     requiresRole: ['admin']
   },
@@ -307,6 +309,11 @@ const navigationItems = [
     title: "Analytics Avançado",
     url: "/advanced-analytics",
     icon: TrendingUp
+  },
+  {
+    title: "Analytics Tempo Real", 
+    url: "/real-time-analytics",
+    icon: Activity
   },
   {
     title: "Monitor Avançado",

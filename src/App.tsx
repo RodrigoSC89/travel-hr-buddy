@@ -63,6 +63,9 @@ import EnhancedMetrics from "./pages/EnhancedMetrics";
 import PerformanceOptimizerPage from "./pages/PerformanceOptimizer";
 import AIInsights from "./pages/AIInsights";
 import TestingDashboard from "./pages/TestingDashboard";
+import FeedbackPage from "./pages/Feedback";
+import RealTimeAnalyticsPage from "./pages/RealTimeAnalytics";
+import OfflineSyncPage from "./pages/OfflineSync";
 
 const queryClient = new QueryClient();
 
@@ -150,6 +153,9 @@ const App = () => {
                   <Route path="performance-optimizer" element={<PerformanceOptimizerPage />} />
                   <Route path="ai-insights" element={<AIInsights />} />
                   <Route path="testing" element={<TestingDashboard />} />
+                  <Route path="feedback" element={<FeedbackPage />} />
+                  <Route path="real-time-analytics" element={<RealTimeAnalyticsPage />} />
+                  <Route path="offline-sync" element={<OfflineSyncPage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
