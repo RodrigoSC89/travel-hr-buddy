@@ -1,13 +1,14 @@
 import React from 'react';
 import { SuperAdminDashboard } from '@/components/admin/super-admin-dashboard';
-import { OrganizationProvider } from '@/contexts/OrganizationContext';
+import { OrganizationLayout } from '@/components/layout/organization-layout';
 
 export default function SuperAdmin() {
   return (
-    <OrganizationProvider>
-      <div className="min-h-screen bg-background">
-        <SuperAdminDashboard />
-      </div>
-    </OrganizationProvider>
+    <OrganizationLayout 
+      title="Super Administração" 
+      requiresOrganization={false}
+    >
+      <SuperAdminDashboard />
+    </OrganizationLayout>
   );
 }

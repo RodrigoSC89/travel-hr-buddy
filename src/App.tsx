@@ -11,7 +11,7 @@ import { OrganizationProvider } from "@/contexts/OrganizationContext";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import VoiceInterface from "@/components/voice/VoiceInterface";
 import IntelligentChatbot from "@/components/voice/IntelligentChatbot";
-import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import EnterpriseLayout from "./components/layout/enterprise-layout";
@@ -107,7 +107,7 @@ const App = () => {
                     <EnterpriseLayout />
                   </ProtectedRoute>
                 }>
-                  <Route index element={<Index />} />
+                  <Route index element={<Dashboard />} />
                   <Route path="admin" element={<Admin />} />
                   <Route path="price-alerts" element={<PriceAlerts />} />
                   <Route path="reports" element={<Reports />} />

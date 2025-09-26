@@ -5,6 +5,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { NotificationCenter } from '@/components/notifications/notification-center';
 import { UserProfileDialog } from '@/components/user/user-profile-dialog';
 import { SimpleGlobalSearch } from '@/components/ui/simple-global-search';
+import { OrganizationSelector } from '@/components/admin/organization-selector';
 
 export const Header: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ export const Header: React.FC = () => {
           </div>
           
           <nav className="flex items-center space-x-2">
+            <OrganizationSelector />
             <NotificationCenter />
             <UserProfileDialog />
             <ThemeToggle />

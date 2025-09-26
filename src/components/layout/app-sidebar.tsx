@@ -77,6 +77,18 @@ const navigationItems = [
     requiresRole: ["admin", "hr_manager"] as const,
   },
   {
+    title: "Super Admin",
+    url: "/super-admin",
+    icon: Shield,
+    requiresRole: ["admin"] as const,
+  },
+  {
+    title: "Configurações da Organização",
+    url: "/organization-settings",
+    icon: Settings,
+    requiresRole: ["admin", "owner"] as const,
+  },
+  {
     title: "RH",
     url: "/hr", 
     icon: Users,
