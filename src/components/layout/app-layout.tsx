@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/header';
 import { QuickActionsBar } from '@/components/ui/quick-actions-bar';
 import VoiceInterface from '@/components/voice/VoiceInterface';
 import IntelligentChatbot from '@/components/voice/IntelligentChatbot';
+import NautilusCopilot from '@/components/ai/nautilus-copilot';
 
 import { useSystemActions } from '@/hooks/use-system-actions';
 import { Toaster } from '@/components/ui/sonner';
@@ -33,7 +34,7 @@ export const AppLayout: React.FC = () => {
             {/* Floating Components - Organized per Layout Guide */}
             <QuickActionsBar onOpenSearch={() => setIsSearchOpen(true)} />
             <VoiceInterface />
-            <IntelligentChatbot />
+            <NautilusCopilot />
             
             
             {/* Toast Notifications */}
