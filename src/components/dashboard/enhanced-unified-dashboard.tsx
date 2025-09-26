@@ -51,6 +51,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTenant } from '@/contexts/TenantContext';
 import { useToast } from '@/hooks/use-toast';
 import { EnhancedDashboardFilters } from './enhanced-dashboard-filters';
+import FloatingActionButtons from '@/components/ui/floating-action-buttons';
+import ProfessionalKPICards from '@/components/ui/professional-kpi-cards';
+import SystemStatusDashboard from '@/components/ui/system-status-dashboard';
+import ExecutiveMetricsPanel from '@/components/ui/executive-metrics-panel';
 
 const EnhancedUnifiedDashboard = () => {
   const navigate = useNavigate();
@@ -422,150 +426,11 @@ const EnhancedUnifiedDashboard = () => {
         </Card>
       </div>
 
-      {/* Enhanced KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {selectedKPIs.includes('revenue') && (
-          <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-green-200">
-            <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg opacity-50" />
-            <CardContent className="relative p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-xl group-hover:shadow-2xl transition-shadow">
-                  <DollarSign className="w-8 h-8" />
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold text-green-700">R$ {(dashboardData.kpis.revenue.value / 1000000).toFixed(1)}M</div>
-                  <div className="text-sm text-muted-foreground">Meta: R$ {(dashboardData.kpis.revenue.target / 1000000).toFixed(1)}M</div>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Receita Total</span>
-                  <div className="flex items-center gap-1">
-                    <TrendingUp className="w-4 h-4 text-green-600" />
-                    <span className="text-sm font-medium text-green-600">+{dashboardData.kpis.revenue.change}%</span>
-                  </div>
-                </div>
-                <Progress 
-                  value={(dashboardData.kpis.revenue.value / dashboardData.kpis.revenue.target) * 100} 
-                  className="h-3 bg-green-100"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Anterior: R$ {(dashboardData.kpis.revenue.previous / 1000000).toFixed(1)}M</span>
-                  <span>Previsão: R$ {(dashboardData.kpis.revenue.forecast / 1000000).toFixed(1)}M</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+      {/* Enhanced Professional KPI Cards */}
+      <ProfessionalKPICards />
 
-        {selectedKPIs.includes('employees') && (
-          <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-blue-200">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg opacity-50" />
-            <CardContent className="relative p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-xl group-hover:shadow-2xl transition-shadow">
-                  <Users className="w-8 h-8" />
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold text-blue-700">{dashboardData.kpis.employees.value}</div>
-                  <div className="text-sm text-muted-foreground">{dashboardData.kpis.employees.active} ativos</div>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Funcionários</span>
-                  <div className="flex items-center gap-1">
-                    <TrendingUp className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm font-medium text-blue-600">+{dashboardData.kpis.employees.change}%</span>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-xs">
-                  <div className="text-center p-2 bg-blue-50 rounded">
-                    <div className="font-semibold text-blue-700">{dashboardData.kpis.employees.active}</div>
-                    <div className="text-muted-foreground">Ativos</div>
-                  </div>
-                  <div className="text-center p-2 bg-orange-50 rounded">
-                    <div className="font-semibold text-orange-700">{dashboardData.kpis.employees.onLeave}</div>
-                    <div className="text-muted-foreground">Licença</div>
-                  </div>
-                  <div className="text-center p-2 bg-purple-50 rounded">
-                    <div className="font-semibold text-purple-700">{dashboardData.kpis.employees.contractors}</div>
-                    <div className="text-muted-foreground">Terceiros</div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {selectedKPIs.includes('efficiency') && (
-          <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-orange-200">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg opacity-50" />
-            <CardContent className="relative p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-xl group-hover:shadow-2xl transition-shadow">
-                  <Activity className="w-8 h-8" />
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold text-orange-700">{dashboardData.kpis.efficiency.value.toFixed(1)}%</div>
-                  <div className="text-sm text-muted-foreground">Meta: {dashboardData.kpis.efficiency.target}%</div>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Eficiência Operacional</span>
-                  <div className="flex items-center gap-1">
-                    <TrendingUp className="w-4 h-4 text-orange-600" />
-                    <span className="text-sm font-medium text-orange-600">+{dashboardData.kpis.efficiency.change}%</span>
-                  </div>
-                </div>
-                <Progress 
-                  value={dashboardData.kpis.efficiency.value} 
-                  className="h-3 bg-orange-100"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Setor: {dashboardData.kpis.efficiency.industry_avg}%</span>
-                  <span className="text-orange-600 font-medium">+{(dashboardData.kpis.efficiency.value - dashboardData.kpis.efficiency.industry_avg).toFixed(1)}%</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {selectedKPIs.includes('satisfaction') && (
-          <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-purple-200">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-violet-50 rounded-lg opacity-50" />
-            <CardContent className="relative p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 text-white shadow-xl group-hover:shadow-2xl transition-shadow">
-                  <Target className="w-8 h-8" />
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold text-purple-700">{dashboardData.kpis.satisfaction.value}/5</div>
-                  <div className="text-sm text-muted-foreground">NPS: {dashboardData.kpis.satisfaction.nps}</div>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Satisfação da Equipe</span>
-                  <div className="flex items-center gap-1">
-                    <TrendingUp className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm font-medium text-purple-600">+{dashboardData.kpis.satisfaction.change}%</span>
-                  </div>
-                </div>
-                <Progress 
-                  value={(dashboardData.kpis.satisfaction.value / 5) * 100} 
-                  className="h-3 bg-purple-100"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>{dashboardData.kpis.satisfaction.responses} respostas</span>
-                  <span className="text-purple-600 font-medium">Excelente</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+      {/* Executive Metrics Panel */}
+      <ExecutiveMetricsPanel />
 
       {/* Financial Overview */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -855,62 +720,11 @@ const EnhancedUnifiedDashboard = () => {
         </Card>
       </div>
 
-      {/* System Health Monitor */}
-      <Card className="border-2 border-primary/10 shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-primary/5 to-transparent">
-          <CardTitle className="flex items-center gap-2">
-            <Server className="w-5 h-5 text-primary" />
-            Monitoramento do Sistema
-          </CardTitle>
-          <CardDescription>Status da infraestrutura e recursos</CardDescription>
-        </CardHeader>
-        <CardContent className="p-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            <div className="text-center space-y-2">
-              <div className="p-3 rounded-full bg-green-100 mx-auto w-fit">
-                <Cpu className="w-6 h-6 text-green-600" />
-              </div>
-              <div className="text-2xl font-bold text-green-600">{dashboardData.systemHealth.performance}%</div>
-              <div className="text-sm text-muted-foreground">Performance</div>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="p-3 rounded-full bg-blue-100 mx-auto w-fit">
-                <Network className="w-6 h-6 text-blue-600" />
-              </div>
-              <div className="text-2xl font-bold text-blue-600">{dashboardData.systemHealth.uptime}%</div>
-              <div className="text-sm text-muted-foreground">Uptime</div>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="p-3 rounded-full bg-purple-100 mx-auto w-fit">
-                <Users className="w-6 h-6 text-purple-600" />
-              </div>
-              <div className="text-2xl font-bold text-purple-600">{dashboardData.systemHealth.activeUsers}</div>
-              <div className="text-sm text-muted-foreground">Usuários</div>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="p-3 rounded-full bg-orange-100 mx-auto w-fit">
-                <Database className="w-6 h-6 text-orange-600" />
-              </div>
-              <div className="text-2xl font-bold text-orange-600">{dashboardData.systemHealth.apiCalls}</div>
-              <div className="text-sm text-muted-foreground">API Calls</div>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="p-3 rounded-full bg-cyan-100 mx-auto w-fit">
-                <HardDrive className="w-6 h-6 text-cyan-600" />
-              </div>
-              <div className="text-2xl font-bold text-cyan-600">{dashboardData.systemHealth.storageUsed}GB</div>
-              <div className="text-sm text-muted-foreground">Armazenamento</div>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="p-3 rounded-full bg-emerald-100 mx-auto w-fit">
-                <Cloud className="w-6 h-6 text-emerald-600" />
-              </div>
-              <div className="text-2xl font-bold text-emerald-600">{dashboardData.systemHealth.responseTime}ms</div>
-              <div className="text-sm text-muted-foreground">Resposta</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Enhanced System Health Monitor */}
+      <SystemStatusDashboard />
+
+      {/* Floating Action Buttons */}
+      <FloatingActionButtons />
     </div>
   );
 };
