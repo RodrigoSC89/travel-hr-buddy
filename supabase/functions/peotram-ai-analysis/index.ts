@@ -7,321 +7,186 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY')!;
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+interface PeotramAnalysisRequest {
+  audit_id: string;
+  element_code: string;
+  requirements_data: Array<{
+    code: string;
+    description: string;
+    score_classification: string;
+    criticality_level: string;
+    auditor_comments?: string;
+    evidence_provided?: string;
+  }>;
+}
+
+interface PeotramRecommendation {
+  requirement_code: string;
+  priority: 'alta' | 'media' | 'baixa';
+  recommendation: string;
+  compliance_gap: string;
+  action_plan: string[];
+  timeline: string;
+  resources_needed: string[];
+}
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    const { auditId } = await req.json();
+    const { audit_id, element_code, requirements_data }: PeotramAnalysisRequest = await req.json();
 
-    console.log('Iniciando análise PEOTRAM para auditoria:', auditId);
+    console.log(`Starting PEOTRAM AI analysis for audit ${audit_id}, element ${element_code}`);
 
-    // Buscar dados da auditoria
-    const { data: audit, error: auditError } = await supabase
-      .from('peotram_audits')
-      .select(`
-        *,
-        peotram_documents (*)
-      `)
-      .eq('id', auditId)
-      .single();
+    // Construir prompt específico para PEOTRAM baseado no elemento
+    const elementPrompts = {
+      'ELEMENT_01': 'Sistema de Gestão - Analise a eficácia do sistema de gestão empresarial, incluindo políticas, procedimentos, estrutura organizacional e controles internos.',
+      'ELEMENT_02': 'Conformidade Legal - Avalie o atendimento às normas regulamentadoras (NRs), convenções internacionais (STCW, ISM) e legislação marítima aplicável.',
+      'ELEMENT_03': 'Gestão de Riscos - Examine os processos de identificação, avaliação, controle e monitoramento de riscos operacionais e ocupacionais.',
+      'ELEMENT_04': 'Operação - Analise procedimentos operacionais, operações críticas, controles de processo e supervisão operacional.',
+      'ELEMENT_05': 'Controle Operacional - Avalie sistemas de controle, procedimentos de trabalho seguro e medidas de controle implementadas.',
+      'ELEMENT_06': 'Manutenção - Examine gestão da manutenção preventiva, corretiva, preditiva e controle de equipamentos críticos.',
+      'ELEMENT_07': 'Gestão de Mudanças - Analise processos de gestão de mudanças organizacionais, técnicas e procedimentais.',
+      'ELEMENT_08': 'Gestão de Fornecedores - Avalie qualificação, seleção, avaliação e gestão de prestadores de serviços.',
+      'ELEMENT_09': 'Gestão de Recursos Humanos - Examine recrutamento, seleção, treinamento, competências e gestão de pessoal.',
+      'ELEMENT_10': 'Gestão da Informação & Comunicação - Analise controle de documentos, registros, comunicação e gestão do conhecimento.',
+      'ELEMENT_11': 'Preparação e Respostas à Emergências - Avalie planos de contingência, resposta a emergências e exercícios simulados.',
+      'ELEMENT_12': 'Investigação de Acidentes e Incidentes - Examine processos de investigação, análise de causas e implementação de medidas corretivas.',
+      'ELEMENT_13': 'Auditoria Interna e Análise Crítica - Analise sistema de auditoria interna, análise crítica da direção e melhoria contínua.'
+    };
 
-    if (auditError) {
-      throw new Error(`Erro ao buscar auditoria: ${auditError.message}`);
-    }
+    const prompt = `
+Você é um especialista em auditoria PEOTRAM (Programa de Excelência Operacional em Transporte Aquaviário de Produtos Perigosos) da Petrobras.
 
-    const documents = audit.peotram_documents || [];
-    
-    // Categorizar documentos
-    const documentsByCategory: Record<string, any[]> = documents.reduce((acc: Record<string, any[]>, doc: any) => {
-      if (!acc[doc.category]) {
-        acc[doc.category] = [];
-      }
-      acc[doc.category].push(doc);
-      return acc;
-    }, {});
+CONTEXTO:
+- Elemento: ${element_code}
+- Foco: ${elementPrompts[element_code as keyof typeof elementPrompts] || 'Análise geral do elemento'}
 
-    // Definir categorias obrigatórias PEOTRAM
-    const requiredCategories = [
-      'seguranca',
-      'qualidade', 
-      'ambiental',
-      'operacional',
-      'treinamento',
-      'emergencia',
-      'manutencao',
-      'certificacoes'
-    ];
+DADOS DA AVALIAÇÃO:
+${requirements_data.map(req => `
+Requisito ${req.code}:
+- Descrição: ${req.description}
+- Classificação: ${req.score_classification} (escala: N/A, 0-4)
+- Criticidade: ${req.criticality_level} (níveis: N/A, A-D, ✓, ✓✓)
+- Comentários: ${req.auditor_comments || 'Não informado'}
+- Evidências: ${req.evidence_provided || 'Não fornecidas'}
+`).join('\n')}
 
-    // Analisar cada categoria
-    const categoryScores: Record<string, any> = {};
-    const criticalFindings: string[] = [];
-    const recommendations = [];
+TAREFA:
+Analise os dados e gere recomendações específicas seguindo os critérios PEOTRAM:
 
-    for (const category of requiredCategories) {
-      const categoryDocs = documentsByCategory[category] || [];
-      const requiredDocsCount = getCategoryRequiredDocs(category);
-      const presentDocsCount = categoryDocs.length;
-      const conformeDocs = categoryDocs.filter((doc: any) => doc.compliance_status === 'conforme').length;
-      
-      // Calcular score da categoria (0-100)
-      const completenessScore = Math.min(100, (presentDocsCount / requiredDocsCount) * 100);
-      const conformityScore = presentDocsCount > 0 ? (conformeDocs / presentDocsCount) * 100 : 0;
-      const categoryScore = (completenessScore * 0.6) + (conformityScore * 0.4);
-      
-      categoryScores[category] = {
-        score: Math.round(categoryScore),
-        completeness: Math.round(completenessScore),
-        conformity: Math.round(conformityScore),
-        required_docs: requiredDocsCount,
-        present_docs: presentDocsCount,
-        conforme_docs: conformeDocs
-      };
+1. Para cada requisito com score < 3 ou criticidade A/B, identifique:
+   - Gap de conformidade específico
+   - Recomendação técnica detalhada
+   - Plano de ação estruturado
+   - Cronograma realista
+   - Recursos necessários
 
-      // Identificar problemas críticos
-      if (categoryScore < 60) {
-        criticalFindings.push(`Categoria ${category}: Score baixo (${Math.round(categoryScore)}%)`);
-      }
-      
-      if (presentDocsCount < requiredDocsCount) {
-        const missing = requiredDocsCount - presentDocsCount;
-        criticalFindings.push(`Categoria ${category}: ${missing} documento(s) ausente(s)`);
-        recommendations.push(`Urgente: Incluir documentos obrigatórios da categoria ${category}`);
-      }
-    }
+2. Priorize as recomendações baseado em:
+   - Criticidade (A > B > C > D)
+   - Impacto na segurança operacional
+   - Complexidade de implementação
+   - Custo-benefício
 
-    // Calcular score geral
-    const categoryScoreValues = Object.values(categoryScores).map((cat: any) => cat.score);
-    const overallCompliance = categoryScoreValues.reduce((sum: number, score: number) => sum + score, 0) / categoryScoreValues.length;
+3. Considere as melhores práticas da indústria marítima e regulamentações aplicáveis.
 
-    // Análise de IA com GPT-4
-    const analysisPrompt = `Você é um especialista em auditoria PEOTRAM da Petrobras. Analise os dados fornecidos e forneça insights:
-
-    Auditoria: ${audit.audit_period}
-    Embarcação: ${audit.vessel_id || 'N/A'}
-    Total de documentos: ${documents.length}
-    
-    Scores por categoria:
-    ${JSON.stringify(categoryScores, null, 2)}
-    
-    Problemas críticos identificados:
-    ${criticalFindings.join('\n')}
-    
-    Baseado nesta análise, forneça:
-    1. Avaliação geral da conformidade
-    2. Principais riscos identificados
-    3. Recomendações prioritárias
-    4. Ações corretivas específicas
-    5. Previsão de score final da auditoria
-    
-    Responda APENAS com um JSON válido:
+Responda em formato JSON com este schema exato:
+{
+  "overall_score": number (0-100),
+  "compliance_level": "excelente" | "bom" | "adequado" | "deficiente" | "crítico",
+  "critical_findings": string[],
+  "recommendations": [
     {
-      "assessment_summary": "string",
-      "risk_level": "baixo|medio|alto|critico",
-      "priority_recommendations": ["string"],
-      "corrective_actions": ["string"],
-      "predicted_final_score": number,
-      "confidence_assessment": number
-    }`;
+      "requirement_code": string,
+      "priority": "alta" | "media" | "baixa",
+      "recommendation": string,
+      "compliance_gap": string,
+      "action_plan": string[],
+      "timeline": string,
+      "resources_needed": string[]
+    }
+  ],
+  "improvement_opportunities": string[],
+  "regulatory_alerts": string[],
+  "next_steps": string[]
+}
+`;
 
-    console.log('Chamando OpenAI para análise PEOTRAM...');
-    
-    const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o',
         messages: [
-          { 
-            role: 'system', 
-            content: 'Você é um especialista em auditoria PEOTRAM. Forneça análises precisas e acionáveis.' 
+          {
+            role: 'system',
+            content: 'Você é um auditor sênior especialista em PEOTRAM da Petrobras com 20 anos de experiência em segurança marítima e operações com produtos perigosos.'
           },
-          { role: 'user', content: analysisPrompt }
+          {
+            role: 'user',
+            content: prompt
+          }
         ],
-        temperature: 0.2,
-        max_tokens: 1500,
+        temperature: 0.3,
+        max_tokens: 4000,
       }),
     });
 
-    if (!openAIResponse.ok) {
-      throw new Error(`OpenAI API error: ${openAIResponse.statusText}`);
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.status}`);
     }
 
-    const openAIData = await openAIResponse.json();
-    const aiResponse = openAIData.choices[0].message.content;
+    const data = await response.json();
+    const analysis = JSON.parse(data.choices[0].message.content);
 
-    // Parsear resposta da IA
-    let aiAnalysis;
-    try {
-      aiAnalysis = JSON.parse(aiResponse);
-    } catch (parseError) {
-      console.error('Erro ao parsear resposta da IA:', parseError);
-      aiAnalysis = {
-        assessment_summary: 'Análise automatizada baseada em métricas de conformidade',
-        risk_level: overallCompliance < 60 ? 'alto' : overallCompliance < 80 ? 'medio' : 'baixo',
-        priority_recommendations: recommendations.slice(0, 5),
-        corrective_actions: ['Revisar documentação pendente', 'Verificar conformidade de documentos'],
-        predicted_final_score: Math.round(overallCompliance),
-        confidence_assessment: 0.75
-      };
-    }
-
-    // Buscar auditorias anteriores para comparação
-    const { data: previousAudits } = await supabase
-      .from('peotram_audits')
-      .select('final_score, audit_period')
-      .eq('vessel_id', audit.vessel_id)
-      .neq('id', auditId)
-      .order('audit_date', { ascending: false })
-      .limit(3);
-
-    const comparativeAnalysis = {
-      trend: 'stable',
-      improvement_areas: [],
-      regression_areas: []
-    };
-
-    if (previousAudits && previousAudits.length > 0) {
-      const lastScore = previousAudits[0]?.final_score;
-      if (lastScore) {
-        const scoreDiff = overallCompliance - lastScore;
-        comparativeAnalysis.trend = scoreDiff > 5 ? 'improving' : scoreDiff < -5 ? 'declining' : 'stable';
-      }
-    }
-
-    // Preparar resultado final
-    const finalAnalysis = {
-      audit_id: auditId,
-      analysis_type: 'overall_assessment',
-      category_scores: categoryScores,
-      overall_compliance: Math.round(overallCompliance),
-      critical_findings: criticalFindings,
-      recommendations: [...recommendations, ...aiAnalysis.priority_recommendations],
-      risk_assessment: {
-        level: aiAnalysis.risk_level,
-        factors: criticalFindings,
-        mitigation_actions: aiAnalysis.corrective_actions
-      },
-      comparative_analysis: comparativeAnalysis,
-      ai_model_used: 'gpt-4',
-      confidence_level: aiAnalysis.confidence_assessment,
-      analysis_data: {
-        total_documents: documents.length,
-        categories_analyzed: requiredCategories.length,
-        compliance_by_category: categoryScores,
-        ai_assessment: aiAnalysis
-      }
-    };
+    console.log('AI analysis completed successfully');
 
     // Salvar análise no banco
-    const { data: analysisRecord, error: insertError } = await supabase
-      .from('peotram_ai_analysis')
-      .insert(finalAnalysis)
-      .select()
-      .single();
-
-    if (insertError) {
-      console.error('Erro ao salvar análise PEOTRAM:', insertError);
-    }
-
-    // Atualizar score preditivo da auditoria
-    await supabase
-      .from('peotram_audits')
-      .update({
-        predicted_score: Math.round(overallCompliance)
-      })
-      .eq('id', auditId);
-
-    // Gerar predição de melhoria
-    const improvementScenarios = generateImprovementScenarios(categoryScores, documents);
-    
-    // Salvar predições
-    await supabase
-      .from('peotram_score_predictions')
+    const { error: saveError } = await supabase
+      .from('checklist_ai_analysis')
       .insert({
-        audit_id: auditId,
-        predicted_score: Math.round(overallCompliance),
-        prediction_confidence: aiAnalysis.confidence_assessment,
-        score_breakdown: categoryScores,
-        improvement_scenarios: improvementScenarios,
-        risk_factors: criticalFindings,
-        recommended_actions: aiAnalysis.corrective_actions,
-        based_on_documents: documents.length
+        checklist_id: audit_id,
+        analysis_type: `PEOTRAM_${element_code}`,
+        overall_score: analysis.overall_score,
+        analysis_data: analysis,
+        recommendations: analysis.recommendations.map((r: PeotramRecommendation) => r.recommendation),
+        critical_issues: analysis.critical_findings?.length || 0,
+        issues_found: analysis.recommendations?.length || 0,
+        confidence_level: 0.85,
+        created_by_ai_model: 'gpt-4o'
       });
 
-    console.log('Análise PEOTRAM concluída com sucesso');
+    if (saveError) {
+      console.error('Error saving analysis:', saveError);
+    }
 
     return new Response(JSON.stringify({
       success: true,
-      analysis: finalAnalysis,
-      improvement_scenarios: improvementScenarios,
-      analysis_id: analysisRecord?.id
+      analysis,
+      message: 'Análise PEOTRAM concluída com sucesso'
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
-  } catch (error: any) {
-    console.error('Erro na análise PEOTRAM:', error);
-    return new Response(JSON.stringify({
-      success: false,
-      error: error?.message || 'Erro desconhecido'
+  } catch (error) {
+    console.error('Error in PEOTRAM AI analysis:', error);
+    return new Response(JSON.stringify({ 
+      error: 'Erro na análise IA',
+      details: error instanceof Error ? error.message : 'Erro desconhecido'
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 });
-
-// Função auxiliar para definir documentos obrigatórios por categoria
-function getCategoryRequiredDocs(category: string): number {
-  const requirements: Record<string, number> = {
-    'seguranca': 12,
-    'qualidade': 8,
-    'ambiental': 10,
-    'operacional': 15,
-    'treinamento': 6,
-    'emergencia': 8,
-    'manutencao': 10,
-    'certificacoes': 12
-  };
-  return requirements[category] || 5;
-}
-
-// Função para gerar cenários de melhoria
-function generateImprovementScenarios(categoryScores: any, documents: any[]): any[] {
-  const scenarios = [];
-  
-  // Analisar categorias com baixo score
-  for (const [category, data] of Object.entries(categoryScores)) {
-    const categoryData = data as any;
-    if (categoryData.score < 80) {
-      const potentialImprovement = Math.min(20, 85 - categoryData.score);
-      scenarios.push({
-        action: `Completar documentação da categoria ${category}`,
-        potential_improvement: potentialImprovement,
-        impact: potentialImprovement > 15 ? 'alto' : potentialImprovement > 8 ? 'medio' : 'baixo',
-        estimated_effort: categoryData.present_docs < categoryData.required_docs / 2 ? 'alto' : 'medio'
-      });
-    }
-  }
-
-  // Cenário otimista
-  scenarios.push({
-    action: 'Completar todos os documentos pendentes',
-    potential_improvement: Math.max(...Object.values(categoryScores).map((cat: any) => 100 - cat.score)),
-    impact: 'muito_alto',
-    estimated_effort: 'alto'
-  });
-
-  return scenarios.slice(0, 5); // Retornar top 5 cenários
-}
