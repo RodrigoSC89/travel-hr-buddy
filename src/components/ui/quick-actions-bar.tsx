@@ -40,7 +40,7 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
       id: 'search',
       label: 'Buscar',
       icon: <Search className="h-4 w-4" />,
-      hasDropdown: true,
+      action: onOpenSearch,
       shortcut: 'Ctrl+K'
     },
     {
@@ -180,20 +180,7 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
           {/* Expanded Content */}
           {expandedButton && (
             <div className="bg-card border rounded-lg p-2 space-y-2">
-              {expandedButton === 'search' ? (
-                <div>
-                  <LiveSearch
-                    placeholder="Buscar em todo o sistema..."
-                    value={searchQuery}
-                    onChange={setSearchQuery}
-                  />
-                  <div className="flex justify-end gap-2 mt-2">
-                    <Button variant="outline" size="sm" onClick={() => setExpandedButton(null)}>
-                      Minimizar
-                    </Button>
-                  </div>
-                </div>
-              ) : (
+              {expandedButton !== 'search' && (
                 quickActions
                   .find(action => action.id === expandedButton)
                   ?.items?.map((item, index) => (

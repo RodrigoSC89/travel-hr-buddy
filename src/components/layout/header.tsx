@@ -16,8 +16,8 @@ export const Header: React.FC = () => {
           <SidebarTrigger />
         </div>
         
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none max-w-md">
+        <div className="flex flex-1 items-center justify-between space-x-2">
+          <div className="flex-1 max-w-md mx-auto">
             <SimpleGlobalSearch />
           </div>
           
