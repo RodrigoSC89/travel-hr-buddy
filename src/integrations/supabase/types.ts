@@ -287,6 +287,45 @@ export type Database = {
         }
         Relationships: []
       }
+      error_logs: {
+        Row: {
+          component_stack: string | null
+          error_message: string
+          error_stack: string | null
+          id: string
+          metadata: Json | null
+          resolved: boolean
+          timestamp: string
+          url: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          component_stack?: string | null
+          error_message: string
+          error_stack?: string | null
+          id?: string
+          metadata?: Json | null
+          resolved?: boolean
+          timestamp?: string
+          url?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          component_stack?: string | null
+          error_message?: string
+          error_stack?: string | null
+          id?: string
+          metadata?: Json | null
+          resolved?: boolean
+          timestamp?: string
+          url?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       intelligent_notifications: {
         Row: {
           action_data: Json | null
@@ -451,6 +490,45 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           weekly_report?: boolean | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          action_data: Json | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          message: string
+          priority: string
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          action_data?: Json | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          message: string
+          priority?: string
+          read?: boolean
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          action_data?: Json | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          message?: string
+          priority?: string
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -843,6 +921,75 @@ export type Database = {
           },
         ]
       }
+      system_metrics: {
+        Row: {
+          id: string
+          metadata: Json | null
+          metric_name: string
+          metric_type: string
+          recorded_at: string
+          unit: string | null
+          value: number
+        }
+        Insert: {
+          id?: string
+          metadata?: Json | null
+          metric_name: string
+          metric_type: string
+          recorded_at?: string
+          unit?: string | null
+          value: number
+        }
+        Update: {
+          id?: string
+          metadata?: Json | null
+          metric_name?: string
+          metric_type?: string
+          recorded_at?: string
+          unit?: string | null
+          value?: number
+        }
+        Relationships: []
+      }
+      system_status: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          last_check: string
+          metadata: Json | null
+          response_time: number | null
+          service_name: string
+          status: string
+          updated_at: string
+          uptime_percentage: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          last_check?: string
+          metadata?: Json | null
+          response_time?: number | null
+          service_name: string
+          status: string
+          updated_at?: string
+          uptime_percentage?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          last_check?: string
+          metadata?: Json | null
+          response_time?: number | null
+          service_name?: string
+          status?: string
+          updated_at?: string
+          uptime_percentage?: number | null
+        }
+        Relationships: []
+      }
       user_achievements: {
         Row: {
           achievement_id: string
@@ -885,6 +1032,54 @@ export type Database = {
           unlocked?: boolean
           unlocked_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_feedback: {
+        Row: {
+          attachments: Json | null
+          browser_info: string | null
+          created_at: string
+          description: string
+          id: string
+          page_url: string | null
+          priority: string
+          rating: number | null
+          status: string
+          title: string
+          type: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          attachments?: Json | null
+          browser_info?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          page_url?: string | null
+          priority?: string
+          rating?: number | null
+          status?: string
+          title: string
+          type: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          attachments?: Json | null
+          browser_info?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          page_url?: string | null
+          priority?: string
+          rating?: number | null
+          status?: string
+          title?: string
+          type?: string
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
