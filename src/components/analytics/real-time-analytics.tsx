@@ -417,6 +417,7 @@ const RealTimeAnalytics = () => {
         </TabsContent>
       </Tabs>
     </div>
+  );
 };
 
 export default RealTimeAnalytics;
