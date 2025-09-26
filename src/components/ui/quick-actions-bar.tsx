@@ -29,6 +29,7 @@ interface QuickActionsBarProps {
 
 export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [expandedButton, setExpandedButton] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -140,39 +141,61 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
       
       <div className="space-y-3">
         {/* Quick Actions */}
-        <div className="flex flex-wrap gap-1">
-          {quickActions.map((action) => (
-            action.hasDropdown ? (
-              <DropdownMenu key={action.id}>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-8">
+        <div className="space-y-2">
+          <div className="flex flex-wrap gap-1">
+            {quickActions.map((action) => (
+              action.hasDropdown ? (
+                <div key={action.id} className="relative">
+                  <Button
+                    variant={expandedButton === action.id ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setExpandedButton(expandedButton === action.id ? null : action.id)}
+                    className="h-8"
+                  >
                     {action.icon}
                     <span className="ml-1 text-xs">{action.label}</span>
-                    <ChevronDown className="h-3 w-3 ml-1" />
+                    <ChevronDown className={`h-3 w-3 ml-1 transition-transform ${
+                      expandedButton === action.id ? 'rotate-180' : ''
+                    }`} />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {action.items?.map((item, index) => (
-                    <DropdownMenuItem key={index} onClick={item.action}>
-                      {item.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Button
-                key={action.id}
-                variant="outline"
-                size="sm"
-                onClick={action.action}
-                className="h-8"
-                title={action.shortcut}
-              >
-                {action.icon}
-                <span className="ml-1 text-xs">{action.label}</span>
-              </Button>
-            )
-          ))}
+                </div>
+              ) : (
+                <Button
+                  key={action.id}
+                  variant="outline"
+                  size="sm"
+                  onClick={action.action}
+                  className="h-8"
+                  title={action.shortcut}
+                >
+                  {action.icon}
+                  <span className="ml-1 text-xs">{action.label}</span>
+                </Button>
+              )
+            ))}
+          </div>
+          
+          {/* Expanded Dropdown Content */}
+          {expandedButton && (
+            <div className="bg-muted/50 border rounded-lg p-2 space-y-1">
+              {quickActions
+                .find(action => action.id === expandedButton)
+                ?.items?.map((item, index) => (
+                  <Button
+                    key={index}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      item.action();
+                      setExpandedButton(null);
+                    }}
+                    className="w-full justify-start h-7 text-xs"
+                  >
+                    {item.label}
+                  </Button>
+                ))}
+            </div>
+          )}
         </div>
 
         {/* Navigation Shortcuts */}
