@@ -6,7 +6,7 @@ import { Header } from '@/components/layout/header';
 import { QuickActionsBar } from '@/components/ui/quick-actions-bar';
 import VoiceInterface from '@/components/voice/VoiceInterface';
 import IntelligentChatbot from '@/components/voice/IntelligentChatbot';
-import { InteractiveOverlay } from '@/components/ui/interactive-overlay';
+
 import { useSystemActions } from '@/hooks/use-system-actions';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/layout/theme-provider';
@@ -25,7 +25,7 @@ export const AppLayout: React.FC = () => {
             <AppSidebar />
             <div className="flex-1 flex flex-col">
               <Header />
-              <main className="flex-1 overflow-auto">
+              <main className="flex-1 overflow-auto pr-4 pb-28 md:pb-40 md:pr-6">
                 <Outlet />
               </main>
             </div>
@@ -34,7 +34,7 @@ export const AppLayout: React.FC = () => {
             <QuickActionsBar onOpenSearch={() => setIsSearchOpen(true)} />
             <VoiceInterface />
             <IntelligentChatbot />
-            <InteractiveOverlay />
+            
             
             {/* Toast Notifications */}
             <Toaster />
