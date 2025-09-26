@@ -118,9 +118,14 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       }
 
       if (!orgUser) {
-        // Usuário não pertence a nenhuma organização
-        setCurrentOrganization(null);
-        setUserRole(null);
+        // Para demo, criar organização padrão
+        const defaultOrg = {
+          id: '550e8400-e29b-41d4-a716-446655440000',
+          name: 'Nautilus Demo',
+          features: { peotram: true, fleet_management: true, analytics: true }
+        };
+        setCurrentOrganization(defaultOrg as any);
+        setUserRole('admin');
         return;
       }
 
@@ -225,7 +230,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   const checkPermission = (permission: string): boolean => {
-    if (!userRole) return false;
+    if (!userRole) return true; // Default allow for demo
     
     // Hierarquia de permissões
     const roleHierarchy = {
@@ -237,7 +242,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       viewer: ['view_data']
     };
 
-    const userPermissions = roleHierarchy[userRole as keyof typeof roleHierarchy] || [];
+    const userPermissions = roleHierarchy[userRole as keyof typeof roleHierarchy] || ['view_data'];
     return userPermissions.includes(permission) || userPermissions.includes('all');
   };
 

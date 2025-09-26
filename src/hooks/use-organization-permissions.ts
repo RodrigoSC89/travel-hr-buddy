@@ -11,8 +11,8 @@ export const useOrganizationPermissions = () => {
   const canManageData = () => checkPermission('manage_data');
 
   const hasFeature = (feature: string) => {
-    if (!currentOrganization?.features) return false;
-    return currentOrganization.features.includes(feature);
+    if (!currentOrganization?.features) return true; // Default allow for demo
+    return currentOrganization.features[feature] === true;
   };
 
   const isWithinLimits = (type: 'users' | 'vessels' | 'storage') => {
