@@ -180,6 +180,53 @@ export type Database = {
           },
         ]
       }
+      certificates: {
+        Row: {
+          certificate_number: string
+          certificate_type: string
+          created_at: string | null
+          employee_id: string | null
+          expiry_date: string
+          id: string
+          issue_date: string
+          issuing_authority: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          certificate_number: string
+          certificate_type: string
+          created_at?: string | null
+          employee_id?: string | null
+          expiry_date: string
+          id?: string
+          issue_date: string
+          issuing_authority: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          certificate_number?: string
+          certificate_type?: string
+          created_at?: string | null
+          employee_id?: string | null
+          expiry_date?: string
+          id?: string
+          issue_date?: string
+          issuing_authority?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificates_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversation_participants: {
         Row: {
           conversation_id: string
@@ -284,6 +331,63 @@ export type Database = {
           issuer?: string | null
           status?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      employees: {
+        Row: {
+          contract_end: string | null
+          contract_start: string
+          created_at: string | null
+          department: string
+          email: string
+          employee_id: string
+          full_name: string
+          id: string
+          nationality: string | null
+          passport_number: string | null
+          phone: string | null
+          position: string
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+          vessel_assignment: string | null
+        }
+        Insert: {
+          contract_end?: string | null
+          contract_start: string
+          created_at?: string | null
+          department: string
+          email: string
+          employee_id: string
+          full_name: string
+          id?: string
+          nationality?: string | null
+          passport_number?: string | null
+          phone?: string | null
+          position: string
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vessel_assignment?: string | null
+        }
+        Update: {
+          contract_end?: string | null
+          contract_start?: string
+          created_at?: string | null
+          department?: string
+          email?: string
+          employee_id?: string
+          full_name?: string
+          id?: string
+          nationality?: string | null
+          passport_number?: string | null
+          phone?: string | null
+          position?: string
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vessel_assignment?: string | null
         }
         Relationships: []
       }
@@ -456,6 +560,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      nautilus_messages: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          priority: string | null
+          receiver_id: string | null
+          sender_id: string | null
+          subject: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          priority?: string | null
+          receiver_id?: string | null
+          sender_id?: string | null
+          subject?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          priority?: string | null
+          receiver_id?: string | null
+          sender_id?: string | null
+          subject?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       notification_settings: {
         Row: {
@@ -844,6 +984,48 @@ export type Database = {
           },
         ]
       }
+      reservations: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          end_date: string
+          id: string
+          location: string | null
+          reservation_type: string
+          start_date: string
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          end_date: string
+          id?: string
+          location?: string | null
+          reservation_type: string
+          start_date: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          end_date?: string
+          id?: string
+          location?: string | null
+          reservation_type?: string
+          start_date?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       role_permissions: {
         Row: {
           can_delete: boolean | null
@@ -1212,6 +1394,48 @@ export type Database = {
           status?: string
           target_value?: number | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      vessels: {
+        Row: {
+          created_at: string | null
+          current_location: string | null
+          eta: string | null
+          flag_state: string
+          id: string
+          imo_number: string | null
+          name: string
+          next_port: string | null
+          status: string | null
+          updated_at: string | null
+          vessel_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_location?: string | null
+          eta?: string | null
+          flag_state: string
+          id?: string
+          imo_number?: string | null
+          name: string
+          next_port?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_type: string
+        }
+        Update: {
+          created_at?: string | null
+          current_location?: string | null
+          eta?: string | null
+          flag_state?: string
+          id?: string
+          imo_number?: string | null
+          name?: string
+          next_port?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_type?: string
         }
         Relationships: []
       }
