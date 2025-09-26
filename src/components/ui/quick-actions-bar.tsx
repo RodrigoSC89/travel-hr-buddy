@@ -29,7 +29,7 @@ interface QuickActionsBarProps {
 }
 
 export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isMinimized, setIsMinimized] = useState(true);
   const [expandedButton, setExpandedButton] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -94,7 +94,7 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
     { label: 'Alertas', icon: <TrendingUp className="h-3 w-3" />, route: '/price-alerts', shortcut: 'Ctrl+4' },
   ];
 
-  if (!isVisible) {
+  if (isMinimized) {
     return (
       <DraggableFloating
         storageKey="quick_actions_toggle_pos"
@@ -108,7 +108,7 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setIsVisible(true)}
+          onClick={() => setIsMinimized(false)}
           className="shadow-lg"
         >
           <Zap className="h-4 w-4" />
@@ -129,17 +129,17 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
     >
       <Card className="p-3 shadow-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 max-w-xs">
         <div className="flex items-center gap-2 mb-2">
-        <Zap className="h-4 w-4 text-primary" />
-        <span className="text-sm font-medium">Ações Rápidas</span>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setIsVisible(false)}
-          className="ml-auto h-6 w-6 p-0"
-        >
-          <ChevronDown className="h-3 w-3" />
-        </Button>
-      </div>
+          <Zap className="h-4 w-4 text-primary" />
+          <span className="text-sm font-medium">Ações Rápidas</span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsMinimized(true)}
+            className="ml-auto h-6 w-6 p-0"
+          >
+            <ChevronDown className="h-3 w-3" />
+          </Button>
+        </div>
       
       <div className="space-y-3">
         {/* Quick Actions */}
