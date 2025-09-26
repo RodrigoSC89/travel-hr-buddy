@@ -27,9 +27,26 @@ import {
   Ship,
   FileText,
   Brain,
-  Settings
+  Settings,
+  Anchor,
+  Waves,
+  MapPin,
+  TrendingDown,
+  AlertCircle,
+  Award,
+  Building2,
+  Database,
+  Cloud,
+  Cpu,
+  HardDrive,
+  Network,
+  Server,
+  Eye,
+  PieChart,
+  LineChart,
+  BarChart2
 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell } from 'recharts';
+import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart as RechartsPieChart, Pie, Cell, BarChart, Bar, RadialBarChart, RadialBar } from 'recharts';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTenant } from '@/contexts/TenantContext';
 import { useToast } from '@/hooks/use-toast';
@@ -46,112 +63,208 @@ const EnhancedUnifiedDashboard = () => {
   const [isAutoUpdate, setIsAutoUpdate] = useState(true);
   const [filterPeriod, setFilterPeriod] = useState('30d');
 
-  // Dados consolidados do sistema
+  // Enhanced dashboard data with professional metrics
   const [dashboardData, setDashboardData] = useState({
     kpis: {
-      revenue: { value: 2450000, change: 12.5, status: 'up' },
-      employees: { value: 125, change: 4.2, status: 'up' },
-      efficiency: { value: 94.2, change: 2.8, status: 'up' },
-      satisfaction: { value: 4.6, change: 4.5, status: 'up' }
+      revenue: { 
+        value: 2450000, 
+        change: 12.5, 
+        status: 'up', 
+        target: 3000000,
+        previous: 2180000,
+        forecast: 2850000
+      },
+      employees: { 
+        value: 125, 
+        change: 4.2, 
+        status: 'up',
+        active: 118,
+        onLeave: 7,
+        contractors: 15
+      },
+      efficiency: { 
+        value: 94.2, 
+        change: 2.8, 
+        status: 'up',
+        target: 95,
+        industry_avg: 87.5
+      },
+      satisfaction: { 
+        value: 4.6, 
+        change: 4.5, 
+        status: 'up',
+        responses: 89,
+        nps: 72
+      }
+    },
+    financialMetrics: {
+      grossMargin: 68.5,
+      operatingMargin: 15.3,
+      ebitda: 1850000,
+      cashFlow: 980000,
+      roe: 18.7,
+      debt: 2100000
+    },
+    operationalMetrics: {
+      vesselUtilization: 87.3,
+      fuelEfficiency: 92.1,
+      maintenanceCost: 340000,
+      downtime: 2.1,
+      safetyScore: 98.5,
+      complianceRate: 99.2
     },
     alerts: [
-      { id: 1, title: 'Certificado STCW expirando em 15 dias', type: 'warning', priority: 'high', module: 'hr' },
-      { id: 2, title: 'Meta de eficiência atingida', type: 'success', priority: 'low', module: 'fleet' },
-      { id: 3, title: 'Análise IA disponível para PEOTRAM', type: 'info', priority: 'medium', module: 'peotram' },
-      { id: 4, title: 'Backup automático concluído', type: 'success', priority: 'low', module: 'system' }
+      { id: 1, title: 'Certificado STCW da MV Ocean Explorer expira em 15 dias', type: 'warning', priority: 'high', module: 'hr', vessel: 'MV Ocean Explorer', date: '2024-01-15' },
+      { id: 2, title: 'Meta mensal de eficiência operacional atingida - 94.2%', type: 'success', priority: 'medium', module: 'fleet', percentage: 94.2 },
+      { id: 3, title: 'Análise IA detectou 3 oportunidades de otimização no PEOTRAM', type: 'info', priority: 'medium', module: 'peotram', insights: 3 },
+      { id: 4, title: 'Backup automático da base de dados concluído com sucesso', type: 'success', priority: 'low', module: 'system', size: '2.3GB' },
+      { id: 5, title: 'Manutenção preventiva agendada para MV Atlantic Dawn', type: 'warning', priority: 'medium', module: 'maintenance', vessel: 'MV Atlantic Dawn', date: '2024-01-20' }
     ],
     recentActivities: [
-      { id: 1, user: 'João Silva', action: 'Completou auditoria PEOTRAM #2024-001', time: '2h atrás', type: 'peotram', vessel: 'MV Ocean Explorer' },
-      { id: 2, user: 'Maria Santos', action: 'Aprovou relatório mensal de frota', time: '4h atrás', type: 'fleet' },
-      { id: 3, user: 'Carlos Lima', action: 'Atualizou cronograma de viagem', time: '6h atrás', type: 'travel' },
-      { id: 4, user: 'Ana Costa', action: 'Upload de certificado STCW', time: '8h atrás', type: 'certificate' }
+      { id: 1, user: 'João Silva', action: 'Completou auditoria PEOTRAM #2024-001 com score 98.5%', time: '2h atrás', type: 'peotram', vessel: 'MV Ocean Explorer', score: 98.5 },
+      { id: 2, user: 'Maria Santos', action: 'Aprovou relatório mensal de frota - Janeiro 2024', time: '4h atrás', type: 'fleet', documents: 15 },
+      { id: 3, user: 'Carlos Lima', action: 'Atualizou cronograma de viagem para rota Santos-Houston', time: '6h atrás', type: 'travel', route: 'Santos-Houston' },
+      { id: 4, user: 'Ana Costa', action: 'Upload de certificado STCW renovado', time: '8h atrás', type: 'certificate', validity: '5 anos' },
+      { id: 5, user: 'Pedro Oliveira', action: 'Finalizou inspeção de segurança com nota A+', time: '1d atrás', type: 'safety', grade: 'A+' }
     ],
     systemHealth: {
-      performance: 97,
-      uptime: 99.9,
+      performance: 97.3,
+      uptime: 99.95,
       activeUsers: tenantUsage?.active_users || 42,
-      errorRate: 0.1,
+      errorRate: 0.08,
       apiCalls: tenantUsage?.api_calls_made || 1250,
-      storageUsed: tenantUsage?.storage_used_gb || 2.3
+      storageUsed: tenantUsage?.storage_used_gb || 2.3,
+      totalStorage: 50,
+      bandwidth: 245.8,
+      responseTime: 180
     },
     moduleStats: {
-      peotram: { audits: tenantUsage?.peotram_audits_created || 15, completion: 92 },
-      fleet: { vessels: tenantUsage?.vessels_managed || 8, efficiency: 94 },
-      documents: { processed: tenantUsage?.documents_processed || 42, ai_analyzed: 38 },
-      reports: { generated: tenantUsage?.reports_generated || 23, automated: 18 }
+      peotram: { 
+        audits: tenantUsage?.peotram_audits_created || 15, 
+        completion: 94.2,
+        nonConformities: 3,
+        avgScore: 96.8
+      },
+      fleet: { 
+        vessels: tenantUsage?.vessels_managed || 8, 
+        efficiency: 92.1,
+        utilization: 87.3,
+        routes: 24
+      },
+      documents: { 
+        processed: tenantUsage?.documents_processed || 42, 
+        ai_analyzed: 38,
+        compliance: 99.1,
+        digital: 89
+      },
+      reports: { 
+        generated: tenantUsage?.reports_generated || 23, 
+        automated: 18,
+        scheduled: 45,
+        real_time: 12
+      }
     }
   });
 
+  // Enhanced performance data
   const performanceData = [
-    { time: '00:00', users: 15, performance: 92, api_calls: 120 },
-    { time: '04:00', users: 8, performance: 95, api_calls: 80 },
-    { time: '08:00', users: 35, performance: 88, api_calls: 280 },
-    { time: '12:00', users: 45, performance: 85, api_calls: 350 },
-    { time: '16:00', users: 38, performance: 90, api_calls: 290 },
-    { time: '20:00', users: 25, performance: 94, api_calls: 180 }
+    { time: '00:00', users: 15, performance: 95.2, api_calls: 120, revenue: 245000 },
+    { time: '04:00', users: 8, performance: 97.1, api_calls: 80, revenue: 180000 },
+    { time: '08:00', users: 35, performance: 91.3, api_calls: 280, revenue: 420000 },
+    { time: '12:00', users: 45, performance: 88.7, api_calls: 350, revenue: 580000 },
+    { time: '16:00', users: 38, performance: 93.4, api_calls: 290, revenue: 490000 },
+    { time: '20:00', users: 25, performance: 96.8, api_calls: 180, revenue: 320000 }
+  ];
+
+  const revenueData = [
+    { month: 'Jul', value: 2100000, target: 2200000, previous: 2080000 },
+    { month: 'Ago', value: 2250000, target: 2300000, previous: 2150000 },
+    { month: 'Set', value: 2180000, target: 2400000, previous: 2200000 },
+    { month: 'Out', value: 2350000, target: 2500000, previous: 2280000 },
+    { month: 'Nov', value: 2420000, target: 2600000, previous: 2350000 },
+    { month: 'Dez', value: 2450000, target: 2700000, previous: 2420000 }
   ];
 
   const moduleUsageData = [
-    { name: 'PEOTRAM', value: 35, color: '#2563eb' },
-    { name: 'Fleet', value: 28, color: '#7c3aed' },
-    { name: 'HR', value: 20, color: '#059669' },
-    { name: 'Analytics', value: 17, color: '#dc2626' }
+    { name: 'PEOTRAM', value: 35, color: '#1e40af', growth: 12.5 },
+    { name: 'Fleet Management', value: 28, color: '#7c3aed', growth: 8.3 },
+    { name: 'HR & Certificates', value: 20, color: '#059669', growth: 15.2 },
+    { name: 'Analytics', value: 17, color: '#dc2626', growth: 22.1 }
+  ];
+
+  const operationalData = [
+    { metric: 'Vessel Utilization', value: 87.3, target: 90, status: 'warning' },
+    { metric: 'Fuel Efficiency', value: 92.1, target: 88, status: 'success' },
+    { metric: 'Safety Score', value: 98.5, target: 95, status: 'success' },
+    { metric: 'Compliance Rate', value: 99.2, target: 98, status: 'success' }
   ];
 
   const quickActions = [
     { 
-      title: 'Auditoria PEOTRAM', 
-      description: 'Iniciar nova auditoria ou revisar pendentes', 
+      title: 'PEOTRAM Auditorias', 
+      description: 'Sistema completo de auditorias marítimas', 
       icon: FileText, 
       path: '/peotram',
-      color: 'bg-blue-500',
+      color: 'from-blue-600 to-blue-700',
       count: dashboardData.moduleStats.peotram.audits,
-      status: 'success'
+      status: 'success',
+      subtitle: `Score médio: ${dashboardData.moduleStats.peotram.avgScore}%`,
+      metric: `${dashboardData.moduleStats.peotram.completion}% concluído`
     },
     { 
       title: 'Gestão da Frota', 
-      description: 'Monitorar embarcações e performance', 
+      description: 'Monitoramento avançado de embarcações', 
       icon: Ship, 
       path: '/fleet-dashboard',
-      color: 'bg-purple-500',
+      color: 'from-purple-600 to-purple-700',
       count: dashboardData.moduleStats.fleet.vessels,
-      status: 'info'
+      status: 'info',
+      subtitle: `Utilização: ${dashboardData.operationalMetrics.vesselUtilization}%`,
+      metric: `${dashboardData.moduleStats.fleet.routes} rotas ativas`
     },
     { 
       title: 'Analytics Avançado', 
-      description: 'Relatórios detalhados e insights', 
+      description: 'Business Intelligence e relatórios', 
       icon: BarChart3, 
       path: '/advanced-analytics',
-      color: 'bg-green-500',
+      color: 'from-green-600 to-green-700',
       count: dashboardData.moduleStats.reports.generated,
-      status: 'warning'
+      status: 'success',
+      subtitle: `${dashboardData.moduleStats.reports.automated} automáticos`,
+      metric: `${dashboardData.moduleStats.reports.real_time} em tempo real`
     },
     { 
-      title: 'IA & Inovação', 
-      description: 'Ferramentas de inteligência artificial', 
+      title: 'IA & Automação', 
+      description: 'Inteligência artificial aplicada', 
       icon: Brain, 
       path: '/ai-insights',
-      color: 'bg-cyan-500',
+      color: 'from-cyan-600 to-cyan-700',
       count: dashboardData.moduleStats.documents.ai_analyzed,
-      status: 'success'
+      status: 'success',
+      subtitle: `${dashboardData.moduleStats.documents.compliance}% compliance`,
+      metric: `${dashboardData.moduleStats.documents.digital}% digitalizados`
     },
     { 
-      title: 'Sistema Marítimo', 
-      description: 'Gestão completa marítima', 
-      icon: Globe, 
+      title: 'Centro Marítimo', 
+      description: 'Hub completo de operações', 
+      icon: Anchor, 
       path: '/maritime',
-      color: 'bg-indigo-500',
+      color: 'from-indigo-600 to-indigo-700',
       count: dashboardData.systemHealth.activeUsers,
-      status: 'info'
+      status: 'info',
+      subtitle: `${dashboardData.operationalMetrics.safetyScore}% segurança`,
+      metric: `${dashboardData.systemHealth.uptime}% disponibilidade`
     },
     { 
-      title: 'Scanner IA', 
-      description: 'Análise inteligente de documentos', 
+      title: 'Scanner Inteligente', 
+      description: 'Processamento IA de documentos', 
       icon: Zap, 
       path: '/advanced-documents',
-      color: 'bg-orange-500',
+      color: 'from-orange-600 to-orange-700',
       count: dashboardData.moduleStats.documents.processed,
-      status: 'success'
+      status: 'success',
+      subtitle: `${dashboardData.moduleStats.documents.ai_analyzed} analisados`,
+      metric: `99.1% precisão`
     }
   ];
 
@@ -159,7 +272,6 @@ const EnhancedUnifiedDashboard = () => {
     setIsRefreshing(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // Simular atualização dos dados
     setDashboardData(prev => ({
       ...prev,
       kpis: {
@@ -188,10 +300,9 @@ const EnhancedUnifiedDashboard = () => {
     );
   };
 
-  // Auto-update effect
   React.useEffect(() => {
     if (isAutoUpdate) {
-      const interval = setInterval(refreshData, 60000); // Update every minute
+      const interval = setInterval(refreshData, 60000);
       return () => clearInterval(interval);
     }
   }, [isAutoUpdate]);
@@ -200,7 +311,8 @@ const EnhancedUnifiedDashboard = () => {
     switch (type) {
       case 'warning': return <AlertTriangle className="w-4 h-4 text-orange-500" />;
       case 'success': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      default: return <Bell className="w-4 h-4 text-blue-500" />;
+      case 'info': return <Bell className="w-4 h-4 text-blue-500" />;
+      default: return <AlertCircle className="w-4 h-4 text-gray-500" />;
     }
   };
 
@@ -208,8 +320,9 @@ const EnhancedUnifiedDashboard = () => {
     switch (type) {
       case 'peotram': return <FileText className="w-4 h-4 text-blue-500" />;
       case 'fleet': return <Ship className="w-4 h-4 text-purple-500" />;
-      case 'certificate': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'travel': return <Calendar className="w-4 h-4 text-orange-500" />;
+      case 'certificate': return <Award className="w-4 h-4 text-green-500" />;
+      case 'travel': return <MapPin className="w-4 h-4 text-orange-500" />;
+      case 'safety': return <Shield className="w-4 h-4 text-red-500" />;
       default: return <Activity className="w-4 h-4 text-gray-500" />;
     }
   };
@@ -223,19 +336,11 @@ const EnhancedUnifiedDashboard = () => {
     }
   };
 
-  const availableKPIs = {
-    revenue: dashboardData.kpis.revenue,
-    employees: dashboardData.kpis.employees,
-    efficiency: dashboardData.kpis.efficiency,
-    satisfaction: dashboardData.kpis.satisfaction
-  };
-
   const displayName = currentBranding?.company_name || currentTenant?.name || 'Nautilus One';
   const userDisplayName = currentUser?.display_name || user?.email?.split('@')[0] || 'Usuário';
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Enhanced Dashboard Filters */}
+    <div className="space-y-8 p-6 bg-gradient-to-br from-background via-background to-muted/20 min-h-screen">
       <EnhancedDashboardFilters
         selectedKPIs={selectedKPIs}
         onKPIToggle={handleKPIToggle}
@@ -246,69 +351,107 @@ const EnhancedUnifiedDashboard = () => {
         lastUpdated={lastUpdated}
       />
 
-      {/* Header Aprimorado */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-gradient-to-br from-primary to-primary-light text-primary-foreground shadow-lg">
-              <LayoutDashboard className="w-8 h-8" />
-            </div>
-            <div>
-              <span>{displayName}</span>
-              <div className="flex items-center gap-2 mt-1">
-                <Badge variant="outline" className="text-xs">
-                  Plataforma SaaS Multicliente
-                </Badge>
-                {currentTenant?.plan_type && (
-                  <Badge variant="secondary" className="text-xs flex items-center gap-1">
-                    <Crown className="w-3 h-3" />
-                    {currentTenant.plan_type.charAt(0).toUpperCase() + currentTenant.plan_type.slice(1)}
-                  </Badge>
-                )}
-              </div>
-            </div>
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Bem-vindo de volta, <strong>{userDisplayName}</strong>! 
-            Aqui está o resumo completo do seu sistema marítimo.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            onClick={refreshData}
-            disabled={isRefreshing}
-            className="bg-background hover:bg-accent shadow-sm"
-          >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-            Atualizar
-          </Button>
-          <Button 
-            onClick={() => navigate('/executive')}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
-          >
-            <Target className="w-4 h-4 mr-2" />
-            Visão Executiva
-          </Button>
-        </div>
-      </div>
-
-      {/* KPIs Principais - Filtrados pela seleção do usuário */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {selectedKPIs.includes('revenue') && (
-          <Card className="hover:shadow-lg transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Receita Total</p>
-                  <p className="text-2xl font-bold">R$ {(availableKPIs.revenue.value / 1000000).toFixed(1)}M</p>
-                  <div className="flex items-center gap-1 mt-1">
-                    <TrendingUp className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-green-600">+{availableKPIs.revenue.change}%</span>
+      {/* Professional Header with Enhanced Branding */}
+      <div className="relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5 rounded-2xl" />
+        <Card className="relative border-2 border-primary/10 shadow-2xl bg-gradient-to-br from-card via-card to-card/95">
+          <CardContent className="p-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-2xl blur-sm opacity-30" />
+                  <div className="relative p-4 rounded-2xl bg-gradient-to-br from-primary via-primary to-primary-light text-primary-foreground shadow-2xl">
+                    <Anchor className="w-10 h-10" />
                   </div>
                 </div>
-                <div className="p-3 rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg">
-                  <DollarSign className="w-6 h-6" />
+                <div>
+                  <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-primary-light to-secondary bg-clip-text text-transparent">
+                    {displayName}
+                  </h1>
+                  <div className="flex items-center gap-3 mt-2">
+                    <Badge variant="outline" className="text-sm border-primary/20 bg-primary/5">
+                      <Crown className="w-4 h-4 mr-1" />
+                      Sistema Marítimo Integrado
+                    </Badge>
+                    {currentTenant?.plan_type && (
+                      <Badge className="text-sm bg-gradient-to-r from-secondary to-secondary-light">
+                        <Award className="w-3 h-3 mr-1" />
+                        {currentTenant.plan_type.charAt(0).toUpperCase() + currentTenant.plan_type.slice(1)}
+                      </Badge>
+                    )}
+                    <Badge variant="secondary" className="text-sm">
+                      <Activity className="w-3 h-3 mr-1" />
+                      {dashboardData.systemHealth.activeUsers} usuários ativos
+                    </Badge>
+                  </div>
+                  <p className="text-muted-foreground mt-3 text-lg">
+                    Bem-vindo de volta, <strong className="text-foreground">{userDisplayName}</strong>! 
+                    <br />Painel executivo de operações marítimas em tempo real.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col items-end gap-3">
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    onClick={refreshData}
+                    disabled={isRefreshing}
+                    className="bg-background/80 hover:bg-accent shadow-lg border-primary/20"
+                  >
+                    <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                    Atualizar Dados
+                  </Button>
+                  <Button 
+                    onClick={() => navigate('/executive')}
+                    className="bg-gradient-to-r from-primary to-primary-light text-primary-foreground hover:shadow-xl shadow-lg"
+                  >
+                    <Target className="w-4 h-4 mr-2" />
+                    Visão Executiva
+                  </Button>
+                </div>
+                <div className="text-right text-sm text-muted-foreground">
+                  <div>Última atualização: {lastUpdated.toLocaleTimeString()}</div>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    Sistema operacional - {dashboardData.systemHealth.uptime}% uptime
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Enhanced KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {selectedKPIs.includes('revenue') && (
+          <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-green-200">
+            <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg opacity-50" />
+            <CardContent className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-xl group-hover:shadow-2xl transition-shadow">
+                  <DollarSign className="w-8 h-8" />
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-green-700">R$ {(dashboardData.kpis.revenue.value / 1000000).toFixed(1)}M</div>
+                  <div className="text-sm text-muted-foreground">Meta: R$ {(dashboardData.kpis.revenue.target / 1000000).toFixed(1)}M</div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Receita Total</span>
+                  <div className="flex items-center gap-1">
+                    <TrendingUp className="w-4 h-4 text-green-600" />
+                    <span className="text-sm font-medium text-green-600">+{dashboardData.kpis.revenue.change}%</span>
+                  </div>
+                </div>
+                <Progress 
+                  value={(dashboardData.kpis.revenue.value / dashboardData.kpis.revenue.target) * 100} 
+                  className="h-3 bg-green-100"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>Anterior: R$ {(dashboardData.kpis.revenue.previous / 1000000).toFixed(1)}M</span>
+                  <span>Previsão: R$ {(dashboardData.kpis.revenue.forecast / 1000000).toFixed(1)}M</span>
                 </div>
               </div>
             </CardContent>
@@ -316,19 +459,39 @@ const EnhancedUnifiedDashboard = () => {
         )}
 
         {selectedKPIs.includes('employees') && (
-          <Card className="hover:shadow-lg transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Funcionários Ativos</p>
-                  <p className="text-2xl font-bold">{availableKPIs.employees.value}</p>
-                  <div className="flex items-center gap-1 mt-1">
+          <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-blue-200">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg opacity-50" />
+            <CardContent className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-xl group-hover:shadow-2xl transition-shadow">
+                  <Users className="w-8 h-8" />
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-blue-700">{dashboardData.kpis.employees.value}</div>
+                  <div className="text-sm text-muted-foreground">{dashboardData.kpis.employees.active} ativos</div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Funcionários</span>
+                  <div className="flex items-center gap-1">
                     <TrendingUp className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm text-blue-600">+{availableKPIs.employees.change}%</span>
+                    <span className="text-sm font-medium text-blue-600">+{dashboardData.kpis.employees.change}%</span>
                   </div>
                 </div>
-                <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
-                  <Users className="w-6 h-6" />
+                <div className="grid grid-cols-3 gap-2 text-xs">
+                  <div className="text-center p-2 bg-blue-50 rounded">
+                    <div className="font-semibold text-blue-700">{dashboardData.kpis.employees.active}</div>
+                    <div className="text-muted-foreground">Ativos</div>
+                  </div>
+                  <div className="text-center p-2 bg-orange-50 rounded">
+                    <div className="font-semibold text-orange-700">{dashboardData.kpis.employees.onLeave}</div>
+                    <div className="text-muted-foreground">Licença</div>
+                  </div>
+                  <div className="text-center p-2 bg-purple-50 rounded">
+                    <div className="font-semibold text-purple-700">{dashboardData.kpis.employees.contractors}</div>
+                    <div className="text-muted-foreground">Terceiros</div>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -336,19 +499,33 @@ const EnhancedUnifiedDashboard = () => {
         )}
 
         {selectedKPIs.includes('efficiency') && (
-          <Card className="hover:shadow-lg transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Eficiência Operacional</p>
-                  <p className="text-2xl font-bold">{availableKPIs.efficiency.value.toFixed(1)}%</p>
-                  <div className="flex items-center gap-1 mt-1">
+          <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-orange-200">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg opacity-50" />
+            <CardContent className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-xl group-hover:shadow-2xl transition-shadow">
+                  <Activity className="w-8 h-8" />
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-orange-700">{dashboardData.kpis.efficiency.value.toFixed(1)}%</div>
+                  <div className="text-sm text-muted-foreground">Meta: {dashboardData.kpis.efficiency.target}%</div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Eficiência Operacional</span>
+                  <div className="flex items-center gap-1">
                     <TrendingUp className="w-4 h-4 text-orange-600" />
-                    <span className="text-sm text-orange-600">+{availableKPIs.efficiency.change}%</span>
+                    <span className="text-sm font-medium text-orange-600">+{dashboardData.kpis.efficiency.change}%</span>
                   </div>
                 </div>
-                <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
-                  <Activity className="w-6 h-6" />
+                <Progress 
+                  value={dashboardData.kpis.efficiency.value} 
+                  className="h-3 bg-orange-100"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>Setor: {dashboardData.kpis.efficiency.industry_avg}%</span>
+                  <span className="text-orange-600 font-medium">+{(dashboardData.kpis.efficiency.value - dashboardData.kpis.efficiency.industry_avg).toFixed(1)}%</span>
                 </div>
               </div>
             </CardContent>
@@ -356,19 +533,33 @@ const EnhancedUnifiedDashboard = () => {
         )}
 
         {selectedKPIs.includes('satisfaction') && (
-          <Card className="hover:shadow-lg transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Satisfação da Equipe</p>
-                  <p className="text-2xl font-bold">{availableKPIs.satisfaction.value}/5</p>
-                  <div className="flex items-center gap-1 mt-1">
+          <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-purple-200">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-violet-50 rounded-lg opacity-50" />
+            <CardContent className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 text-white shadow-xl group-hover:shadow-2xl transition-shadow">
+                  <Target className="w-8 h-8" />
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-purple-700">{dashboardData.kpis.satisfaction.value}/5</div>
+                  <div className="text-sm text-muted-foreground">NPS: {dashboardData.kpis.satisfaction.nps}</div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Satisfação da Equipe</span>
+                  <div className="flex items-center gap-1">
                     <TrendingUp className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm text-purple-600">+{availableKPIs.satisfaction.change}%</span>
+                    <span className="text-sm font-medium text-purple-600">+{dashboardData.kpis.satisfaction.change}%</span>
                   </div>
                 </div>
-                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg">
-                  <Target className="w-6 h-6" />
+                <Progress 
+                  value={(dashboardData.kpis.satisfaction.value / 5) * 100} 
+                  className="h-3 bg-purple-100"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>{dashboardData.kpis.satisfaction.responses} respostas</span>
+                  <span className="text-purple-600 font-medium">Excelente</span>
                 </div>
               </div>
             </CardContent>
@@ -376,45 +567,125 @@ const EnhancedUnifiedDashboard = () => {
         )}
       </div>
 
-      {/* Módulos e Ações Rápidas */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>Módulos do Sistema</span>
-            <Badge variant="outline" className="text-xs">
-              {quickActions.length} módulos ativos
+      {/* Financial Overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="border-2 border-primary/10 shadow-xl">
+          <CardHeader className="bg-gradient-to-r from-primary/5 to-transparent">
+            <CardTitle className="flex items-center gap-2">
+              <LineChart className="w-5 h-5 text-primary" />
+              Performance Financeira
+            </CardTitle>
+            <CardDescription>Indicadores financeiros principais</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="text-sm text-muted-foreground">Margem Bruta</div>
+                <div className="text-2xl font-bold text-green-600">{dashboardData.financialMetrics.grossMargin}%</div>
+                <Progress value={dashboardData.financialMetrics.grossMargin} className="h-2" />
+              </div>
+              <div className="space-y-2">
+                <div className="text-sm text-muted-foreground">Margem Operacional</div>
+                <div className="text-2xl font-bold text-blue-600">{dashboardData.financialMetrics.operatingMargin}%</div>
+                <Progress value={dashboardData.financialMetrics.operatingMargin * 2} className="h-2" />
+              </div>
+              <div className="space-y-2">
+                <div className="text-sm text-muted-foreground">EBITDA</div>
+                <div className="text-2xl font-bold text-purple-600">R$ {(dashboardData.financialMetrics.ebitda / 1000000).toFixed(1)}M</div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-sm text-muted-foreground">ROE</div>
+                <div className="text-2xl font-bold text-orange-600">{dashboardData.financialMetrics.roe}%</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-2 border-secondary/10 shadow-xl">
+          <CardHeader className="bg-gradient-to-r from-secondary/5 to-transparent">
+            <CardTitle className="flex items-center gap-2">
+              <BarChart2 className="w-5 h-5 text-secondary" />
+              Indicadores Operacionais
+            </CardTitle>
+            <CardDescription>Métricas de performance operacional</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              {operationalData.map((item, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      item.status === 'success' ? 'bg-green-500' :
+                      item.status === 'warning' ? 'bg-orange-500' : 'bg-red-500'
+                    }`} />
+                    <span className="text-sm font-medium">{item.metric}</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold">{item.value}%</div>
+                    <div className="text-xs text-muted-foreground">Meta: {item.target}%</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Enhanced Module Cards */}
+      <Card className="border-2 border-primary/10 shadow-xl">
+        <CardHeader className="bg-gradient-to-r from-primary/5 via-transparent to-secondary/5">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-2xl flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-primary to-primary-light text-primary-foreground">
+                  <Globe className="w-6 h-6" />
+                </div>
+                Módulos Operacionais
+              </CardTitle>
+              <CardDescription className="text-lg mt-2">
+                Centro de controle integrado - {quickActions.length} módulos ativos
+              </CardDescription>
+            </div>
+            <Badge variant="outline" className="text-sm border-primary/20 bg-primary/5">
+              Sistema Completo
             </Badge>
-          </CardTitle>
-          <CardDescription>Acesso direto aos principais recursos da plataforma marítima</CardDescription>
+          </div>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <CardContent className="p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {quickActions.map((action, index) => (
               <Card 
                 key={index} 
-                className="hover:shadow-lg hover-lift transition-all cursor-pointer border-l-4 border-l-primary group bg-card shadow-sm"
+                className="group hover:shadow-2xl hover-lift transition-all duration-500 cursor-pointer border-2 border-transparent hover:border-primary/20 relative overflow-hidden"
                 onClick={() => navigate(action.path)}
               >
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary-light text-primary-foreground shadow-lg group-hover:shadow-xl transition-all">
-                        <action.icon className="w-5 h-5" />
+                <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-5 group-hover:opacity-10 transition-opacity`} />
+                <CardContent className="relative p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`p-4 rounded-2xl bg-gradient-to-br ${action.color} text-white shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300`}>
+                      <action.icon className="w-7 h-7" />
+                    </div>
+                    <Badge 
+                      variant="secondary" 
+                      className={`text-xs px-3 py-1 ${getActionStatusColor(action.status)} bg-background/50 backdrop-blur`}
+                    >
+                      {action.count} ativos
+                    </Badge>
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="font-bold text-lg group-hover:text-primary transition-colors">{action.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{action.description}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-medium text-foreground">{action.subtitle}</span>
+                        <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors">{action.title}</h4>
-                        <p className="text-sm text-muted-foreground">{action.description}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="secondary" className="text-xs">
-                            {action.count} itens
-                          </Badge>
-                          <span className={`text-xs ${getActionStatusColor(action.status)}`}>
-                            ●
-                          </span>
-                        </div>
+                      <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded-lg">
+                        {action.metric}
                       </div>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                   </div>
                 </CardContent>
               </Card>
@@ -423,60 +694,160 @@ const EnhancedUnifiedDashboard = () => {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Performance Chart */}
-        <Card className="lg:col-span-2">
+      {/* Enhanced Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="border-2 border-primary/10 shadow-xl">
           <CardHeader>
-            <CardTitle>Performance do Sistema (24h)</CardTitle>
-            <CardDescription>Monitoramento em tempo real da plataforma</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <LineChart className="w-5 h-5 text-primary" />
+              Performance em Tempo Real
+            </CardTitle>
+            <CardDescription>Monitoramento 24/7 do sistema</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={320}>
               <AreaChart data={performanceData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="time" />
-                <YAxis />
-                <Tooltip />
-                <Area type="monotone" dataKey="users" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="Usuários" />
-                <Area type="monotone" dataKey="performance" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name="Performance %" />
+                <defs>
+                  <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1}/>
+                  </linearGradient>
+                  <linearGradient id="colorPerformance" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.1}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="time" stroke="#64748b" />
+                <YAxis stroke="#64748b" />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))', 
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px'
+                  }} 
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="users" 
+                  stroke="#3b82f6" 
+                  fillOpacity={1} 
+                  fill="url(#colorUsers)" 
+                  name="Usuários Ativos" 
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="performance" 
+                  stroke="#10b981" 
+                  fillOpacity={1} 
+                  fill="url(#colorPerformance)" 
+                  name="Performance %" 
+                />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        {/* Module Usage */}
-        <Card>
+        <Card className="border-2 border-secondary/10 shadow-xl">
           <CardHeader>
-            <CardTitle>Uso por Módulo</CardTitle>
-            <CardDescription>Distribuição de acesso aos módulos</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <PieChart className="w-5 h-5 text-secondary" />
+              Distribuição de Módulos
+            </CardTitle>
+            <CardDescription>Uso por categoria do sistema</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
+            <ResponsiveContainer width="100%" height={320}>
+              <RechartsPieChart>
                 <Pie
                   data={moduleUsageData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={120}
-                  paddingAngle={5}
+                  outerRadius={100}
+                  fill="#8884d8"
                   dataKey="value"
+                  label={({ name, value }) => `${name}: ${value}%`}
                 >
                   {moduleUsageData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip />
-              </PieChart>
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))', 
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px'
+                  }} 
+                />
+              </RechartsPieChart>
             </ResponsiveContainer>
-            <div className="mt-4 space-y-2">
-              {moduleUsageData.map((item, index) => (
-                <div key={index} className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded" style={{ backgroundColor: item.color }} />
-                    <span>{item.name}</span>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Enhanced Alerts and Activities */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="border-2 border-orange-100 shadow-xl">
+          <CardHeader className="bg-gradient-to-r from-orange-50 to-transparent">
+            <CardTitle className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-orange-600" />
+              Alertas do Sistema
+            </CardTitle>
+            <CardDescription>Notificações importantes e pendências</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              {dashboardData.alerts.slice(0, 4).map((alert) => (
+                <div key={alert.id} className="flex items-start gap-3 p-4 rounded-lg border border-border/50 hover:border-border transition-colors">
+                  <div className="mt-1">{getStatusIcon(alert.type)}</div>
+                  <div className="flex-1 space-y-1">
+                    <div className="font-medium text-sm leading-relaxed">{alert.title}</div>
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Building2 className="w-3 h-3" />
+                        {alert.module.toUpperCase()}
+                      </span>
+                      <Badge variant="outline" className={`text-xs ${
+                        alert.priority === 'high' ? 'border-red-200 text-red-700' :
+                        alert.priority === 'medium' ? 'border-orange-200 text-orange-700' :
+                        'border-gray-200 text-gray-700'
+                      }`}>
+                        {alert.priority}
+                      </Badge>
+                    </div>
                   </div>
-                  <span className="font-medium">{item.value}%</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-2 border-green-100 shadow-xl">
+          <CardHeader className="bg-gradient-to-r from-green-50 to-transparent">
+            <CardTitle className="flex items-center gap-2">
+              <Activity className="w-5 h-5 text-green-600" />
+              Atividades Recentes
+            </CardTitle>
+            <CardDescription>Timeline de operações do sistema</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              {dashboardData.recentActivities.slice(0, 4).map((activity) => (
+                <div key={activity.id} className="flex items-start gap-3 p-4 rounded-lg border border-border/50 hover:border-border transition-colors">
+                  <div className="mt-1">{getActivityIcon(activity.type)}</div>
+                  <div className="flex-1 space-y-1">
+                    <div className="font-medium text-sm leading-relaxed">{activity.action}</div>
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Users className="w-3 h-3" />
+                        {activity.user}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {activity.time}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -484,104 +855,62 @@ const EnhancedUnifiedDashboard = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* System Health */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5" />
-              Saúde do Sistema
-            </CardTitle>
-            <CardDescription>Monitoramento em tempo real</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Performance Geral</span>
-                <span className="text-sm">{dashboardData.systemHealth.performance}%</span>
+      {/* System Health Monitor */}
+      <Card className="border-2 border-primary/10 shadow-xl">
+        <CardHeader className="bg-gradient-to-r from-primary/5 to-transparent">
+          <CardTitle className="flex items-center gap-2">
+            <Server className="w-5 h-5 text-primary" />
+            Monitoramento do Sistema
+          </CardTitle>
+          <CardDescription>Status da infraestrutura e recursos</CardDescription>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div className="text-center space-y-2">
+              <div className="p-3 rounded-full bg-green-100 mx-auto w-fit">
+                <Cpu className="w-6 h-6 text-green-600" />
               </div>
-              <Progress value={dashboardData.systemHealth.performance} className="h-2" />
+              <div className="text-2xl font-bold text-green-600">{dashboardData.systemHealth.performance}%</div>
+              <div className="text-sm text-muted-foreground">Performance</div>
             </div>
-
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Uptime</span>
-                <span className="text-sm">{dashboardData.systemHealth.uptime}%</span>
+            <div className="text-center space-y-2">
+              <div className="p-3 rounded-full bg-blue-100 mx-auto w-fit">
+                <Network className="w-6 h-6 text-blue-600" />
               </div>
-              <Progress value={dashboardData.systemHealth.uptime} className="h-2" />
+              <div className="text-2xl font-bold text-blue-600">{dashboardData.systemHealth.uptime}%</div>
+              <div className="text-sm text-muted-foreground">Uptime</div>
             </div>
-
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-blue-600">{dashboardData.systemHealth.activeUsers}</p>
-                <p className="text-xs text-muted-foreground">Usuários Ativos</p>
+            <div className="text-center space-y-2">
+              <div className="p-3 rounded-full bg-purple-100 mx-auto w-fit">
+                <Users className="w-6 h-6 text-purple-600" />
               </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-green-600">{dashboardData.systemHealth.errorRate}%</p>
-                <p className="text-xs text-muted-foreground">Taxa de Erro</p>
-              </div>
+              <div className="text-2xl font-bold text-purple-600">{dashboardData.systemHealth.activeUsers}</div>
+              <div className="text-sm text-muted-foreground">Usuários</div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Alertas Recentes */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              Alertas e Notificações
-              <Badge variant="destructive" className="text-xs">
-                {dashboardData.alerts.filter(a => a.priority === 'high').length} Alta
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {dashboardData.alerts.slice(0, 4).map((alert) => (
-              <div key={alert.id} className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors">
-                {getStatusIcon(alert.type)}
-                <div className="flex-1">
-                  <p className="font-medium text-sm">{alert.title}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Badge variant="outline" className="text-xs">
-                      {alert.priority}
-                    </Badge>
-                    <Badge variant="secondary" className="text-xs">
-                      {alert.module}
-                    </Badge>
-                  </div>
-                </div>
-                <Clock className="w-4 h-4 text-muted-foreground" />
+            <div className="text-center space-y-2">
+              <div className="p-3 rounded-full bg-orange-100 mx-auto w-fit">
+                <Database className="w-6 h-6 text-orange-600" />
               </div>
-            ))}
-            <Button variant="outline" size="sm" className="w-full" onClick={() => navigate('/notification-center')}>
-              Ver Todos os Alertas
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Atividades Recentes */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Atividades Recentes</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {dashboardData.recentActivities.slice(0, 4).map((activity) => (
-              <div key={activity.id} className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors">
-                {getActivityIcon(activity.type)}
-                <div className="flex-1">
-                  <p className="font-medium text-sm">{activity.user}</p>
-                  <p className="text-xs text-muted-foreground">{activity.action}</p>
-                  {activity.vessel && (
-                    <Badge variant="outline" className="text-xs mt-1">
-                      {activity.vessel}
-                    </Badge>
-                  )}
-                </div>
-                <span className="text-xs text-muted-foreground">{activity.time}</span>
+              <div className="text-2xl font-bold text-orange-600">{dashboardData.systemHealth.apiCalls}</div>
+              <div className="text-sm text-muted-foreground">API Calls</div>
+            </div>
+            <div className="text-center space-y-2">
+              <div className="p-3 rounded-full bg-cyan-100 mx-auto w-fit">
+                <HardDrive className="w-6 h-6 text-cyan-600" />
               </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
+              <div className="text-2xl font-bold text-cyan-600">{dashboardData.systemHealth.storageUsed}GB</div>
+              <div className="text-sm text-muted-foreground">Armazenamento</div>
+            </div>
+            <div className="text-center space-y-2">
+              <div className="p-3 rounded-full bg-emerald-100 mx-auto w-fit">
+                <Cloud className="w-6 h-6 text-emerald-600" />
+              </div>
+              <div className="text-2xl font-bold text-emerald-600">{dashboardData.systemHealth.responseTime}ms</div>
+              <div className="text-sm text-muted-foreground">Resposta</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
