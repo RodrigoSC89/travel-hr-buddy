@@ -84,6 +84,10 @@ import FleetTracking from "./pages/FleetTracking";
 import ExecutiveDashboard from "./pages/ExecutiveDashboard";
 import IntelligentAlerts from "./pages/IntelligentAlerts";
 
+// Lazy load the new advanced pages
+const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
+const MobileApp = React.lazy(() => import("./pages/MobileApp"));
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -199,9 +203,19 @@ const App = () => {
                   <Route path="organization-setup" element={<OrganizationSetup />} />
                   <Route path="super-admin" element={<SuperAdmin />} />
                   <Route path="executive-dashboard" element={<ExecutiveDashboard />} />
-                  <Route path="intelligent-alerts" element={<IntelligentAlerts />} />
-                  <Route path="task-management" element={<TaskManagement />} />
-                  <Route path="document-management" element={<DocumentManagement />} />
+                   <Route path="intelligent-alerts" element={<IntelligentAlerts />} />
+                   <Route path="task-management" element={<TaskManagement />} />
+                   <Route path="document-management" element={<DocumentManagement />} />
+                   <Route path="advanced-documents" element={
+                     <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                       <AdvancedDocuments />
+                     </React.Suspense>
+                   } />
+                   <Route path="mobile-app" element={
+                     <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                       <MobileApp />
+                     </React.Suspense>
+                   } />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

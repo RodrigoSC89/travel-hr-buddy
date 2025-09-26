@@ -33,7 +33,8 @@ import {
   Workflow,
   TestTube,
   MapPin,
-  CheckCircle
+  CheckCircle,
+  Scan
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilusOneLogo from '@/assets/nautilus-one-logo.png';
@@ -153,6 +154,11 @@ const navigationItems = [
         title: "Documentos",
         url: "/document-management",
         icon: FileText,
+      },
+      {
+        title: "Scanner IA",
+        url: "/advanced-documents",
+        icon: Scan,
       },
     ],
   },

@@ -215,7 +215,7 @@ const MobileAppPage = () => {
                   </li>
                   <li className="flex gap-3">
                     <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">3</span>
-                    <span>Ou use menu > "Instalar app"</span>
+                    <span>Ou use menu &gt; "Instalar app"</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">4</span>

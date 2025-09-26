@@ -26,8 +26,7 @@ import {
   Maximize2,
   Crop,
   RotateCw,
-  Contrast,
-  Brightness4
+  Contrast
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
