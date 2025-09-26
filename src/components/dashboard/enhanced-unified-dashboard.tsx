@@ -278,11 +278,15 @@ const EnhancedUnifiedDashboard = () => {
             variant="outline" 
             onClick={refreshData}
             disabled={isRefreshing}
+            className="bg-background hover:bg-accent shadow-sm"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Atualizar
           </Button>
-          <Button onClick={() => navigate('/executive')}>
+          <Button 
+            onClick={() => navigate('/executive')}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
+          >
             <Target className="w-4 h-4 mr-2" />
             Visão Executiva
           </Button>
@@ -386,8 +390,12 @@ const EnhancedUnifiedDashboard = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickActions.map((action, index) => (
-              <Card key={index} className="hover:shadow-lg hover-lift transition-all cursor-pointer border-l-4 border-l-primary group">
-                <CardContent className="p-4" onClick={() => navigate(action.path)}>
+              <Card 
+                key={index} 
+                className="hover:shadow-lg hover-lift transition-all cursor-pointer border-l-4 border-l-primary group bg-card shadow-sm"
+                onClick={() => navigate(action.path)}
+              >
+                <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary-light text-primary-foreground shadow-lg group-hover:shadow-xl transition-all">
