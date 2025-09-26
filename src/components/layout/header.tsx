@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './theme-toggle';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { NotificationCenter } from '@/components/notifications/notification-center';
+import { RealTimeNotificationCenter } from '@/components/notifications/real-time-notification-center';
 import { UserMenu } from '@/components/auth/user-menu';
 import { SimpleGlobalSearch } from '@/components/ui/simple-global-search';
 import { OrganizationSelector } from '@/components/admin/organization-selector';
@@ -22,7 +23,7 @@ export const Header: React.FC = () => {
           
           <nav className="flex items-center space-x-2">
             <OrganizationSelector />
-            <NotificationCenter />
+            <RealTimeNotificationCenter />
             <UserMenu />
             <ThemeToggle />
           </nav>

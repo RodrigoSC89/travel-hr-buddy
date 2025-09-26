@@ -606,6 +606,78 @@ export type Database = {
           },
         ]
       }
+      emergency_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string | null
+          description: string | null
+          id: string
+          location: Json | null
+          organization_id: string | null
+          reported_by: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          status: string
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          location?: Json | null
+          organization_id?: string | null
+          reported_by?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          status?: string
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          location?: Json | null
+          organization_id?: string | null
+          reported_by?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          status?: string
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emergency_alerts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "emergency_alerts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       employee_certificates: {
         Row: {
           certificate_name: string
@@ -1948,6 +2020,62 @@ export type Database = {
             columns: ["manager_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      real_time_notifications: {
+        Row: {
+          category: string
+          created_at: string | null
+          data: Json | null
+          expires_at: string | null
+          id: string
+          message: string
+          organization_id: string | null
+          priority: string
+          read_at: string | null
+          title: string
+          type: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string | null
+          data?: Json | null
+          expires_at?: string | null
+          id?: string
+          message: string
+          organization_id?: string | null
+          priority?: string
+          read_at?: string | null
+          title: string
+          type?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          data?: Json | null
+          expires_at?: string | null
+          id?: string
+          message?: string
+          organization_id?: string | null
+          priority?: string
+          read_at?: string | null
+          title?: string
+          type?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "real_time_notifications_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]

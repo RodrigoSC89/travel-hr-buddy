@@ -77,6 +77,7 @@ import SuperAdmin from "./pages/SuperAdmin";
 import TaskManagement from "./pages/TaskManagement";
 import DocumentManagement from "./pages/DocumentManagement";
 import FleetDashboard from "./pages/FleetDashboard";
+import ExecutiveDashboard from "./pages/ExecutiveDashboard";
 
 const queryClient = new QueryClient();
 
@@ -188,6 +189,7 @@ const App = () => {
                     </div>
                   } />
                   <Route path="super-admin" element={<SuperAdmin />} />
+                  <Route path="executive-dashboard" element={<ExecutiveDashboard />} />
                   <Route path="task-management" element={<TaskManagement />} />
                   <Route path="document-management" element={<DocumentManagement />} />
                 </Route>

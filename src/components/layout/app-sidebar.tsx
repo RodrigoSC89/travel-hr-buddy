@@ -71,6 +71,12 @@ const navigationItems = [
     alwaysVisible: true
   },
   {
+    title: "Dashboard Executivo",
+    url: "/executive-dashboard",
+    icon: TrendingUp,
+    requiresRole: ["admin", "owner"] as const,
+  },
+  {
     title: "Administração",
     url: "/admin",
     icon: UserCog,
