@@ -478,11 +478,11 @@ export const OrganizationCustomization: React.FC = () => {
                   <Input
                     type="number"
                     placeholder="Ex: 5"
-                    value={customization.business_rules.max_reservations || ''}
+                    value={(customization.business_rules as any)?.max_reservations || ''}
                     onChange={(e) => setCustomization({
                       ...customization,
                       business_rules: {
-                        ...customization.business_rules,
+                        ...(customization.business_rules as any || {}),
                         max_reservations: e.target.value
                       }
                     })}
@@ -494,11 +494,11 @@ export const OrganizationCustomization: React.FC = () => {
                   <Input
                     type="number"
                     placeholder="Ex: 24"
-                    value={customization.business_rules.min_advance_hours || ''}
+                    value={(customization.business_rules as any)?.min_advance_hours || ''}
                     onChange={(e) => setCustomization({
                       ...customization,
                       business_rules: {
-                        ...customization.business_rules,
+                        ...(customization.business_rules as any || {}),
                         min_advance_hours: e.target.value
                       }
                     })}
@@ -510,11 +510,11 @@ export const OrganizationCustomization: React.FC = () => {
                 <Label>Tipos de Alerta Personalizados</Label>
                 <Textarea
                   placeholder="Ex: Alerta de Manutenção Programada, Inspeção de Segurança..."
-                  value={customization.business_rules.custom_alert_types || ''}
+                  value={(customization.business_rules as any)?.custom_alert_types || ''}
                   onChange={(e) => setCustomization({
                     ...customization,
                     business_rules: {
-                      ...customization.business_rules,
+                      ...(customization.business_rules as any || {}),
                       custom_alert_types: e.target.value
                     }
                   })}
@@ -525,11 +525,11 @@ export const OrganizationCustomization: React.FC = () => {
                 <Label>Configurações de Integração Específicas</Label>
                 <Textarea
                   placeholder="APIs específicas, webhooks, integrações com sistemas legados..."
-                  value={customization.business_rules.integration_settings || ''}
+                  value={(customization.business_rules as any)?.integration_settings || ''}
                   onChange={(e) => setCustomization({
                     ...customization,
                     business_rules: {
-                      ...customization.business_rules,
+                      ...(customization.business_rules as any || {}),
                       integration_settings: e.target.value
                     }
                   })}
