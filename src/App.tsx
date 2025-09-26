@@ -68,6 +68,9 @@ import RealTimeAnalyticsPage from "./pages/RealTimeAnalytics";
 import OfflineSyncPage from "./pages/OfflineSync";
 import IntelligentHelpCenter from "@/components/help/intelligent-help-center";
 import KnowledgeManagement from "@/components/admin/knowledge-management";
+import FleetManagement from "./pages/FleetManagement";
+import CrewManagement from "./pages/CrewManagement";
+import MaritimeCertifications from "./pages/MaritimeCertifications";
 
 const queryClient = new QueryClient();
 
@@ -168,8 +171,9 @@ const App = () => {
                       <KnowledgeManagement />
                     </div>
                   } />
-                  <Route path="fleet-management" element={<Maritime />} />
-                  <Route path="crew-management" element={<HumanResources />} />
+                  <Route path="fleet-management" element={<FleetManagement />} />
+                  <Route path="crew-management" element={<CrewManagement />} />
+                  <Route path="maritime-certifications" element={<MaritimeCertifications />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
