@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 import { 
-  MapPin, 
+  Ship, 
   Navigation, 
-  Clock, 
-  Fuel,
+  MapPin, 
+  Fuel, 
+  Gauge,
   Thermometer,
   Wind,
-  Anchor,
-  Radio
+  Radio,
+  AlertTriangle,
+  CheckCircle,
+  Clock
 } from 'lucide-react';
 
 interface VesselPosition {
@@ -20,73 +26,103 @@ interface VesselPosition {
   longitude: number;
   speed: number;
   heading: number;
-  status: string;
-  lastUpdate: string;
-  fuel: number;
-  temperature: number;
-  weather: string;
+  status: 'sailing' | 'anchored' | 'docked' | 'maintenance' | 'emergency';
+  fuel_level: number;
+  last_update: string;
+  weather: {
+    temperature: number;
+    wind_speed: number;
+    wind_direction: number;
+    visibility: number;
+  };
+  crew_count: number;
+  destination: string;
+  eta: string;
 }
 
-const mockVesselPositions: VesselPosition[] = [
-  {
-    id: '1',
-    name: 'MV Atlântico',
-    latitude: -23.9618,
-    longitude: -46.3322,
-    speed: 12.5,
-    heading: 180,
-    status: 'underway',
-    lastUpdate: '2024-01-20T10:30:00Z',
-    fuel: 75,
-    temperature: 24,
-    weather: 'Clear'
-  },
-  {
-    id: '2',
-    name: 'MV Pacífico',
-    latitude: -25.4284,
-    longitude: -48.6732,
-    speed: 0,
-    heading: 0,
-    status: 'anchored',
-    lastUpdate: '2024-01-20T10:15:00Z',
-    fuel: 65,
-    temperature: 22,
-    weather: 'Partly Cloudy'
-  },
-  {
-    id: '3',
-    name: 'MV Índico',
-    latitude: -8.8137,
-    longitude: -35.2369,
-    speed: 15.2,
-    heading: 90,
-    status: 'underway',
-    lastUpdate: '2024-01-20T10:45:00Z',
-    fuel: 85,
-    temperature: 28,
-    weather: 'Sunny'
-  }
-];
-
-export const VesselTracking: React.FC = () => {
+export const VesselTracking = () => {
+  const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
   const [trackingMode, setTrackingMode] = useState<'real-time' | 'historical'>('real-time');
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'underway': return 'bg-green-500 text-white';
-      case 'anchored': return 'bg-blue-500 text-white';
-      case 'maintenance': return 'bg-yellow-500 text-white';
-      case 'emergency': return 'bg-red-500 text-white';
-      default: return 'bg-gray-500 text-white';
+  useEffect(() => {
+    loadVessels();
+    
+    // Set up real-time tracking
+    const interval = setInterval(() => {
+      if (trackingMode === 'real-time') {
+        loadVessels();
+      }
+    }, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [trackingMode]);
+
+  const loadVessels = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('vessels')
+        .select('*')
+        .eq('status', 'active');
+
+      if (error) throw error;
+
+      // Transform to tracking format with mock real-time data
+      const trackingData: VesselPosition[] = data?.map(vessel => ({
+        id: vessel.id,
+        name: vessel.name,
+        latitude: -23.5505 + (Math.random() - 0.5) * 0.1,
+        longitude: -46.6333 + (Math.random() - 0.5) * 0.1,
+        speed: Math.random() * 20,
+        heading: Math.random() * 360,
+        status: ['sailing', 'anchored', 'docked'][Math.floor(Math.random() * 3)] as any,
+        fuel_level: 50 + Math.random() * 50,
+        last_update: new Date().toISOString(),
+        weather: {
+          temperature: 20 + Math.random() * 15,
+          wind_speed: Math.random() * 25,
+          wind_direction: Math.random() * 360,
+          visibility: 5 + Math.random() * 5
+        },
+        crew_count: Math.floor(10 + Math.random() * 20),
+        destination: 'Porto de Santos',
+        eta: new Date(Date.now() + Math.random() * 86400000 * 7).toISOString()
+      })) || [];
+
+      setVessels(trackingData);
+      if (!selectedVessel && trackingData.length > 0) {
+        setSelectedVessel(trackingData[0]);
+      }
+    } catch (error) {
+      console.error('Error loading vessels:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao carregar dados dos navios",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getStatusText = (status: string) => {
+  const getStatusColor = (status: VesselPosition['status']) => {
     switch (status) {
-      case 'underway': return 'Em Trânsito';
+      case 'sailing': return 'bg-blue-500';
+      case 'anchored': return 'bg-yellow-500';
+      case 'docked': return 'bg-green-500';
+      case 'maintenance': return 'bg-orange-500';
+      case 'emergency': return 'bg-red-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  const getStatusText = (status: VesselPosition['status']) => {
+    switch (status) {
+      case 'sailing': return 'Navegando';
       case 'anchored': return 'Ancorado';
+      case 'docked': return 'Atracado';
       case 'maintenance': return 'Manutenção';
       case 'emergency': return 'Emergência';
       default: return 'Desconhecido';
@@ -94,174 +130,203 @@ export const VesselTracking: React.FC = () => {
   };
 
   const formatCoordinate = (lat: number, lng: number) => {
-    return `${lat.toFixed(4)}°, ${lng.toFixed(4)}°`;
+    return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Navigation className="h-6 w-6 text-primary" />
-            Rastreamento de Embarcações
-          </h2>
+          <h2 className="text-2xl font-bold">Rastreamento de Navios</h2>
           <p className="text-muted-foreground">
-            Monitoramento em tempo real da localização e status da frota
+            Acompanhe a posição e status da frota em tempo real
           </p>
         </div>
         
-        <div className="flex gap-2">
-          <Button 
-            variant={trackingMode === 'real-time' ? 'default' : 'outline'}
-            onClick={() => setTrackingMode('real-time')}
-          >
-            Tempo Real
-          </Button>
-          <Button 
-            variant={trackingMode === 'historical' ? 'default' : 'outline'}
-            onClick={() => setTrackingMode('historical')}
-          >
-            Histórico
-          </Button>
-        </div>
+        <Tabs value={trackingMode} onValueChange={(value) => setTrackingMode(value as any)}>
+          <TabsList>
+            <TabsTrigger value="real-time">Tempo Real</TabsTrigger>
+            <TabsTrigger value="historical">Histórico</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Vessel List */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-1">
           <Card>
             <CardHeader>
-              <CardTitle>Embarcações Ativas</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Ship className="h-5 w-5" />
+                Navios Ativos ({vessels.length})
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {mockVesselPositions.map((vessel) => (
-                  <div
-                    key={vessel.id}
-                    className={`p-4 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${
-                      selectedVessel?.id === vessel.id ? 'border-primary bg-primary/5' : ''
-                    }`}
-                    onClick={() => setSelectedVessel(vessel)}
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <Anchor className="h-8 w-8 text-primary" />
-                        <div>
-                          <h3 className="font-semibold">{vessel.name}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {formatCoordinate(vessel.latitude, vessel.longitude)}
-                          </p>
-                        </div>
-                      </div>
-                      <Badge className={getStatusColor(vessel.status)}>
-                        {getStatusText(vessel.status)}
-                      </Badge>
+            <CardContent className="space-y-3">
+              {vessels.map((vessel) => (
+                <div
+                  key={vessel.id}
+                  className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                    selectedVessel?.id === vessel.id 
+                      ? 'border-primary bg-primary/5' 
+                      : 'border-border hover:bg-accent'
+                  }`}
+                  onClick={() => setSelectedVessel(vessel)}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium">{vessel.name}</h4>
+                    <Badge variant="outline" className={`${getStatusColor(vessel.status)} text-white`}>
+                      {getStatusText(vessel.status)}
+                    </Badge>
+                  </div>
+                  
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-3 w-3" />
+                      {formatCoordinate(vessel.latitude, vessel.longitude)}
                     </div>
-                    
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div className="flex items-center gap-1">
-                        <Navigation className="h-4 w-4 text-muted-foreground" />
-                        <span>{vessel.speed} nós</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4 text-muted-foreground" />
-                        <span>
-                          {new Date(vessel.lastUpdate).toLocaleTimeString('pt-BR')}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Fuel className="h-4 w-4 text-muted-foreground" />
-                        <span>{vessel.fuel}% combustível</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Thermometer className="h-4 w-4 text-muted-foreground" />
-                        <span>{vessel.temperature}°C</span>
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <Gauge className="h-3 w-3" />
+                      {vessel.speed.toFixed(1)} nós
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Fuel className="h-3 w-3" />
+                      {vessel.fuel_level.toFixed(0)}%
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </CardContent>
           </Card>
         </div>
 
         {/* Vessel Details */}
-        <div>
+        <div className="lg:col-span-2">
           {selectedVessel ? (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Anchor className="h-5 w-5" />
-                  {selectedVessel.name}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="text-sm font-medium">Status</p>
-                  <Badge className={getStatusColor(selectedVessel.status)}>
-                    {getStatusText(selectedVessel.status)}
-                  </Badge>
-                </div>
+            <div className="space-y-6">
+              {/* Main Info Card */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center gap-2">
+                      <Ship className="h-6 w-6" />
+                      {selectedVessel.name}
+                    </CardTitle>
+                    <Badge variant="outline" className={`${getStatusColor(selectedVessel.status)} text-white`}>
+                      {getStatusText(selectedVessel.status)}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div className="text-center p-3 bg-accent rounded-lg">
+                      <Navigation className="h-6 w-6 mx-auto mb-2 text-primary" />
+                      <div className="text-2xl font-bold">{selectedVessel.speed.toFixed(1)}</div>
+                      <div className="text-sm text-muted-foreground">Nós</div>
+                    </div>
+                    
+                    <div className="text-center p-3 bg-accent rounded-lg">
+                      <Fuel className="h-6 w-6 mx-auto mb-2 text-primary" />
+                      <div className="text-2xl font-bold">{selectedVessel.fuel_level.toFixed(0)}%</div>
+                      <div className="text-sm text-muted-foreground">Combustível</div>
+                    </div>
+                    
+                    <div className="text-center p-3 bg-accent rounded-lg">
+                      <MapPin className="h-6 w-6 mx-auto mb-2 text-primary" />
+                      <div className="text-lg font-bold">{selectedVessel.heading.toFixed(0)}°</div>
+                      <div className="text-sm text-muted-foreground">Rumo</div>
+                    </div>
+                    
+                    <div className="text-center p-3 bg-accent rounded-lg">
+                      <CheckCircle className="h-6 w-6 mx-auto mb-2 text-primary" />
+                      <div className="text-2xl font-bold">{selectedVessel.crew_count}</div>
+                      <div className="text-sm text-muted-foreground">Tripulação</div>
+                    </div>
+                  </div>
 
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-sm">Posição:</span>
-                    <span className="text-sm font-medium">
-                      {formatCoordinate(selectedVessel.latitude, selectedVessel.longitude)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm">Velocidade:</span>
-                    <span className="text-sm font-medium">{selectedVessel.speed} nós</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm">Rumo:</span>
-                    <span className="text-sm font-medium">{selectedVessel.heading}°</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm">Combustível:</span>
-                    <span className="text-sm font-medium">{selectedVessel.fuel}%</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm">Temperatura:</span>
-                    <span className="text-sm font-medium">{selectedVessel.temperature}°C</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm">Clima:</span>
-                    <span className="text-sm font-medium">{selectedVessel.weather}</span>
-                  </div>
-                </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Position */}
+                    <div>
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
+                        Posição Atual
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div>Latitude: {selectedVessel.latitude.toFixed(6)}</div>
+                        <div>Longitude: {selectedVessel.longitude.toFixed(6)}</div>
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Clock className="h-3 w-3" />
+                          Atualizado: {new Date(selectedVessel.last_update).toLocaleTimeString()}
+                        </div>
+                      </div>
+                    </div>
 
-                <div>
-                  <p className="text-sm font-medium mb-2">Última Atualização</p>
-                  <p className="text-sm text-muted-foreground">
-                    {new Date(selectedVessel.lastUpdate).toLocaleString('pt-BR')}
-                  </p>
-                </div>
+                    {/* Weather */}
+                    <div>
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <Wind className="h-4 w-4" />
+                        Condições Meteorológicas
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center gap-2">
+                          <Thermometer className="h-3 w-3" />
+                          {selectedVessel.weather.temperature.toFixed(1)}°C
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Wind className="h-3 w-3" />
+                          Vento: {selectedVessel.weather.wind_speed.toFixed(1)} nós
+                        </div>
+                        <div>Visibilidade: {selectedVessel.weather.visibility.toFixed(1)} km</div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-                <div className="pt-4 space-y-2">
-                  <Button variant="outline" className="w-full">
-                    <MapPin className="h-4 w-4 mr-2" />
-                    Centralizar no Mapa
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    <Radio className="h-4 w-4 mr-2" />
-                    Comunicar com Embarcação
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    <Wind className="h-4 w-4 mr-2" />
-                    Condições Meteorológicas
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+              {/* Actions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Ações Rápidas</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-3">
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4" />
+                      Centralizar no Mapa
+                    </Button>
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <Radio className="h-4 w-4" />
+                      Comunicar
+                    </Button>
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <Navigation className="h-4 w-4" />
+                      Ver Rota
+                    </Button>
+                    {selectedVessel.status === 'emergency' && (
+                      <Button variant="destructive" className="flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4" />
+                        Protocolo Emergência
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           ) : (
             <Card>
-              <CardContent className="p-8 text-center">
-                <Navigation className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <CardContent className="text-center py-12">
+                <Ship className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Nenhum navio selecionado</h3>
                 <p className="text-muted-foreground">
-                  Selecione uma embarcação para ver os detalhes de rastreamento
+                  Selecione um navio da lista para ver os detalhes
                 </p>
               </CardContent>
             </Card>
