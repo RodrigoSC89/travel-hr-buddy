@@ -171,37 +171,43 @@ export const EnhancedPeotramManager: React.FC = () => {
 
   const loadPeotramData = async () => {
     try {
-      // Carregar auditorias existentes
-      const { data: auditsData, error: auditsError } = await supabase
-        .from('operational_checklists')
-        .select('*')
-        .eq('organization_id', currentOrganization?.id)
-        .eq('type', 'peotram')
-        .order('created_at', { ascending: false });
+      // Por enquanto, usar dados mock até as tabelas estarem prontas
+      const mockAudits: PeotramAudit[] = [
+        {
+          id: '1',
+          company_base: 'Empresa Marítima Exemplo',
+          vessel_petrobras_code: 'PBR-001',
+          vessel_name: 'Navio Exemplo Alpha',
+          audit_date: '2024-01-15',
+          scope: 'Auditoria completa dos 13 elementos PEOTRAM',
+          operations_summary: 'Operações de apoio marítimo realizadas conforme procedimentos',
+          observations: 'Observações gerais da auditoria',
+          auditors: 'João Silva, Maria Santos',
+          audited: 'Equipe de bordo e gestão',
+          status: 'completed',
+          total_score: 89,
+          created_by: 'auditor-1',
+          organization_id: currentOrganization?.id || ''
+        },
+        {
+          id: '2',
+          company_base: 'Empresa Marítima Exemplo',
+          vessel_petrobras_code: 'PBR-002',
+          vessel_name: 'Navio Exemplo Beta',
+          audit_date: '2024-02-10',
+          scope: 'Auditoria focada em elementos críticos',
+          operations_summary: 'Operações de segurança e manutenção',
+          observations: 'Melhorias necessárias em alguns pontos',
+          auditors: 'Carlos Oliveira, Ana Costa',
+          audited: 'Tripulação técnica',
+          status: 'in_progress',
+          total_score: 92,
+          created_by: 'auditor-2',
+          organization_id: currentOrganization?.id || ''
+        }
+      ];
 
-      if (auditsError) throw auditsError;
-
-      const formattedAudits: PeotramAudit[] = auditsData?.map(audit => {
-        const metadata = audit.metadata as any || {};
-        return {
-          id: audit.id,
-          company_base: metadata.company_base || '',
-          vessel_petrobras_code: metadata.vessel_petrobras_code || '',
-          vessel_name: metadata.vessel_name || '',
-          audit_date: metadata.audit_date || new Date().toISOString().split('T')[0],
-          scope: metadata.scope || '',
-          operations_summary: metadata.operations_summary || '',
-          observations: metadata.observations || '',
-          auditors: metadata.auditors || '',
-          audited: metadata.audited || '',
-          status: audit.status as any || 'draft',
-          total_score: metadata.total_score || 0,
-          created_by: audit.created_by || '',
-          organization_id: audit.organization_id || ''
-        };
-      }) || [];
-
-      setAudits(formattedAudits);
+      setAudits(mockAudits);
       setElements(peotramElements);
 
     } catch (error: any) {
@@ -220,63 +226,48 @@ export const EnhancedPeotramManager: React.FC = () => {
     if (!currentOrganization) return;
 
     try {
-      const newAudit = {
-        title: `Auditoria PEOTRAM - ${new Date().toLocaleDateString('pt-BR')}`,
-        type: 'peotram',
-        organization_id: currentOrganization.id,
-        created_by: '', // Will be set by database
+  const createNewAudit = async () => {
+    if (!currentOrganization) return;
+
+    try {
+      // Por enquanto, criar auditoria mock
+      const newAuditId = `audit-${Date.now()}`;
+      const newAudit: PeotramAudit = {
+        id: newAuditId,
+        company_base: '',
+        vessel_name: '',
+        vessel_petrobras_code: '',
+        audit_date: new Date().toISOString().split('T')[0],
+        scope: '',
+        operations_summary: '',
+        observations: '',
+        auditors: '',
+        audited: '',
         status: 'draft',
-        metadata: {
-          company_base: '',
-          vessel_petrobras_code: '',
-          vessel_name: '',
-          audit_date: new Date().toISOString().split('T')[0],
-          scope: '',
-          operations_summary: '',
-          observations: '',
-          auditors: '',
-          audited: '',
-          total_score: 0,
-          version: '2024-v01'
-        }
+        total_score: 0,
+        created_by: 'current-user',
+        organization_id: currentOrganization.id
       };
-
-      const { data, error } = await supabase
-        .from('operational_checklists')
-        .insert([newAudit])
-        .select()
-        .single();
-
-      if (error) throw error;
 
       toast({
         title: "Sucesso",
         description: "Nova auditoria PEOTRAM criada"
       });
 
-      await loadPeotramData();
-      
-      // Selecionar a nova auditoria
-      if (data) {
-        const formattedAudit: PeotramAudit = {
-          id: data.id,
-          company_base: '',
-          vessel_petrobras_code: '',
-          vessel_name: '',
-          audit_date: new Date().toISOString().split('T')[0],
-          scope: '',
-          operations_summary: '',
-          observations: '',
-          auditors: '',
-          audited: '',
-          status: 'draft',
-          total_score: 0,
-          created_by: data.created_by || '',
-          organization_id: data.organization_id || ''
-        };
-        setSelectedAudit(formattedAudit);
-        setActiveTab('audit-form');
-      }
+      // Adicionar à lista local
+      setAudits(prev => [newAudit, ...prev]);
+      setSelectedAudit(newAudit);
+      setActiveTab('audit-form');
+
+    } catch (error: any) {
+      console.error('Erro ao criar auditoria:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível criar a auditoria",
+        variant: "destructive"
+      });
+    }
+  };
 
     } catch (error: any) {
       console.error('Erro ao criar auditoria:', error);
