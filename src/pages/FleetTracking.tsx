@@ -2,7 +2,7 @@ import React from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import VesselTrackingMap from '@/components/fleet/vessel-tracking-map';
-import { Map } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import VoiceInterface from '@/components/voice/VoiceInterface';
 
 const FleetTracking = () => {
@@ -13,7 +13,7 @@ const FleetTracking = () => {
         <main className="flex-1 p-6">
           <div className="flex items-center gap-4 mb-6">
             <div className="p-3 rounded-lg bg-primary/10">
-              <Map className="h-8 w-8 text-primary" />
+              <MapPin className="h-8 w-8 text-primary" />
             </div>
             <div>
               <h1 className="text-3xl font-bold">Rastreamento de Frota</h1>

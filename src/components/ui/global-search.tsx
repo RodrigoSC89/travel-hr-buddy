@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Search, FileText, Users, Map, TrendingUp, Calendar, MessageSquare, Settings, Plane, Building, Anchor } from 'lucide-react';
+import { Search, FileText, Users, MapPin, TrendingUp, Calendar, MessageSquare, Settings, Plane, Building, Anchor } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 

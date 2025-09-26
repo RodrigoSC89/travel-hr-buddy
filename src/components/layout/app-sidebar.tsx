@@ -31,7 +31,8 @@ import {
   Brain,
   MessageSquare,
   Workflow,
-  TestTube
+  TestTube,
+  MapPin
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import nautilusOneLogo from '@/assets/nautilus-one-logo.png';
@@ -123,7 +124,7 @@ const navigationItems = [
       {
         title: "Rastreamento",
         url: "/fleet-tracking",
-        icon: Map,
+        icon: MapPin,
       },
       {
         title: "Colaboração",

@@ -7,7 +7,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plane, Building, Map, Calendar, BarChart3, Brain } from 'lucide-react';
+import { Plane, Building, MapPin, Calendar, BarChart3, Brain } from 'lucide-react';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import VoiceInterface from '@/components/voice/VoiceInterface';
 
@@ -72,7 +72,7 @@ const Travel = () => {
                 Hotéis
               </TabsTrigger>
               <TabsTrigger value="map" className="flex items-center gap-2">
-                <Map className="h-4 w-4" />
+                <MapPin className="h-4 w-4" />
                 Mapa
               </TabsTrigger>
               <TabsTrigger value="itinerary" className="flex items-center gap-2">
