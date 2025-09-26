@@ -58,6 +58,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
+import { ScrollArea } from "@/components/ui/scroll-area";
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -493,11 +495,12 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
 
       {/* Content */}
       <SidebarContent>
-        <SidebarGroup>
-          {!collapsed && <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>}
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navigationItems.map((item) => {
+        <ScrollArea className="flex-1 overflow-hidden">
+          <SidebarGroup>
+            {!collapsed && <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>}
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {navigationItems.map((item) => {
                 // Verificar permissões para exibir o item
                 if (!canAccessItem(item)) {
                   return null;
@@ -607,6 +610,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        </ScrollArea>
       </SidebarContent>
 
       {/* Footer */}
