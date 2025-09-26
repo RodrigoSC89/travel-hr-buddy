@@ -83,7 +83,7 @@ const IntelligentChatbot: React.FC = () => {
     return (
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 left-8 z-25 rounded-full w-14 h-14 shadow-lg"
+        className="fixed bottom-24 right-8 z-30 rounded-full w-14 h-14 shadow-lg"
       >
         <MessageSquare className="w-6 h-6" />
       </Button>
@@ -91,7 +91,7 @@ const IntelligentChatbot: React.FC = () => {
   }
 
   return (
-    <Card className="fixed bottom-24 left-8 z-25 w-96 h-[500px] bg-card/95 backdrop-blur-sm border-border/50 flex flex-col">
+    <Card className="fixed bottom-24 right-8 z-30 w-96 h-[500px] bg-card/95 backdrop-blur-sm border-border/50 flex flex-col">
       <CardHeader className="flex-shrink-0 pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-lg">
