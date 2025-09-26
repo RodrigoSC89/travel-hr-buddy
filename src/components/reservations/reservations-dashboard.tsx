@@ -1,233 +1,197 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { StatsCard } from '@/components/ui/stats-card';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar as CalendarIcon, Plus, Clock, MapPin, Users, Edit, Trash2, Smartphone } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Clock, 
-  CheckCircle, 
-  AlertCircle,
-  Plus,
-  Search,
-  Filter,
-  Building,
-  Bed,
-  Wifi,
-  Car,
-  Coffee,
-  Star
-} from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useAuth } from '@/contexts/AuthContext';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 interface Reservation {
   id: string;
-  type: 'hotel' | 'flight' | 'car' | 'restaurant' | 'meeting_room';
   title: string;
-  location: string;
-  checkIn: string;
-  checkOut: string;
-  guests: number;
-  status: 'confirmed' | 'pending' | 'cancelled';
-  totalPrice: number;
   description?: string;
-  amenities?: string[];
-  rating?: number;
+  reservation_type: string;
+  start_date: string;
+  end_date: string;
+  location?: string;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  created_at: string;
 }
 
-const mockReservations: Reservation[] = [
-  {
-    id: '1',
-    type: 'hotel',
-    title: 'Hotel Copacabana Palace',
-    location: 'Rio de Janeiro, RJ',
-    checkIn: '2024-02-15',
-    checkOut: '2024-02-18',
-    guests: 2,
-    status: 'confirmed',
-    totalPrice: 1850,
-    amenities: ['wifi', 'pool', 'spa', 'gym'],
-    rating: 4.8
-  },
-  {
-    id: '2',
-    type: 'flight',
-    title: 'Voo São Paulo - Rio',
-    location: 'GRU → SDU',
-    checkIn: '2024-02-15',
-    checkOut: '2024-02-15',
-    guests: 1,
-    status: 'confirmed',
-    totalPrice: 450
-  },
-  {
-    id: '3',
-    type: 'car',
-    title: 'Aluguel de Carro',
-    location: 'Rio de Janeiro, RJ',
-    checkIn: '2024-02-15',
-    checkOut: '2024-02-18',
-    guests: 1,
-    status: 'pending',
-    totalPrice: 320
-  },
-  {
-    id: '4',
-    type: 'meeting_room',
-    title: 'Sala de Reunião Executive',
-    location: 'Centro Empresarial Rio',
-    checkIn: '2024-02-16',
-    checkOut: '2024-02-16',
-    guests: 8,
-    status: 'confirmed',
-    totalPrice: 650,
-    amenities: ['projector', 'wifi', 'coffee', 'whiteboard']
-  }
-];
-
-export const ReservationsDashboard = () => {
-  const { toast } = useToast();
-  const [reservations, setReservations] = useState<Reservation[]>(mockReservations);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
-  const [isCreatingReservation, setIsCreatingReservation] = useState(false);
-  const [newReservation, setNewReservation] = useState<Partial<Reservation>>({
-    type: 'hotel',
+export const ReservationsDashboard: React.FC = () => {
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+  const [formData, setFormData] = useState({
     title: '',
+    description: '',
+    reservation_type: '',
+    start_date: '',
+    end_date: '',
     location: '',
-    checkIn: '',
-    checkOut: '',
-    guests: 1,
-    status: 'pending',
-    totalPrice: 0,
-    description: ''
+    status: 'confirmed' as 'pending' | 'confirmed' | 'cancelled'
   });
 
-  const handleCreateReservation = () => {
-    if (!newReservation.title || !newReservation.location || !newReservation.checkIn) {
+  const { toast } = useToast();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      fetchReservations();
+    }
+  }, [user]);
+
+  const triggerHaptics = async () => {
+    try {
+      await Haptics.impact({ style: ImpactStyle.Medium });
+    } catch (error) {
+      console.log('Haptics not available');
+    }
+  };
+
+  const fetchReservations = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('reservations')
+        .select('*')
+        .order('start_date', { ascending: true });
+
+      if (error) throw error;
+      setReservations((data || []) as Reservation[]);
+    } catch (error) {
+      console.error('Error fetching reservations:', error);
       toast({
         title: "Erro",
-        description: "Preencha todos os campos obrigatórios",
+        description: "Erro ao carregar reservas",
         variant: "destructive"
       });
-      return;
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const reservation: Reservation = {
-      id: `res-${Date.now()}`,
-      title: newReservation.title!,
-      type: newReservation.type as Reservation['type'],
-      location: newReservation.location!,
-      checkIn: newReservation.checkIn!,
-      checkOut: newReservation.checkOut || newReservation.checkIn!,
-      guests: newReservation.guests || 1,
-      status: 'pending',
-      totalPrice: newReservation.totalPrice || 0,
-      description: newReservation.description
-    };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
 
-    setReservations(prev => [reservation, ...prev]);
-    setNewReservation({
-      type: 'hotel',
-      title: '',
-      location: '',
-      checkIn: '',
-      checkOut: '',
-      guests: 1,
-      status: 'pending',
-      totalPrice: 0,
-      description: ''
-    });
-    setIsCreatingReservation(false);
+    await triggerHaptics();
+
+    try {
+      const reservationData = {
+        ...formData,
+        user_id: user.id,
+        start_date: new Date(formData.start_date).toISOString(),
+        end_date: new Date(formData.end_date).toISOString(),
+      };
+
+      if (selectedReservation) {
+        const { error } = await supabase
+          .from('reservations')
+          .update(reservationData)
+          .eq('id', selectedReservation.id);
+
+        if (error) throw error;
+        toast({
+          title: "Sucesso",
+          description: "Reserva atualizada com sucesso!"
+        });
+      } else {
+        const { error } = await supabase
+          .from('reservations')
+          .insert([reservationData]);
+
+        if (error) throw error;
+        toast({
+          title: "Sucesso",
+          description: "Reserva criada com sucesso!"
+        });
+      }
+
+      setIsDialogOpen(false);
+      resetForm();
+      fetchReservations();
+    } catch (error) {
+      console.error('Error saving reservation:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao salvar reserva",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    await triggerHaptics();
     
-    toast({
-      title: "Reserva criada!",
-      description: `${reservation.title} foi adicionada com sucesso`
+    try {
+      const { error } = await supabase
+        .from('reservations')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      toast({
+        title: "Sucesso",
+        description: "Reserva excluída com sucesso!"
+      });
+      fetchReservations();
+    } catch (error) {
+      console.error('Error deleting reservation:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao excluir reserva",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      description: '',
+      reservation_type: '',
+      start_date: '',
+      end_date: '',
+      location: '',
+      status: 'confirmed' as 'pending' | 'confirmed' | 'cancelled'
     });
+    setSelectedReservation(null);
   };
 
-  const handleCancelReservation = (id: string) => {
-    setReservations(prev => prev.map(res => 
-      res.id === id ? { ...res, status: 'cancelled' } : res
-    ));
-    toast({
-      title: "Reserva cancelada",
-      description: "A reserva foi cancelada com sucesso"
+  const openEditDialog = (reservation: Reservation) => {
+    setSelectedReservation(reservation);
+    setFormData({
+      title: reservation.title,
+      description: reservation.description || '',
+      reservation_type: reservation.reservation_type,
+      start_date: new Date(reservation.start_date).toISOString().slice(0, 16),
+      end_date: new Date(reservation.end_date).toISOString().slice(0, 16),
+      location: reservation.location || '',
+      status: reservation.status
     });
+    setIsDialogOpen(true);
   };
 
-  const filteredReservations = reservations.filter(reservation => {
-    const matchesSearch = reservation.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         reservation.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = selectedType === 'all' || reservation.type === selectedType;
-    const matchesStatus = selectedStatus === 'all' || reservation.status === selectedStatus;
-    return matchesSearch && matchesType && matchesStatus;
-  });
-
-  const stats = [
-    {
-      title: "Total de Reservas",
-      value: reservations.length.toString(),
-      icon: Calendar,
-      variant: 'ocean' as const
-    },
-    {
-      title: "Confirmadas",
-      value: reservations.filter(r => r.status === 'confirmed').length.toString(),
-      icon: CheckCircle,
-      variant: 'success' as const
-    },
-    {
-      title: "Pendentes",
-      value: reservations.filter(r => r.status === 'pending').length.toString(),
-      icon: Clock,
-      variant: 'warning' as const
-    },
-    {
-      title: "Valor Total",
-      value: `R$ ${reservations.reduce((acc, r) => acc + r.totalPrice, 0).toLocaleString()}`,
-      icon: Building,
-      variant: 'default' as const
-    }
-  ];
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'hotel': return <Building className="w-4 h-4" />;
-      case 'flight': return <Calendar className="w-4 h-4" />;
-      case 'car': return <Car className="w-4 h-4" />;
-      case 'restaurant': return <Coffee className="w-4 h-4" />;
-      case 'meeting_room': return <Users className="w-4 h-4" />;
-      default: return <Calendar className="w-4 h-4" />;
-    }
-  };
-
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'hotel': return 'Hotel';
-      case 'flight': return 'Voo';
-      case 'car': return 'Carro';
-      case 'restaurant': return 'Restaurante';
-      case 'meeting_room': return 'Sala de Reunião';
-      default: return type;
-    }
+  const openNewDialog = () => {
+    resetForm();
+    setIsDialogOpen(true);
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'pending': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'cancelled': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'confirmed': return 'bg-green-100 text-green-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'cancelled': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -236,281 +200,279 @@ export const ReservationsDashboard = () => {
       case 'confirmed': return 'Confirmada';
       case 'pending': return 'Pendente';
       case 'cancelled': return 'Cancelada';
-      default: return status;
+      default: return 'Desconhecida';
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Carregando reservas...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Reservas</h1>
-          <p className="text-muted-foreground mt-1">
-            Gerencie todas as suas reservas e agendamentos
+          <h2 className="text-3xl font-bold flex items-center gap-2">
+            <CalendarIcon className="h-8 w-8 text-primary" />
+            Reservas
+            <Smartphone className="h-5 w-5 text-green-500" />
+          </h2>
+          <p className="text-muted-foreground">
+            Gerencie todas as suas reservas e agendamentos - Compatível com mobile
           </p>
         </div>
-        <Dialog open={isCreatingReservation} onOpenChange={setIsCreatingReservation}>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="mt-4 md:mt-0">
-              <Plus className="mr-2 w-4 h-4" />
+            <Button onClick={openNewDialog}>
+              <Plus className="h-4 w-4 mr-2" />
               Nova Reserva
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent>
             <DialogHeader>
-              <DialogTitle>Nova Reserva</DialogTitle>
+              <DialogTitle>
+                {selectedReservation ? 'Editar Reserva' : 'Nova Reserva'}
+              </DialogTitle>
               <DialogDescription>
-                Adicione uma nova reserva ao sistema
+                {selectedReservation ? 'Edite os detalhes da reserva' : 'Crie uma nova reserva'}
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="type" className="text-right">Tipo</Label>
-                <Select value={newReservation.type} onValueChange={(value) => setNewReservation(prev => ({ ...prev, type: value as Reservation['type'] }))}>
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue />
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">Título</label>
+                <Input
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  placeholder="Título da reserva"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Tipo</label>
+                <Select
+                  value={formData.reservation_type}
+                  onValueChange={(value) => setFormData({ ...formData, reservation_type: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="hotel">Hotel</SelectItem>
-                    <SelectItem value="flight">Voo</SelectItem>
-                    <SelectItem value="car">Carro</SelectItem>
-                    <SelectItem value="restaurant">Restaurante</SelectItem>
-                    <SelectItem value="meeting_room">Sala de Reunião</SelectItem>
+                    <SelectItem value="viagem">Viagem</SelectItem>
+                    <SelectItem value="reuniao">Reunião</SelectItem>
+                    <SelectItem value="treinamento">Treinamento</SelectItem>
+                    <SelectItem value="embarcacao">Embarcação</SelectItem>
+                    <SelectItem value="outro">Outro</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="title" className="text-right">Título *</Label>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium">Data/Hora Início</label>
+                  <Input
+                    type="datetime-local"
+                    value={formData.start_date}
+                    onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Data/Hora Fim</label>
+                  <Input
+                    type="datetime-local"
+                    value={formData.end_date}
+                    onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-medium">Local</label>
                 <Input
-                  id="title"
-                  value={newReservation.title || ''}
-                  onChange={(e) => setNewReservation(prev => ({ ...prev, title: e.target.value }))}
-                  className="col-span-3"
-                  placeholder="Nome da reserva"
+                  value={formData.location}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  placeholder="Local da reserva"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="location" className="text-right">Local *</Label>
-                <Input
-                  id="location"
-                  value={newReservation.location || ''}
-                  onChange={(e) => setNewReservation(prev => ({ ...prev, location: e.target.value }))}
-                  className="col-span-3"
-                  placeholder="Localização"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="checkIn" className="text-right">Check-in *</Label>
-                <Input
-                  id="checkIn"
-                  type="date"
-                  value={newReservation.checkIn || ''}
-                  onChange={(e) => setNewReservation(prev => ({ ...prev, checkIn: e.target.value }))}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="checkOut" className="text-right">Check-out</Label>
-                <Input
-                  id="checkOut"
-                  type="date"
-                  value={newReservation.checkOut || ''}
-                  onChange={(e) => setNewReservation(prev => ({ ...prev, checkOut: e.target.value }))}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="guests" className="text-right">Pessoas</Label>
-                <Input
-                  id="guests"
-                  type="number"
-                  min="1"
-                  value={newReservation.guests || 1}
-                  onChange={(e) => setNewReservation(prev => ({ ...prev, guests: parseInt(e.target.value) }))}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="price" className="text-right">Valor (R$)</Label>
-                <Input
-                  id="price"
-                  type="number"
-                  value={newReservation.totalPrice || ''}
-                  onChange={(e) => setNewReservation(prev => ({ ...prev, totalPrice: parseFloat(e.target.value) || 0 }))}
-                  className="col-span-3"
-                  placeholder="0.00"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-start gap-4">
-                <Label htmlFor="description" className="text-right">Descrição</Label>
+              <div>
+                <label className="text-sm font-medium">Descrição</label>
                 <Textarea
-                  id="description"
-                  value={newReservation.description || ''}
-                  onChange={(e) => setNewReservation(prev => ({ ...prev, description: e.target.value }))}
-                  className="col-span-3"
-                  placeholder="Detalhes adicionais..."
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Descrição adicional"
+                  rows={3}
                 />
               </div>
-            </div>
-            <DialogFooter>
-              <Button type="submit" onClick={handleCreateReservation}>
-                Criar Reserva
-              </Button>
-            </DialogFooter>
+              <div>
+                <label className="text-sm font-medium">Status</label>
+                <Select
+                  value={formData.status}
+                  onValueChange={(value: 'pending' | 'confirmed' | 'cancelled') => 
+                    setFormData({ ...formData, status: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="confirmed">Confirmada</SelectItem>
+                    <SelectItem value="pending">Pendente</SelectItem>
+                    <SelectItem value="cancelled">Cancelada</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex gap-2">
+                <Button type="submit" className="flex-1">
+                  {selectedReservation ? 'Atualizar' : 'Criar'}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsDialogOpen(false)}
+                >
+                  Cancelar
+                </Button>
+              </div>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <StatsCard key={index} {...stat} />
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2">
+              <CalendarIcon className="h-5 w-5 text-primary" />
+              <div>
+                <p className="text-sm text-muted-foreground">Total</p>
+                <p className="text-2xl font-bold">{reservations.length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-green-600" />
+              <div>
+                <p className="text-sm text-muted-foreground">Confirmadas</p>
+                <p className="text-2xl font-bold">
+                  {reservations.filter(r => r.status === 'confirmed').length}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-yellow-600" />
+              <div>
+                <p className="text-sm text-muted-foreground">Pendentes</p>
+                <p className="text-2xl font-bold">
+                  {reservations.filter(r => r.status === 'pending').length}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-red-600" />
+              <div>
+                <p className="text-sm text-muted-foreground">Canceladas</p>
+                <p className="text-2xl font-bold">
+                  {reservations.filter(r => r.status === 'cancelled').length}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Reservations List - Mobile Optimized */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {reservations.map((reservation) => (
+          <Card key={reservation.id} className="hover:shadow-lg transition-shadow">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg">{reservation.title}</CardTitle>
+                <Badge className={getStatusColor(reservation.status)}>
+                  {getStatusLabel(reservation.status)}
+                </Badge>
+              </div>
+              <CardDescription className="capitalize">
+                {reservation.reservation_type}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm">
+                  <Clock className="h-4 w-4" />
+                  <span>
+                    {new Date(reservation.start_date).toLocaleString('pt-BR')} - 
+                    {new Date(reservation.end_date).toLocaleString('pt-BR')}
+                  </span>
+                </div>
+                {reservation.location && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <MapPin className="h-4 w-4" />
+                    <span>{reservation.location}</span>
+                  </div>
+                )}
+                {reservation.description && (
+                  <p className="text-sm text-muted-foreground">
+                    {reservation.description}
+                  </p>
+                )}
+              </div>
+              <div className="flex gap-2 mt-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => openEditDialog(reservation)}
+                  className="flex-1"
+                >
+                  <Edit className="h-4 w-4 mr-1" />
+                  Editar
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleDelete(reservation.id)}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
-      {/* Filters */}
-      <Card className="p-6">
-        <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
-            <Input
-              placeholder="Buscar reservas..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          <div className="flex items-center space-x-2">
-            <Filter size={20} className="text-muted-foreground" />
-            <Select value={selectedType} onValueChange={setSelectedType}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Tipo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os Tipos</SelectItem>
-                <SelectItem value="hotel">Hotel</SelectItem>
-                <SelectItem value="flight">Voo</SelectItem>
-                <SelectItem value="car">Carro</SelectItem>
-                <SelectItem value="restaurant">Restaurante</SelectItem>
-                <SelectItem value="meeting_room">Sala de Reunião</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os Status</SelectItem>
-                <SelectItem value="confirmed">Confirmada</SelectItem>
-                <SelectItem value="pending">Pendente</SelectItem>
-                <SelectItem value="cancelled">Cancelada</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </Card>
-
-      {/* Reservations List */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Suas Reservas</h2>
-          <span className="text-sm text-muted-foreground">
-            {filteredReservations.length} reservas encontradas
-          </span>
-        </div>
-
-        {filteredReservations.length === 0 ? (
-          <Card>
-            <CardContent className="p-8 text-center">
-              <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium mb-2">Nenhuma reserva encontrada</h3>
-              <p className="text-muted-foreground mb-4">
-                Comece criando sua primeira reserva
-              </p>
-              <Button onClick={() => setIsCreatingReservation(true)}>
-                <Plus className="w-4 h-4 mr-2" />
-                Criar Primeira Reserva
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid gap-4">
-            {filteredReservations.map((reservation) => (
-              <Card key={reservation.id} className="hover:shadow-lg transition-all">
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        {getTypeIcon(reservation.type)}
-                        <h3 className="text-lg font-semibold">{reservation.title}</h3>
-                        <Badge className={getStatusColor(reservation.status)}>
-                          {getStatusLabel(reservation.status)}
-                        </Badge>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4" />
-                          {reservation.location}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
-                          {new Date(reservation.checkIn).toLocaleDateString('pt-BR')}
-                          {reservation.checkOut !== reservation.checkIn && (
-                            <> - {new Date(reservation.checkOut).toLocaleDateString('pt-BR')}</>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4" />
-                          {reservation.guests} pessoa{reservation.guests > 1 ? 's' : ''}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline">
-                            R$ {reservation.totalPrice.toLocaleString()}
-                          </Badge>
-                        </div>
-                      </div>
-
-                      {reservation.amenities && (
-                        <div className="flex items-center gap-2 mt-3">
-                          {reservation.amenities.map((amenity, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs">
-                              {amenity}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
-
-                      {reservation.rating && (
-                        <div className="flex items-center gap-1 mt-2">
-                          <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                          <span className="text-sm font-medium">{reservation.rating}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex items-center gap-2 mt-4 md:mt-0">
-                      {reservation.status !== 'cancelled' && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleCancelReservation(reservation.id)}
-                        >
-                          Cancelar
-                        </Button>
-                      )}
-                      <Button size="sm">
-                        Ver Detalhes
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-      </div>
+      {reservations.length === 0 && (
+        <Card>
+          <CardContent className="p-8 text-center">
+            <CalendarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Nenhuma reserva encontrada</h3>
+            <p className="text-muted-foreground mb-4">
+              Crie sua primeira reserva para começar a organizar seus agendamentos
+            </p>
+            <Button onClick={openNewDialog}>
+              <Plus className="h-4 w-4 mr-2" />
+              Criar Primeira Reserva
+            </Button>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
