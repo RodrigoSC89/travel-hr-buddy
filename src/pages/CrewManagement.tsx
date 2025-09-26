@@ -509,7 +509,6 @@ export default function CrewManagement() {
           </Card>
         </TabsContent>
       </Tabs>
-        </div>
       </div>
     </OrganizationLayout>
   );

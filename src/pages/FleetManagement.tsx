@@ -460,7 +460,6 @@ export default function FleetManagement() {
           </Card>
         </TabsContent>
       </Tabs>
-        </div>
       </div>
     </OrganizationLayout>
   );
