@@ -66,6 +66,8 @@ import TestingDashboard from "./pages/TestingDashboard";
 import FeedbackPage from "./pages/Feedback";
 import RealTimeAnalyticsPage from "./pages/RealTimeAnalytics";
 import OfflineSyncPage from "./pages/OfflineSync";
+import IntelligentHelpCenter from "@/components/help/intelligent-help-center";
+import KnowledgeManagement from "@/components/admin/knowledge-management";
 
 const queryClient = new QueryClient();
 
@@ -156,6 +158,16 @@ const App = () => {
                   <Route path="feedback" element={<FeedbackPage />} />
                   <Route path="real-time-analytics" element={<RealTimeAnalyticsPage />} />
                   <Route path="offline-sync" element={<OfflineSyncPage />} />
+                  <Route path="help-center" element={
+                    <div className="container mx-auto p-6">
+                      <IntelligentHelpCenter />
+                    </div>
+                  } />
+                  <Route path="knowledge-management" element={
+                    <div className="container mx-auto p-6">
+                      <KnowledgeManagement />
+                    </div>
+                  } />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

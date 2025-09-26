@@ -38,12 +38,14 @@ interface KnowledgeItem {
   tags: string[];
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   status: 'draft' | 'published' | 'archived';
-  author: string;
+  author_id?: string;
   created_at: Date;
   updated_at: Date;
   views: number;
   rating: number;
+  helpful_votes?: number;
   steps?: any[];
+  metadata?: any;
 }
 
 interface Analytics {
@@ -88,88 +90,74 @@ export const KnowledgeManagement: React.FC = () => {
     { id: 'video', name: 'Vídeo' }
   ];
 
-  // Dados de exemplo
-  const sampleKnowledgeItems: KnowledgeItem[] = [
-    {
-      id: '1',
-      title: 'Como criar uma escala de tripulação',
-      content: 'Tutorial completo para criação de escalas de tripulação no sistema marítimo.',
-      type: 'tutorial',
-      module: 'maritime',
-      tags: ['escala', 'tripulação', 'gestão'],
-      difficulty: 'beginner',
-      status: 'published',
-      author: 'Admin Sistema',
-      created_at: new Date('2024-01-15'),
-      updated_at: new Date('2024-01-20'),
-      views: 245,
-      rating: 4.8,
-      steps: [
-        { title: 'Acesse o módulo Marítimo', description: 'Navegue até Sistema Marítimo > Gestão de Tripulação' },
-        { title: 'Clique em "Nova Escala"', description: 'Localize o botão no canto superior direito' },
-        { title: 'Preencha os dados', description: 'Defina embarcação, período e tripulantes' }
-      ]
-    },
-    {
-      id: '2',
-      title: 'Configurando alertas de preço',
-      content: 'Como configurar e gerenciar alertas de preço para monitoramento automático.',
-      type: 'guide',
-      module: 'price-alerts',
-      tags: ['preços', 'alertas', 'notificações'],
-      difficulty: 'intermediate',
-      status: 'published',
-      author: 'Especialista IA',
-      created_at: new Date('2024-01-10'),
-      updated_at: new Date('2024-01-18'),
-      views: 189,
-      rating: 4.6
-    },
-    {
-      id: '3',
-      title: 'Como alterar status de uma reserva?',
-      content: 'Para alterar o status de uma reserva, vá até o módulo Reservas, localize a reserva desejada e clique no menu de ações.',
-      type: 'faq',
-      module: 'reservations',
-      tags: ['reserva', 'status', 'alteração'],
-      difficulty: 'beginner',
-      status: 'published',
-      author: 'Suporte',
-      created_at: new Date('2024-01-05'),
-      updated_at: new Date('2024-01-05'),
-      views: 156,
-      rating: 4.2
+  const loadKnowledgeItems = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('knowledge_base')
+        .select('*')
+        .order('updated_at', { ascending: false });
+
+      if (error) throw error;
+
+      const formattedData: KnowledgeItem[] = data?.map(item => ({
+        id: item.id,
+        title: item.title,
+        content: item.content,
+        type: item.type as 'tutorial' | 'faq' | 'guide' | 'video',
+        module: item.module,
+        tags: Array.isArray(item.tags) ? item.tags : [],
+        difficulty: item.difficulty as 'beginner' | 'intermediate' | 'advanced',
+        status: item.status as 'draft' | 'published' | 'archived',
+        author_id: item.author_id,
+        created_at: new Date(item.created_at),
+        updated_at: new Date(item.updated_at),
+        views: item.views || 0,
+        rating: item.rating || 0,
+        helpful_votes: item.helpful_votes || 0,
+        steps: Array.isArray(item.steps) ? item.steps : [],
+        metadata: typeof item.metadata === 'object' ? item.metadata : {}
+      })) || [];
+
+      setKnowledgeItems(formattedData);
+      
+      // Calcular analytics
+      const totalItems = formattedData.length;
+      const publishedItems = formattedData.filter(item => item.status === 'published').length;
+      const totalViews = formattedData.reduce((sum, item) => sum + item.views, 0);
+      
+      const moduleCount = formattedData.reduce((acc, item) => {
+        acc[item.module] = (acc[item.module] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+      
+      const topModules = Object.entries(moduleCount)
+        .map(([module, count]) => ({ module, count }))
+        .sort((a, b) => b.count - a.count);
+      
+      const topContent = formattedData
+        .sort((a, b) => b.views - a.views)
+        .slice(0, 5);
+
+      setAnalytics({
+        totalItems,
+        publishedItems,
+        totalViews,
+        topModules,
+        topContent
+      });
+
+    } catch (error) {
+      console.error('Error loading knowledge items:', error);
+      toast({
+        title: "Erro ao carregar",
+        description: "Não foi possível carregar os itens da base de conhecimento",
+        variant: "destructive",
+      });
     }
-  ];
+  };
 
   useEffect(() => {
-    setKnowledgeItems(sampleKnowledgeItems);
-    
-    // Calcular analytics
-    const totalItems = sampleKnowledgeItems.length;
-    const publishedItems = sampleKnowledgeItems.filter(item => item.status === 'published').length;
-    const totalViews = sampleKnowledgeItems.reduce((sum, item) => sum + item.views, 0);
-    
-    const moduleCount = sampleKnowledgeItems.reduce((acc, item) => {
-      acc[item.module] = (acc[item.module] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    const topModules = Object.entries(moduleCount)
-      .map(([module, count]) => ({ module, count }))
-      .sort((a, b) => b.count - a.count);
-    
-    const topContent = [...sampleKnowledgeItems]
-      .sort((a, b) => b.views - a.views)
-      .slice(0, 5);
-
-    setAnalytics({
-      totalItems,
-      publishedItems,
-      totalViews,
-      topModules,
-      topContent
-    });
+    loadKnowledgeItems();
   }, []);
 
   const filteredItems = knowledgeItems.filter(item => {
@@ -193,11 +181,14 @@ export const KnowledgeManagement: React.FC = () => {
       tags: [],
       difficulty: 'beginner',
       status: 'draft',
-      author: 'Usuário Atual',
+      author_id: null,
       created_at: new Date(),
       updated_at: new Date(),
       views: 0,
-      rating: 0
+      rating: 0,
+      helpful_votes: 0,
+      steps: [],
+      metadata: {}
     });
     setIsEditDialogOpen(true);
   };
@@ -213,27 +204,47 @@ export const KnowledgeManagement: React.FC = () => {
     try {
       if (editingItem.id) {
         // Atualizar item existente
-        const updatedItems = knowledgeItems.map(item =>
-          item.id === editingItem.id 
-            ? { ...editingItem, updated_at: new Date() }
-            : item
-        );
-        setKnowledgeItems(updatedItems);
-        
+        const { error } = await supabase
+          .from('knowledge_base')
+          .update({
+            title: editingItem.title,
+            content: editingItem.content,
+            type: editingItem.type,
+            module: editingItem.module,
+            tags: editingItem.tags,
+            difficulty: editingItem.difficulty,
+            status: editingItem.status,
+            steps: editingItem.steps || [],
+            metadata: editingItem.metadata || {},
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', editingItem.id);
+
+        if (error) throw error;
+
         toast({
           title: "Item atualizado",
           description: "O conteúdo foi atualizado com sucesso",
         });
       } else {
         // Criar novo item
-        const newItem = {
-          ...editingItem,
-          id: Date.now().toString(),
-          created_at: new Date(),
-          updated_at: new Date()
-        };
-        setKnowledgeItems([...knowledgeItems, newItem]);
-        
+        const { error } = await supabase
+          .from('knowledge_base')
+          .insert({
+            title: editingItem.title,
+            content: editingItem.content,
+            type: editingItem.type,
+            module: editingItem.module,
+            tags: editingItem.tags,
+            difficulty: editingItem.difficulty,
+            status: editingItem.status,
+            author_id: null, // Seria auth.uid() se autenticado
+            steps: editingItem.steps || [],
+            metadata: editingItem.metadata || {}
+          });
+
+        if (error) throw error;
+
         toast({
           title: "Item criado",
           description: "Novo conteúdo adicionado à base de conhecimento",
@@ -242,7 +253,10 @@ export const KnowledgeManagement: React.FC = () => {
       
       setIsEditDialogOpen(false);
       setEditingItem(null);
+      loadKnowledgeItems(); // Recarregar dados
+      
     } catch (error) {
+      console.error('Error saving item:', error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar o item",
@@ -253,11 +267,28 @@ export const KnowledgeManagement: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     if (confirm('Tem certeza que deseja excluir este item?')) {
-      setKnowledgeItems(knowledgeItems.filter(item => item.id !== id));
-      toast({
-        title: "Item excluído",
-        description: "O conteúdo foi removido da base de conhecimento",
-      });
+      try {
+        const { error } = await supabase
+          .from('knowledge_base')
+          .delete()
+          .eq('id', id);
+
+        if (error) throw error;
+
+        toast({
+          title: "Item excluído",
+          description: "O conteúdo foi removido da base de conhecimento",
+        });
+
+        loadKnowledgeItems(); // Recarregar dados
+      } catch (error) {
+        console.error('Error deleting item:', error);
+        toast({
+          title: "Erro",
+          description: "Não foi possível excluir o item",
+          variant: "destructive",
+        });
+      }
     }
   };
 

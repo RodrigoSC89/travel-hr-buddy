@@ -149,8 +149,27 @@ export const IntelligentHelpCenter: React.FC = () => {
     setIsLoading(true);
     
     try {
-      // Busca inteligente usando IA
-      const { data, error } = await supabase.functions.invoke('ai-chat', {
+      // Busca no banco de dados
+      const { data: searchResults, error } = await supabase
+        .from('knowledge_base')
+        .select('*')
+        .eq('status', 'published')
+        .or(`title.ilike.%${query}%,content.ilike.%${query}%,tags.cs.{${query}}`)
+        .limit(10);
+
+      if (error) throw error;
+
+      // Registrar analytics da busca
+      await supabase
+        .from('help_center_analytics')
+        .insert({
+          action_type: 'search',
+          session_data: { query, results_count: searchResults?.length || 0 },
+          user_id: null // Seria auth.uid() se autenticado
+        });
+
+      // Busca inteligente usando IA para sugestões
+      const { data: aiResponse, error: aiError } = await supabase.functions.invoke('ai-chat', {
         body: {
           message: `Buscar ajuda sobre: ${query}`,
           context: 'help_search',
@@ -158,26 +177,11 @@ export const IntelligentHelpCenter: React.FC = () => {
         }
       });
 
-      if (error) throw error;
-
-      // Combinar resultados de tutorials, FAQs e sugerir ações
-      const results = [
-        ...tutorials.filter(t => 
-          t.title.toLowerCase().includes(query.toLowerCase()) ||
-          t.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
-        ).map(t => ({ ...t, type: 'tutorial' })),
-        
-        ...faqs.filter(f =>
-          f.question.toLowerCase().includes(query.toLowerCase()) ||
-          f.answer.toLowerCase().includes(query.toLowerCase())
-        ).map(f => ({ ...f, type: 'faq' }))
-      ];
-
-      setSearchResults(results);
+      setSearchResults(searchResults || []);
       
       toast({
         title: "Busca realizada",
-        description: `Encontrados ${results.length} resultados para "${query}"`,
+        description: `Encontrados ${searchResults?.length || 0} resultados para "${query}"`,
       });
 
     } catch (error) {
@@ -189,6 +193,21 @@ export const IntelligentHelpCenter: React.FC = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const trackAnalytics = async (action: string, itemId?: string, data?: any) => {
+    try {
+      await supabase
+        .from('help_center_analytics')
+        .insert({
+          knowledge_item_id: itemId || null,
+          action_type: action,
+          session_data: data || {},
+          user_id: null // Seria auth.uid() se autenticado
+        });
+    } catch (error) {
+      console.error('Error tracking analytics:', error);
     }
   };
 

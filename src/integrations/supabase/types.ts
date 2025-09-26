@@ -292,6 +292,77 @@ export type Database = {
         }
         Relationships: []
       }
+      copilot_conversations: {
+        Row: {
+          context_data: Json | null
+          ended_at: string | null
+          id: string
+          message_count: number | null
+          session_id: string
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          context_data?: Json | null
+          ended_at?: string | null
+          id?: string
+          message_count?: number | null
+          session_id: string
+          started_at?: string
+          user_id: string
+        }
+        Update: {
+          context_data?: Json | null
+          ended_at?: string | null
+          id?: string
+          message_count?: number | null
+          session_id?: string
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      copilot_messages: {
+        Row: {
+          actions: Json | null
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          suggestions: Json | null
+          type: string
+        }
+        Insert: {
+          actions?: Json | null
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          suggestions?: Json | null
+          type: string
+        }
+        Update: {
+          actions?: Json | null
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          suggestions?: Json | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "copilot_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "copilot_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       employee_certificates: {
         Row: {
           certificate_name: string
@@ -430,6 +501,68 @@ export type Database = {
         }
         Relationships: []
       }
+      help_center_analytics: {
+        Row: {
+          action_type: string
+          created_at: string
+          id: string
+          knowledge_item_id: string | null
+          session_data: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          id?: string
+          knowledge_item_id?: string | null
+          session_data?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          id?: string
+          knowledge_item_id?: string | null
+          session_data?: Json | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "help_center_analytics_knowledge_item_id_fkey"
+            columns: ["knowledge_item_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_base"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      help_system_settings: {
+        Row: {
+          created_at: string
+          id: string
+          setting_key: string
+          setting_value: Json
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          setting_key: string
+          setting_value: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       intelligent_notifications: {
         Row: {
           action_data: Json | null
@@ -475,6 +608,63 @@ export type Database = {
           type?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      knowledge_base: {
+        Row: {
+          author_id: string | null
+          content: string
+          created_at: string
+          difficulty: string
+          helpful_votes: number | null
+          id: string
+          metadata: Json | null
+          module: string
+          rating: number | null
+          status: string
+          steps: Json | null
+          tags: string[] | null
+          title: string
+          type: string
+          updated_at: string
+          views: number | null
+        }
+        Insert: {
+          author_id?: string | null
+          content: string
+          created_at?: string
+          difficulty?: string
+          helpful_votes?: number | null
+          id?: string
+          metadata?: Json | null
+          module: string
+          rating?: number | null
+          status?: string
+          steps?: Json | null
+          tags?: string[] | null
+          title: string
+          type: string
+          updated_at?: string
+          views?: number | null
+        }
+        Update: {
+          author_id?: string | null
+          content?: string
+          created_at?: string
+          difficulty?: string
+          helpful_votes?: number | null
+          id?: string
+          metadata?: Json | null
+          module?: string
+          rating?: number | null
+          status?: string
+          steps?: Json | null
+          tags?: string[] | null
+          title?: string
+          type?: string
+          updated_at?: string
+          views?: number | null
         }
         Relationships: []
       }
