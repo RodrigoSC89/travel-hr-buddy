@@ -89,13 +89,13 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
           
           if (commandResult.success && commandResult.intent) {
             // Log do comando executado
-            await logVoiceCommand(
-              userText.trim(),
-              commandResult.action || 'navigation',
-              commandResult.intent.module,
-              `Navigated to ${commandResult.intent.module}`,
-              true
-            );
+            await logVoiceCommand({
+              command: userText.trim(),
+              action: commandResult.action || 'navigation',
+              module: commandResult.intent.module,
+              result: `Navigated to ${commandResult.intent.module}`,
+              success: true
+            });
             
             // Executar navegação se callback fornecido
             if (onNavigate) {
@@ -103,13 +103,13 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
             }
           } else {
             // Log do comando falhado
-            await logVoiceCommand(
-              userText.trim(),
-              'unknown',
-              undefined,
-              'Command not recognized',
-              false
-            );
+            await logVoiceCommand({
+              command: userText.trim(),
+              action: 'unknown',
+              module: undefined,
+              result: 'Command not recognized',
+              success: false
+            });
           }
         }
       }
@@ -124,13 +124,13 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
               onNavigate(module);
               
               // Log da navegação via function call
-              await logVoiceCommand(
-                'Function call navigation',
-                'function_call',
-                module,
-                `Navigated to ${module} via function call`,
-                true
-              );
+              await logVoiceCommand({
+                command: 'Function call navigation',
+                action: 'function_call',
+                module: module,
+                result: `Navigated to ${module} via function call`,
+                success: true
+              });
               
               toast({
                 title: "Navegando",
@@ -233,10 +233,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
       setIsConnecting(true);
       
       // Iniciar conversa no banco de dados
-      const dbConversationId = await startDbConversation();
-      if (!dbConversationId) {
-        throw new Error('Falha ao iniciar conversa no banco de dados');
-      }
+      await startDbConversation();
       
       // Iniciar conexão de voz
       chatRef.current = new RealtimeChat(handleMessage, onNavigate);
