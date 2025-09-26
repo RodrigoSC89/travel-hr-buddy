@@ -1,8 +1,11 @@
 import React from 'react';
-import RealTimeAnalytics from '@/components/analytics/real-time-analytics';
+import { OrganizationLayout } from '@/components/layout/organization-layout';
+import { AdvancedFleetAnalytics } from '@/components/analytics/advanced-fleet-analytics';
 
-const AdvancedAnalyticsPage = () => {
-  return <RealTimeAnalytics />;
-};
-
-export default AdvancedAnalyticsPage;
+export default function AdvancedAnalytics() {
+  return (
+    <OrganizationLayout title="Analytics Avançado">
+      <AdvancedFleetAnalytics />
+    </OrganizationLayout>
+  );
+}

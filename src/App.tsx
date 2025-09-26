@@ -78,6 +78,7 @@ import TaskManagement from "./pages/TaskManagement";
 import DocumentManagement from "./pages/DocumentManagement";
 import FleetDashboard from "./pages/FleetDashboard";
 import ExecutiveDashboard from "./pages/ExecutiveDashboard";
+import IntelligentAlerts from "./pages/IntelligentAlerts";
 
 const queryClient = new QueryClient();
 
@@ -190,6 +191,7 @@ const App = () => {
                   } />
                   <Route path="super-admin" element={<SuperAdmin />} />
                   <Route path="executive-dashboard" element={<ExecutiveDashboard />} />
+                  <Route path="intelligent-alerts" element={<IntelligentAlerts />} />
                   <Route path="task-management" element={<TaskManagement />} />
                   <Route path="document-management" element={<DocumentManagement />} />
                 </Route>

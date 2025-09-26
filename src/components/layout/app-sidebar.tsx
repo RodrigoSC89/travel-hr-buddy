@@ -232,6 +232,16 @@ const navigationItems = [
         url: "/ai-insights",
         icon: Brain,
       },
+      {
+        title: "Analytics Avançado",
+        url: "/advanced-analytics",
+        icon: TrendingUp,
+      },
+      {
+        title: "Alertas Inteligentes",
+        url: "/intelligent-alerts",
+        icon: Zap,
+      },
     ],
   },
   {
