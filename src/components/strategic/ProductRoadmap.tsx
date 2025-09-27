@@ -343,7 +343,7 @@ const ProductRoadmap: React.FC = () => {
                     )}
                     
                     <div className="flex items-start gap-4">
-                      <div className={`p-2 rounded-full ${phase.color} text-white`}>
+                      <div className={`p-2 rounded-full ${phase.color} text-azure-50`}>
                         {phase.icon}
                       </div>
                       
@@ -405,7 +405,7 @@ const ProductRoadmap: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
-                  <div className={`p-2 rounded-full ${currentPhase.color} text-white`}>
+                  <div className={`p-2 rounded-full ${currentPhase.color} text-azure-50`}>
                     {currentPhase.icon}
                   </div>
                   Fase {currentPhase.id}: {currentPhase.name}

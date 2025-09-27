@@ -488,7 +488,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
               <div className="space-y-4">
                 <div className="p-6 border rounded-lg bg-background">
                   <div 
-                    className="p-4 rounded-lg text-white"
+                    className="p-4 rounded-lg text-azure-50"
                     style={{ backgroundColor: formData.primary_color }}
                   >
                     <h3 className="text-lg font-bold">{formData.company_name || 'Sua Empresa'}</h3>

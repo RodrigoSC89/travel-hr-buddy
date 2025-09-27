@@ -103,10 +103,10 @@ export const EnhancedReservationsCalendar: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'bg-success text-white';
-      case 'pending': return 'bg-warning text-white';
-      case 'cancelled': return 'bg-destructive text-white';
-      case 'completed': return 'bg-info text-white';
+      case 'confirmed': return 'bg-success text-azure-50';
+      case 'pending': return 'bg-warning text-azure-900';
+      case 'cancelled': return 'bg-destructive text-azure-50';
+      case 'completed': return 'bg-info text-azure-50';
       default: return 'bg-muted text-muted-foreground';
     }
   };

@@ -183,14 +183,14 @@ export const EnhancedAlertManagement: React.FC = () => {
   };
 
   const getStatusColor = (isActive: boolean) => {
-    return isActive ? 'bg-success text-white' : 'bg-muted text-muted-foreground';
+    return isActive ? 'bg-success text-azure-50' : 'bg-muted text-muted-foreground';
   };
 
   const getActionColor = (action: string) => {
     switch (action) {
-      case 'purchased': return 'bg-success text-white';
+      case 'purchased': return 'bg-success text-azure-50';
       case 'ignored': return 'bg-muted text-muted-foreground';
-      case 'snoozed': return 'bg-warning text-white';
+      case 'snoozed': return 'bg-warning text-azure-900';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -304,7 +304,7 @@ export const EnhancedAlertManagement: React.FC = () => {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{group.name}</CardTitle>
-                    <Badge className={group.status === 'active' ? 'bg-success text-white' : 'bg-muted text-muted-foreground'}>
+                    <Badge className={group.status === 'active' ? 'bg-success text-azure-50' : 'bg-muted text-muted-foreground'}>
                       {group.status}
                     </Badge>
                   </div>

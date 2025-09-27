@@ -183,7 +183,7 @@ export const VesselTracking = () => {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium">{vessel.name}</h4>
-                    <Badge variant="outline" className={`${getStatusColor(vessel.status)} text-white`}>
+                    <Badge variant="outline" className={`${getStatusColor(vessel.status)} text-azure-50`}>
                       {getStatusText(vessel.status)}
                     </Badge>
                   </div>
@@ -220,7 +220,7 @@ export const VesselTracking = () => {
                       <Ship className="h-6 w-6" />
                       {selectedVessel.name}
                     </CardTitle>
-                    <Badge variant="outline" className={`${getStatusColor(selectedVessel.status)} text-white`}>
+                    <Badge variant="outline" className={`${getStatusColor(selectedVessel.status)} text-azure-50`}>
                       {getStatusText(selectedVessel.status)}
                     </Badge>
                   </div>

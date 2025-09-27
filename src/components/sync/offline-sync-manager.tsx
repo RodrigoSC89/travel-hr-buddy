@@ -358,7 +358,7 @@ export const OfflineSyncManager: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     {item.synced ? (
-                      <Badge variant="default" className="bg-green-500 text-white">
+                      <Badge variant="default" className="bg-green-500 text-azure-50">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Sincronizado
                       </Badge>

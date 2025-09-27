@@ -297,7 +297,7 @@ export const CrewManagementDashboard = () => {
                       
                       <div className="flex items-center gap-4">
                         <div className="text-right">
-                          <Badge className={`${getStatusColor(member.status)} text-white`}>
+                          <Badge className={`${getStatusColor(member.status)} text-azure-50`}>
                             {getStatusText(member.status)}
                           </Badge>
                           <div className="text-xs text-muted-foreground mt-1">

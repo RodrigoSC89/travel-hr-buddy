@@ -328,7 +328,7 @@ export const OrganizationCustomization: React.FC = () => {
                       <img src={customization.logo_url} alt="Logo" className="h-8 w-auto" />
                     ) : (
                       <div 
-                        className="w-8 h-8 rounded flex items-center justify-center text-white font-bold"
+                        className="w-8 h-8 rounded flex items-center justify-center text-azure-50 font-bold"
                         style={{ backgroundColor: customization.primary_color }}
                       >
                         {customization.company_name.charAt(0) || 'N'}

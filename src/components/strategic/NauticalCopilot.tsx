@@ -258,7 +258,7 @@ const NauticalCopilot: React.FC = () => {
                   variant="outline"
                   size="sm"
                   onClick={toggleVoiceInput}
-                  className={`${isListening ? 'bg-red-500 text-white' : ''}`}
+                  className={`${isListening ? 'bg-red-500 text-azure-50' : ''}`}
                 >
                   {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                 </Button>

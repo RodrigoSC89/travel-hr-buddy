@@ -90,10 +90,10 @@ export const CrewScheduleVisualizer: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-success text-white';
-      case 'upcoming': return 'bg-info text-white';
+      case 'active': return 'bg-success text-azure-50';
+      case 'upcoming': return 'bg-info text-azure-50';
       case 'completed': return 'bg-muted text-muted-foreground';
-      case 'cancelled': return 'bg-destructive text-white';
+      case 'cancelled': return 'bg-destructive text-azure-50';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -162,7 +162,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
                       key={monthIndex}
                       className={`h-8 rounded border flex items-center justify-center ${
                         isActive 
-                          ? `${getRotationColor(schedule.rotationType)} text-white text-xs font-medium`
+                          ? `${getRotationColor(schedule.rotationType)} text-azure-50 text-xs font-medium`
                           : 'bg-background border-dashed'
                       }`}
                     >

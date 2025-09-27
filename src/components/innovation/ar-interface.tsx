@@ -318,13 +318,13 @@ export const ARInterface: React.FC = () => {
               {/* AR Controls */}
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                 <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-lg p-2">
-                  <Button size="sm" variant="ghost" className="text-white">
+                  <Button size="sm" variant="ghost" className="text-azure-50">
                     <QrCode className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="ghost" className="text-white">
+                  <Button size="sm" variant="ghost" className="text-azure-50">
                     <Layers className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="ghost" className="text-white">
+                  <Button size="sm" variant="ghost" className="text-azure-50">
                     <Settings className="h-4 w-4" />
                   </Button>
                 </div>

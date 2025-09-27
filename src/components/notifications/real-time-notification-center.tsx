@@ -288,7 +288,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
       case 'urgent':
         return <Badge variant="destructive" className="text-xs">Urgente</Badge>;
       case 'high':
-        return <Badge variant="secondary" className="bg-orange-500 text-white text-xs">Alto</Badge>;
+        return <Badge variant="secondary" className="bg-orange-500 text-azure-50 text-xs">Alto</Badge>;
       case 'medium':
         return <Badge variant="outline" className="text-xs">Médio</Badge>;
       default:

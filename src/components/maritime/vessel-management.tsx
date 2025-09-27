@@ -139,8 +139,8 @@ export const VesselManagement: React.FC = () => {
 
   const getCertificationBadge = (status: string) => {
     switch (status) {
-      case 'valid': return <Badge className="bg-green-500 text-white">Válido</Badge>;
-      case 'expiring': return <Badge className="bg-yellow-500 text-white">Vencendo</Badge>;
+      case 'valid': return <Badge className="bg-green-500 text-azure-50">Válido</Badge>;
+      case 'expiring': return <Badge className="bg-yellow-500 text-azure-900">Vencendo</Badge>;
       case 'expired': return <Badge variant="destructive">Vencido</Badge>;
       default: return <Badge variant="secondary">N/A</Badge>;
     }

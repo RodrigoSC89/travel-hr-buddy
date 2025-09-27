@@ -492,7 +492,7 @@ export const OrganizationSetupWizard: React.FC = () => {
                         isActive
                           ? 'bg-primary text-primary-foreground'
                           : isCompleted
-                          ? 'bg-green-500 text-white'
+                          ? 'bg-green-500 text-azure-50'
                           : 'bg-muted text-muted-foreground'
                       }`}
                     >

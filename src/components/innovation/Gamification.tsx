@@ -374,9 +374,9 @@ export const Gamification = () => {
                 <div key={entry.rank} className={`p-4 rounded-lg border ${entry.rank === 1 ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200' : 'bg-card'}`}>
                   <div className="flex items-center gap-3">
                     <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${
-                      entry.rank === 1 ? 'bg-yellow-500 text-white' :
-                      entry.rank === 2 ? 'bg-gray-400 text-white' :
-                      entry.rank === 3 ? 'bg-orange-600 text-white' :
+                      entry.rank === 1 ? 'bg-yellow-500 text-azure-50' :
+                      entry.rank === 2 ? 'bg-gray-400 text-azure-50' :
+                      entry.rank === 3 ? 'bg-orange-600 text-azure-50' :
                       'bg-muted text-muted-foreground'
                     }`}>
                       {entry.rank}

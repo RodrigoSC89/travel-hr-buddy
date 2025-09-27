@@ -176,8 +176,8 @@ const VesselTrackingMap = () => {
         align-items: center;
         justify-content: center;
         font-size: 16px;
-        color: white;
-        border: 2px solid white;
+        color: #F0F9FF;
+        border: 2px solid #E0F2FE;
         box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         ${getVesselMarkerStyle(vessel.status)}
         transform: rotate(${vessel.course}deg);

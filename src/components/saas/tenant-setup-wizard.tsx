@@ -147,7 +147,7 @@ export const TenantSetupWizard: React.FC = () => {
               >
                 <div className={`rounded-full p-3 ${
                   isCurrent ? 'bg-primary text-primary-foreground' : 
-                  isCompleted ? 'bg-green-600 text-white' : 'bg-muted'
+                  isCompleted ? 'bg-green-600 text-azure-50' : 'bg-muted'
                 }`}>
                   {isCompleted ? <CheckCircle className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
                 </div>

@@ -259,14 +259,14 @@ const FloatingActionButtons = () => {
                 <TooltipTrigger asChild>
                   <Button
                     size="lg"
-                    className={`${item.color} text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-14 h-14 animate-slide-in-right`}
+                    className={`${item.color} text-azure-50 shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-14 h-14 animate-slide-in-right`}
                     style={{ animationDelay: `${index * 100}ms` }}
                     onClick={() => handleQuickAction(item.action)}
                   >
                     <item.icon className="w-6 h-6" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side="left" className="bg-black text-white">
+                <TooltipContent side="left" className="bg-azure-800 text-azure-50">
                   <p>{item.label}</p>
                 </TooltipContent>
               </Tooltip>
@@ -281,14 +281,14 @@ const FloatingActionButtons = () => {
             <TooltipTrigger asChild>
               <Button
                 size="lg"
-                className={`${voiceStatus.color} text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
+                className={`${voiceStatus.color} text-azure-50 shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
                 onClick={handleVoiceCommand}
                 disabled={isProcessing}
               >
                 <voiceStatus.icon className={`w-8 h-8 ${voiceStatus.spinning ? 'animate-spin' : ''}`} />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="left" className="bg-black text-white">
+            <TooltipContent side="left" className="bg-azure-800 text-azure-50">
               <p>{voiceStatus.label}</p>
             </TooltipContent>
           </Tooltip>
@@ -298,14 +298,14 @@ const FloatingActionButtons = () => {
             <TooltipTrigger asChild>
               <Button
                 size="lg"
-                className={`${aiStatus.color} text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
+                className={`${aiStatus.color} text-azure-50 shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
                 onClick={isSpeaking ? stopSpeaking : handleAIAssistant}
                 disabled={isThinking}
               >
                 <aiStatus.icon className={`w-8 h-8 ${aiStatus.spinning ? 'animate-spin' : ''}`} />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="left" className="bg-black text-white">
+            <TooltipContent side="left" className="bg-azure-800 text-azure-50">
               <p>{aiStatus.label}</p>
             </TooltipContent>
           </Tooltip>
@@ -319,13 +319,13 @@ const FloatingActionButtons = () => {
                   isExpanded
                     ? 'bg-orange-500 hover:bg-orange-600 rotate-45'
                     : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700'
-                } text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
+                } text-azure-50 shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
                 onClick={() => setIsExpanded(!isExpanded)}
               >
                 <Plus className="w-8 h-8" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="left" className="bg-black text-white">
+            <TooltipContent side="left" className="bg-azure-800 text-azure-50">
               <p>{isExpanded ? 'Fechar Menu' : 'Ações Rápidas'}</p>
             </TooltipContent>
           </Tooltip>
@@ -340,7 +340,7 @@ const FloatingActionButtons = () => {
               isSpeaking ? 'bg-green-500' :
               isThinking ? 'bg-purple-500' :
               'bg-blue-500'
-            } text-white border-0`}>
+            } text-azure-50 border-0`}>
               <CardContent className="p-3 flex items-center gap-2">
                 <div className="w-2 h-2 bg-azure-100 rounded-full animate-pulse" />
                 <span className="text-sm font-medium">
