@@ -84,6 +84,8 @@ const IntelligentChatbot: React.FC = () => {
       <Button
         onClick={() => setIsOpen(true)}
         className="fixed bottom-24 right-6 z-35 rounded-full w-14 h-14 shadow-lg hidden md:block"
+        aria-label="Abrir chat com IA"
+        tabIndex={0}
       >
         <MessageSquare className="w-6 h-6" />
       </Button>
