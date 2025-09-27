@@ -79,7 +79,7 @@ const FloatingActionButtons = () => {
       console.error('Voice command error:', error);
       toast({
         title: "❌ Erro no comando de voz",
-        description: "Verifique as permissões do microfone",
+        description: error instanceof Error ? error.message : "Verifique as permissões do microfone",
         variant: "destructive"
       });
     }
@@ -149,6 +149,7 @@ const FloatingActionButtons = () => {
   };
 
   const handleQuickAction = (action: string, path?: string) => {
+    console.log('🎯 Quick action triggered:', action);
     switch (action) {
       case 'search':
         toast({
@@ -159,6 +160,10 @@ const FloatingActionButtons = () => {
         const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
         if (searchInput) {
           searchInput.focus();
+        } else {
+          // Try to find and focus any search element
+          const searchBox = document.querySelector('[data-search], .search-input, #search-box') as HTMLInputElement;
+          if (searchBox) searchBox.focus();
         }
         break;
       case 'emergency':
@@ -167,6 +172,7 @@ const FloatingActionButtons = () => {
           description: "Ativando protocolos de segurança marítima",
           variant: "destructive"
         });
+        // Navigate to emergency or create emergency alert
         navigate('/emergency-alerts');
         break;
       case 'reports':
@@ -191,7 +197,14 @@ const FloatingActionButtons = () => {
         navigate('/maritime');
         break;
       default:
-        if (path) navigate(path);
+        if (path) {
+          navigate(path);
+        } else {
+          toast({
+            title: "ℹ️ Ação não implementada",
+            description: `A ação "${action}" será implementada em breve`,
+          });
+        }
     }
   };
 

@@ -234,8 +234,8 @@ export const useAIChat = () => {
         throw error;
       }
 
-      console.log('AI response received:', data?.response);
-      return data?.response || 'Desculpe, não consegui processar sua solicitação.';
+      console.log('AI response received:', data?.reply);
+      return data?.reply || 'Desculpe, não consegui processar sua solicitação.';
     } catch (error) {
       console.error('Failed to send message to AI:', error);
       throw error;
