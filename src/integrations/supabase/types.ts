@@ -124,6 +124,75 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_suggestions: {
+        Row: {
+          action_data: Json | null
+          created_at: string | null
+          description: string
+          id: string
+          is_acted_upon: boolean | null
+          is_dismissed: boolean | null
+          is_read: boolean | null
+          organization_id: string | null
+          priority: number | null
+          tenant_id: string | null
+          title: string
+          type: string
+          updated_at: string | null
+          user_id: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          action_data?: Json | null
+          created_at?: string | null
+          description: string
+          id?: string
+          is_acted_upon?: boolean | null
+          is_dismissed?: boolean | null
+          is_read?: boolean | null
+          organization_id?: string | null
+          priority?: number | null
+          tenant_id?: string | null
+          title: string
+          type: string
+          updated_at?: string | null
+          user_id?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          action_data?: Json | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          is_acted_upon?: boolean | null
+          is_dismissed?: boolean | null
+          is_read?: boolean | null
+          organization_id?: string | null
+          priority?: number | null
+          tenant_id?: string | null
+          title?: string
+          type?: string
+          updated_at?: string | null
+          user_id?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_suggestions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_suggestions_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "saas_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       alert_votes: {
         Row: {
           created_at: string | null
@@ -205,6 +274,197 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      automated_reports: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          filters: Json | null
+          format: string | null
+          id: string
+          is_active: boolean | null
+          last_generated_at: string | null
+          name: string
+          next_scheduled_at: string | null
+          organization_id: string | null
+          recipients: Json
+          report_type: string
+          schedule_cron: string
+          template_config: Json | null
+          tenant_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          filters?: Json | null
+          format?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_generated_at?: string | null
+          name: string
+          next_scheduled_at?: string | null
+          organization_id?: string | null
+          recipients?: Json
+          report_type: string
+          schedule_cron: string
+          template_config?: Json | null
+          tenant_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          filters?: Json | null
+          format?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_generated_at?: string | null
+          name?: string
+          next_scheduled_at?: string | null
+          organization_id?: string | null
+          recipients?: Json
+          report_type?: string
+          schedule_cron?: string
+          template_config?: Json | null
+          tenant_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automated_reports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "automated_reports_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "saas_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      automation_executions: {
+        Row: {
+          completed_at: string | null
+          duration_ms: number | null
+          error_message: string | null
+          execution_log: Json | null
+          id: string
+          started_at: string | null
+          status: string
+          trigger_data: Json | null
+          triggered_by: string | null
+          workflow_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          duration_ms?: number | null
+          error_message?: string | null
+          execution_log?: Json | null
+          id?: string
+          started_at?: string | null
+          status?: string
+          trigger_data?: Json | null
+          triggered_by?: string | null
+          workflow_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          duration_ms?: number | null
+          error_message?: string | null
+          execution_log?: Json | null
+          id?: string
+          started_at?: string | null
+          status?: string
+          trigger_data?: Json | null
+          triggered_by?: string | null
+          workflow_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_executions_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "automation_workflows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      automation_workflows: {
+        Row: {
+          actions: Json
+          conditions: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          execution_count: number | null
+          id: string
+          is_active: boolean | null
+          last_executed_at: string | null
+          name: string
+          organization_id: string | null
+          tenant_id: string | null
+          trigger_config: Json
+          trigger_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          actions?: Json
+          conditions?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          execution_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_executed_at?: string | null
+          name: string
+          organization_id?: string | null
+          tenant_id?: string | null
+          trigger_config?: Json
+          trigger_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          actions?: Json
+          conditions?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          execution_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_executed_at?: string | null
+          name?: string
+          organization_id?: string | null
+          tenant_id?: string | null
+          trigger_config?: Json
+          trigger_type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_workflows_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "automation_workflows_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "saas_tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -1626,6 +1886,69 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      onboarding_progress: {
+        Row: {
+          company_profile: Json | null
+          completed_at: string | null
+          completed_steps: Json | null
+          created_at: string | null
+          current_step: string
+          id: string
+          is_completed: boolean | null
+          organization_id: string | null
+          preferences: Json | null
+          tenant_id: string | null
+          updated_at: string | null
+          user_id: string | null
+          user_type: string | null
+        }
+        Insert: {
+          company_profile?: Json | null
+          completed_at?: string | null
+          completed_steps?: Json | null
+          created_at?: string | null
+          current_step?: string
+          id?: string
+          is_completed?: boolean | null
+          organization_id?: string | null
+          preferences?: Json | null
+          tenant_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          user_type?: string | null
+        }
+        Update: {
+          company_profile?: Json | null
+          completed_at?: string | null
+          completed_steps?: Json | null
+          created_at?: string | null
+          current_step?: string
+          id?: string
+          is_completed?: boolean | null
+          organization_id?: string | null
+          preferences?: Json | null
+          tenant_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          user_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_progress_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "onboarding_progress_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "saas_tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -4406,6 +4729,10 @@ export type Database = {
     Functions: {
       can_access_employee_data: {
         Args: { target_employee_id: string; user_uuid?: string }
+        Returns: boolean
+      }
+      can_manage_tenant: {
+        Args: { tenant_uuid: string; user_uuid?: string }
         Returns: boolean
       }
       check_organization_limits: {

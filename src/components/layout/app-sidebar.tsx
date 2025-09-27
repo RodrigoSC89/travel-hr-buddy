@@ -587,6 +587,19 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                 </SidebarMenuItem>
               )}
 
+              {/* Automação IA - Para todos os usuários */}
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  onClick={() => navigate("/automation")}
+                  isActive={window.location.pathname === "/automation"}
+                  className="w-full justify-start"
+                  title={collapsed ? "Automação IA" : undefined}
+                >
+                  <Zap className="h-4 w-4" />
+                  {!collapsed && <span className="ml-2">Automação IA</span>}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
               {/* SaaS Manager - Para super admins */}
               {userRole === 'admin' && (
                 <SidebarMenuItem>

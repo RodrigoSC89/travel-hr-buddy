@@ -198,6 +198,7 @@ const App = () => {
                   <Route path="fleet-tracking" element={<FleetTracking />} />
                   <Route path="crew-management" element={<CrewManagement />} />
                   <Route path="maritime-certifications" element={<MaritimeCertifications />} />
+                  <Route path="automation" element={<Automation />} />
                   <Route path="organization-settings" element={
                     <div className="container mx-auto p-6">
                       <OrganizationSettings />
