@@ -39,11 +39,15 @@ export const FloatingShortcutButton: React.FC<FloatingShortcutButtonProps> = ({
     lg: 'w-16 h-16'
   } as const;
 
+
   const iconSizes = {
     sm: 'w-5 h-5',
     md: 'w-6 h-6',
     lg: 'w-8 h-8'
   } as const;
+
+  // Allow both Tailwind utility classes and raw colors (hex/rgb/hsl)
+  const isRawColor = (v?: string) => !!v && (/^#|^rgb\(|^hsl\(|^var\(/i.test(v));
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -62,6 +66,15 @@ export const FloatingShortcutButton: React.FC<FloatingShortcutButtonProps> = ({
     return <IconComp className={cn(iconSizes[size], spinning && 'animate-spin')} />;
   };
 
+  const mergedButtonStyle: React.CSSProperties = {
+    ...style,
+    ...(isRawColor(bgColor) ? { backgroundColor: bgColor as string } : {}),
+  };
+
+  const iconSpanStyle: React.CSSProperties | undefined = isRawColor(iconColor)
+    ? { color: iconColor as string }
+    : undefined;
+
   return (
     <TooltipProvider>
       <Tooltip>
@@ -74,11 +87,11 @@ export const FloatingShortcutButton: React.FC<FloatingShortcutButtonProps> = ({
             disabled={disabled}
             aria-label={ariaLabel || label}
             tabIndex={tabIndex}
-            style={style}
+            style={mergedButtonStyle}
             className={cn(
               'pointer-events-auto cursor-pointer z-[9999]',
               sizeClasses[size],
-              bgColor,
+              !isRawColor(bgColor) && bgColor,
               'rounded-full transition-transform duration-200',
               'shadow-[0_4px_10px_rgba(0,0,0,0.3)] hover:scale-110 active:scale-95',
               'focus:outline-none focus:ring-4 focus:ring-azure-200 dark:focus:ring-azure-800',
@@ -86,7 +99,7 @@ export const FloatingShortcutButton: React.FC<FloatingShortcutButtonProps> = ({
               className
             )}
           >
-            <span className={cn(iconColor)}>{renderIcon()}</span>
+            <span className={cn(!isRawColor(iconColor) && iconColor)} style={iconSpanStyle}>{renderIcon()}</span>
           </Button>
         </TooltipTrigger>
         <TooltipContent side="left" className="bg-azure-800 text-azure-50 border-azure-600">

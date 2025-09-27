@@ -238,16 +238,15 @@ const FloatingActionButtons = () => {
   const getVoiceButtonStatus = () => {
     if (isProcessing) return { icon: Loader2, color: 'bg-yellow-500', label: 'Processando...', spinning: true };
     if (isRecording) return { icon: MicOff, color: 'bg-red-500 animate-pulse', label: 'Gravando - Clique para parar', spinning: false };
-    return { icon: Mic, color: 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700', label: 'Comando de Voz', spinning: false };
+    return { icon: Mic, color: 'bg-azure-800 hover:bg-azure-900', label: 'Comando de Voz', spinning: false };
   };
 
   const getAIButtonStatus = () => {
     if (isThinking) return { icon: Loader2, color: 'bg-yellow-500', label: 'Pensando...', spinning: true };
-    if (isSpeaking) return { icon: VolumeX, color: 'bg-orange-500 hover:bg-orange-600', label: 'Falando - Clique para parar', spinning: false };
-    if (conversationMode) return { icon: MessageSquare, color: 'bg-green-500 hover:bg-green-600', label: 'Modo Conversa Ativo', spinning: false };
-    return { icon: Brain, color: 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700', label: 'IA Nautilus Assistant', spinning: false };
+    if (isSpeaking) return { icon: VolumeX, color: 'bg-azure-800 hover:bg-azure-900', label: 'Falando - Clique para parar', spinning: false };
+    if (conversationMode) return { icon: MessageSquare, color: 'bg-azure-800 hover:bg-azure-900', label: 'Modo Conversa Ativo', spinning: false };
+    return { icon: Brain, color: 'bg-azure-800 hover:bg-azure-900', label: 'IA Nautilus Assistant', spinning: false };
   };
-
   const voiceStatus = getVoiceButtonStatus();
   const aiStatus = getAIButtonStatus();
 
@@ -275,6 +274,7 @@ const FloatingActionButtons = () => {
             iconColor="text-azure-50"
             size="lg"
             ariaLabel="Comando de voz"
+            tabIndex={0}
             spinning={voiceStatus.spinning}
             disabled={isProcessing}
             className="w-16 h-16 pointer-events-auto"
@@ -289,6 +289,7 @@ const FloatingActionButtons = () => {
             iconColor="text-azure-50"
             size="lg"
             ariaLabel="Busca avançada"
+            tabIndex={0}
             className="w-16 h-16 pointer-events-auto"
           />
 
@@ -301,6 +302,7 @@ const FloatingActionButtons = () => {
             iconColor="text-azure-50"
             size="lg"
             ariaLabel="Configurações do sistema"
+            tabIndex={0}
             className="w-16 h-16 pointer-events-auto"
           />
 
@@ -313,6 +315,7 @@ const FloatingActionButtons = () => {
             iconColor="text-azure-50"
             size="lg"
             ariaLabel="Chatbot com IA"
+            tabIndex={0}
             spinning={aiStatus.spinning}
             disabled={isThinking}
             className="w-16 h-16 pointer-events-auto"
