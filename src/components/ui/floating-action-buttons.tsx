@@ -26,7 +26,7 @@ import {
   VolumeX,
   Loader2
 } from 'lucide-react';
-import { FloatingActionButton } from '@/components/ui/reusable-floating-action-button';
+import { FloatingShortcutButton } from '@/components/ui/floating-shortcut-button';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useVoiceRecording, useTextToSpeech, useAIChat } from '@/hooks/use-voice-conversation';
@@ -251,68 +251,71 @@ const FloatingActionButtons = () => {
   const voiceStatus = getVoiceButtonStatus();
   const aiStatus = getAIButtonStatus();
 
+  // Shortcuts API (as requested)
+  const ativarReconhecimentoDeVoz = () => handleVoiceCommand();
+  const abrirBuscaAvancada = () => handleQuickAction('search');
+  const abrirConfiguracoesAvancadas = () => {
+    toast({ title: '⚙️ Configurações', description: 'Abrindo configurações avançadas' });
+    navigate('/settings');
+  };
+  const abrirChatIA = () => handleAIAssistant();
+
   return (
     <TooltipProvider>
       <div className="fixed bottom-6 right-6 z-[9999] pointer-events-auto">
         {/* Quick Actions Menu */}
-        {isExpanded && (
-          <div className="absolute bottom-20 right-0 space-y-3 animate-fade-in">
-            {quickActions.map((item, index) => (
-              <FloatingActionButton
-                key={index}
-                icon={item.icon}
-                onClick={() => handleQuickAction(item.action)}
-                label={item.label}
-                bgColor={`${item.color}`}
-                iconColor="text-azure-50"
-                size="md"
-                className="w-14 h-14 animate-slide-in-right pointer-events-auto"
-                style={{ animationDelay: `${index * 100}ms` }}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Main Action Buttons */}
+        {/* Main Action Buttons - 4 fixed shortcuts as requested */}
         <div className="flex flex-col gap-4">
-          {/* Voice Command Button */}
-          <FloatingActionButton
+          {/* 🎙️ Microfone */}
+          <FloatingShortcutButton
             icon={voiceStatus.icon}
-            onClick={handleVoiceCommand}
+            onClick={ativarReconhecimentoDeVoz}
             label={voiceStatus.label}
-            bgColor={`${voiceStatus.color}`}
+            bgColor={`${voiceStatus.color || 'bg-azure-800 hover:bg-azure-900'}`}
             iconColor="text-azure-50"
             size="lg"
-            ariaLabel={voiceStatus.label}
+            ariaLabel="Comando de voz"
             spinning={voiceStatus.spinning}
             disabled={isProcessing}
             className="w-16 h-16 pointer-events-auto"
           />
 
-          {/* AI Assistant Button */}
-          <FloatingActionButton
-            icon={aiStatus.icon}
-            onClick={isSpeaking ? stopSpeaking : handleAIAssistant}
-            label={aiStatus.label}
-            bgColor={`${aiStatus.color}`}
+          {/* 🔍 Busca avançada */}
+          <FloatingShortcutButton
+            icon={Search}
+            onClick={abrirBuscaAvancada}
+            label="Busca avançada"
+            bgColor="bg-azure-800 hover:bg-azure-900"
             iconColor="text-azure-50"
             size="lg"
-            ariaLabel={aiStatus.label}
-            spinning={aiStatus.spinning}
-            disabled={isThinking}
+            ariaLabel="Busca avançada"
             className="w-16 h-16 pointer-events-auto"
           />
 
-          {/* Quick Actions Menu Toggle */}
-          <FloatingActionButton
-            icon={Plus}
-            onClick={() => setIsExpanded(!isExpanded)}
-            label={isExpanded ? 'Fechar Menu' : 'Ações Rápidas'}
-            bgColor={isExpanded ? 'bg-orange-500 hover:bg-orange-600' : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700'}
+          {/* ⚙️ Configurações */}
+          <FloatingShortcutButton
+            icon={Settings}
+            onClick={abrirConfiguracoesAvancadas}
+            label="Configurações"
+            bgColor="bg-azure-800 hover:bg-azure-900"
             iconColor="text-azure-50"
             size="lg"
-            ariaLabel={isExpanded ? 'Fechar Menu' : 'Ações Rápidas'}
-            className={isExpanded ? 'w-16 h-16 rotate-45' : 'w-16 h-16'}
+            ariaLabel="Configurações do sistema"
+            className="w-16 h-16 pointer-events-auto"
+          />
+
+          {/* 🤖 Chatbot IA */}
+          <FloatingShortcutButton
+            icon={aiStatus.icon}
+            onClick={isSpeaking ? stopSpeaking : abrirChatIA}
+            label={aiStatus.label}
+            bgColor={`${aiStatus.color || 'bg-azure-800 hover:bg-azure-900'}`}
+            iconColor="text-azure-50"
+            size="lg"
+            ariaLabel="Chatbot com IA"
+            spinning={aiStatus.spinning}
+            disabled={isThinking}
+            className="w-16 h-16 pointer-events-auto"
           />
         </div>
 
