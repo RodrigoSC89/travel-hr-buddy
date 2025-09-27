@@ -312,7 +312,7 @@ export const EnhancedDashboard = () => {
       
       <div className="relative z-10 space-y-8 p-6">
         {/* Revolutionary Hero Section */}
-        <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary-glow to-primary-dark p-8 text-white 
+        <div className={`relative overflow-hidden rounded-3xl hero-gradient p-8 text-white 
           transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           
           {/* Animated Background Pattern */}
@@ -326,33 +326,33 @@ export const EnhancedDashboard = () => {
                 <Rocket className="w-10 h-10" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold font-display mb-2 text-shimmer">
+                <h1 className="text-4xl font-bold font-display mb-2 text-shimmer drop-shadow-lg">
                   Dashboard Revolucionário
                 </h1>
-                <p className="text-xl opacity-90">
+                <p className="text-xl opacity-95 drop-shadow-md text-yellow-100">
                   Bem-vindo(a), {profile?.full_name || 'Usuário'} 
-                  <Crown className="inline-block w-6 h-6 ml-2 text-yellow-300 animate-bounce" />
+                  <Crown className="inline-block w-6 h-6 ml-2 text-yellow-300 animate-bounce drop-shadow-lg" />
                 </p>
               </div>
             </div>
             
-            <p className="text-lg opacity-90 mb-8 max-w-3xl">
+            <p className="text-lg opacity-95 mb-8 max-w-3xl drop-shadow-md text-blue-50">
               Sistema de gestão mais avançado do mercado com IA, automação e experiência 
               completamente hipnotizante para revolucionar sua produtividade.
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300">
-                <Zap className="h-5 w-5 animate-pulse" />
-                <span>IA Preditiva</span>
+              <div className="flex items-center gap-2 bg-white/25 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white/30 shadow-lg">
+                <Zap className="h-5 w-5 animate-pulse text-yellow-300" />
+                <span className="font-medium text-white drop-shadow-sm">IA Preditiva</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300">
-                <Globe className="h-5 w-5 animate-pulse" />
-                <span>Global Scale</span>
+              <div className="flex items-center gap-2 bg-white/25 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white/30 shadow-lg">
+                <Globe className="h-5 w-5 animate-pulse text-blue-300" />
+                <span className="font-medium text-white drop-shadow-sm">Global Scale</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300">
-                <Diamond className="h-5 w-5 animate-pulse" />
-                <span>Premium Experience</span>
+              <div className="flex items-center gap-2 bg-white/25 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white/30 shadow-lg">
+                <Diamond className="h-5 w-5 animate-pulse text-purple-300" />
+                <span className="font-medium text-white drop-shadow-sm">Premium Experience</span>
               </div>
             </div>
           </div>
