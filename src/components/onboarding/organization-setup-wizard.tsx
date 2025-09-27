@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -46,6 +47,7 @@ interface OrganizationData {
 export const OrganizationSetupWizard: React.FC = () => {
   const { currentOrganization, updateBranding } = useOrganization();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   
@@ -193,7 +195,7 @@ export const OrganizationSetupWizard: React.FC = () => {
       });
 
       // Redirect to dashboard
-      window.location.href = '/';
+      navigate('/');
       
     } catch (error: any) {
       console.error('Setup error:', error);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useNavigate } from 'react-router-dom';
 import { 
   Lightbulb, 
   AlertTriangle, 
@@ -37,6 +38,7 @@ export const AISuggestionsPanel: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadSuggestions();
@@ -116,11 +118,11 @@ export const AISuggestionsPanel: React.FC = () => {
     switch (action_data.action) {
       case 'renew_certificates':
         // Redirecionar para a página de certificados
-        window.location.href = '/maritime-certifications';
+        navigate('/maritime-certifications');
         break;
       case 'review_schedule':
         // Redirecionar para a página de escalas
-        window.location.href = '/crew-management';
+        navigate('/crew-management');
         break;
       case 'assign_auditor':
         // Abrir modal de atribuição de auditor

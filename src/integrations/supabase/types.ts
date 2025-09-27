@@ -4787,12 +4787,20 @@ export type Database = {
         }
         Returns: boolean
       }
+      user_belongs_to_org: {
+        Args: { _org_id: string; _user_id: string }
+        Returns: boolean
+      }
       user_belongs_to_organization: {
         Args: { org_id: string; user_uuid?: string }
         Returns: boolean
       }
       user_belongs_to_tenant: {
         Args: { tenant_uuid: string; user_uuid?: string }
+        Returns: boolean
+      }
+      user_is_org_admin: {
+        Args: { _org_id: string; _user_id: string }
         Returns: boolean
       }
     }

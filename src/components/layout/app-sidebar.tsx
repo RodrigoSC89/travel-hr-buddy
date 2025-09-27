@@ -37,7 +37,7 @@ import {
   CheckCircle,
   Scan
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import nautilusOneLogo from '@/assets/nautilus-one-logo.png';
 import { usePermissions } from "@/hooks/use-permissions";
 
@@ -431,6 +431,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
   const navigate = useNavigate();
+  const location = useLocation();
   const { canAccessModule, hasPermission, getRoleDisplayName, userRole } = usePermissions();
   const { handleNavigation } = useSidebarActions();
 
@@ -591,7 +592,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   onClick={() => navigate("/automation")}
-                  isActive={window.location.pathname === "/automation"}
+                  isActive={location.pathname === "/automation"}
                   className="w-full justify-start"
                   title={collapsed ? "Automação IA" : undefined}
                 >
@@ -605,7 +606,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                 <SidebarMenuItem>
                   <SidebarMenuButton 
                     onClick={() => navigate("/saas-manager")}
-                    isActive={window.location.pathname === "/saas-manager"}
+                    isActive={location.pathname === "/saas-manager"}
                     className="w-full justify-start"
                     title={collapsed ? "SaaS Manager" : undefined}
                   >

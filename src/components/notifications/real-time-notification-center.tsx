@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useNavigate } from 'react-router-dom';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -53,6 +54,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   // Carregar notificações do banco
   const loadNotifications = async () => {
@@ -180,7 +182,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
       // Aqui você pode implementar diferentes tipos de ações
       switch (notification.action_type) {
         case 'navigate':
-          window.location.href = notification.action_data.url;
+          navigate(notification.action_data.url);
           break;
         case 'download':
           window.open(notification.action_data.downloadUrl, '_blank');

@@ -53,15 +53,15 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 Sistema Corporativo Inteligente com IA Avançada
               </p>
               <div className="flex items-center gap-4 mt-4">
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-success/20 text-success-foreground border border-success/30 text-sm font-medium">
+                  <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
                   Sistema Online
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium">
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-foreground border border-primary/30 text-sm font-medium">
                   <Brain className="w-4 h-4" />
                   IA Ativa
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-medium">
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/20 text-secondary-foreground border border-secondary/30 text-sm font-medium">
                   <Sparkles className="w-4 h-4" />
                   11 Módulos
                 </div>
@@ -288,24 +288,24 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                     </CardHeader>
                     <CardContent>
                       <div className="grid gap-6 md:grid-cols-2">
-                        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200/50">
+                        <Card className="bg-success/10 border-success/30">
                           <CardContent className="p-6">
                             <div className="space-y-4">
-                              <h3 className="font-semibold text-green-700 flex items-center gap-2">
+                              <h3 className="font-semibold text-success-foreground flex items-center gap-2">
                                 <Sparkles className="w-5 h-5" />
                                 🚀 Oportunidades de Crescimento
                               </h3>
-                              <ul className="space-y-3 text-sm">
+                              <ul className="space-y-3 text-sm text-foreground">
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-success rounded-full mt-2"></div>
                                   Automatizar 3 processos pode economizar 12h semanais
                                 </li>
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-success rounded-full mt-2"></div>
                                   Implementar alertas inteligentes reduzirá gastos em 15%
                                 </li>
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-success rounded-full mt-2"></div>
                                   Capacitação em IA pode aumentar produtividade em 28%
                                 </li>
                               </ul>
@@ -313,24 +313,24 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                           </CardContent>
                         </Card>
 
-                        <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200/50">
+                        <Card className="bg-info/10 border-info/30">
                           <CardContent className="p-6">
                             <div className="space-y-4">
-                              <h3 className="font-semibold text-blue-700 flex items-center gap-2">
+                              <h3 className="font-semibold text-info-foreground flex items-center gap-2">
                                 <BarChart3 className="w-5 h-5" />
                                 📊 Análise de Padrões
                               </h3>
-                              <ul className="space-y-3 text-sm">
+                              <ul className="space-y-3 text-sm text-foreground">
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-info rounded-full mt-2"></div>
                                   Pico de uso entre 9h-11h (otimizar recursos)
                                 </li>
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-info rounded-full mt-2"></div>
                                   Terças-feiras: 34% mais produtivas
                                 </li>
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-info rounded-full mt-2"></div>
                                   Módulo de viagens tem 89% de satisfação
                                 </li>
                               </ul>
