@@ -90,6 +90,11 @@ const config: Config = {
         "sea-foam": "hsl(var(--sea-foam))",
         "nautical-gold": "hsl(var(--nautical-gold))",
         "maritime-navy": "hsl(var(--maritime-navy))",
+        // High-contrast links
+        link: {
+          DEFAULT: "hsl(var(--link))",
+          hover: "hsl(var(--link-hover))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -32,36 +32,36 @@ export const EnterpriseLayout: React.FC = () => {
               <Header />
               
               {/* Status Bar */}
-              <div className="bg-gradient-to-r from-primary/5 to-secondary/5 border-b px-6 py-2">
+              <div className="bg-gradient-to-r from-primary/10 to-secondary/10 border-b px-6 py-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                       <Activity className="w-4 h-4 text-primary" />
-                      <span className="text-xs font-medium">Sistema Operacional</span>
-                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      <span className="text-xs font-medium text-foreground">Sistema Operacional</span>
+                      <Badge variant="success" className="bg-success/20 text-success-foreground border-success/40">
                         Online
                       </Badge>
                     </div>
                     
                     <div className="flex items-center gap-2">
-                      <Shield className="w-4 h-4 text-accent" />
-                      <span className="text-xs font-medium">Segurança</span>
-                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                      <Shield className="w-4 h-4 text-primary" />
+                      <span className="text-xs font-medium text-foreground">Segurança</span>
+                      <Badge variant="info" className="bg-info/20 text-info-foreground border-info/40">
                         Ativa
                       </Badge>
                     </div>
                     
                     <div className="flex items-center gap-2">
                       <Zap className="w-4 h-4 text-warning" />
-                      <span className="text-xs font-medium">Performance</span>
-                      <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+                      <span className="text-xs font-medium text-foreground">Performance</span>
+                      <Badge variant="warning" className="bg-warning/20 text-warning-foreground border-warning/40">
                         95%
                       </Badge>
                     </div>
                   </div>
                   
                    <div className="flex items-center gap-4">
-                     <div className="text-xs text-muted-foreground">
+                     <div className="text-xs text-foreground/80">
                        Usuário: {user?.email?.split('@')[0] || 'Anonimo'} | Sessão Ativa
                      </div>
                      <NotificationSystem />

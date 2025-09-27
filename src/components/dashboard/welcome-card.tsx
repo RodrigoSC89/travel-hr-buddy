@@ -64,12 +64,12 @@ export const WelcomeCard: React.FC = () => {
   };
 
   return (
-    <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <Card className="border-primary/30 bg-gradient-to-br from-primary/8 via-background to-secondary/8">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="space-y-1">
-            <CardTitle className="text-xl">{getWelcomeMessage()}</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-xl text-foreground">{getWelcomeMessage()}</CardTitle>
+            <CardDescription className="text-foreground/70">
               {userRole && `Você está logado como ${getRoleDisplayName(userRole)}`}
             </CardDescription>
           </div>
@@ -78,7 +78,7 @@ export const WelcomeCard: React.FC = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-foreground/80">
             Bem-vindo ao sistema corporativo. Escolha uma das ações rápidas abaixo ou navegue pelos módulos disponíveis.
           </p>
           
@@ -101,8 +101,8 @@ export const WelcomeCard: React.FC = () => {
             roles={['admin', 'hr_manager']} 
             showFallback={false}
           >
-            <div className="mt-4 p-3 bg-primary/15 rounded-lg border border-primary/30 shadow-sm">
-              <p className="text-sm text-primary-foreground font-medium">
+            <div className="mt-4 p-3 bg-primary/20 rounded-lg border border-primary/40 shadow-sm">
+              <p className="text-sm text-primary font-medium">
                 💡 Como administrador/gerente, você tem acesso a recursos especiais de gestão
               </p>
             </div>
