@@ -90,6 +90,8 @@ import Automation from "./pages/Automation";
 const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
 const MobileApp = React.lazy(() => import("./pages/MobileApp"));
 const SaaSManager = React.lazy(() => import("./pages/SaaSManager"));
+const Academy = React.lazy(() => import("./pages/Academy"));
+const Marketplace = React.lazy(() => import("./pages/Marketplace"));
 
 const queryClient = new QueryClient();
 
@@ -217,11 +219,21 @@ const App = () => {
                        <AdvancedDocuments />
                      </React.Suspense>
                    } />
-                   <Route path="mobile-app" element={
-                     <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                       <MobileApp />
-                     </React.Suspense>
-                   } />
+                    <Route path="mobile-app" element={
+                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <MobileApp />
+                      </React.Suspense>
+                    } />
+                    <Route path="academy" element={
+                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <Academy />
+                      </React.Suspense>
+                    } />
+                    <Route path="marketplace" element={
+                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <Marketplace />
+                      </React.Suspense>
+                    } />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
