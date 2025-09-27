@@ -323,19 +323,19 @@ export const KnowledgeManagement: React.FC = () => {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-500';
-      case 'intermediate': return 'bg-yellow-500';
-      case 'advanced': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'beginner': return 'bg-success';
+      case 'intermediate': return 'bg-warning';
+      case 'advanced': return 'bg-status-error';
+      default: return 'bg-muted';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'published': return 'bg-green-500';
-      case 'draft': return 'bg-yellow-500';
-      case 'archived': return 'bg-gray-500';
-      default: return 'bg-gray-500';
+      case 'published': return 'bg-success';
+      case 'draft': return 'bg-warning';
+      case 'archived': return 'bg-muted';
+      default: return 'bg-muted';
     }
   };
 
@@ -425,10 +425,10 @@ export const KnowledgeManagement: React.FC = () => {
                         <div className="flex items-center gap-2">
                           {getTypeIcon(item.type)}
                           <h3 className="font-semibold text-lg">{item.title}</h3>
-                          <Badge className={`${getStatusColor(item.status)} text-white`}>
+                          <Badge className={`${getStatusColor(item.status)} text-card-foreground`}>
                             {item.status}
                           </Badge>
-                          <Badge className={`${getDifficultyColor(item.difficulty)} text-white`}>
+                          <Badge className={`${getDifficultyColor(item.difficulty)} text-card-foreground`}>
                             {item.difficulty}
                           </Badge>
                         </div>

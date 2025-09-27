@@ -403,10 +403,10 @@ export const NautilusCopilot: React.FC = () => {
             <div className="relative">
               <Avatar className="w-10 h-10 bg-gradient-to-br from-primary to-primary/70">
                 <AvatarFallback>
-                  <Bot className="w-6 h-6 text-white" />
+                  <Bot className="w-6 h-6 text-primary-foreground" />
                 </AvatarFallback>
               </Avatar>
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-status-active rounded-full border-2 border-background"></div>
             </div>
             <div>
               <CardTitle className="text-lg flex items-center gap-2">
@@ -525,7 +525,7 @@ export const NautilusCopilot: React.FC = () => {
                     {message.type === 'user' && (
                       <Avatar className="w-8 h-8 bg-primary">
                         <AvatarFallback>
-                          <User className="w-5 h-5 text-white" />
+                          <User className="w-5 h-5 text-primary-foreground" />
                         </AvatarFallback>
                       </Avatar>
                     )}

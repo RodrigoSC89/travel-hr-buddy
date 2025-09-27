@@ -333,7 +333,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
             variant="outline"
             size="icon"
             onClick={toggleListening}
-            className={isListening ? 'bg-red-500 text-white' : ''}
+            className={isListening ? 'bg-status-error text-status-error-foreground' : ''}
           >
             {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </Button>

@@ -49,9 +49,28 @@ const config: Config = {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
         },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+        },
+        danger: {
+          DEFAULT: "hsl(var(--danger))",
+          foreground: "hsl(var(--danger-foreground))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
+        },
+        // Status colors with proper contrast
+        status: {
+          active: "hsl(var(--status-active))",
+          "active-foreground": "hsl(var(--status-active-foreground))",
+          inactive: "hsl(var(--status-inactive))",
+          "inactive-foreground": "hsl(var(--status-inactive-foreground))",
+          warning: "hsl(var(--status-warning))",
+          "warning-foreground": "hsl(var(--status-warning-foreground))",
+          error: "hsl(var(--status-error))",
+          "error-foreground": "hsl(var(--status-error-foreground))",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",

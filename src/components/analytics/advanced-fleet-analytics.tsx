@@ -195,11 +195,11 @@ export const AdvancedFleetAnalytics = () => {
 
   const getStatusColor = (status: VesselPerformance['status']) => {
     switch (status) {
-      case 'excellent': return 'bg-green-500';
-      case 'good': return 'bg-blue-500';
-      case 'average': return 'bg-yellow-500';
-      case 'poor': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'excellent': return 'bg-success';
+      case 'good': return 'bg-info';
+      case 'average': return 'bg-warning';
+      case 'poor': return 'bg-status-error';
+      default: return 'bg-muted';
     }
   };
 
@@ -532,7 +532,7 @@ export const AdvancedFleetAnalytics = () => {
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <h3 className="font-semibold">{vessel.vessel_name}</h3>
-                        <Badge className={`${getStatusColor(vessel.status)} text-white`}>
+                        <Badge className={`${getStatusColor(vessel.status)} text-card-foreground`}>
                           {getStatusText(vessel.status)}
                         </Badge>
                       </div>

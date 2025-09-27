@@ -268,13 +268,13 @@ export const MaritimeCommunicationCenter = () => {
 
   const getMessageTypeColor = (type: MaritimeCommunication['message_type']) => {
     switch (type) {
-      case 'emergency': return 'bg-red-500';
-      case 'weather_alert': return 'bg-orange-500';
-      case 'navigation': return 'bg-blue-500';
-      case 'maintenance': return 'bg-yellow-500';
-      case 'port_authority': return 'bg-purple-500';
-      case 'general': return 'bg-green-500';
-      default: return 'bg-gray-500';
+      case 'emergency': return 'bg-status-error';
+      case 'weather_alert': return 'bg-warning';
+      case 'navigation': return 'bg-info';
+      case 'maintenance': return 'bg-warning';
+      case 'port_authority': return 'bg-primary';
+      case 'general': return 'bg-success';
+      default: return 'bg-muted';
     }
   };
 
@@ -589,7 +589,7 @@ export const MaritimeCommunicationCenter = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h3 className="font-semibold">{comm.vessel_name}</h3>
-                            <Badge className={`${getMessageTypeColor(comm.message_type)} text-white`}>
+                            <Badge className={`${getMessageTypeColor(comm.message_type)} text-card-foreground`}>
                               {getMessageTypeText(comm.message_type)}
                             </Badge>
                             <Badge className={getPriorityColor(comm.priority)}>
@@ -659,9 +659,9 @@ export const MaritimeCommunicationCenter = () => {
                         <div>
                           <h3 className="font-semibold">{channel.name}</h3>
                           <Badge className={
-                            channel.status === 'active' ? 'bg-green-500 text-white' :
-                            channel.status === 'maintenance' ? 'bg-yellow-500 text-white' :
-                            'bg-gray-500 text-white'
+                            channel.status === 'active' ? 'bg-status-active text-status-active-foreground' :
+                            channel.status === 'maintenance' ? 'bg-warning text-warning-foreground' :
+                            'bg-status-inactive text-status-inactive-foreground'
                           }>
                             {channel.status === 'active' ? 'Ativo' :
                              channel.status === 'maintenance' ? 'Manutenção' : 'Inativo'}

@@ -23,41 +23,42 @@ const VoiceSettings: React.FC<VoiceSettingsProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-md p-6 space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Settings className="h-5 w-5" />
-            <h3 className="text-lg font-semibold">Configurações de Voz</h3>
-          </div>
-          <Button variant="outline" size="sm" onClick={onClose}>
-            Fechar
-          </Button>
-        </div>
-
-        <div className="space-y-6">
-          {/* Auto Listen */}
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <Card className="w-full max-w-md bg-card border-border shadow-xl">
+        <div className="p-6 space-y-6">
           <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>Escuta Automática</Label>
-              <div className="text-sm text-muted-foreground">
-                Detectar automaticamente quando você fala
-              </div>
+            <div className="flex items-center gap-2">
+              <Settings className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-semibold text-card-foreground">Configurações de Voz</h3>
             </div>
-            <Switch 
-              checked={autoListen} 
-              onCheckedChange={setAutoListen}
-            />
+            <Button variant="outline" size="sm" onClick={onClose}>
+              Fechar
+            </Button>
           </div>
 
-          <Separator />
-
-          {/* Volume */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Volume2 className="h-4 w-4" />
-              <Label>Volume da Resposta</Label>
+          <div className="space-y-6">
+            {/* Auto Listen */}
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label className="text-card-foreground">Escuta Automática</Label>
+                <div className="text-sm text-muted-foreground">
+                  Detectar automaticamente quando você fala
+                </div>
+              </div>
+              <Switch 
+                checked={autoListen} 
+                onCheckedChange={setAutoListen}
+              />
             </div>
+
+            <Separator />
+
+            {/* Volume */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Volume2 className="h-4 w-4 text-primary" />
+                <Label className="text-card-foreground">Volume da Resposta</Label>
+              </div>
             <Slider
               value={volume}
               onValueChange={setVolume}
@@ -71,14 +72,14 @@ const VoiceSettings: React.FC<VoiceSettingsProps> = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          <Separator />
+            <Separator />
 
-          {/* Sensitivity */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Mic className="h-4 w-4" />
-              <Label>Sensibilidade do Microfone</Label>
-            </div>
+            {/* Sensitivity */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Mic className="h-4 w-4 text-primary" />
+                <Label className="text-card-foreground">Sensibilidade do Microfone</Label>
+              </div>
             <Slider
               value={sensitivity}
               onValueChange={setSensitivity}
@@ -92,11 +93,11 @@ const VoiceSettings: React.FC<VoiceSettingsProps> = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          <Separator />
+            <Separator />
 
-          {/* Voice Selection */}
-          <div className="space-y-3">
-            <Label>Voz do Assistente</Label>
+            {/* Voice Selection */}
+            <div className="space-y-3">
+              <Label className="text-card-foreground">Voz do Assistente</Label>
             <Select value={voice} onValueChange={setVoice}>
               <SelectTrigger>
                 <SelectValue />
@@ -112,9 +113,9 @@ const VoiceSettings: React.FC<VoiceSettingsProps> = ({ isOpen, onClose }) => {
             </Select>
           </div>
 
-          {/* Language */}
-          <div className="space-y-3">
-            <Label>Idioma</Label>
+            {/* Language */}
+            <div className="space-y-3">
+              <Label className="text-card-foreground">Idioma</Label>
             <Select value={language} onValueChange={setLanguage}>
               <SelectTrigger>
                 <SelectValue />
@@ -126,12 +127,13 @@ const VoiceSettings: React.FC<VoiceSettingsProps> = ({ isOpen, onClose }) => {
               </SelectContent>
             </Select>
           </div>
-        </div>
+          </div>
 
-        <div className="flex gap-2 pt-4">
-          <Button onClick={onClose} className="flex-1">
-            Salvar Configurações
-          </Button>
+          <div className="flex gap-2 pt-4">
+            <Button onClick={onClose} className="flex-1">
+              Salvar Configurações
+            </Button>
+          </div>
         </div>
       </Card>
     </div>
