@@ -13,6 +13,7 @@ import {
   ChevronDown,
   Bell,
   UserCog,
+  Building2,
   Ship,
   Anchor,
   Bot,
@@ -582,6 +583,21 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                   >
                     <UserCog className="h-4 w-4" />
                     {!collapsed && <span className="ml-2">Administração</span>}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+
+              {/* SaaS Manager - Para super admins */}
+              {userRole === 'admin' && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton 
+                    onClick={() => navigate("/saas-manager")}
+                    isActive={window.location.pathname === "/saas-manager"}
+                    className="w-full justify-start"
+                    title={collapsed ? "SaaS Manager" : undefined}
+                  >
+                    <Building2 className="h-4 w-4" />
+                    {!collapsed && <span className="ml-2">SaaS Manager</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               )}

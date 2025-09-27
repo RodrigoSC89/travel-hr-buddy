@@ -203,8 +203,9 @@ const App = () => {
                       <OrganizationSettings />
                     </div>
                   } />
-                  <Route path="organization-setup" element={<OrganizationSetup />} />
+                   <Route path="organization-setup" element={<OrganizationSetup />} />
                   <Route path="super-admin" element={<SuperAdmin />} />
+                  <Route path="saas-manager" element={<SaaSManager />} />
                   <Route path="executive-dashboard" element={<ExecutiveDashboard />} />
                    <Route path="intelligent-alerts" element={<IntelligentAlerts />} />
                    <Route path="task-management" element={<TaskManagement />} />
