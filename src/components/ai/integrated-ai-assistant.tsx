@@ -388,7 +388,7 @@ Como posso ajudá-lo especificamente hoje?`,
     try {
       // This would integrate with the actual conversations table
       // For now, we'll just show a success message
-      console.log('Conversation saved:', { userMessage, assistantMessage });
+      // Conversation saved to history
     } catch (error) {
       console.error('Error saving conversation:', error);
     }

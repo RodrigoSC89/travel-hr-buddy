@@ -207,7 +207,7 @@ export const MaritimeCommunicationCenter = () => {
   const setupRealTimeUpdates = () => {
     // Set up real-time communication updates
     const interval = setInterval(() => {
-      console.log('Checking for new communications...');
+      // Checking for new communications
     }, 30000);
 
     return () => clearInterval(interval);

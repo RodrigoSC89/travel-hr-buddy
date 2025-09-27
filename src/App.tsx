@@ -100,6 +100,10 @@ const ProductRoadmapPage = React.lazy(() => import("./pages/ProductRoadmap"));
 const SystemAuditorPage = React.lazy(() => import("./pages/SystemAuditor"));
 const ProductionDeployPage = React.lazy(() => import("./pages/ProductionDeploy"));
 const UserOnboardingPage = React.lazy(() => import("./pages/UserOnboarding"));
+const Strategic = React.lazy(() => import("./pages/Strategic"));
+const NotificationCenterPage = React.lazy(() => import("./pages/NotificationCenterPage"));
+const SystemMonitorPage = React.lazy(() => import("./pages/SystemMonitorPage"));
+const AdvancedSettingsPage = React.lazy(() => import("./pages/AdvancedSettingsPage"));
 
 const queryClient = new QueryClient();
 
@@ -108,11 +112,11 @@ const App = () => {
   React.useEffect(() => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then((registration) => {
-          console.log('SW registered: ', registration);
+        .then(() => {
+          // Service Worker registered successfully
         })
-        .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError);
+        .catch(() => {
+          // Service Worker registration failed
         });
     }
   }, []);
@@ -272,11 +276,31 @@ const App = () => {
                          <ProductionDeployPage />
                        </React.Suspense>
                      } />
-                     <Route path="user-onboarding" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                         <UserOnboardingPage />
-                       </React.Suspense>
-                     } />
+                      <Route path="user-onboarding" element={
+                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                          <UserOnboardingPage />
+                        </React.Suspense>
+                      } />
+                      <Route path="strategic" element={
+                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                          <Strategic />
+                        </React.Suspense>
+                      } />
+                      <Route path="notification-center-page" element={
+                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                          <NotificationCenterPage />
+                        </React.Suspense>
+                      } />
+                      <Route path="system-monitor-page" element={
+                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                          <SystemMonitorPage />
+                        </React.Suspense>
+                      } />
+                      <Route path="advanced-settings-page" element={
+                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                          <AdvancedSettingsPage />
+                        </React.Suspense>
+                      } />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

@@ -98,7 +98,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
   };
 
   const revokeSession = (sessionId: string) => {
-    console.log('Revoking session:', sessionId);
+    // Revoking session
   };
 
   return (

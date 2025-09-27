@@ -129,7 +129,7 @@ export const AISuggestionsPanel: React.FC = () => {
         // Implementar lógica específica
         break;
       default:
-        console.log('Ação não implementada:', action_data.action);
+        // Action not implemented yet
     }
   };
 
