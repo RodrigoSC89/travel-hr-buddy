@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => ({
     // Produção otimizada
     minify: true,
     sourcemap: false,
-    target: 'es2015',
+    target: 'es2020', // Atualizado para suportar big integers
     rollupOptions: {
       output: {
         manualChunks: {
