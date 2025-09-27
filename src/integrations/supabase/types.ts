@@ -4747,6 +4747,10 @@ export type Database = {
         Args: { limit_type: string; tenant_uuid: string }
         Returns: boolean
       }
+      create_sample_peotram_audit: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       get_current_organization_id: {
         Args: Record<PropertyKey, never>
         Returns: string
