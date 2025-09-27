@@ -71,7 +71,7 @@ export const OrganizationHealthCheck: React.FC = () => {
         users: usersData.data?.length || 0,
         vessels: vesselsData.data?.length || 0,
         certificates: certificatesData.data?.length || 0,
-        modules: currentBranding?.enabled_modules?.length || 0
+        modules: currentBranding?.enabled_modules ? Object.keys(currentBranding.enabled_modules).length : 0
       };
 
       setStats(newStats);
@@ -80,7 +80,7 @@ export const OrganizationHealthCheck: React.FC = () => {
       const checks: HealthCheck[] = [];
 
       // Organization setup check
-      if (!currentBranding || !currentBranding.enabled_modules || currentBranding.enabled_modules.length === 0) {
+      if (!currentBranding || !currentBranding.enabled_modules || Object.keys(currentBranding.enabled_modules).length === 0) {
         checks.push({
           id: 'setup',
           title: 'Configuração Inicial',
@@ -122,7 +122,7 @@ export const OrganizationHealthCheck: React.FC = () => {
       }
 
       // Maritime module checks
-      if (currentBranding?.enabled_modules?.includes('maritime')) {
+      if (currentBranding?.enabled_modules?.fleet_management) {
         if (newStats.vessels === 0) {
           checks.push({
             id: 'vessels',
@@ -145,7 +145,7 @@ export const OrganizationHealthCheck: React.FC = () => {
       }
 
       // Analytics check
-      if (currentBranding?.enabled_modules?.includes('analytics')) {
+      if (currentBranding?.enabled_modules?.analytics) {
         checks.push({
           id: 'analytics',
           title: 'Dashboard Analytics',
