@@ -212,11 +212,11 @@ const FloatingActionButtons = () => {
   };
 
   const quickActions = [
-    { icon: Search, label: 'Busca Global', action: 'search', color: 'bg-blue-500 hover:bg-blue-600' },
-    { icon: AlertTriangle, label: 'Emergência', action: 'emergency', color: 'bg-red-500 hover:bg-red-600' },
-    { icon: BarChart3, label: 'Relatórios', action: 'reports', color: 'bg-green-500 hover:bg-green-600' },
-    { icon: Camera, label: 'Scanner IA', action: 'scan', color: 'bg-purple-500 hover:bg-purple-600' },
-    { icon: Compass, label: 'Navegação', action: 'navigation', color: 'bg-cyan-500 hover:bg-cyan-600' },
+    { icon: Search, label: 'Busca Global', action: 'search', color: 'bg-azure-700 hover:bg-azure-800' },
+    { icon: AlertTriangle, label: 'Emergência', action: 'emergency', color: 'bg-azure-700 hover:bg-azure-800' },
+    { icon: BarChart3, label: 'Relatórios', action: 'reports', color: 'bg-azure-700 hover:bg-azure-800' },
+    { icon: Camera, label: 'Scanner IA', action: 'scan', color: 'bg-azure-700 hover:bg-azure-800' },
+    { icon: Compass, label: 'Navegação', action: 'navigation', color: 'bg-azure-700 hover:bg-azure-800' },
   ];
 
   // Auto-handle conversation mode
@@ -253,7 +253,7 @@ const FloatingActionButtons = () => {
 
   return (
     <TooltipProvider>
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 right-6 z-[9999] pointer-events-auto">
         {/* Quick Actions Menu */}
         {isExpanded && (
           <div className="absolute bottom-20 right-0 space-y-3 animate-fade-in">
@@ -266,7 +266,7 @@ const FloatingActionButtons = () => {
                 bgColor={`${item.color}`}
                 iconColor="text-azure-50"
                 size="md"
-                className="w-14 h-14 animate-slide-in-right"
+                className="w-14 h-14 animate-slide-in-right pointer-events-auto"
                 style={{ animationDelay: `${index * 100}ms` }}
               />
             ))}
@@ -286,7 +286,7 @@ const FloatingActionButtons = () => {
             ariaLabel={voiceStatus.label}
             spinning={voiceStatus.spinning}
             disabled={isProcessing}
-            className="w-16 h-16"
+            className="w-16 h-16 pointer-events-auto"
           />
 
           {/* AI Assistant Button */}
@@ -300,7 +300,7 @@ const FloatingActionButtons = () => {
             ariaLabel={aiStatus.label}
             spinning={aiStatus.spinning}
             disabled={isThinking}
-            className="w-16 h-16"
+            className="w-16 h-16 pointer-events-auto"
           />
 
           {/* Quick Actions Menu Toggle */}
@@ -318,7 +318,7 @@ const FloatingActionButtons = () => {
 
         {/* Status Indicators */}
         {(isRecording || isProcessing || isSpeaking || isThinking || conversationMode) && (
-          <div className="absolute -top-20 right-0 animate-bounce-in">
+          <div className="absolute -top-20 right-0 z-[9999] animate-bounce-in">
             <Card className={`${
               isRecording ? 'bg-red-500' :
               isProcessing ? 'bg-yellow-500' :

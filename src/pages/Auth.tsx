@@ -149,7 +149,7 @@ const Auth: React.FC = () => {
 
         {/* Right Side - Auth Forms */}
         <div className="w-full max-w-md mx-auto">
-          <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
+          <Card className="shadow-xl border-0 bg-azure-100/80 backdrop-blur-sm">
             <CardHeader className="space-y-1 text-center">
               <CardTitle className="text-2xl font-bold">
                 {activeTab === 'signin' ? 'Entrar na Conta' : 

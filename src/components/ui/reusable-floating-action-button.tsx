@@ -58,12 +58,12 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
             tabIndex={tabIndex}
             style={style}
             className={cn(
+              'pointer-events-auto cursor-pointer z-[9999]',
               bgColor,
               iconColor,
               sizeClasses[size],
-              'shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full',
-              'focus:outline-none focus:ring-4 focus:ring-azure-200 focus:ring-opacity-50',
-              'dark:focus:ring-azure-800',
+              'rounded-full transform transition-all duration-300 shadow-azure hover:shadow-glow hover:scale-110 active:scale-95',
+              'focus:outline-none focus:ring-4 focus:ring-azure-200 focus:ring-opacity-50 dark:focus:ring-azure-800',
               isActive && 'ring-4 ring-azure-300 ring-opacity-75',
               disabled && 'opacity-50 cursor-not-allowed transform-none hover:scale-100',
               className
