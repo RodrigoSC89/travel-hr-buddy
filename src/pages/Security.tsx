@@ -1,12 +1,33 @@
 import React from 'react';
-import AdvancedSecurityCenter from '@/components/security/advanced-security-center';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/layout/app-sidebar';
+import { CompleteSecurity } from '@/components/security/complete-security';
+import { Shield } from 'lucide-react';
+import VoiceInterface from '@/components/voice/VoiceInterface';
 
-const SecurityPage = () => {
+const Security = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <AdvancedSecurityCenter />
-    </div>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        <AppSidebar />
+        <main className="flex-1 p-6 space-y-6">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="p-3 rounded-lg bg-primary/10">
+              <Shield className="h-8 w-8 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">Centro de Segurança</h1>
+              <p className="text-muted-foreground">
+                Proteção avançada e monitoramento
+              </p>
+            </div>
+          </div>
+          <CompleteSecurity />
+        </main>
+        <VoiceInterface />
+      </div>
+    </SidebarProvider>
   );
 };
 
-export default SecurityPage;
+export default Security;

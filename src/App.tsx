@@ -92,6 +92,8 @@ const MobileApp = React.lazy(() => import("./pages/MobileApp"));
 const SaaSManager = React.lazy(() => import("./pages/SaaSManager"));
 const Academy = React.lazy(() => import("./pages/Academy"));
 const Marketplace = React.lazy(() => import("./pages/Marketplace"));
+const RealTimeMonitoring = React.lazy(() => import("./pages/RealTimeMonitoring"));
+const AdvancedAuth = React.lazy(() => import("./pages/AdvancedAuth"));
 
 const queryClient = new QueryClient();
 
@@ -232,6 +234,16 @@ const App = () => {
                     <Route path="marketplace" element={
                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
                         <Marketplace />
+                      </React.Suspense>
+                    } />
+                    <Route path="real-time-monitoring" element={
+                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <RealTimeMonitoring />
+                      </React.Suspense>
+                    } />
+                    <Route path="advanced-auth" element={
+                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <AdvancedAuth />
                       </React.Suspense>
                     } />
                 </Route>
