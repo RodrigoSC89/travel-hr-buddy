@@ -521,11 +521,11 @@
 .text-shimmer {
   background: linear-gradient(
     90deg,
-    hsl(var(--primary-foreground)) 0%,
-    hsl(var(--secondary-light)) 25%,
-    hsl(var(--primary-foreground)) 50%,
-    hsl(var(--accent-light)) 75%,
-    hsl(var(--primary-foreground)) 100%
+    hsl(var(--foreground)) 0%,
+    hsl(var(--primary-dark)) 25%,
+    hsl(var(--foreground)) 50%,
+    hsl(var(--nautical)) 75%,
+    hsl(var(--foreground)) 100%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;

@@ -329,30 +329,30 @@ export const EnhancedDashboard = () => {
                 <h1 className="text-4xl font-bold font-display mb-2 text-shimmer drop-shadow-lg">
                   Dashboard Revolucionário
                 </h1>
-                <p className="text-xl opacity-95 drop-shadow-md text-yellow-100">
+                <p className="text-xl opacity-95 drop-shadow-md text-gray-800 font-semibold">
                   Bem-vindo(a), {profile?.full_name || 'Usuário'} 
-                  <Crown className="inline-block w-6 h-6 ml-2 text-yellow-300 animate-bounce drop-shadow-lg" />
+                  <Crown className="inline-block w-6 h-6 ml-2 text-orange-500 animate-bounce drop-shadow-lg" />
                 </p>
               </div>
             </div>
             
-            <p className="text-lg opacity-95 mb-8 max-w-3xl drop-shadow-md text-blue-50">
+            <p className="text-lg opacity-95 mb-8 max-w-3xl drop-shadow-md text-gray-800 font-medium">
               Sistema de gestão mais avançado do mercado com IA, automação e experiência 
               completamente hipnotizante para revolucionar sua produtividade.
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <div className="flex items-center gap-2 bg-white/25 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white/30 shadow-lg">
-                <Zap className="h-5 w-5 animate-pulse text-yellow-300" />
-                <span className="font-medium text-white drop-shadow-sm">IA Preditiva</span>
+              <div className="flex items-center gap-2 bg-white/90 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white shadow-lg border border-gray-200">
+                <Zap className="h-5 w-5 animate-pulse text-amber-600" />
+                <span className="font-semibold text-gray-800">IA Preditiva</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/25 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white/30 shadow-lg">
-                <Globe className="h-5 w-5 animate-pulse text-blue-300" />
-                <span className="font-medium text-white drop-shadow-sm">Global Scale</span>
+              <div className="flex items-center gap-2 bg-white/90 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white shadow-lg border border-gray-200">
+                <Globe className="h-5 w-5 animate-pulse text-blue-600" />
+                <span className="font-semibold text-gray-800">Global Scale</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/25 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white/30 shadow-lg">
-                <Diamond className="h-5 w-5 animate-pulse text-purple-300" />
-                <span className="font-medium text-white drop-shadow-sm">Premium Experience</span>
+              <div className="flex items-center gap-2 bg-white/90 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white shadow-lg border border-gray-200">
+                <Diamond className="h-5 w-5 animate-pulse text-purple-600" />
+                <span className="font-semibold text-gray-800">Premium Experience</span>
               </div>
             </div>
           </div>
