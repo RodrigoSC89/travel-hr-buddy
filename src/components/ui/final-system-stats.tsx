@@ -116,13 +116,13 @@ export const FinalSystemStats: React.FC = () => {
               O sistema está pronto para uso em produção.
             </p>
             <div className="flex justify-center gap-4">
-              <Badge className="bg-green-500 text-white">
+              <Badge className="bg-success text-success-foreground">
                 ✅ Zero Bugs Críticos
               </Badge>
-              <Badge className="bg-blue-500 text-white">
+              <Badge className="bg-info text-info-foreground">
                 🔒 Segurança Validada
               </Badge>
-              <Badge className="bg-purple-500 text-white">
+              <Badge className="bg-accent text-accent-foreground">
                 ⚡ Performance Otimizada
               </Badge>
             </div>

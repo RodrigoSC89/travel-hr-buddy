@@ -86,6 +86,7 @@ import ExecutiveDashboard from "./pages/ExecutiveDashboard";
 import IntelligentAlerts from "./pages/IntelligentAlerts";
 import Automation from "./pages/Automation";
 import DropdownTests from "./pages/DropdownTests";
+import SystemValidation from "./pages/SystemValidation";
 
 // Lazy load the new advanced pages
 const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
@@ -300,7 +301,8 @@ const App = () => {
                         <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
                           <AdvancedSettingsPage />
                         </React.Suspense>
-                      } />
+                       } />
+                      <Route path="system-validation" element={<SystemValidation />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

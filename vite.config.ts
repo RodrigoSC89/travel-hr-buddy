@@ -30,9 +30,10 @@ export default defineConfig(({ mode }) => ({
         }
       }
     },
-    // Remove console.log em produção
+    // Remove console.log/error/warn em produção
     esbuild: mode === 'production' ? {
       drop: ['console', 'debugger'],
+      pure: ['console.log', 'console.error', 'console.warn', 'console.info'],
     } : undefined,
   },
 }));
