@@ -346,16 +346,6 @@ const SmartTooltipSystem: React.FC = () => {
         </div>
       )}
 
-      {/* Botão de Ajuda Flutuante */}
-      <Button
-        className="fixed bottom-4 left-4 z-30 rounded-full w-14 h-14 shadow-lg btn-maritime"
-        onClick={() => setIsHelpMode(!isHelpMode)}
-        aria-label="Ajuda do sistema"
-        aria-pressed={isHelpMode}
-        tabIndex={0}
-      >
-        <HelpCircle className="w-6 h-6" />
-      </Button>
 
       {/* Painel de Ajuda */}
       {isHelpMode && currentTour === null && (
