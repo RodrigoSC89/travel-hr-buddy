@@ -723,8 +723,6 @@ const EnhancedUnifiedDashboard = () => {
       {/* Enhanced System Health Monitor */}
       <SystemStatusDashboard />
 
-      {/* Floating Action Buttons */}
-      <FloatingActionButtons />
       </div>
     </div>
   );
