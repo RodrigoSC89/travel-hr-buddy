@@ -50,14 +50,14 @@ export const WelcomeCard: React.FC = () => {
       icon: BarChart3,
       label: 'Ver Analytics',
       action: () => navigate('/analytics'),
-      variant: 'outline' as const
+        variant: 'default' as const
     });
     
     actions.push({
       icon: Settings,
       label: 'Configurações',
       action: () => navigate('/settings'),
-      variant: 'ghost' as const
+        variant: 'outline' as const
     });
     
     return actions.slice(0, 3); // Limitar a 3 ações
@@ -101,8 +101,8 @@ export const WelcomeCard: React.FC = () => {
             roles={['admin', 'hr_manager']} 
             showFallback={false}
           >
-            <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
-              <p className="text-sm text-primary font-medium">
+            <div className="mt-4 p-3 bg-primary/15 rounded-lg border border-primary/30 shadow-sm">
+              <p className="text-sm text-primary-foreground font-medium">
                 💡 Como administrador/gerente, você tem acesso a recursos especiais de gestão
               </p>
             </div>

@@ -673,9 +673,9 @@ const EnhancedUnifiedDashboard = () => {
                         {alert.module.toUpperCase()}
                       </span>
                       <Badge variant="outline" className={`text-xs ${
-                        alert.priority === 'high' ? 'border-red-200 text-red-700' :
-                        alert.priority === 'medium' ? 'border-orange-200 text-orange-700' :
-                        'border-gray-200 text-gray-700'
+                        alert.priority === 'high' ? 'border-destructive text-destructive-foreground bg-destructive/10' :
+                        alert.priority === 'medium' ? 'border-warning text-warning-foreground bg-warning/10' :
+                        'border-muted-foreground text-muted-foreground bg-muted/10'
                       }`}>
                         {alert.priority}
                       </Badge>

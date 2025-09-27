@@ -44,13 +44,13 @@ const SystemOverview = () => {
       case 'optimal':
       case 'stable':
       case 'secure':
-        return 'text-green-600 bg-green-50 border-green-200';
+        return 'text-success-foreground bg-success/20 border-success/30';
       case 'warning':
-        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+        return 'text-warning-foreground bg-warning/20 border-warning/30';
       case 'critical':
-        return 'text-red-600 bg-red-50 border-red-200';
+        return 'text-destructive-foreground bg-destructive/20 border-destructive/30';
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-muted-foreground bg-muted/20 border-muted/30';
     }
   };
 

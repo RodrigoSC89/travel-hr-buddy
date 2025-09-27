@@ -187,18 +187,18 @@ const FloatingActionButton = ({ icon: Icon, label, onClick, color = "primary", d
 
 const PulsingNotificationCard = ({ title, description, time, priority = "medium", icon: Icon }) => {
   const priorityColors = {
-    high: "border-l-red-500 bg-gradient-to-r from-red-50/80 to-red-100/50 dark:from-red-900/20 dark:to-red-800/10",
-    medium: "border-l-blue-500 bg-gradient-to-r from-blue-50/80 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-800/10", 
-    low: "border-l-emerald-500 bg-gradient-to-r from-emerald-50/80 to-emerald-100/50 dark:from-emerald-900/20 dark:to-emerald-800/10"
+    high: "border-l-destructive bg-destructive/10 text-destructive-foreground",
+    medium: "border-l-info bg-info/10 text-info-foreground", 
+    low: "border-l-success bg-success/10 text-success-foreground"
   };
 
   return (
     <div className={`group p-4 border-l-4 rounded-xl ${priorityColors[priority]} 
       hover:scale-[1.02] transition-all duration-300 cursor-pointer hover:shadow-lg backdrop-blur-sm`}>
       <div className="flex items-start gap-3">
-        <div className="p-2.5 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm 
+        <div className="p-2.5 rounded-xl bg-card/80 border border-border backdrop-blur-sm 
           group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-          <Icon className="w-4 h-4" />
+          <Icon className="w-4 h-4 text-foreground" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-2">
@@ -329,30 +329,30 @@ export const EnhancedDashboard = () => {
                 <h1 className="text-4xl font-bold font-display mb-2 text-shimmer drop-shadow-lg">
                   Dashboard Revolucionário
                 </h1>
-                <p className="text-xl opacity-95 drop-shadow-md text-gray-800 font-semibold">
+                <p className="text-xl opacity-95 drop-shadow-md text-primary-foreground font-semibold">
                   Bem-vindo(a), {profile?.full_name || 'Usuário'} 
-                  <Crown className="inline-block w-6 h-6 ml-2 text-orange-500 animate-bounce drop-shadow-lg" />
+                  <Crown className="inline-block w-6 h-6 ml-2 text-warning animate-bounce drop-shadow-lg" />
                 </p>
               </div>
             </div>
             
-            <p className="text-lg opacity-95 mb-8 max-w-3xl drop-shadow-md text-gray-800 font-medium">
+            <p className="text-lg opacity-95 mb-8 max-w-3xl drop-shadow-md text-primary-foreground font-medium">
               Sistema de gestão mais avançado do mercado com IA, automação e experiência 
               completamente hipnotizante para revolucionar sua produtividade.
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <div className="flex items-center gap-2 bg-white/90 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white shadow-lg border border-gray-200">
-                <Zap className="h-5 w-5 animate-pulse text-amber-600" />
-                <span className="font-semibold text-gray-800">IA Preditiva</span>
+              <div className="flex items-center gap-2 bg-primary/90 text-primary-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-primary shadow-lg border border-primary/30">
+                <Zap className="h-5 w-5 animate-pulse" />
+                <span className="font-semibold">IA Preditiva</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/90 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white shadow-lg border border-gray-200">
-                <Globe className="h-5 w-5 animate-pulse text-blue-600" />
-                <span className="font-semibold text-gray-800">Global Scale</span>
+              <div className="flex items-center gap-2 bg-info/90 text-info-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-info shadow-lg border border-info/30">
+                <Globe className="h-5 w-5 animate-pulse" />
+                <span className="font-semibold">Global Scale</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/90 px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-white shadow-lg border border-gray-200">
-                <Diamond className="h-5 w-5 animate-pulse text-purple-600" />
-                <span className="font-semibold text-gray-800">Premium Experience</span>
+              <div className="flex items-center gap-2 bg-secondary/90 text-secondary-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-secondary shadow-lg border border-secondary/30">
+                <Diamond className="h-5 w-5 animate-pulse" />
+                <span className="font-semibold">Premium Experience</span>
               </div>
             </div>
           </div>
