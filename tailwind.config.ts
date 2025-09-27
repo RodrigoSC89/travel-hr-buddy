@@ -28,14 +28,32 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        
+        // Paleta Azure Completa
+        azure: {
+          50: "hsl(var(--azure-50))",
+          100: "hsl(var(--azure-100))",
+          200: "hsl(var(--azure-200))",
+          300: "hsl(var(--azure-300))",
+          400: "hsl(var(--azure-400))",
+          500: "hsl(var(--azure-500))",
+          600: "hsl(var(--azure-600))",
+          700: "hsl(var(--azure-700))",
+          800: "hsl(var(--azure-800))",
+          900: "hsl(var(--azure-900))",
+        },
+        
         primary: {
           DEFAULT: "hsl(var(--primary))",
           glow: "hsl(var(--primary-glow))",
           foreground: "hsl(var(--primary-foreground))",
+          light: "hsl(var(--primary-light))",
+          dark: "hsl(var(--primary-dark))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+          light: "hsl(var(--secondary-light))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -75,6 +93,7 @@ const config: Config = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          light: "hsl(var(--accent-light))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -104,12 +123,16 @@ const config: Config = {
       boxShadow: {
         elegant: "var(--shadow-elegant)",
         glow: "var(--shadow-glow)",
-        card: "var(--shadow-card)",
+        azure: "var(--shadow-azure)",
+        depth: "var(--shadow-depth)",
+        soft: "var(--shadow-soft)",
       },
       backgroundImage: {
         "gradient-ocean": "var(--gradient-ocean)",
-        "gradient-nautical": "var(--gradient-primary)",
-        "gradient-subtle": "var(--gradient-subtle)",
+        "gradient-sky": "var(--gradient-sky)",
+        "gradient-depth": "var(--gradient-depth)",
+        "gradient-deep": "var(--gradient-deep)",
+        "gradient-wave": "var(--gradient-wave)",
       },
       keyframes: {
         "accordion-down": {

@@ -343,7 +343,7 @@ const EnhancedUnifiedDashboard = () => {
   const userDisplayName = currentUser?.display_name || user?.email?.split('@')[0] || 'Usuário';
 
   return (
-    <div className="space-y-6 bg-gradient-to-br from-maritime-navy via-maritime-navy to-maritime-navy/90 min-h-screen">
+    <div className="space-y-6 bg-gradient-to-br from-background via-azure-100 to-azure-200 min-h-screen">
       <div className="space-y-8 p-6">
       <EnhancedDashboardFilters
         selectedKPIs={selectedKPIs}
@@ -358,7 +358,7 @@ const EnhancedUnifiedDashboard = () => {
       {/* Professional Header with Enhanced Branding */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5 rounded-2xl" />
-        <Card className="relative border-2 border-primary/10 shadow-2xl bg-gradient-to-br from-maritime-navy via-maritime-navy to-maritime-navy/95">
+        <Card className="relative border-2 border-primary/20 shadow-2xl bg-gradient-to-br from-card via-azure-200 to-azure-300">
           <CardContent className="p-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">
@@ -466,7 +466,7 @@ const EnhancedUnifiedDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-secondary/10 shadow-xl bg-maritime-navy">
+        <Card className="border-2 border-secondary/20 shadow-azure bg-gradient-to-br from-azure-100 to-azure-200">
           <CardHeader className="bg-gradient-to-r from-secondary/10 to-transparent">
             <CardTitle className="flex items-center gap-2">
               <BarChart2 className="w-5 h-5 text-secondary" />
@@ -497,7 +497,7 @@ const EnhancedUnifiedDashboard = () => {
       </div>
 
       {/* Enhanced Module Cards */}
-      <Card className="border-2 border-primary/10 shadow-xl bg-maritime-navy">
+      <Card className="border-2 border-primary/20 shadow-azure bg-gradient-to-br from-azure-100 to-azure-200">
         <CardHeader className="bg-gradient-to-r from-primary/10 via-transparent to-secondary/10">
           <div className="flex items-center justify-between">
             <div>
@@ -561,7 +561,7 @@ const EnhancedUnifiedDashboard = () => {
 
       {/* Enhanced Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-2 border-primary/10 shadow-xl bg-maritime-navy">
+        <Card className="border-2 border-primary/20 shadow-azure bg-gradient-to-br from-azure-100 to-azure-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <LineChart className="w-5 h-5 text-primary" />
@@ -613,7 +613,7 @@ const EnhancedUnifiedDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-secondary/10 shadow-xl bg-maritime-navy">
+        <Card className="border-2 border-secondary/20 shadow-azure bg-gradient-to-br from-azure-100 to-azure-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <PieChart className="w-5 h-5 text-secondary" />
@@ -652,8 +652,8 @@ const EnhancedUnifiedDashboard = () => {
 
       {/* Enhanced Alerts and Activities */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-2 border-orange-100 shadow-xl bg-maritime-navy">
-          <CardHeader className="bg-gradient-to-r from-orange-200/20 to-transparent">
+        <Card className="border-2 border-warning/30 shadow-azure bg-gradient-to-br from-azure-100 to-azure-200">
+          <CardHeader className="bg-gradient-to-r from-warning/10 to-transparent">
             <CardTitle className="flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-orange-600" />
               Alertas do Sistema
@@ -687,8 +687,8 @@ const EnhancedUnifiedDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-green-100 shadow-xl bg-maritime-navy">
-          <CardHeader className="bg-gradient-to-r from-green-200/20 to-transparent">
+        <Card className="border-2 border-success/30 shadow-azure bg-gradient-to-br from-azure-100 to-azure-200">
+          <CardHeader className="bg-gradient-to-r from-success/10 to-transparent">
             <CardTitle className="flex items-center gap-2">
               <Activity className="w-5 h-5 text-success" />
               Atividades Recentes

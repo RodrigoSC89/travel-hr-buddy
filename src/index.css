@@ -9,201 +9,222 @@
 
 @layer base {
   :root {
-    /* === DESIGN TOKENS NAUTILUS ONE - SISTEMA MARÍTIMO === */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 220 90% 5%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 90% 5%;
-
-    /* Paleta WCAG AA Compliant - Cores Fortes e Acessíveis */
-    --primary: 214 100% 31%;        /* #004F9E - Azul forte para contraste máximo */
-    --primary-foreground: 0 0% 100%; /* Branco puro */
-    --primary-light: 214 80% 40%;   
-    --primary-dark: 214 100% 20%;   /* #003366 - Azul escuro para hover */
-    --primary-glow: 214 70% 45%;   
-
-    --secondary: 0 0% 13%;          /* #222222 - Cinza escuro */
-    --secondary-foreground: 0 0% 100%; /* Branco puro */
-    --secondary-light: 0 0% 20%;
-
-    --accent: 214 100% 20%;         /* #003366 - Azul escuro para acentos */
-    --accent-foreground: 0 0% 100%; /* Branco puro */
-    --accent-light: 214 100% 25%;
-    /* Links com alto contraste WCAG AA */
-    --link: 214 100% 40%;           /* #0055CC - Azul para links */
-    --link-hover: 214 100% 20%;     /* #003399 - Azul escuro no hover */
-
-    /* Cores Náuticas Especializadas */
-    --nautical: 210 100% 30%;       /* Azul Naval */
-    --nautical-foreground: 210 20% 98%;
+    /* === NAUTILUS ONE - PALETA AZUL PROFISSIONAL === */
     
-    /* Status Colors - WCAG AA Compliant */
-    --success: 125 70% 28%;         /* #388E3C - Verde escuro */
-    --success-foreground: 0 0% 100%; /* Branco puro */
-    --warning: 35 100% 50%;         /* #FFA000 - Laranja para avisos */
-    --warning-foreground: 0 0% 0%;  /* Preto para contraste */
-    --danger: 0 70% 42%;            /* #D32F2F - Vermelho escuro */
-    --danger-foreground: 0 0% 100%; /* Branco puro */
-    --info: 214 100% 31%;           /* #004F9E - Mesmo azul do primary */
-    --info-foreground: 0 0% 100%;   /* Branco puro */
-
-    --muted: 0 0% 96%;              /* Cinza muito claro para fundos */
-    --muted-foreground: 0 0% 13%;   /* #222222 - Texto escuro para contraste forte */
-
-    --destructive: 0 70% 42%;       /* #D32F2F - Vermelho escuro */
-    --destructive-foreground: 0 0% 100%; /* Branco puro */
+    /* Azuis Base - Gradação Harmoniosa */
+    --azure-50: 214 100% 97%;     /* #F0F9FF - Azul glacial muito claro */
+    --azure-100: 214 95% 93%;     /* #E0F2FE - Azul gelo */
+    --azure-200: 214 87% 85%;     /* #BAE6FD - Azul céu claro */
+    --azure-300: 214 78% 73%;     /* #7DD3FC - Azul médio claro */
+    --azure-400: 214 71% 59%;     /* #38BDF8 - Azul vibrante */
+    --azure-500: 214 84% 46%;     /* #0EA5E9 - Azul principal */
+    --azure-600: 214 91% 40%;     /* #0284C7 - Azul forte */
+    --azure-700: 214 100% 32%;    /* #0369A1 - Azul profundo */
+    --azure-800: 214 100% 25%;    /* #075985 - Azul escuro */
+    --azure-900: 214 100% 18%;    /* #0C4A6E - Azul noturno */
     
-    /* Cores de Status com Alto Contraste */
-    --status-active: 142 76% 36%;
-    --status-active-foreground: 210 20% 98%;
-    --status-inactive: 215 25% 27%;
-    --status-inactive-foreground: 210 20% 98%;
-    --status-warning: 38 92% 50%;
-    --status-warning-foreground: 220 90% 5%;
-    --status-error: 348 83% 47%;
-    --status-error-foreground: 210 20% 98%;
+    /* Sistema Base */
+    --background: var(--azure-50);           /* Fundo principal azul glacial */
+    --foreground: 214 100% 11%;              /* #082F49 - Texto escuro azulado */
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 215 100% 40%;
+    --card: var(--azure-100);                /* Cards azul gelo */
+    --card-foreground: 214 100% 15%;         /* Texto nos cards */
+
+    --popover: var(--azure-100);
+    --popover-foreground: 214 100% 15%;
+
+    /* Paleta Principal Azul */
+    --primary: var(--azure-600);             /* #0284C7 - Azul principal forte */
+    --primary-foreground: var(--azure-50);   /* Branco azulado */
+    --primary-light: var(--azure-500);       /* #0EA5E9 - Azul médio */
+    --primary-dark: var(--azure-700);        /* #0369A1 - Azul escuro */
+    --primary-glow: var(--azure-400);        /* #38BDF8 - Azul brilhante */
+
+    --secondary: var(--azure-800);           /* #075985 - Azul escuro */
+    --secondary-foreground: var(--azure-50); /* Branco azulado */
+    --secondary-light: var(--azure-700);
+
+    --accent: var(--azure-500);              /* #0EA5E9 - Azul vibrante */
+    --accent-foreground: var(--azure-50);    /* Branco azulado */
+    --accent-light: var(--azure-400);
+
+    /* Links com Azuis Harmoniosos */
+    --link: var(--azure-600);                /* #0284C7 - Azul para links */
+    --link-hover: var(--azure-800);          /* #075985 - Azul escuro no hover */
+
+    /* Cores Náuticas em Azul */
+    --nautical: var(--azure-700);            /* #0369A1 - Azul náutico */
+    --nautical-foreground: var(--azure-50);
+    
+    /* Status Colors em Tons de Azul */
+    --success: 200 100% 35%;                 /* #00A86B - Verde azulado */
+    --success-foreground: var(--azure-50);
+    --warning: 45 100% 51%;                  /* #FFA500 - Laranja (complementar) */
+    --warning-foreground: 214 100% 11%;     /* Texto escuro */
+    --danger: 4 90% 45%;                     /* #E63946 - Vermelho azulado */
+    --danger-foreground: var(--azure-50);
+    --info: var(--azure-500);                /* #0EA5E9 - Azul informativo */
+    --info-foreground: var(--azure-50);
+
+    --muted: var(--azure-200);               /* #BAE6FD - Azul muito claro */
+    --muted-foreground: var(--azure-800);    /* #075985 - Texto escuro azul */
+
+    --destructive: 4 90% 45%;                /* #E63946 - Vermelho azulado */
+    --destructive-foreground: var(--azure-50);
+    
+    /* Cores de Status com Azuis */
+    --status-active: 200 100% 35%;
+    --status-active-foreground: var(--azure-50);
+    --status-inactive: var(--azure-400);
+    --status-inactive-foreground: var(--azure-900);
+    --status-warning: 45 100% 51%;
+    --status-warning-foreground: 214 100% 11%;
+    --status-error: 4 90% 45%;
+    --status-error-foreground: var(--azure-50);
+
+    --border: var(--azure-300);              /* #7DD3FC - Bordas azul claro */
+    --input: var(--azure-200);               /* #BAE6FD - Inputs azul claro */
+    --ring: var(--azure-500);                /* #0EA5E9 - Foco azul */
 
     --radius: 0.75rem;
     
     /* Popover Colors */
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 40% 15%;
+    --popover: var(--azure-100);
+    --popover-foreground: 214 100% 15%;
     
     /* Interactive Elements */
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 215 100% 40%;
+    --border: var(--azure-300);
+    --input: var(--azure-200);
+    --ring: var(--azure-500);
     
-    /* Gradients */
-    --gradient-ocean: linear-gradient(135deg, hsl(210 100% 45%), hsl(195 100% 50%));
-    --gradient-depth: linear-gradient(180deg, hsl(210 100% 45%), hsl(225 73% 25%));
-    --gradient-wave: linear-gradient(90deg, hsl(195 100% 50%), hsl(210 100% 45%), hsl(200 100% 40%));
+    /* Gradients Azuis */
+    --gradient-ocean: linear-gradient(135deg, hsl(var(--azure-500)), hsl(var(--azure-400)));
+    --gradient-depth: linear-gradient(180deg, hsl(var(--azure-600)), hsl(var(--azure-800)));
+    --gradient-wave: linear-gradient(90deg, hsl(var(--azure-400)), hsl(var(--azure-500)), hsl(var(--azure-600)));
+    --gradient-sky: linear-gradient(135deg, hsl(var(--azure-300)), hsl(var(--azure-500)));
+    --gradient-deep: linear-gradient(180deg, hsl(var(--azure-700)), hsl(var(--azure-900)));
     
-    /* Shadows */
-    --shadow-nautical: 0 4px 20px hsl(210 100% 45% / 0.15);
-    --shadow-depth: 0 8px 30px hsl(225 73% 25% / 0.2);
-    --shadow-wave: 0 2px 15px hsl(195 100% 50% / 0.1);
+    /* Shadows Azuis */
+    --shadow-azure: 0 4px 20px hsl(var(--azure-500) / 0.15);
+    --shadow-depth: 0 8px 30px hsl(var(--azure-800) / 0.2);
+    --shadow-soft: 0 2px 15px hsl(var(--azure-400) / 0.1);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
-    /* Glassmorphism */
-    --glass-bg: hsla(var(--background), 0.8);
-    --glass-border: hsla(var(--border), 0.2);
+    /* Glassmorphism Azul */
+    --glass-bg: hsla(var(--azure-100), 0.8);
+    --glass-border: hsla(var(--azure-300), 0.3);
     --glass-blur: blur(12px);
 
     /* Advanced gradients */
-    --gradient-radial: radial-gradient(circle at center, hsl(var(--primary) / 0.1), transparent);
-    --gradient-conic: conic-gradient(from 0deg, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--primary)));
+    --gradient-radial: radial-gradient(circle at center, hsl(var(--azure-500) / 0.1), transparent);
+    --gradient-conic: conic-gradient(from 0deg, hsl(var(--azure-500)), hsl(var(--azure-700)), hsl(var(--azure-500)));
     --gradient-mesh: 
-      radial-gradient(circle at 20% 80%, hsl(var(--primary) / 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, hsl(var(--secondary) / 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, hsl(var(--accent) / 0.1) 0%, transparent 50%);
+      radial-gradient(circle at 20% 80%, hsl(var(--azure-400) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(var(--azure-600) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, hsl(var(--azure-500) / 0.1) 0%, transparent 50%);
 
     /* Shadows */
-    --shadow-glass: 0 8px 32px 0 hsla(var(--primary), 0.37);
-    --shadow-elegant: 0 10px 25px -3px hsla(var(--foreground), 0.1), 0 4px 6px -2px hsla(var(--foreground), 0.05);
-    --shadow-glow: 0 0 20px hsla(var(--primary), 0.3);
+    --shadow-glass: 0 8px 32px 0 hsla(var(--azure-500), 0.37);
+    --shadow-elegant: 0 10px 25px -3px hsla(var(--azure-600), 0.1), 0 4px 6px -2px hsla(var(--azure-500), 0.05);
+    --shadow-glow: 0 0 20px hsla(var(--azure-400), 0.3);
 
     /* Layout */
     --radius: 12px;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-    /* Define maritime themed tokens used in tailwind.config.ts */
-    --ocean-blue: 207 100% 31%;
-    --ocean-deep: 210 100% 20%;
-    --sea-foam: 160 84% 39%;
-    --nautical-gold: 38 92% 50%;
-    --maritime-navy: 225 73% 25%;
+    --sidebar-background: var(--azure-100);
+    --sidebar-foreground: 214 100% 15%;
+    --sidebar-primary: var(--azure-600);
+    --sidebar-primary-foreground: var(--azure-50);
+    --sidebar-accent: var(--azure-200);
+    --sidebar-accent-foreground: 214 100% 15%;
+    --sidebar-border: var(--azure-300);
+    --sidebar-ring: var(--azure-500);
+    
+    /* Tokens Marítimos em Azul */
+    --ocean-blue: var(--azure-600);
+    --ocean-deep: var(--azure-800);
+    --sea-foam: var(--azure-400);
+    --nautical-gold: 45 100% 51%;
+    --maritime-navy: var(--azure-800);
   }
 
   .dark {
-    /* Dark Maritime Theme */
-    --background: 225 25% 8%;
-    --foreground: 210 40% 95%;
+    /* Dark Mode - Tons Azuis Noturnos */
+    --background: var(--azure-900);          /* #0C4A6E - Azul noturno */
+    --foreground: var(--azure-100);          /* #E0F2FE - Texto claro azulado */
 
-    --card: 225 25% 10%;
-    --card-foreground: 210 40% 90%;
+    --card: var(--azure-800);                /* #075985 - Cards azul escuro */
+    --card-foreground: var(--azure-100);     /* Texto claro */
     
-    --primary: 210 100% 55%;
-    --primary-foreground: 225 25% 8%;
-    --primary-light: 210 100% 65%;
-    --primary-dark: 210 100% 45%;
+    --primary: var(--azure-400);             /* #38BDF8 - Azul vibrante */
+    --primary-foreground: var(--azure-900);  /* Texto escuro */
+    --primary-light: var(--azure-300);
+    --primary-dark: var(--azure-500);
     
-    --secondary: 195 100% 60%;
-    --secondary-foreground: 225 25% 8%;
+    --secondary: var(--azure-300);           /* #7DD3FC - Azul claro */
+    --secondary-foreground: var(--azure-900);
     
-    --accent: 200 100% 50%;
-    --accent-foreground: 225 25% 8%;
-    /* High-contrast links for dark mode */
-    --link: 210 100% 65%;
-    --link-hover: 210 100% 75%;
+    --accent: var(--azure-400);              /* #38BDF8 - Azul brilhante */
+    --accent-foreground: var(--azure-900);
     
-    --nautical: 225 73% 35%;
-    --nautical-foreground: 0 0% 100%;
+    /* Links no modo escuro */
+    --link: var(--azure-300);
+    --link-hover: var(--azure-200);
     
-    --muted: 225 25% 15%;
-    --muted-foreground: 215 16% 65%;
+    --nautical: var(--azure-600);
+    --nautical-foreground: var(--azure-100);
     
-    /* Destructive Colors */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --muted: var(--azure-800);
+    --muted-foreground: var(--azure-300);
     
-    /* Dark Mode Status Colors */
-    --success: 142 76% 45%;
-    --success-foreground: 225 25% 8%;
-    --warning: 38 92% 60%;
-    --warning-foreground: 225 25% 8%;
-    --danger: 0 84% 60%;
-    --danger-foreground: 0 0% 100%;
-    --info: 199 89% 58%;
-    --info-foreground: 225 25% 8%;
+    /* Status Colors Modo Escuro */
+    --success: 200 100% 45%;
+    --success-foreground: var(--azure-900);
+    --warning: 45 100% 61%;
+    --warning-foreground: var(--azure-900);
+    --danger: 4 90% 55%;
+    --danger-foreground: var(--azure-100);
+    --info: var(--azure-400);
+    --info-foreground: var(--azure-900);
     
-    --status-active: 142 76% 45%;
-    --status-active-foreground: 225 25% 8%;
-    --status-inactive: 215 16% 65%;
-    --status-inactive-foreground: 225 25% 8%;
-    --status-warning: 38 92% 60%;
-    --status-warning-foreground: 225 25% 8%;
-    --status-error: 0 84% 60%;
-    --status-error-foreground: 0 0% 100%;
+    --destructive: 4 90% 55%;
+    --destructive-foreground: var(--azure-100);
+    
+    --status-active: 200 100% 45%;
+    --status-active-foreground: var(--azure-900);
+    --status-inactive: var(--azure-600);
+    --status-inactive-foreground: var(--azure-200);
+    --status-warning: 45 100% 61%;
+    --status-warning-foreground: var(--azure-900);
+    --status-error: 4 90% 55%;
+    --status-error-foreground: var(--azure-100);
     
     /* Popover Colors */
-    --popover: 225 25% 12%;
-    --popover-foreground: 210 40% 90%;
+    --popover: var(--azure-800);
+    --popover-foreground: var(--azure-100);
     
-    --border: 225 25% 20%;
-    --input: 225 25% 20%;
-    --ring: 210 100% 65%;
+    --border: var(--azure-700);
+    --input: var(--azure-700);
+    --ring: var(--azure-400);
     
-    --gradient-ocean: linear-gradient(135deg, hsl(210 100% 55%), hsl(195 100% 60%));
-    --gradient-depth: linear-gradient(180deg, hsl(210 100% 55%), hsl(225 73% 35%));
-    --gradient-wave: linear-gradient(90deg, hsl(195 100% 60%), hsl(210 100% 55%), hsl(200 100% 50%));
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Gradients Modo Escuro */
+    --gradient-ocean: linear-gradient(135deg, hsl(var(--azure-500)), hsl(var(--azure-400)));
+    --gradient-depth: linear-gradient(180deg, hsl(var(--azure-600)), hsl(var(--azure-800)));
+    --gradient-wave: linear-gradient(90deg, hsl(var(--azure-400)), hsl(var(--azure-500)), hsl(var(--azure-600)));
+    
+    /* Sidebar Modo Escuro */
+    --sidebar-background: var(--azure-900);
+    --sidebar-foreground: var(--azure-200);
+    --sidebar-primary: var(--azure-400);
+    --sidebar-primary-foreground: var(--azure-900);
+    --sidebar-accent: var(--azure-800);
+    --sidebar-accent-foreground: var(--azure-200);
+    --sidebar-border: var(--azure-700);
+    --sidebar-ring: var(--azure-400);
   }
 }
 
@@ -240,41 +261,49 @@
   .animate-slide-in-down { animation: slide-in-down 0.3s ease-out; }
 }
 
-/* Custom Utility Classes */
+/* Custom Utility Classes - Tons de Azul */
 @layer components {
   .gradient-ocean {
     background: var(--gradient-ocean);
+  }
+  
+  .gradient-sky {
+    background: var(--gradient-sky);
   }
   
   .gradient-depth {
     background: var(--gradient-depth);
   }
   
+  .gradient-deep {
+    background: var(--gradient-deep);
+  }
+  
   .gradient-wave {
     background: var(--gradient-wave);
   }
   
-  .shadow-nautical {
-    box-shadow: var(--shadow-nautical);
+  .shadow-azure {
+    box-shadow: var(--shadow-azure);
   }
   
   .shadow-depth {
     box-shadow: var(--shadow-depth);
   }
   
-  .shadow-wave {
-    box-shadow: var(--shadow-wave);
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
   }
   
   .glass-effect {
-    background: rgba(255, 255, 255, 0.1);
+    background: hsla(var(--azure-100), 0.6);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid hsla(var(--azure-300), 0.3);
   }
   
   .dark .glass-effect {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: hsla(var(--azure-800), 0.4);
+    border: 1px solid hsla(var(--azure-600), 0.2);
   }
 }
 
