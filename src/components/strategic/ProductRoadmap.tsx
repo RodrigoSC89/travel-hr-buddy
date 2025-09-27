@@ -1,297 +1,544 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { 
-  CalendarDays, 
+  Calendar, 
   Target, 
   TrendingUp, 
-  Globe, 
-  Zap,
-  Shield,
+  Shield, 
+  Brain, 
+  Settings, 
+  CheckCircle, 
+  Clock, 
+  AlertCircle,
   Users,
-  Briefcase,
-  MapPin,
-  DollarSign
+  Rocket,
+  BarChart3
 } from 'lucide-react';
 
-interface RoadmapItem {
-  id: string;
-  quarter: string;
-  title: string;
-  description: string;
-  priority: 'high' | 'medium' | 'low';
-  category: 'core' | 'expansion' | 'monetization' | 'innovation';
-  estimatedValue: string;
-  dependencies?: string[];
-  resources: number;
-  status: 'planned' | 'in-progress' | 'completed';
+interface Sprint {
+  id: number;
+  name: string;
+  status: 'completed' | 'in-progress' | 'planned';
+  progress: number;
+  startDate: string;
+  endDate: string;
+  objectives: string[];
+  deliverables: string[];
 }
 
-export const ProductRoadmap = () => {
-  const roadmapItems: RoadmapItem[] = [
-    {
-      id: '1',
-      quarter: 'Q1 2025',
-      title: 'API Pública & Marketplace',
-      description: 'Lançamento da API RESTful documentada com autenticação OAuth2 e marketplace de extensões.',
-      priority: 'high',
-      category: 'core',
-      estimatedValue: 'R$ 2.5M ARR',
-      resources: 8,
-      status: 'in-progress'
-    },
-    {
-      id: '2',
-      quarter: 'Q1 2025',
-      title: 'Mobile App Nativo',
-      description: 'Aplicativo iOS/Android com modo offline para operações em alto mar.',
-      priority: 'high',
-      category: 'expansion',
-      estimatedValue: '40% aumento engajamento',
-      resources: 12,
-      status: 'planned'
-    },
-    {
-      id: '3',
-      quarter: 'Q2 2025',
-      title: 'BI Avançado & Previsões',
-      description: 'Dashboards preditivos com ML para otimização de rotas e recursos.',
-      priority: 'high',
-      category: 'innovation',
-      estimatedValue: '25% redução custos',
-      resources: 6,
-      status: 'planned'
-    },
-    {
-      id: '4',
-      quarter: 'Q2 2025',
-      title: 'Segmento Offshore',
-      description: 'Módulos especializados para plataformas petrolíferas e energia offshore.',
-      priority: 'medium',
-      category: 'expansion',
-      estimatedValue: 'R$ 5M TAM',
-      resources: 10,
-      status: 'planned'
-    },
-    {
-      id: '5',
-      quarter: 'Q3 2025',
-      title: 'White-Label Enterprise',
-      description: 'Solução white-label para grandes armadores e operadores portuários.',
-      priority: 'high',
-      category: 'monetization',
-      estimatedValue: 'R$ 10M ARR',
-      resources: 15,
-      status: 'planned'
-    },
-    {
-      id: '6',
-      quarter: 'Q3 2025',
-      title: 'Compliance Automático',
-      description: 'Integração com IMO, ANTAQ e outras autoridades para compliance automático.',
-      priority: 'high',
-      category: 'core',
-      estimatedValue: '80% redução tempo compliance',
-      resources: 8,
-      status: 'planned'
-    },
-    {
-      id: '7',
-      quarter: 'Q4 2025',
-      title: 'Turismo Náutico',
-      description: 'Módulos para iates, turismo náutico e embarcações de recreio.',
-      priority: 'medium',
-      category: 'expansion',
-      estimatedValue: 'R$ 3M TAM',
-      resources: 6,
-      status: 'planned'
-    },
-    {
-      id: '8',
-      quarter: 'Q4 2025',
-      title: 'IA Copiloto Avançado',
-      description: 'Assistente IA com processamento de linguagem natural e automação complexa.',
-      priority: 'high',
-      category: 'innovation',
-      estimatedValue: '50% redução tempo operacional',
-      resources: 12,
-      status: 'planned'
-    }
-  ];
+interface Phase {
+  id: number;
+  name: string;
+  description: string;
+  icon: React.ReactNode;
+  sprints: Sprint[];
+  status: 'completed' | 'in-progress' | 'planned';
+  overallProgress: number;
+  expectedResult: string;
+  color: string;
+}
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'bg-danger text-danger-foreground';
-      case 'medium': return 'bg-warning text-warning-foreground';
-      case 'low': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
-    }
-  };
+const roadmapData: Phase[] = [
+  {
+    id: 1,
+    name: "Estabilização e Qualidade",
+    description: "Corrigir erros, auditar funcionalidades e preparar o sistema para homologação",
+    icon: <Settings className="w-6 h-6" />,
+    status: "completed",
+    overallProgress: 100,
+    expectedResult: "Sistema estável e funcional, pronto para ser homologado por usuários-chave",
+    color: "bg-green-500",
+    sprints: [
+      {
+        id: 1,
+        name: "Auditoria Funcional",
+        status: "completed",
+        progress: 100,
+        startDate: "2024-01-01",
+        endDate: "2024-01-14",
+        objectives: ["Mapear todas as funcionalidades", "Identificar bugs críticos", "Documentar fluxos"],
+        deliverables: ["Relatório de auditoria", "Lista de bugs priorizados", "Documentação técnica"]
+      },
+      {
+        id: 2,
+        name: "Correção de Bugs",
+        status: "completed",
+        progress: 100,
+        startDate: "2024-01-15",
+        endDate: "2024-01-28",
+        objectives: ["Corrigir bugs críticos", "Otimizar performance", "Melhorar UX"],
+        deliverables: ["Sistema estabilizado", "Testes automatizados", "Performance otimizada"]
+      },
+      {
+        id: 3,
+        name: "Homologação",
+        status: "completed",
+        progress: 100,
+        startDate: "2024-01-29",
+        endDate: "2024-02-11",
+        objectives: ["Preparar checklist", "Executar testes", "Validar com usuários"],
+        deliverables: ["Checklist de homologação", "Relatório de testes", "Aprovação de usuários"]
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: "Performance e Escalabilidade",
+    description: "Garantir performance sob carga real e preparar o sistema para múltiplos clientes",
+    icon: <TrendingUp className="w-6 h-6" />,
+    status: "completed",
+    overallProgress: 100,
+    expectedResult: "Sistema escalável, com estrutura pronta para múltiplos clientes e uso intenso",
+    color: "bg-blue-500",
+    sprints: [
+      {
+        id: 4,
+        name: "Simulações de Carga",
+        status: "completed",
+        progress: 100,
+        startDate: "2024-02-12",
+        endDate: "2024-02-25",
+        objectives: ["Testes de stress", "Identificar gargalos", "Otimizar queries"],
+        deliverables: ["Relatório de performance", "Otimizações implementadas", "Métricas de carga"]
+      },
+      {
+        id: 5,
+        name: "Multi-tenant",
+        status: "completed",
+        progress: 100,
+        startDate: "2024-02-26",
+        endDate: "2024-03-11",
+        objectives: ["Estrutura multiempresa", "Isolamento de dados", "Gestão de tenants"],
+        deliverables: ["Arquitetura multi-tenant", "Sistema de organizações", "Controle de acesso"]
+      },
+      {
+        id: 6,
+        name: "White Label Base",
+        status: "completed",
+        progress: 100,
+        startDate: "2024-03-12",
+        endDate: "2024-03-25",
+        objectives: ["Personalização visual", "Branding por cliente", "Configurações customizáveis"],
+        deliverables: ["Sistema de branding", "Temas personalizáveis", "Configurações white label"]
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: "Inteligência e Automação",
+    description: "Implementar IA, automações e assistente virtual",
+    icon: <Brain className="w-6 h-6" />,
+    status: "completed",
+    overallProgress: 100,
+    expectedResult: "Sistema proativo, com suporte inteligente e redução de esforço operacional",
+    color: "bg-purple-500",
+    sprints: [
+      {
+        id: 7,
+        name: "Assistente Virtual",
+        status: "completed",
+        progress: 100,
+        startDate: "2024-03-26",
+        endDate: "2024-04-08",
+        objectives: ["IA conversacional", "Assistente contextual", "Comandos de voz"],
+        deliverables: ["Nautilus Copilot", "Interface de voz", "Chatbot inteligente"]
+      },
+      {
+        id: 8,
+        name: "Central de Ajuda IA",
+        status: "completed",
+        progress: 100,
+        startDate: "2024-04-09",
+        endDate: "2024-04-22",
+        objectives: ["Suporte automatizado", "Base de conhecimento", "Respostas inteligentes"],
+        deliverables: ["Central de ajuda inteligente", "Sistema de tickets", "Base de conhecimento"]
+      },
+      {
+        id: 9,
+        name: "Automações",
+        status: "completed",
+        progress: 100,
+        startDate: "2024-04-23",
+        endDate: "2024-05-06",
+        objectives: ["Workflows automáticos", "Alertas inteligentes", "Relatórios automáticos"],
+        deliverables: ["Sistema de automação", "Workflows configuráveis", "Alertas proativos"]
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: "Métricas e Produto Comercial",
+    description: "Mensurar o uso do sistema e preparar a versão comercial SaaS",
+    icon: <BarChart3 className="w-6 h-6" />,
+    status: "in-progress",
+    overallProgress: 75,
+    expectedResult: "Produto com métricas claras, estrutura comercial e gestão inteligente de clientes",
+    color: "bg-orange-500",
+    sprints: [
+      {
+        id: 10,
+        name: "KPIs e Dashboards",
+        status: "completed",
+        progress: 100,
+        startDate: "2024-05-07",
+        endDate: "2024-05-20",
+        objectives: ["Definir KPIs", "Dashboards executivos", "Métricas operacionais"],
+        deliverables: ["Dashboard executivo", "KPIs definidos", "Relatórios gerenciais"]
+      },
+      {
+        id: 11,
+        name: "Estrutura Comercial",
+        status: "in-progress",
+        progress: 50,
+        startDate: "2024-05-21",
+        endDate: "2024-06-03",
+        objectives: ["Planos de assinatura", "Gestão de clientes", "Billing automático"],
+        deliverables: ["Planos SaaS", "Sistema de billing", "Gestão comercial"]
+      }
+    ]
+  },
+  {
+    id: 5,
+    name: "Confiabilidade e Escala",
+    description: "Fortalecer segurança, continuidade e preparar expansão comercial",
+    icon: <Shield className="w-6 h-6" />,
+    status: "in-progress",
+    overallProgress: 60,
+    expectedResult: "Produto confiável, auditável e seguro, pronto para escalar comercialmente",
+    color: "bg-red-500",
+    sprints: [
+      {
+        id: 12,
+        name: "BCP e Segurança",
+        status: "in-progress",
+        progress: 80,
+        startDate: "2024-06-04",
+        endDate: "2024-06-17",
+        objectives: ["Plano de continuidade", "Backup automatizado", "Políticas de segurança"],
+        deliverables: ["BCP implementado", "Sistema de backup", "Auditoria de segurança"]
+      },
+      {
+        id: 13,
+        name: "Preparação Go-to-Market",
+        status: "planned",
+        progress: 0,
+        startDate: "2024-06-18",
+        endDate: "2024-07-01",
+        objectives: ["Onboarding automático", "Material de vendas", "Treinamento"],
+        deliverables: ["Processo de onboarding", "Kit de vendas", "Documentação comercial"]
+      }
+    ]
+  }
+];
 
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'core': return <Shield className="h-4 w-4" />;
-      case 'expansion': return <Globe className="h-4 w-4" />;
-      case 'monetization': return <DollarSign className="h-4 w-4" />;
-      case 'innovation': return <Zap className="h-4 w-4" />;
-      default: return <Target className="h-4 w-4" />;
+const ProductRoadmap: React.FC = () => {
+  const [selectedPhase, setSelectedPhase] = useState<number>(1);
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'in-progress':
+        return <Clock className="w-4 h-4 text-blue-500" />;
+      case 'planned':
+        return <AlertCircle className="w-4 h-4 text-gray-400" />;
+      default:
+        return <Clock className="w-4 h-4 text-gray-400" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-success text-success-foreground';
-      case 'in-progress': return 'bg-warning text-warning-foreground';
-      case 'planned': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
+      case 'completed':
+        return 'text-green-600 bg-green-50 border-green-200';
+      case 'in-progress':
+        return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'planned':
+        return 'text-gray-600 bg-gray-50 border-gray-200';
+      default:
+        return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
 
-  const totalValue = 'R$ 20.5M';
-  const totalResources = roadmapItems.reduce((sum, item) => sum + item.resources, 0);
+  const currentPhase = roadmapData.find(phase => phase.id === selectedPhase);
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <Card className="glass-effect">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CalendarDays className="h-5 w-5 text-primary" />
-            Roadmap Estratégico 2025
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary">{roadmapItems.length}</div>
-              <div className="text-sm text-muted-foreground">Iniciativas</div>
+      {/* Header com Métricas Gerais */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2">
+              <Target className="w-5 h-5 text-primary" />
+              <div>
+                <p className="text-sm text-muted-foreground">Fases Concluídas</p>
+                <p className="text-2xl font-bold">3/5</p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-success">{totalValue}</div>
-              <div className="text-sm text-muted-foreground">Valor Total Estimado</div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-primary" />
+              <div>
+                <p className="text-sm text-muted-foreground">Sprints Executados</p>
+                <p className="text-2xl font-bold">10/13</p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-warning">{totalResources}</div>
-              <div className="text-sm text-muted-foreground">Recursos Necessários</div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-primary" />
+              <div>
+                <p className="text-sm text-muted-foreground">Progresso Geral</p>
+                <p className="text-2xl font-bold">87%</p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-info">12</div>
-              <div className="text-sm text-muted-foreground">Meses de Execução</div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2">
+              <Rocket className="w-5 h-5 text-primary" />
+              <div>
+                <p className="text-sm text-muted-foreground">Go-to-Market</p>
+                <p className="text-2xl font-bold">Jun/2024</p>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
 
-      {/* Roadmap Timeline */}
-      <div className="grid grid-cols-1 gap-6">
-        {['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025'].map((quarter) => {
-          const quarterItems = roadmapItems.filter(item => item.quarter === quarter);
-          
-          return (
-            <Card key={quarter} className="glass-effect">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Target className="h-5 w-5 text-primary" />
-                    {quarter}
-                  </div>
-                  <Badge variant="outline">
-                    {quarterItems.length} iniciativas
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {quarterItems.map((item) => (
-                    <div key={item.id} className="border rounded-lg p-4 hover-lift">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          {getCategoryIcon(item.category)}
-                          <h4 className="font-semibold">{item.title}</h4>
-                        </div>
-                        <div className="flex gap-2">
-                          <Badge className={getPriorityColor(item.priority)}>
-                            {item.priority}
-                          </Badge>
-                          <Badge className={getStatusColor(item.status)}>
-                            {item.status}
-                          </Badge>
-                        </div>
+      <Tabs defaultValue="timeline" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="timeline">Timeline Geral</TabsTrigger>
+          <TabsTrigger value="phases">Fases Detalhadas</TabsTrigger>
+          <TabsTrigger value="sprints">Sprints Ativos</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="timeline" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Roadmap de Evolução - Nautilus One</CardTitle>
+              <CardDescription>
+                Trilha estratégica para transformação em plataforma SaaS robusta
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {roadmapData.map((phase, index) => (
+                  <div key={phase.id} className="relative">
+                    {index < roadmapData.length - 1 && (
+                      <div className="absolute left-6 top-12 bottom-0 w-0.5 bg-border" />
+                    )}
+                    
+                    <div className="flex items-start gap-4">
+                      <div className={`p-2 rounded-full ${phase.color} text-white`}>
+                        {phase.icon}
                       </div>
                       
-                      <p className="text-sm text-muted-foreground mb-3">
-                        {item.description}
-                      </p>
-                      
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="flex items-center gap-1">
-                            <TrendingUp className="h-3 w-3 text-success" />
-                            Valor:
-                          </span>
-                          <span className="font-medium text-success">
-                            {item.estimatedValue}
-                          </span>
+                      <div className="flex-1 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="text-lg font-semibold">{phase.name}</h3>
+                            <p className="text-sm text-muted-foreground">{phase.description}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {getStatusIcon(phase.status)}
+                            <Badge className={getStatusColor(phase.status)}>
+                              {phase.status === 'completed' ? 'Concluída' : 
+                               phase.status === 'in-progress' ? 'Em Andamento' : 'Planejada'}
+                            </Badge>
+                          </div>
                         </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="flex items-center gap-1">
-                            <Users className="h-3 w-3 text-info" />
-                            Recursos:
-                          </span>
-                          <span className="font-medium">
-                            {item.resources} pessoas
-                          </span>
+                        
+                        <div className="w-full bg-secondary rounded-full h-2">
+                          <div 
+                            className={`${phase.color} h-2 rounded-full transition-all duration-300`}
+                            style={{ width: `${phase.overallProgress}%` }}
+                          />
                         </div>
+                        
+                        <div className="flex justify-between text-sm text-muted-foreground">
+                          <span>Sprints {phase.sprints[0].id}-{phase.sprints[phase.sprints.length - 1].id}</span>
+                          <span>{phase.overallProgress}% concluído</span>
+                        </div>
+                        
+                        <p className="text-sm text-muted-foreground italic">
+                          📋 {phase.expectedResult}
+                        </p>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="phases" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+            {roadmapData.map((phase) => (
+              <Button
+                key={phase.id}
+                variant={selectedPhase === phase.id ? "default" : "outline"}
+                onClick={() => setSelectedPhase(phase.id)}
+                className="h-auto p-3 flex flex-col items-center gap-2"
+              >
+                {phase.icon}
+                <span className="text-xs text-center">{phase.name}</span>
+              </Button>
+            ))}
+          </div>
+
+          {currentPhase && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <div className={`p-2 rounded-full ${currentPhase.color} text-white`}>
+                    {currentPhase.icon}
+                  </div>
+                  Fase {currentPhase.id}: {currentPhase.name}
+                </CardTitle>
+                <CardDescription>{currentPhase.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <span className="text-sm font-medium">Progresso Geral</span>
+                      <span className="text-sm text-muted-foreground">{currentPhase.overallProgress}%</span>
+                    </div>
+                    <Progress value={currentPhase.overallProgress} className="h-2" />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {currentPhase.sprints.map((sprint) => (
+                      <Card key={sprint.id} className="border-l-4" style={{ borderLeftColor: currentPhase.color.replace('bg-', '#') }}>
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-base">Sprint {sprint.id}</CardTitle>
+                            {getStatusIcon(sprint.status)}
+                          </div>
+                          <CardDescription>{sprint.name}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <div className="flex justify-between mb-1">
+                              <span className="text-xs">Progresso</span>
+                              <span className="text-xs">{sprint.progress}%</span>
+                            </div>
+                            <Progress value={sprint.progress} className="h-1" />
+                          </div>
+
+                          <div>
+                            <p className="text-xs font-medium mb-1">Objetivos:</p>
+                            <ul className="text-xs text-muted-foreground space-y-1">
+                              {sprint.objectives.map((objective, idx) => (
+                                <li key={idx}>• {objective}</li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div>
+                            <p className="text-xs font-medium mb-1">Entregas:</p>
+                            <ul className="text-xs text-muted-foreground space-y-1">
+                              {sprint.deliverables.map((deliverable, idx) => (
+                                <li key={idx}>✓ {deliverable}</li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="text-xs text-muted-foreground">
+                            📅 {sprint.startDate} a {sprint.endDate}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+
+                  <div className="bg-secondary/50 p-4 rounded-lg">
+                    <h4 className="font-medium text-sm mb-2">🎯 Resultado Esperado</h4>
+                    <p className="text-sm text-muted-foreground">{currentPhase.expectedResult}</p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
-          );
-        })}
-      </div>
+          )}
+        </TabsContent>
 
-      {/* Monetization Models */}
-      <Card className="glass-effect">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Briefcase className="h-5 w-5 text-success" />
-            Modelos de Monetização
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold mb-2">SaaS Premium</h4>
-              <p className="text-sm text-muted-foreground mb-3">
-                Funcionalidades avançadas de IA, BI e automação.
-              </p>
-              <div className="text-lg font-bold text-success">R$ 2.500/mês</div>
-              <div className="text-sm text-muted-foreground">por embarcação</div>
-            </div>
-            
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold mb-2">White-Label Enterprise</h4>
-              <p className="text-sm text-muted-foreground mb-3">
-                Solução customizada para grandes operadores.
-              </p>
-              <div className="text-lg font-bold text-success">R$ 50.000</div>
-              <div className="text-sm text-muted-foreground">setup + R$ 15.000/mês</div>
-            </div>
-            
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold mb-2">Marketplace de APIs</h4>
-              <p className="text-sm text-muted-foreground mb-3">
-                Revenue share com desenvolvedores terceiros.
-              </p>
-              <div className="text-lg font-bold text-success">30%</div>
-              <div className="text-sm text-muted-foreground">comissão por transação</div>
-            </div>
+        <TabsContent value="sprints" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-blue-500" />
+                  Sprints em Andamento
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {roadmapData
+                  .flatMap(phase => phase.sprints)
+                  .filter(sprint => sprint.status === 'in-progress')
+                  .map((sprint) => (
+                    <div key={sprint.id} className="border rounded-lg p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-medium">Sprint {sprint.id}: {sprint.name}</h4>
+                        <Badge className="text-blue-600 bg-blue-50 border-blue-200">
+                          Em Andamento
+                        </Badge>
+                      </div>
+                      <Progress value={sprint.progress} className="mb-2" />
+                      <p className="text-sm text-muted-foreground">
+                        {sprint.progress}% concluído • {sprint.startDate} a {sprint.endDate}
+                      </p>
+                    </div>
+                  ))}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <AlertCircle className="w-5 h-5 text-orange-500" />
+                  Próximos Sprints
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {roadmapData
+                  .flatMap(phase => phase.sprints)
+                  .filter(sprint => sprint.status === 'planned')
+                  .slice(0, 3)
+                  .map((sprint) => (
+                    <div key={sprint.id} className="border rounded-lg p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-medium">Sprint {sprint.id}: {sprint.name}</h4>
+                        <Badge className="text-gray-600 bg-gray-50 border-gray-200">
+                          Planejado
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Início previsto: {sprint.startDate}
+                      </p>
+                    </div>
+                  ))}
+              </CardContent>
+            </Card>
           </div>
-        </CardContent>
-      </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
+
+export default ProductRoadmap;

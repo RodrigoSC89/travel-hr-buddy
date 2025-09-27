@@ -95,6 +95,7 @@ const Marketplace = React.lazy(() => import("./pages/Marketplace"));
 const RealTimeMonitoring = React.lazy(() => import("./pages/RealTimeMonitoring"));
 const AdvancedAuth = React.lazy(() => import("./pages/AdvancedAuth"));
 const BusinessContinuityPlan = React.lazy(() => import("./pages/BusinessContinuityPlan"));
+const ProductRoadmapPage = React.lazy(() => import("./pages/ProductRoadmap"));
 
 const queryClient = new QueryClient();
 
@@ -247,11 +248,16 @@ const App = () => {
                         <AdvancedAuth />
                       </React.Suspense>
                     } />
-                    <Route path="business-continuity" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                        <BusinessContinuityPlan />
-                      </React.Suspense>
-                    } />
+                     <Route path="business-continuity" element={
+                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                         <BusinessContinuityPlan />
+                       </React.Suspense>
+                     } />
+                     <Route path="roadmap" element={
+                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                         <ProductRoadmapPage />
+                       </React.Suspense>
+                     } />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
