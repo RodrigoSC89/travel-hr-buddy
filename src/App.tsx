@@ -97,6 +97,8 @@ const AdvancedAuth = React.lazy(() => import("./pages/AdvancedAuth"));
 const BusinessContinuityPlan = React.lazy(() => import("./pages/BusinessContinuityPlan"));
 const ProductRoadmapPage = React.lazy(() => import("./pages/ProductRoadmap"));
 const SystemAuditorPage = React.lazy(() => import("./pages/SystemAuditor"));
+const ProductionDeployPage = React.lazy(() => import("./pages/ProductionDeploy"));
+const UserOnboardingPage = React.lazy(() => import("./pages/UserOnboarding"));
 
 const queryClient = new QueryClient();
 
@@ -262,6 +264,16 @@ const App = () => {
                      <Route path="system-auditor" element={
                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
                          <SystemAuditorPage />
+                       </React.Suspense>
+                     } />
+                     <Route path="production-deploy" element={
+                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                         <ProductionDeployPage />
+                       </React.Suspense>
+                     } />
+                     <Route path="user-onboarding" element={
+                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                         <UserOnboardingPage />
                        </React.Suspense>
                      } />
                 </Route>
