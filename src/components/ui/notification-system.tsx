@@ -192,20 +192,20 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
           <div className="absolute right-0 top-12 w-96 max-h-[500px] bg-card border border-border rounded-xl shadow-nautical z-50 overflow-hidden">
             {/* Header */}
             <div className="p-4 border-b border-border bg-gradient-depth">
-              <div className="flex items-center justify-between text-white">
+              <div className="flex items-center justify-between text-azure-50">
                 <h3 className="font-semibold">Notificações</h3>
                 <div className="flex items-center space-x-2">
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={markAllAsRead}
-                    className="text-white hover:bg-white/10"
+                    className="text-azure-50 hover:bg-azure-600/20"
                   >
                     Marcar como lidas
                   </Button>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-1 hover:bg-white/10 rounded"
+                    className="p-1 hover:bg-azure-600/20 rounded text-azure-50"
                   >
                     <X size={16} />
                   </button>
