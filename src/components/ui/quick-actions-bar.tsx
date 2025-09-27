@@ -23,7 +23,7 @@ import { useToast } from '@/hooks/use-toast';
 
 import DraggableFloating from '@/components/ui/draggable-floating';
 import { LiveSearch } from '@/components/ui/live-search';
-
+import { FloatingShortcutButton } from '@/components/ui/floating-shortcut-button';
 interface QuickActionsBarProps {
   onOpenSearch: () => void;
 }
@@ -102,17 +102,19 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
           x: Math.max(8, window.innerWidth - 48 - 16),
           y: Math.max(8, window.innerHeight - 48 - 96),
         })}
-        zIndex={40}
+        zIndex={10050}
         ariaLabel="Botão de Ações Rápidas"
       >
-        <Button
-          variant="outline"
-          size="sm"
+        <FloatingShortcutButton
+          icon={Zap}
           onClick={() => setIsMinimized(false)}
-          className="shadow-lg"
-        >
-          <Zap className="h-4 w-4" />
-        </Button>
+          label="Ações rápidas"
+          bgColor="#003366"
+          iconColor="#FFFFFF"
+          size="md"
+          ariaLabel="Abrir ações rápidas"
+          tabIndex={0}
+        />
       </DraggableFloating>
     );
   }
@@ -124,7 +126,7 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
         x: Math.max(8, window.innerWidth - 280 - 16),
         y: Math.max(8, window.innerHeight - 180 - 120),
       })}
-      zIndex={40}
+      zIndex={10050}
       ariaLabel="Painel de Ações Rápidas"
     >
       <Card className="p-3 shadow-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 max-w-xs">

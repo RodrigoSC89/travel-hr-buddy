@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useVoiceRecording, useTextToSpeech, useAIChat } from '@/hooks/use-voice-conversation';
 import { useVoiceNavigation } from '@/hooks/use-voice-navigation';
 import DraggableFloating from '@/components/ui/draggable-floating';
-
+import { FloatingShortcutButton } from '@/components/ui/floating-shortcut-button';
 interface VoiceInterfaceProps {
   onSpeakingChange?: (speaking: boolean) => void;
   onNavigate?: (module: string) => void;
@@ -314,17 +314,19 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
       <DraggableFloating
         storageKey="voice_interface_toggle_pos"
         defaultPosition={() => ({ x: 16, y: Math.max(12, window.innerHeight - 48 - 96) })}
-        zIndex={30}
+        zIndex={10040}
         ariaLabel="Botão Assistente de Voz"
       >
-        <Button
-          variant="outline"
-          size="sm"
+        <FloatingShortcutButton
+          icon={Mic}
           onClick={() => setIsMinimized(false)}
-          className="shadow-lg"
-        >
-          <Mic className="h-4 w-4" />
-        </Button>
+          label="Assistente de Voz"
+          bgColor="#003366"
+          iconColor="#FFFFFF"
+          size="md"
+          ariaLabel="Abrir assistente de voz"
+          tabIndex={0}
+        />
       </DraggableFloating>
     );
   }
@@ -333,7 +335,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
     <DraggableFloating
       storageKey="voice_interface_panel_pos"
       defaultPosition={() => ({ x: 16, y: Math.max(12, window.innerHeight - 280 - 120) })}
-      zIndex={30}
+      zIndex={10040}
       ariaLabel="Painel Assistente de Voz"
     >
       <Card className="w-80 bg-card/95 backdrop-blur-sm border-border/50">
