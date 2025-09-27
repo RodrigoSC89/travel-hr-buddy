@@ -236,16 +236,16 @@ const FloatingActionButtons = () => {
   }, [conversationMode, isRecording, isProcessing, isSpeaking, isThinking]);
 
   const getVoiceButtonStatus = () => {
-    if (isProcessing) return { icon: Loader2, color: 'bg-yellow-500', label: 'Processando...', spinning: true };
-    if (isRecording) return { icon: MicOff, color: 'bg-red-500 animate-pulse', label: 'Gravando - Clique para parar', spinning: false };
-    return { icon: Mic, color: 'bg-azure-800 hover:bg-azure-900', label: 'Comando de Voz', spinning: false };
+    if (isProcessing) return { icon: Loader2, color: '#004F9E', label: 'Processando...', spinning: true };
+    if (isRecording) return { icon: MicOff, color: '#004F9E', label: 'Gravando - Clique para parar', spinning: false };
+    return { icon: Mic, color: '#003366', label: 'Comando de Voz', spinning: false };
   };
 
   const getAIButtonStatus = () => {
-    if (isThinking) return { icon: Loader2, color: 'bg-yellow-500', label: 'Pensando...', spinning: true };
-    if (isSpeaking) return { icon: VolumeX, color: 'bg-azure-800 hover:bg-azure-900', label: 'Falando - Clique para parar', spinning: false };
-    if (conversationMode) return { icon: MessageSquare, color: 'bg-azure-800 hover:bg-azure-900', label: 'Modo Conversa Ativo', spinning: false };
-    return { icon: Brain, color: 'bg-azure-800 hover:bg-azure-900', label: 'IA Nautilus Assistant', spinning: false };
+    if (isThinking) return { icon: Loader2, color: '#004F9E', label: 'Pensando...', spinning: true };
+    if (isSpeaking) return { icon: VolumeX, color: '#004F9E', label: 'Falando - Clique para parar', spinning: false };
+    if (conversationMode) return { icon: MessageSquare, color: '#003366', label: 'Modo Conversa Ativo', spinning: false };
+    return { icon: Brain, color: '#003366', label: 'IA Nautilus Assistant', spinning: false };
   };
   const voiceStatus = getVoiceButtonStatus();
   const aiStatus = getAIButtonStatus();
@@ -261,7 +261,7 @@ const FloatingActionButtons = () => {
 
   return (
     <TooltipProvider>
-      <div className="fixed bottom-6 right-6 z-[9999] pointer-events-auto">
+      <div className="fixed bottom-6 right-6 z-[10060] pointer-events-auto">
         {/* Quick Actions Menu */}
         {/* Main Action Buttons - 4 fixed shortcuts as requested */}
         <div className="flex flex-col gap-4">
@@ -270,8 +270,8 @@ const FloatingActionButtons = () => {
             icon={voiceStatus.icon}
             onClick={ativarReconhecimentoDeVoz}
             label={voiceStatus.label}
-            bgColor={`${voiceStatus.color || 'bg-azure-800 hover:bg-azure-900'}`}
-            iconColor="text-azure-50"
+            bgColor={`${voiceStatus.color || '#003366'}`}
+            iconColor="#FFFFFF"
             size="lg"
             ariaLabel="Comando de voz"
             tabIndex={0}
@@ -285,8 +285,8 @@ const FloatingActionButtons = () => {
             icon={Search}
             onClick={abrirBuscaAvancada}
             label="Busca avançada"
-            bgColor="bg-azure-800 hover:bg-azure-900"
-            iconColor="text-azure-50"
+            bgColor="#003366"
+            iconColor="#FFFFFF"
             size="lg"
             ariaLabel="Busca avançada"
             tabIndex={0}
@@ -298,8 +298,8 @@ const FloatingActionButtons = () => {
             icon={Settings}
             onClick={abrirConfiguracoesAvancadas}
             label="Configurações"
-            bgColor="bg-azure-800 hover:bg-azure-900"
-            iconColor="text-azure-50"
+            bgColor="#003366"
+            iconColor="#FFFFFF"
             size="lg"
             ariaLabel="Configurações do sistema"
             tabIndex={0}
@@ -311,8 +311,8 @@ const FloatingActionButtons = () => {
             icon={aiStatus.icon}
             onClick={isSpeaking ? stopSpeaking : abrirChatIA}
             label={aiStatus.label}
-            bgColor={`${aiStatus.color || 'bg-azure-800 hover:bg-azure-900'}`}
-            iconColor="text-azure-50"
+            bgColor={`${aiStatus.color || '#003366'}`}
+            iconColor="#FFFFFF"
             size="lg"
             ariaLabel="Chatbot com IA"
             tabIndex={0}
