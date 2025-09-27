@@ -103,7 +103,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                         relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 min-w-fit
                         ${isActive 
                           ? 'bg-primary text-primary-foreground shadow-lg transform scale-105' 
-                          : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-102'
+                          : 'text-foreground/80 hover:text-foreground hover:bg-accent/50 hover:scale-102'
                         }
                       `}
                     >
@@ -271,7 +271,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-slate-500/20 to-gray-500/20">
-                      <Brain className="w-6 h-6 text-slate-600" />
+                      <Brain className="w-6 h-6 text-muted-foreground" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Insights Avançados</h2>

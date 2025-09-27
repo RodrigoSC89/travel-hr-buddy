@@ -108,7 +108,7 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
               <div className={`p-2 rounded-xl ${colors.bg} backdrop-blur-sm transition-all duration-300 group-hover:scale-110`}>
                 <Icon className={`w-5 h-5 ${colors.icon}`} />
               </div>
-              <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+              <span className="text-sm font-medium text-foreground/90 group-hover:text-foreground transition-colors">
                 {title}
               </span>
             </div>
@@ -135,7 +135,7 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
           </div>
         </div>
         
-        <p className="text-xs text-muted-foreground opacity-70 group-hover:opacity-100 transition-all duration-300">
+        <p className="text-xs text-foreground/70 opacity-70 group-hover:opacity-100 transition-all duration-300">
           {description}
         </p>
         
@@ -204,11 +204,11 @@ const PulsingNotificationCard = ({ title, description, time, priority = "medium"
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-medium text-sm group-hover:text-primary transition-colors">{title}</h4>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">{time}</span>
-              {priority === 'high' && <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />}
+              <span className="text-xs text-foreground/70">{time}</span>
+              {priority === 'high' && <div className="w-2 h-2 bg-destructive rounded-full animate-pulse" />}
             </div>
           </div>
-          <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+          <p className="text-sm text-foreground/80 group-hover:text-foreground transition-colors">
             {description}
           </p>
         </div>
@@ -449,7 +449,7 @@ export const EnhancedDashboard = () => {
                           <span className="text-sm font-semibold flex items-center gap-2">
                             <kpi.icon className="w-4 h-4 text-primary" />
                             {kpi.label}
-                            <Trophy className="w-3 h-3 text-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <Trophy className="w-3 h-3 text-warning opacity-0 group-hover:opacity-100 transition-opacity" />
                           </span>
                           <span className="text-xl font-bold text-primary font-display">{kpi.value}%</span>
                         </div>
@@ -461,7 +461,7 @@ export const EnhancedDashboard = () => {
                           <div className="absolute inset-0 h-3 bg-gradient-to-r from-primary/40 to-primary-glow/40 rounded-full 
                             animate-shimmer opacity-20 group-hover:opacity-40 transition-opacity" />
                         </div>
-                        <p className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+                        <p className="text-xs text-foreground/70 group-hover:text-foreground transition-colors">
                           {kpi.detail}
                         </p>
                       </div>
@@ -558,7 +558,7 @@ export const EnhancedDashboard = () => {
                   <h4 className="font-semibold text-primary mb-2 font-display group-hover:text-primary-glow transition-colors">
                     {feature.title}
                   </h4>
-                  <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                  <p className="text-sm text-foreground/80 group-hover:text-foreground transition-colors">
                     {feature.desc}
                   </p>
                 </div>

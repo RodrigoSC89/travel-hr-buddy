@@ -334,7 +334,7 @@ export const OrganizationHealthCheck: React.FC = () => {
                             {check.priority === 'high' ? 'Importante' : 'Recomendado'}
                           </Badge>
                         </div>
-                        <p className="text-sm mt-1 opacity-90">{check.description}</p>
+                        <p className="text-sm mt-1 text-foreground/80">{check.description}</p>
                       </div>
                     </div>
                     {check.action && check.actionUrl && (

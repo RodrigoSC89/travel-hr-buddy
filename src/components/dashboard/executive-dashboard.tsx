@@ -183,11 +183,11 @@ const ExecutiveDashboard = () => {
 
   const getTrendIcon = (trend: string, change: number) => {
     if (trend === 'up' || change > 0) {
-      return <TrendingUp className="h-4 w-4 text-green-600" />;
+      return <TrendingUp className="h-4 w-4 text-success" />;
     } else if (trend === 'down' || change < 0) {
-      return <TrendingDown className="h-4 w-4 text-red-600" />;
+      return <TrendingDown className="h-4 w-4 text-destructive" />;
     }
-    return <BarChart3 className="h-4 w-4 text-gray-600" />;
+    return <BarChart3 className="h-4 w-4 text-muted-foreground" />;
   };
 
   // Dados para gráficos

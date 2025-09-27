@@ -48,7 +48,7 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, change, icon, tre
             </span>
           </div>
         </div>
-        <div className={`text-muted-foreground group-hover:bg-gradient-to-br group-hover:${gradient} group-hover:bg-clip-text group-hover:text-transparent transition-all`}>
+        <div className={`text-foreground/80 group-hover:bg-gradient-to-br group-hover:${gradient} group-hover:bg-clip-text group-hover:text-transparent transition-all`}>
           {icon}
         </div>
       </div>

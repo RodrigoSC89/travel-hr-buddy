@@ -168,10 +168,10 @@ const UnifiedDashboard = () => {
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'certificate': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'report': return <BarChart3 className="w-4 h-4 text-blue-500" />;
-      case 'travel': return <Calendar className="w-4 h-4 text-purple-500" />;
-      default: return <Activity className="w-4 h-4 text-gray-500" />;
+      case 'certificate': return <CheckCircle className="w-4 h-4 text-success" />;
+      case 'report': return <BarChart3 className="w-4 h-4 text-info" />;
+      case 'travel': return <Calendar className="w-4 h-4 text-primary" />;
+      default: return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -315,10 +315,10 @@ const UnifiedDashboard = () => {
                       </div>
                       <div>
                         <h4 className="font-semibold text-foreground">{action.title}</h4>
-                        <p className="text-sm text-muted-foreground">{action.description}</p>
+                        <p className="text-sm text-foreground/80">{action.description}</p>
                       </div>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <ArrowRight className="w-4 h-4 text-foreground/70 group-hover:text-primary transition-colors" />
                   </div>
                 </CardContent>
               </Card>

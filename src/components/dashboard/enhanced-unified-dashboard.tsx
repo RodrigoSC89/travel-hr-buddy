@@ -312,30 +312,30 @@ const EnhancedUnifiedDashboard = () => {
 
   const getStatusIcon = (type: string) => {
     switch (type) {
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-orange-500" />;
-      case 'success': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'info': return <Bell className="w-4 h-4 text-blue-500" />;
-      default: return <AlertCircle className="w-4 h-4 text-gray-500" />;
+      case 'warning': return <AlertTriangle className="w-4 h-4 text-warning" />;
+      case 'success': return <CheckCircle className="w-4 h-4 text-success" />;
+      case 'info': return <Bell className="w-4 h-4 text-info" />;
+      default: return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'peotram': return <FileText className="w-4 h-4 text-blue-500" />;
-      case 'fleet': return <Ship className="w-4 h-4 text-purple-500" />;
-      case 'certificate': return <Award className="w-4 h-4 text-green-500" />;
-      case 'travel': return <MapPin className="w-4 h-4 text-orange-500" />;
-      case 'safety': return <Shield className="w-4 h-4 text-red-500" />;
-      default: return <Activity className="w-4 h-4 text-gray-500" />;
+      case 'peotram': return <FileText className="w-4 h-4 text-info" />;
+      case 'fleet': return <Ship className="w-4 h-4 text-primary" />;
+      case 'certificate': return <Award className="w-4 h-4 text-success" />;
+      case 'travel': return <MapPin className="w-4 h-4 text-warning" />;
+      case 'safety': return <Shield className="w-4 h-4 text-destructive" />;
+      default: return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getActionStatusColor = (status: string) => {
     switch (status) {
-      case 'success': return 'text-green-600';
-      case 'warning': return 'text-orange-600';
-      case 'info': return 'text-blue-600';
-      default: return 'text-gray-600';
+      case 'success': return 'text-success-foreground';
+      case 'warning': return 'text-warning-foreground';
+      case 'info': return 'text-info-foreground';
+      default: return 'text-muted-foreground';
     }
   };
 
@@ -545,9 +545,9 @@ const EnhancedUnifiedDashboard = () => {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-sm">
                         <span className="font-medium text-foreground">{action.subtitle}</span>
-                        <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                        <ArrowRight className="w-4 h-4 text-foreground/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                       </div>
-                      <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded-lg">
+                      <div className="text-xs text-foreground/80 bg-accent/30 p-2 rounded-lg">
                         {action.metric}
                       </div>
                     </div>
