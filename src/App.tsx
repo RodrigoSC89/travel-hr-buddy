@@ -84,6 +84,7 @@ import FleetDashboard from "./pages/FleetDashboard";
 import FleetTracking from "./pages/FleetTracking";
 import ExecutiveDashboard from "./pages/ExecutiveDashboard";
 import IntelligentAlerts from "./pages/IntelligentAlerts";
+import Automation from "./pages/Automation";
 
 // Lazy load the new advanced pages
 const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
