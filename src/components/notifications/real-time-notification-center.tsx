@@ -306,14 +306,14 @@ export const RealTimeNotificationCenter: React.FC = () => {
         <Button 
           variant="ghost" 
           size="sm"
-          className="relative p-2"
+          className="relative p-2 hover:bg-accent transition-colors"
           aria-label="Notificações"
         >
-          <Bell className="h-5 w-5" />
+          <Bell className="h-5 w-5 text-foreground" />
           {totalUnread > 0 && (
             <Badge 
               variant="destructive" 
-              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs shadow-sm"
             >
               {totalUnread > 9 ? '9+' : totalUnread}
             </Badge>
@@ -322,10 +322,10 @@ export const RealTimeNotificationCenter: React.FC = () => {
       </PopoverTrigger>
       
       <PopoverContent 
-        className="w-96 p-0 bg-background border shadow-lg z-50" 
+        className="w-96 p-0" 
         align="end"
         side="bottom"
-        sideOffset={5}
+        sideOffset={8}
       >
         <div className="p-4 border-b">
           <div className="flex items-center justify-between mb-3">

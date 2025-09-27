@@ -71,20 +71,23 @@ export const OrganizationSelector: React.FC = () => {
 
   return (
     <div className="flex items-center space-x-2">
-      <Building2 className="h-4 w-4 text-muted-foreground" />
+      <Building2 className="h-4 w-4 text-foreground/70" />
       <Select
         value={currentOrganization?.id || ''}
         onValueChange={handleOrganizationChange}
         disabled={isLoading}
       >
-        <SelectTrigger className="w-[200px]">
-          <SelectValue placeholder="Selecionar organização" />
+        <SelectTrigger className="w-[200px] border-border hover:border-ring">
+          <SelectValue 
+            placeholder="Selecionar organização" 
+            className="text-foreground placeholder:text-muted-foreground"
+          />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent align="start" className="min-w-[240px]">
           {organizations.map((org) => (
-            <SelectItem key={org.id} value={org.id}>
-              <div className="flex flex-col">
-                <span>{org.name}</span>
+            <SelectItem key={org.id} value={org.id} className="cursor-pointer">
+              <div className="flex flex-col py-1">
+                <span className="text-foreground font-medium">{org.name}</span>
                 <span className="text-xs text-muted-foreground capitalize">
                   {org.role}
                 </span>

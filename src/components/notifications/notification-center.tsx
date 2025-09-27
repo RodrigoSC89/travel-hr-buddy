@@ -53,12 +53,12 @@ export const NotificationCenter: React.FC = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-9 w-9 relative">
-          <Bell className="h-4 w-4" />
+        <Button variant="ghost" size="icon" className="h-9 w-9 relative hover:bg-accent transition-colors">
+          <Bell className="h-4 w-4 text-foreground" />
           {unreadCount > 0 && (
             <Badge 
               variant="destructive" 
-              className="absolute -top-1 -right-1 h-5 w-5 text-xs p-0 flex items-center justify-center animate-pulse"
+              className="absolute -top-1 -right-1 h-5 w-5 text-xs p-0 flex items-center justify-center animate-pulse shadow-sm"
             >
               {unreadCount > 99 ? '99+' : unreadCount}
             </Badge>
@@ -66,7 +66,7 @@ export const NotificationCenter: React.FC = () => {
           <span className="sr-only">Notificações</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-0 bg-popover text-popover-foreground border-border" align="end">
+      <PopoverContent className="w-80 p-0" align="end" sideOffset={8}>
         <div className="border-b border-border p-4">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-sm text-popover-foreground">Notificações</h3>

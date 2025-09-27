@@ -28,19 +28,19 @@ export const UserMenu: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-8 w-8">
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full hover:bg-accent transition-colors">
+          <Avatar className="h-8 w-8 border-2 border-border">
             <AvatarImage src={user.user_metadata?.avatar_url} alt="Avatar" />
-            <AvatarFallback>
+            <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
               {getInitials(user.email || 'U')}
             </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
+      <DropdownMenuContent className="w-64" align="end" forceMount sideOffset={8}>
+        <DropdownMenuLabel className="font-normal p-3">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
+            <p className="text-sm font-medium leading-none text-foreground">
               {user.user_metadata?.full_name || user.email?.split('@')[0]}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
@@ -49,16 +49,16 @@ export const UserMenu: React.FC = () => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span>Perfil</span>
+        <DropdownMenuItem className="cursor-pointer">
+          <User className="mr-2 h-4 w-4 text-foreground/70" />
+          <span className="text-foreground">Perfil</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Settings className="mr-2 h-4 w-4" />
-          <span>Configurações</span>
+        <DropdownMenuItem className="cursor-pointer">
+          <Settings className="mr-2 h-4 w-4 text-foreground/70" />
+          <span className="text-foreground">Configurações</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSignOut}>
+        <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive focus:text-destructive">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sair</span>
         </DropdownMenuItem>
