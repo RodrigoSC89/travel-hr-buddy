@@ -55,8 +55,6 @@ import FloatingActionButtons from '@/components/ui/floating-action-buttons';
 import ProfessionalKPICards from '@/components/ui/professional-kpi-cards';
 import SystemStatusDashboard from '@/components/ui/system-status-dashboard';
 import ExecutiveMetricsPanel from '@/components/ui/executive-metrics-panel';
-import { NavigationBar } from '@/components/ui/navigation-bar';
-
 const EnhancedUnifiedDashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -346,9 +344,6 @@ const EnhancedUnifiedDashboard = () => {
 
   return (
     <div className="space-y-6 bg-gradient-to-br from-background via-background to-muted/20 min-h-screen">
-      {/* Navigation Bar */}
-      <NavigationBar />
-      
       <div className="space-y-8 p-6">
       <EnhancedDashboardFilters
         selectedKPIs={selectedKPIs}

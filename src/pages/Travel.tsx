@@ -3,13 +3,9 @@ import { FlightSearch } from '@/components/travel/flight-search';
 import { HotelSearch } from '@/components/travel/hotel-search';
 import { TravelMap } from '@/components/travel/travel-map';
 import { PredictiveTravelDashboard } from '@/components/travel/predictive-travel-dashboard';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plane, Building, MapPin, Calendar, BarChart3, Brain } from 'lucide-react';
-import { Breadcrumbs } from '@/components/layout/breadcrumbs';
-import VoiceInterface from '@/components/voice/VoiceInterface';
 
 const Travel = () => {
   const [sampleLocations] = useState([
@@ -34,17 +30,7 @@ const Travel = () => {
   ]);
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <AppSidebar />
-        <main className="flex-1 p-6 space-y-6">
-          <Breadcrumbs
-            items={[
-              { label: 'Viagens', current: true }
-            ]}
-            className="mb-4"
-          />
-          
+    <div className="p-6 space-y-6">
           <div className="flex items-center gap-4 mb-8">
             <div className="p-3 rounded-lg bg-primary/10">
               <Plane className="h-8 w-8 text-primary" />
@@ -129,10 +115,7 @@ const Travel = () => {
               </Card>
             </TabsContent>
           </Tabs>
-        </main>
-        <VoiceInterface />
-      </div>
-    </SidebarProvider>
+    </div>
   );
 };
 
