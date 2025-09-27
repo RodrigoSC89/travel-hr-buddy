@@ -85,7 +85,7 @@ const FloatingMenu = () => {
             <div className="relative group">
               {/* Tooltip */}
               <div className={`absolute right-16 top-1/2 transform -translate-y-1/2 
-                bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap
+                bg-gray-900 text-azure-50 px-3 py-2 rounded-lg text-sm whitespace-nowrap
                 transition-all duration-300 ${hoveredIndex === index ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                 {action.label}
                 <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 
@@ -104,7 +104,7 @@ const FloatingMenu = () => {
                   opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 {/* Shimmer effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent 
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-azure-100/30 to-transparent 
                   transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] 
                   transition-transform duration-1000" />
                 
@@ -165,7 +165,7 @@ const StatusWidget = () => {
 
   return (
     <Card className="fixed top-8 right-8 z-40 w-64 bg-gradient-to-br from-card/90 to-primary/10 
-      backdrop-blur-xl border border-white/20 shadow-2xl">
+      backdrop-blur-xl border border-azure-200/30 shadow-2xl">
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold font-display">System Status</h3>

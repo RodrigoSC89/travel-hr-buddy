@@ -141,7 +141,7 @@ const ProfessionalKPICards = () => {
             <CardContent className="relative p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-2xl bg-gradient-to-br ${colorClasses.icon} text-white shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300`}>
+                <div className={`p-3 rounded-2xl bg-gradient-to-br ${colorClasses.icon} text-azure-50 shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300`}>
                   <kpi.icon className="w-7 h-7" />
                 </div>
                 

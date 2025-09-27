@@ -68,10 +68,10 @@ const MobileAppPage = () => {
           <div className="flex justify-center">
             <div className="relative">
               <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                <Smartphone className="h-12 w-12 text-white" />
+                <Smartphone className="h-12 w-12 text-azure-50" />
               </div>
               <div className="absolute -top-2 -right-2">
-                <Badge className="bg-green-500 text-white">PWA</Badge>
+                <Badge className="bg-green-500 text-azure-50">PWA</Badge>
               </div>
             </div>
           </div>
@@ -171,7 +171,7 @@ const MobileAppPage = () => {
               {/* iOS Installation */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <div className="w-6 h-6 bg-black rounded text-white text-xs flex items-center justify-center">
+                  <div className="w-6 h-6 bg-black rounded text-azure-50 text-xs flex items-center justify-center">
                     iOS
                   </div>
                   Instalação no iOS
@@ -199,7 +199,7 @@ const MobileAppPage = () => {
               {/* Android Installation */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <div className="w-6 h-6 bg-green-500 rounded text-white text-xs flex items-center justify-center">
+                  <div className="w-6 h-6 bg-green-500 rounded text-azure-50 text-xs flex items-center justify-center">
                     And
                   </div>
                   Instalação no Android

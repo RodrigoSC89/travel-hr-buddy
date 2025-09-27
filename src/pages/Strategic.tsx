@@ -119,11 +119,11 @@ const Strategic: React.FC = () => {
             {/* Hero Section */}
             <Card className="card-vessel overflow-hidden relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary-glow/10 to-nautical/20 animate-tide" />
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-white/20 to-transparent rounded-full blur-3xl animate-lighthouse" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-azure-100/20 to-transparent rounded-full blur-3xl animate-lighthouse" />
               
               <CardHeader className="relative z-10 pb-8">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="p-4 rounded-2xl bg-white/20 backdrop-blur-sm animate-navigation">
+                  <div className="p-4 rounded-2xl bg-azure-600/20 backdrop-blur-sm animate-navigation">
                     <Target className="w-10 h-10 animate-compass" />
                   </div>
                   <div>
@@ -206,7 +206,7 @@ const Strategic: React.FC = () => {
                       <CardHeader className="pb-4">
                         <div className="flex items-start justify-between mb-4">
                           <div className={`p-3 rounded-xl bg-gradient-to-br ${module.color} bg-opacity-20 group-hover:scale-110 transition-transform float-element`}>
-                            <Icon className="w-6 h-6 text-white" />
+                            <Icon className="w-6 h-6 text-azure-50" />
                           </div>
                           <Badge className="badge-captain">
                             {module.status}

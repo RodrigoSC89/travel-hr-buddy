@@ -576,7 +576,7 @@ export const FlightSearch = () => {
               <div className="flex-1 space-y-4 lg:space-y-0 lg:flex lg:items-center lg:space-x-8">
                 {/* Airline & Flight Number */}
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 rounded-lg gradient-ocean flex items-center justify-center text-white font-bold">
+                  <div className="w-12 h-12 rounded-lg gradient-ocean flex items-center justify-center text-azure-50 font-bold">
                     {flight.airline.slice(0, 2)}
                   </div>
                   <div>
@@ -646,7 +646,7 @@ export const FlightSearch = () => {
                     R$ {flight.price}
                   </p>
                   {flight.savings && (
-                    <Badge className="bg-success text-white">
+                    <Badge className="bg-success text-azure-50">
                       Economize R$ {flight.savings}
                     </Badge>
                   )}

@@ -377,12 +377,12 @@
   
   .glass-effect {
     backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: hsla(var(--azure-100), 0.1);
+    border: 1px solid hsla(var(--azure-300), 0.2);
   }
   
   .gradient-border {
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(45deg, transparent, hsla(var(--azure-300), 0.2), transparent);
     padding: 1px;
   }
   

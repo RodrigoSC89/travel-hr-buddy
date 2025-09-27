@@ -26,6 +26,7 @@ import {
   VolumeX,
   Loader2
 } from 'lucide-react';
+import { FloatingActionButton } from '@/components/ui/reusable-floating-action-button';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useVoiceRecording, useTextToSpeech, useAIChat } from '@/hooks/use-voice-conversation';
@@ -43,6 +44,7 @@ const FloatingActionButtons = () => {
 
   const handleVoiceCommand = async () => {
     try {
+      console.log('Floating Action: Voice Command clicked');
       if (isRecording) {
         // Stop recording and process
         toast({
@@ -117,6 +119,7 @@ const FloatingActionButtons = () => {
 
   const handleAIAssistant = async () => {
     try {
+      console.log('Floating Action: AI Assistant clicked');
       if (conversationMode) {
         // Turn off conversation mode
         setConversationMode(false);
@@ -255,21 +258,17 @@ const FloatingActionButtons = () => {
         {isExpanded && (
           <div className="absolute bottom-20 right-0 space-y-3 animate-fade-in">
             {quickActions.map((item, index) => (
-              <Tooltip key={index}>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="lg"
-                    className={`${item.color} text-azure-50 shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-14 h-14 animate-slide-in-right`}
-                    style={{ animationDelay: `${index * 100}ms` }}
-                    onClick={() => handleQuickAction(item.action)}
-                  >
-                    <item.icon className="w-6 h-6" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="left" className="bg-azure-800 text-azure-50">
-                  <p>{item.label}</p>
-                </TooltipContent>
-              </Tooltip>
+              <FloatingActionButton
+                key={index}
+                icon={item.icon}
+                onClick={() => handleQuickAction(item.action)}
+                label={item.label}
+                bgColor={`${item.color}`}
+                iconColor="text-azure-50"
+                size="md"
+                className="w-14 h-14 animate-slide-in-right"
+                style={{ animationDelay: `${index * 100}ms` }}
+              />
             ))}
           </div>
         )}
@@ -277,58 +276,44 @@ const FloatingActionButtons = () => {
         {/* Main Action Buttons */}
         <div className="flex flex-col gap-4">
           {/* Voice Command Button */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="lg"
-                className={`${voiceStatus.color} text-azure-50 shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
-                onClick={handleVoiceCommand}
-                disabled={isProcessing}
-              >
-                <voiceStatus.icon className={`w-8 h-8 ${voiceStatus.spinning ? 'animate-spin' : ''}`} />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="left" className="bg-azure-800 text-azure-50">
-              <p>{voiceStatus.label}</p>
-            </TooltipContent>
-          </Tooltip>
+          <FloatingActionButton
+            icon={voiceStatus.icon}
+            onClick={handleVoiceCommand}
+            label={voiceStatus.label}
+            bgColor={`${voiceStatus.color}`}
+            iconColor="text-azure-50"
+            size="lg"
+            ariaLabel={voiceStatus.label}
+            spinning={voiceStatus.spinning}
+            disabled={isProcessing}
+            className="w-16 h-16"
+          />
 
           {/* AI Assistant Button */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="lg"
-                className={`${aiStatus.color} text-azure-50 shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
-                onClick={isSpeaking ? stopSpeaking : handleAIAssistant}
-                disabled={isThinking}
-              >
-                <aiStatus.icon className={`w-8 h-8 ${aiStatus.spinning ? 'animate-spin' : ''}`} />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="left" className="bg-azure-800 text-azure-50">
-              <p>{aiStatus.label}</p>
-            </TooltipContent>
-          </Tooltip>
+          <FloatingActionButton
+            icon={aiStatus.icon}
+            onClick={isSpeaking ? stopSpeaking : handleAIAssistant}
+            label={aiStatus.label}
+            bgColor={`${aiStatus.color}`}
+            iconColor="text-azure-50"
+            size="lg"
+            ariaLabel={aiStatus.label}
+            spinning={aiStatus.spinning}
+            disabled={isThinking}
+            className="w-16 h-16"
+          />
 
           {/* Quick Actions Menu Toggle */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="lg"
-                className={`${
-                  isExpanded
-                    ? 'bg-orange-500 hover:bg-orange-600 rotate-45'
-                    : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700'
-                } text-azure-50 shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 rounded-full w-16 h-16`}
-                onClick={() => setIsExpanded(!isExpanded)}
-              >
-                <Plus className="w-8 h-8" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="left" className="bg-azure-800 text-azure-50">
-              <p>{isExpanded ? 'Fechar Menu' : 'Ações Rápidas'}</p>
-            </TooltipContent>
-          </Tooltip>
+          <FloatingActionButton
+            icon={Plus}
+            onClick={() => setIsExpanded(!isExpanded)}
+            label={isExpanded ? 'Fechar Menu' : 'Ações Rápidas'}
+            bgColor={isExpanded ? 'bg-orange-500 hover:bg-orange-600' : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700'}
+            iconColor="text-azure-50"
+            size="lg"
+            ariaLabel={isExpanded ? 'Fechar Menu' : 'Ações Rápidas'}
+            className={isExpanded ? 'w-16 h-16 rotate-45' : 'w-16 h-16'}
+          />
         </div>
 
         {/* Status Indicators */}

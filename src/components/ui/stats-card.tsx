@@ -16,7 +16,7 @@ interface StatsCardProps {
 
 const variantStyles = {
   default: 'bg-card border border-border',
-  ocean: 'gradient-ocean text-white border-0',
+  ocean: 'gradient-ocean text-azure-50 border-0',
   success: 'bg-success/10 border border-success/20',
   warning: 'bg-warning/10 border border-warning/20',
   danger: 'bg-danger/10 border border-danger/20',
@@ -55,7 +55,7 @@ export const StatsCard = ({
           <div className={cn(
             "flex items-center text-sm font-medium",
             change.type === 'increase' ? 'text-success' : 'text-danger',
-            variant === 'ocean' && 'text-white/90'
+            variant === 'ocean' && 'text-azure-50/90'
           )}>
             <span className="mr-1">
               {change.type === 'increase' ? '↗' : '↘'}
@@ -68,13 +68,13 @@ export const StatsCard = ({
       <div>
         <p className={cn(
           "text-3xl font-bold mb-1",
-          variant === 'ocean' ? 'text-white' : 'text-foreground'
+          variant === 'ocean' ? 'text-azure-50' : 'text-foreground'
         )}>
           {value}
         </p>
         <p className={cn(
           "text-sm",
-          variant === 'ocean' ? 'text-white/80' : 'text-muted-foreground'
+          variant === 'ocean' ? 'text-azure-50/80' : 'text-muted-foreground'
         )}>
           {title}
         </p>

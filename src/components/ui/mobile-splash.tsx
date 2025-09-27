@@ -16,7 +16,7 @@ export const MobileSplash = () => {
 
   return (
     <div className="fixed inset-0 z-50 bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-700 flex items-center justify-center">
-      <div className="text-center text-white animate-pulse">
+      <div className="text-center text-azure-50 animate-pulse">
         <div className="mb-8 relative">
           <div className="w-20 h-20 mx-auto mb-4 bg-azure-100/20 rounded-full flex items-center justify-center backdrop-blur-sm">
             <div className="w-12 h-12 bg-azure-100 rounded-full flex items-center justify-center">

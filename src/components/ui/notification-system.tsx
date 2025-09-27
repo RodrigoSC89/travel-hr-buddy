@@ -167,9 +167,9 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
       {/* Notification Bell */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-lg hover:bg-white/10 transition-colors"
+        className="relative p-2 rounded-lg hover:bg-azure-600/20 transition-colors"
       >
-        <Bell size={20} className="text-white" />
+        <Bell size={20} className="text-azure-50" />
         {unreadCount > 0 && (
           <Badge 
             className={cn(
@@ -221,8 +221,8 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
                     className={cn(
                       "px-3 py-1 rounded-lg text-xs font-medium transition-colors",
                       filter === filterType
-                        ? "bg-white/20 text-white"
-                        : "text-white/70 hover:bg-white/10"
+                        ? "bg-azure-600/20 text-azure-50"
+                        : "text-azure-50/80 hover:bg-azure-600/15"
                     )}
                   >
                     {filterType === 'all' && 'Todas'}

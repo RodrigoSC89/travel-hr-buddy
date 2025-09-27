@@ -16,6 +16,8 @@ interface FloatingActionButtonProps {
   isActive?: boolean;
   ariaLabel?: string;
   spinning?: boolean;
+  tabIndex?: number;
+  style?: React.CSSProperties;
 }
 
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
@@ -29,7 +31,9 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   disabled = false,
   isActive = false,
   ariaLabel,
-  spinning = false
+  spinning = false,
+  tabIndex = 0,
+  style
 }) => {
   const sizeClasses = {
     sm: 'w-12 h-12',
@@ -51,6 +55,8 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
             onClick={onClick}
             disabled={disabled}
             aria-label={ariaLabel || label}
+            tabIndex={tabIndex}
+            style={style}
             className={cn(
               bgColor,
               iconColor,

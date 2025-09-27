@@ -195,9 +195,9 @@ export const TaskManagement: React.FC = () => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'bg-red-500 text-azure-50';
-      case 'medium': return 'bg-yellow-500 text-white';
-      case 'low': return 'bg-green-500 text-white';
-      default: return 'bg-gray-500 text-white';
+      case 'medium': return 'bg-yellow-500 text-azure-50';
+      case 'low': return 'bg-green-500 text-azure-50';
+      default: return 'bg-gray-500 text-azure-50';
     }
   };
 
@@ -212,11 +212,11 @@ export const TaskManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-gray-500 text-white';
-      case 'in_progress': return 'bg-blue-500 text-white';
-      case 'completed': return 'bg-green-500 text-white';
-      case 'cancelled': return 'bg-red-500 text-white';
-      default: return 'bg-gray-500 text-white';
+      case 'pending': return 'bg-gray-500 text-azure-50';
+      case 'in_progress': return 'bg-blue-500 text-azure-50';
+      case 'completed': return 'bg-green-500 text-azure-50';
+      case 'cancelled': return 'bg-red-500 text-azure-50';
+      default: return 'bg-gray-500 text-azure-50';
     }
   };
 
