@@ -265,10 +265,10 @@ export const DocumentManagement: React.FC = () => {
 
   const getAccessLevelColor = (level: string) => {
     switch (level) {
-      case 'public': return 'bg-green-500 text-white';
-      case 'organization': return 'bg-blue-500 text-white';
-      case 'restricted': return 'bg-red-500 text-white';
-      default: return 'bg-gray-500 text-white';
+      case 'public': return 'bg-green-500 text-azure-50';
+      case 'organization': return 'bg-blue-500 text-azure-50';
+      case 'restricted': return 'bg-red-500 text-azure-50';
+      default: return 'bg-gray-500 text-azure-50';
     }
   };
 

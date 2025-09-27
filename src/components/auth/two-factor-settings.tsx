@@ -217,7 +217,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       {qrCode && (
         <div className="space-y-4">
           <div className="flex justify-center">
-            <div className="p-4 bg-white rounded-lg border">
+            <div className="p-4 bg-azure-100 rounded-lg border">
               <img src={qrCode} alt="QR Code" className="w-40 h-40" />
             </div>
           </div>

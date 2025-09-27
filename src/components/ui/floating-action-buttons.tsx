@@ -342,7 +342,7 @@ const FloatingActionButtons = () => {
               'bg-blue-500'
             } text-white border-0`}>
               <CardContent className="p-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                <div className="w-2 h-2 bg-azure-100 rounded-full animate-pulse" />
                 <span className="text-sm font-medium">
                   {isRecording ? 'Ouvindo...' :
                    isProcessing ? 'Processando...' :

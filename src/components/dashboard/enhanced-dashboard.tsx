@@ -164,14 +164,14 @@ const FloatingActionButton = ({ icon: Icon, label, onClick, color = "primary", d
   return (
     <Button
       onClick={onClick}
-      className={`group relative overflow-hidden bg-gradient-to-r from-primary to-primary-glow text-white 
+      className={`group relative overflow-hidden bg-gradient-to-r from-primary to-primary-glow text-azure-50 
         transition-all duration-500 transform hover:scale-110 hover:shadow-2xl hover:-rotate-2
         ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
         rounded-2xl p-6 h-auto flex-col gap-3 min-w-[140px] hover:from-primary-glow hover:to-primary
         shadow-lg hover:shadow-primary/25`}
     >
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-azure-100/20 to-transparent 
         opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform -skew-x-12 translate-x-[-100%] 
         group-hover:translate-x-[100%] transition-transform duration-1000" />
       
@@ -312,7 +312,7 @@ export const EnhancedDashboard = () => {
       
       <div className="relative z-10 space-y-8 p-6">
         {/* Revolutionary Hero Section */}
-        <div className={`relative overflow-hidden rounded-3xl hero-gradient p-8 text-white 
+        <div className={`relative overflow-hidden rounded-3xl hero-gradient p-8 text-azure-50 
           transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           
           {/* Animated Background Pattern */}

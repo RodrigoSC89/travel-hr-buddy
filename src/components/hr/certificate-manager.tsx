@@ -283,11 +283,11 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
-        return <Badge className="bg-success text-white"><CheckCircle size={12} className="mr-1" />Ativo</Badge>;
+        return <Badge className="bg-success text-azure-50"><CheckCircle size={12} className="mr-1" />Ativo</Badge>;
       case 'expiring_soon':
-        return <Badge className="bg-warning text-white"><Clock size={12} className="mr-1" />Expirando</Badge>;
+        return <Badge className="bg-warning text-azure-900"><Clock size={12} className="mr-1" />Expirando</Badge>;
       case 'expired':
-        return <Badge className="bg-destructive text-white"><AlertTriangle size={12} className="mr-1" />Expirado</Badge>;
+        return <Badge className="bg-destructive text-azure-50"><AlertTriangle size={12} className="mr-1" />Expirado</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }

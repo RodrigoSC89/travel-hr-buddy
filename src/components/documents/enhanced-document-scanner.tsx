@@ -414,7 +414,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                         className="object-cover w-full h-full"
                       />
                       <div className="absolute top-2 right-2">
-                        <Badge className="bg-green-500 text-white">
+                        <Badge className="bg-green-500 text-azure-50">
                           {result.confidence}%
                         </Badge>
                       </div>

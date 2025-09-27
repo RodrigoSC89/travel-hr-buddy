@@ -283,7 +283,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
         }}></div>
         <div className="relative z-10">
           <div className="flex items-center gap-4 mb-6">
-            <div className="p-4 bg-white/20 rounded-2xl">
+            <div className="p-4 bg-azure-100/20 rounded-2xl">
               <Ship className="h-12 w-12" />
             </div>
             <div>
@@ -297,28 +297,28 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white/20 p-4 rounded-xl">
+            <div className="bg-azure-100/20 p-4 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
                 <Ship className="h-5 w-5" />
                 <span>Embarcações Ativas</span>
               </div>
               <div className="text-3xl font-bold">{vessels.length}</div>
             </div>
-            <div className="bg-white/20 p-4 rounded-xl">
+            <div className="bg-azure-100/20 p-4 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
                 <Container className="h-5 w-5" />
                 <span>Operações Hoje</span>
               </div>
               <div className="text-3xl font-bold">{operations.length}</div>
             </div>
-            <div className="bg-white/20 p-4 rounded-xl">
+            <div className="bg-azure-100/20 p-4 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
                 <Anchor className="h-5 w-5" />
                 <span>Portos Monitorados</span>
               </div>
               <div className="text-3xl font-bold">{portSchedules.length}</div>
             </div>
-            <div className="bg-white/20 p-4 rounded-xl">
+            <div className="bg-azure-100/20 p-4 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
                 <Zap className="h-5 w-5" />
                 <span>Eficiência IA</span>

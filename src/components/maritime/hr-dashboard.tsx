@@ -319,7 +319,7 @@ export const MaritimeHRDashboard: React.FC = () => {
         }}></div>
         <div className="relative z-10">
           <div className="flex items-center gap-4 mb-6">
-            <div className="p-4 bg-white/20 rounded-2xl">
+            <div className="p-4 bg-azure-100/20 rounded-2xl">
               <Users className="h-12 w-12" />
             </div>
             <div>
@@ -333,30 +333,26 @@ export const MaritimeHRDashboard: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white/20 p-4 rounded-xl">
+            <div className="bg-azure-100/20 p-4 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
                 <Users className="h-5 w-5" />
                 <span>Tripulantes Ativos</span>
               </div>
               <div className="text-3xl font-bold">{crewMembers.length}</div>
             </div>
-            <div className="bg-white/20 p-4 rounded-xl">
-              <div className="flex items-center gap-2 mb-2">
-                <Ship className="h-5 w-5" />
-                <span>A Bordo</span>
-              </div>
-              <div className="text-3xl font-bold">
-                {crewMembers.filter(c => c.status === 'onboard').length}
+            <div className="bg-azure-100/20 p-4 rounded-xl">
+              <h3 className="text-sm font-medium mb-1">🧭 Navegação</h3>
+              <p className="text-lg font-bold">Ativa</p>
+              <div className="w-full bg-blue-200 rounded-full h-2 mt-2">
+                <div className="bg-blue-500 h-2 rounded-full w-4/5"></div>
               </div>
             </div>
-            <div className="bg-white/20 p-4 rounded-xl">
-              <div className="flex items-center gap-2 mb-2">
-                <Shield className="h-5 w-5" />
-                <span>Compliance</span>
-              </div>
-              <div className="text-3xl font-bold">98.5%</div>
+            <div className="bg-azure-100/20 p-4 rounded-xl">
+              <h3 className="text-sm font-medium mb-1">🌊 Condições Marítimas</h3>
+              <p className="text-lg font-bold">Favoráveis</p>
+              <p className="text-xs opacity-70">Vento: 15 nós</p>
             </div>
-            <div className="bg-white/20 p-4 rounded-xl">
+            <div className="bg-azure-100/20 p-4 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
                 <Heart className="h-5 w-5" />
                 <span>Wellness Score</span>

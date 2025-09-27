@@ -177,15 +177,15 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
             a gestão de recursos humanos e operações marítimas.
           </p>
           <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-azure-100/20 px-4 py-2 rounded-lg">
               <Brain className="h-5 w-5" />
               <span>IA Preditiva</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-azure-100/20 px-4 py-2 rounded-lg">
               <Globe className="h-5 w-5" />
               <span>Compliance Global</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-azure-100/20 px-4 py-2 rounded-lg">
               <Zap className="h-5 w-5" />
               <span>Automação Total</span>
             </div>

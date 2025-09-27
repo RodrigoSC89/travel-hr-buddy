@@ -113,7 +113,7 @@ export const CommunicationModule = () => {
   const renderOverview = () => (
     <div className="space-y-8">
       {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-900 p-8 text-white">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-900 p-8 text-azure-50">
         <div className="relative z-10">
           <h2 className="text-3xl font-bold mb-4">
             Centro de Comunicação Inteligente
@@ -123,15 +123,15 @@ export const CommunicationModule = () => {
             a colaboração e produtividade da equipe.
           </p>
           <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-azure-100/20 px-4 py-2 rounded-lg">
               <Zap className="h-5 w-5" />
               <span>Tempo Real</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-azure-100/20 px-4 py-2 rounded-lg">
               <Shield className="h-5 w-5" />
               <span>Segurança Avançada</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-azure-100/20 px-4 py-2 rounded-lg">
               <Globe className="h-5 w-5" />
               <span>Multi-plataforma</span>
             </div>
@@ -207,7 +207,7 @@ export const CommunicationModule = () => {
                     onClick={() => setActiveTab('chat')}
                   >
                     <div className={`p-2 rounded-lg ${action.color} mr-3`}>
-                      <Icon className="h-4 w-4 text-white" />
+                      <Icon className="h-4 w-4 text-azure-50" />
                     </div>
                     <div className="text-left">
                       <div className="font-medium">{action.label}</div>
@@ -247,7 +247,7 @@ export const CommunicationModule = () => {
                     className={`p-4 border-l-4 rounded-lg ${priorityColors[activity.priority]} hover:scale-[1.02] transition-all duration-300`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-lg bg-white dark:bg-gray-800">
+                      <div className="p-2 rounded-lg bg-azure-100 dark:bg-azure-800">
                         <Icon className="h-4 w-4" />
                       </div>
                       <div className="flex-1 min-w-0">

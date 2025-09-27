@@ -381,7 +381,7 @@ const NauticalCopilot: React.FC = () => {
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg bg-white/50 dark:bg-gray-800/50">
+                            <div className="p-2 rounded-lg bg-azure-100/50 dark:bg-azure-800/50">
                               <Icon className="w-5 h-5" />
                             </div>
                             <div className="flex-1">

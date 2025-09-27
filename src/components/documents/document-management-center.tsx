@@ -496,7 +496,7 @@ export const DocumentManagementCenter = () => {
                         
                         <div className="flex items-center gap-4">
                           <div className="text-right">
-                            <Badge className={`${getStatusColor(doc.status)} text-white mb-1`}>
+                            <Badge className={`${getStatusColor(doc.status)} text-azure-50 mb-1`}>
                               {getStatusText(doc.status)}
                             </Badge>
                             <div className="text-xs text-muted-foreground">

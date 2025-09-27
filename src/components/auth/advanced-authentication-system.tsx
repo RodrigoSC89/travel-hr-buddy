@@ -209,7 +209,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
               <div className="space-y-4">
                 <div className="p-4 border rounded-lg">
                   <div className="flex items-center justify-center mb-4">
-                    <div className="p-4 bg-white border rounded-lg">
+                    <div className="p-4 bg-azure-100 border rounded-lg">
                       <QrCode className="w-24 h-24" />
                     </div>
                   </div>

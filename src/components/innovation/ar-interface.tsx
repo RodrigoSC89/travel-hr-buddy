@@ -302,7 +302,7 @@ export const ARInterface: React.FC = () => {
                     }}
                     onClick={() => simulateObjectDetection(object.id)}
                   >
-                    <div className="bg-white/90 backdrop-blur-sm rounded-lg p-2 shadow-lg border">
+                    <div className="bg-azure-100/90 backdrop-blur-sm rounded-lg p-2 shadow-lg border">
                       <div className="flex items-center gap-2">
                         {getObjectIcon(object.type)}
                         <span className="text-sm font-medium">{object.name}</span>

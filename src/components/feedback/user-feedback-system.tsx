@@ -161,9 +161,9 @@ export const UserFeedbackSystem: React.FC = () => {
       case 'open':
         return <Badge variant="outline">Aberto</Badge>;
       case 'in_progress':
-        return <Badge variant="secondary" className="bg-blue-500 text-white">Em Análise</Badge>;
+        return <Badge variant="secondary" className="bg-blue-500 text-azure-50">Em Análise</Badge>;
       case 'resolved':
-        return <Badge variant="default" className="bg-green-500 text-white">Resolvido</Badge>;
+        return <Badge variant="default" className="bg-green-500 text-azure-50">Resolvido</Badge>;
       case 'closed':
         return <Badge variant="secondary">Fechado</Badge>;
       default:
@@ -176,7 +176,7 @@ export const UserFeedbackSystem: React.FC = () => {
       case 'urgent':
         return <Badge variant="destructive">Urgente</Badge>;
       case 'high':
-        return <Badge variant="secondary" className="bg-orange-500 text-white">Alto</Badge>;
+        return <Badge variant="secondary" className="bg-orange-500 text-azure-50">Alto</Badge>;
       case 'medium':
         return <Badge variant="outline">Médio</Badge>;
       default:
@@ -345,7 +345,7 @@ export const UserFeedbackSystem: React.FC = () => {
                   className="flex items-center gap-2"
                 >
                   {isSubmitting ? (
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-azure-100"></div>
                   ) : (
                     <Send className="h-4 w-4" />
                   )}

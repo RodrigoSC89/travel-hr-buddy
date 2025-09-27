@@ -277,7 +277,7 @@ What would you like assistance with today?`,
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-gradient-nautical flex items-center justify-center">
-                  <Bot className="h-4 w-4 text-white" />
+                  <Bot className="h-4 w-4 text-azure-50" />
                 </div>
                 Nautilus Copilot
                 <Badge variant="secondary" className="ml-auto">
@@ -299,7 +299,7 @@ What would you like assistance with today?`,
                         <div
                           className={`rounded-lg p-4 ${
                             message.type === 'user'
-                              ? 'bg-gradient-nautical text-white'
+                              ? 'bg-gradient-nautical text-azure-50'
                               : 'bg-muted'
                           }`}
                         >

@@ -209,7 +209,7 @@ export const HRDashboard = () => {
       sortable: true,
       render: (value, row) => (
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-full gradient-ocean flex items-center justify-center text-white font-bold text-sm">
+          <div className="w-8 h-8 rounded-full gradient-ocean flex items-center justify-center text-azure-50 font-bold text-sm">
             {value.split(' ').map((n: string) => n[0]).join('')}
           </div>
           <div>
@@ -311,9 +311,9 @@ export const HRDashboard = () => {
 
   const getStatusColor = (status: Employee['status']) => {
     switch (status) {
-      case 'active': return 'bg-success text-white';
-      case 'vacation': return 'bg-warning text-white';
-      case 'travel': return 'bg-info text-white';
+      case 'active': return 'bg-success text-azure-50';
+      case 'vacation': return 'bg-warning text-azure-900';
+      case 'travel': return 'bg-info text-azure-50';
       case 'inactive': return 'bg-muted text-muted-foreground';
       default: return 'bg-muted text-muted-foreground';
     }
@@ -515,7 +515,7 @@ export const HRDashboard = () => {
             <Card key={employee.id} className="p-6 hover:shadow-nautical transition-all duration-300">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 rounded-full gradient-ocean flex items-center justify-center text-white font-bold text-lg">
+                  <div className="w-12 h-12 rounded-full gradient-ocean flex items-center justify-center text-azure-50 font-bold text-lg">
                     {employee.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div>
@@ -667,7 +667,7 @@ export const HRDashboard = () => {
           {selectedEmployee && (
             <div className="grid gap-6 py-4">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 rounded-full gradient-ocean flex items-center justify-center text-white font-bold text-xl">
+                <div className="w-16 h-16 rounded-full gradient-ocean flex items-center justify-center text-azure-50 font-bold text-xl">
                   {selectedEmployee.name.split(' ').map(n => n[0]).join('')}
                 </div>
                 <div>

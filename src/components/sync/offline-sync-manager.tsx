@@ -308,7 +308,7 @@ export const OfflineSyncManager: React.FC = () => {
           className="flex items-center gap-2"
         >
           {isSync ? (
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-azure-100"></div>
           ) : (
             <RefreshCw className="h-4 w-4" />
           )}

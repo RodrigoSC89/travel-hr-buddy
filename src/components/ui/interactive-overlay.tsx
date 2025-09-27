@@ -94,13 +94,13 @@ const FloatingMenu = () => {
 
               <Button
                 onClick={action.action}
-                className={`w-14 h-14 rounded-full bg-gradient-to-r ${action.color} text-white 
+                className={`w-14 h-14 rounded-full bg-gradient-to-r ${action.color} text-azure-50 
                   shadow-2xl hover:shadow-3xl transition-all duration-300 transform 
                   hover:scale-110 hover:-rotate-6 group relative overflow-hidden
-                  border-2 border-white/20 hover:border-white/40`}
+                  border-2 border-azure-100/20 hover:border-azure-100/40`}
               >
                 {/* Animated background */}
-                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent 
+                <div className="absolute inset-0 bg-gradient-to-r from-azure-100/20 to-transparent 
                   opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 {/* Shimmer effect */}
@@ -118,15 +118,15 @@ const FloatingMenu = () => {
         <div className="relative group">
           <Button
             className="w-16 h-16 rounded-full bg-gradient-to-r from-primary via-primary-glow to-primary 
-              text-white shadow-2xl hover:shadow-3xl transition-all duration-500 transform 
+              text-azure-50 shadow-2xl hover:shadow-3xl transition-all duration-500 transform 
               hover:scale-125 hover:rotate-12 group relative overflow-hidden
-              border-4 border-white/30 hover:border-white/50 animate-pulse-glow"
+              border-4 border-azure-100/30 hover:border-azure-100/50 animate-pulse-glow"
           >
             {/* Multiple animated backgrounds */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/20 to-white/10 
+            <div className="absolute inset-0 bg-gradient-to-r from-azure-100/10 via-azure-100/20 to-azure-100/10 
               animate-gradient-shift opacity-50" />
             
-            <div className="absolute inset-0 rounded-full border-2 border-white/20 
+            <div className="absolute inset-0 rounded-full border-2 border-azure-100/20 
               animate-ping" />
             
             <Rocket className="w-8 h-8 relative z-10 group-hover:scale-125 transition-transform animate-bounce" />
@@ -134,10 +134,10 @@ const FloatingMenu = () => {
           
           {/* Orbiting particles */}
           <div className="absolute inset-0 animate-spin" style={{ animationDuration: '10s' }}>
-            <div className="absolute -top-2 left-1/2 w-1 h-1 bg-white rounded-full animate-pulse" />
-            <div className="absolute top-1/2 -right-2 w-1 h-1 bg-white rounded-full animate-pulse" />
-            <div className="absolute -bottom-2 left-1/2 w-1 h-1 bg-white rounded-full animate-pulse" />
-            <div className="absolute top-1/2 -left-2 w-1 h-1 bg-white rounded-full animate-pulse" />
+            <div className="absolute -top-2 left-1/2 w-1 h-1 bg-azure-100 rounded-full animate-pulse" />
+            <div className="absolute top-1/2 -right-2 w-1 h-1 bg-azure-100 rounded-full animate-pulse" />
+            <div className="absolute -bottom-2 left-1/2 w-1 h-1 bg-azure-100 rounded-full animate-pulse" />
+            <div className="absolute top-1/2 -left-2 w-1 h-1 bg-azure-100 rounded-full animate-pulse" />
           </div>
         </div>
       </div>

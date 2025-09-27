@@ -374,7 +374,7 @@ export const EmployeeManagement = () => {
               <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-white font-bold text-lg">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-azure-50 font-bold text-lg">
                       {employee.name.split(' ').map(n => n[0]).join('')}
                     </div>
                     <div>
@@ -479,7 +479,7 @@ export const EmployeeManagement = () => {
           {selectedEmployee && (
             <div className="space-y-6 py-4">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-white font-bold text-xl">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-azure-50 font-bold text-xl">
                   {selectedEmployee.name.split(' ').map(n => n[0]).join('')}
                 </div>
                 <div>

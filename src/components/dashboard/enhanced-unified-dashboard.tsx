@@ -527,7 +527,7 @@ const EnhancedUnifiedDashboard = () => {
                 <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-5 group-hover:opacity-10 transition-opacity`} />
                 <CardContent className="relative p-6">
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`p-4 rounded-2xl bg-gradient-to-br ${action.color} text-white shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300`}>
+                    <div className={`p-4 rounded-2xl bg-gradient-to-br ${action.color} text-azure-50 shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300`}>
                       <action.icon className="w-7 h-7" />
                     </div>
                     <Badge 

@@ -24,7 +24,7 @@ const variantStyles = {
 
 const iconVariantStyles = {
   default: 'bg-primary/10 text-primary',
-  ocean: 'bg-white/20 text-white',
+  ocean: 'bg-azure-100/20 text-azure-50',
   success: 'bg-success/20 text-success',
   warning: 'bg-warning/20 text-warning',
   danger: 'bg-danger/20 text-danger',
