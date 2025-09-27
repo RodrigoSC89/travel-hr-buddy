@@ -42,7 +42,7 @@ export const KPICard: React.FC<KPICardProps> = ({
           <div className="flex items-center pt-1">
             <span 
               className={`text-xs font-medium ${
-                trend.isPositive ? 'text-green-600' : 'text-red-600'
+                trend.isPositive ? 'text-success' : 'text-destructive'
               }`}
             >
               {trend.isPositive ? '+' : ''}{trend.value}%

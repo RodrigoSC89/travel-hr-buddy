@@ -446,21 +446,21 @@ const EnhancedUnifiedDashboard = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <div className="text-sm text-muted-foreground">Margem Bruta</div>
-                <div className="text-2xl font-bold text-green-600">{dashboardData.financialMetrics.grossMargin}%</div>
+                <div className="text-2xl font-bold text-success">{dashboardData.financialMetrics.grossMargin}%</div>
                 <Progress value={dashboardData.financialMetrics.grossMargin} className="h-2" />
               </div>
               <div className="space-y-2">
                 <div className="text-sm text-muted-foreground">Margem Operacional</div>
-                <div className="text-2xl font-bold text-blue-600">{dashboardData.financialMetrics.operatingMargin}%</div>
+                <div className="text-2xl font-bold text-info">{dashboardData.financialMetrics.operatingMargin}%</div>
                 <Progress value={dashboardData.financialMetrics.operatingMargin * 2} className="h-2" />
               </div>
               <div className="space-y-2">
                 <div className="text-sm text-muted-foreground">EBITDA</div>
-                <div className="text-2xl font-bold text-purple-600">R$ {(dashboardData.financialMetrics.ebitda / 1000000).toFixed(1)}M</div>
+                <div className="text-2xl font-bold text-primary">R$ {(dashboardData.financialMetrics.ebitda / 1000000).toFixed(1)}M</div>
               </div>
               <div className="space-y-2">
                 <div className="text-sm text-muted-foreground">ROE</div>
-                <div className="text-2xl font-bold text-orange-600">{dashboardData.financialMetrics.roe}%</div>
+                <div className="text-2xl font-bold text-warning">{dashboardData.financialMetrics.roe}%</div>
               </div>
             </div>
           </CardContent>
@@ -690,7 +690,7 @@ const EnhancedUnifiedDashboard = () => {
         <Card className="border-2 border-green-100 shadow-xl">
           <CardHeader className="bg-gradient-to-r from-green-50 to-transparent">
             <CardTitle className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-green-600" />
+              <Activity className="w-5 h-5 text-success" />
               Atividades Recentes
             </CardTitle>
             <CardDescription>Timeline de operações do sistema</CardDescription>

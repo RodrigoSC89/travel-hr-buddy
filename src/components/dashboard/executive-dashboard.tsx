@@ -173,10 +173,10 @@ const ExecutiveDashboard = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'excellent': return <Award className="h-4 w-4 text-green-600" />;
-      case 'good': return <CheckCircle className="h-4 w-4 text-blue-600" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
-      case 'critical': return <AlertTriangle className="h-4 w-4 text-red-600" />;
+      case 'excellent': return <Award className="h-4 w-4 text-success" />;
+      case 'good': return <CheckCircle className="h-4 w-4 text-info" />;
+      case 'warning': return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case 'critical': return <AlertTriangle className="h-4 w-4 text-destructive" />;
       default: return <BarChart3 className="h-4 w-4" />;
     }
   };
@@ -261,7 +261,7 @@ const ExecutiveDashboard = () => {
                   <div className="text-2xl font-bold">{formatValue(kpi)}</div>
                   <div className="flex items-center gap-1 text-sm">
                     {getTrendIcon(kpi.trend, kpi.change)}
-                    <span className={kpi.change >= 0 ? 'text-green-600' : 'text-red-600'}>
+                    <span className={kpi.change >= 0 ? 'text-success' : 'text-destructive'}>
                       {kpi.change >= 0 ? '+' : ''}{kpi.change}
                       {kpi.changeType === 'percentage' ? '%' : ''}
                     </span>
@@ -369,7 +369,7 @@ const ExecutiveDashboard = () => {
                         <span className="text-sm font-medium">{metric.name}</span>
                         <div className="flex items-center gap-1">
                           {getTrendIcon('', metric.trend)}
-                          <span className={`text-xs ${metric.trend >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          <span className={`text-xs ${metric.trend >= 0 ? 'text-success' : 'text-destructive'}`}>
                             {metric.trend >= 0 ? '+' : ''}{metric.trend}%
                           </span>
                         </div>
@@ -395,7 +395,7 @@ const ExecutiveDashboard = () => {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-2">
-                  <Ship className="h-8 w-8 text-blue-600" />
+                  <Ship className="h-8 w-8 text-info" />
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Embarcações Ativas</p>
                     <p className="text-2xl font-bold">24</p>
@@ -407,7 +407,7 @@ const ExecutiveDashboard = () => {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-2">
-                  <Users className="h-8 w-8 text-green-600" />
+                  <Users className="h-8 w-8 text-success" />
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Tripulação Total</p>
                     <p className="text-2xl font-bold">340</p>
@@ -419,7 +419,7 @@ const ExecutiveDashboard = () => {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-2">
-                  <Clock className="h-8 w-8 text-yellow-600" />
+                  <Clock className="h-8 w-8 text-warning" />
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Horas Navegadas</p>
                     <p className="text-2xl font-bold">8,450</p>
@@ -431,7 +431,7 @@ const ExecutiveDashboard = () => {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-2">
-                  <Target className="h-8 w-8 text-purple-600" />
+                  <Target className="h-8 w-8 text-primary" />
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Entregas no Prazo</p>
                     <p className="text-2xl font-bold">92.1%</p>

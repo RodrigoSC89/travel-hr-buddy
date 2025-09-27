@@ -177,14 +177,14 @@ export const BusinessKPIDashboard: React.FC = () => {
 
   const getChangeIcon = (type: 'increase' | 'decrease') => {
     return type === 'increase' ? (
-      <ArrowUpRight className="w-4 h-4 text-green-600" />
+      <ArrowUpRight className="w-4 h-4 text-success" />
     ) : (
-      <ArrowDownRight className="w-4 h-4 text-red-600" />
+      <ArrowDownRight className="w-4 h-4 text-destructive" />
     );
   };
 
   const getChangeColor = (type: 'increase' | 'decrease') => {
-    return type === 'increase' ? 'text-green-600' : 'text-red-600';
+    return type === 'increase' ? 'text-success' : 'text-destructive';
   };
 
   const getCategoryKPIs = (category: string) => {
@@ -279,12 +279,12 @@ export const BusinessKPIDashboard: React.FC = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              <Target className="w-4 h-4 text-purple-600" />
+              <Target className="w-4 h-4 text-primary" />
               Eficiência
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-primary">
               {metrics.performance.efficiency}%
             </div>
             <Progress value={metrics.performance.efficiency} className="mt-2" />

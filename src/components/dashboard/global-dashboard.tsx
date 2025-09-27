@@ -73,11 +73,11 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 <div className="text-xs text-muted-foreground">Uptime</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">1.2M</div>
+                <div className="text-2xl font-bold text-success">1.2M</div>
                 <div className="text-xs text-muted-foreground">Transações</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">45</div>
+                <div className="text-2xl font-bold text-info">45</div>
                 <div className="text-xs text-muted-foreground">Usuários Ativos</div>
               </div>
             </div>
@@ -133,7 +133,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
-                      <Users className="w-6 h-6 text-blue-600" />
+                      <Users className="w-6 h-6 text-info" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Colaboração em Tempo Real</h2>
@@ -148,7 +148,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20">
-                      <Sparkles className="w-6 h-6 text-purple-600" />
+                      <Sparkles className="w-6 h-6 text-primary" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Assistente IA Inteligente</h2>
@@ -178,7 +178,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20">
-                      <Bell className="w-6 h-6 text-green-600" />
+                      <Bell className="w-6 h-6 text-success" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Workflows Inteligentes</h2>
@@ -208,7 +208,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20">
-                      <Brain className="w-6 h-6 text-yellow-600" />
+                      <Brain className="w-6 h-6 text-warning" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Gamificação Corporativa</h2>
@@ -341,7 +341,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                         <Card className="bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200/50">
                           <CardContent className="p-6">
                             <div className="space-y-4">
-                              <h3 className="font-semibold text-purple-700 flex items-center gap-2">
+                              <h3 className="font-semibold text-primary-foreground flex items-center gap-2">
                                 <Target className="w-5 h-5" />
                                 🎯 Recomendações Estratégicas
                               </h3>
@@ -397,8 +397,8 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                         <p className="text-sm leading-relaxed">
                           A implementação completa das funcionalidades de IA disponíveis pode resultar em:
                           <strong className="text-primary"> 40% de redução no tempo de tarefas administrativas</strong>, 
-                          <strong className="text-green-600"> 25% de economia em custos operacionais</strong> e 
-                          <strong className="text-blue-600"> 60% de melhoria na tomada de decisões</strong> baseadas em dados.
+                          <strong className="text-success-foreground"> 25% de economia em custos operacionais</strong> e 
+                          <strong className="text-info-foreground"> 60% de melhoria na tomada de decisões</strong> baseadas em dados.
                         </p>
                         <div className="mt-4 flex items-center justify-between">
                           <span className="text-xs text-muted-foreground">

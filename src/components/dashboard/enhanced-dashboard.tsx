@@ -44,39 +44,39 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
 
   const colorClasses = {
     blue: {
-      gradient: "from-blue-500/20 via-cyan-400/10 to-blue-600/20",
-      border: "border-blue-200/50",
-      icon: "text-blue-600",
-      bg: "bg-blue-500/10",
-      glow: "shadow-blue-500/25"
+      gradient: "from-info/20 via-info/10 to-info/20",
+      border: "border-info/30",
+      icon: "text-info-foreground",
+      bg: "bg-info/15",
+      glow: "shadow-info/25"
     },
     green: {
-      gradient: "from-emerald-500/20 via-green-400/10 to-teal-600/20",
-      border: "border-emerald-200/50", 
-      icon: "text-emerald-600",
-      bg: "bg-emerald-500/10",
-      glow: "shadow-emerald-500/25"
+      gradient: "from-success/20 via-success/10 to-success/20",
+      border: "border-success/30", 
+      icon: "text-success-foreground",
+      bg: "bg-success/15",
+      glow: "shadow-success/25"
     },
     purple: {
-      gradient: "from-purple-500/20 via-violet-400/10 to-indigo-600/20",
-      border: "border-purple-200/50",
-      icon: "text-purple-600", 
-      bg: "bg-purple-500/10",
-      glow: "shadow-purple-500/25"
+      gradient: "from-primary/20 via-primary/10 to-primary/20",
+      border: "border-primary/30",
+      icon: "text-primary-foreground", 
+      bg: "bg-primary/15",
+      glow: "shadow-primary/25"
     },
     orange: {
-      gradient: "from-orange-500/20 via-amber-400/10 to-red-600/20",
-      border: "border-orange-200/50",
-      icon: "text-orange-600",
-      bg: "bg-orange-500/10", 
-      glow: "shadow-orange-500/25"
+      gradient: "from-warning/20 via-warning/10 to-warning/20",
+      border: "border-warning/30",
+      icon: "text-warning-foreground",
+      bg: "bg-warning/15", 
+      glow: "shadow-warning/25"
     },
     rose: {
-      gradient: "from-rose-500/20 via-pink-400/10 to-red-600/20",
-      border: "border-rose-200/50",
-      icon: "text-rose-600",
-      bg: "bg-rose-500/10",
-      glow: "shadow-rose-500/25"
+      gradient: "from-destructive/20 via-destructive/10 to-destructive/20",
+      border: "border-destructive/30",
+      icon: "text-destructive-foreground",
+      bg: "bg-destructive/15",
+      glow: "shadow-destructive/25"
     }
   };
 
@@ -92,13 +92,13 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
       {/* Floating Particles Effect */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-4 left-4 w-2 h-2 bg-white/20 rounded-full animate-ping" style={{ animationDelay: '0s' }} />
-        <div className="absolute top-8 right-6 w-1 h-1 bg-white/30 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-6 left-8 w-1.5 h-1.5 bg-white/25 rounded-full animate-ping" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-4 left-4 w-2 h-2 bg-primary/40 rounded-full animate-ping" style={{ animationDelay: '0s' }} />
+        <div className="absolute top-8 right-6 w-1 h-1 bg-secondary/50 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-6 left-8 w-1.5 h-1.5 bg-accent/40 rounded-full animate-ping" style={{ animationDelay: '2s' }} />
       </div>
       
       <CardContent className="p-6 relative z-10">
@@ -119,11 +119,11 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
             
             <div className="flex items-center gap-2">
               {trend === 'up' ? (
-                <TrendingUp className="w-4 h-4 text-emerald-500 group-hover:scale-110 transition-transform" />
+                <TrendingUp className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
               ) : (
-                <TrendingDown className="w-4 h-4 text-red-500 group-hover:scale-110 transition-transform" />
+                <TrendingDown className="w-4 h-4 text-destructive group-hover:scale-110 transition-transform" />
               )}
-              <span className={`text-sm font-medium ${trend === 'up' ? 'text-emerald-600' : 'text-red-600'}`}>
+              <span className={`text-sm font-medium ${trend === 'up' ? 'text-success-foreground' : 'text-destructive-foreground'}`}>
                 {change}
               </span>
               <Sparkles className="w-3 h-3 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -176,7 +176,7 @@ const FloatingActionButton = ({ icon: Icon, label, onClick, color = "primary", d
         group-hover:translate-x-[100%] transition-transform duration-1000" />
       
       <div className="relative z-10 flex flex-col items-center gap-2">
-        <div className="p-3 rounded-xl bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+        <div className="p-3 rounded-xl bg-primary/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
           <Icon className="w-6 h-6" />
         </div>
         <span className="text-sm font-medium text-center">{label}</span>
@@ -317,12 +317,12 @@ export const EnhancedDashboard = () => {
           
           {/* Animated Background Pattern */}
           <div className="absolute inset-0 bg-mesh opacity-20" />
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-white/10 to-transparent rounded-full blur-2xl animate-pulse" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-cyan-400/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/15 to-transparent rounded-full blur-2xl animate-pulse" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
           
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-6">
-              <div className="p-4 rounded-2xl bg-white/20 backdrop-blur-sm animate-pulse-glow">
+              <div className="p-4 rounded-2xl bg-primary/20 backdrop-blur-sm animate-pulse-glow">
                 <Rocket className="w-10 h-10" />
               </div>
               <div>
@@ -410,7 +410,7 @@ export const EnhancedDashboard = () => {
                     </CardTitle>
                     <CardDescription className="text-base opacity-80 group-hover:opacity-100 transition-opacity mt-2">
                       Métricas revolucionárias em tempo real • Última atualização: agora
-                      <Star className="inline-block w-4 h-4 ml-2 text-yellow-500 animate-pulse" />
+                      <Star className="inline-block w-4 h-4 ml-2 text-warning animate-pulse" />
                     </CardDescription>
                   </div>
                   
@@ -510,7 +510,7 @@ export const EnhancedDashboard = () => {
                 <CardTitle className="flex items-center gap-2 font-display">
                   <AlertTriangle className="h-5 w-5 text-orange-500 animate-pulse" />
                   Atividades Inteligentes
-                  <Heart className="h-4 w-4 text-red-500 animate-pulse" />
+                  <Heart className="h-4 w-4 text-destructive animate-pulse" />
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -530,7 +530,7 @@ export const EnhancedDashboard = () => {
             <CardTitle className="flex items-center gap-2 text-2xl font-display">
               <Brain className="h-6 w-6 text-primary animate-pulse" />
               <span className="text-gradient">Recursos Revolucionários do Sistema</span>
-              <Crown className="h-6 w-6 text-yellow-500 animate-bounce" />
+              <Crown className="h-6 w-6 text-warning animate-bounce" />
             </CardTitle>
             <CardDescription className="text-base">
               Funcionalidades que ainda não existem no mercado mundial
