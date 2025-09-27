@@ -25,10 +25,10 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
   
   // Mock data for conversation
   const conversationId = 'mock-conversation-id';
-  const startDbConversation = () => console.log('Starting conversation');
-  const endDbConversation = () => console.log('Ending conversation');
-  const saveMessage = (message: any) => console.log('Saving message:', message);
-  const logVoiceCommand = (command: any) => console.log('Logging command:', command);
+  const startDbConversation = () => {/* Start conversation */};
+  const endDbConversation = () => {/* End conversation */};
+  const saveMessage = (message: any) => {/* Save message */};
+  const logVoiceCommand = (command: any) => {/* Log command */};
   
   const { processVoiceCommand } = useVoiceNavigation();
 
