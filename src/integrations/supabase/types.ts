@@ -4799,6 +4799,14 @@ export type Database = {
         Args: { tenant_uuid: string; user_uuid?: string }
         Returns: boolean
       }
+      user_in_organization: {
+        Args: { org_id: string; user_id: string }
+        Returns: boolean
+      }
+      user_in_tenant: {
+        Args: { tenant_id: string; user_id: string }
+        Returns: boolean
+      }
       user_is_org_admin: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
