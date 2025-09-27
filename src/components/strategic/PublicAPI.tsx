@@ -573,3 +573,5 @@ export const PublicAPI = () => {
     </div>
   );
 };
+
+export default PublicAPI;

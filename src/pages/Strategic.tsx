@@ -5,6 +5,9 @@ import { Badge } from '@/components/ui/badge';
 import NauticalCopilot from '@/components/strategic/NauticalCopilot';
 import MaritimeIdentitySystem from '@/components/strategic/MaritimeIdentitySystem';
 import SmartIntegrationHub from '@/components/strategic/SmartIntegrationHub';
+import { PublicAPI } from '@/components/strategic/PublicAPI';
+import NautilusCopilotAdvanced from '@/components/ai/nautilus-copilot-advanced';
+import PredictiveAnalyticsEnhanced from '@/components/analytics/predictive-analytics-enhanced';
 import { 
   Anchor, 
   Compass, 
@@ -30,7 +33,7 @@ import {
 } from 'lucide-react';
 
 const Strategic: React.FC = () => {
-  const [activeModule, setActiveModule] = useState<'overview' | 'copilot' | 'identity' | 'integrations'>('overview');
+  const [activeModule, setActiveModule] = useState<'overview' | 'copilot' | 'identity' | 'integrations' | 'api' | 'ai-advanced' | 'predictive'>('overview');
 
   const strategicModules = [
     {
@@ -41,6 +44,33 @@ const Strategic: React.FC = () => {
       color: 'from-blue-500 to-cyan-500',
       features: ['IA Conversacional', 'Comandos Inteligentes', 'Automação Proativa', 'Análise Preditiva'],
       status: 'Revolucionário'
+    },
+    {
+      id: 'ai-advanced',
+      title: 'Copiloto IA Avançado',
+      description: 'Sistema avançado de IA com capacidades marítimas especializadas',
+      icon: Sparkles,
+      color: 'from-purple-500 to-indigo-500',
+      features: ['Análise Contextual', 'Insights Preditivos', 'Automação Inteligente', 'ML Marítimo'],
+      status: 'Beta Avançado'
+    },
+    {
+      id: 'predictive',
+      title: 'Analytics Preditivos',
+      description: 'Previsões e insights baseados em Machine Learning marítimo',
+      icon: TrendingUp,
+      color: 'from-emerald-500 to-teal-500',
+      features: ['Previsão de Manutenção', 'Análise de Mercado', 'Otimização de Rotas', 'Gestão de Riscos'],
+      status: 'Inovador'
+    },
+    {
+      id: 'api',
+      title: 'APIs Públicas',
+      description: 'Interface de programação para integrações empresariais',
+      icon: Globe,
+      color: 'from-orange-500 to-red-500',
+      features: ['REST APIs', 'Webhooks', 'Rate Limiting', 'Documentação'],
+      status: 'Enterprise'
     },
     {
       id: 'identity',
@@ -73,6 +103,12 @@ const Strategic: React.FC = () => {
     switch (activeModule) {
       case 'copilot':
         return <NauticalCopilot />;
+      case 'ai-advanced':
+        return <NautilusCopilotAdvanced />;
+      case 'predictive':
+        return <PredictiveAnalyticsEnhanced />;
+      case 'api':
+        return <PublicAPI />;
       case 'identity':
         return <MaritimeIdentitySystem />;
       case 'integrations':
@@ -155,7 +191,7 @@ const Strategic: React.FC = () => {
                 <span className="text-maritime">Módulos Estratégicos Náuticos</span>
               </h2>
               
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {strategicModules.map((module, index) => {
                   const Icon = module.icon;
                   return (
