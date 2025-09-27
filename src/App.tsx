@@ -94,6 +94,7 @@ const Academy = React.lazy(() => import("./pages/Academy"));
 const Marketplace = React.lazy(() => import("./pages/Marketplace"));
 const RealTimeMonitoring = React.lazy(() => import("./pages/RealTimeMonitoring"));
 const AdvancedAuth = React.lazy(() => import("./pages/AdvancedAuth"));
+const BusinessContinuityPlan = React.lazy(() => import("./pages/BusinessContinuityPlan"));
 
 const queryClient = new QueryClient();
 
@@ -244,6 +245,11 @@ const App = () => {
                     <Route path="advanced-auth" element={
                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
                         <AdvancedAuth />
+                      </React.Suspense>
+                    } />
+                    <Route path="business-continuity" element={
+                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <BusinessContinuityPlan />
                       </React.Suspense>
                     } />
                 </Route>
