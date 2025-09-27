@@ -109,8 +109,8 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({ onOpenSearch }
           icon={Zap}
           onClick={() => setIsMinimized(false)}
           label="Ações rápidas"
-          bgColor="#003366"
-          iconColor="#FFFFFF"
+          bgColor="bg-azure-700 hover:bg-azure-800"
+          iconColor="text-azure-50"
           size="md"
           ariaLabel="Abrir ações rápidas"
           tabIndex={0}

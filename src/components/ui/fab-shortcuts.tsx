@@ -1,44 +1,48 @@
 import React from 'react';
 import { Mic, Search, Settings, Bot } from 'lucide-react';
 import FloatingShortcutButton from '@/components/ui/floating-shortcut-button';
+import { useSystemActions } from '@/hooks/use-system-actions';
+import { useSidebarActions } from '@/hooks/use-sidebar-actions';
 
-// Simple, accessible cluster of 4 floating action buttons (bottom-right)
-// Colors per spec: bg #003366 / #004F9E, icon #FFFFFF
+// Production-ready floating action buttons with integrated functionality
 const FabShortcuts: React.FC = () => {
+  const { handleGlobalSearch, handleNavigateToSettings } = useSystemActions();
+  const { handleModuleAccess } = useSidebarActions();
+
   return (
     <div className="fixed bottom-6 right-6 z-[10060] pointer-events-auto">
       <div className="flex flex-col gap-4">
         <FloatingShortcutButton
           icon={<Mic />}
-          onClick={() => console.log('Comando de voz')}
+          onClick={() => handleModuleAccess('voice')}
           label="Comando de voz"
-          bgColor="#003366"
-          iconColor="#FFFFFF"
-          ariaLabel="Comando de voz"
+          bgColor="bg-azure-700 hover:bg-azure-800"
+          iconColor="text-azure-50"
+          ariaLabel="Ativar comando de voz"
         />
         <FloatingShortcutButton
           icon={<Search />}
-          onClick={() => console.log('Busca avançada')}
+          onClick={handleGlobalSearch}
           label="Busca avançada"
-          bgColor="#003366"
-          iconColor="#FFFFFF"
-          ariaLabel="Busca avançada"
+          bgColor="bg-azure-700 hover:bg-azure-800"
+          iconColor="text-azure-50"
+          ariaLabel="Abrir busca global"
         />
         <FloatingShortcutButton
           icon={<Settings />}
-          onClick={() => console.log('Configurações')}
+          onClick={handleNavigateToSettings}
           label="Configurações"
-          bgColor="#004F9E"
-          iconColor="#FFFFFF"
-          ariaLabel="Configurações do sistema"
+          bgColor="bg-azure-600 hover:bg-azure-700"
+          iconColor="text-azure-50"
+          ariaLabel="Abrir configurações do sistema"
         />
         <FloatingShortcutButton
           icon={<Bot />}
-          onClick={() => console.log('Chat IA')}
+          onClick={() => handleModuleAccess('ai-insights')}
           label="Chat IA"
-          bgColor="#004F9E"
-          iconColor="#FFFFFF"
-          ariaLabel="Chat com IA"
+          bgColor="bg-azure-600 hover:bg-azure-700"
+          iconColor="text-azure-50"
+          ariaLabel="Abrir assistente de IA"
         />
       </div>
     </div>
