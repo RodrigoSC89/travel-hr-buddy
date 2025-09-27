@@ -51,7 +51,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTenant } from '@/contexts/TenantContext';
 import { useToast } from '@/hooks/use-toast';
 import { EnhancedDashboardFilters } from './enhanced-dashboard-filters';
-import FloatingActionButtons from '@/components/ui/floating-action-buttons';
+
 import ProfessionalKPICards from '@/components/ui/professional-kpi-cards';
 import SystemStatusDashboard from '@/components/ui/system-status-dashboard';
 import ExecutiveMetricsPanel from '@/components/ui/executive-metrics-panel';

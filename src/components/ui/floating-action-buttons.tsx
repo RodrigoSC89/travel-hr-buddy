@@ -253,8 +253,8 @@ const FloatingActionButtons = () => {
   // Shortcuts API (as requested)
   const ativarReconhecimentoDeVoz = () => handleVoiceCommand();
   const abrirBuscaAvancada = () => handleQuickAction('search');
-  const abrirConfiguracoesAvancadas = () => {
-    toast({ title: '⚙️ Configurações', description: 'Abrindo configurações avançadas' });
+  const abrirConfiguracoes = () => {
+    toast({ title: '⚙️ Configurações', description: 'Abrindo configurações do sistema' });
     navigate('/settings');
   };
   const abrirChatIA = () => handleAIAssistant();
@@ -296,7 +296,7 @@ const FloatingActionButtons = () => {
           {/* ⚙️ Configurações */}
           <FloatingShortcutButton
             icon={Settings}
-            onClick={abrirConfiguracoesAvancadas}
+            onClick={abrirConfiguracoes}
             label="Configurações"
             bgColor="#003366"
             iconColor="#FFFFFF"
