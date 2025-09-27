@@ -4727,6 +4727,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_peotram_compliance_score: {
+        Args: { audit_uuid: string }
+        Returns: number
+      }
       can_access_employee_data: {
         Args: { target_employee_id: string; user_uuid?: string }
         Returns: boolean
