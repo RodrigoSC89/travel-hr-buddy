@@ -1,968 +1,495 @@
 import React, { useState, useEffect } from 'react';
+import { EnhancedPeotramDashboard } from './enhanced-peotram-dashboard';
+import { PeotramAuditWizard } from './peotram-audit-wizard';
+import { PeotramReportsGenerator } from './peotram-reports-generator';
+import { PeotramNonConformities } from './peotram-non-conformities';
+import { PeotramTemplateManager } from './peotram-template-manager';
+import { PeotramAnalyticsPanel } from './peotram-analytics-panel';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
-import { supabase } from '@/integrations/supabase/client';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { AlertCircle, CheckCircle, FileText, Plus, Search, Ship, Building, Calendar, Users, BarChart3, TrendingUp, Download, Upload, Eye, Edit, Trash2, Star, Clock, Target, Activity, Shield, Zap, Settings, UserCheck } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
 import { useOrganizationPermissions } from '@/hooks/use-organization-permissions';
-import { PeotramTemplateManager } from './peotram-template-manager';
-import { PeotramNonConformities } from './peotram-non-conformities';
-import { PeotramPermissionsManager } from './peotram-permissions-manager';
+import { 
+  BarChart3, 
+  FileCheck, 
+  AlertTriangle, 
+  Settings, 
+  Plus,
+  Download,
+  Upload,
+  Users,
+  Award,
+  TrendingUp,
+  Clock,
+  Target,
+  Eye,
+  Edit,
+  Calendar,
+  MapPin,
+  Ship,
+  Building,
+  Star,
+  Shield,
+  Zap,
+  Activity,
+  Leaf
+} from 'lucide-react';
+
+interface PeotramAudit {
+  id: string;
+  auditPeriod: string;
+  auditType: 'vessel' | 'shore';
+  vesselName?: string;
+  location?: string;
+  status: 'draft' | 'in-progress' | 'completed' | 'approved';
+  complianceScore: number;
+  auditorName: string;
+  completedAt?: string;
+  nonConformitiesCount: number;
+  createdAt: string;
+}
+
+interface NonConformity {
+  id: string;
+  audit_id: string;
+  element_number: string;
+  element_name: string;
+  non_conformity_type: 'critical' | 'grave' | 'moderate' | 'light';
+  description: string;
+  corrective_action: string;
+  responsible_person: string;
+  target_date: string;
+  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  severity_score: number;
+  audit_date: string;
+  vessel_name?: string;
+  shore_location?: string;
+}
 
 interface PeotramTemplate {
   id: string;
   year: number;
   version: string;
-  template_data: {
-    elements: Array<{
-      number: string;
-      name: string;
-      requirements: string[];
-    }>;
-  };
+  template_data: any;
   is_active: boolean;
   checklist_type: 'vessel' | 'shore';
   created_at: string;
 }
 
-interface PeotramAudit {
-  id: string;
-  audit_date: string;
-  audit_period: string;
-  audit_type: 'vessel' | 'shore';
-  vessel_name?: string;
-  vessel_id?: string;
-  shore_location?: string;
-  auditor_name: string;
-  status: 'draft' | 'in_progress' | 'completed' | 'approved';
-  compliance_score: number;
-  elements_evaluated: number;
-  non_conformities_count: number;
-  template_id?: string;
-  created_at: string;
-  vessels?: {
-    id: string;
-    name: string;
-    imo_number?: string;
-  };
-}
-
-interface NonConformity {
-  id: string;
-  element_number: string;
-  element_name: string;
-  non_conformity_type: 'major' | 'minor' | 'observation';
-  description: string;
-  corrective_action?: string;
-  responsible_person?: string;
-  target_date?: string;
-  status: 'open' | 'in_progress' | 'closed' | 'verified';
-  severity_score: number;
-  peotram_audits?: {
-    audit_period: string;
-    vessel_name?: string;
-    shore_location?: string;
-  };
-}
-
-// Dados de demonstração
-const getDemoAudits = (): PeotramAudit[] => [
-  {
-    id: 'demo-1',
-    audit_period: 'Janeiro 2024',
-    audit_date: '2024-01-15',
-    audit_type: 'vessel',
-    vessel_name: 'MV Nautilus',
-    vessel_id: 'vessel-1',
-    auditor_name: 'João Silva',
-    status: 'completed',
-    compliance_score: 85,
-    elements_evaluated: 13,
-    non_conformities_count: 2,
-    created_at: '2024-01-15T10:00:00Z'
-  },
-  {
-    id: 'demo-2',
-    audit_period: 'Fevereiro 2024',
-    audit_date: '2024-02-10',
-    audit_type: 'shore',
-    shore_location: 'Base Santos',
-    auditor_name: 'Maria Santos',
-    status: 'in_progress',
-    compliance_score: 0,
-    elements_evaluated: 7,
-    non_conformities_count: 0,
-    created_at: '2024-02-10T08:00:00Z'
-  }
-];
-
-const getDemoTemplates = (): PeotramTemplate[] => [
-  {
-    id: 'template-1',
-    year: 2024,
-    version: '1.0',
-    checklist_type: 'vessel',
-    template_data: {
-      elements: [
-        { number: '01', name: 'Política de Segurança', requirements: ['Política documentada', 'Divulgação adequada'] },
-        { number: '02', name: 'Responsabilidade e Autoridade', requirements: ['Organograma atualizado', 'Descrição de cargos'] }
-      ]
-    },
-    is_active: true,
-    created_at: '2024-01-01T00:00:00Z'
-  }
-];
-
-const getDemoVessels = () => [
-  { id: 'vessel-1', name: 'MV Nautilus', imo_number: '9876543' },
-  { id: 'vessel-2', name: 'MV Atlantic', imo_number: '9876544' },
-  { id: 'vessel-3', name: 'MV Pacific', imo_number: '9876545' }
-];
-
 export const EnhancedPeotramManager: React.FC = () => {
-  const { hasFeature, canManageData, isAdmin } = useOrganizationPermissions();
-  const [audits, setAudits] = useState<PeotramAudit[]>([]);
-  const [templates, setTemplates] = useState<PeotramTemplate[]>([]);
-  const [vessels, setVessels] = useState<any[]>([]);
-  const [nonConformities, setNonConformities] = useState<NonConformity[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const { hasFeature } = useOrganizationPermissions();
+  const [activeView, setActiveView] = useState('dashboard');
+  const [isNewAuditOpen, setIsNewAuditOpen] = useState(false);
   const [selectedAudit, setSelectedAudit] = useState<PeotramAudit | null>(null);
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [isTemplateManagerOpen, setIsTemplateManagerOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<PeotramTemplate | null>(null);
-  const [aiAnalysis, setAiAnalysis] = useState<string>('');
-  const [activeView, setActiveView] = useState<'dashboard' | 'audits' | 'non-conformities' | 'templates' | 'permissions'>('dashboard');
+  const [audits, setAudits] = useState<PeotramAudit[]>([]);
+  const [nonConformities, setNonConformities] = useState<NonConformity[]>([]);
+  const [templates, setTemplates] = useState<PeotramTemplate[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Carregar dados de demonstração inicialmente
-    setLoading(true);
-    setAudits(getDemoAudits());
-    setTemplates(getDemoTemplates());
-    setVessels(getDemoVessels());
-    setNonConformities([]);
-    setLoading(false);
-    
-    // Se a feature PEOTRAM estiver habilitada, tentar carregar dados reais
-    if (hasFeature('peotram')) {
-      fetchAudits();
-    }
-  }, []); // Fixed: removed hasFeature from dependencies to prevent infinite loop
-
-  const fetchAudits = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('peotram_audits')
-        .select(`
-          *,
-          vessels (
-            id,
-            name,
-            imo_number
-          )
-        `)
-        .order('created_at', { ascending: false })
-        .limit(20);
-
-      if (error) {
-        console.log('Erro ao carregar dados do banco, usando dados de demonstração');
-        return; // Manter os dados de demonstração que já foram carregados
-      }
-
-      if (data && data.length > 0) {
-        const mappedAudits = data.map((audit: any) => ({
-          ...audit,
-          elements_evaluated: audit.elements_evaluated || 0,
-          non_conformities_count: audit.non_conformities_count || 0,
-          compliance_score: audit.compliance_score || 0
-        }));
-        setAudits(mappedAudits);
-      }
-    } catch (error) {
-      console.log('Erro ao conectar com banco, usando dados de demonstração:', error);
-      // Manter os dados de demonstração
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchTemplates = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('peotram_templates')
-        .select('*')
-        .order('year', { ascending: false });
-
-      if (error) throw error;
-      
-      const mappedTemplates = (data || []).map((template: any) => ({
-        ...template,
-        template_data: typeof template.template_data === 'string' 
-          ? JSON.parse(template.template_data)
-          : template.template_data
-      }));
-      
-      setTemplates(mappedTemplates);
-    } catch (error) {
-      console.error('Error fetching templates:', error);
-    }
-  };
-
-  const fetchVessels = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('vessels')
-        .select('id, name, imo_number, vessel_type')
-        .order('name');
-
-      if (error) throw error;
-      setVessels(data || []);
-    } catch (error) {
-      console.error('Error fetching vessels:', error);
-    }
-  };
-
-  const fetchNonConformities = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('peotram_non_conformities')
-        .select(`
-          *,
-          peotram_audits (
-            audit_period,
-            vessel_name,
-            shore_location
-          )
-        `)
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      if (error) throw error;
-      
-      const mappedNCs = (data || []).map((nc: any) => ({
-        ...nc,
-        non_conformity_type: nc.non_conformity_type as 'major' | 'minor' | 'observation'
-      }));
-      
-      setNonConformities(mappedNCs);
-    } catch (error) {
-      console.error('Error fetching non-conformities:', error);
-    }
-  };
-
-  const createNewAudit = async (auditData: any) => {
-    try {
-      const { data, error } = await supabase
-        .from('peotram_audits')
-        .insert([{
-          ...auditData,
-          compliance_score: 0,
-          elements_evaluated: 0,
-          non_conformities_count: 0
-        }])
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      const mappedAudit: PeotramAudit = {
-        ...data,
-        audit_type: data.audit_type as 'vessel' | 'shore',
-        elements_evaluated: 0,
-        non_conformities_count: 0,
-        status: data.status as 'draft' | 'in_progress' | 'completed' | 'approved'
-      };
-
-      setAudits(prev => [mappedAudit, ...prev]);
-      setIsCreateDialogOpen(false);
-      
-      toast({
-        title: "Sucesso",
-        description: "Nova auditoria PEOTRAM criada com sucesso!",
-      });
-    } catch (error) {
-      console.error('Error creating audit:', error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível criar a auditoria.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const createTemplate = async (templateData: any) => {
-    try {
-      const { data, error } = await supabase
-        .from('peotram_templates')
-        .insert([templateData])
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      const mappedTemplate: PeotramTemplate = {
-        ...data,
-        template_data: typeof data.template_data === 'string' 
-          ? JSON.parse(data.template_data)
-          : data.template_data,
-        checklist_type: data.checklist_type as 'vessel' | 'shore'
-      };
-
-      setTemplates(prev => [mappedTemplate, ...prev]);
-      
-      toast({
-        title: "Sucesso",
-        description: "Template PEOTRAM criado com sucesso!",
-      });
-    } catch (error) {
-      console.error('Error creating template:', error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível criar o template.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const filteredAudits = audits.filter(audit => {
-    const matchesSearch = audit.audit_period.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         audit.vessel_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         audit.shore_location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         audit.auditor_name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = selectedStatus === 'all' || audit.status === selectedStatus;
-    
-    return matchesSearch && matchesStatus;
-  });
-
-  const activeTemplates = templates.filter(t => t.is_active);
-  const currentYear = new Date().getFullYear();
-  const vesselTemplate = activeTemplates.find(t => t.checklist_type === 'vessel' && t.year === currentYear);
-  const shoreTemplate = activeTemplates.find(t => t.checklist_type === 'shore' && t.year === currentYear);
-
+  // Verificar permissões
   if (!hasFeature('peotram')) {
     return (
-      <Card className="max-w-2xl mx-auto mt-8">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="h-6 w-6" />
-            Acesso Restrito
-          </CardTitle>
-        </CardHeader>
+      <Card className="p-8 text-center">
         <CardContent>
-          <p className="text-muted-foreground">
-            Você não tem permissão para acessar o módulo PEOTRAM. Entre em contato com o administrador do sistema.
+          <Shield className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Acesso Restrito</h3>
+          <p className="text-muted-foreground mb-4">
+            O módulo PEOTRAM não está disponível no seu plano atual.
           </p>
+          <Button variant="outline">
+            Solicitar Acesso
+          </Button>
         </CardContent>
       </Card>
     );
   }
 
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    setIsLoading(true);
+    try {
+      // Carregar dados de demonstração
+      setAudits(getDemoAudits());
+      setNonConformities(getDemoNonConformities());
+      setTemplates(getDemoTemplates());
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getDemoAudits = (): PeotramAudit[] => [
+    {
+      id: 'AUDIT_001',
+      auditPeriod: '2024-Q4',
+      auditType: 'vessel',
+      vesselName: 'MV Atlantic Explorer',
+      status: 'completed',
+      complianceScore: 87.5,
+      auditorName: 'João Silva',
+      completedAt: '2024-12-15',
+      nonConformitiesCount: 3,
+      createdAt: '2024-12-01'
+    },
+    {
+      id: 'AUDIT_002',
+      auditPeriod: '2024-Q4',
+      auditType: 'shore',
+      location: 'Terminal Santos - SP',
+      status: 'in-progress',
+      complianceScore: 0,
+      auditorName: 'Maria Santos',
+      nonConformitiesCount: 0,
+      createdAt: '2024-12-10'
+    },
+    {
+      id: 'AUDIT_003',
+      auditPeriod: '2024-Q3',
+      auditType: 'vessel',
+      vesselName: 'OSV Petrobras XXI',
+      status: 'completed',
+      complianceScore: 92.3,
+      auditorName: 'Carlos Eduardo',
+      completedAt: '2024-09-28',
+      nonConformitiesCount: 1,
+      createdAt: '2024-09-15'
+    }
+  ];
+
+  const getDemoNonConformities = (): NonConformity[] => [
+    {
+      id: 'NC_001',
+      audit_id: 'AUDIT_001',
+      element_number: 'ELEMENTO_01',
+      element_name: 'Liderança, Gerenciamento e Responsabilidade',
+      non_conformity_type: 'moderate',
+      description: 'Política de segurança necessita atualização conforme normas vigentes',
+      corrective_action: 'Atualizar política conforme normas vigentes e treinar equipe',
+      responsible_person: 'Gestor de Segurança',
+      target_date: '2024-12-30',
+      status: 'in_progress',
+      severity_score: 2,
+      audit_date: '2024-12-15',
+      vessel_name: 'MV Atlantic Explorer'
+    },
+    {
+      id: 'NC_002',
+      audit_id: 'AUDIT_001',
+      element_number: 'ELEMENTO_02',
+      element_name: 'Conformidade Legal',
+      non_conformity_type: 'light',
+      description: 'Documentação de NR-34 incompleta para alguns tripulantes',
+      corrective_action: 'Completar documentação faltante e implementar checklist de verificação',
+      responsible_person: 'Departamento de RH',
+      target_date: '2025-01-15',
+      status: 'open',
+      severity_score: 1,
+      audit_date: '2024-12-15',
+      vessel_name: 'MV Atlantic Explorer'
+    }
+  ];
+
+  const getDemoTemplates = (): PeotramTemplate[] => [
+    {
+      id: 'TPL_001',
+      year: 2024,
+      version: '2.1',
+      template_data: { elements: [] },
+      is_active: true,
+      checklist_type: 'vessel',
+      created_at: '2024-01-01'
+    },
+    {
+      id: 'TPL_002',
+      year: 2024,
+      version: '2.1',
+      template_data: { elements: [] },
+      is_active: true,
+      checklist_type: 'shore',
+      created_at: '2024-01-01'
+    }
+  ];
+
+  const handleSaveAudit = async (auditData: any) => {
+    console.log('Salvando auditoria:', auditData);
+    // Implementar salvamento na API Supabase
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay
+    await loadData(); // Recarregar dados
+  };
+
+  const handleCompleteAudit = async (auditData: any) => {
+    console.log('Finalizando auditoria:', auditData);
+    setIsNewAuditOpen(false);
+    setSelectedAudit(null);
+    // Implementar finalização na API
+    await loadData();
+  };
+
+  const handleUpdateNonConformity = async (id: string, updates: any) => {
+    console.log('Atualizando não conformidade:', id, updates);
+    // Implementar atualização na API
+    await loadData();
+  };
+
+  const handleUpdateTemplate = async (template: any) => {
+    console.log('Atualizando template:', template);
+    // Implementar atualização na API
+    await loadData();
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'bg-success/20 text-success border-success/30';
+      case 'in-progress': return 'bg-info/20 text-info border-info/30';
+      case 'draft': return 'bg-warning/20 text-warning border-warning/30';
+      case 'approved': return 'bg-primary/20 text-primary border-primary/30';
+      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'completed': return 'Concluída';
+      case 'in-progress': return 'Em Andamento';
+      case 'draft': return 'Rascunho';
+      case 'approved': return 'Aprovada';
+      default: return status;
+    }
+  };
+
+  // Se há uma auditoria selecionada, mostrar o wizard
+  if (selectedAudit) {
+    return (
+      <PeotramAuditWizard
+        auditId={selectedAudit.id}
+        onSave={handleSaveAudit}
+        onComplete={handleCompleteAudit}
+        onCancel={() => setSelectedAudit(null)}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
-      {/* Demo Mode Banner */}
-      <Card className="bg-blue-50 border-blue-200">
-        <CardContent className="pt-6">
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <AlertCircle className="h-4 w-4 text-blue-600" />
-              </div>
-            </div>
-            <div>
-              <h4 className="font-medium text-blue-900">Modo Demonstração Ativo</h4>
-              <p className="text-sm text-blue-700">
-                Sistema funcionando com dados de demonstração. Todas as funcionalidades estão disponíveis para teste como administrador.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
       {/* Header */}
-      <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Sistema PEOTRAM</h1>
+          <h1 className="text-3xl font-bold text-foreground">Sistema PEOTRAM</h1>
           <p className="text-muted-foreground">
-            Programa de Gerenciamento da Segurança Operacional
+            Programa de Excelência Operacional no Transporte Aéreo e Marítimo
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          {/* Navigation Tabs */}
-          <div className="flex items-center space-x-1 bg-muted rounded-lg p-1">
-            <Button 
-              variant={activeView === 'dashboard' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setActiveView('dashboard')}
-            >
-              <BarChart3 className="h-4 w-4 mr-1" />
-              Dashboard
-            </Button>
-            <Button 
-              variant={activeView === 'audits' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setActiveView('audits')}
-            >
-              <FileText className="h-4 w-4 mr-1" />
-              Auditorias
-            </Button>
-            <Button 
-              variant={activeView === 'non-conformities' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setActiveView('non-conformities')}
-            >
-              <AlertCircle className="h-4 w-4 mr-1" />
-              Não Conformidades
-            </Button>
-            {isAdmin() && (
-              <>
-                <Button 
-                  variant={activeView === 'templates' ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => setActiveView('templates')}
-                >
-                  <Settings className="h-4 w-4 mr-1" />
-                  Templates
-                </Button>
-                <Button 
-                  variant={activeView === 'permissions' ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => setActiveView('permissions')}
-                >
-                  <UserCheck className="h-4 w-4 mr-1" />
-                  Permissões
-                </Button>
-              </>
-            )}
-          </div>
+        
+        <div className="flex gap-2">
+          <Dialog open={isNewAuditOpen} onOpenChange={setIsNewAuditOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-primary hover:bg-primary/90">
+                <Plus className="w-4 h-4 mr-2" />
+                Nova Auditoria
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-7xl max-h-[95vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Nova Auditoria PEOTRAM</DialogTitle>
+              </DialogHeader>
+              <PeotramAuditWizard
+                onSave={handleSaveAudit}
+                onComplete={handleCompleteAudit}
+                onCancel={() => setIsNewAuditOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
           
-          {canManageData() && activeView === 'audits' && (
-            <Button onClick={() => setIsCreateDialogOpen(true)} className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              Nova Auditoria
-            </Button>
-          )}
+          <Button variant="outline">
+            <Download className="w-4 h-4 mr-2" />
+            Exportar Dados
+          </Button>
           
-          {isAdmin() && activeView === 'templates' && (
-            <Button onClick={() => setIsTemplateManagerOpen(true)} className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              Novo Template
-            </Button>
-          )}
+          <Button variant="outline">
+            <Upload className="w-4 h-4 mr-2" />
+            Importar
+          </Button>
         </div>
       </div>
 
-      {/* Render based on active view */}
-      {activeView === 'dashboard' && (
-        <>
-          {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Total de Auditorias</p>
-                    <p className="text-2xl font-bold">{audits.length}</p>
-                  </div>
-                  <FileText className="h-8 w-8 text-muted-foreground" />
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Em Andamento</p>
-                    <p className="text-2xl font-bold">{audits.filter(a => a.status === 'in_progress').length}</p>
-                  </div>
-                  <Clock className="h-8 w-8 text-blue-600" />
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Não Conformidades</p>
-                    <p className="text-2xl font-bold text-red-600">
-                      {audits.reduce((acc, audit) => acc + (audit.non_conformities_count || 0), 0)}
-                    </p>
-                  </div>
-                  <AlertCircle className="h-8 w-8 text-red-600" />
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Compliance Médio</p>
-                    <p className="text-2xl font-bold">
-                      {audits.length > 0 
-                        ? Math.round(audits.reduce((acc, audit) => acc + audit.compliance_score, 0) / audits.length)
-                        : 0}%
-                    </p>
-                  </div>
-                  <TrendingUp className="h-8 w-8 text-purple-600" />
-                </div>
-              </CardContent>
-            </Card>
+      {/* Main Content */}
+      <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-6 bg-muted/50">
+          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+            <BarChart3 className="w-4 h-4" />
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="audits" className="flex items-center gap-2">
+            <FileCheck className="w-4 h-4" />
+            Auditorias
+          </TabsTrigger>
+          <TabsTrigger value="non-conformities" className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            Não Conformidades
+          </TabsTrigger>
+          <TabsTrigger value="reports" className="flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            Relatórios
+          </TabsTrigger>
+          <TabsTrigger value="templates" className="flex items-center gap-2">
+            <Settings className="w-4 h-4" />
+            Templates
+          </TabsTrigger>
+          <TabsTrigger value="analytics" className="flex items-center gap-2">
+            <Activity className="w-4 h-4" />
+            Analytics
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="dashboard" className="space-y-0">
+          <EnhancedPeotramDashboard />
+        </TabsContent>
+
+        <TabsContent value="audits" className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold">Auditorias PEOTRAM</h2>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm">
+                <Calendar className="w-4 h-4 mr-2" />
+                Filtrar Período
+              </Button>
+              <Button variant="outline" size="sm">
+                <Ship className="w-4 h-4 mr-2" />
+                Tipo de Auditoria
+              </Button>
+            </div>
           </div>
 
-          {/* Templates Status */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Ship className="h-5 w-5" />
-                  Template Embarcações {currentYear}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {vesselTemplate ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {audits.map((audit) => (
+              <Card
+                key={audit.id}
+                className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-accent/5"
+                onClick={() => setSelectedAudit(audit)}
+              >
+                <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
-                    <Badge variant="outline" className="text-green-600">
-                      <CheckCircle className="h-3 w-3 mr-1" />
-                      Ativo v{vesselTemplate.version}
+                    <CardTitle className="text-lg">{audit.id}</CardTitle>
+                    <Badge variant="outline" className={getStatusColor(audit.status)}>
+                      {getStatusLabel(audit.status)}
                     </Badge>
-                    <span className="text-sm text-muted-foreground">
-                      {vesselTemplate.template_data.elements?.length || 0} elementos
-                    </span>
                   </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm text-muted-foreground">
-                      Nenhum template ativo para {currentYear}
-                    </span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Building className="h-5 w-5" />
-                  Template Base Terrestre {currentYear}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {shoreTemplate ? (
+                  <CardDescription className="flex items-center gap-2">
+                    {audit.auditType === 'vessel' ? (
+                      <>
+                        <Ship className="w-4 h-4" />
+                        {audit.vesselName}
+                      </>
+                    ) : (
+                      <>
+                        <Building className="w-4 h-4" />
+                        {audit.location}
+                      </>
+                    )}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <Badge variant="outline" className="text-green-600">
-                      <CheckCircle className="h-3 w-3 mr-1" />
-                      Ativo v{shoreTemplate.version}
-                    </Badge>
-                    <span className="text-sm text-muted-foreground">
-                      {shoreTemplate.template_data.elements?.length || 0} elementos
+                    <span className="text-sm font-medium">Score de Conformidade</span>
+                    <span className="text-lg font-bold text-foreground">
+                      {audit.status === 'completed' ? `${audit.complianceScore}%` : '-'}
                     </span>
                   </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm text-muted-foreground">
-                      Nenhum template ativo para {currentYear}
+                  
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="flex items-center gap-1 text-muted-foreground">
+                      <Users className="w-3 h-3" />
+                      {audit.auditorName}
+                    </span>
+                    <span className="flex items-center gap-1 text-muted-foreground">
+                      <Calendar className="w-3 h-3" />
+                      {audit.auditPeriod}
                     </span>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
 
-          {/* Recent Activity */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Atividades Recentes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {audits.slice(0, 5).map((audit) => (
-                  <div key={audit.id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="flex items-center gap-3">
-                      {audit.vessel_name ? (
-                        <Ship className="h-4 w-4 text-blue-600" />
-                      ) : (
-                        <Building className="h-4 w-4 text-green-600" />
-                      )}
-                      <div>
-                        <p className="font-medium text-sm">{audit.audit_period}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {audit.vessel_name || audit.shore_location} • {audit.auditor_name}
-                        </p>
-                      </div>
+                  {audit.nonConformitiesCount > 0 && (
+                    <div className="flex items-center gap-2 p-2 bg-warning/10 rounded-lg border border-warning/20">
+                      <AlertTriangle className="w-4 h-4 text-warning" />
+                      <span className="text-sm text-warning font-medium">
+                        {audit.nonConformitiesCount} Não Conformidades
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline">{audit.compliance_score}%</Badge>
-                      <Badge variant={
-                        audit.status === 'completed' ? 'default' :
-                        audit.status === 'in_progress' ? 'secondary' : 'outline'
-                      }>
-                        {audit.status}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
-
-      {activeView === 'audits' && (
-        <>
-          {/* Filters and Search */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                    <Input
-                      placeholder="Buscar auditorias..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                </div>
-                
-                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                  <SelectTrigger className="w-full md:w-48">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todos os status</SelectItem>
-                    <SelectItem value="draft">Rascunho</SelectItem>
-                    <SelectItem value="in_progress">Em andamento</SelectItem>
-                    <SelectItem value="completed">Concluído</SelectItem>
-                    <SelectItem value="approved">Aprovado</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Audits Grid */}
-          <div className="grid gap-4">
-            {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <div className="text-center">
-                  <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                  <p className="text-muted-foreground">Carregando auditorias...</p>
-                </div>
-              </div>
-            ) : filteredAudits.length === 0 ? (
-              <Card>
-                <CardContent className="py-8 text-center">
-                  <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="font-semibold text-lg mb-2">Nenhuma auditoria encontrada</h3>
-                  <p className="text-muted-foreground mb-4">
-                    {audits.length === 0 
-                      ? "Comece criando sua primeira auditoria PEOTRAM."
-                      : "Ajuste os filtros para ver outras auditorias."
-                    }
-                  </p>
-                  {audits.length === 0 && canManageData() && (
-                    <Button onClick={() => setIsCreateDialogOpen(true)}>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Criar primeira auditoria
-                    </Button>
                   )}
+
+                  <div className="flex gap-2 pt-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Visualizar relatório
+                      }}
+                    >
+                      <Eye className="w-3 h-3 mr-1" />
+                      Ver
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedAudit(audit);
+                      }}
+                    >
+                      <Edit className="w-3 h-3 mr-1" />
+                      Editar
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
-            ) : (
-              filteredAudits.map((audit) => (
-                <Card key={audit.id} className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="pt-6">
-                    <div className="flex flex-col md:flex-row gap-4">
-                      <div className="flex-1 space-y-3">
-                        <div className="flex items-start justify-between">
-                          <div className="space-y-1">
-                            <h3 className="font-semibold text-lg">{audit.audit_period}</h3>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              {audit.vessel_name ? (
-                                <>
-                                  <Ship className="h-4 w-4" />
-                                  <span>{audit.vessel_name}</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Building className="h-4 w-4" />
-                                  <span>{audit.shore_location || 'Base Terrestre'}</span>
-                                </>
-                              )}
-                              <Separator orientation="vertical" className="h-4" />
-                              <Calendar className="h-4 w-4" />
-                              <span>{new Date(audit.audit_date).toLocaleDateString('pt-BR')}</span>
-                            </div>
-                          </div>
-                          
-                          <Badge 
-                            variant={
-                              audit.status === 'completed' ? 'default' :
-                              audit.status === 'in_progress' ? 'secondary' :
-                              audit.status === 'approved' ? 'outline' : 'destructive'
-                            }
-                          >
-                            {audit.status === 'draft' ? 'Rascunho' :
-                             audit.status === 'in_progress' ? 'Em andamento' :
-                             audit.status === 'completed' ? 'Concluído' : 'Aprovado'}
-                          </Badge>
-                        </div>
-                        
-                        <div className="flex items-center gap-4 flex-wrap">
-                          <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm">{audit.auditor_name}</span>
-                          </div>
-                          
-                          <div className="flex items-center gap-2">
-                            <Activity className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm">{audit.elements_evaluated} elementos</span>
-                          </div>
-                          
-                          <div className="flex items-center gap-2">
-                            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm">{audit.compliance_score}% compliance</span>
-                          </div>
+            ))}
 
-                          {audit.non_conformities_count > 0 && (
-                            <div className="flex items-center gap-2">
-                              <AlertCircle className="h-4 w-4 text-red-500" />
-                              <span className="text-sm text-red-600">{audit.non_conformities_count} NC</span>
-                            </div>
-                          )}
-                        </div>
-                        
-                        <Progress value={audit.compliance_score} className="w-full" />
-                      </div>
-                      
-                      <div className="flex flex-col justify-between items-end gap-2">
-                        <div className="text-right text-sm text-muted-foreground">
-                          <p>Criado em {new Date(audit.created_at).toLocaleDateString('pt-BR')}</p>
-                        </div>
-                        
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          {canManageData() && (
-                            <Button variant="outline" size="sm">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            )}
+            {/* Card para nova auditoria */}
+            <Card 
+              className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-dashed border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10"
+              onClick={() => setIsNewAuditOpen(true)}
+            >
+              <CardContent className="flex flex-col items-center justify-center h-48 text-primary">
+                <Plus className="w-12 h-12 mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Nova Auditoria</h3>
+                <p className="text-sm text-center text-primary/80">
+                  Iniciar uma nova auditoria PEOTRAM
+                </p>
+              </CardContent>
+            </Card>
           </div>
-        </>
-      )}
+        </TabsContent>
 
-      {activeView === 'non-conformities' && (
-        <PeotramNonConformities 
-          nonConformities={nonConformities}
-          onUpdate={fetchNonConformities}
-        />
-      )}
-
-      {activeView === 'templates' && isAdmin() && (
-        <PeotramTemplateManager 
-          templates={templates}
-          onTemplateUpdate={fetchTemplates}
-        />
-      )}
-
-      {activeView === 'permissions' && isAdmin() && (
-        <PeotramPermissionsManager />
-      )}
-
-      {/* Create Audit Dialog */}
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Nova Auditoria PEOTRAM</DialogTitle>
-            <DialogDescription>
-              Crie uma nova auditoria do Programa de Gerenciamento da Segurança Operacional
-            </DialogDescription>
-          </DialogHeader>
-          
-          <CreateAuditForm 
-            onSubmit={createNewAudit}
-            onCancel={() => setIsCreateDialogOpen(false)}
-            templates={activeTemplates}
-            vessels={vessels}
+        <TabsContent value="non-conformities">
+          <PeotramNonConformities 
+            nonConformities={nonConformities}
+            onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
           />
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-};
+        </TabsContent>
 
-// Create Audit Form Component  
-const CreateAuditForm: React.FC<{
-  onSubmit: (data: any) => void;
-  onCancel: () => void;
-  templates: any[];
-  vessels: any[];
-}> = ({ onSubmit, onCancel, templates, vessels }) => {
-  const [formData, setFormData] = useState({
-    audit_period: '',
-    audit_type: 'vessel',
-    vessel_id: '',
-    shore_location: '',
-    auditor_name: '',
-    audit_date: new Date().toISOString().split('T')[0],
-    template_id: '',
-    status: 'draft'
-  });
+        <TabsContent value="reports">
+          <PeotramReportsGenerator />
+        </TabsContent>
 
-  return (
-    <div className="space-y-4">
-      <form className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="audit_period">Período da Auditoria</Label>
-            <Input
-              id="audit_period"
-              value={formData.audit_period}
-              onChange={(e) => setFormData(prev => ({ ...prev, audit_period: e.target.value }))}
-              placeholder="Ex: Janeiro 2024"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="audit_type">Tipo de Auditoria</Label>
-            <Select 
-              value={formData.audit_type} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, audit_type: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione o tipo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="vessel">Embarcação</SelectItem>
-                <SelectItem value="shore">Base Terrestre</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          {formData.audit_type === 'vessel' ? (
-            <div className="space-y-2">
-              <Label htmlFor="vessel_id">Embarcação</Label>
-              <Select 
-                value={formData.vessel_id} 
-                onValueChange={(value) => setFormData(prev => ({ ...prev, vessel_id: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione a embarcação" />
-                </SelectTrigger>
-                <SelectContent>
-                  {vessels.map((vessel) => (
-                    <SelectItem key={vessel.id} value={vessel.id}>
-                      {vessel.name} {vessel.imo_number && `(IMO: ${vessel.imo_number})`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              <Label htmlFor="shore_location">Local da Base</Label>
-              <Input
-                id="shore_location"
-                value={formData.shore_location}
-                onChange={(e) => setFormData(prev => ({ ...prev, shore_location: e.target.value }))}
-                placeholder="Ex: Escritório São Paulo"
-              />
-            </div>
-          )}
-          
-          <div className="space-y-2">
-            <Label htmlFor="template_id">Template PEOTRAM</Label>
-            <Select 
-              value={formData.template_id} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, template_id: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione o template" />
-              </SelectTrigger>
-              <SelectContent>
-                {templates
-                  .filter(t => t.checklist_type === formData.audit_type)
-                  .map((template) => (
-                    <SelectItem key={template.id} value={template.id}>
-                      {template.year} v{template.version} ({template.template_data.elements?.length || 0} elementos)
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="auditor_name">Nome do Auditor</Label>
-            <Input
-              id="auditor_name"
-              value={formData.auditor_name}
-              onChange={(e) => setFormData(prev => ({ ...prev, auditor_name: e.target.value }))}
-              placeholder="Ex: João Silva"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="audit_date">Data da Auditoria</Label>
-            <Input
-              id="audit_date"
-              type="date"
-              value={formData.audit_date}
-              onChange={(e) => setFormData(prev => ({ ...prev, audit_date: e.target.value }))}
-            />
-          </div>
-        </div>
-        
-        <div className="flex justify-end gap-2 pt-4 border-t">
-          <Button variant="outline" onClick={onCancel}>
-            Cancelar
-          </Button>
-          <Button 
-            onClick={() => {
-              const selectedVessel = vessels.find(v => v.id === formData.vessel_id);
-              onSubmit({
-                ...formData,
-                vessel_name: selectedVessel?.name || null,
-                compliance_score: 0,
-                elements_evaluated: 0
-              });
-            }}
-            disabled={
-              !formData.audit_period || 
-              !formData.auditor_name || 
-              !formData.template_id ||
-              (formData.audit_type === 'vessel' && !formData.vessel_id) ||
-              (formData.audit_type === 'shore' && !formData.shore_location)
-            }
-          >
-            Criar Auditoria
-          </Button>
-        </div>
-      </form>
+        <TabsContent value="templates">
+          <PeotramTemplateManager 
+            templates={templates}
+            onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
+          />
+        </TabsContent>
+
+        <TabsContent value="analytics">
+          <PeotramAnalyticsPanel />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

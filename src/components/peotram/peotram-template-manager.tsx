@@ -29,7 +29,7 @@ interface PeotramTemplate {
 
 interface TemplateManagerProps {
   templates: PeotramTemplate[];
-  onTemplateUpdate: () => void;
+  onTemplateUpdate: (template: PeotramTemplate) => void;
 }
 
 export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({ 
@@ -50,7 +50,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
 
       if (error) throw error;
 
-      onTemplateUpdate();
+      await onTemplateUpdate(template);
       
       toast({
         title: "Sucesso",
@@ -75,7 +75,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
 
       if (error) throw error;
 
-      onTemplateUpdate();
+      await onTemplateUpdate(editingTemplate as PeotramTemplate);
       setIsEditDialogOpen(false);
       
       toast({
