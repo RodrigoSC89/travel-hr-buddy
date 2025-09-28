@@ -8,6 +8,9 @@ import { PeotramAnalyticsPanel } from './peotram-analytics-panel';
 import { PeotramComplianceChecker } from './peotram-compliance-checker';
 import { PeotramPerformanceIndicators } from './peotram-performance-indicators';
 import { PeotramDocumentManager } from './peotram-document-manager';
+import { PeotramRiskAssessment } from './peotram-risk-assessment';
+import { PeotramTrainingManagement } from './peotram-training-management';
+import { PeotramRealtimeMonitoring } from './peotram-realtime-monitoring';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -84,6 +87,7 @@ interface PeotramTemplate {
 export const EnhancedPeotramManager: React.FC = () => {
   const { hasFeature } = useOrganizationPermissions();
   const [activeView, setActiveView] = useState('dashboard');
+  const [managementSubView, setManagementSubView] = useState('non-conformities');
   const [isNewAuditOpen, setIsNewAuditOpen] = useState(false);
   const [selectedAudit, setSelectedAudit] = useState<PeotramAudit | null>(null);
   const [audits, setAudits] = useState<PeotramAudit[]>([]);
@@ -323,7 +327,7 @@ export const EnhancedPeotramManager: React.FC = () => {
 
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-8 bg-muted/50">
+        <TabsList className="grid w-full grid-cols-4 bg-muted/50">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
             Dashboard
@@ -332,31 +336,86 @@ export const EnhancedPeotramManager: React.FC = () => {
             <FileCheck className="w-4 h-4" />
             Auditorias
           </TabsTrigger>
-          <TabsTrigger value="non-conformities" className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" />
-            Não Conformidades
-          </TabsTrigger>
-          <TabsTrigger value="reports" className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4" />
-            Relatórios
-          </TabsTrigger>
-          <TabsTrigger value="templates" className="flex items-center gap-2">
-            <Settings className="w-4 h-4" />
-            Templates
-          </TabsTrigger>
-          <TabsTrigger value="analytics" className="flex items-center gap-2">
+          <TabsTrigger value="monitoring" className="flex items-center gap-2">
             <Activity className="w-4 h-4" />
-            Analytics
+            Monitoramento
           </TabsTrigger>
-          <TabsTrigger value="compliance" className="flex items-center gap-2">
-            <Shield className="w-4 h-4" />
-            Conformidade
-          </TabsTrigger>
-          <TabsTrigger value="performance" className="flex items-center gap-2">
-            <Target className="w-4 h-4" />
-            Performance
+          <TabsTrigger value="management" className="flex items-center gap-2">
+            <Settings className="w-4 h-4" />
+            Gestão
           </TabsTrigger>
         </TabsList>
+
+        {/* Tabs secundárias para Gestão */}
+        {activeView === 'management' && (
+          <div className="bg-muted/30 rounded-lg p-1">
+            <div className="grid w-full grid-cols-7 gap-1">
+              <Button
+                variant={managementSubView === 'non-conformities' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('non-conformities')}
+                className="flex items-center gap-2"
+              >
+                <AlertTriangle className="w-4 h-4" />
+                Não Conformidades
+              </Button>
+              <Button
+                variant={managementSubView === 'reports' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('reports')}
+                className="flex items-center gap-2"
+              >
+                <TrendingUp className="w-4 h-4" />
+                Relatórios
+              </Button>
+              <Button
+                variant={managementSubView === 'templates' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('templates')}
+                className="flex items-center gap-2"
+              >
+                <Settings className="w-4 h-4" />
+                Templates
+              </Button>
+              <Button
+                variant={managementSubView === 'analytics' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('analytics')}
+                className="flex items-center gap-2"
+              >
+                <BarChart3 className="w-4 h-4" />
+                Analytics
+              </Button>
+              <Button
+                variant={managementSubView === 'compliance' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('compliance')}
+                className="flex items-center gap-2"
+              >
+                <Shield className="w-4 h-4" />
+                Conformidade
+              </Button>
+              <Button
+                variant={managementSubView === 'risk-assessment' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('risk-assessment')}
+                className="flex items-center gap-2"
+              >
+                <AlertTriangle className="w-4 h-4" />
+                Riscos
+              </Button>
+              <Button
+                variant={managementSubView === 'training' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('training')}
+                className="flex items-center gap-2"
+              >
+                <Users className="w-4 h-4" />
+                Treinamentos
+              </Button>
+            </div>
+          </div>
+        )}
 
         <TabsContent value="dashboard" className="space-y-0">
           <EnhancedPeotramDashboard />
@@ -505,8 +564,67 @@ export const EnhancedPeotramManager: React.FC = () => {
           <PeotramComplianceChecker />
         </TabsContent>
 
+        <TabsContent value="monitoring">
+          <PeotramRealtimeMonitoring />
+        </TabsContent>
+
+        <TabsContent value="management">
+          {managementSubView === 'non-conformities' && (
+            <PeotramNonConformities 
+              nonConformities={nonConformities}
+              onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+            />
+          )}
+          {managementSubView === 'reports' && <PeotramReportsGenerator />}
+          {managementSubView === 'templates' && (
+            <PeotramTemplateManager 
+              templates={templates}
+              onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
+            />
+          )}
+          {managementSubView === 'analytics' && <PeotramAnalyticsPanel />}
+          {managementSubView === 'compliance' && <PeotramComplianceChecker />}
+          {managementSubView === 'risk-assessment' && <PeotramRiskAssessment />}
+          {managementSubView === 'training' && <PeotramTrainingManagement />}
+        </TabsContent>
+
+        {/* Manter as antigas abas para compatibilidade */}
+        <TabsContent value="non-conformities">
+          <PeotramNonConformities 
+            nonConformities={nonConformities}
+            onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+          />
+        </TabsContent>
+
+        <TabsContent value="reports">
+          <PeotramReportsGenerator />
+        </TabsContent>
+
+        <TabsContent value="templates">
+          <PeotramTemplateManager 
+            templates={templates}
+            onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
+          />
+        </TabsContent>
+
+        <TabsContent value="analytics">
+          <PeotramAnalyticsPanel />
+        </TabsContent>
+
+        <TabsContent value="compliance">
+          <PeotramComplianceChecker />
+        </TabsContent>
+
         <TabsContent value="performance">
           <PeotramPerformanceIndicators />
+        </TabsContent>
+
+        <TabsContent value="risk-assessment">
+          <PeotramRiskAssessment />
+        </TabsContent>
+
+        <TabsContent value="training">
+          <PeotramTrainingManagement />
         </TabsContent>
       </Tabs>
     </div>
