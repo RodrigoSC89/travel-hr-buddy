@@ -20,11 +20,14 @@ import {
   Settings,
   MapPin,
   Navigation,
-  QrCode
+  QrCode,
+  Bell
 } from 'lucide-react';
 import { ChecklistScheduler } from '../components/maritime/checklist-scheduler';
 import { ChecklistReports } from '../components/maritime/checklist-reports';
 import { QREquipmentManager } from '../components/maritime/qr-equipment-manager';
+import { ChecklistDashboard } from '../components/maritime/checklist-dashboard';
+import { NotificationCenter } from '../components/maritime/notification-center';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -260,13 +263,9 @@ export default function Maritime() {
                   <Shield className="h-4 w-4 mr-2" />
                   Verificar Certificações
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/reports')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('dashboard')}>
                   <BarChart3 className="h-4 w-4 mr-2" />
-                  Relatórios de Compliance
-                </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/fleet-tracking')}>
-                  <Globe className="h-4 w-4 mr-2" />
-                  Rastreamento de Frota
+                  Dashboard de Checklists
                 </Button>
                 <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('scheduler')}>
                   <Calendar className="h-4 w-4 mr-2" />
@@ -279,6 +278,10 @@ export default function Maritime() {
                 <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('qr-equipment')}>
                   <QrCode className="h-4 w-4 mr-2" />
                   QR Equipamentos
+                </Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('notifications')}>
+                  <Bell className="h-4 w-4 mr-2" />
+                  Central de Notificações
                 </Button>
               </CardContent>
             </Card>
@@ -409,6 +412,14 @@ export default function Maritime() {
       </Tabs>
 
       {/* Feature Components */}
+      {activeFeature === 'dashboard' && (
+        <div className="mt-6">
+          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+            ← Voltar ao Dashboard
+          </Button>
+          <ChecklistDashboard userId="user-123" />
+        </div>
+      )}
       {activeFeature === 'scheduler' && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
@@ -431,6 +442,14 @@ export default function Maritime() {
             ← Voltar ao Dashboard
           </Button>
           <QREquipmentManager />
+        </div>
+      )}
+      {activeFeature === 'notifications' && (
+        <div className="mt-6">
+          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+            ← Voltar ao Dashboard
+          </Button>
+          <NotificationCenter userId="user-123" />
         </div>
       )}
     </div>
