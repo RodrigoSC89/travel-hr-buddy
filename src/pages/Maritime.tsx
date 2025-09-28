@@ -19,8 +19,12 @@ import {
   BarChart3,
   Settings,
   MapPin,
-  Navigation
+  Navigation,
+  QrCode
 } from 'lucide-react';
+import { ChecklistScheduler } from '../components/maritime/checklist-scheduler';
+import { ChecklistReports } from '../components/maritime/checklist-reports';
+import { QREquipmentManager } from '../components/maritime/qr-equipment-manager';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -45,6 +49,7 @@ export default function Maritime() {
   });
   const [loading, setLoading] = useState(true);
   const [vessels, setVessels] = useState<any[]>([]);
+  const [activeFeature, setActiveFeature] = useState<string | null>(null);
 
   useEffect(() => {
     loadDashboardData();
@@ -263,9 +268,17 @@ export default function Maritime() {
                   <Globe className="h-4 w-4 mr-2" />
                   Rastreamento de Frota
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/task-management')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('scheduler')}>
                   <Calendar className="h-4 w-4 mr-2" />
-                  Agendar Manutenção
+                  Agendamento de Checklists
+                </Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('reports')}>
+                  <FileText className="h-4 w-4 mr-2" />
+                  Relatórios de Checklists
+                </Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('qr-equipment')}>
+                  <QrCode className="h-4 w-4 mr-2" />
+                  QR Equipamentos
                 </Button>
               </CardContent>
             </Card>
@@ -394,6 +407,32 @@ export default function Maritime() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Feature Components */}
+      {activeFeature === 'scheduler' && (
+        <div className="mt-6">
+          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+            ← Voltar ao Dashboard
+          </Button>
+          <ChecklistScheduler />
+        </div>
+      )}
+      {activeFeature === 'reports' && (
+        <div className="mt-6">
+          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+            ← Voltar ao Dashboard
+          </Button>
+          <ChecklistReports />
+        </div>
+      )}
+      {activeFeature === 'qr-equipment' && (
+        <div className="mt-6">
+          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+            ← Voltar ao Dashboard
+          </Button>
+          <QREquipmentManager />
+        </div>
+      )}
     </div>
   );
 }
