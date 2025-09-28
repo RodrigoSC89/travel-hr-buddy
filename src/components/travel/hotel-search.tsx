@@ -1,6 +1,6 @@
 import React from 'react';
-import { ResponsiveHotelSearch } from './responsive-hotel-search';
+import { EnhancedHotelSearch } from './enhanced-hotel-search';
 
 export const HotelSearch = () => {
-  return <ResponsiveHotelSearch />;
+  return <EnhancedHotelSearch />;
 };

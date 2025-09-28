@@ -3,6 +3,8 @@ import { FlightSearch } from '@/components/travel/flight-search';
 import { HotelSearch } from '@/components/travel/hotel-search';
 import { TravelMap } from '@/components/travel/travel-map';
 import { PredictiveTravelDashboard } from '@/components/travel/predictive-travel-dashboard';
+import { AITravelAssistant } from '@/components/travel/ai-travel-assistant';
+import { PredictiveTravelDashboard } from '@/components/travel/predictive-travel-dashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -144,7 +146,7 @@ const Travel = () => {
         {/* Enhanced Tabs */}
         <Tabs defaultValue="predictive" className="space-y-6">
           <div className="flex justify-center">
-            <TabsList className="grid grid-cols-5 w-full max-w-4xl h-14 bg-card/50 backdrop-blur-sm border border-border/50">
+            <TabsList className="grid grid-cols-6 w-full max-w-5xl h-14 bg-card/50 backdrop-blur-sm border border-border/50">
               <TabsTrigger value="predictive" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Brain className="h-5 w-5" />
                 <span className="hidden md:inline">IA Preditiva</span>
@@ -164,6 +166,10 @@ const Travel = () => {
               <TabsTrigger value="itinerary" className="flex items-center gap-2 data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground">
                 <Calendar className="h-5 w-5" />
                 <span className="hidden md:inline">Roteiro</span>
+              </TabsTrigger>
+              <TabsTrigger value="assistant" className="flex items-center gap-2 data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+                <Brain className="h-5 w-5" />
+                <span className="hidden md:inline">IA Assistant</span>
               </TabsTrigger>
             </TabsList>
           </div>
@@ -246,6 +252,10 @@ const Travel = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="assistant" className="space-y-6">
+            <AITravelAssistant />
           </TabsContent>
         </Tabs>
       </div>
