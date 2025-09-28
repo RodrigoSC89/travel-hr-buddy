@@ -4,7 +4,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Header } from '@/components/layout/header';
 import { QuickActionsBar } from '@/components/ui/quick-actions-bar';
-import FabShortcuts from '@/components/ui/fab-shortcuts';
+import ModernFabShortcuts from '@/components/ui/modern-fab-shortcuts';
 import VoiceInterface from '@/components/voice/VoiceInterface';
 import IntelligentChatbot from '@/components/voice/IntelligentChatbot';
 import NautilusCopilot from '@/components/ai/nautilus-copilot';
@@ -34,7 +34,12 @@ export const AppLayout: React.FC = () => {
             
             {/* Floating Components - Organized per Layout Guide */}
             <QuickActionsBar onOpenSearch={() => setIsSearchOpen(true)} />
-            <FabShortcuts />
+            <ModernFabShortcuts 
+              onOpenSearch={() => setIsSearchOpen(true)}
+              onActivateVoice={() => console.log('Voice activated')}
+              onOpenAIChat={() => console.log('AI Chat opened')}
+              onOpenSettings={() => console.log('Settings opened')}
+            />
             <VoiceInterface />
             <NautilusCopilot />
             
