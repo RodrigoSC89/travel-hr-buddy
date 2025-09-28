@@ -1653,6 +1653,86 @@ export type Database = {
         }
         Relationships: []
       }
+      maintenance_records: {
+        Row: {
+          actual_cost: number | null
+          actual_duration: number | null
+          assigned_technician: string | null
+          completed_date: string | null
+          cost_estimate: number | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          estimated_duration: number | null
+          id: string
+          location: string | null
+          maintenance_type: string
+          next_maintenance_date: string | null
+          organization_id: string | null
+          parts_required: string[] | null
+          priority: string
+          scheduled_date: string
+          status: string
+          title: string
+          updated_at: string
+          vessel_id: string
+        }
+        Insert: {
+          actual_cost?: number | null
+          actual_duration?: number | null
+          assigned_technician?: string | null
+          completed_date?: string | null
+          cost_estimate?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          estimated_duration?: number | null
+          id?: string
+          location?: string | null
+          maintenance_type: string
+          next_maintenance_date?: string | null
+          organization_id?: string | null
+          parts_required?: string[] | null
+          priority?: string
+          scheduled_date: string
+          status?: string
+          title: string
+          updated_at?: string
+          vessel_id: string
+        }
+        Update: {
+          actual_cost?: number | null
+          actual_duration?: number | null
+          assigned_technician?: string | null
+          completed_date?: string | null
+          cost_estimate?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          estimated_duration?: number | null
+          id?: string
+          location?: string | null
+          maintenance_type?: string
+          next_maintenance_date?: string | null
+          organization_id?: string | null
+          parts_required?: string[] | null
+          priority?: string
+          scheduled_date?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       maintenance_schedules: {
         Row: {
           completed_date: string | null
@@ -1702,6 +1782,80 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "maintenance_schedules_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maritime_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          ai_confidence: number | null
+          alert_type: string
+          auto_generated: boolean | null
+          created_at: string
+          description: string
+          id: string
+          is_acknowledged: boolean | null
+          organization_id: string | null
+          predicted_impact: string | null
+          recommendations: string[] | null
+          related_data: Json | null
+          resolution_notes: string | null
+          severity: string
+          status: string
+          title: string
+          updated_at: string
+          vessel_id: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          ai_confidence?: number | null
+          alert_type: string
+          auto_generated?: boolean | null
+          created_at?: string
+          description: string
+          id?: string
+          is_acknowledged?: boolean | null
+          organization_id?: string | null
+          predicted_impact?: string | null
+          recommendations?: string[] | null
+          related_data?: Json | null
+          resolution_notes?: string | null
+          severity: string
+          status?: string
+          title: string
+          updated_at?: string
+          vessel_id: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          ai_confidence?: number | null
+          alert_type?: string
+          auto_generated?: boolean | null
+          created_at?: string
+          description?: string
+          id?: string
+          is_acknowledged?: boolean | null
+          organization_id?: string | null
+          predicted_impact?: string | null
+          recommendations?: string[] | null
+          related_data?: Json | null
+          resolution_notes?: string | null
+          severity?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maritime_alerts_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -4471,6 +4625,89 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      vessel_certificates: {
+        Row: {
+          category: string
+          certificate_name: string
+          certificate_number: string
+          certificate_type: string
+          compliance_score: number | null
+          created_at: string
+          expiry_date: string
+          file_url: string | null
+          holder_name: string
+          id: string
+          issue_date: string
+          issuing_authority: string
+          last_inspection: string | null
+          next_inspection: string | null
+          notes: string | null
+          organization_id: string | null
+          regulatory_body: string
+          renewal_cost: number | null
+          risk_level: string
+          status: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          category: string
+          certificate_name: string
+          certificate_number: string
+          certificate_type: string
+          compliance_score?: number | null
+          created_at?: string
+          expiry_date: string
+          file_url?: string | null
+          holder_name: string
+          id?: string
+          issue_date: string
+          issuing_authority: string
+          last_inspection?: string | null
+          next_inspection?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          regulatory_body: string
+          renewal_cost?: number | null
+          risk_level?: string
+          status?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          category?: string
+          certificate_name?: string
+          certificate_number?: string
+          certificate_type?: string
+          compliance_score?: number | null
+          created_at?: string
+          expiry_date?: string
+          file_url?: string | null
+          holder_name?: string
+          id?: string
+          issue_date?: string
+          issuing_authority?: string
+          last_inspection?: string | null
+          next_inspection?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          regulatory_body?: string
+          renewal_cost?: number | null
+          risk_level?: string
+          status?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_certificates_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vessel_tracking: {
         Row: {

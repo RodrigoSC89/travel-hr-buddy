@@ -80,7 +80,45 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
 
   useEffect(() => {
     loadVessels();
-  }, []);
+    
+    // Setup real-time subscriptions
+    const channel = supabase
+      .channel('vessels-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'vessels'
+        },
+        (payload) => {
+          console.log('Vessel change received:', payload);
+          
+          if (payload.eventType === 'INSERT') {
+            setVessels(prev => [payload.new as Vessel, ...prev]);
+            toast({
+              title: "Nova Embarcação",
+              description: `${payload.new.name} foi adicionada à frota`,
+            });
+          } else if (payload.eventType === 'UPDATE') {
+            setVessels(prev => prev.map(vessel => 
+              vessel.id === payload.new.id ? payload.new as Vessel : vessel
+            ));
+          } else if (payload.eventType === 'DELETE') {
+            setVessels(prev => prev.filter(vessel => vessel.id !== payload.old.id));
+            toast({
+              title: "Embarcação Removida",
+              description: "Uma embarcação foi removida da frota",
+            });
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [toast]);
 
   const loadVessels = async () => {
     try {
@@ -178,6 +216,14 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
 
   const handleAddVessel = async () => {
     try {
+      // Get current organization ID
+      const { data: userOrg, error: orgError } = await supabase
+        .from('organization_users')
+        .select('organization_id')
+        .eq('user_id', (await supabase.auth.getUser()).data.user?.id)
+        .eq('status', 'active')
+        .single();
+
       const vesselData = {
         name: newVessel.name,
         imo_number: newVessel.imo_number,
@@ -186,10 +232,11 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
         next_port: newVessel.next_port,
         eta: newVessel.eta ? new Date(newVessel.eta).toISOString() : null,
         status: 'active',
-        current_location: 'Unknown Location',
+        current_location: 'Location TBD',
         crew_count: parseInt(newVessel.crew_count) || 0,
         cargo_capacity: parseInt(newVessel.cargo_capacity) || 0,
-        fuel_consumption: parseFloat(newVessel.fuel_consumption) || 0
+        fuel_consumption: parseFloat(newVessel.fuel_consumption) || 0,
+        organization_id: userOrg?.organization_id
       };
 
       const { data, error } = await supabase
@@ -199,17 +246,10 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
         .single();
 
       if (error) {
-        // Local addition fallback
-        const vessel: Vessel = {
-          id: Math.random().toString(),
-          ...vesselData,
-          created_at: new Date().toISOString()
-        };
-        setVessels([vessel, ...vessels]);
-      } else {
-        setVessels([data, ...vessels]);
+        throw error;
       }
       
+      // Real-time will handle the UI update
       setNewVessel({
         name: '',
         imo_number: '',
@@ -226,9 +266,10 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
       
       toast({
         title: "Embarcação Adicionada",
-        description: `${newVessel.name} foi adicionada com sucesso à frota`,
+        description: `${data.name} foi adicionada com sucesso à frota`,
       });
     } catch (error) {
+      console.error('Error adding vessel:', error);
       toast({
         title: "Erro",
         description: "Não foi possível adicionar a embarcação",

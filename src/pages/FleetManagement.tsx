@@ -43,6 +43,7 @@ import FleetAnalytics from '@/components/fleet/fleet-analytics';
 import RealTimeTracking from '@/components/fleet/real-time-tracking';
 import IntelligentAlerts from '@/components/fleet/intelligent-alerts';
 import ComplianceCenter from '@/components/fleet/compliance-center';
+import NotificationCenter from '@/components/fleet/notification-center';
 
 const MaritimeFleetManagement = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -224,7 +225,7 @@ const MaritimeFleetManagement = () => {
 
         {/* Main Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-8 mb-8">
+          <TabsList className="grid w-full grid-cols-9 mb-8">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Painel Geral
@@ -256,6 +257,10 @@ const MaritimeFleetManagement = () => {
             <TabsTrigger value="compliance" className="flex items-center gap-2">
               <Shield className="h-4 w-4" />
               Conformidade
+            </TabsTrigger>
+            <TabsTrigger value="notifications" className="flex items-center gap-2">
+              <Bell className="h-4 w-4" />
+              Notificações
             </TabsTrigger>
           </TabsList>
 
@@ -289,6 +294,10 @@ const MaritimeFleetManagement = () => {
 
           <TabsContent value="compliance" className="space-y-6">
             <ComplianceCenter />
+          </TabsContent>
+
+          <TabsContent value="notifications" className="space-y-6">
+            <NotificationCenter />
           </TabsContent>
         </Tabs>
       </div>
