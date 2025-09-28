@@ -32,7 +32,7 @@ interface SearchResult {
   title: string;
   description: string;
   category: string;
-  icon: React.ComponentType;
+  icon: React.ComponentType<{ className?: string }>;
   path: string;
   relevance: number;
   metadata?: {
@@ -201,7 +201,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
     });
   };
 
-  const getCategoryIcon = (category: string) => {
+  const getCategoryIcon = (category: string): React.ComponentType<{ className?: string }> => {
     switch (category.toLowerCase()) {
       case 'auditorias': return FileText;
       case 'módulos': return Hash;

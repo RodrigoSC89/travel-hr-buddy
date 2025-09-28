@@ -388,7 +388,7 @@ const EnhancedUnifiedDashboard = () => {
                       {dashboardData.systemHealth.activeUsers} usuários ativos
                     </Badge>
                   </div>
-                  <p className="text-muted-foreground mt-3 text-lg">
+                  <p className="text-foreground mt-3 text-lg font-medium">
                     Bem-vindo de volta, <strong className="text-foreground">{userDisplayName}</strong>! 
                     <br />Painel executivo de operações marítimas em tempo real.
                   </p>
@@ -413,11 +413,11 @@ const EnhancedUnifiedDashboard = () => {
                     Visão Executiva
                   </Button>
                 </div>
-                <div className="text-right text-sm text-muted-foreground">
+                <div className="text-right text-sm font-medium text-foreground">
                   <div>Última atualização: {lastUpdated.toLocaleTimeString()}</div>
                   <div className="flex items-center gap-2 mt-1">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    Sistema operacional - {dashboardData.systemHealth.uptime}% uptime
+                    <span className="text-foreground font-medium">Sistema operacional - {dashboardData.systemHealth.uptime}% uptime</span>
                   </div>
                 </div>
               </div>
@@ -445,22 +445,22 @@ const EnhancedUnifiedDashboard = () => {
           <CardContent className="p-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <div className="text-sm text-muted-foreground">Margem Bruta</div>
-                <div className="text-2xl font-bold text-success">{dashboardData.financialMetrics.grossMargin}%</div>
+                <div className="text-sm font-bold text-foreground">Margem Bruta</div>
+                <div className="text-2xl font-bold text-foreground">{dashboardData.financialMetrics.grossMargin}%</div>
                 <Progress value={dashboardData.financialMetrics.grossMargin} className="h-2" />
               </div>
               <div className="space-y-2">
-                <div className="text-sm text-muted-foreground">Margem Operacional</div>
-                <div className="text-2xl font-bold text-info">{dashboardData.financialMetrics.operatingMargin}%</div>
+                <div className="text-sm font-bold text-foreground">Margem Operacional</div>
+                <div className="text-2xl font-bold text-foreground">{dashboardData.financialMetrics.operatingMargin}%</div>
                 <Progress value={dashboardData.financialMetrics.operatingMargin * 2} className="h-2" />
               </div>
               <div className="space-y-2">
-                <div className="text-sm text-muted-foreground">EBITDA</div>
-                <div className="text-2xl font-bold text-primary">R$ {(dashboardData.financialMetrics.ebitda / 1000000).toFixed(1)}M</div>
+                <div className="text-sm font-bold text-foreground">EBITDA</div>
+                <div className="text-2xl font-bold text-foreground">R$ {(dashboardData.financialMetrics.ebitda / 1000000).toFixed(1)}M</div>
               </div>
               <div className="space-y-2">
-                <div className="text-sm text-muted-foreground">ROE</div>
-                <div className="text-2xl font-bold text-warning">{dashboardData.financialMetrics.roe}%</div>
+                <div className="text-sm font-bold text-foreground">ROE</div>
+                <div className="text-2xl font-bold text-foreground">{dashboardData.financialMetrics.roe}%</div>
               </div>
             </div>
           </CardContent>
@@ -483,11 +483,11 @@ const EnhancedUnifiedDashboard = () => {
                       item.status === 'success' ? 'bg-green-500' :
                       item.status === 'warning' ? 'bg-orange-500' : 'bg-red-500'
                     }`} />
-                    <span className="text-sm font-medium">{item.metric}</span>
+                    <span className="text-sm font-bold text-foreground">{item.metric}</span>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold">{item.value}%</div>
-                    <div className="text-xs text-muted-foreground">Meta: {item.target}%</div>
+                    <div className="font-bold text-foreground">{item.value}%</div>
+                    <div className="text-sm font-medium text-foreground">Meta: {item.target}%</div>
                   </div>
                 </div>
               ))}

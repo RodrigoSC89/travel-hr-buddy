@@ -94,32 +94,32 @@ const ProfessionalKPICards = () => {
   const getColorClasses = (color: string) => {
     const colors = {
       green: {
-        bg: 'from-emerald-50 to-green-50',
-        icon: 'from-emerald-500 to-green-600',
-        text: 'text-emerald-700',
-        progress: 'bg-emerald-100',
-        border: 'border-emerald-200'
+        bg: 'from-background to-green-50/30',
+        icon: 'from-emerald-600 to-green-700',
+        text: 'text-emerald-800 dark:text-emerald-700',
+        progress: 'bg-emerald-200',
+        border: 'border-emerald-300'
       },
       blue: {
-        bg: 'from-blue-50 to-indigo-50',
-        icon: 'from-blue-500 to-indigo-600',
-        text: 'text-blue-700',
-        progress: 'bg-blue-100',
-        border: 'border-blue-200'
+        bg: 'from-background to-blue-50/30',
+        icon: 'from-azure-600 to-azure-700',
+        text: 'text-azure-900 dark:text-azure-800',
+        progress: 'bg-azure-200',
+        border: 'border-azure-300'
       },
       purple: {
-        bg: 'from-purple-50 to-violet-50',
-        icon: 'from-purple-500 to-violet-600',
-        text: 'text-purple-700',
-        progress: 'bg-purple-100',
-        border: 'border-purple-200'
+        bg: 'from-background to-purple-50/30',
+        icon: 'from-purple-600 to-violet-700',
+        text: 'text-purple-900 dark:text-purple-800',
+        progress: 'bg-purple-200',
+        border: 'border-purple-300'
       },
       orange: {
-        bg: 'from-orange-50 to-amber-50',
-        icon: 'from-orange-500 to-amber-600',
-        text: 'text-orange-700',
-        progress: 'bg-orange-100',
-        border: 'border-orange-200'
+        bg: 'from-background to-orange-50/30',
+        icon: 'from-orange-600 to-amber-700',
+        text: 'text-orange-900 dark:text-orange-800',
+        progress: 'bg-orange-200',
+        border: 'border-orange-300'
       }
     };
     return colors[color as keyof typeof colors];
@@ -135,7 +135,7 @@ const ProfessionalKPICards = () => {
             className={`relative group hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:${colorClasses.border} cursor-pointer`}
           >
             {/* Background Gradient */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${colorClasses.bg} rounded-lg opacity-60 group-hover:opacity-80 transition-opacity`} />
+            <div className={`absolute inset-0 bg-gradient-to-br ${colorClasses.bg} rounded-lg opacity-50 group-hover:opacity-70 transition-opacity border border-border/20`} />
             
             {/* Content */}
             <CardContent className="relative p-6">
@@ -146,10 +146,10 @@ const ProfessionalKPICards = () => {
                 </div>
                 
                 <div className="text-right">
-                  <div className={`text-3xl font-bold ${colorClasses.text}`}>
+                  <div className={`text-3xl font-bold text-foreground`}>
                     {kpi.value}
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-sm font-medium text-muted-foreground">
                     {kpi.subtitle}
                   </div>
                 </div>
@@ -158,17 +158,17 @@ const ProfessionalKPICards = () => {
               {/* Title and Trend */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-foreground">
+                  <h3 className="text-sm font-bold text-foreground">
                     {kpi.title}
                   </h3>
                   <div className="flex items-center gap-1">
                     {kpi.trend === 'up' ? (
-                      <TrendingUp className="w-4 h-4 text-green-600" />
+                      <TrendingUp className="w-4 h-4 text-green-700 dark:text-green-600" />
                     ) : (
-                      <TrendingDown className="w-4 h-4 text-red-600" />
+                      <TrendingDown className="w-4 h-4 text-red-700 dark:text-red-600" />
                     )}
-                    <span className={`text-sm font-medium ${
-                      kpi.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                    <span className={`text-sm font-bold ${
+                      kpi.trend === 'up' ? 'text-green-700 dark:text-green-600' : 'text-red-700 dark:text-red-600'
                     }`}>
                       {kpi.change}
                     </span>
@@ -181,22 +181,22 @@ const ProfessionalKPICards = () => {
                     value={kpi.progress} 
                     className={`h-2 ${colorClasses.progress}`}
                   />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>Atual</span>
-                    <span className={`font-medium ${colorClasses.text}`}>
+                  <div className="flex justify-between text-xs">
+                    <span className="font-medium text-foreground">Progresso</span>
+                    <span className={`font-bold text-foreground`}>
                       {kpi.progress.toFixed(1)}%
                     </span>
                   </div>
                 </div>
 
                 {/* Details */}
-                <div className="space-y-2 mt-4 pt-3 border-t border-border/30">
+                <div className="space-y-2 mt-4 pt-3 border-t border-border/50">
                   {Object.entries(kpi.details).map(([key, value]) => (
                     <div key={key} className="flex justify-between text-xs">
-                      <span className="text-muted-foreground capitalize">
+                      <span className="text-foreground font-medium capitalize">
                         {key.replace('_', ' ')}:
                       </span>
-                      <span className="font-medium text-foreground">
+                      <span className="font-bold text-foreground">
                         {value}
                       </span>
                     </div>

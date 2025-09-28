@@ -240,16 +240,16 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
     }
   };
 
-  const getCategoryIcon = (category: string) => {
+  const getCategoryIcon = (category: string): React.ComponentType<{ className?: string }> => {
     switch (category.toLowerCase()) {
-      case 'certificações': return <Users className="w-4 h-4" />;
-      case 'performance': return <TrendingUp className="w-4 h-4" />;
-      case 'auditorias': return <FileText className="w-4 h-4" />;
-      case 'sistema': return <Settings className="w-4 h-4" />;
-      case 'frota': return <Ship className="w-4 h-4" />;
-      case 'segurança': return <Shield className="w-4 h-4" />;
-      case 'financeiro': return <DollarSign className="w-4 h-4" />;
-      default: return <Bell className="w-4 h-4" />;
+      case 'certificações': return Users;
+      case 'performance': return TrendingUp;
+      case 'auditorias': return FileText;
+      case 'sistema': return Settings;
+      case 'frota': return Ship;
+      case 'segurança': return Shield;
+      case 'financeiro': return DollarSign;
+      default: return Bell;
     }
   };
 
