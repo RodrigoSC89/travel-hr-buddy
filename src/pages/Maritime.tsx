@@ -28,6 +28,8 @@ import { ChecklistReports } from '../components/maritime/checklist-reports';
 import { QREquipmentManager } from '../components/maritime/qr-equipment-manager';
 import { ChecklistDashboard } from '../components/maritime/checklist-dashboard';
 import { NotificationCenter } from '../components/maritime/notification-center';
+import { RealTimeFleetMonitor } from '../components/maritime/real-time-fleet-monitor';
+import { VesselPerformanceDashboard } from '../components/maritime/vessel-performance-dashboard';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -283,6 +285,14 @@ export default function Maritime() {
                   <Bell className="h-4 w-4 mr-2" />
                   Central de Notificações
                 </Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('fleet-monitor')}>
+                  <Activity className="h-4 w-4 mr-2" />
+                  Monitor Tempo Real
+                </Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('performance')}>
+                  <TrendingUp className="h-4 w-4 mr-2" />
+                  Performance de Navios
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -450,6 +460,22 @@ export default function Maritime() {
             ← Voltar ao Dashboard
           </Button>
           <NotificationCenter userId="user-123" />
+        </div>
+      )}
+      {activeFeature === 'fleet-monitor' && (
+        <div className="mt-6">
+          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+            ← Voltar ao Dashboard
+          </Button>
+          <RealTimeFleetMonitor />
+        </div>
+      )}
+      {activeFeature === 'performance' && (
+        <div className="mt-6">
+          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+            ← Voltar ao Dashboard
+          </Button>
+          <VesselPerformanceDashboard />
         </div>
       )}
     </div>
