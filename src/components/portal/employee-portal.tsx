@@ -224,11 +224,12 @@ export const EmployeePortal: React.FC = () => {
       </div>
 
       <Tabs defaultValue="timesheet" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="timesheet">Timesheet</TabsTrigger>
           <TabsTrigger value="leave">Licenças</TabsTrigger>
           <TabsTrigger value="achievements">Conquistas</TabsTrigger>
           <TabsTrigger value="documents">Documentos</TabsTrigger>
+          <TabsTrigger value="dossier">Dossiê</TabsTrigger>
           <TabsTrigger value="feedback">Feedback</TabsTrigger>
         </TabsList>
 
@@ -421,6 +422,32 @@ export const EmployeePortal: React.FC = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="dossier" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Dossiê do Tripulante</CardTitle>
+              <CardDescription>
+                Visualize e gerencie suas informações de tripulante
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <User className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium mb-2">Acesse seu Dossiê Completo</h3>
+                <p className="text-muted-foreground mb-4">
+                  Visualize certificações, embarques, avaliações e documentos do tripulante
+                </p>
+                <Button 
+                  onClick={() => window.open('/crew-dossier', '_blank')} 
+                  className="w-full max-w-sm"
+                >
+                  Abrir Dossiê do Tripulante
+                </Button>
               </div>
             </CardContent>
           </Card>
