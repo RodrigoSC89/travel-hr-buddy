@@ -4,6 +4,7 @@ import { DPChecklist } from './dp-checklist';
 import { MachineRoutineChecklist } from './machine-routine-checklist';
 import { NauticalRoutineChecklist } from './nautical-routine-checklist';
 import { SafetyChecklist } from './safety-checklist';
+import { EnvironmentalChecklist } from './environmental-checklist';
 import type { Checklist, ChecklistTemplate } from './checklist-types';
 
 interface MaritimeChecklistSystemProps {
@@ -91,7 +92,16 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
           />
         );
       
-      // TODO: Add environmental checklist
+      case 'environmental':
+        return (
+          <EnvironmentalChecklist
+            checklist={selectedChecklist}
+            onSave={handleSaveChecklist}
+            onSubmit={handleSubmitChecklist}
+            onBack={handleBackToManager}
+          />
+        );
+      
       default:
         return (
           <div className="text-center p-8">

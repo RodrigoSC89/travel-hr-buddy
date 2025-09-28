@@ -3,50 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { PlusCircle, Ship, FileText, Filter, Search } from 'lucide-react';
+import { PlusCircle, Ship, FileText, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useMaritimeChecklists } from '@/hooks/use-maritime-checklists';
 import type { Checklist, ChecklistTemplate } from './checklist-types';
 
-// Mock data for development
-const mockChecklists: Checklist[] = [
-  {
-    id: '1',
-    title: 'Inspeção DP - Navio Exemplo',
-    type: 'dp',
-    version: '1.0',
-    description: 'Checklist de Dynamic Positioning',
-    vessel: {
-      id: 'vessel-1',
-      name: 'MV Ocean Explorer',
-      type: 'PSV',
-      imo: 'IMO1234567',
-      flag: 'Brasil',
-      classification: 'DNV',
-      operator: 'Operator ABC'
-    },
-    inspector: {
-      id: 'inspector-1',
-      name: 'João Silva',
-      license: 'LIC001',
-      company: 'Maritime Inspections Ltd',
-      email: 'joao@maritime.com',
-      phone: '+55 11 99999-9999',
-      certifications: ['DPO', 'Chief Engineer']
-    },
-    status: 'in_progress',
-    items: [],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    priority: 'high',
-    estimatedDuration: 240,
-    complianceScore: 85,
-    workflow: [],
-    tags: ['dp', 'inspection'],
-    template: false,
-    syncStatus: 'synced'
-  }
-];
+// Mock data will be replaced by real Supabase data
+const mockChecklists: Checklist[] = [];
 
 const mockTemplates: ChecklistTemplate[] = [
   {
@@ -68,15 +32,66 @@ const mockTemplates: ChecklistTemplate[] = [
   },
   {
     id: 'template-2',
-    name: 'Machine Routine Inspection',
+    name: 'Machine Routine Template',
     type: 'machine_routine',
     version: '1.5',
-    description: 'Rotina de inspeção de máquinas',
+    description: 'Template para rotina de inspeção de máquinas',
     items: [],
     estimatedDuration: 180,
     frequency: 'weekly',
     applicableVesselTypes: ['PSV', 'AHTS', 'OSV', 'Drill Ship'],
     requiredCertifications: ['Chief Engineer'],
+    dependencies: [],
+    active: true,
+    createdBy: 'admin',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'template-3',
+    name: 'Nautical Routine Template',
+    type: 'nautical_routine',
+    version: '1.0',
+    description: 'Template para rotina náutica',
+    items: [],
+    estimatedDuration: 120,
+    frequency: 'daily',
+    applicableVesselTypes: ['PSV', 'AHTS', 'OSV', 'Drill Ship'],
+    requiredCertifications: ['Captain', 'Officer'],
+    dependencies: [],
+    active: true,
+    createdBy: 'admin',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'template-4',
+    name: 'Safety Inspection Template',
+    type: 'safety',
+    version: '2.1',
+    description: 'Template para inspeção de segurança',
+    items: [],
+    estimatedDuration: 200,
+    frequency: 'weekly',
+    applicableVesselTypes: ['PSV', 'AHTS', 'OSV', 'Drill Ship'],
+    requiredCertifications: ['Safety Officer'],
+    dependencies: [],
+    active: true,
+    createdBy: 'admin',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'template-5',
+    name: 'Environmental Assessment Template',
+    type: 'environmental',
+    version: '1.3',
+    description: 'Template para avaliação ambiental',
+    items: [],
+    estimatedDuration: 150,
+    frequency: 'monthly',
+    applicableVesselTypes: ['PSV', 'AHTS', 'OSV', 'Drill Ship'],
+    requiredCertifications: ['Environmental Officer'],
     dependencies: [],
     active: true,
     createdBy: 'admin',
@@ -100,8 +115,19 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
   onChecklistSelect,
   onTemplateSelect
 }) => {
-  const [checklists, setChecklists] = useState<Checklist[]>(mockChecklists);
-  const [templates, setTemplates] = useState<ChecklistTemplate[]>(mockTemplates);
+  const {
+    checklists: dbChecklists,
+    templates: dbTemplates,
+    loading,
+    error,
+    saveChecklist,
+    submitChecklist,
+    createChecklistFromTemplate
+  } = useMaritimeChecklists(userId);
+
+  // Use database data when available, fallback to mock data
+  const checklists = dbChecklists.length > 0 ? dbChecklists : mockChecklists;
+  const templates = dbTemplates.length > 0 ? dbTemplates : mockTemplates;
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
@@ -142,7 +168,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
       case 'nautical_routine': return 'Rotina Náutica';
       case 'safety': return 'Segurança';
       case 'environmental': return 'Ambiental';
-      default: return type.toUpperCase();
+      case 'custom': return 'Personalizado';
     }
   };
 
@@ -206,60 +232,70 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
             </Select>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredChecklists.map((checklist) => (
-              <Card key={checklist.id} className="cursor-pointer hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg">{checklist.title}</CardTitle>
-                      <CardDescription className="mt-1">
-                        {checklist.description}
-                      </CardDescription>
+          {loading ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">Carregando checklists...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-8">
+              <p className="text-red-500">{error}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredChecklists.map((checklist) => (
+                <Card key={checklist.id} className="cursor-pointer hover:shadow-lg transition-shadow">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">{checklist.title}</CardTitle>
+                        <CardDescription className="mt-1">
+                          {checklist.description}
+                        </CardDescription>
+                      </div>
+                      <Badge className={`${getPriorityColor(checklist.priority)} text-white`}>
+                        {checklist.priority}
+                      </Badge>
                     </div>
-                    <Badge className={`${getPriorityColor(checklist.priority)} text-white`}>
-                      {checklist.priority}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Ship className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">{checklist.vessel.name}</span>
-                  </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Ship className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-sm font-medium">{checklist.vessel.name}</span>
+                    </div>
 
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline">
-                      {getTypeLabel(checklist.type)}
-                    </Badge>
-                    <Badge className={`${getStatusColor(checklist.status)} text-white`}>
-                      {checklist.status}
-                    </Badge>
-                  </div>
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline">
+                        {getTypeLabel(checklist.type)}
+                      </Badge>
+                      <Badge className={`${getStatusColor(checklist.status)} text-white`}>
+                        {checklist.status}
+                      </Badge>
+                    </div>
 
-                  {checklist.complianceScore && (
+                    {checklist.complianceScore && (
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Conformidade:</span>
+                        <span className="font-medium">{checklist.complianceScore}%</span>
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Conformidade:</span>
-                      <span className="font-medium">{checklist.complianceScore}%</span>
+                      <span className="text-muted-foreground">Duração estimada:</span>
+                      <span>{checklist.estimatedDuration}min</span>
                     </div>
-                  )}
 
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Duração estimada:</span>
-                    <span>{checklist.estimatedDuration}min</span>
-                  </div>
-
-                  <Button 
-                    className="w-full mt-4" 
-                    onClick={() => onChecklistSelect(checklist)}
-                  >
-                    <FileText className="w-4 h-4 mr-2" />
-                    Abrir Checklist
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    <Button 
+                      className="w-full mt-4" 
+                      onClick={() => onChecklistSelect(checklist)}
+                    >
+                      <FileText className="w-4 h-4 mr-2" />
+                      Abrir Checklist
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="templates" className="space-y-4">
