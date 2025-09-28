@@ -39,6 +39,8 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import ModuleActionButton from '@/components/ui/module-action-button';
 import { MetricCard, AlertItem, ActivityItem, DashboardConfig } from '@/types/dashboard';
+import { DashboardCharts, AIInsightsPanel } from '@/components/dashboard/dashboard-analytics';
+import { DashboardKPIWidget, DashboardExportPanel, DashboardFilters } from '@/components/dashboard/dashboard-widgets';
 
 const StrategicDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -52,6 +54,9 @@ const StrategicDashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProfile, setSelectedProfile] = useState<'admin' | 'hr' | 'operator' | 'auditor'>('admin');
   const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isExporting, setIsExporting] = useState(false);
+  const [dashboardFilters, setDashboardFilters] = useState({});
   const [dashboardConfig, setDashboardConfig] = useState<DashboardConfig>({
     layout: 'grid',
     activeWidgets: ['metrics', 'alerts', 'activities', 'charts'],
@@ -223,6 +228,38 @@ const StrategicDashboard: React.FC = () => {
     });
   };
 
+  // Export dashboard data
+  const handleExport = async (format: string, options?: any) => {
+    setIsExporting(true);
+    
+    try {
+      const exportData = {
+        metrics,
+        alerts,
+        activities,
+        profile: selectedProfile,
+        timestamp: new Date().toISOString(),
+        filters: dashboardFilters
+      };
+
+      // Simulate export process
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      toast({
+        title: "Exportação Concluída",
+        description: `Dashboard exportado em formato ${format.toUpperCase()} com sucesso!`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro na Exportação",
+        description: "Falha ao exportar dados do dashboard",
+        variant: "destructive"
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   // Initialize dashboard
   useEffect(() => {
     loadDashboardData();
@@ -230,10 +267,10 @@ const StrategicDashboard: React.FC = () => {
     // Set up real-time updates
     const interval = setInterval(() => {
       loadDashboardData();
-    }, dashboardConfig.refreshInterval * 1000);
+    }, 30000); // 30 seconds
 
     return () => clearInterval(interval);
-  }, [selectedProfile, dashboardConfig.refreshInterval]);
+  }, [selectedProfile]);
 
   // Filter alerts and activities based on search
   const filteredAlerts = alerts.filter(alert => 
@@ -338,59 +375,69 @@ const StrategicDashboard: React.FC = () => {
 
       {/* Main Content */}
       <div className="container mx-auto p-6">
-        {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-          {metrics.map((metric) => (
-            <Card 
-              key={metric.id} 
-              className="hover:shadow-lg transition-all duration-300 cursor-pointer group border-l-4 border-l-transparent hover:border-l-primary"
-              onClick={metric.onClick}
-            >
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  {metric.title}
-                </CardTitle>
-                <metric.icon className={`h-5 w-5 ${metric.color} group-hover:scale-110 transition-transform`} />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold mb-2">{formatMetricValue(metric.value, metric.unit)}</div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-sm">
-                    {metric.trend === 'up' && <TrendingUp className="h-3 w-3 text-success" />}
-                    {metric.trend === 'down' && <TrendingDown className="h-3 w-3 text-destructive" />}
-                    {metric.trend === 'stable' && <Activity className="h-3 w-3 text-muted-foreground" />}
-                    <span className={`font-medium ${
-                      metric.trend === 'up' ? 'text-success' : 
-                      metric.trend === 'down' ? 'text-destructive' : 
-                      'text-muted-foreground'
-                    }`}>
-                      {metric.change > 0 ? '+' : ''}{metric.change.toFixed(1)}%
-                    </span>
-                  </div>
-                  {metric.subtitle && (
-                    <Badge variant="secondary" className="text-xs">
-                      {metric.subtitle}
-                    </Badge>
-                  )}
-                </div>
-                {metric.target && (
-                  <div className="mt-3">
-                    <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                      <span>Meta</span>
-                      <span>{formatMetricValue(metric.target, metric.unit || '')}</span>
-                    </div>
-                    <Progress 
-                      value={((parseFloat(metric.value.toString().replace(/[^\d.]/g, '')) || 0) / metric.target) * 100} 
-                      className="h-2"
-                    />
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {/* Tabs Navigation */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="insights">IA Insights</TabsTrigger>
+            <TabsTrigger value="export">Exportação</TabsTrigger>
+          </TabsList>
 
-        {/* Content Grid */}
+          <TabsContent value="overview" className="space-y-6">
+            {/* Metrics Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {metrics.map((metric) => (
+                <Card 
+                  key={metric.id} 
+                  className="hover:shadow-lg transition-all duration-300 cursor-pointer group border-l-4 border-l-transparent hover:border-l-primary"
+                  onClick={metric.onClick}
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                      {metric.title}
+                    </CardTitle>
+                    <metric.icon className={`h-5 w-5 ${metric.color} group-hover:scale-110 transition-transform`} />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold mb-2">{formatMetricValue(metric.value, metric.unit)}</div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1 text-sm">
+                        {metric.trend === 'up' && <TrendingUp className="h-3 w-3 text-success" />}
+                        {metric.trend === 'down' && <TrendingDown className="h-3 w-3 text-destructive" />}
+                        {metric.trend === 'stable' && <Activity className="h-3 w-3 text-muted-foreground" />}
+                        <span className={`font-medium ${
+                          metric.trend === 'up' ? 'text-success' : 
+                          metric.trend === 'down' ? 'text-destructive' : 
+                          'text-muted-foreground'
+                        }`}>
+                          {metric.change > 0 ? '+' : ''}{metric.change.toFixed(1)}%
+                        </span>
+                      </div>
+                      {metric.subtitle && (
+                        <Badge variant="secondary" className="text-xs">
+                          {metric.subtitle}
+                        </Badge>
+                      )}
+                    </div>
+                    {metric.target && (
+                      <div className="mt-3">
+                        <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                          <span>Meta</span>
+                          <span>{formatMetricValue(metric.target, metric.unit || '')}</span>
+                        </div>
+                        <Progress 
+                          value={((parseFloat(metric.value.toString().replace(/[^\d.]/g, '')) || 0) / metric.target) * 100} 
+                          className="h-2"
+                        />
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Alerts Panel */}
           <Card className="lg:col-span-1">
@@ -509,31 +556,58 @@ const StrategicDashboard: React.FC = () => {
             </CardTitle>
             <CardDescription>
               Acesso direto aos módulos mais importantes
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {[
-                { title: 'PEOTRAM', icon: Shield, route: '/peotram', color: 'text-success' },
-                { title: 'Frota', icon: Ship, route: '/fleet-management', color: 'text-azure-600' },
-                { title: 'RH', icon: Users, route: '/hr', color: 'text-info' },
-                { title: 'Viagens', icon: Map, route: '/travel', color: 'text-warning' },
-                { title: 'Relatórios', icon: BarChart3, route: '/reports', color: 'text-primary' },
-                { title: 'Configurações', icon: Settings, route: '/settings', color: 'text-muted-foreground' }
-              ].map((item) => (
-                <Button 
-                  key={item.title}
-                  variant="outline" 
-                  className="h-20 flex flex-col items-center gap-2 hover:shadow-md transition-all"
-                  onClick={() => navigate(item.route)}
-                >
-                  <item.icon className={`h-6 w-6 ${item.color}`} />
-                  <span className="text-sm font-medium">{item.title}</span>
-                </Button>
-              ))}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                {[
+                  { title: 'PEOTRAM', icon: Shield, route: '/peotram', color: 'text-success' },
+                  { title: 'Frota', icon: Ship, route: '/fleet-management', color: 'text-azure-600' },
+                  { title: 'RH', icon: Users, route: '/hr', color: 'text-info' },
+                  { title: 'Viagens', icon: Map, route: '/travel', color: 'text-warning' },
+                  { title: 'Relatórios', icon: BarChart3, route: '/reports', color: 'text-primary' },
+                  { title: 'Configurações', icon: Settings, route: '/settings', color: 'text-muted-foreground' }
+                ].map((item) => (
+                  <Button 
+                    key={item.title}
+                    variant="outline" 
+                    className="h-20 flex flex-col items-center gap-2 hover:shadow-md transition-all"
+                    onClick={() => navigate(item.route)}
+                  >
+                    <item.icon className={`h-6 w-6 ${item.color}`} />
+                    <span className="text-sm font-medium">{item.title}</span>
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="analytics" className="space-y-6">
+          <DashboardCharts profile={selectedProfile} />
+        </TabsContent>
+
+        <TabsContent value="insights" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <AIInsightsPanel profile={selectedProfile} />
             </div>
-          </CardContent>
-        </Card>
+            <div>
+              <DashboardFilters 
+                onFilterChange={setDashboardFilters}
+                currentFilters={dashboardFilters}
+              />
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="export" className="space-y-6">
+          <DashboardExportPanel 
+            onExport={handleExport}
+            isExporting={isExporting}
+          />
+        </TabsContent>
+      </Tabs>
       </div>
 
       {/* Module Action Button */}
