@@ -2,10 +2,10 @@ import React, { Suspense } from 'react';
 import { User } from 'lucide-react';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
-// Lazy loading do portal
-const EmployeePortal = React.lazy(() => 
-  import('@/components/portal/employee-portal').then(module => ({
-    default: module.EmployeePortal
+// Lazy loading do portal moderno
+const ModernEmployeePortal = React.lazy(() => 
+  import('@/components/portal/modern-employee-portal').then(module => ({
+    default: module.ModernEmployeePortal
   }))
 );
 
@@ -32,7 +32,7 @@ const Portal: React.FC = () => {
           </div>
         </div>
       }>
-        <EmployeePortal />
+        <ModernEmployeePortal />
       </Suspense>
     </div>
   );
