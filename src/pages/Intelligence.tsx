@@ -1,12 +1,12 @@
 import React from 'react';
-import AIAssistantEnhanced from '@/components/intelligence/ai-assistant-enhanced';
+import EnhancedAIChatbot from '@/components/intelligence/enhanced-ai-chatbot';
 import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 
 const Intelligence = () => {
   return (
     <div className="space-y-6">
       <BackToDashboard />
-      <AIAssistantEnhanced />
+      <EnhancedAIChatbot />
     </div>
   );
 };
