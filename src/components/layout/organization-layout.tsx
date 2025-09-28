@@ -1,6 +1,5 @@
 import React from 'react';
 import { MultiTenantWrapper } from './multi-tenant-wrapper';
-import { Header } from './header';
 import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 
 interface OrganizationLayoutProps {
@@ -18,20 +17,17 @@ export const OrganizationLayout: React.FC<OrganizationLayoutProps> = ({
 }) => {
   return (
     <MultiTenantWrapper requiresOrganization={requiresOrganization}>
-      <div className="min-h-screen bg-background">
-        <Header />
-        <main className="container mx-auto p-6 space-y-6">
-          {showBackButton && <BackToDashboard />}
-          {title && (
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-              <p className="text-muted-foreground">
-                Gerencie as configurações e dados da sua organização
-              </p>
-            </div>
-          )}
-          {children}
-        </main>
+      <div className="container mx-auto p-6 space-y-6">
+        {showBackButton && <BackToDashboard />}
+        {title && (
+          <div className="space-y-2">
+            <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+            <p className="text-muted-foreground">
+              Gerencie as configurações e dados da sua organização
+            </p>
+          </div>
+        )}
+        {children}
       </div>
     </MultiTenantWrapper>
   );
