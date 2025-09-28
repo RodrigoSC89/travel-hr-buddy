@@ -23,12 +23,12 @@
     --azure-800: 214 100% 25%;    /* #075985 - Azul escuro */
     --azure-900: 214 100% 18%;    /* #0C4A6E - Azul noturno */
     
-    /* Sistema Base - CONTRASTE MÁXIMO PARA ACESSIBILIDADE */
-    --background: var(--azure-50);           /* Fundo principal azul glacial */
-    --foreground: 214 100% 5%;               /* #020F14 - Texto MUITO ESCURO para contraste 7:1 */
+    /* Sistema Base - CONTRASTE MÁXIMO PARA ACESSIBILIDADE WCAG AAA */
+    --background: 214 100% 98%;              /* #FCFEFF - Fundo principal super claro */
+    --foreground: 214 100% 3%;               /* #010B0F - Texto ULTRA ESCURO para contraste 7:1+ */
 
-    --card: var(--azure-100);                /* Cards azul gelo */
-    --card-foreground: 214 100% 8%;          /* Texto ESCURO nos cards para contraste máximo */
+    --card: 214 95% 96%;                     /* #F8FCFE - Cards super claros */
+    --card-foreground: 214 100% 5%;          /* #020F14 - Texto ULTRA ESCURO nos cards para contraste máximo */
 
     --popover: var(--azure-100);
     --popover-foreground: 214 100% 12%;
@@ -66,8 +66,8 @@
     --info: var(--azure-500);                /* #0EA5E9 - Azul informativo */
     --info-foreground: var(--azure-50);
 
-    --muted: var(--azure-200);               /* #BAE6FD - Azul muito claro */
-    --muted-foreground: 214 100% 8%;         /* Texto MUITO ESCURO para contraste máximo */
+    --muted: 214 80% 92%;                    /* #E6F4FF - Azul muito claro melhorado */
+    --muted-foreground: 214 100% 5%;         /* #020F14 - Texto ULTRA ESCURO para contraste máximo */
 
     --destructive: 4 90% 45%;                /* #E63946 - Vermelho azulado */
     --destructive-foreground: var(--azure-50);

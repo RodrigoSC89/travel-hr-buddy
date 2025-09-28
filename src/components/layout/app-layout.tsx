@@ -14,9 +14,14 @@ import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/layout/theme-provider';
 import { SEOWrapper } from '@/components/layout/seo-wrapper';
 import { OfflineIndicator } from '@/components/ui/offline-indicator';
+import GlobalSearch from '@/components/ui/global-search';
+import SmartAssistant from '@/components/ui/smart-assistant';
+import EnhancedNotifications from '@/components/ui/enhanced-notifications';
 
 export const AppLayout: React.FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
+  const [isAssistantMinimized, setIsAssistantMinimized] = React.useState(true);
+  const [isNotificationsOpen, setIsNotificationsOpen] = React.useState(false);
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
@@ -36,13 +41,26 @@ export const AppLayout: React.FC = () => {
             <QuickActionsBar onOpenSearch={() => setIsSearchOpen(true)} />
             <ModernFabShortcuts 
               onOpenSearch={() => setIsSearchOpen(true)}
-              onActivateVoice={() => console.log('Voice activated')}
-              onOpenAIChat={() => console.log('AI Chat opened')}
+              onActivateVoice={() => setIsAssistantMinimized(false)}
+              onOpenAIChat={() => setIsAssistantMinimized(false)}
               onOpenSettings={() => console.log('Settings opened')}
             />
             <VoiceInterface />
             <NautilusCopilot />
             
+            {/* Enhanced Global Features */}
+            <GlobalSearch 
+              isOpen={isSearchOpen} 
+              onOpenChange={setIsSearchOpen} 
+            />
+            <SmartAssistant 
+              isMinimized={isAssistantMinimized}
+              onToggleMinimize={() => setIsAssistantMinimized(!isAssistantMinimized)}
+            />
+            <EnhancedNotifications 
+              isOpen={isNotificationsOpen}
+              onClose={() => setIsNotificationsOpen(false)}
+            />
             
             {/* Toast Notifications */}
             <Toaster />
