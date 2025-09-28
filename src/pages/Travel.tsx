@@ -4,7 +4,6 @@ import { HotelSearch } from '@/components/travel/hotel-search';
 import { TravelMap } from '@/components/travel/travel-map';
 import { PredictiveTravelDashboard } from '@/components/travel/predictive-travel-dashboard';
 import { AITravelAssistant } from '@/components/travel/ai-travel-assistant';
-import { PredictiveTravelDashboard } from '@/components/travel/predictive-travel-dashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
