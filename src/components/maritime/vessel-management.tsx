@@ -2,532 +2,449 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Ship, 
-  Anchor, 
-  Users, 
-  Calendar, 
+  Plus, 
+  Edit, 
+  Trash2, 
   MapPin, 
+  Calendar,
+  Users,
+  Anchor,
   AlertTriangle,
   CheckCircle,
-  Clock,
-  TrendingUp,
-  Radio,
-  Heart,
-  Shield,
-  FileText,
-  Globe,
-  Compass
+  Clock
 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface Vessel {
   id: string;
   name: string;
-  imo: string;
-  type: string;
-  flag: string;
-  currentPort: string;
-  nextPort: string;
-  eta: string;
-  crew: CrewMember[];
-  status: 'at_sea' | 'in_port' | 'maintenance' | 'emergency';
-  coordinates: { lat: number; lng: number };
+  vessel_type: string;
+  imo_number?: string;
+  flag_state: string;
+  gross_tonnage?: number;
+  built_year?: number;
+  classification_society?: string;
+  status: string;
+  current_location?: string;
+  crew_capacity?: number;
+  organization_id?: string;
+  created_at: string;
+  updated_at: string;
 }
 
-interface CrewMember {
-  id: string;
+interface VesselFormData {
   name: string;
-  rank: string;
-  nationality: string;
-  contractStart: string;
-  contractEnd: string;
-  certificationsStatus: 'valid' | 'expiring' | 'expired';
-  onboard: boolean;
-  workHours: number;
-  restHours: number;
+  vessel_type: string;
+  imo_number: string;
+  flag_state: string;
+  gross_tonnage: number;
+  built_year: number;
+  classification_society: string;
+  status: string;
+  current_location: string;
+  crew_capacity: number;
 }
 
-export const VesselManagement: React.FC = () => {
-  const [vessels, setVessels] = useState<Vessel[]>([]);
-  const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
-  const { toast } = useToast();
+const initialFormData: VesselFormData = {
+  name: '',
+  vessel_type: '',
+  imo_number: '',
+  flag_state: '',
+  gross_tonnage: 0,
+  built_year: new Date().getFullYear(),
+  classification_society: '',
+  status: 'active',
+  current_location: '',
+  crew_capacity: 0
+};
 
-  // Mock data para demonstração
+export function VesselManagement() {
+  const [vessels, setVessels] = useState<Vessel[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingVessel, setEditingVessel] = useState<Vessel | null>(null);
+  const [formData, setFormData] = useState<VesselFormData>(initialFormData);
+  const [searchTerm, setSearchTerm] = useState('');
+
   useEffect(() => {
-    const mockVessels: Vessel[] = [
-      {
-        id: '1',
-        name: 'MV Ocean Pioneer',
-        imo: 'IMO9876543',
-        type: 'Container Ship',
-        flag: 'Brazil',
-        currentPort: 'Santos, BR',
-        nextPort: 'Hamburg, DE',
-        eta: '2024-01-15T14:30:00Z',
-        status: 'at_sea',
-        coordinates: { lat: -12.9714, lng: -38.5014 },
-        crew: [
-          {
-            id: '1',
-            name: 'João Silva',
-            rank: 'Captain',
-            nationality: 'Brazilian',
-            contractStart: '2024-01-01',
-            contractEnd: '2024-06-01',
-            certificationsStatus: 'valid',
-            onboard: true,
-            workHours: 8,
-            restHours: 16
-          },
-          {
-            id: '2',
-            name: 'Maria Santos',
-            rank: 'Chief Engineer',
-            nationality: 'Brazilian',
-            contractStart: '2024-01-01',
-            contractEnd: '2024-04-01',
-            certificationsStatus: 'expiring',
-            onboard: true,
-            workHours: 10,
-            restHours: 14
-          }
-        ]
-      },
-      {
-        id: '2',
-        name: 'MV Atlantic Star',
-        imo: 'IMO9876544',
-        type: 'Bulk Carrier',
-        flag: 'Brazil',
-        currentPort: 'Rio de Janeiro, BR',
-        nextPort: 'New York, US',
-        eta: '2024-01-20T08:00:00Z',
-        status: 'in_port',
-        coordinates: { lat: -22.9068, lng: -43.1729 },
-        crew: []
-      }
-    ];
-    setVessels(mockVessels);
-    setSelectedVessel(mockVessels[0]);
+    fetchVessels();
   }, []);
+
+  const fetchVessels = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('vessels')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setVessels(data || []);
+    } catch (error) {
+      console.error('Error fetching vessels:', error);
+      toast.error('Erro ao carregar navios');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveVessel = async () => {
+    try {
+      const vesselData = {
+        ...formData,
+        gross_tonnage: formData.gross_tonnage || null,
+        built_year: formData.built_year || null,
+        crew_capacity: formData.crew_capacity || null
+      };
+
+      if (editingVessel) {
+        const { error } = await supabase
+          .from('vessels')
+          .update(vesselData)
+          .eq('id', editingVessel.id);
+
+        if (error) throw error;
+        toast.success('Navio atualizado com sucesso');
+      } else {
+        const { error } = await supabase
+          .from('vessels')
+          .insert([vesselData]);
+
+        if (error) throw error;
+        toast.success('Navio cadastrado com sucesso');
+      }
+
+      setDialogOpen(false);
+      setEditingVessel(null);
+      setFormData(initialFormData);
+      fetchVessels();
+    } catch (error) {
+      console.error('Error saving vessel:', error);
+      toast.error('Erro ao salvar navio');
+    }
+  };
+
+  const handleDeleteVessel = async (vesselId: string) => {
+    if (!confirm('Tem certeza que deseja excluir este navio?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('vessels')
+        .delete()
+        .eq('id', vesselId);
+
+      if (error) throw error;
+      toast.success('Navio excluído com sucesso');
+      fetchVessels();
+    } catch (error) {
+      console.error('Error deleting vessel:', error);
+      toast.error('Erro ao excluir navio');
+    }
+  };
+
+  const handleEditVessel = (vessel: Vessel) => {
+    setEditingVessel(vessel);
+    setFormData({
+      name: vessel.name,
+      vessel_type: vessel.vessel_type,
+      imo_number: vessel.imo_number || '',
+      flag_state: vessel.flag_state,
+      gross_tonnage: vessel.gross_tonnage || 0,
+      built_year: vessel.built_year || new Date().getFullYear(),
+      classification_society: vessel.classification_society || '',
+      status: vessel.status,
+      current_location: vessel.current_location || '',
+      crew_capacity: vessel.crew_capacity || 0
+    });
+    setDialogOpen(true);
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'at_sea': return 'bg-primary';
-      case 'in_port': return 'bg-green-500';
-      case 'maintenance': return 'bg-yellow-500';
-      case 'emergency': return 'bg-destructive';
-      default: return 'bg-muted';
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'maintenance': return 'bg-yellow-100 text-yellow-800';
+      case 'inactive': return 'bg-gray-100 text-gray-800';
+      case 'dry_dock': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const getStatusLabel = (status: string) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'at_sea': return 'Em Navegação';
-      case 'in_port': return 'No Porto';
-      case 'maintenance': return 'Manutenção';
-      case 'emergency': return 'Emergência';
-      default: return 'Desconhecido';
+      case 'active': return <CheckCircle className="w-4 h-4" />;
+      case 'maintenance': return <AlertTriangle className="w-4 h-4" />;
+      case 'inactive': return <Clock className="w-4 h-4" />;
+      default: return <Ship className="w-4 h-4" />;
     }
   };
 
-  const getCertificationBadge = (status: string) => {
-    switch (status) {
-      case 'valid': return <Badge className="bg-green-500 text-azure-50">Válido</Badge>;
-      case 'expiring': return <Badge className="bg-yellow-500 text-azure-900">Vencendo</Badge>;
-      case 'expired': return <Badge variant="destructive">Vencido</Badge>;
-      default: return <Badge variant="secondary">N/A</Badge>;
-    }
-  };
-
-  const handleCrewRotation = (vesselId: string) => {
-    toast({
-      title: "Rotação de Tripulação",
-      description: "Planejamento de rotação iniciado para " + selectedVessel?.name,
-    });
-  };
-
-  const handleEmergencyAlert = (vesselId: string) => {
-    toast({
-      title: "🚨 Alerta de Emergência",
-      description: "Protocolo de emergência ativado para " + selectedVessel?.name,
-      variant: "destructive",
-    });
-  };
-
-  if (!selectedVessel) return <div>Carregando...</div>;
+  const filteredVessels = vessels.filter(vessel =>
+    vessel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    vessel.vessel_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    vessel.flag_state.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Ship className="h-8 w-8 text-primary" />
-            Gestão de Embarcações
-          </h1>
+          <h2 className="text-3xl font-bold">Gestão de Navios</h2>
           <p className="text-muted-foreground">
-            Controle total da frota e tripulação em tempo real
+            Gerencie a frota de embarcações
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => handleCrewRotation(selectedVessel.id)}>
-            <Users className="h-4 w-4 mr-2" />
-            Planejar Rotação
-          </Button>
-          <Button variant="destructive" onClick={() => handleEmergencyAlert(selectedVessel.id)}>
-            <AlertTriangle className="h-4 w-4 mr-2" />
-            Emergência
-          </Button>
-        </div>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Button onClick={() => { setEditingVessel(null); setFormData(initialFormData); }}>
+              <Plus className="w-4 h-4 mr-2" />
+              Novo Navio
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>
+                {editingVessel ? 'Editar Navio' : 'Novo Navio'}
+              </DialogTitle>
+              <DialogDescription>
+                Preencha as informações do navio
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="name">Nome do Navio</Label>
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Ex: MV Atlantic Explorer"
+                />
+              </div>
+              <div>
+                <Label htmlFor="vessel_type">Tipo</Label>
+                <Select value={formData.vessel_type} onValueChange={(value) => setFormData({ ...formData, vessel_type: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="cargo">Cargueiro</SelectItem>
+                    <SelectItem value="tanker">Petroleiro</SelectItem>
+                    <SelectItem value="container">Porta-contêiner</SelectItem>
+                    <SelectItem value="bulk_carrier">Graneleiro</SelectItem>
+                    <SelectItem value="passenger">Passageiros</SelectItem>
+                    <SelectItem value="offshore">Offshore</SelectItem>
+                    <SelectItem value="fishing">Pesqueiro</SelectItem>
+                    <SelectItem value="other">Outro</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="imo_number">Número IMO</Label>
+                <Input
+                  id="imo_number"
+                  value={formData.imo_number}
+                  onChange={(e) => setFormData({ ...formData, imo_number: e.target.value })}
+                  placeholder="Ex: 1234567"
+                />
+              </div>
+              <div>
+                <Label htmlFor="flag_state">Bandeira</Label>
+                <Input
+                  id="flag_state"
+                  value={formData.flag_state}
+                  onChange={(e) => setFormData({ ...formData, flag_state: e.target.value })}
+                  placeholder="Ex: Brasil"
+                />
+              </div>
+              <div>
+                <Label htmlFor="gross_tonnage">Tonelagem Bruta</Label>
+                <Input
+                  id="gross_tonnage"
+                  type="number"
+                  value={formData.gross_tonnage}
+                  onChange={(e) => setFormData({ ...formData, gross_tonnage: parseInt(e.target.value) || 0 })}
+                  placeholder="Ex: 50000"
+                />
+              </div>
+              <div>
+                <Label htmlFor="built_year">Ano de Construção</Label>
+                <Input
+                  id="built_year"
+                  type="number"
+                  value={formData.built_year}
+                  onChange={(e) => setFormData({ ...formData, built_year: parseInt(e.target.value) || new Date().getFullYear() })}
+                  placeholder="Ex: 2020"
+                />
+              </div>
+              <div>
+                <Label htmlFor="classification_society">Sociedade Classificadora</Label>
+                <Input
+                  id="classification_society"
+                  value={formData.classification_society}
+                  onChange={(e) => setFormData({ ...formData, classification_society: e.target.value })}
+                  placeholder="Ex: DNV GL"
+                />
+              </div>
+              <div>
+                <Label htmlFor="crew_capacity">Capacidade da Tripulação</Label>
+                <Input
+                  id="crew_capacity"
+                  type="number"
+                  value={formData.crew_capacity}
+                  onChange={(e) => setFormData({ ...formData, crew_capacity: parseInt(e.target.value) || 0 })}
+                  placeholder="Ex: 25"
+                />
+              </div>
+              <div>
+                <Label htmlFor="status">Status</Label>
+                <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Ativo</SelectItem>
+                    <SelectItem value="maintenance">Manutenção</SelectItem>
+                    <SelectItem value="dry_dock">Dique Seco</SelectItem>
+                    <SelectItem value="inactive">Inativo</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="current_location">Localização Atual</Label>
+                <Input
+                  id="current_location"
+                  value={formData.current_location}
+                  onChange={(e) => setFormData({ ...formData, current_location: e.target.value })}
+                  placeholder="Ex: Porto de Santos"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={handleSaveVessel}>
+                {editingVessel ? 'Atualizar' : 'Cadastrar'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
-      {/* Seletor de Embarcação */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Selecionar Embarcação</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {vessels.map((vessel) => (
-              <Card 
-                key={vessel.id} 
-                className={`cursor-pointer transition-all ${
-                  selectedVessel?.id === vessel.id ? 'ring-2 ring-primary' : ''
-                }`}
-                onClick={() => setSelectedVessel(vessel)}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold">{vessel.name}</h3>
-                    <div className={`w-3 h-3 rounded-full ${getStatusColor(vessel.status)}`} />
+      {/* Search */}
+      <div className="flex gap-4">
+        <Input
+          placeholder="Buscar navios..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="max-w-md"
+        />
+      </div>
+
+      {/* Vessels Grid */}
+      {loading ? (
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <Ship className="w-12 h-12 mx-auto text-muted-foreground animate-pulse" />
+            <p className="text-muted-foreground mt-2">Carregando navios...</p>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredVessels.map((vessel) => (
+            <Card key={vessel.id} className="hover:shadow-lg transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <div className="flex items-center space-x-2">
+                  <Ship className="w-5 h-5 text-blue-600" />
+                  <CardTitle className="text-lg">{vessel.name}</CardTitle>
+                </div>
+                <div className="flex space-x-1">
+                  <Button variant="ghost" size="icon" onClick={() => handleEditVessel(vessel)}>
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => handleDeleteVessel(vessel.id)}
+                    className="text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Badge className={getStatusColor(vessel.status)}>
+                      {getStatusIcon(vessel.status)}
+                      <span className="ml-1">
+                        {vessel.status === 'active' && 'Ativo'}
+                        {vessel.status === 'maintenance' && 'Manutenção'}
+                        {vessel.status === 'inactive' && 'Inativo'}
+                        {vessel.status === 'dry_dock' && 'Dique Seco'}
+                      </span>
+                    </Badge>
+                    <Badge variant="outline">{vessel.vessel_type}</Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">{vessel.type}</p>
-                  <p className="text-sm">{getStatusLabel(vessel.status)}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    <MapPin className="h-3 w-3 inline mr-1" />
-                    {vessel.currentPort}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Detalhes da Embarcação */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-          <TabsTrigger value="crew">Tripulação</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="operations">Operações</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Ship className="h-5 w-5" />
-                  Informações da Embarcação
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">IMO:</span>
-                  <span className="font-medium">{selectedVessel.imo}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Tipo:</span>
-                  <span className="font-medium">{selectedVessel.type}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Bandeira:</span>
-                  <span className="font-medium">{selectedVessel.flag}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Status:</span>
-                  <Badge variant="secondary">{getStatusLabel(selectedVessel.status)}</Badge>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Compass className="h-5 w-5" />
-                  Posição e Rota
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Porto Atual:</span>
-                  <span className="font-medium">{selectedVessel.currentPort}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Próximo Porto:</span>
-                  <span className="font-medium">{selectedVessel.nextPort}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">ETA:</span>
-                  <span className="font-medium">
-                    {new Date(selectedVessel.eta).toLocaleDateString('pt-BR')}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Coordenadas:</span>
-                  <span className="font-medium text-xs">
-                    {selectedVessel.coordinates.lat.toFixed(4)}, {selectedVessel.coordinates.lng.toFixed(4)}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Status da Tripulação
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Total a Bordo:</span>
-                  <span className="font-medium">{selectedVessel.crew.filter(c => c.onboard).length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Cert. Válidas:</span>
-                  <span className="font-medium text-green-600">
-                    {selectedVessel.crew.filter(c => c.certificationsStatus === 'valid').length}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Cert. Vencendo:</span>
-                  <span className="font-medium text-yellow-600">
-                    {selectedVessel.crew.filter(c => c.certificationsStatus === 'expiring').length}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Cert. Vencidas:</span>
-                  <span className="font-medium text-red-600">
-                    {selectedVessel.crew.filter(c => c.certificationsStatus === 'expired').length}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="crew">
-          <Card>
-            <CardHeader>
-              <CardTitle>Tripulação a Bordo</CardTitle>
-              <CardDescription>
-                Gestão completa da tripulação e rotações
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {selectedVessel.crew.map((member) => (
-                  <div key={member.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="space-y-1">
-                      <h4 className="font-semibold">{member.name}</h4>
-                      <p className="text-sm text-muted-foreground">{member.rank}</p>
-                      <p className="text-xs text-muted-foreground">
-                        Contrato: {new Date(member.contractStart).toLocaleDateString('pt-BR')} - {new Date(member.contractEnd).toLocaleDateString('pt-BR')}
-                      </p>
+                  
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="flex items-center text-muted-foreground">
+                      <Anchor className="w-3 h-3 mr-1" />
+                      {vessel.flag_state}
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-center">
-                        <p className="text-xs text-muted-foreground">Certificações</p>
-                        {getCertificationBadge(member.certificationsStatus)}
+                    {vessel.imo_number && (
+                      <div className="flex items-center text-muted-foreground">
+                        <span className="font-mono">IMO: {vessel.imo_number}</span>
                       </div>
-                      <div className="text-center">
-                        <p className="text-xs text-muted-foreground">Trabalho/Descanso</p>
-                        <p className="text-sm font-medium">{member.workHours}h / {member.restHours}h</p>
+                    )}
+                    {vessel.gross_tonnage && (
+                      <div className="flex items-center text-muted-foreground">
+                        <span>{vessel.gross_tonnage.toLocaleString()} GT</span>
                       </div>
-                      <Badge variant={member.onboard ? "default" : "secondary"}>
-                        {member.onboard ? "A Bordo" : "Em Terra"}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="compliance">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5" />
-                  Certificações STCW
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span>Basic Safety Training</span>
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Medical First Aid</span>
-                    <AlertTriangle className="h-5 w-5 text-yellow-500" />
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Security Awareness</span>
-                    <CheckCircle className="h-5 w-5 text-green-500" />
+                    )}
+                    {vessel.built_year && (
+                      <div className="flex items-center text-muted-foreground">
+                        <Calendar className="w-3 h-3 mr-1" />
+                        {vessel.built_year}
+                      </div>
+                    )}
+                    {vessel.crew_capacity && (
+                      <div className="flex items-center text-muted-foreground">
+                        <Users className="w-3 h-3 mr-1" />
+                        {vessel.crew_capacity}
+                      </div>
+                    )}
+                    {vessel.current_location && (
+                      <div className="flex items-center text-muted-foreground col-span-2">
+                        <MapPin className="w-3 h-3 mr-1" />
+                        {vessel.current_location}
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
             </Card>
+          ))}
+        </div>
+      )}
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
-                  Compliance MLC
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span>Work Hours Compliance</span>
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Rest Hours Compliance</span>
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Medical Certificates</span>
-                    <AlertTriangle className="h-5 w-5 text-yellow-500" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="operations">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Radio className="h-5 w-5" />
-                  Comunicação
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Button variant="outline" className="w-full justify-start">
-                  <Radio className="h-4 w-4 mr-2" />
-                  Comunicação Sat
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Globe className="h-4 w-4 mr-2" />
-                  Internet Marítimo
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <AlertTriangle className="h-4 w-4 mr-2" />
-                  Emergência
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Heart className="h-5 w-5" />
-                  Wellness da Tripulação
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Moral da Tripulação</Label>
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 bg-gray-200 rounded-full h-2">
-                      <div className="bg-green-500 h-2 rounded-full" style={{ width: '78%' }}></div>
-                    </div>
-                    <span className="text-sm font-medium">78%</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Saúde Mental</Label>
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 bg-gray-200 rounded-full h-2">
-                      <div className="bg-blue-500 h-2 rounded-full" style={{ width: '82%' }}></div>
-                    </div>
-                    <span className="text-sm font-medium">82%</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="analytics">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5" />
-                  Performance Analytics
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="text-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg">
-                    <h3 className="text-2xl font-bold text-blue-600">94.5%</h3>
-                    <p className="text-sm text-blue-600">Eficiência Operacional</p>
-                  </div>
-                  <div className="text-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg">
-                    <h3 className="text-2xl font-bold text-green-600">98.2%</h3>
-                    <p className="text-sm text-green-600">Compliance Score</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
-                  Previsões IA
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                    <p className="text-sm font-medium text-yellow-800">
-                      ⚠️ Rotação necessária em 15 dias
-                    </p>
-                    <p className="text-xs text-yellow-600">
-                      2 oficiais com contratos vencendo
-                    </p>
-                  </div>
-                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-sm font-medium text-blue-800">
-                      📊 Otimização sugerida
-                    </p>
-                    <p className="text-xs text-blue-600">
-                      Reduzir custos de rotação em 12%
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
+      {filteredVessels.length === 0 && !loading && (
+        <div className="text-center py-12">
+          <Ship className="w-12 h-12 mx-auto text-muted-foreground" />
+          <h3 className="mt-4 text-lg font-semibold">Nenhum navio encontrado</h3>
+          <p className="text-muted-foreground">
+            {searchTerm ? 'Nenhum navio corresponde à sua busca.' : 'Comece cadastrando o primeiro navio.'}
+          </p>
+        </div>
+      )}
     </div>
   );
-};
+}

@@ -75,6 +75,7 @@ import KnowledgeManagement from "@/components/admin/knowledge-management";
 import FleetManagement from "./pages/FleetManagement";
 import CrewManagement from "./pages/CrewManagement";
 import MaritimeCertifications from "./pages/MaritimeCertifications";
+import MaritimeChecklists from "./pages/MaritimeChecklists";
 import OrganizationSettings from "./pages/OrganizationSettings";
 import OrganizationSetup from "./pages/OrganizationSetup";
 import SuperAdmin from "./pages/SuperAdmin";
@@ -214,6 +215,7 @@ const App = () => {
                   <Route path="fleet-tracking" element={<FleetTracking />} />
                   <Route path="crew-management" element={<CrewManagement />} />
                   <Route path="maritime-certifications" element={<MaritimeCertifications />} />
+                  <Route path="maritime-checklists" element={<MaritimeChecklists />} />
                   <Route path="automation" element={<Automation />} />
                   <Route path="organization-settings" element={
                     <div className="container mx-auto p-6">
