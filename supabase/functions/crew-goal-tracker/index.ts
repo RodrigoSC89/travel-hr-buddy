@@ -58,7 +58,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in crew goal tracker:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -187,17 +187,17 @@ async function getCrewGoals(crewMemberId: string, supabase: any) {
   // Calculate statistics
   const stats = {
     total_goals: goals.length,
-    completed_goals: goals.filter(g => g.status === 'completed').length,
-    active_goals: goals.filter(g => g.status === 'active').length,
-    overdue_goals: goals.filter(g => 
+    completed_goals: goals.filter((g: any) => g.status === 'completed').length,
+    active_goals: goals.filter((g: any) => g.status === 'active').length,
+    overdue_goals: goals.filter((g: any) => 
       g.status === 'active' && 
       g.deadline && 
       new Date(g.deadline) < new Date()
     ).length,
     total_points_earned: goals
-      .filter(g => g.status === 'completed')
-      .reduce((sum, g) => sum + (g.reward_points || 0), 0),
-    average_completion_time: calculateAverageCompletionTime(goals.filter(g => g.status === 'completed'))
+      .filter((g: any) => g.status === 'completed')
+      .reduce((sum: number, g: any) => sum + (g.reward_points || 0), 0),
+    average_completion_time: calculateAverageCompletionTime(goals.filter((g: any) => g.status === 'completed'))
   }
 
   return {
@@ -228,7 +228,7 @@ async function suggestPersonalizedGoals(crewMemberId: string, supabase: any) {
 
   // Certification suggestions
   const certifications = crewData.crew_certifications || []
-  const expiringSoon = certifications.filter(c => {
+  const expiringSoon = certifications.filter((c: any) => {
     const expiryDate = new Date(c.expiry_date)
     const sixMonthsFromNow = new Date()
     sixMonthsFromNow.setMonth(sixMonthsFromNow.getMonth() + 6)
@@ -250,8 +250,8 @@ async function suggestPersonalizedGoals(crewMemberId: string, supabase: any) {
   // Skill development suggestions
   const recentReviews = crewData.crew_performance_reviews?.slice(-3) || []
   if (recentReviews.length > 0) {
-    const avgTechnical = recentReviews.reduce((sum, r) => sum + (r.technical_score || 0), 0) / recentReviews.length
-    const avgLeadership = recentReviews.reduce((sum, r) => sum + (r.leadership_score || 0), 0) / recentReviews.length
+    const avgTechnical = recentReviews.reduce((sum: number, r: any) => sum + (r.technical_score || 0), 0) / recentReviews.length
+    const avgLeadership = recentReviews.reduce((sum: number, r: any) => sum + (r.leadership_score || 0), 0) / recentReviews.length
 
     if (avgTechnical < 8.0) {
       suggestions.push({
@@ -290,7 +290,7 @@ async function suggestPersonalizedGoals(crewMemberId: string, supabase: any) {
   }
 
   // Safety suggestions
-  const safetyIncidents = recentReviews.some(r => r.incidents && r.incidents.trim() !== '')
+  const safetyIncidents = recentReviews.some((r: any) => r.incidents && r.incidents.trim() !== '')
   if (safetyIncidents) {
     suggestions.push({
       title: 'Melhorar Segurança',

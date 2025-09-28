@@ -80,13 +80,13 @@ serve(async (req) => {
         strengths: review.strengths,
         improvement_areas: review.improvement_areas
       })) || [],
-      evaluations: crewData.crew_evaluations?.map((eval: any) => ({
-        evaluation_date: eval.evaluation_date,
-        overall_score: eval.overall_score,
-        technical_score: eval.technical_score,
-        behavioral_score: eval.behavioral_score,
-        positive_feedback: eval.positive_feedback,
-        improvement_areas: eval.improvement_areas
+      evaluations: crewData.crew_evaluations?.map((evaluation: any) => ({
+        evaluation_date: evaluation.evaluation_date,
+        overall_score: evaluation.overall_score,
+        technical_score: evaluation.technical_score,
+        behavioral_score: evaluation.behavioral_score,
+        positive_feedback: evaluation.positive_feedback,
+        improvement_areas: evaluation.improvement_areas
       })) || []
     }
 
@@ -184,7 +184,7 @@ Retorne uma análise estruturada em JSON com as seguintes seções:
   } catch (error) {
     console.error('Error in crew AI insights:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

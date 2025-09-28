@@ -887,6 +887,62 @@ export type Database = {
           },
         ]
       }
+      crew_ai_insights: {
+        Row: {
+          analysis_type: string
+          confidence_score: number | null
+          created_at: string
+          crew_member_id: string
+          generated_by: string
+          id: string
+          improvement_areas: Json | null
+          insights_data: Json
+          next_actions: Json | null
+          recommendations: Json | null
+          risk_factors: Json | null
+          strengths: Json | null
+          updated_at: string
+        }
+        Insert: {
+          analysis_type?: string
+          confidence_score?: number | null
+          created_at?: string
+          crew_member_id: string
+          generated_by?: string
+          id?: string
+          improvement_areas?: Json | null
+          insights_data?: Json
+          next_actions?: Json | null
+          recommendations?: Json | null
+          risk_factors?: Json | null
+          strengths?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          analysis_type?: string
+          confidence_score?: number | null
+          created_at?: string
+          crew_member_id?: string
+          generated_by?: string
+          id?: string
+          improvement_areas?: Json | null
+          insights_data?: Json
+          next_actions?: Json | null
+          recommendations?: Json | null
+          risk_factors?: Json | null
+          strengths?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_ai_insights_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_ai_recommendations: {
         Row: {
           category: string
@@ -1070,6 +1126,137 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "crew_certifications_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crew_communications: {
+        Row: {
+          content: string | null
+          conversation_id: string | null
+          created_at: string
+          file_url: string | null
+          id: string
+          is_read: boolean | null
+          is_urgent: boolean | null
+          message_type: string
+          metadata: Json | null
+          read_at: string | null
+          recipient_id: string | null
+          sender_id: string | null
+          voice_duration: number | null
+        }
+        Insert: {
+          content?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          file_url?: string | null
+          id?: string
+          is_read?: boolean | null
+          is_urgent?: boolean | null
+          message_type: string
+          metadata?: Json | null
+          read_at?: string | null
+          recipient_id?: string | null
+          sender_id?: string | null
+          voice_duration?: number | null
+        }
+        Update: {
+          content?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          file_url?: string | null
+          id?: string
+          is_read?: boolean | null
+          is_urgent?: boolean | null
+          message_type?: string
+          metadata?: Json | null
+          read_at?: string | null
+          recipient_id?: string | null
+          sender_id?: string | null
+          voice_duration?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_communications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_communications_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crew_development_goals: {
+        Row: {
+          category: string
+          completed_at: string | null
+          created_at: string
+          crew_member_id: string
+          current_progress: number | null
+          deadline: string | null
+          description: string | null
+          id: string
+          milestones: Json | null
+          priority: string | null
+          progress_history: Json | null
+          reward_points: number | null
+          status: string | null
+          target_value: number | null
+          title: string
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          completed_at?: string | null
+          created_at?: string
+          crew_member_id: string
+          current_progress?: number | null
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          milestones?: Json | null
+          priority?: string | null
+          progress_history?: Json | null
+          reward_points?: number | null
+          status?: string | null
+          target_value?: number | null
+          title: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          completed_at?: string | null
+          created_at?: string
+          crew_member_id?: string
+          current_progress?: number | null
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          milestones?: Json | null
+          priority?: string | null
+          progress_history?: Json | null
+          reward_points?: number | null
+          status?: string | null
+          target_value?: number | null
+          title?: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_development_goals_crew_member_id_fkey"
             columns: ["crew_member_id"]
             isOneToOne: false
             referencedRelation: "crew_members"
@@ -1399,6 +1586,59 @@ export type Database = {
             columns: ["embarkation_id"]
             isOneToOne: false
             referencedRelation: "crew_embarkations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crew_gamification_profiles: {
+        Row: {
+          achievements: Json | null
+          badges_earned: Json | null
+          created_at: string
+          crew_member_id: string
+          current_level: number | null
+          id: string
+          last_activity: string | null
+          leaderboard_rank: number | null
+          skill_progression: Json | null
+          streaks: Json | null
+          total_experience_points: number | null
+          updated_at: string
+        }
+        Insert: {
+          achievements?: Json | null
+          badges_earned?: Json | null
+          created_at?: string
+          crew_member_id: string
+          current_level?: number | null
+          id?: string
+          last_activity?: string | null
+          leaderboard_rank?: number | null
+          skill_progression?: Json | null
+          streaks?: Json | null
+          total_experience_points?: number | null
+          updated_at?: string
+        }
+        Update: {
+          achievements?: Json | null
+          badges_earned?: Json | null
+          created_at?: string
+          crew_member_id?: string
+          current_level?: number | null
+          id?: string
+          last_activity?: string | null
+          leaderboard_rank?: number | null
+          skill_progression?: Json | null
+          streaks?: Json | null
+          total_experience_points?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_gamification_profiles_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: true
+            referencedRelation: "crew_members"
             referencedColumns: ["id"]
           },
         ]
@@ -2788,6 +3028,102 @@ export type Database = {
           },
         ]
       }
+      operational_alerts: {
+        Row: {
+          action_required: string | null
+          affected_crew_member_id: string | null
+          affected_vessel_id: string | null
+          alert_type: string
+          assigned_to: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          organization_id: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string | null
+          source_data: Json | null
+          status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          action_required?: string | null
+          affected_crew_member_id?: string | null
+          affected_vessel_id?: string | null
+          alert_type: string
+          assigned_to?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          organization_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          source_data?: Json | null
+          status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          action_required?: string | null
+          affected_crew_member_id?: string | null
+          affected_vessel_id?: string | null
+          alert_type?: string
+          assigned_to?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          organization_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          source_data?: Json | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operational_alerts_affected_crew_member_id_fkey"
+            columns: ["affected_crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_alerts_affected_vessel_id_fkey"
+            columns: ["affected_vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_alerts_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_alerts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operational_alerts_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       operational_checklists: {
         Row: {
           ai_analysis: Json | null
@@ -2846,6 +3182,62 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      operational_metrics: {
+        Row: {
+          alerts_threshold: Json | null
+          created_at: string
+          current_value: number
+          historical_data: Json | null
+          id: string
+          last_calculation: string | null
+          metric_name: string
+          metric_type: string
+          organization_id: string | null
+          target_value: number | null
+          trend: string | null
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          alerts_threshold?: Json | null
+          created_at?: string
+          current_value: number
+          historical_data?: Json | null
+          id?: string
+          last_calculation?: string | null
+          metric_name: string
+          metric_type: string
+          organization_id?: string | null
+          target_value?: number | null
+          trend?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          alerts_threshold?: Json | null
+          created_at?: string
+          current_value?: number
+          historical_data?: Json | null
+          id?: string
+          last_calculation?: string | null
+          metric_name?: string
+          metric_type?: string
+          organization_id?: string | null
+          target_value?: number | null
+          trend?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operational_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
