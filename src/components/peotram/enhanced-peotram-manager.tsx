@@ -158,7 +158,7 @@ export const EnhancedPeotramManager: React.FC = () => {
     if (hasFeature('peotram')) {
       fetchAudits();
     }
-  }, [hasFeature]);
+  }, []); // Fixed: removed hasFeature from dependencies to prevent infinite loop
 
   const fetchAudits = async () => {
     try {

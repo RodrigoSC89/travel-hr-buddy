@@ -1,14 +1,14 @@
 import React from 'react';
-import AIAssistantEnhanced from '@/components/intelligence/ai-assistant-enhanced';
+import EnhancedLogisticsDashboard from '@/components/logistics/enhanced-logistics-dashboard';
 import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 
-const Intelligence = () => {
+const Logistics = () => {
   return (
     <div className="space-y-6">
       <BackToDashboard />
-      <AIAssistantEnhanced />
+      <EnhancedLogisticsDashboard />
     </div>
   );
 };
 
-export default Intelligence;
+export default Logistics;
