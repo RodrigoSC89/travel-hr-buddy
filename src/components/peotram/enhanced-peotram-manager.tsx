@@ -7,7 +7,6 @@ import { PeotramTemplateManager } from './peotram-template-manager';
 import { PeotramAnalyticsPanel } from './peotram-analytics-panel';
 import { PeotramComplianceChecker } from './peotram-compliance-checker';
 import { PeotramPerformanceIndicators } from './peotram-performance-indicators';
-import { PeotramDocumentManager } from './peotram-document-manager';
 import { PeotramRiskAssessment } from './peotram-risk-assessment';
 import { PeotramTrainingManagement } from './peotram-training-management';
 import { PeotramRealtimeMonitoring } from './peotram-realtime-monitoring';
@@ -18,6 +17,10 @@ import { PeotramEmergencyResponse } from './peotram-emergency-response';
 import { PeotramEquipmentManager } from './peotram-equipment-manager';
 import { PeotramIncidentManager } from './peotram-incident-manager';
 import { PeotramCommunicationCenter } from './peotram-communication-center';
+import { PeotramDocumentManager } from './peotram-document-manager';
+import { PeotramComplianceTracker } from './peotram-compliance-tracker';
+import { PeotramPerformanceKPI } from './peotram-performance-kpi';
+import { PeotramEnvironmentalMonitor } from './peotram-environmental-monitor';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -124,6 +127,14 @@ export const EnhancedPeotramManager: React.FC = () => {
         return <PeotramIncidentManager />;
       case 'communication':
         return <PeotramCommunicationCenter />;
+      case 'documentos':
+        return <PeotramDocumentManager />;
+      case 'conformidade':
+        return <PeotramComplianceTracker />;
+      case 'performance':
+        return <PeotramPerformanceKPI />;
+      case 'ambiental':
+        return <PeotramEnvironmentalMonitor />;
       default:
         return <PeotramNonConformities nonConformities={nonConformities} onUpdate={handleUpdateNonConformity} />;
     }
