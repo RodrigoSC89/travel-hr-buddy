@@ -1,129 +1,121 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
+
+const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY')!;
+interface ChecklistItem {
+  id: string;
+  title: string;
+  description?: string;
+  type: string;
+  required: boolean;
+  category: string;
+  value?: any;
+  status: string;
+  notes?: string;
+  evidence?: any[];
+  historicalData?: any[];
+}
+
+interface ChecklistAnalysisRequest {
+  checklist: {
+    id: string;
+    title: string;
+    type: string;
+    items: ChecklistItem[];
+    vessel: any;
+    inspector: any;
+  };
+  analysisType: 'validation' | 'anomaly_detection' | 'completion_check' | 'compliance_review';
+}
+
+interface AnalysisResult {
+  overallScore: number;
+  anomalies: Array<{
+    itemId: string;
+    type: string;
+    severity: 'low' | 'medium' | 'high' | 'critical';
+    description: string;
+    suggestion: string;
+    confidence: number;
+  }>;
+  suggestions: string[];
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  missingItems: string[];
+  inconsistencies: string[];
+  comparisonWithHistory: {
+    similarChecklists: number;
+    averageScore: number;
+    trendAnalysis: 'improving' | 'stable' | 'declining';
+    deviations: string[];
+  };
+  predictiveInsights: string[];
+}
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    const { 
-      checklistId,
-      documents = [], // Array de documentos ou texto
-      analysisType = 'compliance'
-    } = await req.json();
-
-    console.log('Iniciando análise de IA para checklist:', checklistId);
-
-    // Buscar dados do checklist
-    const { data: checklist, error: checklistError } = await supabase
-      .from('operational_checklists')
-      .select(`
-        *,
-        checklist_items (*)
-      `)
-      .eq('id', checklistId)
-      .single();
-
-    if (checklistError) {
-      throw new Error(`Erro ao buscar checklist: ${checklistError.message}`);
+    if (!openAIApiKey) {
+      throw new Error('OpenAI API key not configured');
     }
+
+    const { checklist, analysisType }: ChecklistAnalysisRequest = await req.json();
+    
+    console.log(`Analyzing checklist: ${checklist.id}, type: ${analysisType}`);
 
     // Preparar dados para análise
-    const analysisData = {
-      checklist: {
-        title: checklist.title,
-        type: checklist.type,
-        status: checklist.status,
-        items: checklist.checklist_items || []
-      },
-      documents,
-      totalItems: checklist.checklist_items?.length || 0,
-      completedItems: checklist.checklist_items?.filter((item: any) => item.completed).length || 0
+    const checklistSummary = {
+      title: checklist.title,
+      type: checklist.type,
+      totalItems: checklist.items.length,
+      completedItems: checklist.items.filter(item => item.status === 'completed').length,
+      requiredItems: checklist.items.filter(item => item.required).length,
+      completedRequiredItems: checklist.items.filter(item => item.required && item.status === 'completed').length,
+      items: checklist.items.map(item => ({
+        id: item.id,
+        title: item.title,
+        category: item.category,
+        type: item.type,
+        required: item.required,
+        status: item.status,
+        hasValue: item.value !== undefined && item.value !== null && item.value !== '',
+        hasNotes: item.notes && item.notes.length > 0,
+        hasEvidence: item.evidence && item.evidence.length > 0,
+        hasHistoricalData: item.historicalData && item.historicalData.length > 0
+      }))
     };
 
-    // Criar prompt baseado no tipo de análise
-    let systemPrompt = '';
-    let userPrompt = '';
+    const systemPrompt = getSystemPrompt(analysisType, checklist.type);
+    const userPrompt = `
+      Analise o seguinte checklist marítimo e forneça uma análise detalhada:
 
-    switch (analysisType) {
-      case 'compliance':
-        systemPrompt = `Você é um especialista em conformidade operacional marítima. Analise o checklist fornecido e identifique:
-        1. Score geral de conformidade (0-100)
-        2. Problemas encontrados
-        3. Itens críticos não conformes
-        4. Recomendações específicas
-        5. Campos obrigatórios não preenchidos
-        6. Inconsistências nos dados
+      DADOS DO CHECKLIST:
+      ${JSON.stringify(checklistSummary, null, 2)}
 
-        Responda APENAS com um JSON válido no formato:
-        {
-          "overall_score": number,
-          "issues_found": number,
-          "critical_issues": number,
-          "recommendations": string[],
-          "missing_fields": string[],
-          "inconsistencies": string[],
-          "confidence_level": number,
-          "analysis_summary": string
-        }`;
-        break;
+      INFORMAÇÕES DO NAVIO:
+      ${JSON.stringify(checklist.vessel, null, 2)}
 
-      case 'quality':
-        systemPrompt = `Você é um especialista em qualidade operacional. Analise a qualidade do preenchimento do checklist e forneça:
-        1. Score de qualidade (0-100)
-        2. Problemas de qualidade identificados
-        3. Sugestões de melhoria
-        4. Campos com informações insuficientes
+      INFORMAÇÕES DO INSPETOR:
+      ${JSON.stringify(checklist.inspector, null, 2)}
 
-        Responda APENAS com um JSON válido no formato especificado.`;
-        break;
+      Por favor, forneça uma análise estruturada seguindo o formato JSON especificado no prompt do sistema.
+      Foque em:
+      1. Identificação de anomalias e inconsistências
+      2. Verificação de conformidade com regulamentações marítimas
+      3. Sugestões específicas para melhorias
+      4. Avaliação de riscos operacionais
+      5. Comparação com padrões da indústria
+    `;
 
-      case 'risk':
-        systemPrompt = `Você é um especialista em análise de risco operacional marítimo. Identifique:
-        1. Riscos potenciais baseados no checklist
-        2. Score de risco (0-100, onde 100 é muito alto risco)
-        3. Itens críticos para segurança
-        4. Recomendações de mitigação
-
-        Responda APENAS com um JSON válido no formato especificado.`;
-        break;
-
-      default:
-        systemPrompt = `Você é um especialista em análise operacional marítima. Faça uma análise geral do checklist.
-        Responda APENAS com um JSON válido no formato especificado.`;
-    }
-
-    userPrompt = `Analise o seguinte checklist operacional:
-
-    Tipo: ${checklist.type}
-    Status: ${checklist.status}
-    Total de itens: ${analysisData.totalItems}
-    Itens completos: ${analysisData.completedItems}
-
-    Itens do checklist:
-    ${JSON.stringify(checklist.checklist_items, null, 2)}
-
-    ${documents.length > 0 ? `Documentos anexos:\n${JSON.stringify(documents, null, 2)}` : ''}
-
-    Faça uma análise detalhada e forneça insights acionáveis.`;
-
-    // Chamar OpenAI para análise
-    console.log('Chamando OpenAI para análise...');
-    
-    const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${openAIApiKey}`,
@@ -136,107 +128,229 @@ serve(async (req) => {
           { role: 'user', content: userPrompt }
         ],
         temperature: 0.3,
-        max_tokens: 2000,
+        max_tokens: 2000
       }),
     });
 
-    if (!openAIResponse.ok) {
-      throw new Error(`OpenAI API error: ${openAIResponse.statusText}`);
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
     }
 
-    const openAIData = await openAIResponse.json();
-    const aiResponse = openAIData.choices[0].message.content;
+    const data = await response.json();
+    const aiAnalysis = data.choices[0].message.content;
 
-    console.log('Resposta da IA recebida:', aiResponse);
+    console.log('AI Analysis completed:', aiAnalysis);
 
-    // Tentar parsear a resposta JSON
-    let analysisResult;
+    // Parse da resposta da IA
+    let analysisResult: AnalysisResult;
     try {
-      analysisResult = JSON.parse(aiResponse);
+      analysisResult = JSON.parse(aiAnalysis);
     } catch (parseError) {
-      console.error('Erro ao parsear resposta da IA:', parseError);
-      // Fallback: criar resultado básico
-      analysisResult = {
-        overall_score: Math.max(0, Math.min(100, (analysisData.completedItems / analysisData.totalItems) * 100)),
-        issues_found: Math.max(0, analysisData.totalItems - analysisData.completedItems),
-        critical_issues: 0,
-        recommendations: ['Revisar itens não preenchidos', 'Validar informações críticas'],
-        missing_fields: [],
-        inconsistencies: [],
-        confidence_level: 0.5,
-        analysis_summary: 'Análise automatizada básica realizada'
-      };
+      console.error('Error parsing AI response:', parseError);
+      // Fallback analysis se o parsing falhar
+      analysisResult = createFallbackAnalysis(checklist);
     }
 
-    // Garantir que todos os campos obrigatórios estejam presentes
-    const finalResult = {
-      overall_score: Math.max(0, Math.min(100, analysisResult.overall_score || 0)),
-      issues_found: analysisResult.issues_found || 0,
-      critical_issues: analysisResult.critical_issues || 0,
-      recommendations: Array.isArray(analysisResult.recommendations) ? analysisResult.recommendations : [],
-      missing_fields: Array.isArray(analysisResult.missing_fields) ? analysisResult.missing_fields : [],
-      inconsistencies: Array.isArray(analysisResult.inconsistencies) ? analysisResult.inconsistencies : [],
-      confidence_level: Math.max(0, Math.min(1, analysisResult.confidence_level || 0.7)),
-      analysis_data: {
-        analysis_type: analysisType,
-        processed_items: analysisData.totalItems,
-        completion_rate: analysisData.totalItems > 0 ? (analysisData.completedItems / analysisData.totalItems) : 0,
-        raw_response: aiResponse
-      }
-    };
-
-    // Salvar análise no banco
-    const { data: analysisRecord, error: insertError } = await supabase
-      .from('checklist_ai_analysis')
-      .insert({
-        checklist_id: checklistId,
-        analysis_type: analysisType,
-        overall_score: finalResult.overall_score,
-        issues_found: finalResult.issues_found,
-        critical_issues: finalResult.critical_issues,
-        recommendations: finalResult.recommendations,
-        missing_fields: finalResult.missing_fields,
-        inconsistencies: finalResult.inconsistencies,
-        confidence_level: finalResult.confidence_level,
-        analysis_data: finalResult.analysis_data,
-        created_by_ai_model: 'gpt-4'
-      })
-      .select()
-      .single();
-
-    if (insertError) {
-      console.error('Erro ao salvar análise:', insertError);
-    }
-
-    // Atualizar score do checklist
-    if (analysisType === 'compliance') {
-      await supabase
-        .from('operational_checklists')
-        .update({
-          compliance_score: finalResult.overall_score,
-          ai_analysis: finalResult
-        })
-        .eq('id', checklistId);
-    }
-
-    console.log('Análise concluída com sucesso');
+    // Enriquecer a análise com dados adicionais
+    analysisResult = enrichAnalysis(analysisResult, checklist);
 
     return new Response(JSON.stringify({
       success: true,
-      analysis: finalResult,
-      analysis_id: analysisRecord?.id
+      analysis: analysisResult,
+      checklist_id: checklist.id,
+      analysis_type: analysisType,
+      timestamp: new Date().toISOString()
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
-  } catch (error: any) {
-    console.error('Erro na análise de IA:', error);
+  } catch (error) {
+    console.error('Error in checklist-ai-analysis function:', error);
+    
     return new Response(JSON.stringify({
       success: false,
-      error: error?.message || 'Erro desconhecido'
+      error: error instanceof Error ? error.message : 'Unknown error',
+      timestamp: new Date().toISOString()
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 });
+
+function getSystemPrompt(analysisType: string, checklistType: string): string {
+  const basePrompt = `
+    Você é um especialista em segurança marítima e conformidade regulatória com 20+ anos de experiência em auditorias PEOTRAM, IMO, MARPOL, STCW e outras regulamentações marítimas internacionais.
+
+    Sua tarefa é analisar checklists marítimos e fornecer insights críticos para segurança operacional.
+
+    SEMPRE responda em formato JSON válido seguindo esta estrutura exata:
+    {
+      "overallScore": number (0-100),
+      "anomalies": [
+        {
+          "itemId": "string",
+          "type": "missing_value|unexpected_value|out_of_range|pattern_deviation|evidence_mismatch",
+          "severity": "low|medium|high|critical",
+          "description": "string",
+          "suggestion": "string",
+          "confidence": number (0-1)
+        }
+      ],
+      "suggestions": ["string array of general suggestions"],
+      "riskLevel": "low|medium|high|critical",
+      "missingItems": ["string array of missing required items"],
+      "inconsistencies": ["string array of inconsistencies found"],
+      "comparisonWithHistory": {
+        "similarChecklists": number,
+        "averageScore": number,
+        "trendAnalysis": "improving|stable|declining",
+        "deviations": ["string array of deviations from normal patterns"]
+      },
+      "predictiveInsights": ["string array of predictive insights"]
+    }
+  `;
+
+  switch (analysisType) {
+    case 'validation':
+      return basePrompt + `
+        FOCO: Validação de completude e conformidade regulatória.
+        - Verifique se todos os itens obrigatórios estão preenchidos
+        - Identifique não-conformidades com regulamentações marítimas
+        - Valide consistência entre dados relacionados
+      `;
+    
+    case 'anomaly_detection':
+      return basePrompt + `
+        FOCO: Detecção de anomalias e padrões suspeitos.
+        - Identifique valores fora do padrão normal
+        - Detecte inconsistências temporais ou operacionais
+        - Sinalize potenciais riscos de segurança
+      `;
+    
+    case 'completion_check':
+      return basePrompt + `
+        FOCO: Verificação de completude do checklist.
+        - Confirme que todos os itens necessários foram verificados
+        - Identifique lacunas na documentação
+        - Valide evidências e documentação de suporte
+      `;
+    
+    case 'compliance_review':
+      return basePrompt + `
+        FOCO: Revisão de conformidade regulatória.
+        - Verifique conformidade com IMO, MARPOL, SOLAS, STCW
+        - Identifique não-conformidades regulamentares
+        - Sugira ações corretivas específicas
+      `;
+    
+    default:
+      return basePrompt;
+  }
+}
+
+function createFallbackAnalysis(checklist: any): AnalysisResult {
+  const completedItems = checklist.items.filter((item: ChecklistItem) => item.status === 'completed').length;
+  const totalItems = checklist.items.length;
+  const requiredItems = checklist.items.filter((item: ChecklistItem) => item.required);
+  const completedRequiredItems = requiredItems.filter((item: ChecklistItem) => item.status === 'completed').length;
+  
+  const overallScore = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+  const complianceScore = requiredItems.length > 0 ? Math.round((completedRequiredItems / requiredItems.length) * 100) : 100;
+  
+  const missingRequired = requiredItems
+    .filter((item: ChecklistItem) => item.status !== 'completed')
+    .map((item: ChecklistItem) => item.title);
+
+  const riskLevel = complianceScore >= 90 ? 'low' : 
+                   complianceScore >= 70 ? 'medium' : 
+                   complianceScore >= 50 ? 'high' : 'critical';
+
+  return {
+    overallScore: Math.max(overallScore, complianceScore),
+    anomalies: missingRequired.map((title: string, index: number) => ({
+      itemId: `missing_${index}`,
+      type: 'missing_value',
+      severity: 'high' as const,
+      description: `Item obrigatório não completado: ${title}`,
+      suggestion: `Complete o item ${title} antes de finalizar o checklist`,
+      confidence: 0.9
+    })),
+    suggestions: [
+      'Complete todos os itens obrigatórios pendentes',
+      'Adicione evidências fotográficas quando aplicável',
+      'Revise as observações para garantir clareza',
+      'Verifique conformidade com regulamentações aplicáveis'
+    ],
+    riskLevel,
+    missingItems: missingRequired,
+    inconsistencies: [],
+    comparisonWithHistory: {
+      similarChecklists: 0,
+      averageScore: overallScore,
+      trendAnalysis: 'stable' as const,
+      deviations: []
+    },
+    predictiveInsights: [
+      'Análise preditiva limitada - dados históricos insuficientes',
+      'Recomenda-se completar mais checklists para melhor análise'
+    ]
+  };
+}
+
+function enrichAnalysis(analysis: AnalysisResult, checklist: any): AnalysisResult {
+  // Adicionar insights específicos baseados no tipo de checklist
+  const typeSpecificInsights = getTypeSpecificInsights(checklist.type, analysis.overallScore);
+  
+  return {
+    ...analysis,
+    suggestions: [...analysis.suggestions, ...typeSpecificInsights.suggestions],
+    predictiveInsights: [...analysis.predictiveInsights, ...typeSpecificInsights.insights]
+  };
+}
+
+function getTypeSpecificInsights(checklistType: string, score: number) {
+  const insights = {
+    suggestions: [] as string[],
+    insights: [] as string[]
+  };
+
+  switch (checklistType) {
+    case 'dp':
+      insights.suggestions.push(
+        'Verifique redundância dos sistemas DP conforme IMO MSC.1/Circ.1580',
+        'Confirme procedimentos de emergência para falha de DP',
+        'Valide capability plot para condições atuais'
+      );
+      if (score < 90) {
+        insights.insights.push('Sistema DP com score baixo pode indicar risco operacional elevado');
+      }
+      break;
+    
+    case 'machine_routine':
+      insights.suggestions.push(
+        'Monitore temperaturas e pressões dentro dos limites operacionais',
+        'Verifique níveis de óleo e combustível',
+        'Confirme funcionamento de sistemas de segurança'
+      );
+      break;
+    
+    case 'nautical_routine':
+      insights.suggestions.push(
+        'Verifique equipamentos de navegação e comunicação',
+        'Confirme compliance com COLREG e SOLAS',
+        'Valide cartas náuticas atualizadas'
+      );
+      break;
+    
+    case 'safety':
+      insights.suggestions.push(
+        'Verifique equipamentos de combate a incêndio',
+        'Confirme procedimentos de abandono',
+        'Valide treinamento da tripulação'
+      );
+      break;
+  }
+
+  return insights;
+}

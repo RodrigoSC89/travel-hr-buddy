@@ -4727,6 +4727,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_checklist_compliance_score: {
+        Args: { checklist_items: Json }
+        Returns: number
+      }
       calculate_peotram_compliance_score: {
         Args: { audit_uuid: string }
         Returns: number
@@ -4749,6 +4753,10 @@ export type Database = {
       }
       create_sample_peotram_audit: {
         Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_next_checklist_date: {
+        Args: { frequency: string; last_date?: string }
         Returns: string
       }
       get_current_organization_id: {
