@@ -14,6 +14,10 @@ import { PeotramRealtimeMonitoring } from './peotram-realtime-monitoring';
 import { PeotramWorkflowManager } from './peotram-workflow-manager';
 import { PeotramIntegrationHub } from './peotram-integration-hub';
 import { PeotramAdvancedReporting } from './peotram-advanced-reporting';
+import { PeotramEmergencyResponse } from './peotram-emergency-response';
+import { PeotramEquipmentManager } from './peotram-equipment-manager';
+import { PeotramIncidentManager } from './peotram-incident-manager';
+import { PeotramCommunicationCenter } from './peotram-communication-center';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -91,6 +95,39 @@ export const EnhancedPeotramManager: React.FC = () => {
   const { hasFeature } = useOrganizationPermissions();
   const [activeView, setActiveView] = useState('dashboard');
   const [managementSubView, setManagementSubView] = useState('non-conformities');
+
+  const renderManagementContent = () => {
+    switch (managementSubView) {
+      case 'non-conformities':
+        return <PeotramNonConformities nonConformities={nonConformities} onUpdate={handleUpdateNonConformity} />;
+      case 'reports':
+        return <PeotramAdvancedReporting />;
+      case 'templates':
+        return <PeotramTemplateManager templates={templates} onTemplateUpdate={handleUpdateTemplate} />;
+      case 'analytics':
+        return <PeotramAnalyticsPanel />;
+      case 'compliance':
+        return <PeotramComplianceChecker />;
+      case 'risk-assessment':
+        return <PeotramRiskAssessment />;
+      case 'training':
+        return <PeotramTrainingManagement />;
+      case 'workflows':
+        return <PeotramWorkflowManager />;
+      case 'integrations':
+        return <PeotramIntegrationHub />;
+      case 'emergency':
+        return <PeotramEmergencyResponse />;
+      case 'equipment':
+        return <PeotramEquipmentManager />;
+      case 'incidents':
+        return <PeotramIncidentManager />;
+      case 'communication':
+        return <PeotramCommunicationCenter />;
+      default:
+        return <PeotramNonConformities nonConformities={nonConformities} onUpdate={handleUpdateNonConformity} />;
+    }
+  };
   const [isNewAuditOpen, setIsNewAuditOpen] = useState(false);
   const [selectedAudit, setSelectedAudit] = useState<PeotramAudit | null>(null);
   const [audits, setAudits] = useState<PeotramAudit[]>([]);
@@ -352,7 +389,63 @@ export const EnhancedPeotramManager: React.FC = () => {
         {/* Tabs secundárias para Gestão */}
         {activeView === 'management' && (
           <div className="bg-muted/30 rounded-lg p-1">
-            <div className="grid w-full grid-cols-9 gap-1">
+            <div className="grid w-full grid-cols-6 gap-1 mb-4">
+              <Button
+                variant={managementSubView === 'emergency' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('emergency')}
+                className="flex items-center gap-2"
+              >
+                <AlertTriangle className="w-4 h-4" />
+                Emergências
+              </Button>
+              <Button
+                variant={managementSubView === 'equipment' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('equipment')}
+                className="flex items-center gap-2"
+              >
+                <Settings className="w-4 h-4" />
+                Equipamentos
+              </Button>
+              <Button
+                variant={managementSubView === 'incidents' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('incidents')}
+                className="flex items-center gap-2"
+              >
+                <AlertTriangle className="w-4 h-4" />
+                Incidentes
+              </Button>
+              <Button
+                variant={managementSubView === 'communication' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('communication')}
+                className="flex items-center gap-2"
+              >
+                <Activity className="w-4 h-4" />
+                Comunicação
+              </Button>
+              <Button
+                variant={managementSubView === 'workflows' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('workflows')}
+                className="flex items-center gap-2"
+              >
+                <Zap className="w-4 h-4" />
+                Workflows
+              </Button>
+              <Button
+                variant={managementSubView === 'integrations' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('integrations')}
+                className="flex items-center gap-2"
+              >
+                <Leaf className="w-4 h-4" />
+                Integrações
+              </Button>
+            </div>
+            <div className="grid w-full grid-cols-7 gap-1">
               <Button
                 variant={managementSubView === 'non-conformities' ? 'default' : 'ghost'}
                 size="sm"
