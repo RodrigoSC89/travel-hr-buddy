@@ -256,7 +256,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const inviteUser = async (email: string, role: string) => {
     if (!currentOrganization) throw new Error('Nenhuma organização selecionada');
-    console.log('Funcionalidade de convite será implementada em breve');
+    // Invite functionality to be implemented
   };
 
   const removeUser = async (userId: string) => {

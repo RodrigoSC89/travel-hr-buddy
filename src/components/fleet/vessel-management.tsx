@@ -69,7 +69,7 @@ const VesselManagement: React.FC = () => {
         .order('created_at', { ascending: false });
       
       if (error) {
-        console.log('Database not ready, using mock data:', error);
+        // Database fallback to mock data
         // Fallback mock data
         const mockVessels: Vessel[] = [
         {
@@ -147,7 +147,7 @@ const VesselManagement: React.FC = () => {
         .single();
 
       if (error) {
-        console.log('Database insert failed, adding locally:', error);
+        // Local addition fallback
         // Fallback to local state
         const vessel: Vessel = {
           id: Math.random().toString(),

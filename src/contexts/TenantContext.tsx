@@ -487,7 +487,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const inviteTenantUser = async (email: string, role: string) => {
     if (!currentTenant) throw new Error('Nenhum tenant selecionado');
-    console.log('Funcionalidade de convite será implementada');
+    // Invite functionality to be implemented
   };
 
   const updateUserRole = async (userId: string, role: string) => {

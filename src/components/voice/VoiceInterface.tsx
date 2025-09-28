@@ -33,7 +33,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onNav
   const { processVoiceCommand } = useVoiceNavigation();
 
   const handleMessage = async (event: any) => {
-    console.log('Received message:', event.type, event);
+    // Voice event received
     
     try {
       // Handle different event types
