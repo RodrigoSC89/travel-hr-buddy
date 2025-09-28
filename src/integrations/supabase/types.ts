@@ -887,6 +887,65 @@ export type Database = {
           },
         ]
       }
+      crew_ai_recommendations: {
+        Row: {
+          category: string
+          confidence_score: number | null
+          created_at: string | null
+          crew_member_id: string
+          deadline: string | null
+          description: string
+          id: string
+          metadata: Json | null
+          priority: string | null
+          recommendation_type: string
+          status: string | null
+          suggested_action: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          confidence_score?: number | null
+          created_at?: string | null
+          crew_member_id: string
+          deadline?: string | null
+          description: string
+          id?: string
+          metadata?: Json | null
+          priority?: string | null
+          recommendation_type: string
+          status?: string | null
+          suggested_action?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          confidence_score?: number | null
+          created_at?: string | null
+          crew_member_id?: string
+          deadline?: string | null
+          description?: string
+          id?: string
+          metadata?: Json | null
+          priority?: string | null
+          recommendation_type?: string
+          status?: string | null
+          suggested_action?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_ai_recommendations_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_assignments: {
         Row: {
           created_at: string | null
@@ -943,50 +1002,68 @@ export type Database = {
       }
       crew_certifications: {
         Row: {
+          certificate_file_url: string | null
           certificate_number: string | null
           certification_name: string
           certification_type: string
+          completion_percentage: number | null
+          course_location: string | null
+          course_provider: string | null
           created_at: string
           crew_member_id: string
           document_url: string | null
           expiry_date: string | null
           grade: number | null
           id: string
+          is_internal_course: boolean | null
           issue_date: string
           issuing_authority: string
           notes: string | null
+          renewal_date: string | null
           status: string
           updated_at: string
         }
         Insert: {
+          certificate_file_url?: string | null
           certificate_number?: string | null
           certification_name: string
           certification_type: string
+          completion_percentage?: number | null
+          course_location?: string | null
+          course_provider?: string | null
           created_at?: string
           crew_member_id: string
           document_url?: string | null
           expiry_date?: string | null
           grade?: number | null
           id?: string
+          is_internal_course?: boolean | null
           issue_date: string
           issuing_authority: string
           notes?: string | null
+          renewal_date?: string | null
           status?: string
           updated_at?: string
         }
         Update: {
+          certificate_file_url?: string | null
           certificate_number?: string | null
           certification_name?: string
           certification_type?: string
+          completion_percentage?: number | null
+          course_location?: string | null
+          course_provider?: string | null
           created_at?: string
           crew_member_id?: string
           document_url?: string | null
           expiry_date?: string | null
           grade?: number | null
           id?: string
+          is_internal_course?: boolean | null
           issue_date?: string
           issuing_authority?: string
           notes?: string | null
+          renewal_date?: string | null
           status?: string
           updated_at?: string
         }
@@ -1057,8 +1134,13 @@ export type Database = {
           cir_number: string | null
           created_at: string
           crew_member_id: string
+          employee_registration: string | null
           id: string
           internal_registration: string
+          notes: string | null
+          previous_position: string | null
+          profile_photo_url: string | null
+          status: string | null
           updated_at: string
         }
         Insert: {
@@ -1067,8 +1149,13 @@ export type Database = {
           cir_number?: string | null
           created_at?: string
           crew_member_id: string
+          employee_registration?: string | null
           id?: string
           internal_registration: string
+          notes?: string | null
+          previous_position?: string | null
+          profile_photo_url?: string | null
+          status?: string | null
           updated_at?: string
         }
         Update: {
@@ -1077,8 +1164,13 @@ export type Database = {
           cir_number?: string | null
           created_at?: string
           crew_member_id?: string
+          employee_registration?: string | null
           id?: string
           internal_registration?: string
+          notes?: string | null
+          previous_position?: string | null
+          profile_photo_url?: string | null
+          status?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -1091,56 +1183,145 @@ export type Database = {
           },
         ]
       }
+      crew_dossier_documents: {
+        Row: {
+          created_at: string | null
+          crew_member_id: string
+          document_category: string
+          document_name: string
+          expiry_date: string | null
+          file_size: number | null
+          file_type: string
+          file_url: string
+          id: string
+          is_confidential: boolean | null
+          notes: string | null
+          tags: string[] | null
+          upload_date: string | null
+          uploaded_by: string | null
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          crew_member_id: string
+          document_category: string
+          document_name: string
+          expiry_date?: string | null
+          file_size?: number | null
+          file_type: string
+          file_url: string
+          id?: string
+          is_confidential?: boolean | null
+          notes?: string | null
+          tags?: string[] | null
+          upload_date?: string | null
+          uploaded_by?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          crew_member_id?: string
+          document_category?: string
+          document_name?: string
+          expiry_date?: string | null
+          file_size?: number | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          is_confidential?: boolean | null
+          notes?: string | null
+          tags?: string[] | null
+          upload_date?: string | null
+          uploaded_by?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_dossier_documents_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_embarkations: {
         Row: {
+          completed_operations: number | null
           created_at: string
           crew_member_id: string
           disembark_date: string | null
           disembark_location: string | null
+          disembark_location_details: Json | null
+          dp_class: string | null
+          dp_operation_modes: string[] | null
           dp_operation_type: string | null
           embark_date: string
           embark_location: string | null
+          embark_location_details: Json | null
           equipment_operated: string[] | null
           function_role: string
           hours_worked: number | null
           id: string
           observations: string | null
+          operation_notes: string | null
+          performance_rating: number | null
           updated_at: string
           vessel_class: string | null
           vessel_name: string
           vessel_type: string
         }
         Insert: {
+          completed_operations?: number | null
           created_at?: string
           crew_member_id: string
           disembark_date?: string | null
           disembark_location?: string | null
+          disembark_location_details?: Json | null
+          dp_class?: string | null
+          dp_operation_modes?: string[] | null
           dp_operation_type?: string | null
           embark_date: string
           embark_location?: string | null
+          embark_location_details?: Json | null
           equipment_operated?: string[] | null
           function_role: string
           hours_worked?: number | null
           id?: string
           observations?: string | null
+          operation_notes?: string | null
+          performance_rating?: number | null
           updated_at?: string
           vessel_class?: string | null
           vessel_name: string
           vessel_type: string
         }
         Update: {
+          completed_operations?: number | null
           created_at?: string
           crew_member_id?: string
           disembark_date?: string | null
           disembark_location?: string | null
+          disembark_location_details?: Json | null
+          dp_class?: string | null
+          dp_operation_modes?: string[] | null
           dp_operation_type?: string | null
           embark_date?: string
           embark_location?: string | null
+          embark_location_details?: Json | null
           equipment_operated?: string[] | null
           function_role?: string
           hours_worked?: number | null
           id?: string
           observations?: string | null
+          operation_notes?: string | null
+          performance_rating?: number | null
           updated_at?: string
           vessel_class?: string | null
           vessel_name?: string
@@ -1305,6 +1486,96 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crew_performance_reviews: {
+        Row: {
+          behavioral_score: number
+          career_progression_notes: string | null
+          created_at: string | null
+          crew_member_id: string
+          embarkation_id: string | null
+          id: string
+          improvement_areas: string | null
+          incidents: string | null
+          leadership_score: number | null
+          next_review_date: string | null
+          overall_score: number
+          positive_feedback: string | null
+          recommendations: string | null
+          review_date: string
+          review_period: string
+          review_status: string | null
+          reviewer_name: string
+          reviewer_position: string | null
+          safety_score: number
+          strengths: string | null
+          technical_score: number
+          updated_at: string | null
+        }
+        Insert: {
+          behavioral_score: number
+          career_progression_notes?: string | null
+          created_at?: string | null
+          crew_member_id: string
+          embarkation_id?: string | null
+          id?: string
+          improvement_areas?: string | null
+          incidents?: string | null
+          leadership_score?: number | null
+          next_review_date?: string | null
+          overall_score: number
+          positive_feedback?: string | null
+          recommendations?: string | null
+          review_date: string
+          review_period: string
+          review_status?: string | null
+          reviewer_name: string
+          reviewer_position?: string | null
+          safety_score: number
+          strengths?: string | null
+          technical_score: number
+          updated_at?: string | null
+        }
+        Update: {
+          behavioral_score?: number
+          career_progression_notes?: string | null
+          created_at?: string | null
+          crew_member_id?: string
+          embarkation_id?: string | null
+          id?: string
+          improvement_areas?: string | null
+          incidents?: string | null
+          leadership_score?: number | null
+          next_review_date?: string | null
+          overall_score?: number
+          positive_feedback?: string | null
+          recommendations?: string | null
+          review_date?: string
+          review_period?: string
+          review_status?: string | null
+          reviewer_name?: string
+          reviewer_position?: string | null
+          safety_score?: number
+          strengths?: string | null
+          technical_score?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_performance_reviews_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_performance_reviews_embarkation_id_fkey"
+            columns: ["embarkation_id"]
+            isOneToOne: false
+            referencedRelation: "crew_embarkations"
             referencedColumns: ["id"]
           },
         ]
@@ -5417,6 +5688,10 @@ export type Database = {
         Args: { checklist_items: Json }
         Returns: number
       }
+      calculate_crew_overall_performance: {
+        Args: { crew_uuid: string }
+        Returns: number
+      }
       calculate_peotram_compliance_score: {
         Args: { audit_uuid: string }
         Returns: number
@@ -5440,6 +5715,10 @@ export type Database = {
       create_sample_peotram_audit: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      generate_crew_ai_recommendations: {
+        Args: { crew_uuid: string }
+        Returns: undefined
       }
       generate_next_checklist_date: {
         Args: { frequency: string; last_date?: string }
