@@ -51,6 +51,7 @@ export const useSidebarActions = () => {
       'ai-insights': '/ai-insights',
       'advanced-reports': '/advanced-reports',
       'checklists-inteligentes': '/checklists-inteligentes',
+      'crew-dossier': '/crew-dossier',
       peotram: '/peotram'
     };
 

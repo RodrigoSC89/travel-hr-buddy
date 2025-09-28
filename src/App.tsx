@@ -72,6 +72,7 @@ import IntelligentHelpCenter from "@/components/help/intelligent-help-center";
 import KnowledgeManagement from "@/components/admin/knowledge-management";
 import FleetManagement from "./pages/FleetManagement";
 import CrewManagement from "./pages/CrewManagement";
+import CrewDossier from "./pages/CrewDossier";
 import MaritimeCertifications from "./pages/MaritimeCertifications";
 import MaritimeChecklists from "./pages/MaritimeChecklists";
 import OrganizationSettings from "./pages/OrganizationSettings";
@@ -211,7 +212,8 @@ const App = () => {
                   <Route path="fleet-management" element={<FleetManagement />} />
                   <Route path="fleet-dashboard" element={<FleetDashboard />} />
                   <Route path="fleet-tracking" element={<FleetTracking />} />
-                  <Route path="crew-management" element={<CrewManagement />} />
+                   <Route path="crew-management" element={<CrewManagement />} />
+                   <Route path="crew-dossier" element={<CrewDossier />} />
                   <Route path="maritime-certifications" element={<MaritimeCertifications />} />
                   <Route path="maritime-checklists" element={<MaritimeChecklists />} />
                   <Route path="automation" element={<Automation />} />
