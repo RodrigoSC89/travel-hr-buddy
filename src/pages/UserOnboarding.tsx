@@ -3,7 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import UserOnboardingCenter from '@/components/onboarding/user-onboarding-center';
 import { UserPlus } from 'lucide-react';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 
 const UserOnboardingPage = () => {
   return (
@@ -24,7 +24,7 @@ const UserOnboardingPage = () => {
           </div>
           <UserOnboardingCenter />
         </main>
-        <VoiceInterface />
+        
       </div>
     </SidebarProvider>
   );

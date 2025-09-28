@@ -5,7 +5,7 @@ import VesselManagement from '@/components/fleet/vessel-management';
 import VesselPerformanceMonitor from '@/components/fleet/vessel-performance-monitor';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Ship, Activity } from 'lucide-react';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 
 const FleetManagement = () => {
   return (
@@ -46,7 +46,7 @@ const FleetManagement = () => {
             </TabsContent>
           </Tabs>
         </main>
-        <VoiceInterface />
+        
       </div>
     </SidebarProvider>
   );

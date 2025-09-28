@@ -3,7 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { CompleteSaaSManager } from '@/components/saas/complete-saas-manager';
 import { Crown } from 'lucide-react';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 
 const SaaSManager = () => {
   return (
@@ -24,7 +24,7 @@ const SaaSManager = () => {
           </div>
           <CompleteSaaSManager />
         </main>
-        <VoiceInterface />
+        
       </div>
     </SidebarProvider>
   );

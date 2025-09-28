@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import ModernFabShortcuts from '@/components/ui/modern-fab-shortcuts';
+import ModuleActionButton from '@/components/ui/module-action-button';
 import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 import { 
   Plane, 
@@ -24,7 +24,11 @@ import {
   TrendingUp,
   Briefcase,
   CreditCard,
-  Shield
+  Shield,
+  Plus,
+  DollarSign,
+  RefreshCw,
+  Download
 } from 'lucide-react';
 
 const Travel = () => {
@@ -247,7 +251,57 @@ const Travel = () => {
       </div>
 
       {/* Enhanced FAB */}
-      <ModernFabShortcuts />
+      {/* Module Action Button */}
+      <ModuleActionButton
+        moduleId="travel"
+        moduleName="Viagens"
+        moduleIcon={<Plane className="h-4 w-4" />}
+        actions={[
+          {
+            id: 'new-trip',
+            label: 'Nova Viagem',
+            icon: <Plus className="h-4 w-4" />,
+            action: () => console.log('Nova viagem'),
+            variant: 'default'
+          },
+          {
+            id: 'bookings',
+            label: 'Reservas',
+            icon: <Calendar className="h-4 w-4" />,
+            action: () => console.log('Reservas'),
+            variant: 'outline'
+          },
+          {
+            id: 'expenses',
+            label: 'Despesas',
+            icon: <DollarSign className="h-4 w-4" />,
+            action: () => console.log('Despesas'),
+            variant: 'outline'
+          },
+          {
+            id: 'reports',
+            label: 'Relatórios',
+            icon: <BarChart3 className="h-4 w-4" />,
+            action: () => console.log('Relatórios'),
+            variant: 'outline'
+          }
+        ]}
+        quickActions={[
+          {
+            id: 'refresh',
+            label: 'Atualizar',
+            icon: <RefreshCw className="h-3 w-3" />,
+            action: () => window.location.reload(),
+            shortcut: 'F5'
+          },
+          {
+            id: 'export',
+            label: 'Exportar',
+            icon: <Download className="h-3 w-3" />,
+            action: () => console.log('Exportar')
+          }
+        ]}
+      />
     </div>
   );
 };

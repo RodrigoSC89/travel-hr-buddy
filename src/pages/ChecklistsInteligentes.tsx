@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IntelligentChecklistManager } from '@/components/checklists/intelligent-checklist-manager';
-import ModernFabShortcuts from '@/components/ui/modern-fab-shortcuts';
+import ModuleActionButton from '@/components/ui/module-action-button';
 import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -15,7 +15,11 @@ import {
   Zap,
   CheckCircle,
   Settings,
-  BarChart3
+  BarChart3,
+  Plus,
+  FileText,
+  RefreshCw,
+  Download
 } from 'lucide-react';
 
 const ChecklistsInteligentes = () => {
@@ -140,8 +144,57 @@ const ChecklistsInteligentes = () => {
         </div>
       </div>
 
-      {/* Enhanced FAB */}
-      <ModernFabShortcuts />
+      {/* Module Action Button */}
+      <ModuleActionButton
+        moduleId="checklists"
+        moduleName="Checklists"
+        moduleIcon={<ClipboardCheck className="h-4 w-4" />}
+        actions={[
+          {
+            id: 'new-checklist',
+            label: 'Novo Checklist',
+            icon: <Plus className="h-4 w-4" />,
+            action: () => console.log('Novo checklist'),
+            variant: 'default'
+          },
+          {
+            id: 'templates',
+            label: 'Templates',
+            icon: <FileText className="h-4 w-4" />,
+            action: () => console.log('Templates'),
+            variant: 'outline'
+          },
+          {
+            id: 'reports',
+            label: 'Relatórios',
+            icon: <BarChart3 className="h-4 w-4" />,
+            action: () => console.log('Relatórios'),
+            variant: 'outline'
+          },
+          {
+            id: 'ai-assist',
+            label: 'IA Assistente',
+            icon: <Brain className="h-4 w-4" />,
+            action: () => console.log('IA Assistente'),
+            variant: 'outline'
+          }
+        ]}
+        quickActions={[
+          {
+            id: 'refresh',
+            label: 'Atualizar',
+            icon: <RefreshCw className="h-3 w-3" />,
+            action: () => window.location.reload(),
+            shortcut: 'F5'
+          },
+          {
+            id: 'export',
+            label: 'Exportar',
+            icon: <Download className="h-3 w-3" />,
+            action: () => console.log('Exportar')
+          }
+        ]}
+      />
     </div>
   );
 };

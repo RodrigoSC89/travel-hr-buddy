@@ -3,7 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import ProductionDeployCenter from '@/components/deploy/production-deploy-center';
 import { Rocket } from 'lucide-react';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 
 const ProductionDeployPage = () => {
   return (
@@ -24,7 +24,7 @@ const ProductionDeployPage = () => {
           </div>
           <ProductionDeployCenter />
         </main>
-        <VoiceInterface />
+        
       </div>
     </SidebarProvider>
   );

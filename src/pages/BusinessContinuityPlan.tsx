@@ -7,7 +7,7 @@ import { BackupRecoverySystem } from '@/components/bcp/backup-recovery-system';
 import { ComplianceAuditCenter } from '@/components/bcp/compliance-audit-center';
 import { ContinuousTestingMonitoring } from '@/components/bcp/continuous-testing-monitoring';
 import { Shield } from 'lucide-react';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 
 const BusinessContinuityPlan = () => {
   return (
@@ -52,7 +52,7 @@ const BusinessContinuityPlan = () => {
             </TabsContent>
           </Tabs>
         </main>
-        <VoiceInterface />
+        
       </div>
     </SidebarProvider>
   );

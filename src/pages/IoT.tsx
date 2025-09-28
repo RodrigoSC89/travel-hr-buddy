@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Radio } from 'lucide-react';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 // Lazy loading do dashboard IoT
@@ -41,7 +41,7 @@ const IoT: React.FC = () => {
             <IoTDashboard />
           </Suspense>
         </main>
-        <VoiceInterface />
+        
       </div>
     </SidebarProvider>
   );

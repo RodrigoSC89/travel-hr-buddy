@@ -3,7 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { RealTimeSystemMonitor } from '@/components/monitoring/real-time-system-monitor';
 import { Activity } from 'lucide-react';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 
 const RealTimeMonitoring = () => {
   return (
@@ -24,7 +24,7 @@ const RealTimeMonitoring = () => {
           </div>
           <RealTimeSystemMonitor />
         </main>
-        <VoiceInterface />
+        
       </div>
     </SidebarProvider>
   );

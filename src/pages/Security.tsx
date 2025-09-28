@@ -3,7 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { CompleteSecurity } from '@/components/security/complete-security';
 import { Shield } from 'lucide-react';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 
 const Security = () => {
   return (
@@ -24,7 +24,7 @@ const Security = () => {
           </div>
           <CompleteSecurity />
         </main>
-        <VoiceInterface />
+        
       </div>
     </SidebarProvider>
   );

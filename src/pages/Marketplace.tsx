@@ -3,7 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { IntegrationMarketplace } from '@/components/strategic/IntegrationMarketplace';
 import { Store } from 'lucide-react';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 
 const Marketplace = () => {
   return (
@@ -24,7 +24,7 @@ const Marketplace = () => {
           </div>
           <IntegrationMarketplace />
         </main>
-        <VoiceInterface />
+        
       </div>
     </SidebarProvider>
   );

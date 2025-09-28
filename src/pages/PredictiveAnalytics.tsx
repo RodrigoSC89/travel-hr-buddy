@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { TrendingUp } from 'lucide-react';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 // Lazy loading da análise preditiva
@@ -41,7 +41,7 @@ const PredictiveAnalytics: React.FC = () => {
             <PredictiveAnalyticsAdvanced />
           </Suspense>
         </main>
-        <VoiceInterface />
+        
       </div>
     </SidebarProvider>
   );

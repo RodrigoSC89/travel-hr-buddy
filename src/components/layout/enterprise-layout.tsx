@@ -3,11 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Header } from '@/components/layout/header';
-import { QuickActionsBar } from '@/components/ui/quick-actions-bar';
 import { NotificationSystem } from '@/components/ui/notification-system';
-import VoiceInterface from '@/components/voice/VoiceInterface';
-import IntelligentChatbot from '@/components/voice/IntelligentChatbot';
-import NautilusCopilot from '@/components/ai/nautilus-copilot';
 import { useSystemActions } from '@/hooks/use-system-actions';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/layout/theme-provider';
@@ -77,11 +73,6 @@ export const EnterpriseLayout: React.FC = () => {
               </main>
             </div>
             
-            {/* Floating Components */}
-            <QuickActionsBar onOpenSearch={() => setIsSearchOpen(true)} />
-            <VoiceInterface />
-            <IntelligentChatbot />
-            <NautilusCopilot />
             
             {/* Toast Notifications */}
             <Toaster />

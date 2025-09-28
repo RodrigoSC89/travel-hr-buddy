@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PeotramAuditManager } from '@/components/peotram/peotram-audit-manager';
-import ModernFabShortcuts from '@/components/ui/modern-fab-shortcuts';
+import ModuleActionButton from '@/components/ui/module-action-button';
 import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +18,10 @@ import {
   BarChart3,
   Award,
   Globe,
-  Clock
+  Clock,
+  Plus,
+  RefreshCw,
+  Download
 } from 'lucide-react';
 
 const PEOTRAM = () => {
@@ -89,8 +92,57 @@ const PEOTRAM = () => {
         <PeotramAuditManager />
       </div>
 
-      {/* Enhanced FAB */}
-      <ModernFabShortcuts />
+      {/* Module Action Button */}
+      <ModuleActionButton
+        moduleId="peotram"
+        moduleName="PEOTRAM"
+        moduleIcon={<FileCheck className="h-4 w-4" />}
+        actions={[
+          {
+            id: 'new-audit',
+            label: 'Nova Auditoria',
+            icon: <Plus className="h-4 w-4" />,
+            action: () => console.log('Nova auditoria'),
+            variant: 'default'
+          },
+          {
+            id: 'reports',
+            label: 'Relatórios',
+            icon: <BarChart3 className="h-4 w-4" />,
+            action: () => console.log('Relatórios'),
+            variant: 'outline'
+          },
+          {
+            id: 'compliance',
+            label: 'Conformidade',
+            icon: <Shield className="h-4 w-4" />,
+            action: () => console.log('Conformidade'),
+            variant: 'outline'
+          },
+          {
+            id: 'ai-analysis',
+            label: 'Análise IA',
+            icon: <Brain className="h-4 w-4" />,
+            action: () => console.log('Análise IA'),
+            variant: 'outline'
+          }
+        ]}
+        quickActions={[
+          {
+            id: 'refresh',
+            label: 'Atualizar',
+            icon: <RefreshCw className="h-3 w-3" />,
+            action: () => window.location.reload(),
+            shortcut: 'F5'
+          },
+          {
+            id: 'export',
+            label: 'Exportar',
+            icon: <Download className="h-3 w-3" />,
+            action: () => console.log('Exportar')
+          }
+        ]}
+      />
     </div>
   );
 };

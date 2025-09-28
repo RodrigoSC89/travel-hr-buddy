@@ -10,8 +10,6 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { OrganizationProvider } from "@/contexts/OrganizationContext";
 import { TenantProvider } from "@/contexts/TenantContext";
 import { ThemeProvider } from "@/components/layout/theme-provider";
-import VoiceInterface from "@/components/voice/VoiceInterface";
-import IntelligentChatbot from "@/components/voice/IntelligentChatbot";
 import Dashboard from "./pages/Dashboard";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";

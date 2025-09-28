@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import ModernFabShortcuts from '@/components/ui/modern-fab-shortcuts';
+import ModuleActionButton from '@/components/ui/module-action-button';
 import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 import { 
   Users, 
@@ -28,7 +28,11 @@ import {
   BarChart3,
   FileText,
   Calendar,
-  UserPlus
+  UserPlus,
+  Plus,
+  DollarSign,
+  RefreshCw,
+  Download
 } from 'lucide-react';
 
 const HumanResources = () => {
@@ -205,7 +209,57 @@ const HumanResources = () => {
         </main>
 
         {/* Enhanced FAB */}
-        <ModernFabShortcuts />
+        {/* Module Action Button */}
+        <ModuleActionButton
+          moduleId="hr"
+          moduleName="RH"
+          moduleIcon={<Users className="h-4 w-4" />}
+          actions={[
+            {
+              id: 'new-employee',
+              label: 'Novo Funcionário',
+              icon: <Plus className="h-4 w-4" />,
+              action: () => console.log('Novo funcionário'),
+              variant: 'default'
+            },
+            {
+              id: 'reports',
+              label: 'Relatórios',
+              icon: <BarChart3 className="h-4 w-4" />,
+              action: () => console.log('Relatórios RH'),
+              variant: 'outline'
+            },
+            {
+              id: 'payroll',
+              label: 'Folha de Pagamento',
+              icon: <DollarSign className="h-4 w-4" />,
+              action: () => console.log('Folha de pagamento'),
+              variant: 'outline'
+            },
+            {
+              id: 'training',
+              label: 'Treinamentos',
+              icon: <Brain className="h-4 w-4" />,
+              action: () => console.log('Treinamentos'),
+              variant: 'outline'
+            }
+          ]}
+          quickActions={[
+            {
+              id: 'refresh',
+              label: 'Atualizar',
+              icon: <RefreshCw className="h-3 w-3" />,
+              action: () => window.location.reload(),
+              shortcut: 'F5'
+            },
+            {
+              id: 'export',
+              label: 'Exportar',
+              icon: <Download className="h-3 w-3" />,
+              action: () => console.log('Exportar')
+            }
+          ]}
+        />
       </div>
     </ThemeProvider>
   );

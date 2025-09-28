@@ -3,11 +3,6 @@ import { Outlet } from 'react-router-dom';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Header } from '@/components/layout/header';
-import { QuickActionsBar } from '@/components/ui/quick-actions-bar';
-import ModernFabShortcuts from '@/components/ui/modern-fab-shortcuts';
-import VoiceInterface from '@/components/voice/VoiceInterface';
-import IntelligentChatbot from '@/components/voice/IntelligentChatbot';
-import NautilusCopilot from '@/components/ai/nautilus-copilot';
 
 import { useSystemActions } from '@/hooks/use-system-actions';
 import { Toaster } from '@/components/ui/sonner';
@@ -15,7 +10,7 @@ import { ThemeProvider } from '@/components/layout/theme-provider';
 import { SEOWrapper } from '@/components/layout/seo-wrapper';
 import { OfflineIndicator } from '@/components/ui/offline-indicator';
 import GlobalSearch from '@/components/ui/global-search';
-import SmartAssistant from '@/components/ui/smart-assistant';
+
 import EnhancedNotifications from '@/components/ui/enhanced-notifications';
 
 export const AppLayout: React.FC = () => {
@@ -37,25 +32,10 @@ export const AppLayout: React.FC = () => {
               </main>
             </div>
             
-            {/* Floating Components - Organized per Layout Guide */}
-            <QuickActionsBar onOpenSearch={() => setIsSearchOpen(true)} />
-            <ModernFabShortcuts 
-              onOpenSearch={() => setIsSearchOpen(true)}
-              onActivateVoice={() => setIsAssistantMinimized(false)}
-              onOpenAIChat={() => setIsAssistantMinimized(false)}
-              onOpenSettings={() => console.log('Settings opened')}
-            />
-            <VoiceInterface />
-            <NautilusCopilot />
-            
             {/* Enhanced Global Features */}
             <GlobalSearch 
               isOpen={isSearchOpen} 
               onOpenChange={setIsSearchOpen} 
-            />
-            <SmartAssistant 
-              isMinimized={isAssistantMinimized}
-              onToggleMinimize={() => setIsAssistantMinimized(!isAssistantMinimized)}
             />
             <EnhancedNotifications 
               isOpen={isNotificationsOpen}

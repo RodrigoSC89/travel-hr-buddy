@@ -12,7 +12,7 @@ import {
   Bot
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import VoiceInterface from '@/components/voice/VoiceInterface';
+
 
 export default function Voice() {
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -129,10 +129,6 @@ export default function Voice() {
         </TabsContent>
       </Tabs>
       
-      <VoiceInterface 
-        onSpeakingChange={setIsSpeaking}
-        onNavigate={handleNavigate}
-      />
     </div>
   );
 }
