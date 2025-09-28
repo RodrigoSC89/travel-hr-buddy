@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -15,194 +14,199 @@ import {
   Bell, 
   AlertTriangle, 
   CheckCircle, 
-  Calendar,
-  BarChart3,
   Activity,
   Clock,
   Target,
   Zap,
-  Globe,
-  ArrowRight,
   RefreshCw,
   Crown,
   Shield,
-  Smartphone,
   Ship,
   FileText,
   Brain,
   Settings,
   Search,
   Download,
-  Filter,
-  SortDesc,
-  Maximize2,
-  Minimize2,
-  Plus,
-  Eye,
-  EyeOff,
   Star,
   TrendingDown,
   AlertCircle,
   Award,
-  Building2,
-  Database,
-  Cloud,
-  Cpu,
-  HardDrive,
-  Network,
-  Server,
-  PieChart,
-  LineChart,
-  BarChart2,
+  BarChart3,
   Map
 } from 'lucide-react';
-import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart as RechartsPieChart, Pie, Cell, BarChart, Bar, RadialBarChart, RadialBar } from 'recharts';
+import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart as RechartsPieChart, Pie, Cell, BarChart, Bar } from 'recharts';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import ModuleActionButton from '@/components/ui/module-action-button';
-
-// Strategic Dashboard Data Types
-interface MetricCard {
-  id: string;
-  title: string;
-  value: string | number;
-  change: number;
-  trend: 'up' | 'down' | 'stable';
-  icon: React.ElementType;
-  color: string;
-  subtitle?: string;
-  target?: number;
-  unit?: string;
-  onClick?: () => void;
-}
-
-interface AlertItem {
-  id: string;
-  type: 'warning' | 'error' | 'info' | 'success';
-  title: string;
-  description: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  module: string;
-  actionUrl?: string;
-  isRead: boolean;
-  createdAt: string;
-}
-
-interface ActivityItem {
-  id: string;
-  type: 'audit' | 'checklist' | 'travel' | 'document';
-  title: string;
-  description: string;
-  userName: string;
-  userAvatar?: string;
-  module: string;
-  createdAt: string;
-  metadata?: any;
-}
-
-interface DashboardConfig {
-  layout: 'grid' | 'compact' | 'executive';
-  activeWidgets: string[];
-  refreshInterval: number;
-  userRole: string;
-}
+import { MetricCard, AlertItem, ActivityItem, DashboardConfig } from '@/types/dashboard';
 
 const StrategicDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  
-  // State Management
+
+  // State management
   const [isLoading, setIsLoading] = useState(true);
+  const [metrics, setMetrics] = useState<MetricCard[]>([]);
+  const [alerts, setAlerts] = useState<AlertItem[]>([]);
+  const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProfile, setSelectedProfile] = useState<'admin' | 'hr' | 'operator' | 'auditor'>('admin');
+  const [lastUpdated, setLastUpdated] = useState(new Date());
   const [dashboardConfig, setDashboardConfig] = useState<DashboardConfig>({
     layout: 'grid',
     activeWidgets: ['metrics', 'alerts', 'activities', 'charts'],
     refreshInterval: 30,
     userRole: 'admin'
   });
-  
-  // Dashboard Data
-  const [metrics, setMetrics] = useState<MetricCard[]>([]);
-  const [alerts, setAlerts] = useState<AlertItem[]>([]);
-  const [activities, setActivities] = useState<ActivityItem[]>([]);
-  const [lastUpdated, setLastUpdated] = useState(new Date());
 
-  // Chart Data
-  const [chartData, setChartData] = useState({
-    performance: [],
-    fleet: [],
-    compliance: [],
-    financial: []
-  });
+  // Helper function to format metric values
+  const formatMetricValue = (value: number | string, unit: string = ''): string => {
+    if (typeof value === 'string') return value;
+    
+    switch (unit) {
+      case '%':
+        return `${value.toFixed(1)}%`;
+      case 'BRL':
+        return new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        }).format(value);
+      case 'USD':
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD'
+        }).format(value);
+      case 'K':
+        return `${(value / 1000).toFixed(1)}K`;
+      case 'M':
+        return `${(value / 1000000).toFixed(1)}M`;
+      default:
+        return value.toLocaleString('pt-BR');
+    }
+  };
 
-  // Load real-time data from Supabase
+  // Get metrics based on selected profile
+  const getProfileMetrics = (profile: string): MetricCard[] => {
+    const metricsData = {
+      admin: [
+        { id: 'system-health', title: 'Saúde do Sistema', value: 98.5, change: 2.1, trend: 'up' as const, icon: Activity, color: 'text-success', subtitle: 'Excelente', target: 99, unit: '%' },
+        { id: 'active-users', title: 'Usuários Ativos', value: 1247, change: 8.3, trend: 'up' as const, icon: Users, color: 'text-primary', subtitle: 'Hoje' },
+        { id: 'monthly-revenue', title: 'Receita Mensal', value: 125000, change: 12.5, trend: 'up' as const, icon: DollarSign, color: 'text-success', unit: 'BRL' },
+        { id: 'critical-alerts', title: 'Alertas Críticos', value: 3, change: -25, trend: 'down' as const, icon: AlertTriangle, color: 'text-destructive', subtitle: 'Últimas 24h' }
+      ],
+      hr: [
+        { id: 'crew-onboard', title: 'Tripulação Embarcada', value: 145, change: 3.2, trend: 'up' as const, icon: Users, color: 'text-primary', subtitle: 'Ativos' },
+        { id: 'certificates-expiring', title: 'Certificados Vencendo', value: 12, change: -8.1, trend: 'down' as const, icon: AlertCircle, color: 'text-warning', subtitle: '30 dias' },
+        { id: 'training-completion', title: 'Treinamentos Concluídos', value: 87.5, change: 15.2, trend: 'up' as const, icon: Award, color: 'text-success', unit: '%', target: 95 },
+        { id: 'hr-requests', title: 'Solicitações RH', value: 28, change: 5.7, trend: 'up' as const, icon: FileText, color: 'text-info', subtitle: 'Pendentes' }
+      ],
+      operator: [
+        { id: 'vessels-operational', title: 'Embarcações Operacionais', value: 18, change: 0, trend: 'stable' as const, icon: Ship, color: 'text-success', subtitle: 'De 20 total' },
+        { id: 'pending-checklists', title: 'Checklists Pendentes', value: 7, change: -12.5, trend: 'down' as const, icon: CheckCircle, color: 'text-warning', subtitle: 'Hoje' },
+        { id: 'equipment-status', title: 'Equipamentos OK', value: 94.2, change: 1.8, trend: 'up' as const, icon: Settings, color: 'text-success', unit: '%', target: 98 },
+        { id: 'maintenance-due', title: 'Manutenções Programadas', value: 5, change: 25, trend: 'up' as const, icon: Clock, color: 'text-info', subtitle: 'Esta semana' }
+      ],
+      auditor: [
+        { id: 'peotram-compliance', title: 'Conformidade PEOTRAM', value: 92.8, change: 4.3, trend: 'up' as const, icon: Shield, color: 'text-success', unit: '%', target: 95 },
+        { id: 'non-conformities', title: 'Não Conformidades', value: 14, change: -18.2, trend: 'down' as const, icon: AlertTriangle, color: 'text-warning', subtitle: 'Abertas' },
+        { id: 'audit-coverage', title: 'Cobertura de Auditoria', value: 78.5, change: 8.9, trend: 'up' as const, icon: Target, color: 'text-primary', unit: '%', target: 85 },
+        { id: 'evidence-submitted', title: 'Evidências Enviadas', value: 156, change: 12.7, trend: 'up' as const, icon: FileText, color: 'text-success', subtitle: 'Este mês' }
+      ]
+    };
+
+    return metricsData[profile as keyof typeof metricsData] || metricsData.admin;
+  };
+
+  // Load dashboard data
   const loadDashboardData = async () => {
     try {
       setIsLoading(true);
       
-      // Load Metrics
-      const { data: metricsData } = await supabase
-        .from('dashboard_metrics')
-        .select('*')
-        .order('recorded_at', { ascending: false })
-        .limit(20);
+      // Get metrics for selected profile
+      const profileMetrics = getProfileMetrics(selectedProfile);
+      setMetrics(profileMetrics);
 
-      // Load Alerts
-      const { data: alertsData } = await supabase
-        .from('dashboard_alerts')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10);
+      // Sample alerts data
+      const sampleAlerts: AlertItem[] = [
+        {
+          id: '1',
+          type: 'warning',
+          title: 'Certificado STCW vencendo em 15 dias',
+          description: 'João Silva - Oficial de Máquinas',
+          priority: 'high',
+          module: 'RH',
+          actionUrl: '/hr/certificates',
+          isRead: false,
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: '2',
+          type: 'error',
+          title: 'Não conformidade crítica encontrada',
+          description: 'Auditoria PEOTRAM - Embarcação MV Atlantic',
+          priority: 'critical',
+          module: 'PEOTRAM',
+          actionUrl: '/peotram/audits',
+          isRead: false,
+          createdAt: new Date(Date.now() - 3600000).toISOString()
+        },
+        {
+          id: '3',
+          type: 'info',
+          title: 'Novo checklist disponível',
+          description: 'Inspeção de segurança semanal',
+          priority: 'medium',
+          module: 'Checklists',
+          actionUrl: '/checklists',
+          isRead: true,
+          createdAt: new Date(Date.now() - 7200000).toISOString()
+        }
+      ];
 
-      // Load Activities
-      const { data: activitiesData } = await supabase
-        .from('dashboard_activities')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(15);
+      setAlerts(sampleAlerts);
 
-      // Process and set data
-      if (metricsData) {
-        const processedMetrics = processMetricsData(metricsData);
-        setMetrics(processedMetrics);
-      }
+      // Sample activities data
+      const sampleActivities: ActivityItem[] = [
+        {
+          id: '1',
+          type: 'audit',
+          title: 'Auditoria PEOTRAM concluída',
+          description: 'MV Atlantic - Score: 94.2%',
+          userName: 'Carlos Mendes',
+          module: 'PEOTRAM',
+          createdAt: new Date(Date.now() - 1800000).toISOString(),
+          metadata: { score: 94.2, vesselId: 'mv-atlantic' }
+        },
+        {
+          id: '2',
+          type: 'checklist',
+          title: 'Checklist de segurança aprovado',
+          description: 'Inspeção diária - Ponte de comando',
+          userName: 'Ana Costa',
+          module: 'Checklists',
+          createdAt: new Date(Date.now() - 3600000).toISOString(),
+          metadata: { checklistId: 'safety-daily', location: 'bridge' }
+        },
+        {
+          id: '3',
+          type: 'document',
+          title: 'Certificado atualizado',
+          description: 'STCW renovado para Pedro Santos',
+          userName: 'Maria Silva',
+          module: 'RH',
+          createdAt: new Date(Date.now() - 5400000).toISOString(),
+          metadata: { employeeId: 'pedro-santos', certificateType: 'STCW' }
+        }
+      ];
 
-      if (alertsData) {
-        setAlerts(alertsData.map(alert => ({
-          id: alert.id,
-          type: alert.alert_type as any,
-          title: alert.title,
-          description: alert.description || '',
-          priority: alert.priority as any,
-          module: alert.module,
-          actionUrl: alert.action_url || undefined,
-          isRead: alert.is_read,
-          createdAt: alert.created_at
-        })));
-      }
-
-      if (activitiesData) {
-        setActivities(activitiesData.map(activity => ({
-          id: activity.id,
-          type: activity.activity_type as any,
-          title: activity.title,
-          description: activity.description || '',
-          userName: activity.user_name,
-          userAvatar: activity.user_avatar || undefined,
-          module: activity.module,
-          createdAt: activity.created_at,
-          metadata: activity.metadata
-        })));
-      }
-
+      setActivities(sampleActivities);
       setLastUpdated(new Date());
-      
+
     } catch (error) {
       console.error('Error loading dashboard data:', error);
       toast({
-        title: "Erro ao carregar dashboard",
-        description: "Não foi possível carregar os dados. Tentando novamente...",
+        title: "Erro",
+        description: "Falha ao carregar dados do dashboard",
         variant: "destructive"
       });
     } finally {
@@ -210,92 +214,9 @@ const StrategicDashboard: React.FC = () => {
     }
   };
 
-  // Process metrics data based on user profile
-  const processMetricsData = (data: any[]): MetricCard[] => {
-    const metricsByProfile = {
-      admin: [
-        { key: 'Active Vessels', icon: Ship, color: 'text-azure-600' },
-        { key: 'Fleet Utilization', icon: Activity, color: 'text-success' },
-        { key: 'Safety Score', icon: Shield, color: 'text-warning' },
-        { key: 'Revenue', icon: DollarSign, color: 'text-primary' },
-        { key: 'Active Crew', icon: Users, color: 'text-info' },
-        { key: 'PEOTRAM Compliance', icon: CheckCircle, color: 'text-success' }
-      ],
-      hr: [
-        { key: 'Active Crew', icon: Users, color: 'text-info' },
-        { key: 'PEOTRAM Compliance', icon: CheckCircle, color: 'text-success' },
-        { key: 'Document Compliance', icon: FileText, color: 'text-warning' },
-        { key: 'Safety Score', icon: Shield, color: 'text-warning' }
-      ],
-      operator: [
-        { key: 'Active Vessels', icon: Ship, color: 'text-azure-600' },
-        { key: 'Fleet Utilization', icon: Activity, color: 'text-success' },
-        { key: 'Fuel Efficiency', icon: Zap, color: 'text-primary' },
-        { key: 'Safety Score', icon: Shield, color: 'text-warning' }
-      ],
-      auditor: [
-        { key: 'PEOTRAM Compliance', icon: CheckCircle, color: 'text-success' },
-        { key: 'Document Compliance', icon: FileText, color: 'text-warning' },
-        { key: 'Safety Score', icon: Shield, color: 'text-warning' },
-        { key: 'Active Vessels', icon: Ship, color: 'text-azure-600' }
-      ]
-    };
-
-    const profileMetrics = metricsByProfile[selectedProfile] || metricsByProfile.admin;
-    
-    return profileMetrics.map(profileMetric => {
-      const metricData = data.find(m => m.metric_name === profileMetric.key);
-      if (!metricData) return null;
-      
-      return {
-        id: metricData.id,
-        title: metricData.metric_name,
-        value: formatMetricValue(metricData.metric_value, metricData.metric_unit),
-        change: metricData.metric_change || 0,
-        trend: getTrend(metricData.metric_change || 0),
-        icon: profileMetric.icon,
-        color: profileMetric.color,
-        subtitle: metricData.department,
-        target: metricData.metric_target,
-        unit: metricData.metric_unit,
-        onClick: () => handleMetricClick(metricData.metric_type)
-      };
-    }).filter(Boolean) as MetricCard[];
-  };
-
-  const formatMetricValue = (value: number, unit: string) => {
-    if (unit === 'BRL') return `R$ ${(value / 1000000).toFixed(1)}M`;
-    if (unit === '%') return `${value.toFixed(1)}%`;
-    if (unit === 'people' || unit === 'units') return value.toString();
-    return `${value.toFixed(1)} ${unit}`;
-  };
-
-  const getTrend = (change: number): 'up' | 'down' | 'stable' => {
-    if (change > 1) return 'up';
-    if (change < -1) return 'down';
-    return 'stable';
-  };
-
-  const handleMetricClick = (metricType: string) => {
-    const routes = {
-      operational: '/fleet-management',
-      financial: '/analytics',
-      safety: '/maritime',
-      compliance: '/peotram',
-      hr: '/hr'
-    };
-    
-    if (routes[metricType as keyof typeof routes]) {
-      navigate(routes[metricType as keyof typeof routes]);
-    }
-  };
-
-  const refreshDashboard = async () => {
-    toast({
-      title: "Atualizando Dashboard",
-      description: "Carregando dados mais recentes...",
-    });
-    await loadDashboardData();
+  // Refresh dashboard
+  const refreshDashboard = () => {
+    loadDashboardData();
     toast({
       title: "Dashboard Atualizado",
       description: "Dados atualizados com sucesso!",
@@ -432,7 +353,7 @@ const StrategicDashboard: React.FC = () => {
                 <metric.icon className={`h-5 w-5 ${metric.color} group-hover:scale-110 transition-transform`} />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold mb-2">{metric.value}</div>
+                <div className="text-2xl font-bold mb-2">{formatMetricValue(metric.value, metric.unit)}</div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1 text-sm">
                     {metric.trend === 'up' && <TrendingUp className="h-3 w-3 text-success" />}
@@ -504,38 +425,28 @@ const StrategicDashboard: React.FC = () => {
                       {alert.type === 'success' && <CheckCircle className="h-3 w-3" />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="font-medium text-sm">{alert.title}</p>
+                      <p className="font-medium text-sm truncate">{alert.title}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{alert.description}</p>
+                      <div className="flex items-center gap-2 mt-2">
                         <Badge 
-                          variant={
-                            alert.priority === 'critical' ? 'destructive' :
-                            alert.priority === 'high' ? 'default' :
-                            'secondary'
-                          }
-                          className="text-xs"
+                          variant="outline" 
+                          className={`text-xs ${
+                            alert.priority === 'critical' ? 'border-destructive text-destructive' :
+                            alert.priority === 'high' ? 'border-warning text-warning' :
+                            'border-muted text-muted-foreground'
+                          }`}
                         >
                           {alert.priority}
                         </Badge>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                        {alert.description}
-                      </p>
-                      <div className="flex items-center justify-between mt-2">
-                        <Badge variant="outline" className="text-xs">
-                          {alert.module}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">
-                          {new Date(alert.createdAt).toLocaleDateString()}
-                        </span>
+                        <span className="text-xs text-muted-foreground">{alert.module}</span>
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
-              
               {filteredAlerts.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
+                  <Bell className="h-12 w-12 mx-auto mb-4" />
                   <p>Nenhum alerta encontrado</p>
                 </div>
               )}
@@ -550,51 +461,35 @@ const StrategicDashboard: React.FC = () => {
                 Atividades Recentes
               </CardTitle>
               <CardDescription>
-                Últimas {activities.length} atividades do sistema
+                Últimas atividades do sistema
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 max-h-96 overflow-y-auto">
-              {filteredActivities.slice(0, 8).map((activity) => (
-                <div key={activity.id} className="flex items-start gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors">
-                  <div className={`p-2 rounded-full ${
-                    activity.type === 'audit' ? 'bg-success/20 text-success' :
-                    activity.type === 'checklist' ? 'bg-info/20 text-info' :
-                    activity.type === 'travel' ? 'bg-warning/20 text-warning' :
-                    'bg-primary/20 text-primary'
-                  }`}>
-                    {activity.type === 'audit' && <Shield className="h-4 w-4" />}
-                    {activity.type === 'checklist' && <CheckCircle className="h-4 w-4" />}
-                    {activity.type === 'travel' && <Map className="h-4 w-4" />}
-                    {activity.type === 'document' && <FileText className="h-4 w-4" />}
+              {filteredActivities.slice(0, 10).map((activity) => (
+                <div 
+                  key={activity.id}
+                  className="flex items-start gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors"
+                >
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    {activity.type === 'audit' && <Shield className="h-4 w-4 text-primary" />}
+                    {activity.type === 'checklist' && <CheckCircle className="h-4 w-4 text-success" />}
+                    {activity.type === 'travel' && <Map className="h-4 w-4 text-info" />}
+                    {activity.type === 'document' && <FileText className="h-4 w-4 text-warning" />}
                   </div>
-                  
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <p className="font-medium text-sm">{activity.title}</p>
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(activity.createdAt).toLocaleString()}
-                      </span>
+                      <Badge variant="outline" className="text-xs">{activity.module}</Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {activity.description}
-                    </p>
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-medium">{activity.userName}</span>
-                        <Badge variant="outline" className="text-xs">
-                          {activity.module}
-                        </Badge>
-                      </div>
-                      {activity.metadata?.score && (
-                        <Badge variant="secondary" className="text-xs">
-                          {activity.metadata.score}
-                        </Badge>
-                      )}
+                    <p className="text-xs text-muted-foreground mt-1">{activity.description}</p>
+                    <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                      <span>{activity.userName}</span>
+                      <span>•</span>
+                      <span>{new Date(activity.createdAt).toLocaleString('pt-BR')}</span>
                     </div>
                   </div>
                 </div>
               ))}
-              
               {filteredActivities.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
                   <Activity className="h-12 w-12 mx-auto mb-4" />
