@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { EmployeeDossierSummary } from './employee-dossier-summary';
 
 interface TimeEntry {
   date: string;
@@ -436,19 +437,7 @@ export const EmployeePortal: React.FC = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8">
-                <User className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">Acesse seu Dossiê Completo</h3>
-                <p className="text-muted-foreground mb-4">
-                  Visualize certificações, embarques, avaliações e documentos do tripulante
-                </p>
-                <Button 
-                  onClick={() => window.open('/crew-dossier', '_blank')} 
-                  className="w-full max-w-sm"
-                >
-                  Abrir Dossiê do Tripulante
-                </Button>
-              </div>
+              <EmployeeDossierSummary />
             </CardContent>
           </Card>
         </TabsContent>
