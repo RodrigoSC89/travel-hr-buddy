@@ -217,8 +217,6 @@ const PulsingNotificationCard = ({ title, description, time, priority = "medium"
   );
 };
 
-export default EnhancedDashboard;
-
 export const EnhancedDashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('30d');
   const [isLoaded, setIsLoaded] = useState(false);
