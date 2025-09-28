@@ -1028,6 +1028,135 @@ export type Database = {
           },
         ]
       }
+      dashboard_activities: {
+        Row: {
+          activity_type: string
+          created_at: string | null
+          description: string | null
+          entity_id: string | null
+          id: string
+          metadata: Json | null
+          module: string
+          title: string
+          user_avatar: string | null
+          user_name: string
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string | null
+          description?: string | null
+          entity_id?: string | null
+          id?: string
+          metadata?: Json | null
+          module: string
+          title: string
+          user_avatar?: string | null
+          user_name: string
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string | null
+          description?: string | null
+          entity_id?: string | null
+          id?: string
+          metadata?: Json | null
+          module?: string
+          title?: string
+          user_avatar?: string | null
+          user_name?: string
+        }
+        Relationships: []
+      }
+      dashboard_alerts: {
+        Row: {
+          action_url: string | null
+          alert_type: string
+          created_at: string | null
+          department: string | null
+          description: string | null
+          expires_at: string | null
+          id: string
+          is_read: boolean | null
+          module: string
+          priority: string | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          action_url?: string | null
+          alert_type: string
+          created_at?: string | null
+          department?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          module: string
+          priority?: string | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          action_url?: string | null
+          alert_type?: string
+          created_at?: string | null
+          department?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          module?: string
+          priority?: string | null
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      dashboard_metrics: {
+        Row: {
+          created_at: string | null
+          department: string | null
+          id: string
+          metric_change: number | null
+          metric_name: string
+          metric_target: number | null
+          metric_type: string
+          metric_unit: string | null
+          metric_value: number
+          recorded_at: string | null
+          user_role: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          department?: string | null
+          id?: string
+          metric_change?: number | null
+          metric_name: string
+          metric_target?: number | null
+          metric_type: string
+          metric_unit?: string | null
+          metric_value: number
+          recorded_at?: string | null
+          user_role?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          department?: string | null
+          id?: string
+          metric_change?: number | null
+          metric_name?: string
+          metric_target?: number | null
+          metric_type?: string
+          metric_unit?: string | null
+          metric_value?: number
+          recorded_at?: string | null
+          user_role?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
       emergency_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -4068,6 +4197,45 @@ export type Database = {
           unlocked?: boolean
           unlocked_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_dashboard_configs: {
+        Row: {
+          active_widgets: Json | null
+          config_name: string
+          created_at: string | null
+          filters: Json | null
+          id: string
+          is_default: boolean | null
+          layout_type: string
+          updated_at: string | null
+          user_id: string
+          widget_positions: Json | null
+        }
+        Insert: {
+          active_widgets?: Json | null
+          config_name?: string
+          created_at?: string | null
+          filters?: Json | null
+          id?: string
+          is_default?: boolean | null
+          layout_type?: string
+          updated_at?: string | null
+          user_id: string
+          widget_positions?: Json | null
+        }
+        Update: {
+          active_widgets?: Json | null
+          config_name?: string
+          created_at?: string | null
+          filters?: Json | null
+          id?: string
+          is_default?: boolean | null
+          layout_type?: string
+          updated_at?: string | null
+          user_id?: string
+          widget_positions?: Json | null
         }
         Relationships: []
       }

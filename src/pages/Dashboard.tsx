@@ -1,11 +1,6 @@
 import React from 'react';
-import { EnhancedDashboard } from '@/components/dashboard/enhanced-dashboard';
-import { OrganizationLayout } from '@/components/layout/organization-layout';
+import StrategicDashboard from '@/components/dashboard/strategic-dashboard';
 
 export default function Dashboard() {
-  return (
-    <OrganizationLayout showBackButton={false} requiresOrganization={false}>
-      <EnhancedDashboard />
-    </OrganizationLayout>
-  );
+  return <StrategicDashboard />;
 }
