@@ -4,6 +4,7 @@ import { SystemHealthCheck } from '@/components/testing/system-health-check';
 import { TestEnvironmentConfig } from '@/components/testing/test-environment-config';
 import { PerformanceMonitor } from '@/components/performance/performance-monitor';
 import { PWAStatus } from '@/components/mobile/pwa-status';
+import { FinalHomologationReport } from '@/components/testing/final-homologation-report';
 
 const TestingDashboard = () => {
   return (
@@ -15,13 +16,18 @@ const TestingDashboard = () => {
         </p>
       </div>
 
-      <Tabs defaultValue="health" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+      <Tabs defaultValue="homologation" className="w-full">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="homologation">Homologação Final</TabsTrigger>
           <TabsTrigger value="health">Saúde do Sistema</TabsTrigger>
           <TabsTrigger value="config">Configuração</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
           <TabsTrigger value="mobile">Mobile & PWA</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="homologation" className="space-y-6">
+          <FinalHomologationReport />
+        </TabsContent>
 
         <TabsContent value="health" className="space-y-6">
           <SystemHealthCheck />
