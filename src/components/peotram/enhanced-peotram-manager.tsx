@@ -5,6 +5,9 @@ import { PeotramReportsGenerator } from './peotram-reports-generator';
 import { PeotramNonConformities } from './peotram-non-conformities';
 import { PeotramTemplateManager } from './peotram-template-manager';
 import { PeotramAnalyticsPanel } from './peotram-analytics-panel';
+import { PeotramComplianceChecker } from './peotram-compliance-checker';
+import { PeotramPerformanceIndicators } from './peotram-performance-indicators';
+import { PeotramDocumentManager } from './peotram-document-manager';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -320,7 +323,7 @@ export const EnhancedPeotramManager: React.FC = () => {
 
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6 bg-muted/50">
+        <TabsList className="grid w-full grid-cols-8 bg-muted/50">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
             Dashboard
@@ -344,6 +347,14 @@ export const EnhancedPeotramManager: React.FC = () => {
           <TabsTrigger value="analytics" className="flex items-center gap-2">
             <Activity className="w-4 h-4" />
             Analytics
+          </TabsTrigger>
+          <TabsTrigger value="compliance" className="flex items-center gap-2">
+            <Shield className="w-4 h-4" />
+            Conformidade
+          </TabsTrigger>
+          <TabsTrigger value="performance" className="flex items-center gap-2">
+            <Target className="w-4 h-4" />
+            Performance
           </TabsTrigger>
         </TabsList>
 
@@ -488,6 +499,14 @@ export const EnhancedPeotramManager: React.FC = () => {
 
         <TabsContent value="analytics">
           <PeotramAnalyticsPanel />
+        </TabsContent>
+
+        <TabsContent value="compliance">
+          <PeotramComplianceChecker />
+        </TabsContent>
+
+        <TabsContent value="performance">
+          <PeotramPerformanceIndicators />
         </TabsContent>
       </Tabs>
     </div>
