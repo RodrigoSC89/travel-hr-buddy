@@ -40,6 +40,9 @@ import VesselManagementSystem from '@/components/fleet/vessel-management-system'
 import MaintenanceManagement from '@/components/fleet/maintenance-management';
 import DocumentationCenter from '@/components/fleet/documentation-center';
 import FleetAnalytics from '@/components/fleet/fleet-analytics';
+import RealTimeTracking from '@/components/fleet/real-time-tracking';
+import IntelligentAlerts from '@/components/fleet/intelligent-alerts';
+import ComplianceCenter from '@/components/fleet/compliance-center';
 
 const MaritimeFleetManagement = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -221,7 +224,7 @@ const MaritimeFleetManagement = () => {
 
         {/* Main Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8">
+          <TabsList className="grid w-full grid-cols-8 mb-8">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Painel Geral
@@ -241,6 +244,18 @@ const MaritimeFleetManagement = () => {
             <TabsTrigger value="analytics" className="flex items-center gap-2">
               <Activity className="h-4 w-4" />
               Analytics
+            </TabsTrigger>
+            <TabsTrigger value="tracking" className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              Rastreamento
+            </TabsTrigger>
+            <TabsTrigger value="alerts" className="flex items-center gap-2">
+              <Bell className="h-4 w-4" />
+              Alertas IA
+            </TabsTrigger>
+            <TabsTrigger value="compliance" className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              Conformidade
             </TabsTrigger>
           </TabsList>
 
@@ -262,6 +277,18 @@ const MaritimeFleetManagement = () => {
 
           <TabsContent value="analytics" className="space-y-6">
             <FleetAnalytics />
+          </TabsContent>
+
+          <TabsContent value="tracking" className="space-y-6">
+            <RealTimeTracking />
+          </TabsContent>
+
+          <TabsContent value="alerts" className="space-y-6">
+            <IntelligentAlerts />
+          </TabsContent>
+
+          <TabsContent value="compliance" className="space-y-6">
+            <ComplianceCenter />
           </TabsContent>
         </Tabs>
       </div>
