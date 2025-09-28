@@ -5,6 +5,12 @@ import { TravelMap } from '@/components/travel/travel-map';
 import { PredictiveTravelDashboard } from '@/components/travel/predictive-travel-dashboard';
 import { AITravelAssistant } from '@/components/travel/ai-travel-assistant';
 import { TravelAnalyticsDashboard } from '@/components/travel/travel-analytics-dashboard';
+import { TravelBookingSystem } from '@/components/travel/travel-booking-system';
+import { TravelApprovalSystem } from '@/components/travel/travel-approval-system';
+import { TravelExpenseSystem } from '@/components/travel/travel-expense-system';
+import { TravelCommunication } from '@/components/travel/travel-communication';
+import { TravelNotifications } from '@/components/travel/travel-notifications';
+import { TravelDocumentManager } from '@/components/travel/travel-document-manager';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,7 +36,12 @@ import {
   Plus,
   DollarSign,
   RefreshCw,
-  Download
+  Download,
+  CheckCircle,
+  MessageSquare,
+  Bell,
+  FileText,
+  Users
 } from 'lucide-react';
 
 const Travel = () => {
@@ -157,10 +168,14 @@ const Travel = () => {
         {/* Enhanced Tabs */}
         <Tabs defaultValue="predictive" className="space-y-6">
           <div className="flex justify-center">
-            <TabsList className="grid grid-cols-7 w-full max-w-7xl h-16 bg-card/50 backdrop-blur-sm border border-border/50 shadow-lg rounded-2xl p-2">
+            <TabsList className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-11 w-full max-w-full h-16 bg-card/50 backdrop-blur-sm border border-border/50 shadow-lg rounded-2xl p-2 overflow-x-auto">
               <TabsTrigger value="predictive" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
                 <Brain className="h-5 w-5 animate-pulse" />
                 <span className="hidden md:inline font-semibold">IA Preditiva</span>
+              </TabsTrigger>
+              <TabsTrigger value="booking" className="flex items-center gap-2 data-[state=active]:bg-purple-600 data-[state=active]:text-white rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
+                <CreditCard className="h-5 w-5" />
+                <span className="hidden md:inline font-semibold">Reservas</span>
               </TabsTrigger>
               <TabsTrigger value="flights" className="flex items-center gap-2 data-[state=active]:bg-info data-[state=active]:text-info-foreground rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
                 <Plane className="h-5 w-5" />
@@ -170,17 +185,29 @@ const Travel = () => {
                 <Building className="h-5 w-5" />
                 <span className="hidden md:inline font-semibold">Hotéis</span>
               </TabsTrigger>
+              <TabsTrigger value="approvals" className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
+                <CheckCircle className="h-5 w-5" />
+                <span className="hidden md:inline font-semibold">Aprovações</span>
+              </TabsTrigger>
+              <TabsTrigger value="expenses" className="flex items-center gap-2 data-[state=active]:bg-green-600 data-[state=active]:text-white rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
+                <DollarSign className="h-5 w-5" />
+                <span className="hidden md:inline font-semibold">Despesas</span>
+              </TabsTrigger>
+              <TabsTrigger value="communication" className="flex items-center gap-2 data-[state=active]:bg-orange-600 data-[state=active]:text-white rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
+                <MessageSquare className="h-5 w-5" />
+                <span className="hidden md:inline font-semibold">Chat</span>
+              </TabsTrigger>
+              <TabsTrigger value="notifications" className="flex items-center gap-2 data-[state=active]:bg-red-600 data-[state=active]:text-white rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
+                <Bell className="h-5 w-5" />
+                <span className="hidden md:inline font-semibold">Notificações</span>
+              </TabsTrigger>
+              <TabsTrigger value="documents" className="flex items-center gap-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
+                <FileText className="h-5 w-5" />
+                <span className="hidden md:inline font-semibold">Documentos</span>
+              </TabsTrigger>
               <TabsTrigger value="map" className="flex items-center gap-2 data-[state=active]:bg-warning data-[state=active]:text-warning-foreground rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
                 <MapPin className="h-5 w-5" />
                 <span className="hidden md:inline font-semibold">Mapa</span>
-              </TabsTrigger>
-              <TabsTrigger value="itinerary" className="flex items-center gap-2 data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
-                <Calendar className="h-5 w-5" />
-                <span className="hidden md:inline font-semibold">Roteiro</span>
-              </TabsTrigger>
-              <TabsTrigger value="assistant" className="flex items-center gap-2 data-[state=active]:bg-purple-600 data-[state=active]:text-white rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
-                <Brain className="h-5 w-5 animate-pulse" />
-                <span className="hidden md:inline font-semibold">IA Assistant</span>
               </TabsTrigger>
               <TabsTrigger value="analytics" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-md">
                 <BarChart3 className="h-5 w-5" />
@@ -193,12 +220,36 @@ const Travel = () => {
             <PredictiveTravelDashboard />
           </TabsContent>
 
+          <TabsContent value="booking" className="space-y-6">
+            <TravelBookingSystem />
+          </TabsContent>
+
           <TabsContent value="flights" className="space-y-6">
             <FlightSearch />
           </TabsContent>
 
           <TabsContent value="hotels" className="space-y-6">
             <HotelSearch />
+          </TabsContent>
+
+          <TabsContent value="approvals" className="space-y-6">
+            <TravelApprovalSystem />
+          </TabsContent>
+
+          <TabsContent value="expenses" className="space-y-6">
+            <TravelExpenseSystem />
+          </TabsContent>
+
+          <TabsContent value="communication" className="space-y-6">
+            <TravelCommunication />
+          </TabsContent>
+
+          <TabsContent value="notifications" className="space-y-6">
+            <TravelNotifications />
+          </TabsContent>
+
+          <TabsContent value="documents" className="space-y-6">
+            <TravelDocumentManager />
           </TabsContent>
 
           <TabsContent value="map" className="space-y-6">
@@ -232,45 +283,6 @@ const Travel = () => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="itinerary" className="space-y-6">
-            <Card className="bg-gradient-to-br from-card via-card/95 to-secondary/5 hover:shadow-2xl transition-all duration-700 backdrop-blur-sm border border-border/50">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-2xl">
-                  <div className="p-3 rounded-xl bg-gradient-to-br from-secondary/20 to-secondary/10">
-                    <Calendar className="w-6 h-6 text-secondary" />
-                  </div>
-                  <span className="text-gradient">Roteiros Inteligentes</span>
-                  <Clock className="w-6 h-6 text-secondary animate-pulse" />
-                </CardTitle>
-                <CardDescription className="text-base">
-                  Gerencie itinerários, compromissos e otimize seu tempo de viagem
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="text-center py-12">
-                  <div className="p-6 rounded-2xl bg-gradient-to-br from-secondary/10 to-secondary/5 inline-block mb-6">
-                    <Calendar className="h-16 w-16 text-secondary mx-auto animate-bounce" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4 text-gradient">
-                    Sistema de Roteiros em Desenvolvimento
-                  </h3>
-                  <p className="text-muted-foreground text-lg mb-6 max-w-md mx-auto">
-                    Funcionalidade avançada de roteiros com IA será disponibilizada em breve
-                  </p>
-                  <Button variant="outline" className="gap-2">
-                    <Briefcase className="h-4 w-4" />
-                    Solicitar Acesso Antecipado
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="assistant" className="space-y-6">
-            <AITravelAssistant />
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">
