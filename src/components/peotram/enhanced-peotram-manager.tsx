@@ -11,6 +11,9 @@ import { PeotramDocumentManager } from './peotram-document-manager';
 import { PeotramRiskAssessment } from './peotram-risk-assessment';
 import { PeotramTrainingManagement } from './peotram-training-management';
 import { PeotramRealtimeMonitoring } from './peotram-realtime-monitoring';
+import { PeotramWorkflowManager } from './peotram-workflow-manager';
+import { PeotramIntegrationHub } from './peotram-integration-hub';
+import { PeotramAdvancedReporting } from './peotram-advanced-reporting';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -349,7 +352,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         {/* Tabs secundárias para Gestão */}
         {activeView === 'management' && (
           <div className="bg-muted/30 rounded-lg p-1">
-            <div className="grid w-full grid-cols-7 gap-1">
+            <div className="grid w-full grid-cols-9 gap-1">
               <Button
                 variant={managementSubView === 'non-conformities' ? 'default' : 'ghost'}
                 size="sm"
@@ -412,6 +415,24 @@ export const EnhancedPeotramManager: React.FC = () => {
               >
                 <Users className="w-4 h-4" />
                 Treinamentos
+              </Button>
+              <Button
+                variant={managementSubView === 'workflows' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('workflows')}
+                className="flex items-center gap-2"
+              >
+                <Zap className="w-4 h-4" />
+                Workflows
+              </Button>
+              <Button
+                variant={managementSubView === 'integrations' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setManagementSubView('integrations')}
+                className="flex items-center gap-2"
+              >
+                <Leaf className="w-4 h-4" />
+                Integrações
               </Button>
             </div>
           </div>
@@ -586,6 +607,8 @@ export const EnhancedPeotramManager: React.FC = () => {
           {managementSubView === 'compliance' && <PeotramComplianceChecker />}
           {managementSubView === 'risk-assessment' && <PeotramRiskAssessment />}
           {managementSubView === 'training' && <PeotramTrainingManagement />}
+          {managementSubView === 'workflows' && <PeotramWorkflowManager />}
+          {managementSubView === 'integrations' && <PeotramIntegrationHub />}
         </TabsContent>
 
         {/* Manter as antigas abas para compatibilidade */}
@@ -597,7 +620,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="reports">
-          <PeotramReportsGenerator />
+          <PeotramAdvancedReporting />
         </TabsContent>
 
         <TabsContent value="templates">
