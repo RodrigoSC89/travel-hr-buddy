@@ -21,7 +21,8 @@ import {
   MapPin,
   Navigation,
   QrCode,
-  Bell
+  Bell,
+  Wrench
 } from 'lucide-react';
 import { ChecklistScheduler } from '../components/maritime/checklist-scheduler';
 import { ChecklistReports } from '../components/maritime/checklist-reports';
@@ -30,6 +31,8 @@ import { ChecklistDashboard } from '../components/maritime/checklist-dashboard';
 import { NotificationCenter } from '../components/maritime/notification-center';
 import { RealTimeFleetMonitor } from '../components/maritime/real-time-fleet-monitor';
 import { VesselPerformanceDashboard } from '../components/maritime/vessel-performance-dashboard';
+import { IoTSensorDashboard } from '../components/maritime/iot-sensor-dashboard';
+import { PredictiveMaintenanceSystem } from '../components/maritime/predictive-maintenance-system';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -293,6 +296,14 @@ export default function Maritime() {
                   <TrendingUp className="h-4 w-4 mr-2" />
                   Performance de Navios
                 </Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('iot-sensors')}>
+                  <Activity className="h-4 w-4 mr-2" />
+                  Sensores IoT
+                </Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('predictive-maintenance')}>
+                  <Wrench className="h-4 w-4 mr-2" />
+                  Manutenção Preditiva
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -476,6 +487,22 @@ export default function Maritime() {
             ← Voltar ao Dashboard
           </Button>
           <VesselPerformanceDashboard />
+        </div>
+      )}
+      {activeFeature === 'iot-sensors' && (
+        <div className="mt-6">
+          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+            ← Voltar ao Dashboard
+          </Button>
+          <IoTSensorDashboard />
+        </div>
+      )}
+      {activeFeature === 'predictive-maintenance' && (
+        <div className="mt-6">
+          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+            ← Voltar ao Dashboard
+          </Button>
+          <PredictiveMaintenanceSystem />
         </div>
       )}
     </div>
