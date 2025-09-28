@@ -94,32 +94,36 @@ const ProfessionalKPICards = () => {
   const getColorClasses = (color: string) => {
     const colors = {
       green: {
-        bg: 'from-background to-green-50/30',
-        icon: 'from-emerald-600 to-green-700',
-        text: 'text-emerald-800 dark:text-emerald-700',
+        bg: 'from-emerald-700/90 to-green-800/90',
+        icon: 'from-emerald-500 to-green-600',
+        text: 'text-white',
         progress: 'bg-emerald-200',
-        border: 'border-emerald-300'
+        border: 'border-emerald-400',
+        card: 'bg-emerald-800/95 border-emerald-600/50'
       },
       blue: {
-        bg: 'from-background to-blue-50/30',
-        icon: 'from-azure-600 to-azure-700',
-        text: 'text-azure-900 dark:text-azure-800',
+        bg: 'from-azure-700/90 to-azure-800/90',
+        icon: 'from-azure-400 to-azure-500',
+        text: 'text-white',
         progress: 'bg-azure-200',
-        border: 'border-azure-300'
+        border: 'border-azure-400',
+        card: 'bg-azure-800/95 border-azure-600/50'
       },
       purple: {
-        bg: 'from-background to-purple-50/30',
-        icon: 'from-purple-600 to-violet-700',
-        text: 'text-purple-900 dark:text-purple-800',
+        bg: 'from-purple-700/90 to-violet-800/90',
+        icon: 'from-purple-400 to-violet-500',
+        text: 'text-white',
         progress: 'bg-purple-200',
-        border: 'border-purple-300'
+        border: 'border-purple-400',
+        card: 'bg-purple-800/95 border-purple-600/50'
       },
       orange: {
-        bg: 'from-background to-orange-50/30',
-        icon: 'from-orange-600 to-amber-700',
-        text: 'text-orange-900 dark:text-orange-800',
+        bg: 'from-orange-700/90 to-amber-800/90',
+        icon: 'from-orange-400 to-amber-500',
+        text: 'text-white',
         progress: 'bg-orange-200',
-        border: 'border-orange-300'
+        border: 'border-orange-400',
+        card: 'bg-orange-800/95 border-orange-600/50'
       }
     };
     return colors[color as keyof typeof colors];
@@ -132,24 +136,24 @@ const ProfessionalKPICards = () => {
         return (
           <Card 
             key={index} 
-            className={`relative group hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:${colorClasses.border} cursor-pointer`}
+            className={`relative group hover:shadow-2xl transition-all duration-500 border-2 ${colorClasses.card} hover:${colorClasses.border} cursor-pointer overflow-hidden backdrop-blur-sm`}
           >
-            {/* Background Gradient */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${colorClasses.bg} rounded-lg opacity-50 group-hover:opacity-70 transition-opacity border border-border/20`} />
+            {/* Background Gradient - Fundo Escuro Premium */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${colorClasses.bg} rounded-lg opacity-95 group-hover:opacity-100 transition-opacity`} />
             
             {/* Content */}
-            <CardContent className="relative p-6">
+            <CardContent className="relative p-6 text-white">
               {/* Header */}
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-2xl bg-gradient-to-br ${colorClasses.icon} text-azure-50 shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300`}>
+                <div className={`p-3 rounded-2xl bg-gradient-to-br ${colorClasses.icon} text-white shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300`}>
                   <kpi.icon className="w-7 h-7" />
                 </div>
                 
                 <div className="text-right">
-                  <div className={`text-3xl font-bold text-foreground`}>
+                  <div className="text-3xl font-bold text-white">
                     {kpi.value}
                   </div>
-                  <div className="text-sm font-medium text-muted-foreground">
+                  <div className="text-sm font-medium text-white/80">
                     {kpi.subtitle}
                   </div>
                 </div>
@@ -158,17 +162,17 @@ const ProfessionalKPICards = () => {
               {/* Title and Trend */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-foreground">
+                  <h3 className="text-sm font-bold text-white">
                     {kpi.title}
                   </h3>
                   <div className="flex items-center gap-1">
                     {kpi.trend === 'up' ? (
-                      <TrendingUp className="w-4 h-4 text-green-700 dark:text-green-600" />
+                      <TrendingUp className="w-4 h-4 text-green-300" />
                     ) : (
-                      <TrendingDown className="w-4 h-4 text-red-700 dark:text-red-600" />
+                      <TrendingDown className="w-4 h-4 text-red-300" />
                     )}
                     <span className={`text-sm font-bold ${
-                      kpi.trend === 'up' ? 'text-green-700 dark:text-green-600' : 'text-red-700 dark:text-red-600'
+                      kpi.trend === 'up' ? 'text-green-300' : 'text-red-300'
                     }`}>
                       {kpi.change}
                     </span>
@@ -179,24 +183,25 @@ const ProfessionalKPICards = () => {
                 <div className="space-y-2">
                   <Progress 
                     value={kpi.progress} 
-                    className={`h-2 ${colorClasses.progress}`}
+                    className="h-2 bg-white/20"
                   />
                   <div className="flex justify-between text-xs">
-                    <span className="font-medium text-foreground">Progresso</span>
-                    <span className={`font-bold text-foreground`}>
+                    <span className="font-medium text-white/90">Progresso</span>
+                    <span className="font-bold text-white">
                       {kpi.progress.toFixed(1)}%
                     </span>
                   </div>
                 </div>
 
                 {/* Details */}
-                <div className="space-y-2 mt-4 pt-3 border-t border-border/50">
+                {/* Details */}
+                <div className="space-y-2 mt-4 pt-3 border-t border-white/20">
                   {Object.entries(kpi.details).map(([key, value]) => (
                     <div key={key} className="flex justify-between text-xs">
-                      <span className="text-foreground font-medium capitalize">
+                      <span className="text-white/80 font-medium capitalize">
                         {key.replace('_', ' ')}:
                       </span>
-                      <span className="font-bold text-foreground">
+                      <span className="font-bold text-white">
                         {value}
                       </span>
                     </div>

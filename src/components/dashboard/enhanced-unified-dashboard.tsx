@@ -434,45 +434,45 @@ const EnhancedUnifiedDashboard = () => {
 
       {/* Financial Overview */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-2 border-primary/10 shadow-xl bg-maritime-navy">
-          <CardHeader className="bg-gradient-to-r from-primary/10 to-transparent">
-            <CardTitle className="flex items-center gap-2">
-              <LineChart className="w-5 h-5 text-primary" />
+        <Card className="border-2 border-primary/20 shadow-xl bg-gradient-to-br from-azure-800/95 to-azure-900/95 backdrop-blur-sm">
+          <CardHeader className="bg-gradient-to-r from-primary/20 to-transparent border-b border-white/10">
+            <CardTitle className="flex items-center gap-2 text-white">
+              <LineChart className="w-5 h-5 text-azure-300" />
               Performance Financeira
             </CardTitle>
-            <CardDescription>Indicadores financeiros principais</CardDescription>
+            <CardDescription className="text-white/80">Indicadores financeiros principais</CardDescription>
           </CardHeader>
           <CardContent className="p-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <div className="text-sm font-bold text-foreground">Margem Bruta</div>
-                <div className="text-2xl font-bold text-foreground">{dashboardData.financialMetrics.grossMargin}%</div>
-                <Progress value={dashboardData.financialMetrics.grossMargin} className="h-2" />
+                <div className="text-sm font-bold text-white">Margem Bruta</div>
+                <div className="text-2xl font-bold text-white">{dashboardData.financialMetrics.grossMargin}%</div>
+                <Progress value={dashboardData.financialMetrics.grossMargin} className="h-2 bg-white/20" />
               </div>
               <div className="space-y-2">
-                <div className="text-sm font-bold text-foreground">Margem Operacional</div>
-                <div className="text-2xl font-bold text-foreground">{dashboardData.financialMetrics.operatingMargin}%</div>
-                <Progress value={dashboardData.financialMetrics.operatingMargin * 2} className="h-2" />
+                <div className="text-sm font-bold text-white">Margem Operacional</div>
+                <div className="text-2xl font-bold text-white">{dashboardData.financialMetrics.operatingMargin}%</div>
+                <Progress value={dashboardData.financialMetrics.operatingMargin * 2} className="h-2 bg-white/20" />
               </div>
               <div className="space-y-2">
-                <div className="text-sm font-bold text-foreground">EBITDA</div>
-                <div className="text-2xl font-bold text-foreground">R$ {(dashboardData.financialMetrics.ebitda / 1000000).toFixed(1)}M</div>
+                <div className="text-sm font-bold text-white">EBITDA</div>
+                <div className="text-2xl font-bold text-white">R$ {(dashboardData.financialMetrics.ebitda / 1000000).toFixed(1)}M</div>
               </div>
               <div className="space-y-2">
-                <div className="text-sm font-bold text-foreground">ROE</div>
-                <div className="text-2xl font-bold text-foreground">{dashboardData.financialMetrics.roe}%</div>
+                <div className="text-sm font-bold text-white">ROE</div>
+                <div className="text-2xl font-bold text-white">{dashboardData.financialMetrics.roe}%</div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-secondary/20 shadow-azure bg-gradient-to-br from-azure-100 to-azure-200">
-          <CardHeader className="bg-gradient-to-r from-secondary/10 to-transparent">
-            <CardTitle className="flex items-center gap-2">
-              <BarChart2 className="w-5 h-5 text-secondary" />
+        <Card className="border-2 border-secondary/30 shadow-azure bg-gradient-to-br from-azure-800/95 to-azure-900/95 backdrop-blur-sm">
+          <CardHeader className="bg-gradient-to-r from-secondary/20 to-transparent border-b border-white/10">
+            <CardTitle className="flex items-center gap-2 text-white">
+              <BarChart2 className="w-5 h-5 text-azure-300" />
               Indicadores Operacionais
             </CardTitle>
-            <CardDescription>Métricas de performance operacional</CardDescription>
+            <CardDescription className="text-white/80">Métricas de performance operacional</CardDescription>
           </CardHeader>
           <CardContent className="p-6">
             <div className="space-y-4">
@@ -483,11 +483,11 @@ const EnhancedUnifiedDashboard = () => {
                       item.status === 'success' ? 'bg-green-500' :
                       item.status === 'warning' ? 'bg-orange-500' : 'bg-red-500'
                     }`} />
-                    <span className="text-sm font-bold text-foreground">{item.metric}</span>
+                    <span className="text-sm font-bold text-white">{item.metric}</span>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-foreground">{item.value}%</div>
-                    <div className="text-sm font-medium text-foreground">Meta: {item.target}%</div>
+                    <div className="font-bold text-white">{item.value}%</div>
+                    <div className="text-sm font-medium text-white/80">Meta: {item.target}%</div>
                   </div>
                 </div>
               ))}
