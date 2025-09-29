@@ -4338,43 +4338,147 @@ export type Database = {
           },
         ]
       }
+      reservation_attachments: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_size: number | null
+          file_type: string
+          file_url: string
+          id: string
+          reservation_id: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_size?: number | null
+          file_type: string
+          file_url: string
+          id?: string
+          reservation_id: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_size?: number | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          reservation_id?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservation_attachments_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reservation_templates: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          is_public: boolean | null
+          name: string
+          organization_id: string | null
+          template_data: Json
+          template_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_public?: boolean | null
+          name: string
+          organization_id?: string | null
+          template_data: Json
+          template_type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_public?: boolean | null
+          name?: string
+          organization_id?: string | null
+          template_data?: Json
+          template_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       reservations: {
         Row: {
+          address: string | null
+          attachments: string[] | null
+          confirmation_number: string | null
+          contact_info: string | null
           created_at: string | null
+          currency: string | null
           description: string | null
           end_date: string
           id: string
           location: string | null
+          notes: string | null
           reservation_type: string
+          room_type: string | null
           start_date: string
           status: string | null
+          supplier_url: string | null
           title: string
+          total_amount: number | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
+          address?: string | null
+          attachments?: string[] | null
+          confirmation_number?: string | null
+          contact_info?: string | null
           created_at?: string | null
+          currency?: string | null
           description?: string | null
           end_date: string
           id?: string
           location?: string | null
+          notes?: string | null
           reservation_type: string
+          room_type?: string | null
           start_date: string
           status?: string | null
+          supplier_url?: string | null
           title: string
+          total_amount?: number | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
+          address?: string | null
+          attachments?: string[] | null
+          confirmation_number?: string | null
+          contact_info?: string | null
           created_at?: string | null
+          currency?: string | null
           description?: string | null
           end_date?: string
           id?: string
           location?: string | null
+          notes?: string | null
           reservation_type?: string
+          room_type?: string | null
           start_date?: string
           status?: string | null
+          supplier_url?: string | null
           title?: string
+          total_amount?: number | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -6108,6 +6212,20 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      detect_reservation_conflicts: {
+        Args: {
+          p_end_date: string
+          p_exclude_id?: string
+          p_start_date: string
+          p_user_id: string
+        }
+        Returns: {
+          conflicting_end_date: string
+          conflicting_reservation_id: string
+          conflicting_start_date: string
+          conflicting_title: string
+        }[]
+      }
       generate_crew_ai_recommendations: {
         Args: { crew_uuid: string }
         Returns: undefined
@@ -6123,6 +6241,18 @@ export type Database = {
       get_current_tenant_id: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_reservation_stats: {
+        Args: { p_user_id?: string }
+        Returns: {
+          cancelled_reservations: number
+          completed_reservations: number
+          confirmed_reservations: number
+          conflicts_count: number
+          pending_reservations: number
+          total_amount: number
+          total_reservations: number
+        }[]
       }
       get_user_organization_role: {
         Args: { org_id: string; user_uuid?: string }

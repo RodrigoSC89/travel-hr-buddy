@@ -16,9 +16,13 @@ import {
   User,
   DollarSign,
   FileText,
-  Phone
+  Phone,
+  Paperclip,
+  Download
 } from 'lucide-react';
 import { EnhancedReservation } from './enhanced-reservations-dashboard';
+import { ReservationAttachments } from './reservation-attachments';
+import { ReservationPDFGenerator } from './reservation-pdf-generator';
 
 interface ReservationCardProps {
   reservation: EnhancedReservation;
@@ -31,6 +35,8 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
   onEdit,
   onDelete
 }) => {
+  const [showAttachments, setShowAttachments] = React.useState(false);
+  const [showPDFGenerator, setShowPDFGenerator] = React.useState(false);
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'confirmed': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
@@ -213,6 +219,22 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
             Editar
           </Button>
           
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowAttachments(true)}
+          >
+            <Paperclip className="h-4 w-4" />
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowPDFGenerator(true)}
+          >
+            <Download className="h-4 w-4" />
+          </Button>
+          
           {reservation.supplier_url && (
             <Button
               variant="outline"
@@ -233,6 +255,19 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
           </Button>
         </div>
       </CardContent>
+
+      {/* Modals */}
+      <ReservationAttachments
+        reservationId={reservation.id}
+        isOpen={showAttachments}
+        onClose={() => setShowAttachments(false)}
+      />
+      
+      <ReservationPDFGenerator
+        reservation={reservation}
+        isOpen={showPDFGenerator}
+        onClose={() => setShowPDFGenerator(false)}
+      />
     </Card>
   );
 };
