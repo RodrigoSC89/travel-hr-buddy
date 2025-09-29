@@ -1,8 +1,7 @@
 import React from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/layout/app-sidebar";
+import { MainLayout } from "@/components/layouts/MainLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PerformanceOptimizer } from "@/components/optimization/PerformanceOptimizer";
+import PerformanceOptimizer from "@/components/optimization/performance-optimizer";
 import { UserExperienceEnhancer } from "@/components/optimization/UserExperienceEnhancer";
 import { SmartInsights } from "@/components/optimization/SmartInsights";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,10 +18,8 @@ import {
 
 const Optimization = () => {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <AppSidebar />
-        <div className="flex-1 flex flex-col">
+    <MainLayout>
+      <div className="flex-1 flex flex-col">
           <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-14 items-center px-6">
               <div className="flex items-center gap-2">
@@ -120,9 +117,8 @@ const Optimization = () => {
               </Tabs>
             </div>
           </main>
-        </div>
       </div>
-    </SidebarProvider>
+    </MainLayout>
   );
 };
 
