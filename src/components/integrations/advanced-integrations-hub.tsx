@@ -51,6 +51,8 @@ import { IntegrationTemplates as IntegrationTemplatesComponent } from './integra
 import { IntegrationTesting } from './integration-testing';
 import { IntegrationAutomation } from './integration-automation';
 import { SmartOptimization } from './smart-optimization';
+import { WebhookBuilder } from './webhook-builder';
+import { IntegrationMarketplace } from './integration-marketplace';
 
 interface Integration {
   id: string;
@@ -428,7 +430,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-8">
+        <TabsList className="grid w-full grid-cols-9">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <Activity className="w-4 h-4" />
             Dashboard
@@ -440,6 +442,14 @@ export const AdvancedIntegrationsHub: React.FC = () => {
           <TabsTrigger value="templates" className="flex items-center gap-2">
             <Zap className="w-4 h-4" />
             Templates
+          </TabsTrigger>
+          <TabsTrigger value="marketplace" className="flex items-center gap-2">
+            <Users className="w-4 h-4" />
+            Marketplace
+          </TabsTrigger>
+          <TabsTrigger value="webhooks" className="flex items-center gap-2">
+            <Webhook className="w-4 h-4" />
+            Webhooks
           </TabsTrigger>
           <TabsTrigger value="testing" className="flex items-center gap-2">
             <Settings className="w-4 h-4" />
@@ -456,10 +466,6 @@ export const AdvancedIntegrationsHub: React.FC = () => {
           <TabsTrigger value="monitoring" className="flex items-center gap-2">
             <Eye className="w-4 h-4" />
             Monitoramento
-          </TabsTrigger>
-          <TabsTrigger value="security" className="flex items-center gap-2">
-            <Shield className="w-4 h-4" />
-            Segurança
           </TabsTrigger>
         </TabsList>
 
@@ -511,6 +517,14 @@ export const AdvancedIntegrationsHub: React.FC = () => {
 
         <TabsContent value="templates" className="space-y-6">
           <IntegrationTemplatesComponent />
+        </TabsContent>
+
+        <TabsContent value="marketplace" className="space-y-6">
+          <IntegrationMarketplace />
+        </TabsContent>
+
+        <TabsContent value="webhooks" className="space-y-6">
+          <WebhookBuilder />
         </TabsContent>
 
         <TabsContent value="testing" className="space-y-6">
