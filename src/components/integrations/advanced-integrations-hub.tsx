@@ -44,6 +44,11 @@ import {
   Gauge,
   Calendar
 } from 'lucide-react';
+import { IntegrationMonitoring } from './integration-monitoring';
+import { IntegrationSecurity } from './integration-security';
+import { AIIntegrationAssistant } from './ai-integration-assistant';
+import { IntegrationTemplates as IntegrationTemplatesComponent } from './integration-templates';
+import { IntegrationTesting } from './integration-testing';
 
 interface Integration {
   id: string;
@@ -421,26 +426,34 @@ export const AdvancedIntegrationsHub: React.FC = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <Activity className="w-4 h-4" />
             Dashboard
           </TabsTrigger>
           <TabsTrigger value="integrations" className="flex items-center gap-2">
             <Globe className="w-4 h-4" />
-            Integrações
+            Configurar
           </TabsTrigger>
           <TabsTrigger value="templates" className="flex items-center gap-2">
             <Zap className="w-4 h-4" />
             Templates
           </TabsTrigger>
-          <TabsTrigger value="logs" className="flex items-center gap-2">
-            <Eye className="w-4 h-4" />
-            Logs
+          <TabsTrigger value="testing" className="flex items-center gap-2">
+            <Settings className="w-4 h-4" />
+            Testes
           </TabsTrigger>
-          <TabsTrigger value="ai" className="flex items-center gap-2">
+          <TabsTrigger value="ai-assistant" className="flex items-center gap-2">
             <Brain className="w-4 h-4" />
-            IA Insights
+            IA Assistant
+          </TabsTrigger>
+          <TabsTrigger value="monitoring" className="flex items-center gap-2">
+            <Eye className="w-4 h-4" />
+            Monitoramento
+          </TabsTrigger>
+          <TabsTrigger value="security" className="flex items-center gap-2">
+            <Shield className="w-4 h-4" />
+            Segurança
           </TabsTrigger>
         </TabsList>
 
@@ -491,21 +504,23 @@ export const AdvancedIntegrationsHub: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="templates" className="space-y-6">
-          <IntegrationTemplates onSelect={(template) => {
-            toast({
-              title: "Template Selecionado",
-              description: `Configurando integração: ${template}`,
-            });
-            setIsWizardOpen(true);
-          }} />
+          <IntegrationTemplatesComponent />
         </TabsContent>
 
-        <TabsContent value="logs" className="space-y-6">
-          <LogsViewer logs={logs} integrations={integrations} />
+        <TabsContent value="testing" className="space-y-6">
+          <IntegrationTesting />
         </TabsContent>
 
-        <TabsContent value="ai" className="space-y-6">
-          <AIInsightsPanel insights={aiInsights} />
+        <TabsContent value="ai-assistant" className="space-y-6">
+          <AIIntegrationAssistant />
+        </TabsContent>
+
+        <TabsContent value="monitoring" className="space-y-6">
+          <IntegrationMonitoring />
+        </TabsContent>
+
+        <TabsContent value="security" className="space-y-6">
+          <IntegrationSecurity />
         </TabsContent>
       </Tabs>
     </div>
