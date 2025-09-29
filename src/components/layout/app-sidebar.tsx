@@ -304,6 +304,11 @@ const navigationItems = [
     icon: Zap,
     items: [
       {
+        title: "Otimização Geral",
+        url: "optimization-general",
+        icon: Zap,
+      },
+      {
         title: "Performance",
         url: "performance-optimizer",
         icon: Target,
