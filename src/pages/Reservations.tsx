@@ -1,8 +1,8 @@
 import React from 'react';
-import { ReservationsDashboard } from '@/components/reservations/reservations-dashboard';
+import { EnhancedReservationsDashboard } from '@/components/reservations/enhanced-reservations-dashboard';
 
 const Reservations: React.FC = () => {
-  return <ReservationsDashboard />;
+  return <EnhancedReservationsDashboard />;
 };
 
 export default Reservations;
