@@ -49,6 +49,8 @@ import { IntegrationSecurity } from './integration-security';
 import { AIIntegrationAssistant } from './ai-integration-assistant';
 import { IntegrationTemplates as IntegrationTemplatesComponent } from './integration-templates';
 import { IntegrationTesting } from './integration-testing';
+import { IntegrationAutomation } from './integration-automation';
+import { SmartOptimization } from './smart-optimization';
 
 interface Integration {
   id: string;
@@ -426,7 +428,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <Activity className="w-4 h-4" />
             Dashboard
@@ -443,9 +445,13 @@ export const AdvancedIntegrationsHub: React.FC = () => {
             <Settings className="w-4 h-4" />
             Testes
           </TabsTrigger>
-          <TabsTrigger value="ai-assistant" className="flex items-center gap-2">
+          <TabsTrigger value="automation" className="flex items-center gap-2">
+            <Cpu className="w-4 h-4" />
+            Automação
+          </TabsTrigger>
+          <TabsTrigger value="optimization" className="flex items-center gap-2">
             <Brain className="w-4 h-4" />
-            IA Assistant
+            Otimização
           </TabsTrigger>
           <TabsTrigger value="monitoring" className="flex items-center gap-2">
             <Eye className="w-4 h-4" />
@@ -509,6 +515,14 @@ export const AdvancedIntegrationsHub: React.FC = () => {
 
         <TabsContent value="testing" className="space-y-6">
           <IntegrationTesting />
+        </TabsContent>
+
+        <TabsContent value="automation" className="space-y-6">
+          <IntegrationAutomation />
+        </TabsContent>
+
+        <TabsContent value="optimization" className="space-y-6">
+          <SmartOptimization />
         </TabsContent>
 
         <TabsContent value="ai-assistant" className="space-y-6">
