@@ -105,12 +105,12 @@ export const AdvancedPriceAlerts: React.FC = () => {
     target_price: '',
     product_url: '',
     category: 'viagem',
-    threshold_type: 'below' as const,
+    threshold_type: 'below' as 'below' | 'above' | 'percentage',
     percentage_change: 10,
     notification_settings: {
       email: true,
       push: true,
-      frequency: 'immediate' as const
+      frequency: 'immediate' as 'immediate' | 'daily' | 'weekly'
     }
   });
 
@@ -271,12 +271,12 @@ export const AdvancedPriceAlerts: React.FC = () => {
         target_price: '',
         product_url: '',
         category: 'viagem',
-        threshold_type: 'below',
+        threshold_type: 'below' as 'below' | 'above' | 'percentage',
         percentage_change: 10,
         notification_settings: {
           email: true,
           push: true,
-          frequency: 'immediate'
+          frequency: 'immediate' as 'immediate' | 'daily' | 'weekly'
         }
       });
 
@@ -512,7 +512,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                         <Label className="text-sm font-medium">Tipo de Alerta</Label>
                         <Select 
                           value={newAlert.threshold_type} 
-                          onValueChange={(value: any) => setNewAlert(prev => ({ ...prev, threshold_type: value }))}
+                          onValueChange={(value: 'below' | 'above' | 'percentage') => setNewAlert(prev => ({ ...prev, threshold_type: value }))}
                         >
                           <SelectTrigger className="border-primary/20">
                             <SelectValue />
@@ -549,7 +549,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                         <Label className="text-sm font-medium">Frequência</Label>
                         <Select 
                           value={newAlert.notification_settings.frequency} 
-                          onValueChange={(value: any) => setNewAlert(prev => ({ 
+                          onValueChange={(value: 'immediate' | 'daily' | 'weekly') => setNewAlert(prev => ({ 
                             ...prev, 
                             notification_settings: { ...prev.notification_settings, frequency: value } 
                           }))}
