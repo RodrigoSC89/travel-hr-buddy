@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
@@ -18,29 +17,18 @@ import {
   Settings,
   RefreshCw,
   Play,
-  Pause,
   Database,
   Server,
-  Cpu,
-  HardDrive,
-  Network,
   Globe,
-  Lock,
-  Users,
-  Clock,
-  AlertTriangle,
+  HardDrive,
   CheckCircle,
+  AlertTriangle,
   Info,
-  Lightbulb,
   Rocket,
-  Brain,
-  Maximize,
-  Minimize,
-  Eye,
-  EyeOff
+  Brain
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, AreaChart, Area, PieChart, Pie, Cell } from 'recharts';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell } from 'recharts';
 
 interface OptimizationMetric {
   id: string;
@@ -152,28 +140,6 @@ export const OptimizationGeneralHub = () => {
       impact: 'medium',
       effort: 'complex',
       estimatedImprovement: '+30% response time',
-      status: 'available',
-      autoApplicable: false
-    },
-    {
-      id: 'security_headers',
-      title: 'Headers de Segurança Avançados',
-      description: 'Configurar CSP, HSTS e outros headers de segurança',
-      category: 'security',
-      impact: 'medium',
-      effort: 'easy',
-      estimatedImprovement: '+15% security score',
-      status: 'available',
-      autoApplicable: true
-    },
-    {
-      id: 'infrastructure_scaling',
-      title: 'Auto-scaling de Infraestrutura',
-      description: 'Configurar scaling automático baseado em demanda',
-      category: 'infrastructure',
-      impact: 'high',
-      effort: 'complex',
-      estimatedImprovement: '+50% eficiência de recursos',
       status: 'available',
       autoApplicable: false
     }
@@ -311,8 +277,8 @@ export const OptimizationGeneralHub = () => {
     : optimizations.filter(opt => opt.category === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90">
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="flex-1 flex flex-col bg-gradient-to-br from-background via-background/95 to-background/90">
+      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
         <div className="container flex h-14 items-center px-6">
           <div className="flex items-center gap-2">
             <Zap className="h-6 w-6 text-primary" />
