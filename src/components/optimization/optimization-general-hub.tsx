@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
+import { OptimizationReportsManager } from "./optimization-reports-manager";
+import { IntelligentAlertsCenter } from "./intelligent-alerts-center";
 import { 
   Zap, 
   TrendingUp, 
@@ -25,7 +28,9 @@ import {
   AlertTriangle,
   Info,
   Rocket,
-  Brain
+  Brain,
+  FileText,
+  Bell
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell } from 'recharts';
@@ -317,277 +322,311 @@ export const OptimizationGeneralHub = () => {
 
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
-          {/* Score Geral e Configurações */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card className="lg:col-span-2 glass-effect border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Gauge className="h-5 w-5 text-primary" />
-                  Score Geral de Otimização
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <div className="text-4xl font-bold text-primary">{overallScore.toFixed(1)}</div>
-                    <p className="text-sm text-muted-foreground">Sistema otimizado em {overallScore.toFixed(0)}%</p>
-                  </div>
-                  <div className="w-32 h-32">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={categoryData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={30}
-                          outerRadius={60}
-                          paddingAngle={2}
-                          dataKey="value"
-                        >
-                          {categoryData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-                <Progress value={overallScore} className="h-3 mb-4" />
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <div className="text-lg font-semibold text-success">+12%</div>
-                    <p className="text-xs text-muted-foreground">Performance geral</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-lg font-semibold text-info">47</div>
-                    <p className="text-xs text-muted-foreground">Otimizações aplicadas</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <Tabs defaultValue="overview" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="overview" className="flex items-center gap-2">
+                <Gauge className="h-4 w-4" />
+                <span className="hidden sm:inline">Visão Geral</span>
+              </TabsTrigger>
+              <TabsTrigger value="optimizations" className="flex items-center gap-2">
+                <Brain className="h-4 w-4" />
+                <span className="hidden sm:inline">Otimizações</span>
+              </TabsTrigger>
+              <TabsTrigger value="reports" className="flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                <span className="hidden sm:inline">Relatórios</span>
+              </TabsTrigger>
+              <TabsTrigger value="alerts" className="flex items-center gap-2">
+                <Bell className="h-4 w-4" />
+                <span className="hidden sm:inline">Alertas</span>
+              </TabsTrigger>
+            </TabsList>
 
-            <Card className="glass-effect">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Settings className="h-5 w-5" />
-                  Configurações de Otimização
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Nível de Otimização</label>
-                  <Slider
-                    value={[optimizationLevel]}
-                    onValueChange={(value) => setOptimizationLevel(value[0])}
-                    max={100}
-                    min={25}
-                    step={25}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>Conservador</span>
-                    <span>Balanceado</span>
-                    <span>Agressivo</span>
-                  </div>
+            <TabsContent value="overview">
+              <div className="space-y-6">
+                {/* Score Geral e Configurações */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <Card className="lg:col-span-2 glass-effect border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Gauge className="h-5 w-5 text-primary" />
+                        Score Geral de Otimização
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <div className="text-4xl font-bold text-primary">{overallScore.toFixed(1)}</div>
+                          <p className="text-sm text-muted-foreground">Sistema otimizado em {overallScore.toFixed(0)}%</p>
+                        </div>
+                        <div className="w-32 h-32">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <Pie
+                                data={categoryData}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={30}
+                                outerRadius={60}
+                                paddingAngle={2}
+                                dataKey="value"
+                              >
+                                {categoryData.map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                              </Pie>
+                              <Tooltip />
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </div>
+                      <Progress value={overallScore} className="h-3 mb-4" />
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-center">
+                          <div className="text-lg font-semibold text-success">+12%</div>
+                          <p className="text-xs text-muted-foreground">Performance geral</p>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-semibold text-info">47</div>
+                          <p className="text-xs text-muted-foreground">Otimizações aplicadas</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="glass-effect">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Settings className="h-5 w-5" />
+                        Configurações de Otimização
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Nível de Otimização</label>
+                        <Slider
+                          value={[optimizationLevel]}
+                          onValueChange={(value) => setOptimizationLevel(value[0])}
+                          max={100}
+                          min={25}
+                          step={25}
+                          className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>Conservador</span>
+                          <span>Balanceado</span>
+                          <span>Agressivo</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Cache Inteligente</span>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Compressão Avançada</span>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Pré-carregamento</span>
+                          <Switch />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Otimização em Tempo Real</span>
+                          <Switch defaultChecked />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Cache Inteligente</span>
-                    <Switch defaultChecked />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Compressão Avançada</span>
-                    <Switch defaultChecked />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Pré-carregamento</span>
-                    <Switch />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Otimização em Tempo Real</span>
-                    <Switch defaultChecked />
-                  </div>
+                {/* Métricas por Categoria */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {metrics.map((metric) => {
+                    const StatusIcon = getStatusIcon(metric.status);
+                    return (
+                      <Card key={metric.id} className="glass-effect">
+                        <CardHeader className="pb-3">
+                          <CardTitle className="flex items-center gap-2 text-sm">
+                            <StatusIcon className={`h-4 w-4 ${getStatusColor(metric.status)}`} />
+                            {metric.name}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className={`text-2xl font-bold ${getStatusColor(metric.status)}`}>
+                            {metric.value.toFixed(1)}{metric.unit}
+                          </div>
+                          <p className="text-xs text-muted-foreground mb-2">
+                            Meta: {metric.target}{metric.unit}
+                          </p>
+                          <Progress 
+                            value={(metric.value / metric.target) * 100} 
+                            className="h-1"
+                          />
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
                 </div>
-              </CardContent>
-            </Card>
-          </div>
 
-          {/* Métricas por Categoria */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {metrics.map((metric) => {
-              const StatusIcon = getStatusIcon(metric.status);
-              return (
-                <Card key={metric.id} className="glass-effect">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center gap-2 text-sm">
-                      <StatusIcon className={`h-4 w-4 ${getStatusColor(metric.status)}`} />
-                      {metric.name}
+                {/* Gráfico de Performance */}
+                <Card className="glass-effect">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <BarChart3 className="h-5 w-5" />
+                      Tendências de Performance (24h)
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className={`text-2xl font-bold ${getStatusColor(metric.status)}`}>
-                      {metric.value.toFixed(1)}{metric.unit}
+                    <div className="h-80">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={performanceData}>
+                          <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+                          <XAxis dataKey="time" />
+                          <YAxis />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="score"
+                            stroke="hsl(var(--primary))"
+                            fill="hsl(var(--primary))"
+                            fillOpacity={0.1}
+                            strokeWidth={2}
+                          />
+                          <Area
+                            type="monotone"
+                            dataKey="cpu"
+                            stroke="hsl(var(--warning))"
+                            fill="hsl(var(--warning))"
+                            fillOpacity={0.1}
+                            strokeWidth={2}
+                          />
+                          <Area
+                            type="monotone"
+                            dataKey="memory"
+                            stroke="hsl(var(--info))"
+                            fill="hsl(var(--info))"
+                            fillOpacity={0.1}
+                            strokeWidth={2}
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-2">
-                      Meta: {metric.target}{metric.unit}
-                    </p>
-                    <Progress 
-                      value={(metric.value / metric.target) * 100} 
-                      className="h-1"
-                    />
                   </CardContent>
                 </Card>
-              );
-            })}
-          </div>
-
-          {/* Gráfico de Performance */}
-          <Card className="glass-effect">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5" />
-                Tendências de Performance (24h)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={performanceData}>
-                    <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-                    <XAxis dataKey="time" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area
-                      type="monotone"
-                      dataKey="score"
-                      stroke="hsl(var(--primary))"
-                      fill="hsl(var(--primary))"
-                      fillOpacity={0.1}
-                      strokeWidth={2}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="cpu"
-                      stroke="hsl(var(--warning))"
-                      fill="hsl(var(--warning))"
-                      fillOpacity={0.1}
-                      strokeWidth={2}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="memory"
-                      stroke="hsl(var(--info))"
-                      fill="hsl(var(--info))"
-                      fillOpacity={0.1}
-                      strokeWidth={2}
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
               </div>
-            </CardContent>
-          </Card>
+            </TabsContent>
 
-          {/* Otimizações Disponíveis */}
-          <Card className="glass-effect">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5" />
-                Otimizações Inteligentes Disponíveis
-              </CardTitle>
-              <div className="flex gap-2 mt-4">
-                <Button
-                  variant={selectedCategory === 'all' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedCategory('all')}
-                >
-                  Todas
-                </Button>
-                {['database', 'frontend', 'backend', 'security', 'infrastructure'].map((category) => (
-                  <Button
-                    key={category}
-                    variant={selectedCategory === category ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedCategory(category)}
-                    className="capitalize"
-                  >
-                    {category}
-                  </Button>
-                ))}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredOptimizations.map((optimization) => {
-                  const CategoryIcon = getCategoryIcon(optimization.category);
-                  return (
-                    <Card key={optimization.id} className="border border-border/40">
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-start gap-3 flex-1">
-                            <div className="p-2 rounded-lg bg-primary/10">
-                              <CategoryIcon className="h-4 w-4 text-primary" />
-                            </div>
-                            
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <h4 className="font-semibold">{optimization.title}</h4>
-                                <Badge className={getImpactColor(optimization.impact)}>
-                                  {optimization.impact.toUpperCase()}
-                                </Badge>
-                                <Badge variant="outline" className="capitalize">
-                                  {optimization.category}
-                                </Badge>
-                                {optimization.autoApplicable && (
-                                  <Badge variant="secondary" className="text-xs">
-                                    <Sparkles className="h-3 w-3 mr-1" />
-                                    Auto
+            <TabsContent value="optimizations">
+              <Card className="glass-effect">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Brain className="h-5 w-5" />
+                    Otimizações Inteligentes Disponíveis
+                  </CardTitle>
+                  <div className="flex gap-2 mt-4">
+                    <Button
+                      variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setSelectedCategory('all')}
+                    >
+                      Todas
+                    </Button>
+                    {['database', 'frontend', 'backend', 'security', 'infrastructure'].map((category) => (
+                      <Button
+                        key={category}
+                        variant={selectedCategory === category ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedCategory(category)}
+                        className="capitalize"
+                      >
+                        {category}
+                      </Button>
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {filteredOptimizations.map((optimization) => {
+                      const CategoryIcon = getCategoryIcon(optimization.category);
+                      return (
+                        <Card key={optimization.id} className="border border-border/40">
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-start gap-3 flex-1">
+                                <div className="p-2 rounded-lg bg-primary/10">
+                                  <CategoryIcon className="h-4 w-4 text-primary" />
+                                </div>
+                                
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <h4 className="font-semibold">{optimization.title}</h4>
+                                    <Badge className={getImpactColor(optimization.impact)}>
+                                      {optimization.impact.toUpperCase()}
+                                    </Badge>
+                                    <Badge variant="outline" className="capitalize">
+                                      {optimization.category}
+                                    </Badge>
+                                    {optimization.autoApplicable && (
+                                      <Badge variant="secondary" className="text-xs">
+                                        <Sparkles className="h-3 w-3 mr-1" />
+                                        Auto
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  
+                                  <p className="text-sm text-muted-foreground mb-2">
+                                    {optimization.description}
+                                  </p>
+                                  
+                                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                    <span>Melhoria: {optimization.estimatedImprovement}</span>
+                                    <span>Esforço: {optimization.effort}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-center gap-2">
+                                {optimization.status === 'completed' ? (
+                                  <Badge className="bg-success/10 text-success border-success/20">
+                                    <CheckCircle className="h-3 w-3 mr-1" />
+                                    Concluída
                                   </Badge>
+                                ) : optimization.status === 'in_progress' ? (
+                                  <Badge className="bg-warning/10 text-warning border-warning/20">
+                                    <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
+                                    Aplicando...
+                                  </Badge>
+                                ) : (
+                                  <Button 
+                                    onClick={() => applyOptimization(optimization.id)}
+                                    size="sm"
+                                    className="flex items-center gap-1"
+                                  >
+                                    <Play className="h-3 w-3" />
+                                    Aplicar
+                                  </Button>
                                 )}
                               </div>
-                              
-                              <p className="text-sm text-muted-foreground mb-2">
-                                {optimization.description}
-                              </p>
-                              
-                              <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                <span>Melhoria: {optimization.estimatedImprovement}</span>
-                                <span>Esforço: {optimization.effort}</span>
-                              </div>
                             </div>
-                          </div>
-                          
-                          <div className="flex items-center gap-2">
-                            {optimization.status === 'completed' ? (
-                              <Badge className="bg-success/10 text-success border-success/20">
-                                <CheckCircle className="h-3 w-3 mr-1" />
-                                Concluída
-                              </Badge>
-                            ) : optimization.status === 'in_progress' ? (
-                              <Badge className="bg-warning/10 text-warning border-warning/20">
-                                <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
-                                Aplicando...
-                              </Badge>
-                            ) : (
-                              <Button 
-                                onClick={() => applyOptimization(optimization.id)}
-                                size="sm"
-                                className="flex items-center gap-1"
-                              >
-                                <Play className="h-3 w-3" />
-                                Aplicar
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="reports">
+              <OptimizationReportsManager />
+            </TabsContent>
+
+            <TabsContent value="alerts">
+              <IntelligentAlertsCenter />
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </div>
