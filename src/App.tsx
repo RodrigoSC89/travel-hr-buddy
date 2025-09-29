@@ -63,6 +63,7 @@ import Templates from "./pages/Templates";
 import SystemOverviewPage from "./pages/SystemOverview";
 import EnhancedMetrics from "./pages/EnhancedMetrics";
 import PerformanceOptimizerPage from "./pages/PerformanceOptimizer";
+import OptimizationGeneral from "./pages/OptimizationGeneral";
 import AIInsights from "./pages/AIInsights";
 import TestingDashboard from "./pages/TestingDashboard";
 import FeedbackPage from "./pages/Feedback";
@@ -152,7 +153,7 @@ const App = () => {
                   <Route path="communication" element={<Communication />} />
                   <Route path="intelligence" element={<Intelligence />} />
                   <Route path="optimization" element={<Optimization />} />
-                  <Route path="optimization-general" element={<Optimization />} />
+                  <Route path="optimization-general" element={<OptimizationGeneral />} />
                   <Route path="innovation" element={<Innovation />} />
                   <Route path="collaboration" element={<Collaboration />} />
                   <Route path="voice" element={<Voice />} />
