@@ -29,31 +29,49 @@ async function getAmadeusToken(): Promise<string> {
     throw new Error('Amadeus API secret not configured');
   }
 
-  const tokenResponse = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-      grant_type: 'client_credentials',
-      client_id: apiKey,
-      client_secret: apiSecret,
-    }),
-  });
-
-  if (!tokenResponse.ok) {
-    throw new Error(`Failed to get Amadeus token: ${tokenResponse.statusText}`);
-  }
-
-  const tokenData: AmadeusToken = await tokenResponse.json();
+  // Retry logic for token fetching
+  let lastError: Error | null = null;
+  const maxRetries = 3;
   
-  // Cache the token (subtract 60 seconds for safety)
-  tokenCache = {
-    token: tokenData.access_token,
-    expiresAt: Date.now() + ((tokenData.expires_in - 60) * 1000),
-  };
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const tokenResponse = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          grant_type: 'client_credentials',
+          client_id: apiKey,
+          client_secret: apiSecret,
+        }),
+      });
 
-  return tokenData.access_token;
+      if (!tokenResponse.ok) {
+        throw new Error(`Failed to get Amadeus token: ${tokenResponse.statusText}`);
+      }
+
+      const tokenData: AmadeusToken = await tokenResponse.json();
+      
+      // Cache the token (subtract 60 seconds for safety)
+      tokenCache = {
+        token: tokenData.access_token,
+        expiresAt: Date.now() + ((tokenData.expires_in - 60) * 1000),
+      };
+
+      return tokenData.access_token;
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error('Unknown error');
+      console.warn(`Token fetch attempt ${attempt + 1} failed:`, lastError.message);
+      
+      if (attempt < maxRetries - 1) {
+        // Wait before retrying (exponential backoff)
+        await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+      }
+    }
+  }
+  
+  throw lastError || new Error('Failed to get Amadeus token after retries');
 }
 
 async function searchFlights(searchParams: any) {
