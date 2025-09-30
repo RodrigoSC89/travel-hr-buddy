@@ -43,41 +43,41 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
       {/* Enhanced Header */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
-        <div className="relative px-6 py-8">
-          <div className="flex items-center justify-between">
+        <div className="relative px-4 sm:px-6 py-6 sm:py-8">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
             <div className="space-y-2">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 Nautilus One
               </h1>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-sm sm:text-base lg:text-lg text-muted-foreground">
                 Sistema Corporativo Inteligente com IA Avançada
               </p>
-              <div className="flex items-center gap-4 mt-4">
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-success/20 text-success-foreground border border-success/30 text-sm font-medium">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-4">
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-success/20 text-success-foreground border border-success/30 text-xs sm:text-sm font-medium">
                   <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
                   Sistema Online
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-foreground border border-primary/30 text-sm font-medium">
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-foreground border border-primary/30 text-xs sm:text-sm font-medium">
                   <Brain className="w-4 h-4" />
                   IA Ativa
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/20 text-secondary-foreground border border-secondary/30 text-sm font-medium">
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/20 text-secondary-foreground border border-secondary/30 text-xs sm:text-sm font-medium">
                   <Sparkles className="w-4 h-4" />
                   11 Módulos
                 </div>
               </div>
             </div>
-            <div className="hidden lg:flex items-center gap-6">
+            <div className="hidden lg:flex items-center gap-4 xl:gap-6">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">99.8%</div>
+                <div className="text-xl xl:text-2xl font-bold text-primary">99.8%</div>
                 <div className="text-xs text-muted-foreground">Uptime</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-success">1.2M</div>
+                <div className="text-xl xl:text-2xl font-bold text-success">1.2M</div>
                 <div className="text-xs text-muted-foreground">Transações</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-info">45</div>
+                <div className="text-xl xl:text-2xl font-bold text-info">45</div>
                 <div className="text-xs text-muted-foreground">Usuários Ativos</div>
               </div>
             </div>
@@ -86,8 +86,8 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
       </div>
 
       {/* Enhanced Tabs */}
-      <div className="px-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+      <div className="px-4 sm:px-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 sm:space-y-8">
           {/* Modern Tab Navigation */}
           <div className="relative">
             <ScrollArea className="w-full">

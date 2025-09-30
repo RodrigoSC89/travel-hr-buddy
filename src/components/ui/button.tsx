@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Loader2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -14,13 +15,13 @@ const buttonVariants = cva(
         outline: "border-2 border-primary bg-background text-primary shadow-md hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary/50 hover:scale-105 transition-all duration-300",
         secondary: "bg-secondary text-secondary-foreground shadow-lg hover:bg-secondary/80 focus:ring-2 focus:ring-secondary/50 hover:scale-105 transition-all duration-300",
         ghost: "text-foreground hover:bg-accent hover:text-accent-foreground focus:ring-2 focus:ring-accent/50 hover:scale-105 transition-all duration-300",
-        link: "text-primary underline-offset-4 hover:underline focus:ring-2 focus:ring-primary/50 hover:scale-105 transition-all duration-300",
+        link: "text-link underline-offset-4 hover:underline hover:text-link-hover focus:ring-2 focus:ring-primary/50 transition-all duration-300",
         ocean: "bg-gradient-to-r from-primary to-primary-light text-primary-foreground shadow-xl hover:shadow-2xl hover:from-primary-dark hover:to-primary transition-all duration-300 focus:ring-2 focus:ring-primary/50 transform hover:scale-105",
-        nautical: "bg-gradient-to-r from-azure-600 to-azure-700 text-white shadow-xl hover:shadow-2xl hover:from-azure-700 hover:to-azure-800 transition-all duration-300 focus:ring-2 focus:ring-azure-500/50 transform hover:scale-105",
-        success: "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg hover:from-emerald-600 hover:to-emerald-700 hover:shadow-xl focus:ring-2 focus:ring-emerald-500/50 hover:scale-105 transition-all duration-300",
-        warning: "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg hover:from-amber-600 hover:to-orange-600 hover:shadow-xl focus:ring-2 focus:ring-amber-500/50 hover:scale-105 transition-all duration-300",
-        premium: "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-xl hover:shadow-2xl hover:from-purple-700 hover:to-blue-700 focus:ring-2 focus:ring-purple-500/50 transform hover:scale-105 transition-all duration-300",
-        glass: "bg-white/10 backdrop-blur-md border border-white/20 text-foreground hover:bg-white/20 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-primary/50 hover:scale-105 transition-all duration-300",
+        nautical: "bg-gradient-to-r from-azure-600 to-azure-700 text-primary-foreground shadow-xl hover:shadow-2xl hover:from-azure-700 hover:to-azure-800 transition-all duration-300 focus:ring-2 focus:ring-azure-500/50 transform hover:scale-105",
+        success: "bg-success text-success-foreground shadow-lg hover:bg-success/90 hover:shadow-xl focus:ring-2 focus:ring-success/50 hover:scale-105 transition-all duration-300",
+        warning: "bg-warning text-warning-foreground shadow-lg hover:bg-warning/90 hover:shadow-xl focus:ring-2 focus:ring-warning/50 hover:scale-105 transition-all duration-300",
+        premium: "bg-gradient-to-r from-purple-600 to-blue-600 text-primary-foreground shadow-xl hover:shadow-2xl hover:from-purple-700 hover:to-blue-700 focus:ring-2 focus:ring-purple-500/50 transform hover:scale-105 transition-all duration-300",
+        glass: "bg-background/10 backdrop-blur-md border border-border/20 text-foreground hover:bg-background/20 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-primary/50 hover:scale-105 transition-all duration-300",
       },
       size: {
         default: "h-11 px-6 py-2.5 text-sm font-medium",
@@ -41,12 +42,23 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  loading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, loading = false, children, disabled, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
+    return (
+      <Comp 
+        className={cn(buttonVariants({ variant, size, className }))} 
+        ref={ref} 
+        disabled={disabled || loading}
+        {...props}
+      >
+        {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+        {children}
+      </Comp>
+    );
   },
 );
 Button.displayName = "Button";

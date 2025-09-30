@@ -406,7 +406,7 @@ export const EnhancedDashboard = () => {
                         <BarChart3 className="w-6 h-6 text-primary" />
                       </div>
                       <span className="text-gradient">Performance Overview</span>
-                      <Flame className="w-6 h-6 text-orange-500 animate-bounce" />
+                      <Flame className="w-6 h-6 text-warning animate-bounce" />
                     </CardTitle>
                     <CardDescription className="text-base opacity-80 group-hover:opacity-100 transition-opacity mt-2">
                       Métricas revolucionárias em tempo real • Última atualização: agora
@@ -508,7 +508,7 @@ export const EnhancedDashboard = () => {
             <Card className="hover:shadow-xl transition-all duration-500 bg-gradient-to-br from-card to-primary/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 font-display">
-                  <AlertTriangle className="h-5 w-5 text-orange-500 animate-pulse" />
+                  <AlertTriangle className="h-5 w-5 text-warning animate-pulse" />
                   Atividades Inteligentes
                   <Heart className="h-4 w-4 text-destructive animate-pulse" />
                 </CardTitle>
