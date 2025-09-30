@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useEnhancedNotifications, Notification } from '@/hooks/use-enhanced-notifications';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Popover,
   PopoverContent,
@@ -14,6 +14,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 export const NotificationCenter: React.FC = () => {
+  const navigate = useNavigate();
   const {
     notifications,
     unreadCount,
@@ -176,9 +177,7 @@ export const NotificationCenter: React.FC = () => {
             <Button 
               variant="ghost" 
               className="w-full text-xs h-8 text-popover-foreground hover:bg-muted"
-              onClick={() => {
-                console.log('Navegando para página completa de notificações');
-              }}
+              onClick={() => navigate('/notification-center')}
             >
               Ver todas as notificações
             </Button>
