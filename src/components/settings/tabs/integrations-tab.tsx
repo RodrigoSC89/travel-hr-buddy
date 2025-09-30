@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import { ServiceStatusPanel } from '@/components/integration/service-status-panel';
+import { ConnectionTestPanel } from '@/components/integration/connection-test-panel';
 import { 
   Link2, 
   Key, 
@@ -193,6 +195,12 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
         </TabsList>
 
         <TabsContent value="apis" className="space-y-6">
+          {/* Service Status Monitor */}
+          <ServiceStatusPanel />
+          
+          {/* Connection Testing */}
+          <ConnectionTestPanel />
+          
           {/* API Keys Configuration */}
           <Card>
             <CardHeader>
