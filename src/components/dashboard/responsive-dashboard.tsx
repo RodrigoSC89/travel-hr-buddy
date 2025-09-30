@@ -258,13 +258,13 @@ export const ResponsiveDashboard: React.FC = () => {
                     <p className="text-xs text-muted-foreground">Concluídas</p>
                   </div>
                   <div className="space-y-2">
-                    <p className="text-xl sm:text-2xl font-bold text-blue-500">
+                    <p className="text-xl sm:text-2xl font-bold text-info">
                       {tasks.filter(t => t.status === 'in-progress').length}
                     </p>
                     <p className="text-xs text-muted-foreground">Em Progresso</p>
                   </div>
                   <div className="space-y-2">
-                    <p className="text-xl sm:text-2xl font-bold text-yellow-500">
+                    <p className="text-xl sm:text-2xl font-bold text-warning">
                       {tasks.filter(t => t.status === 'pending').length}
                     </p>
                     <p className="text-xs text-muted-foreground">Pendentes</p>
