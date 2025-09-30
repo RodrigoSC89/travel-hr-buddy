@@ -73,25 +73,25 @@ const ModernKPICard: React.FC<KPICardProps> = ({
   const classes = colorClasses[color];
 
   return (
-    <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-0 overflow-hidden bg-white dark:bg-slate-800">
+    <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-0 overflow-hidden bg-card">
       {/* Header com gradiente */}
-      <div className={`${classes.bg} p-4 text-white relative overflow-hidden`}>
+      <div className={`${classes.bg} p-4 relative overflow-hidden`}>
         <div className="flex items-center justify-between relative z-10">
           <div className="flex-1">
-            <h3 className="text-sm font-medium text-white/90">{title}</h3>
-            <div className="text-2xl font-bold text-white mt-1">{value}</div>
+            <h3 className="text-sm font-medium text-primary-foreground/90">{title}</h3>
+            <div className="text-2xl font-bold text-primary-foreground mt-1">{value}</div>
             {subtitle && (
-              <p className="text-xs text-white/80 mt-1">{subtitle}</p>
+              <p className="text-xs text-primary-foreground/80 mt-1">{subtitle}</p>
             )}
           </div>
-          <div className="p-3 bg-white/10 rounded-full backdrop-blur-sm">
+          <div className="p-3 bg-primary-foreground/10 rounded-full backdrop-blur-sm">
             {icon}
           </div>
         </div>
         
         {/* Pattern decorativo */}
         <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
-          <div className="w-full h-full bg-white rounded-full transform translate-x-12 -translate-y-12"></div>
+          <div className="w-full h-full bg-primary-foreground rounded-full transform translate-x-12 -translate-y-12"></div>
         </div>
       </div>
 

@@ -172,11 +172,11 @@ export const OrganizationHealthCheck: React.FC = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
+        return <CheckCircle className="w-4 h-4 text-success" />;
       case 'warning':
-        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+        return <AlertTriangle className="w-4 h-4 text-warning" />;
       default:
-        return <AlertTriangle className="w-4 h-4 text-blue-500" />;
+        return <AlertTriangle className="w-4 h-4 text-info" />;
     }
   };
 
@@ -262,7 +262,7 @@ export const OrganizationHealthCheck: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <Users className="w-8 h-8 text-blue-500" />
+              <Users className="w-8 h-8 text-info" />
               <div>
                 <p className="text-2xl font-bold">{stats.users}</p>
                 <p className="text-sm text-muted-foreground">Usuários</p>
@@ -274,7 +274,7 @@ export const OrganizationHealthCheck: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <Ship className="w-8 h-8 text-green-500" />
+              <Ship className="w-8 h-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{stats.vessels}</p>
                 <p className="text-sm text-muted-foreground">Embarcações</p>
@@ -298,7 +298,7 @@ export const OrganizationHealthCheck: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <CheckCircle className="w-8 h-8 text-green-500" />
+              <CheckCircle className="w-8 h-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{Math.round(completionPercentage)}%</p>
                 <p className="text-sm text-muted-foreground">Completo</p>

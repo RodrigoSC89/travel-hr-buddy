@@ -29,26 +29,26 @@ interface MetricCardProps {
   gradient?: string;
 }
 
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, change, icon, trend, gradient = "from-blue-500 to-cyan-400" }) => (
+const MetricCard: React.FC<MetricCardProps> = ({ title, value, change, icon, trend, gradient = "from-primary to-primary-light" }) => (
   <Card className="hover-scale cursor-pointer transition-all hover:shadow-lg group overflow-hidden relative">
     <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity`} />
     <CardContent className="p-6 relative">
       <div className="flex items-center justify-between">
         <div className="space-y-2">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          <p className="text-3xl font-bold font-display">{value}</p>
+          <p className="text-3xl font-bold font-display text-foreground">{value}</p>
           <div className="flex items-center space-x-1">
             {trend === 'up' ? (
-              <TrendingUp className="h-4 w-4 text-green-500" />
+              <TrendingUp className="h-4 w-4 text-success" />
             ) : (
-              <TrendingDown className="h-4 w-4 text-red-500" />
+              <TrendingDown className="h-4 w-4 text-destructive" />
             )}
-            <span className={`text-sm font-medium ${trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+            <span className={`text-sm font-medium ${trend === 'up' ? 'text-success' : 'text-destructive'}`}>
               {change > 0 ? '+' : ''}{change}%
             </span>
           </div>
         </div>
-        <div className={`text-foreground/80 group-hover:bg-gradient-to-br group-hover:${gradient} group-hover:bg-clip-text group-hover:text-transparent transition-all`}>
+        <div className="text-primary">
           {icon}
         </div>
       </div>
@@ -66,15 +66,15 @@ interface TaskProgress {
 
 const TaskProgressCard: React.FC<{ task: TaskProgress }> = ({ task }) => {
   const statusColors = {
-    pending: 'bg-yellow-500',
-    'in-progress': 'bg-blue-500',
-    completed: 'bg-green-500'
+    pending: 'bg-warning',
+    'in-progress': 'bg-info',
+    completed: 'bg-success'
   };
 
   const priorityColors = {
-    low: 'border-l-green-500',
-    medium: 'border-l-yellow-500',
-    high: 'border-l-red-500'
+    low: 'border-l-success',
+    medium: 'border-l-warning',
+    high: 'border-l-destructive'
   };
 
   return (
@@ -82,7 +82,7 @@ const TaskProgressCard: React.FC<{ task: TaskProgress }> = ({ task }) => {
       <CardContent className="p-4">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="font-medium text-sm sm:text-base">{task.title}</h4>
+            <h4 className="font-medium text-sm sm:text-base text-foreground">{task.title}</h4>
             <Badge variant={task.status === 'completed' ? 'default' : 'secondary'} className="text-xs">
               {task.status === 'completed' ? <CheckCircle className="w-3 h-3 mr-1" /> : 
                task.status === 'in-progress' ? <Activity className="w-3 h-3 mr-1" /> :
@@ -91,9 +91,9 @@ const TaskProgressCard: React.FC<{ task: TaskProgress }> = ({ task }) => {
             </Badge>
           </div>
           <div className="space-y-2">
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm text-muted-foreground">
               <span>Progresso</span>
-              <span>{task.progress}%</span>
+              <span className="font-medium text-foreground">{task.progress}%</span>
             </div>
             <Progress value={task.progress} className="h-2" />
           </div>
@@ -119,7 +119,7 @@ export const ResponsiveDashboard: React.FC = () => {
       change: 12.5, 
       icon: <Users className="h-6 w-6 sm:h-8 sm:w-8" />, 
       trend: 'up' as const,
-      gradient: 'from-blue-500 to-cyan-400'
+      gradient: 'from-primary to-primary-light'
     },
     { 
       title: 'Receita Mensal', 
@@ -127,7 +127,7 @@ export const ResponsiveDashboard: React.FC = () => {
       change: 8.2, 
       icon: <DollarSign className="h-6 w-6 sm:h-8 sm:w-8" />, 
       trend: 'up' as const,
-      gradient: 'from-green-500 to-emerald-400'
+      gradient: 'from-success to-success'
     },
     { 
       title: 'Taxa de Conversão', 
@@ -135,7 +135,7 @@ export const ResponsiveDashboard: React.FC = () => {
       change: -2.4, 
       icon: <Target className="h-6 w-6 sm:h-8 sm:w-8" />, 
       trend: 'down' as const,
-      gradient: 'from-orange-500 to-red-400'
+      gradient: 'from-destructive to-destructive'
     },
     { 
       title: 'Performance', 
@@ -143,15 +143,15 @@ export const ResponsiveDashboard: React.FC = () => {
       change: 5.1, 
       icon: <Zap className="h-6 w-6 sm:h-8 sm:w-8" />, 
       trend: 'up' as const,
-      gradient: 'from-purple-500 to-pink-400'
+      gradient: 'from-secondary to-secondary'
     }
   ]);
 
   const [quickStats] = useState([
-    { label: 'Viagens Ativas', value: '23', icon: Plane, color: 'text-blue-500' },
-    { label: 'Funcionários', value: '1,247', icon: Users, color: 'text-green-500' },
-    { label: 'Escritórios', value: '8', icon: Building, color: 'text-purple-500' },
-    { label: 'Países', value: '12', icon: Globe, color: 'text-orange-500' }
+    { label: 'Viagens Ativas', value: '23', icon: Plane, color: 'text-primary' },
+    { label: 'Funcionários', value: '1,247', icon: Users, color: 'text-success' },
+    { label: 'Escritórios', value: '8', icon: Building, color: 'text-secondary' },
+    { label: 'Países', value: '12', icon: Globe, color: 'text-info' }
   ]);
 
   useEffect(() => {
@@ -254,7 +254,7 @@ export const ResponsiveDashboard: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div className="space-y-2">
-                    <p className="text-xl sm:text-2xl font-bold text-green-500">{completedTasks}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-success">{completedTasks}</p>
                     <p className="text-xs text-muted-foreground">Concluídas</p>
                   </div>
                   <div className="space-y-2">

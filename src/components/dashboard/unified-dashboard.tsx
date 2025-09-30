@@ -78,7 +78,7 @@ const UnifiedDashboard = () => {
       description: 'Gerar relatórios detalhados', 
       icon: BarChart3, 
       path: '/advanced-reports',
-      color: 'bg-blue-500'
+      color: 'bg-info'
     },
     { 
       title: 'Dashboard Executivo', 
@@ -92,7 +92,7 @@ const UnifiedDashboard = () => {
       description: 'Performance em tempo real', 
       icon: Activity, 
       path: '/system-monitor',
-      color: 'bg-green-500'
+      color: 'bg-success'
     },
     { 
       title: 'Centro Notificações', 
@@ -161,8 +161,8 @@ const UnifiedDashboard = () => {
   const getStatusIcon = (type: string) => {
     switch (type) {
       case 'warning': return <AlertTriangle className="w-4 h-4 text-orange-500" />;
-      case 'success': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      default: return <Bell className="w-4 h-4 text-blue-500" />;
+      case 'success': return <CheckCircle className="w-4 h-4 text-success" />;
+      default: return <Bell className="w-4 h-4 text-info" />;
     }
   };
 
