@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logError } from '@/utils/errorLogger';
 
 type AuditStatus = 'success' | 'warning' | 'error';
 type AuditSeverity = 'low' | 'medium' | 'high' | 'critical';
@@ -139,7 +140,7 @@ const SystemAuditor: React.FC = () => {
       }
 
     } catch (error) {
-      console.error('Erro na auditoria:', error);
+      logError('Erro na auditoria do sistema', error, 'SystemAuditor');
       toast.error('Erro durante a auditoria do sistema');
     } finally {
       setIsAuditing(false);
