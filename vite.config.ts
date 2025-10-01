@@ -6,8 +6,8 @@ import { componentTagger } from "lovable-tagger";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
-    host: "::",
-    port: 8080,
+    host: true,
+    port: 3000,
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
@@ -16,9 +16,9 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Produção otimizada
-    minify: true,
+    outDir: 'dist',
     sourcemap: false,
+    minify: 'esbuild',
     target: 'es2020', // Atualizado para suportar big integers
     rollupOptions: {
       output: {
@@ -36,4 +36,8 @@ export default defineConfig(({ mode }) => ({
       pure: ['console.log', 'console.error', 'console.warn', 'console.info'],
     } : undefined,
   },
+  preview: {
+    host: true,
+    port: 4173
+  }
 }));
