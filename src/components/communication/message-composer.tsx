@@ -182,6 +182,39 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
+  const handleImageUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.multiple = true;
+    input.onchange = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const files = Array.from(target.files || []);
+      setAttachments(prev => [...prev, ...files]);
+    };
+    input.click();
+  };
+
+  const handleAudioUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'audio/*';
+    input.multiple = true;
+    input.onchange = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const files = Array.from(target.files || []);
+      setAttachments(prev => [...prev, ...files]);
+    };
+    input.click();
+  };
+
+  const toggleEmojiPicker = () => {
+    toast({
+      title: "Emoji Picker",
+      description: "Funcionalidade de emojis em breve!"
+    });
+  };
+
   const sendMessage = async () => {
     try {
       if (!messageContent.trim() || selectedRecipients.length === 0) {
@@ -430,7 +463,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                   </DialogContent>
                 </Dialog>
                 
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={toggleEmojiPicker} aria-label="Adicionar emoji">
                   <Smile className="h-4 w-4" />
                 </Button>
               </div>
@@ -467,11 +500,11 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                   </span>
                 </Button>
               </label>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handleImageUpload} aria-label="Adicionar imagem">
                 <Image className="h-4 w-4 mr-2" />
                 Imagem
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handleAudioUpload} aria-label="Adicionar áudio">
                 <Mic className="h-4 w-4 mr-2" />
                 Áudio
               </Button>

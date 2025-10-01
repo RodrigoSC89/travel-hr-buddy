@@ -67,10 +67,16 @@ export class RealtimeChat {
   private recorder: AudioRecorder | null = null;
   private conversationId: string | null = null;
   private currentSessionId: string | null = null;
+  private reconnectAttempts: number = 0;
+  private maxReconnectAttempts: number = 5;
+  private reconnectDelay: number = 2000; // Start with 2 seconds
+  private isReconnecting: boolean = false;
+  private connectionCheckInterval: ReturnType<typeof setInterval> | null = null;
 
   constructor(
     private onMessage: (message: any) => void,
-    private onNavigate?: (module: string) => void
+    private onNavigate?: (module: string) => void,
+    private onConnectionStateChange?: (state: string) => void
   ) {
     this.audioEl = document.createElement("audio");
     this.audioEl.autoplay = true;
@@ -80,11 +86,29 @@ export class RealtimeChat {
     try {
       console.log('Initializing realtime chat...');
       
-      // Get ephemeral token from our Supabase Edge Function
-      const { data, error } = await supabase.functions.invoke("realtime-voice-session");
+      // Get ephemeral token from our Supabase Edge Function with retry
+      let data, error;
+      let retries = 0;
+      const maxTokenRetries = 3;
+      
+      while (retries < maxTokenRetries) {
+        const result = await supabase.functions.invoke("realtime-voice-session");
+        data = result.data;
+        error = result.error;
+        
+        if (!error && data?.client_secret?.value) {
+          break;
+        }
+        
+        retries++;
+        if (retries < maxTokenRetries) {
+          console.log(`Retrying token fetch (${retries}/${maxTokenRetries})...`);
+          await new Promise(resolve => setTimeout(resolve, 1000 * retries));
+        }
+      }
       
       if (error || !data?.client_secret?.value) {
-        console.error('Failed to get ephemeral token:', error);
+        console.error('Failed to get ephemeral token after retries:', error);
         throw new Error("Failed to get ephemeral token");
       }
 
@@ -93,6 +117,26 @@ export class RealtimeChat {
 
       // Create peer connection
       this.pc = new RTCPeerConnection();
+
+      // Monitor connection state
+      this.pc.onconnectionstatechange = () => {
+        const state = this.pc?.connectionState;
+        console.log('Connection state changed:', state);
+        this.onConnectionStateChange?.(state || 'unknown');
+        
+        if (state === 'failed' || state === 'disconnected') {
+          console.log('Connection lost, attempting to reconnect...');
+          this.handleConnectionLoss();
+        } else if (state === 'connected') {
+          this.reconnectAttempts = 0;
+          this.reconnectDelay = 2000;
+          this.isReconnecting = false;
+        }
+      };
+
+      this.pc.onicecandidateerror = (event) => {
+        console.error('ICE candidate error:', event);
+      };
 
       // Set up remote audio
       this.pc.ontrack = (e) => {
@@ -308,10 +352,87 @@ export class RealtimeChat {
     }
   }
 
+  private async handleConnectionLoss() {
+    if (this.isReconnecting) {
+      console.log('Already reconnecting, skipping...');
+      return;
+    }
+
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+      console.error('Max reconnection attempts reached');
+      this.onConnectionStateChange?.('failed');
+      return;
+    }
+
+    this.isReconnecting = true;
+    this.reconnectAttempts++;
+
+    console.log(`Reconnection attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts}`);
+
+    // Clean up existing connection
+    this.cleanupConnection(false);
+
+    // Wait with exponential backoff
+    await new Promise(resolve => setTimeout(resolve, this.reconnectDelay));
+    this.reconnectDelay = Math.min(this.reconnectDelay * 2, 30000); // Max 30 seconds
+
+    try {
+      await this.init();
+      console.log('Reconnection successful');
+    } catch (error) {
+      console.error('Reconnection failed:', error);
+      this.isReconnecting = false;
+      
+      // Try again if we haven't exhausted attempts
+      if (this.reconnectAttempts < this.maxReconnectAttempts) {
+        this.handleConnectionLoss();
+      }
+    }
+  }
+
+  private cleanupConnection(clearReconnectState = true) {
+    if (this.connectionCheckInterval) {
+      clearInterval(this.connectionCheckInterval);
+      this.connectionCheckInterval = null;
+    }
+
+    if (this.recorder) {
+      try {
+        this.recorder.stop();
+      } catch (error) {
+        console.error('Error stopping recorder:', error);
+      }
+      this.recorder = null;
+    }
+
+    if (this.dc) {
+      try {
+        this.dc.close();
+      } catch (error) {
+        console.error('Error closing data channel:', error);
+      }
+      this.dc = null;
+    }
+
+    if (this.pc) {
+      try {
+        this.pc.close();
+      } catch (error) {
+        console.error('Error closing peer connection:', error);
+      }
+      this.pc = null;
+    }
+
+    if (clearReconnectState) {
+      this.reconnectAttempts = 0;
+      this.reconnectDelay = 2000;
+      this.isReconnecting = false;
+    }
+  }
+
   disconnect() {
     console.log('Disconnecting realtime chat...');
-    this.recorder?.stop();
-    this.dc?.close();
-    this.pc?.close();
+    this.cleanupConnection(true);
+    this.onConnectionStateChange?.('closed');
   }
 }
