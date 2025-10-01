@@ -29,6 +29,7 @@ import {
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { logError } from '@/utils/errorLogger';
 
 interface Message {
   id: string;
@@ -193,7 +194,7 @@ const IntegratedAIAssistant = () => {
       }
       
     } catch (error) {
-      console.error('Erro ao processar mensagem:', error);
+      logError('Erro ao processar mensagem do AI Assistant', error, 'IntegratedAIAssistant');
       toast({
         title: "Erro",
         description: "Falha ao processar mensagem. Tente novamente.",
@@ -390,7 +391,7 @@ Como posso ajudá-lo especificamente hoje?`,
       // For now, we'll just show a success message
       // Conversation saved to history
     } catch (error) {
-      console.error('Error saving conversation:', error);
+      logError('Erro ao salvar conversa', error, 'IntegratedAIAssistant');
     }
   };
 

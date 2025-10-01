@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Building2 } from 'lucide-react';
+import { logError } from '@/utils/errorLogger';
 
 interface Organization {
   id: string;
@@ -51,7 +52,7 @@ export const OrganizationSelector: React.FC = () => {
 
       setOrganizations(orgs);
     } catch (error) {
-      console.error('Erro ao carregar organizações:', error);
+      logError('Erro ao carregar organizações do usuário', error, 'OrganizationSelector');
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +62,7 @@ export const OrganizationSelector: React.FC = () => {
     try {
       await switchOrganization(orgId);
     } catch (error) {
-      console.error('Erro ao trocar organização:', error);
+      logError('Erro ao trocar organização', error, 'OrganizationSelector');
     }
   };
 

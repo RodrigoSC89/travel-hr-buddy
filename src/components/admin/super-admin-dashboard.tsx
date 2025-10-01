@@ -26,6 +26,7 @@ import {
   Clock,
   Ban
 } from 'lucide-react';
+import { logError } from '@/utils/errorLogger';
 
 interface Organization {
   id: string;
@@ -96,7 +97,7 @@ export const SuperAdminDashboard: React.FC = () => {
 
       setOrganizations(processedOrgs);
     } catch (error) {
-      console.error('Erro ao carregar organizações:', error);
+      logError('Erro ao carregar organizações', error, 'SuperAdminDashboard');
       toast({
         title: "Erro",
         description: "Erro ao carregar organizações",
@@ -151,7 +152,7 @@ export const SuperAdminDashboard: React.FC = () => {
       
       loadOrganizations();
     } catch (error) {
-      console.error('Erro ao criar organização:', error);
+      logError('Erro ao criar organização', error, 'SuperAdminDashboard');
       toast({
         title: "Erro",
         description: "Erro ao criar organização",
@@ -176,7 +177,7 @@ export const SuperAdminDashboard: React.FC = () => {
 
       loadOrganizations();
     } catch (error) {
-      console.error('Erro ao atualizar status:', error);
+      logError('Erro ao atualizar status da organização', error, 'SuperAdminDashboard');
       toast({
         title: "Erro",
         description: "Erro ao atualizar status da organização",
