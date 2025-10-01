@@ -69,7 +69,32 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [recipientSearch, setRecipientSearch] = useState('');
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const { toast } = useToast();
+
+  // Real-time validation
+  useEffect(() => {
+    const errors: string[] = [];
+    
+    if (messageContent.length > 5000) {
+      errors.push('Mensagem excede o limite de 5000 caracteres');
+    }
+    
+    if (selectedRecipients.length === 0 && messageContent.trim()) {
+      errors.push('Selecione ao menos um destinatário');
+    }
+    
+    if (attachments.length > 10) {
+      errors.push('Máximo de 10 anexos permitidos');
+    }
+    
+    const totalSize = attachments.reduce((sum, file) => sum + file.size, 0);
+    if (totalSize > 50 * 1024 * 1024) {
+      errors.push('Tamanho total dos anexos excede 50MB');
+    }
+    
+    setValidationErrors(errors);
+  }, [messageContent, selectedRecipients, attachments]);
 
   useEffect(() => {
     loadRecipients();
@@ -190,7 +215,23 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement;
       const files = Array.from(target.files || []);
+      
+      // Validate file sizes (max 10MB per image)
+      const invalidFiles = files.filter(f => f.size > 10 * 1024 * 1024);
+      if (invalidFiles.length > 0) {
+        toast({
+          title: "Erro",
+          description: `${invalidFiles.length} arquivo(s) excedem o tamanho máximo de 10MB`,
+          variant: "destructive"
+        });
+        return;
+      }
+      
       setAttachments(prev => [...prev, ...files]);
+      toast({
+        title: "Sucesso",
+        description: `${files.length} imagem(ns) adicionada(s)`
+      });
     };
     input.click();
   };
@@ -203,7 +244,23 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement;
       const files = Array.from(target.files || []);
+      
+      // Validate file sizes (max 25MB per audio)
+      const invalidFiles = files.filter(f => f.size > 25 * 1024 * 1024);
+      if (invalidFiles.length > 0) {
+        toast({
+          title: "Erro",
+          description: `${invalidFiles.length} arquivo(s) excedem o tamanho máximo de 25MB`,
+          variant: "destructive"
+        });
+        return;
+      }
+      
       setAttachments(prev => [...prev, ...files]);
+      toast({
+        title: "Sucesso",
+        description: `${files.length} áudio(s) adicionado(s)`
+      });
     };
     input.click();
   };
@@ -213,6 +270,38 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       title: "Emoji Picker",
       description: "Funcionalidade de emojis em breve!"
     });
+  };
+
+  const saveDraft = async () => {
+    try {
+      if (!messageContent.trim() && attachments.length === 0) {
+        toast({
+          title: "Aviso",
+          description: "Não há conteúdo para salvar",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      setLoading(true);
+
+      // Mock saving draft - replace with real Supabase operations
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      toast({
+        title: "Sucesso",
+        description: "Rascunho salvo com sucesso"
+      });
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao salvar rascunho",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const sendMessage = async () => {
@@ -476,8 +565,16 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               className="min-h-32"
             />
             
-            <div className="text-xs text-muted-foreground text-right">
-              {messageContent.length} caracteres
+            <div className="flex items-center justify-between text-xs">
+              <span className={messageContent.length > 5000 ? "text-destructive" : "text-muted-foreground"}>
+                {messageContent.length} / 5000 caracteres
+              </span>
+              {messageContent.length > 4500 && messageContent.length <= 5000 && (
+                <span className="text-amber-600">Próximo ao limite</span>
+              )}
+              {messageContent.length > 5000 && (
+                <span className="text-destructive font-medium">Limite excedido!</span>
+              )}
             </div>
           </div>
 
@@ -534,6 +631,23 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             )}
           </div>
 
+          {/* Validation Errors */}
+          {validationErrors.length > 0 && (
+            <div className="p-4 border border-destructive/50 rounded-lg bg-destructive/10">
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="h-5 w-5 text-destructive mt-0.5" />
+                <div className="flex-1">
+                  <p className="font-medium text-destructive mb-2">Erros de Validação:</p>
+                  <ul className="space-y-1 text-sm text-destructive/90">
+                    {validationErrors.map((error, index) => (
+                      <li key={index}>• {error}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Message Preview */}
           {(isUrgent || priority === 'critical' || isBroadcast) && (
             <div className="p-4 border rounded-lg bg-muted/50">
@@ -569,13 +683,18 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             </div>
             
             <div className="flex items-center gap-2">
-              <Button variant="outline">
+              <Button 
+                variant="outline" 
+                onClick={saveDraft}
+                disabled={loading}
+                aria-label="Salvar rascunho"
+              >
                 <Save className="h-4 w-4 mr-2" />
                 Salvar Rascunho
               </Button>
               <Button 
                 onClick={sendMessage} 
-                disabled={loading || selectedRecipients.length === 0}
+                disabled={loading || selectedRecipients.length === 0 || validationErrors.length > 0}
                 className="gap-2"
               >
                 {loading ? (
