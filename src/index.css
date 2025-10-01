@@ -24,28 +24,28 @@
     --azure-900: 214 100% 18%;    /* #0C4A6E - Azul noturno */
     
     /* Sistema Base - CONTRASTE MÁXIMO PARA ACESSIBILIDADE WCAG AAA */
-    --background: 214 100% 98%;              /* #FCFEFF - Fundo principal super claro */
-    --foreground: 214 100% 3%;               /* #010B0F - Texto ULTRA ESCURO para contraste 7:1+ */
+    --background: 0 0% 100%;                 /* #FFFFFF - Branco puro para máximo contraste */
+    --foreground: 220 87% 8%;                /* #0A0E1A - Azul escuro para contraste 7:1+ */
 
-    --card: 214 95% 96%;                     /* #F8FCFE - Cards super claros */
-    --card-foreground: 214 100% 5%;          /* #020F14 - Texto ULTRA ESCURO nos cards para contraste máximo */
+    --card: 0 0% 100%;                       /* #FFFFFF - Cards brancos */
+    --card-foreground: 220 87% 8%;           /* #0A0E1A - Texto escuro nos cards */
 
-    --popover: var(--azure-100);
-    --popover-foreground: 214 100% 12%;
+    --popover: 0 0% 100%;                    /* #FFFFFF - Popovers brancos */
+    --popover-foreground: 220 87% 8%;        /* #0A0E1A - Texto escuro */
 
     /* Paleta Principal Azul */
-    --primary: var(--azure-600);             /* #0284C7 - Azul principal forte */
-    --primary-foreground: var(--azure-50);   /* Branco azulado */
+    --primary: 214 84% 46%;                  /* #0EA5E9 - Azul oceânico */
+    --primary-foreground: 0 0% 98%;          /* #FAFAFA - Branco sobre azul */
     --primary-light: var(--azure-500);       /* #0EA5E9 - Azul médio */
     --primary-dark: var(--azure-700);        /* #0369A1 - Azul escuro */
     --primary-glow: var(--azure-400);        /* #38BDF8 - Azul brilhante */
 
-    --secondary: var(--azure-800);           /* #075985 - Azul escuro */
-    --secondary-foreground: var(--azure-50); /* Branco azulado */
+    --secondary: 220 13% 91%;                /* #E2E8F0 - Cinza claro */
+    --secondary-foreground: 220 87% 8%;      /* #0A0E1A - Texto escuro */
     --secondary-light: var(--azure-700);
 
-    --accent: var(--azure-500);              /* #0EA5E9 - Azul vibrante */
-    --accent-foreground: var(--azure-50);    /* Branco azulado */
+    --accent: 214 84% 46%;                   /* #0EA5E9 - Azul destaque */
+    --accent-foreground: 0 0% 98%;           /* #FAFAFA - Branco */
     --accent-light: var(--azure-400);
 
     /* Links com Azuis Harmoniosos */
@@ -66,11 +66,11 @@
     --info: var(--azure-500);                /* #0EA5E9 - Azul informativo */
     --info-foreground: var(--azure-50);
 
-    --muted: 214 80% 92%;                    /* #E6F4FF - Azul muito claro melhorado */
-    --muted-foreground: 214 100% 5%;         /* #020F14 - Texto ULTRA ESCURO para contraste máximo */
+    --muted: 220 13% 95%;                    /* #F1F5F9 - Cinza muito claro */
+    --muted-foreground: 220 9% 46%;          /* #64748B - Cinza médio para contraste */
 
-    --destructive: 4 90% 45%;                /* #E63946 - Vermelho azulado */
-    --destructive-foreground: var(--azure-50);
+    --destructive: 0 84% 60%;                /* #F56565 - Vermelho */
+    --destructive-foreground: 0 0% 98%;      /* #FAFAFA - Branco */
     
     /* Cores de Status com Azuis */
     --status-active: 200 100% 35%;
@@ -82,9 +82,9 @@
     --status-error: 4 90% 45%;
     --status-error-foreground: var(--azure-50);
 
-    --border: var(--azure-300);              /* #7DD3FC - Bordas azul claro */
-    --input: var(--azure-200);               /* #BAE6FD - Inputs azul claro */
-    --ring: var(--azure-500);                /* #0EA5E9 - Foco azul */
+    --border: 220 13% 91%;                   /* #E2E8F0 - Bordas cinza claro */
+    --input: 220 13% 91%;                    /* #E2E8F0 - Inputs cinza claro */
+    --ring: 214 84% 46%;                     /* #0EA5E9 - Focus ring azul */
 
     --radius: 0.75rem;
     
@@ -153,23 +153,23 @@
   }
 
   .dark {
-    /* Dark Mode - Tons Azuis Noturnos */
-    --background: var(--azure-900);          /* #0C4A6E - Azul noturno */
-    --foreground: var(--azure-100);          /* #E0F2FE - Texto claro azulado */
+    /* Dark Mode - WCAG AAA Compliant */
+    --background: 220 87% 8%;                /* #0A0E1A - Fundo escuro */
+    --foreground: 0 0% 98%;                  /* #FAFAFA - Texto claro */
 
-    --card: var(--azure-800);                /* #075985 - Cards azul escuro */
-    --card-foreground: var(--azure-100);     /* Texto claro */
+    --card: 220 84% 12%;                     /* #1E293B - Cards escuros */
+    --card-foreground: 0 0% 98%;             /* #FAFAFA - Texto claro */
     
-    --primary: var(--azure-400);             /* #38BDF8 - Azul vibrante */
-    --primary-foreground: var(--azure-900);  /* Texto escuro */
+    --primary: 214 84% 46%;                  /* #0EA5E9 - Azul oceânico */
+    --primary-foreground: 0 0% 98%;          /* #FAFAFA - Texto claro */
     --primary-light: var(--azure-300);
     --primary-dark: var(--azure-500);
     
-    --secondary: var(--azure-300);           /* #7DD3FC - Azul claro */
-    --secondary-foreground: var(--azure-900);
+    --secondary: 220 84% 12%;                /* #1E293B - Cinza escuro */
+    --secondary-foreground: 0 0% 98%;        /* #FAFAFA - Texto claro */
     
-    --accent: var(--azure-400);              /* #38BDF8 - Azul brilhante */
-    --accent-foreground: var(--azure-900);
+    --accent: 214 84% 46%;                   /* #0EA5E9 - Azul destaque */
+    --accent-foreground: 0 0% 98%;           /* #FAFAFA - Texto claro */
     
     /* Links no modo escuro */
     --link: var(--azure-300);
@@ -178,8 +178,8 @@
     --nautical: var(--azure-600);
     --nautical-foreground: var(--azure-100);
     
-    --muted: var(--azure-800);
-    --muted-foreground: var(--azure-300);
+    --muted: 220 84% 12%;                    /* #1E293B - Fundos sutis */
+    --muted-foreground: 220 13% 63%;         /* #94A3B8 - Texto suave */
     
     /* Status Colors Modo Escuro */
     --success: 200 100% 45%;
@@ -207,8 +207,8 @@
     --popover: var(--azure-800);
     --popover-foreground: var(--azure-100);
     
-    --border: var(--azure-700);
-    --input: var(--azure-700);
+    --border: 220 84% 12%;                   /* #1E293B - Bordas escuras */
+    --input: 220 84% 12%;                    /* #1E293B - Inputs escuros */
     --ring: var(--azure-400);
     
     /* Gradients Modo Escuro */

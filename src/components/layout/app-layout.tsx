@@ -12,6 +12,7 @@ import { OfflineIndicator } from '@/components/ui/offline-indicator';
 import GlobalSearch from '@/components/ui/global-search';
 
 import EnhancedNotifications from '@/components/ui/enhanced-notifications';
+import { FloatingActionButton } from '@/components/ui/floating-action-button';
 
 export const AppLayout: React.FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
@@ -41,6 +42,9 @@ export const AppLayout: React.FC = () => {
               isOpen={isNotificationsOpen}
               onClose={() => setIsNotificationsOpen(false)}
             />
+            
+            {/* Floating Action Button */}
+            <FloatingActionButton />
             
             {/* Toast Notifications */}
             <Toaster />
