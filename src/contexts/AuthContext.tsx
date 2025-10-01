@@ -37,6 +37,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.id);
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
@@ -51,14 +52,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             title: "Desconectado",
             description: "Você foi desconectado com sucesso.",
           });
+        } else if (event === 'TOKEN_REFRESHED') {
+          console.log('Session token refreshed successfully');
+        } else if (event === 'USER_UPDATED') {
+          console.log('User data updated');
         }
       }
     );
 
     // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('Error getting session:', error);
+        toast({
+          title: "Erro de Sessão",
+          description: "Não foi possível recuperar a sessão. Por favor, faça login novamente.",
+          variant: "destructive",
+        });
+      }
       setSession(session);
       setUser(session?.user ?? null);
+      setIsLoading(false);
+    }).catch((error) => {
+      console.error('Unexpected error getting session:', error);
       setIsLoading(false);
     });
 

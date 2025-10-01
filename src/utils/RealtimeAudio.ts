@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { apiHealthMonitor } from "@/utils/api-health-monitor";
 
 export class AudioRecorder {
   private stream: MediaStream | null = null;
@@ -86,29 +87,43 @@ export class RealtimeChat {
     try {
       console.log('Initializing realtime chat...');
       
+      // Check if we can make request (circuit breaker)
+      if (!apiHealthMonitor.canMakeRequest('realtime')) {
+        throw new Error('Realtime API circuit breaker is open. Service temporarily unavailable.');
+      }
+      
       // Get ephemeral token from our Supabase Edge Function with retry
       let data, error;
       let retries = 0;
       const maxTokenRetries = 3;
+      const startTime = Date.now();
       
       while (retries < maxTokenRetries) {
-        const result = await supabase.functions.invoke("realtime-voice-session");
-        data = result.data;
-        error = result.error;
-        
-        if (!error && data?.client_secret?.value) {
-          break;
-        }
-        
-        retries++;
-        if (retries < maxTokenRetries) {
-          console.log(`Retrying token fetch (${retries}/${maxTokenRetries})...`);
-          await new Promise(resolve => setTimeout(resolve, 1000 * retries));
+        try {
+          const result = await supabase.functions.invoke("realtime-voice-session");
+          data = result.data;
+          error = result.error;
+          
+          if (!error && data?.client_secret?.value) {
+            const responseTime = Date.now() - startTime;
+            apiHealthMonitor.recordSuccess('supabase', responseTime);
+            break;
+          }
+          
+          retries++;
+          if (retries < maxTokenRetries) {
+            console.log(`Retrying token fetch (${retries}/${maxTokenRetries})...`);
+            await new Promise(resolve => setTimeout(resolve, 1000 * retries));
+          }
+        } catch (fetchError) {
+          error = fetchError as Error;
+          retries++;
         }
       }
       
       if (error || !data?.client_secret?.value) {
         console.error('Failed to get ephemeral token after retries:', error);
+        apiHealthMonitor.recordFailure('supabase', error as Error);
         throw new Error("Failed to get ephemeral token");
       }
 
@@ -179,6 +194,13 @@ export class RealtimeChat {
       // Connect to OpenAI's Realtime API
       const baseUrl = "https://api.openai.com/v1/realtime";
       const model = "gpt-4o-realtime-preview-2024-12-17";
+      
+      // Check circuit breaker
+      if (!apiHealthMonitor.canMakeRequest('openai')) {
+        throw new Error('OpenAI API circuit breaker is open. Service temporarily unavailable.');
+      }
+      
+      const apiStartTime = Date.now();
       const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
         method: "POST",
         body: offer.sdp,
@@ -189,8 +211,12 @@ export class RealtimeChat {
       });
 
       if (!sdpResponse.ok) {
+        apiHealthMonitor.recordFailure('openai', new Error(`HTTP ${sdpResponse.status}`));
         throw new Error(`Failed to connect to OpenAI: ${sdpResponse.status}`);
       }
+      
+      const apiResponseTime = Date.now() - apiStartTime;
+      apiHealthMonitor.recordSuccess('openai', apiResponseTime);
 
       const answer = {
         type: "answer" as RTCSdpType,
@@ -213,6 +239,7 @@ export class RealtimeChat {
 
     } catch (error) {
       console.error("Error initializing chat:", error);
+      apiHealthMonitor.recordFailure('realtime', error as Error);
       throw error;
     }
   }
