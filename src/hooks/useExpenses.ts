@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 
+// Temporary interface until migration is applied
 export interface Expense {
   id: string;
   user_id: string;
@@ -29,7 +30,6 @@ export const useExpenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { toast } = useToast();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const useExpenses = () => {
       setLoading(true);
       setError(null);
 
-      const { data, error: fetchError } = await supabase
+      const { data, error: fetchError } = await (supabase as any)
         .from('expenses')
         .select('*')
         .eq('user_id', user?.id)
@@ -55,11 +55,7 @@ export const useExpenses = () => {
     } catch (err: any) {
       const errorMessage = err.message || 'Erro ao carregar despesas';
       setError(errorMessage);
-      toast({
-        title: 'Erro',
-        description: errorMessage,
-        variant: 'destructive',
-      });
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -69,7 +65,7 @@ export const useExpenses = () => {
     try {
       if (!user) throw new Error('Usuário não autenticado');
 
-      const { data, error: createError } = await supabase
+      const { data, error: createError } = await (supabase as any)
         .from('expenses')
         .insert([
           {
@@ -84,27 +80,19 @@ export const useExpenses = () => {
       if (createError) throw createError;
 
       setExpenses((prev) => [data, ...prev]);
-
-      toast({
-        title: 'Sucesso',
-        description: 'Despesa criada com sucesso',
-      });
+      toast.success('Despesa criada com sucesso');
 
       return data;
     } catch (err: any) {
       const errorMessage = err.message || 'Erro ao criar despesa';
-      toast({
-        title: 'Erro',
-        description: errorMessage,
-        variant: 'destructive',
-      });
+      toast.error(errorMessage);
       throw err;
     }
   };
 
   const updateExpense = async (id: string, updates: Partial<ExpenseFormData>) => {
     try {
-      const { data, error: updateError } = await supabase
+      const { data, error: updateError } = await (supabase as any)
         .from('expenses')
         .update(updates)
         .eq('id', id)
@@ -117,26 +105,19 @@ export const useExpenses = () => {
         prev.map((exp) => (exp.id === id ? data : exp))
       );
 
-      toast({
-        title: 'Sucesso',
-        description: 'Despesa atualizada com sucesso',
-      });
+      toast.success('Despesa atualizada com sucesso');
 
       return data;
     } catch (err: any) {
       const errorMessage = err.message || 'Erro ao atualizar despesa';
-      toast({
-        title: 'Erro',
-        description: errorMessage,
-        variant: 'destructive',
-      });
+      toast.error(errorMessage);
       throw err;
     }
   };
 
   const deleteExpense = async (id: string) => {
     try {
-      const { error: deleteError } = await supabase
+      const { error: deleteError } = await (supabase as any)
         .from('expenses')
         .delete()
         .eq('id', id);
@@ -144,18 +125,10 @@ export const useExpenses = () => {
       if (deleteError) throw deleteError;
 
       setExpenses((prev) => prev.filter((exp) => exp.id !== id));
-
-      toast({
-        title: 'Sucesso',
-        description: 'Despesa removida com sucesso',
-      });
+      toast.success('Despesa removida com sucesso');
     } catch (err: any) {
       const errorMessage = err.message || 'Erro ao remover despesa';
-      toast({
-        title: 'Erro',
-        description: errorMessage,
-        variant: 'destructive',
-      });
+      toast.error(errorMessage);
       throw err;
     }
   };
