@@ -35,6 +35,7 @@ import { IoTSensorDashboard } from '../components/maritime/iot-sensor-dashboard'
 import { PredictiveMaintenanceSystem } from '../components/maritime/predictive-maintenance-system';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { logError } from '@/utils/errorLogger';
 
 interface DashboardStats {
   totalVessels: number;
@@ -90,7 +91,7 @@ export default function Maritime() {
       });
       
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
+      logError('Erro ao carregar dados do dashboard marítimo', error, 'Maritime');
       toast({
         title: "Erro",
         description: "Falha ao carregar dados do dashboard",
