@@ -1,16 +1,18 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
+import { rateLimiter, RATE_LIMITS } from '@/lib/security/rate-limiter';
+import { sessionManager } from '@/lib/security/session-manager';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, fullName: string) => Promise<{ error: AuthError | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
-  resetPassword: (email: string) => Promise<{ error: any }>;
+  resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,35 +36,63 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Initialize session manager
+    sessionManager.initialize({
+      refreshThresholdMs: 5 * 60 * 1000, // Refresh 5 minutes before expiry
+      timeoutMs: 30 * 60 * 1000, // 30 minutes timeout
+    });
+
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
+      (event, currentSession) => {
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
         setIsLoading(false);
         
-        if (event === 'SIGNED_IN') {
+        if (event === 'SIGNED_IN' && currentSession) {
+          // Persist session for recovery
+          sessionManager.persistSession(currentSession);
+          
           toast({
             title: "Bem-vindo!",
             description: "Login realizado com sucesso.",
           });
         } else if (event === 'SIGNED_OUT') {
+          // Clear persisted session
+          sessionManager.clearPersistedSession();
+          
           toast({
             title: "Desconectado",
             description: "Você foi desconectado com sucesso.",
           });
+        } else if (event === 'TOKEN_REFRESHED') {
+          console.log('Session token refreshed successfully');
         }
       }
     );
 
     // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    const initializeSession = async () => {
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      
+      if (currentSession) {
+        setSession(currentSession);
+        setUser(currentSession.user);
+      } else {
+        // Try to restore from localStorage
+        await sessionManager.restoreSession();
+      }
+      
       setIsLoading(false);
-    });
+    };
 
-    return () => subscription.unsubscribe();
+    initializeSession();
+
+    // Cleanup on unmount
+    return () => {
+      subscription.unsubscribe();
+      sessionManager.cleanup();
+    };
   }, [toast]);
 
   const signUp = async (email: string, password: string, fullName: string) => {
@@ -99,6 +129,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const signIn = async (email: string, password: string) => {
+    // Check rate limit
+    const rateLimitKey = `login:${email}`;
+    if (!rateLimiter.checkLimit(rateLimitKey, RATE_LIMITS.LOGIN)) {
+      const resetTime = rateLimiter.getResetTime(rateLimitKey);
+      const minutes = Math.ceil(resetTime / 60000);
+      
+      toast({
+        title: "Muitas tentativas",
+        description: `Aguarde ${minutes} minuto(s) antes de tentar novamente.`,
+        variant: "destructive",
+      });
+      
+      return { error: new Error('Rate limit exceeded') as AuthError };
+    }
+
     setIsLoading(true);
     
     const { error } = await supabase.auth.signInWithPassword({
@@ -120,6 +165,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signOut = async () => {
     setIsLoading(true);
+    
+    // Clear persisted session
+    sessionManager.clearPersistedSession();
+    
     await supabase.auth.signOut();
     setIsLoading(false);
   };
