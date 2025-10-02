@@ -1,95 +1,99 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ErrorBoundaryWrapper } from "@/components/ui/error-boundary-wrapper";
 import { OfflineIndicator } from "@/components/ui/offline-indicator";
+import { RouteLoading } from "@/components/ui/route-loading";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { OrganizationProvider } from "@/contexts/OrganizationContext";
 import { TenantProvider } from "@/contexts/TenantContext";
 import { ThemeProvider } from "@/components/layout/theme-provider";
-import Dashboard from "./pages/Dashboard";
+// Core pages - eagerly loaded
 import Auth from "./pages/Auth";
-import Admin from "./pages/Admin";
+import Dashboard from "./pages/Dashboard";
 import EnterpriseLayout from "./components/layout/enterprise-layout";
-import PriceAlerts from "./pages/PriceAlerts";
-import Reports from "./pages/Reports";
-import Reservations from "./pages/Reservations";
-import ChecklistsInteligentes from "./pages/ChecklistsInteligentes";
-import PEOTRAM from "./pages/PEOTRAM";
-import Settings from "./pages/Settings";
-import Travel from "./pages/Travel";
-import Analytics from "./pages/Analytics";
-import HumanResources from "./pages/HumanResources";
-import Communication from "./pages/Communication";
-import Intelligence from "./pages/Intelligence";
-import Maritime from "./pages/Maritime";
-import Innovation from "./pages/Innovation";
-import Optimization from "./pages/Optimization";
-import Collaboration from "./pages/Collaboration";
-import Voice from "./pages/Voice";
-import Portal from "./pages/Portal";
-import AR from "./pages/AR";
-import IoT from "./pages/IoT";
-import Blockchain from "./pages/Blockchain";
-import Gamification from "./pages/Gamification";
-import PredictiveAnalytics from "./pages/PredictiveAnalytics";
-import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/protected-route";
-import WorkflowPage from "./pages/Workflow";
-import { WorkflowAutomationHub } from "./components/automation/workflow-automation-hub";
-import { AdvancedDocumentCenter } from "./components/documents/advanced-document-center";
-import { MobileOptimizationCenter } from "./components/mobile/mobile-optimization-center";
-import AdvancedReports from "./pages/AdvancedReports";
-import Executive from "./pages/Executive";
-import SystemMonitor from "./pages/SystemMonitor";
-import NotificationCenter from "./pages/NotificationCenter";
-import IntegrationsHub from "./components/integration/integrations-hub";
-import BackupAudit from "./pages/BackupAudit";
-import SecurityPage from "./pages/Security";
-import UsersPage from "./pages/Users";
-import CollaborationPage from "./pages/Collaboration";
-import MobileOptimizationPage from "./pages/MobileOptimization";
-import AdvancedAnalyticsPage from "./pages/AdvancedAnalytics";
-import AdvancedSystemMonitorPage from "./pages/AdvancedSystemMonitor";
-import IntelligentDocumentsPage from "./pages/IntelligentDocuments";
-import AIAssistantPage from "./pages/AIAssistant";
-import BusinessIntelligencePage from "./pages/BusinessIntelligence";
-import SmartWorkflowPage from "./pages/SmartWorkflow";
-import Help from "./pages/Help";
-import Templates from "./pages/Templates";
-import SystemOverviewPage from "./pages/SystemOverview";
-import EnhancedMetrics from "./pages/EnhancedMetrics";
-import PerformanceOptimizerPage from "./pages/PerformanceOptimizer";
-import OptimizationGeneral from "./pages/OptimizationGeneral";
-import AIInsights from "./pages/AIInsights";
-import TestingDashboard from "./pages/TestingDashboard";
-import FeedbackPage from "./pages/Feedback";
-import RealTimeAnalyticsPage from "./pages/RealTimeAnalytics";
-import OfflineSyncPage from "./pages/OfflineSync";
-import IntelligentHelpCenter from "@/components/help/intelligent-help-center";
-import KnowledgeManagement from "@/components/admin/knowledge-management";
-import FleetManagement from "./pages/FleetManagement";
-import CrewManagement from "./pages/CrewManagement";
-import CrewDossier from "./pages/CrewDossier";
-import MaritimeCertifications from "./pages/MaritimeCertifications";
-import MaritimeChecklists from "./pages/MaritimeChecklists";
-import OrganizationSettings from "./pages/OrganizationSettings";
-import OrganizationSetup from "./pages/OrganizationSetup";
-import SuperAdmin from "./pages/SuperAdmin";
-import TaskManagement from "./pages/TaskManagement";
-import DocumentManagement from "./pages/DocumentManagement";
-import FleetDashboard from "./pages/FleetDashboard";
-import FleetTracking from "./pages/FleetTracking";
-import ExecutiveDashboard from "./pages/ExecutiveDashboard";
-import IntelligentAlerts from "./pages/IntelligentAlerts";
-import Automation from "./pages/Automation";
-import DropdownTests from "./pages/DropdownTests";
-import SystemValidation from "./pages/SystemValidation";
+import NotFound from "./pages/NotFound";
 
-// Lazy load the new advanced pages
+// Lazy load all other pages for better code splitting
+const Admin = React.lazy(() => import("./pages/Admin"));
+const PriceAlerts = React.lazy(() => import("./pages/PriceAlerts"));
+const Reports = React.lazy(() => import("./pages/Reports"));
+const Reservations = React.lazy(() => import("./pages/Reservations"));
+const ChecklistsInteligentes = React.lazy(() => import("./pages/ChecklistsInteligentes"));
+const PEOTRAM = React.lazy(() => import("./pages/PEOTRAM"));
+const Settings = React.lazy(() => import("./pages/Settings"));
+const Travel = React.lazy(() => import("./pages/Travel"));
+const Analytics = React.lazy(() => import("./pages/Analytics"));
+const HumanResources = React.lazy(() => import("./pages/HumanResources"));
+const Communication = React.lazy(() => import("./pages/Communication"));
+const Intelligence = React.lazy(() => import("./pages/Intelligence"));
+const Maritime = React.lazy(() => import("./pages/Maritime"));
+const Innovation = React.lazy(() => import("./pages/Innovation"));
+const Optimization = React.lazy(() => import("./pages/Optimization"));
+const Collaboration = React.lazy(() => import("./pages/Collaboration"));
+const Voice = React.lazy(() => import("./pages/Voice"));
+const Portal = React.lazy(() => import("./pages/Portal"));
+const AR = React.lazy(() => import("./pages/AR"));
+const IoT = React.lazy(() => import("./pages/IoT"));
+const Blockchain = React.lazy(() => import("./pages/Blockchain"));
+const Gamification = React.lazy(() => import("./pages/Gamification"));
+const PredictiveAnalytics = React.lazy(() => import("./pages/PredictiveAnalytics"));
+const WorkflowPage = React.lazy(() => import("./pages/Workflow"));
+const AdvancedReports = React.lazy(() => import("./pages/AdvancedReports"));
+const Executive = React.lazy(() => import("./pages/Executive"));
+const SystemMonitor = React.lazy(() => import("./pages/SystemMonitor"));
+const NotificationCenter = React.lazy(() => import("./pages/NotificationCenter"));
+const BackupAudit = React.lazy(() => import("./pages/BackupAudit"));
+const SecurityPage = React.lazy(() => import("./pages/Security"));
+const UsersPage = React.lazy(() => import("./pages/Users"));
+const CollaborationPage = React.lazy(() => import("./pages/Collaboration"));
+const MobileOptimizationPage = React.lazy(() => import("./pages/MobileOptimization"));
+const AdvancedAnalyticsPage = React.lazy(() => import("./pages/AdvancedAnalytics"));
+const AdvancedSystemMonitorPage = React.lazy(() => import("./pages/AdvancedSystemMonitor"));
+const IntelligentDocumentsPage = React.lazy(() => import("./pages/IntelligentDocuments"));
+const AIAssistantPage = React.lazy(() => import("./pages/AIAssistant"));
+const BusinessIntelligencePage = React.lazy(() => import("./pages/BusinessIntelligence"));
+const SmartWorkflowPage = React.lazy(() => import("./pages/SmartWorkflow"));
+const Help = React.lazy(() => import("./pages/Help"));
+const Templates = React.lazy(() => import("./pages/Templates"));
+const SystemOverviewPage = React.lazy(() => import("./pages/SystemOverview"));
+const EnhancedMetrics = React.lazy(() => import("./pages/EnhancedMetrics"));
+const PerformanceOptimizerPage = React.lazy(() => import("./pages/PerformanceOptimizer"));
+const OptimizationGeneral = React.lazy(() => import("./pages/OptimizationGeneral"));
+const AIInsights = React.lazy(() => import("./pages/AIInsights"));
+const TestingDashboard = React.lazy(() => import("./pages/TestingDashboard"));
+const FeedbackPage = React.lazy(() => import("./pages/Feedback"));
+const RealTimeAnalyticsPage = React.lazy(() => import("./pages/RealTimeAnalytics"));
+const OfflineSyncPage = React.lazy(() => import("./pages/OfflineSync"));
+const FleetManagement = React.lazy(() => import("./pages/FleetManagement"));
+const CrewManagement = React.lazy(() => import("./pages/CrewManagement"));
+const CrewDossier = React.lazy(() => import("./pages/CrewDossier"));
+const MaritimeCertifications = React.lazy(() => import("./pages/MaritimeCertifications"));
+const MaritimeChecklists = React.lazy(() => import("./pages/MaritimeChecklists"));
+const OrganizationSettings = React.lazy(() => import("./pages/OrganizationSettings"));
+const OrganizationSetup = React.lazy(() => import("./pages/OrganizationSetup"));
+const SuperAdmin = React.lazy(() => import("./pages/SuperAdmin"));
+const TaskManagement = React.lazy(() => import("./pages/TaskManagement"));
+const DocumentManagement = React.lazy(() => import("./pages/DocumentManagement"));
+const FleetDashboard = React.lazy(() => import("./pages/FleetDashboard"));
+const FleetTracking = React.lazy(() => import("./pages/FleetTracking"));
+const ExecutiveDashboard = React.lazy(() => import("./pages/ExecutiveDashboard"));
+const IntelligentAlerts = React.lazy(() => import("./pages/IntelligentAlerts"));
+const Automation = React.lazy(() => import("./pages/Automation"));
+const SystemValidation = React.lazy(() => import("./pages/SystemValidation"));
+
+// Lazy load components used in routes
+const WorkflowAutomationHub = React.lazy(() => import("./components/automation/workflow-automation-hub").then(m => ({ default: m.WorkflowAutomationHub })));
+const AdvancedDocumentCenter = React.lazy(() => import("./components/documents/advanced-document-center").then(m => ({ default: m.AdvancedDocumentCenter })));
+const IntegrationsHub = React.lazy(() => import("./components/integration/integrations-hub").then(m => ({ default: m.default })));
+const IntelligentHelpCenter = React.lazy(() => import("@/components/help/intelligent-help-center").then(m => ({ default: m.default })));
+const KnowledgeManagement = React.lazy(() => import("@/components/admin/knowledge-management").then(m => ({ default: m.default })));
+
+// Advanced pages already lazy
 const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
 const MobileApp = React.lazy(() => import("./pages/MobileApp"));
 const SaaSManager = React.lazy(() => import("./pages/SaaSManager"));
@@ -141,33 +145,39 @@ const App = () => {
                   </ProtectedRoute>
                 }>
                   <Route index element={<Dashboard />} />
-                  <Route path="admin" element={<Admin />} />
-                  <Route path="price-alerts" element={<PriceAlerts />} />
-                  <Route path="reports" element={<Reports />} />
-                  <Route path="settings" element={<Settings />} />
-                  <Route path="travel" element={<Travel />} />
-                  <Route path="analytics" element={<Analytics />} />
-                  <Route path="hr" element={<HumanResources />} />
-                  <Route path="reservations" element={<Reservations />} />
-                  <Route path="maritime" element={<Maritime />} />
-                  <Route path="communication" element={<Communication />} />
-                  <Route path="intelligence" element={<Intelligence />} />
-                  <Route path="optimization" element={<Optimization />} />
-                  <Route path="optimization-general" element={<OptimizationGeneral />} />
-                  <Route path="innovation" element={<Innovation />} />
-                  <Route path="collaboration" element={<Collaboration />} />
-                  <Route path="voice" element={<Voice />} />
-                  <Route path="portal" element={<Portal />} />
-                  <Route path="ar" element={<AR />} />
-                  <Route path="iot" element={<IoT />} />
-                  <Route path="blockchain" element={<Blockchain />} />
-                  <Route path="gamification" element={<Gamification />} />
-                  <Route path="predictive-analytics" element={<PredictiveAnalytics />} />
-                  <Route path="workflow" element={<WorkflowPage />} />
+                  <Route path="admin" element={<Suspense fallback={<RouteLoading />}><Admin /></Suspense>} />
+                  <Route path="price-alerts" element={<Suspense fallback={<RouteLoading />}><PriceAlerts /></Suspense>} />
+                  <Route path="reports" element={<Suspense fallback={<RouteLoading />}><Reports /></Suspense>} />
+                  <Route path="settings" element={<Suspense fallback={<RouteLoading />}><Settings /></Suspense>} />
+                  <Route path="travel" element={<Suspense fallback={<RouteLoading />}><Travel /></Suspense>} />
+                  <Route path="analytics" element={<Suspense fallback={<RouteLoading />}><Analytics /></Suspense>} />
+                  <Route path="hr" element={<Suspense fallback={<RouteLoading />}><HumanResources /></Suspense>} />
+                  <Route path="reservations" element={<Suspense fallback={<RouteLoading />}><Reservations /></Suspense>} />
+                  <Route path="maritime" element={<Suspense fallback={<RouteLoading />}><Maritime /></Suspense>} />
+                  <Route path="communication" element={<Suspense fallback={<RouteLoading />}><Communication /></Suspense>} />
+                  <Route path="intelligence" element={<Suspense fallback={<RouteLoading />}><Intelligence /></Suspense>} />
+                  <Route path="optimization" element={<Suspense fallback={<RouteLoading />}><Optimization /></Suspense>} />
+                  <Route path="optimization-general" element={<Suspense fallback={<RouteLoading />}><OptimizationGeneral /></Suspense>} />
+                  <Route path="innovation" element={<Suspense fallback={<RouteLoading />}><Innovation /></Suspense>} />
+                  <Route path="collaboration" element={<Suspense fallback={<RouteLoading />}><Collaboration /></Suspense>} />
+                  <Route path="voice" element={<Suspense fallback={<RouteLoading />}><Voice /></Suspense>} />
+                  <Route path="portal" element={<Suspense fallback={<RouteLoading />}><Portal /></Suspense>} />
+                  <Route path="ar" element={<Suspense fallback={<RouteLoading />}><AR /></Suspense>} />
+                  <Route path="iot" element={<Suspense fallback={<RouteLoading />}><IoT /></Suspense>} />
+                  <Route path="blockchain" element={<Suspense fallback={<RouteLoading />}><Blockchain /></Suspense>} />
+                  <Route path="gamification" element={<Suspense fallback={<RouteLoading />}><Gamification /></Suspense>} />
+                  <Route path="predictive-analytics" element={<Suspense fallback={<RouteLoading />}><PredictiveAnalytics /></Suspense>} />
+                  <Route path="workflow" element={
+                    <Suspense fallback={<RouteLoading />}>
+                      <WorkflowPage />
+                    </Suspense>
+                  } />
                   <Route path="documents" element={
-                    <div className="container mx-auto p-6">
-                      <AdvancedDocumentCenter />
-                    </div>
+                    <Suspense fallback={<RouteLoading />}>
+                      <div className="container mx-auto p-6">
+                        <AdvancedDocumentCenter />
+                      </div>
+                    </Suspense>
                   } />
                   <Route path="mobile-optimization" element={<MobileOptimizationPage />} />
                   <Route path="advanced-reports" element={<AdvancedReports />} />
@@ -175,9 +185,11 @@ const App = () => {
                   <Route path="system-monitor" element={<SystemMonitor />} />
                   <Route path="notification-center" element={<NotificationCenter />} />
                   <Route path="integrations" element={
-                    <div className="container mx-auto p-6">
-                      <IntegrationsHub />
-                    </div>
+                    <Suspense fallback={<RouteLoading />}>
+                      <div className="container mx-auto p-6">
+                        <IntegrationsHub />
+                      </div>
+                    </Suspense>
                   } />
                   <Route path="backup-audit" element={<BackupAudit />} />
                   <Route path="security" element={<SecurityPage />} />
@@ -202,14 +214,18 @@ const App = () => {
                   <Route path="real-time-analytics" element={<RealTimeAnalyticsPage />} />
                   <Route path="offline-sync" element={<OfflineSyncPage />} />
                   <Route path="help-center" element={
-                    <div className="container mx-auto p-6">
-                      <IntelligentHelpCenter />
-                    </div>
+                    <Suspense fallback={<RouteLoading />}>
+                      <div className="container mx-auto p-6">
+                        <IntelligentHelpCenter />
+                      </div>
+                    </Suspense>
                   } />
                   <Route path="knowledge-management" element={
-                    <div className="container mx-auto p-6">
-                      <KnowledgeManagement />
-                    </div>
+                    <Suspense fallback={<RouteLoading />}>
+                      <div className="container mx-auto p-6">
+                        <KnowledgeManagement />
+                      </div>
+                    </Suspense>
                   } />
                   <Route path="fleet-management" element={<FleetManagement />} />
                   <Route path="fleet-dashboard" element={<FleetDashboard />} />
@@ -220,9 +236,11 @@ const App = () => {
                   <Route path="maritime-checklists" element={<MaritimeChecklists />} />
                   <Route path="automation" element={<Automation />} />
                   <Route path="organization-settings" element={
-                    <div className="container mx-auto p-6">
-                      <OrganizationSettings />
-                    </div>
+                    <Suspense fallback={<RouteLoading />}>
+                      <div className="container mx-auto p-6">
+                        <OrganizationSettings />
+                      </div>
+                    </Suspense>
                   } />
                    <Route path="organization-setup" element={<OrganizationSetup />} />
                   <Route path="super-admin" element={<SuperAdmin />} />
