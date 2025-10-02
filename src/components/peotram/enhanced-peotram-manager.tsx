@@ -23,6 +23,8 @@ import { PeotramPerformanceKPI } from './peotram-performance-kpi';
 import { PeotramEnvironmentalMonitor } from './peotram-environmental-monitor';
 import { PeotramOCRProcessor } from './peotram-ocr-processor';
 import { PeotramChecklistVersionManager } from './peotram-checklist-version-manager';
+import { PeotramAdvancedAnalytics } from './peotram-advanced-analytics';
+import { PeotramPredictiveAnalytics } from './peotram-predictive-analytics';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -717,7 +719,12 @@ export const EnhancedPeotramManager: React.FC = () => {
               onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
             />
           )}
-          {managementSubView === 'analytics' && <PeotramAnalyticsPanel />}
+          {managementSubView === 'analytics' && (
+            <div className="space-y-6">
+              <PeotramAdvancedAnalytics />
+              <PeotramPredictiveAnalytics />
+            </div>
+          )}
           {managementSubView === 'compliance' && <PeotramComplianceChecker />}
           {managementSubView === 'risk-assessment' && <PeotramRiskAssessment />}
           {managementSubView === 'training' && <PeotramTrainingManagement />}

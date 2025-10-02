@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { PeoDpWizard } from './peo-dp-wizard';
 import {
   LayoutDashboard,
   FileText,
@@ -126,9 +128,17 @@ export const PeoDpManager: React.FC = () => {
 
   const [selectedPlan, setSelectedPlan] = useState<DPPlan | null>(plans[0] || null);
   const [activeView, setActiveView] = useState<'dashboard' | 'plans' | 'analytics'>('dashboard');
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
 
   const createNewPlan = () => {
-    toast.success('Novo plano PEO-DP será criado');
+    setIsWizardOpen(true);
+  };
+
+  const handleWizardComplete = async (data: any) => {
+    console.log('Wizard completed with data:', data);
+    // TODO: Create plan in database
+    setIsWizardOpen(false);
+    toast.success('Plano PEO-DP criado com sucesso!');
   };
 
   const getStatusBadge = (status: DPPlan['status']) => {
@@ -425,6 +435,19 @@ export const PeoDpManager: React.FC = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Wizard Dialog */}
+      <Dialog open={isWizardOpen} onOpenChange={setIsWizardOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Criar Novo Plano PEO-DP</DialogTitle>
+          </DialogHeader>
+          <PeoDpWizard
+            onComplete={handleWizardComplete}
+            onCancel={() => setIsWizardOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
