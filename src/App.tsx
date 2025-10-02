@@ -88,6 +88,7 @@ import IntelligentAlerts from "./pages/IntelligentAlerts";
 import Automation from "./pages/Automation";
 import DropdownTests from "./pages/DropdownTests";
 import SystemValidation from "./pages/SystemValidation";
+import NautilusOne from "./pages/NautilusOne";
 
 // Lazy load the new advanced pages
 const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
@@ -150,6 +151,7 @@ const App = () => {
                   <Route path="hr" element={<HumanResources />} />
                   <Route path="reservations" element={<Reservations />} />
                   <Route path="maritime" element={<Maritime />} />
+                  <Route path="nautilus-one" element={<NautilusOne />} />
                   <Route path="communication" element={<Communication />} />
                   <Route path="intelligence" element={<Intelligence />} />
                   <Route path="optimization" element={<Optimization />} />
