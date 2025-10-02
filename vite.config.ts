@@ -17,18 +17,56 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     // Produção otimizada
-    minify: true,
+    minify: 'esbuild',
     sourcemap: false,
-    target: 'es2020', // Atualizado para suportar big integers
+    target: 'es2020',
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs'],
-          charts: ['recharts'],
-          supabase: ['@supabase/supabase-js']
-        }
-      }
+        manualChunks: (id) => {
+          // React ecosystem
+          if (id.includes('node_modules/react') || 
+              id.includes('node_modules/react-dom') || 
+              id.includes('node_modules/react-router-dom') ||
+              id.includes('node_modules/react-helmet-async')) {
+            return 'vendor';
+          }
+          
+          // Radix UI components
+          if (id.includes('node_modules/@radix-ui')) {
+            return 'ui';
+          }
+          
+          // Charts
+          if (id.includes('node_modules/recharts') || 
+              id.includes('node_modules/react-big-calendar')) {
+            return 'charts';
+          }
+          
+          // Supabase
+          if (id.includes('node_modules/@supabase')) {
+            return 'supabase';
+          }
+          
+          // Icons
+          if (id.includes('node_modules/lucide-react')) {
+            return 'icons';
+          }
+          
+          // Form libraries
+          if (id.includes('node_modules/react-hook-form') ||
+              id.includes('node_modules/zod') ||
+              id.includes('node_modules/@hookform')) {
+            return 'forms';
+          }
+          
+          // Date libraries
+          if (id.includes('node_modules/date-fns') ||
+              id.includes('node_modules/react-day-picker')) {
+            return 'dates';
+          }
+        },
+      },
     },
     // Remove console.log/error/warn em produção
     esbuild: mode === 'production' ? {
