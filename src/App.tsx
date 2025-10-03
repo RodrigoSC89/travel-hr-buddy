@@ -106,6 +106,7 @@ const Strategic = React.lazy(() => import("./pages/Strategic"));
 const NotificationCenterPage = React.lazy(() => import("./pages/NotificationCenterPage"));
 const SystemMonitorPage = React.lazy(() => import("./pages/SystemMonitorPage"));
 const AdvancedSettingsPage = React.lazy(() => import("./pages/AdvancedSettingsPage"));
+const WeatherDashboard = React.lazy(() => import("./pages/WeatherDashboard"));
 
 const queryClient = new QueryClient();
 
@@ -306,6 +307,11 @@ const App = () => {
                           <AdvancedSettingsPage />
                         </React.Suspense>
                        } />
+                      <Route path="weather-dashboard" element={
+                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                          <WeatherDashboard />
+                        </React.Suspense>
+                      } />
                       <Route path="system-validation" element={<SystemValidation />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
