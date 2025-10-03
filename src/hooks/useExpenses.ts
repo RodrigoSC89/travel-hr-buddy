@@ -3,24 +3,23 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 
-// Temporary interface until migration is applied
 export interface Expense {
   id: string;
   user_id: string;
   amount: number;
-  category: 'travel' | 'accommodation' | 'meals' | 'transport' | 'equipment' | 'other';
+  category: string;
   description: string;
   date: string;
-  status: 'pending' | 'approved' | 'rejected';
-  receipt_url?: string;
-  notes?: string;
+  status: string;
+  receipt_url: string | null;
+  notes: string | null;
   created_at: string;
   updated_at: string;
 }
 
 export interface ExpenseFormData {
   amount: number;
-  category: Expense['category'];
+  category: string;
   description: string;
   date: string;
   notes?: string;
@@ -43,7 +42,7 @@ export const useExpenses = () => {
       setLoading(true);
       setError(null);
 
-      const { data, error: fetchError } = await (supabase as any)
+      const { data, error: fetchError } = await supabase
         .from('expenses')
         .select('*')
         .eq('user_id', user?.id)
@@ -65,7 +64,7 @@ export const useExpenses = () => {
     try {
       if (!user) throw new Error('Usuário não autenticado');
 
-      const { data, error: createError } = await (supabase as any)
+      const { data, error: createError } = await supabase
         .from('expenses')
         .insert([
           {
@@ -92,7 +91,7 @@ export const useExpenses = () => {
 
   const updateExpense = async (id: string, updates: Partial<ExpenseFormData>) => {
     try {
-      const { data, error: updateError } = await (supabase as any)
+      const { data, error: updateError } = await supabase
         .from('expenses')
         .update(updates)
         .eq('id', id)
@@ -117,7 +116,7 @@ export const useExpenses = () => {
 
   const deleteExpense = async (id: string) => {
     try {
-      const { error: deleteError } = await (supabase as any)
+      const { error: deleteError } = await supabase
         .from('expenses')
         .delete()
         .eq('id', id);
