@@ -107,6 +107,7 @@ const NotificationCenterPage = React.lazy(() => import("./pages/NotificationCent
 const SystemMonitorPage = React.lazy(() => import("./pages/SystemMonitorPage"));
 const AdvancedSettingsPage = React.lazy(() => import("./pages/AdvancedSettingsPage"));
 const WeatherDashboard = React.lazy(() => import("./pages/WeatherDashboard"));
+const WeatherDashboardDemo = React.lazy(() => import("./pages/WeatherDashboardDemo"));
 
 const queryClient = new QueryClient();
 
@@ -136,6 +137,11 @@ const App = () => {
                 <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <Routes>
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/weather-demo" element={
+                  <React.Suspense fallback={<div className="flex items-center justify-center h-screen">Carregando...</div>}>
+                    <WeatherDashboardDemo />
+                  </React.Suspense>
+                } />
                 <Route path="/" element={
                   <ProtectedRoute>
                     <EnterpriseLayout />
