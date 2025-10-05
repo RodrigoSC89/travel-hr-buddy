@@ -106,6 +106,7 @@ const Strategic = React.lazy(() => import("./pages/Strategic"));
 const NotificationCenterPage = React.lazy(() => import("./pages/NotificationCenterPage"));
 const SystemMonitorPage = React.lazy(() => import("./pages/SystemMonitorPage"));
 const AdvancedSettingsPage = React.lazy(() => import("./pages/AdvancedSettingsPage"));
+const SpecializedModules = React.lazy(() => import("./pages/SpecializedModules"));
 
 const queryClient = new QueryClient();
 
@@ -284,6 +285,11 @@ const App = () => {
                       <Route path="user-onboarding" element={
                         <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
                           <UserOnboardingPage />
+                        </React.Suspense>
+                      } />
+                      <Route path="specialized-modules" element={
+                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                          <SpecializedModules />
                         </React.Suspense>
                       } />
                       <Route path="strategic" element={

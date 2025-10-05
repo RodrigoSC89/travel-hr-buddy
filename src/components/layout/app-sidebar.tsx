@@ -161,6 +161,11 @@ const navigationItems = [
         url: "/advanced-documents",
         icon: Scan,
       },
+      {
+        title: "Módulos Especializados",
+        url: "/specialized-modules",
+        icon: CheckCircle,
+      },
     ],
   },
   {
