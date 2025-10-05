@@ -26,6 +26,7 @@ import HumanResources from "./pages/HumanResources";
 import Communication from "./pages/Communication";
 import Intelligence from "./pages/Intelligence";
 import Maritime from "./pages/Maritime";
+import MaritimeSupremo from "./pages/MaritimeSupremo";
 import Innovation from "./pages/Innovation";
 import Optimization from "./pages/Optimization";
 import Collaboration from "./pages/Collaboration";
@@ -150,6 +151,7 @@ const App = () => {
                   <Route path="hr" element={<HumanResources />} />
                   <Route path="reservations" element={<Reservations />} />
                   <Route path="maritime" element={<Maritime />} />
+                  <Route path="maritime-supremo" element={<MaritimeSupremo />} />
                   <Route path="communication" element={<Communication />} />
                   <Route path="intelligence" element={<Intelligence />} />
                   <Route path="optimization" element={<Optimization />} />
