@@ -88,6 +88,7 @@ import IntelligentAlerts from "./pages/IntelligentAlerts";
 import Automation from "./pages/Automation";
 import DropdownTests from "./pages/DropdownTests";
 import SystemValidation from "./pages/SystemValidation";
+import NautilusOne from "./pages/NautilusOne";
 
 // Lazy load the new advanced pages
 const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
@@ -307,6 +308,7 @@ const App = () => {
                         </React.Suspense>
                        } />
                       <Route path="system-validation" element={<SystemValidation />} />
+                      <Route path="nautilus-one" element={<NautilusOne />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
