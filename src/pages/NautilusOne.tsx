@@ -20,6 +20,9 @@ import PatternRecognition from '@/components/maritime/pattern-recognition';
 import RealTimeRouteOptimizer from '@/components/maritime/route-optimizer';
 import CarbonFootprintTracker from '@/components/maritime/carbon-tracker';
 import CompetencyHeatmap from '@/components/crew/competency-heatmap';
+import CrewManagement2 from '@/components/crew/crew-management-2';
+import APIHubNautilus from '@/components/integration/api-hub-nautilus';
+import AIThreatDetection from '@/components/security/ai-threat-detection';
 
 const NautilusOne: React.FC = () => {
   const [activeModule, setActiveModule] = useState('overview');
@@ -135,13 +138,20 @@ const NautilusOne: React.FC = () => {
           </CardHeader>
           <CardContent>
             <Tabs value={activeModule} onValueChange={setActiveModule}>
-              <TabsList className="grid w-full grid-cols-6">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-                <TabsTrigger value="insights">Insight Engine</TabsTrigger>
-                <TabsTrigger value="patterns">Padrões IA</TabsTrigger>
+                <TabsTrigger value="insights">Insights IA</TabsTrigger>
+                <TabsTrigger value="patterns">Padrões</TabsTrigger>
+              </TabsList>
+              <TabsList className="grid w-full grid-cols-3 mt-2">
                 <TabsTrigger value="routes">Rotas</TabsTrigger>
-                <TabsTrigger value="carbon">ESG/Carbon</TabsTrigger>
+                <TabsTrigger value="carbon">ESG</TabsTrigger>
                 <TabsTrigger value="crew">Competências</TabsTrigger>
+              </TabsList>
+              <TabsList className="grid w-full grid-cols-3 mt-2">
+                <TabsTrigger value="crewmgmt">Crew 2.0</TabsTrigger>
+                <TabsTrigger value="api">API Hub</TabsTrigger>
+                <TabsTrigger value="security">Segurança</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview" className="space-y-6 mt-6">
@@ -304,6 +314,18 @@ const NautilusOne: React.FC = () => {
 
               <TabsContent value="crew">
                 <CompetencyHeatmap />
+              </TabsContent>
+
+              <TabsContent value="crewmgmt">
+                <CrewManagement2 />
+              </TabsContent>
+
+              <TabsContent value="api">
+                <APIHubNautilus />
+              </TabsContent>
+
+              <TabsContent value="security">
+                <AIThreatDetection />
               </TabsContent>
             </Tabs>
           </CardContent>
