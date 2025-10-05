@@ -106,6 +106,7 @@ const Strategic = React.lazy(() => import("./pages/Strategic"));
 const NotificationCenterPage = React.lazy(() => import("./pages/NotificationCenterPage"));
 const SystemMonitorPage = React.lazy(() => import("./pages/SystemMonitorPage"));
 const AdvancedSettingsPage = React.lazy(() => import("./pages/AdvancedSettingsPage"));
+const NautilusOne = React.lazy(() => import("./pages/NautilusOne"));
 
 const queryClient = new QueryClient();
 
@@ -274,6 +275,11 @@ const App = () => {
                      <Route path="system-auditor" element={
                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
                          <SystemAuditorPage />
+                       </React.Suspense>
+                     } />
+                     <Route path="nautilus-one" element={
+                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                         <NautilusOne />
                        </React.Suspense>
                      } />
                      <Route path="production-deploy" element={
