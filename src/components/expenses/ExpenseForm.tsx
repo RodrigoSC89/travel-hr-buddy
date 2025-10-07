@@ -17,9 +17,7 @@ import { ExpenseFormData } from '@/hooks/useExpenses';
 
 const expenseSchema = z.object({
   amount: z.number().positive('O valor deve ser positivo'),
-  category: z.enum(['travel', 'accommodation', 'meals', 'transport', 'equipment', 'other'], {
-    required_error: 'Selecione uma categoria',
-  }),
+  category: z.string().min(1, 'Selecione uma categoria'),
   description: z.string().min(3, 'Descrição deve ter no mínimo 3 caracteres').max(200),
   date: z.string().min(1, 'Data é obrigatória'),
   notes: z.string().max(500).optional(),
@@ -94,7 +92,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
         </Label>
         <Select
           value={category}
-          onValueChange={(value) => setValue('category', value as any)}
+          onValueChange={(value) => setValue('category', value)}
         >
           <SelectTrigger className="bg-card border-border text-foreground">
             <SelectValue placeholder="Selecione uma categoria" />
