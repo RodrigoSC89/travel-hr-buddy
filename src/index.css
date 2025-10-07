@@ -150,6 +150,27 @@
     --sea-foam: var(--azure-400);
     --nautical-gold: 45 100% 51%;
     --maritime-navy: var(--azure-800);
+    
+    /* SGSO Module Colors - High Contrast for Offshore Use */
+    --sgso-primary: 4 90% 45%;              /* #DC2626 - Red for safety/critical */
+    --sgso-primary-dark: 4 90% 35%;         /* #B91C1C - Darker red */
+    --sgso-text: 0 0% 100%;                 /* White text on SGSO colors */
+    --sgso-border: 4 90% 35%;               /* Dark red borders */
+    --sgso-bg-light: 4 90% 97%;             /* Very light red background */
+    
+    /* PEO-DP Module Colors - High Contrast Blue */
+    --peodp-primary: 214 100% 32%;          /* #0369A1 - Dark blue */
+    --peodp-primary-dark: 214 100% 25%;     /* #075985 - Darker blue */
+    --peodp-text: 0 0% 100%;                /* White text */
+    --peodp-border: 214 100% 25%;           /* Dark blue borders */
+    --peodp-bg-light: 214 100% 97%;         /* Very light blue background */
+    
+    /* PEOTRAM Module Colors - High Contrast Green */
+    --peotram-primary: 160 84% 35%;         /* #059669 - Dark green */
+    --peotram-primary-dark: 160 84% 28%;    /* #047857 - Darker green */
+    --peotram-text: 0 0% 100%;              /* White text */
+    --peotram-border: 160 84% 28%;          /* Dark green borders */
+    --peotram-bg-light: 160 84% 97%;        /* Very light green background */
   }
 
   .dark {
