@@ -19,6 +19,7 @@ import Reports from "./pages/Reports";
 import Reservations from "./pages/Reservations";
 import ChecklistsInteligentes from "./pages/ChecklistsInteligentes";
 import PEOTRAM from "./pages/PEOTRAM";
+import PEODP from "./pages/PEODP";
 import Settings from "./pages/Settings";
 import Travel from "./pages/Travel";
 import Analytics from "./pages/Analytics";
@@ -194,6 +195,7 @@ const App = () => {
                    <Route path="help" element={<Help />} />
                    <Route path="checklists-inteligentes" element={<ChecklistsInteligentes />} />
                    <Route path="peotram" element={<PEOTRAM />} />
+                   <Route path="peo-dp" element={<PEODP />} />
                    <Route path="templates" element={<Templates />} />
                   <Route path="system-overview" element={<SystemOverviewPage />} />
                   <Route path="enhanced-metrics" element={<EnhancedMetrics />} />

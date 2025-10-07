@@ -21,6 +21,10 @@ import { PeotramDocumentManager } from './peotram-document-manager';
 import { PeotramComplianceTracker } from './peotram-compliance-tracker';
 import { PeotramPerformanceKPI } from './peotram-performance-kpi';
 import { PeotramEnvironmentalMonitor } from './peotram-environmental-monitor';
+import { PeotramOCRProcessor } from './peotram-ocr-processor';
+import { PeotramChecklistVersionManager } from './peotram-checklist-version-manager';
+import { PeotramAdvancedAnalytics } from './peotram-advanced-analytics';
+import { PeotramPredictiveAnalytics } from './peotram-predictive-analytics';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -378,7 +382,7 @@ export const EnhancedPeotramManager: React.FC = () => {
 
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 bg-muted/50">
+        <TabsList className="grid w-full grid-cols-6 bg-muted/50">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
             Dashboard
@@ -386,6 +390,14 @@ export const EnhancedPeotramManager: React.FC = () => {
           <TabsTrigger value="audits" className="flex items-center gap-2">
             <FileCheck className="w-4 h-4" />
             Auditorias
+          </TabsTrigger>
+          <TabsTrigger value="ocr" className="flex items-center gap-2">
+            <Upload className="w-4 h-4" />
+            OCR
+          </TabsTrigger>
+          <TabsTrigger value="versions" className="flex items-center gap-2">
+            <Calendar className="w-4 h-4" />
+            Versões
           </TabsTrigger>
           <TabsTrigger value="monitoring" className="flex items-center gap-2">
             <Activity className="w-4 h-4" />
@@ -707,7 +719,12 @@ export const EnhancedPeotramManager: React.FC = () => {
               onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
             />
           )}
-          {managementSubView === 'analytics' && <PeotramAnalyticsPanel />}
+          {managementSubView === 'analytics' && (
+            <div className="space-y-6">
+              <PeotramAdvancedAnalytics />
+              <PeotramPredictiveAnalytics />
+            </div>
+          )}
           {managementSubView === 'compliance' && <PeotramComplianceChecker />}
           {managementSubView === 'risk-assessment' && <PeotramRiskAssessment />}
           {managementSubView === 'training' && <PeotramTrainingManagement />}
@@ -752,6 +769,14 @@ export const EnhancedPeotramManager: React.FC = () => {
 
         <TabsContent value="training">
           <PeotramTrainingManagement />
+        </TabsContent>
+
+        <TabsContent value="ocr">
+          <PeotramOCRProcessor />
+        </TabsContent>
+
+        <TabsContent value="versions">
+          <PeotramChecklistVersionManager />
         </TabsContent>
       </Tabs>
     </div>

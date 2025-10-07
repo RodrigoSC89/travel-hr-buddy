@@ -375,6 +375,11 @@ const navigationItems = [
     icon: Shield
   },
   {
+    title: "PEO-DP",
+    url: "/peo-dp",
+    icon: Anchor
+  },
+  {
     title: "Templates",
     url: "/templates",
     icon: FileText,
