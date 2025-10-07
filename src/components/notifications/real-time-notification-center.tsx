@@ -254,7 +254,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
 
   // Filtrar notificações
   const getFilteredNotifications = (notifs: any[], isIntelligent = false) => {
-    let filtered = notifs.filter(n => {
+    const filtered = notifs.filter(n => {
       const isRead = isIntelligent ? n.is_read : n.read;
       const matchesSearch = n.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            n.message.toLowerCase().includes(searchTerm.toLowerCase());

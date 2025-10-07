@@ -49,11 +49,7 @@ const Auth: React.FC = () => {
   const [activeTab, setActiveTab] = useState('signin');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Redirect if already authenticated
-  if (user) {
-    return <Navigate to="/" replace />;
-  }
-
+  // Call all hooks before any conditional returns
   const signInForm = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -78,6 +74,11 @@ const Auth: React.FC = () => {
       email: ''
     }
   });
+
+  // Redirect if already authenticated (after all hooks)
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleSignIn = async (data: SignInFormData) => {
     setIsLoading(true);

@@ -36,7 +36,7 @@ serve(async (req) => {
     console.log(`Generating ${type} report for ${dateRange.start} to ${dateRange.end}`);
 
     // Collect data based on report type
-    let reportData: any = {};
+    const reportData: any = {};
     
     if (type === 'hr' || modules.includes('hr')) {
       // Get HR data - certificates, employee data

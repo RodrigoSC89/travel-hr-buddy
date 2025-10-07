@@ -102,71 +102,12 @@ export const EnhancedPeotramManager: React.FC = () => {
   const { hasFeature } = useOrganizationPermissions();
   const [activeView, setActiveView] = useState('dashboard');
   const [managementSubView, setManagementSubView] = useState('non-conformities');
-
-  const renderManagementContent = () => {
-    switch (managementSubView) {
-      case 'non-conformities':
-        return <PeotramNonConformities nonConformities={nonConformities} onUpdate={handleUpdateNonConformity} />;
-      case 'reports':
-        return <PeotramAdvancedReporting />;
-      case 'templates':
-        return <PeotramTemplateManager templates={templates} onTemplateUpdate={handleUpdateTemplate} />;
-      case 'analytics':
-        return <PeotramAnalyticsPanel />;
-      case 'compliance':
-        return <PeotramComplianceChecker />;
-      case 'risk-assessment':
-        return <PeotramRiskAssessment />;
-      case 'training':
-        return <PeotramTrainingManagement />;
-      case 'workflows':
-        return <PeotramWorkflowManager />;
-      case 'integrations':
-        return <PeotramIntegrationHub />;
-      case 'emergency':
-        return <PeotramEmergencyResponse />;
-      case 'equipment':
-        return <PeotramEquipmentManager />;
-      case 'incidents':
-        return <PeotramIncidentManager />;
-      case 'communication':
-        return <PeotramCommunicationCenter />;
-      case 'documentos':
-        return <PeotramDocumentManager />;
-      case 'conformidade':
-        return <PeotramComplianceTracker />;
-      case 'performance':
-        return <PeotramPerformanceKPI />;
-      case 'ambiental':
-        return <PeotramEnvironmentalMonitor />;
-      default:
-        return <PeotramNonConformities nonConformities={nonConformities} onUpdate={handleUpdateNonConformity} />;
-    }
-  };
   const [isNewAuditOpen, setIsNewAuditOpen] = useState(false);
   const [selectedAudit, setSelectedAudit] = useState<PeotramAudit | null>(null);
   const [audits, setAudits] = useState<PeotramAudit[]>([]);
   const [nonConformities, setNonConformities] = useState<NonConformity[]>([]);
   const [templates, setTemplates] = useState<PeotramTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Verificar permissões
-  if (!hasFeature('peotram')) {
-    return (
-      <Card className="p-8 text-center">
-        <CardContent>
-          <Shield className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">Acesso Restrito</h3>
-          <p className="text-muted-foreground mb-4">
-            O módulo PEOTRAM não está disponível no seu plano atual.
-          </p>
-          <Button variant="outline">
-            Solicitar Acesso
-          </Button>
-        </CardContent>
-      </Card>
-    );
-  }
 
   useEffect(() => {
     loadData();

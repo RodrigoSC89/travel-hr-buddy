@@ -170,7 +170,7 @@ const TemplateManager = () => {
     });
   };
 
-  const useTemplate = (template: Template) => {
+  const handleUseTemplate = (template: Template) => {
     // Simular uso do template
     setTemplates(prev => prev.map(t => 
       t.id === template.id 
@@ -284,7 +284,7 @@ const TemplateManager = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => useTemplate(template)}>
+                      <Button variant="ghost" size="sm" onClick={() => handleUseTemplate(template)}>
                         <Eye className="w-4 h-4" />
                       </Button>
                       <Button variant="ghost" size="sm" onClick={() => setEditingTemplate(template)}>
@@ -325,7 +325,7 @@ const TemplateManager = () => {
                   </div>
                   
                   <div className="flex items-center gap-2 mt-4">
-                    <Button size="sm" onClick={() => useTemplate(template)}>
+                    <Button size="sm" onClick={() => handleUseTemplate(template)}>
                       Usar Template
                     </Button>
                     <Button variant="outline" size="sm" onClick={() => duplicateTemplate(template)}>
@@ -379,7 +379,7 @@ const TemplateManager = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button size="sm" onClick={() => useTemplate(template)}>
+                    <Button size="sm" onClick={() => handleUseTemplate(template)}>
                       Usar
                     </Button>
                     <Button variant="outline" size="sm" onClick={() => duplicateTemplate(template)}>
@@ -418,7 +418,7 @@ const TemplateManager = () => {
                     </p>
                     <div className="flex items-center justify-between text-sm">
                       <span className="font-medium">{template.usageCount} usos</span>
-                      <Button size="sm" onClick={() => useTemplate(template)}>
+                      <Button size="sm" onClick={() => handleUseTemplate(template)}>
                         Usar Template
                       </Button>
                     </div>
