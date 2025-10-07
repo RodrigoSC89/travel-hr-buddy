@@ -256,9 +256,17 @@ export default function Maritime() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/peo-dp')}>
+                  <Ship className="h-4 w-4 mr-2" />
+                  PEO-DP - Posicionamento Dinâmico
+                </Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/sgso')}>
+                  <Shield className="h-4 w-4 mr-2" />
+                  SGSO - Segurança Operacional ANP
+                </Button>
                 <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/peotram')}>
                   <FileText className="h-4 w-4 mr-2" />
-                  Nova Auditoria PEOTRAM
+                  PEOTRAM - Gestão Ambiental
                 </Button>
                 <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/crew-management')}>
                   <Users className="h-4 w-4 mr-2" />
@@ -322,7 +330,30 @@ export default function Maritime() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">PEOTRAM</span>
+                  <div className="flex items-center gap-2">
+                    <Ship className="h-4 w-4 text-blue-600" />
+                    <span className="text-sm font-medium">PEO-DP (Posicionamento Dinâmico)</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={85} className="w-24" />
+                    <span className="text-sm text-green-600">85%</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-4 w-4 text-green-600" />
+                    <span className="text-sm font-medium">SGSO (Segurança Operacional ANP)</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={88} className="w-24" />
+                    <span className="text-sm text-green-600">88%</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-emerald-600" />
+                    <span className="text-sm font-medium">PEOTRAM (Gestão Ambiental)</span>
+                  </div>
                   <div className="flex items-center space-x-2">
                     <Progress value={87} className="w-24" />
                     <span className="text-sm text-green-600">87%</span>
@@ -376,24 +407,85 @@ export default function Maritime() {
         </TabsContent>
 
         <TabsContent value="compliance" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Conformidade Regulatória</CardTitle>
-              <CardDescription>
-                Monitoramento de compliance e auditorias
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <Shield className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">PEOTRAM & Conformidade</h3>
-                <p className="text-muted-foreground mb-4">
-                  Sistema completo de auditorias e gestão de conformidade
-                </p>
-                <Button onClick={() => navigate('/peotram')}>Acessar PEOTRAM</Button>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/peo-dp')}>
+              <CardHeader>
+                <div className="flex items-center gap-2 mb-2">
+                  <Ship className="h-5 w-5 text-blue-600" />
+                  <CardTitle className="text-lg">PEO-DP</CardTitle>
+                </div>
+                <CardDescription>
+                  Auditoria Petrobras - Posicionamento Dinâmico
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Conformidade</span>
+                    <Badge variant="default">85%</Badge>
+                  </div>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Capability Plots</li>
+                    <li>• Gestão de Propulsores</li>
+                    <li>• Power Management</li>
+                    <li>• Classes DP1/DP2/DP3</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/sgso')}>
+              <CardHeader>
+                <div className="flex items-center gap-2 mb-2">
+                  <Shield className="h-5 w-5 text-green-600" />
+                  <CardTitle className="text-lg">SGSO</CardTitle>
+                </div>
+                <CardDescription>
+                  Sistema de Gestão de Segurança Operacional - ANP
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Conformidade</span>
+                    <Badge variant="default">88%</Badge>
+                  </div>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• 17 Práticas Obrigatórias ANP</li>
+                    <li>• Gestão de Riscos</li>
+                    <li>• Gestão de Incidentes</li>
+                    <li>• Relatórios ANP/IBAMA</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/peotram')}>
+              <CardHeader>
+                <div className="flex items-center gap-2 mb-2">
+                  <Globe className="h-5 w-5 text-emerald-600" />
+                  <CardTitle className="text-lg">PEOTRAM</CardTitle>
+                </div>
+                <CardDescription>
+                  Gestão Ambiental Marítima
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Conformidade</span>
+                    <Badge variant="default">87%</Badge>
+                  </div>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Gestão Ambiental</li>
+                    <li>• Proteção Marinha</li>
+                    <li>• Gestão de Resíduos</li>
+                    <li>• Conformidade Ambiental</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
         <TabsContent value="operations" className="space-y-4">

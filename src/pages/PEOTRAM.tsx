@@ -57,32 +57,32 @@ const PEOTRAM = () => {
               </div>
               <div>
                 <h1 className="text-4xl font-bold font-display mb-2 text-shimmer drop-shadow-lg">
-                  PEOTRAM - Auditoria Petrobras
+                  PEOTRAM - Gestão Ambiental
                 </h1>
                 <p className="text-xl opacity-95 drop-shadow-md font-semibold">
-                  Sistema de auditoria anual inteligente
+                  Programa de Excelência Operacional em Trabalho Ambiental Marítimo
                   <Crown className="inline-block w-6 h-6 ml-2 text-primary animate-bounce" />
                 </p>
               </div>
             </div>
             
             <p className="text-lg opacity-95 mb-8 max-w-3xl drop-shadow-md font-medium">
-              Plataforma revolucionária para auditorias PEOTRAM com IA preditiva, automação completa 
-              e conformidade total com os padrões da Petrobras.
+              Sistema de gestão ambiental para operações marítimas com foco em conformidade 
+              ambiental, gerenciamento de resíduos e proteção dos ecossistemas marinhos.
             </p>
             
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center gap-2 bg-primary/90 text-primary-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-primary shadow-lg border border-primary/30">
                 <Brain className="h-5 w-5 animate-pulse" />
-                <span className="font-semibold">IA Preditiva</span>
+                <span className="font-semibold">Gestão Ambiental</span>
               </div>
               <div className="flex items-center gap-2 bg-success/90 text-success-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-success shadow-lg border border-success/30">
                 <Shield className="h-5 w-5 animate-pulse" />
-                <span className="font-semibold">Conformidade Petrobras</span>
+                <span className="font-semibold">Conformidade Ambiental</span>
               </div>
               <div className="flex items-center gap-2 bg-info/90 text-info-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-info shadow-lg border border-info/30">
                 <Globe className="h-5 w-5 animate-pulse" />
-                <span className="font-semibold">Padrão Internacional</span>
+                <span className="font-semibold">Proteção Marinha</span>
               </div>
             </div>
           </div>
