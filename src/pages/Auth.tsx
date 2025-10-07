@@ -107,17 +107,17 @@ const Auth: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-4xl grid lg:grid-cols-2 gap-8 items-center">
         {/* Left Side - Branding */}
         <div className="hidden lg:block space-y-8">
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg">
-                <Ship className="h-6 w-6 text-azure-50" />
+              <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shadow-lg">
+                <Ship className="h-6 w-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold text-foreground">
                   NAUTILUS
                 </h1>
                 <p className="text-sm text-muted-foreground font-medium">
@@ -128,7 +128,7 @@ const Auth: React.FC = () => {
           </div>
 
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-foreground">
               Gestão Marítima Completa
             </h2>
             <div className="space-y-4">
@@ -139,8 +139,8 @@ const Auth: React.FC = () => {
                 'Automação de processos marítimos'
               ].map((feature, index) => (
                 <div key={index} className="flex items-center space-x-3">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span className="text-gray-700">{feature}</span>
+                  <CheckCircle className="h-5 w-5 text-primary" />
+                  <span className="text-foreground font-medium">{feature}</span>
                 </div>
               ))}
             </div>
@@ -149,14 +149,14 @@ const Auth: React.FC = () => {
 
         {/* Right Side - Auth Forms */}
         <div className="w-full max-w-md mx-auto">
-          <Card className="shadow-xl border-0 bg-azure-100/80 backdrop-blur-sm">
+          <Card className="shadow-xl border-border bg-card">
             <CardHeader className="space-y-1 text-center">
-              <CardTitle className="text-2xl font-bold">
+              <CardTitle className="text-2xl font-bold text-card-foreground">
                 {activeTab === 'signin' ? 'Entrar na Conta' : 
                  activeTab === 'signup' ? 'Criar Conta' : 
                  'Recuperar Senha'}
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-muted-foreground">
                 {activeTab === 'signin' ? 'Entre com suas credenciais para acessar o sistema' :
                  activeTab === 'signup' ? 'Crie sua conta para começar a usar o sistema' :
                  'Digite seu email para receber as instruções'}
@@ -165,8 +165,18 @@ const Auth: React.FC = () => {
             <CardContent>
               <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger value="signin">Entrar</TabsTrigger>
-                  <TabsTrigger value="signup">Cadastrar</TabsTrigger>
+                  <TabsTrigger 
+                    value="signin"
+                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  >
+                    Entrar
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="signup"
+                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  >
+                    Cadastrar
+                  </TabsTrigger>
                 </TabsList>
 
                 {/* Sign In Form */}

@@ -88,6 +88,7 @@ import IntelligentAlerts from "./pages/IntelligentAlerts";
 import Automation from "./pages/Automation";
 import DropdownTests from "./pages/DropdownTests";
 import SystemValidation from "./pages/SystemValidation";
+import FABDemo from "./pages/FABDemo";
 
 // Lazy load the new advanced pages
 const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
@@ -135,6 +136,7 @@ const App = () => {
                 <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <Routes>
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/fab-demo" element={<FABDemo />} />
                 <Route path="/" element={
                   <ProtectedRoute>
                     <EnterpriseLayout />
