@@ -207,6 +207,37 @@ export const SettingsPanel = () => {
     setHasChanges(true);
   };
 
+  const handleAvatarUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/jpeg,image/png,image/gif';
+    input.onchange = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const file = target.files?.[0];
+      if (file) {
+        // Check file size (2MB max)
+        if (file.size > 2 * 1024 * 1024) {
+          toast({
+            title: "Erro",
+            description: "A imagem deve ter no máximo 2MB",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        // In a real implementation, upload to storage and get URL
+        const url = URL.createObjectURL(file);
+        updateSettings('profile', { avatar_url: url });
+        
+        toast({
+          title: "Sucesso",
+          description: "Foto de perfil atualizada"
+        });
+      }
+    };
+    input.click();
+  };
+
   const exportData = async () => {
     try {
       // Mock data export
@@ -373,7 +404,7 @@ export const SettingsPanel = () => {
                     <User className="h-8 w-8 text-muted-foreground" />
                   </div>
                   <div>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={handleAvatarUpload} aria-label="Enviar foto de perfil">
                       <Upload className="h-4 w-4 mr-2" />
                       Enviar Foto
                     </Button>
