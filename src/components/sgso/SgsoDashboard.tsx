@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { AnpPracticesManager } from './AnpPracticesManager';
 import { RiskAssessmentMatrix } from './RiskAssessmentMatrix';
+import { IncidentReporting } from './IncidentReporting';
 
 export const SgsoDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -305,21 +306,7 @@ export const SgsoDashboard: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="incidents">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Gestão de Incidentes</CardTitle>
-                  <CardDescription>
-                    Registro e investigação de incidentes de segurança
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-12 text-gray-500">
-                    <Bell className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                    <p className="text-lg font-semibold mb-2">Módulo de Incidentes</p>
-                    <p className="text-sm">Sistema de registro e investigação de incidentes em desenvolvimento</p>
-                  </div>
-                </CardContent>
-              </Card>
+              <IncidentReporting />
             </TabsContent>
 
             <TabsContent value="audits">
