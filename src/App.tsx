@@ -2,10 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
 
-// Lazy load all pages for better performance
+// Lazy load all pages
 const Index = React.lazy(() => import('./pages/Index'));
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const PriceAlerts = React.lazy(() => import('./pages/PriceAlerts'));
@@ -34,59 +32,97 @@ const Blockchain = React.lazy(() => import('./pages/Blockchain'));
 const Gamification = React.lazy(() => import('./pages/Gamification'));
 const PredictiveAnalytics = React.lazy(() => import('./pages/PredictiveAnalytics'));
 
-// Create QueryClient instance
+// Create QueryClient
 const queryClient = new QueryClient();
 
-// Loading component for lazy loaded routes
+// Loading component
 const LoadingSpinner = () => (
-  <div className="flex items-center justify-center h-64">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-    <span className="ml-2 text-gray-600">Carregando...</span>
+  <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <p className="mt-4 text-gray-600">Carregando Nautilus One...</p>
+    </div>
   </div>
 );
+
+// Simple Navigation Component (inline)
+const SimpleNavigation = () => {
+  const [currentPath, setCurrentPath] = React.useState(window.location.pathname);
+
+  const navItems = [
+    { path: '/', label: 'Início' },
+    { path: '/dashboard', label: 'Dashboard' },
+    { path: '/peotram', label: 'PEOTRAM' },
+    { path: '/peo-dp', label: 'PEO-DP' },
+    { path: '/sgso', label: 'SGSO' },
+    { path: '/analytics', label: 'Analytics' },
+    { path: '/settings', label: 'Configurações' }
+  ];
+
+  return (
+    <nav className="bg-blue-900 text-white p-4">
+      <div className="container mx-auto">
+        <h1 className="text-xl font-bold mb-4">🚢 Nautilus One</h1>
+        <div className="flex flex-wrap gap-2">
+          {navItems.map((item) => (
+            <a
+              key={item.path}
+              href={item.path}
+              className={`px-3 py-2 rounded text-sm ${
+                currentPath === item.path 
+                  ? 'bg-blue-700 text-white' 
+                  : 'bg-blue-800 hover:bg-blue-700 text-blue-100'
+              }`}
+              onClick={() => setCurrentPath(item.path)}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+};
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <div className="flex h-screen bg-gray-100">
-          <Sidebar />
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <Header />
-            <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-              <React.Suspense fallback={<LoadingSpinner />}>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/price-alerts" element={<PriceAlerts />} />
-                  <Route path="/reports" element={<Reports />} />
-                  <Route path="/reservations" element={<Reservations />} />
-                  <Route path="/checklists" element={<ChecklistsInteligentes />} />
-                  <Route path="/peotram" element={<PEOTRAM />} />
-                  <Route path="/peo-dp" element={<PEODP />} />
-                  <Route path="/sgso" element={<SGSO />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/travel" element={<Travel />} />
-                  <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/hr" element={<HumanResources />} />
-                  <Route path="/communication" element={<Communication />} />
-                  <Route path="/intelligence" element={<Intelligence />} />
-                  <Route path="/maritime" element={<Maritime />} />
-                  <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
-                  <Route path="/innovation" element={<Innovation />} />
-                  <Route path="/optimization" element={<Optimization />} />
-                  <Route path="/collaboration" element={<Collaboration />} />
-                  <Route path="/voice" element={<Voice />} />
-                  <Route path="/portal" element={<Portal />} />
-                  <Route path="/ar" element={<AR />} />
-                  <Route path="/iot" element={<IoT />} />
-                  <Route path="/blockchain" element={<Blockchain />} />
-                  <Route path="/gamification" element={<Gamification />} />
-                  <Route path="/predictive" element={<PredictiveAnalytics />} />
-                </Routes>
-              </React.Suspense>
-            </main>
-          </div>
+        <div className="min-h-screen bg-gray-100">
+          <SimpleNavigation />
+          <main className="container mx-auto p-6">
+            <React.Suspense fallback={<LoadingSpinner />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/price-alerts" element={<PriceAlerts />} />
+                <Route path="/reports" element={<Reports />} />
+                <Route path="/reservations" element={<Reservations />} />
+                <Route path="/checklists" element={<ChecklistsInteligentes />} />
+                <Route path="/peotram" element={<PEOTRAM />} />
+                <Route path="/peo-dp" element={<PEODP />} />
+                <Route path="/sgso" element={<SGSO />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/travel" element={<Travel />} />
+                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/hr" element={<HumanResources />} />
+                <Route path="/communication" element={<Communication />} />
+                <Route path="/intelligence" element={<Intelligence />} />
+                <Route path="/maritime" element={<Maritime />} />
+                <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
+                <Route path="/innovation" element={<Innovation />} />
+                <Route path="/optimization" element={<Optimization />} />
+                <Route path="/collaboration" element={<Collaboration />} />
+                <Route path="/voice" element={<Voice />} />
+                <Route path="/portal" element={<Portal />} />
+                <Route path="/ar" element={<AR />} />
+                <Route path="/iot" element={<IoT />} />
+                <Route path="/blockchain" element={<Blockchain />} />
+                <Route path="/gamification" element={<Gamification />} />
+                <Route path="/predictive" element={<PredictiveAnalytics />} />
+              </Routes>
+            </React.Suspense>
+          </main>
         </div>
         <Toaster position="top-right" />
       </Router>
