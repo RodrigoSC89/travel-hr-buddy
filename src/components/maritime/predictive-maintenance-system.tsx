@@ -146,7 +146,7 @@ export const PredictiveMaintenanceSystem = () => {
       case 'up': return <TrendingUp className="h-4 w-4 text-green-500" />;
       case 'down': return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
       case 'stable': return <BarChart3 className="h-4 w-4 text-blue-500" />;
-      default: return <BarChart3 className="h-4 w-4 text-gray-500" />;
+      default: return <BarChart3 className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

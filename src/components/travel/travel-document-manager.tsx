@@ -297,7 +297,7 @@ export const TravelDocumentManager = () => {
       case 'png': return <FileImage className="h-8 w-8 text-blue-500" />;
       case 'mp4':
       case 'avi': return <FileVideo className="h-8 w-8 text-purple-500" />;
-      default: return <File className="h-8 w-8 text-gray-500" />;
+      default: return <File className="h-8 w-8 text-muted-foreground" />;
     }
   };
 

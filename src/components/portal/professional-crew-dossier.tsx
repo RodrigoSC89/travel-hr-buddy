@@ -1026,7 +1026,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <Upload className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-sm text-muted-foreground mb-2">
                   Arraste arquivos aqui ou clique para selecionar
                 </p>

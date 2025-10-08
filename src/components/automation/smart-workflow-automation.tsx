@@ -231,7 +231,7 @@ const SmartWorkflowAutomation = () => {
       case 'active':
         return <CheckCircle className="w-4 h-4 text-green-500" />;
       case 'inactive':
-        return <Pause className="w-4 h-4 text-gray-500" />;
+        return <Pause className="w-4 h-4 text-muted-foreground" />;
       case 'draft':
         return <Edit className="w-4 h-4 text-blue-500" />;
       default:
@@ -248,7 +248,7 @@ const SmartWorkflowAutomation = () => {
       case 'failed':
         return <XCircle className="w-4 h-4 text-red-500" />;
       case 'cancelled':
-        return <Pause className="w-4 h-4 text-gray-500" />;
+        return <Pause className="w-4 h-4 text-muted-foreground" />;
       default:
         return <Clock className="w-4 h-4 text-yellow-500" />;
     }

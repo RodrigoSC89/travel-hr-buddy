@@ -143,7 +143,7 @@ const IntegrationsHub = () => {
       case 'error':
         return <AlertTriangle className="w-4 h-4 text-red-600" />;
       default:
-        return <RefreshCw className="w-4 h-4 text-gray-400" />;
+        return <RefreshCw className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

@@ -130,7 +130,7 @@ export const SystemHealthDashboard = () => {
     switch (trend) {
       case 'up': return <TrendingUp className="h-3 w-3 text-green-500" />;
       case 'down': return <TrendingDown className="h-3 w-3 text-red-500" />;
-      default: return <Activity className="h-3 w-3 text-gray-500" />;
+      default: return <Activity className="h-3 w-3 text-muted-foreground" />;
     }
   };
 

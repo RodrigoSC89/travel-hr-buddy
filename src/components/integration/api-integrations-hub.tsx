@@ -145,7 +145,7 @@ export const APIIntegrationsHub: React.FC = () => {
     switch (status) {
       case 'connected': return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'error': return <AlertCircle className="h-4 w-4 text-red-500" />;
-      default: return <AlertCircle className="h-4 w-4 text-gray-500" />;
+      default: return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

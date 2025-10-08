@@ -328,7 +328,7 @@ export const TrainingCompliance: React.FC = () => {
           </div>
 
           {filteredTrainings.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-muted-foreground">
               <Award className="h-16 w-16 mx-auto mb-4 opacity-50" />
               <p className="text-lg font-semibold mb-2">Nenhum treinamento encontrado</p>
               <p className="text-sm">Selecione outra categoria</p>

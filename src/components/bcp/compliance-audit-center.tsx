@@ -153,7 +153,7 @@ export const ComplianceAuditCenter: React.FC = () => {
       case 'in_progress': return 'text-yellow-500';
       case 'non_compliant': 
       case 'failed': return 'text-red-500';
-      default: return 'text-gray-500';
+      default: return 'text-muted-foreground';
     }
   };
 

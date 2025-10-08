@@ -152,7 +152,7 @@ export const UserFeedbackSystem: React.FC = () => {
       case 'suggestion': return <Lightbulb className="h-4 w-4 text-blue-500" />;
       case 'improvement': return <TrendingUp className="h-4 w-4 text-green-500" />;
       case 'question': return <MessageSquare className="h-4 w-4 text-purple-500" />;
-      default: return <MessageSquare className="h-4 w-4 text-gray-500" />;
+      default: return <MessageSquare className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -327,7 +327,7 @@ export const UserFeedbackSystem: React.FC = () => {
                       className={`h-6 w-6 cursor-pointer transition-colors ${
                         rating <= formData.rating 
                           ? 'text-yellow-500 fill-current' 
-                          : 'text-gray-300'
+                          : 'text-muted-foreground'
                       }`}
                       onClick={() => setFormData(prev => ({ ...prev, rating }))}
                     />

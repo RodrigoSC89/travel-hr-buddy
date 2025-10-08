@@ -357,7 +357,7 @@ export const EmployeePortal: React.FC = () => {
                 {achievements.map((achievement) => (
                   <div key={achievement.id} className={`p-4 border rounded-lg ${achievement.earned ? 'bg-green-50 border-green-200' : 'bg-gray-50'}`}>
                     <div className="flex items-start space-x-3">
-                      <div className={`p-2 rounded-full ${achievement.earned ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
+                      <div className={`p-2 rounded-full ${achievement.earned ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-muted-foreground'}`}>
                         {achievement.earned ? <CheckCircle className="h-5 w-5" /> : <Award className="h-5 w-5" />}
                       </div>
                       <div className="flex-1">
@@ -390,7 +390,7 @@ export const EmployeePortal: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <Upload className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-sm text-muted-foreground mb-2">
                   Arraste arquivos aqui ou clique para selecionar
                 </p>

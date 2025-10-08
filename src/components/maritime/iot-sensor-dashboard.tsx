@@ -240,7 +240,7 @@ export const IoTSensorDashboard = () => {
       case 'online': return 'text-green-500';
       case 'unstable': return 'text-yellow-500';
       case 'offline': return 'text-red-500';
-      default: return 'text-gray-500';
+      default: return 'text-muted-foreground';
     }
   };
 

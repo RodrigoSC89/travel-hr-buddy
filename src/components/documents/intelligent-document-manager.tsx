@@ -181,7 +181,7 @@ const IntelligentDocumentManager = () => {
       case 'word':
         return <FileText className="w-8 h-8 text-blue-500" />;
       default:
-        return <FileText className="w-8 h-8 text-gray-500" />;
+        return <FileText className="w-8 h-8 text-muted-foreground" />;
     }
   };
 

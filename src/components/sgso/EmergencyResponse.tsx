@@ -371,7 +371,7 @@ export const EmergencyResponse: React.FC = () => {
           </div>
 
           {filteredPlans.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-muted-foreground">
               <Shield className="h-16 w-16 mx-auto mb-4 opacity-50" />
               <p className="text-lg font-semibold mb-2">Nenhum plano encontrado</p>
               <p className="text-sm">Selecione outro tipo</p>

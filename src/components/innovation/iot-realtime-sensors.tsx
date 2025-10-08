@@ -133,8 +133,8 @@ const IoTRealtimeSensors: React.FC = () => {
       case 'normal': return 'text-green-500';
       case 'warning': return 'text-orange-500';
       case 'critical': return 'text-red-500';
-      case 'offline': return 'text-gray-500';
-      default: return 'text-gray-500';
+      case 'offline': return 'text-muted-foreground';
+      default: return 'text-muted-foreground';
     }
   };
 
@@ -279,7 +279,7 @@ const IoTRealtimeSensors: React.FC = () => {
         <Card className="bg-gray-50 border-gray-200">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Radio className="h-4 w-4 text-gray-500" />
+              <Radio className="h-4 w-4 text-muted-foreground" />
               <div>
                 <div className="text-sm font-medium text-gray-700">Offline</div>
                 <div className="text-lg font-bold text-gray-600">

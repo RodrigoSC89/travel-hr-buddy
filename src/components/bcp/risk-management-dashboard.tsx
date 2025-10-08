@@ -155,7 +155,7 @@ export const RiskManagementDashboard: React.FC = () => {
       case 'operational': return 'text-green-500';
       case 'infrastructure': return 'text-purple-500';
       case 'security': return 'text-red-500';
-      default: return 'text-gray-500';
+      default: return 'text-muted-foreground';
     }
   };
 

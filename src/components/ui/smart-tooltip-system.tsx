@@ -239,7 +239,7 @@ const SmartTooltipSystem: React.FC = () => {
       case 'warning': return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
       case 'success': return <CheckCircle className="w-5 h-5 text-green-500" />;
       case 'info': return <Info className="w-5 h-5 text-blue-500" />;
-      default: return <HelpCircle className="w-5 h-5 text-gray-500" />;
+      default: return <HelpCircle className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
