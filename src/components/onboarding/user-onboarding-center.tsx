@@ -437,7 +437,7 @@ const UserOnboardingCenter: React.FC = () => {
                           <Star
                             key={i}
                             className={`w-4 h-4 ${
-                              i < feedback.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+                              i < feedback.rating ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'
                             }`}
                           />
                         ))}

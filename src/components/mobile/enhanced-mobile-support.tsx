@@ -335,7 +335,7 @@ export const EnhancedMobileSupport: React.FC = () => {
   };
 
   const getBatteryColor = (level?: number) => {
-    if (!level) return 'text-gray-500';
+    if (!level) return 'text-muted-foreground';
     if (level > 50) return 'text-green-500';
     if (level > 20) return 'text-yellow-500';
     return 'text-red-500';

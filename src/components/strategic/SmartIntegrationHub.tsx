@@ -230,10 +230,10 @@ const SmartIntegrationHub: React.FC = () => {
   const getStatusIcon = (status: Integration['status']) => {
     switch (status) {
       case 'connected': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'disconnected': return <XCircle className="w-4 h-4 text-gray-500" />;
+      case 'disconnected': return <XCircle className="w-4 h-4 text-muted-foreground" />;
       case 'error': return <AlertTriangle className="w-4 h-4 text-red-500" />;
       case 'pending': return <RefreshCw className="w-4 h-4 text-yellow-500" />;
-      default: return <XCircle className="w-4 h-4 text-gray-500" />;
+      default: return <XCircle className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

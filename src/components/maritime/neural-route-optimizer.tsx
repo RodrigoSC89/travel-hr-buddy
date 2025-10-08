@@ -236,19 +236,19 @@ export const NeuralRouteOptimizer: React.FC = () => {
             <Progress value={optimizationProgress} className="h-2" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="flex items-center gap-2">
-                <Cloud className={optimizationProgress > 25 ? 'text-green-500' : 'text-gray-400'} />
+                <Cloud className={optimizationProgress > 25 ? 'text-green-500' : 'text-muted-foreground'} />
                 <span className="text-sm">Dados meteorológicos</span>
               </div>
               <div className="flex items-center gap-2">
-                <Waves className={optimizationProgress > 50 ? 'text-green-500' : 'text-gray-400'} />
+                <Waves className={optimizationProgress > 50 ? 'text-green-500' : 'text-muted-foreground'} />
                 <span className="text-sm">Análise de correntes</span>
               </div>
               <div className="flex items-center gap-2">
-                <Ship className={optimizationProgress > 75 ? 'text-green-500' : 'text-gray-400'} />
+                <Ship className={optimizationProgress > 75 ? 'text-green-500' : 'text-muted-foreground'} />
                 <span className="text-sm">Tráfego marítimo</span>
               </div>
               <div className="flex items-center gap-2">
-                <Fuel className={optimizationProgress === 100 ? 'text-green-500' : 'text-gray-400'} />
+                <Fuel className={optimizationProgress === 100 ? 'text-green-500' : 'text-muted-foreground'} />
                 <span className="text-sm">Otimização combustível</span>
               </div>
             </div>

@@ -143,7 +143,7 @@ const ProductionDeployCenter: React.FC = () => {
       case 'degraded':
         return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
       default:
-        return <Activity className="w-4 h-4 text-gray-400" />;
+        return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

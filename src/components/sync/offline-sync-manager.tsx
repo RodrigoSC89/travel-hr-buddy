@@ -216,7 +216,7 @@ export const OfflineSyncManager: React.FC = () => {
       case 'create_note': return <Upload className="h-4 w-4 text-blue-500" />;
       case 'update_profile': return <RefreshCw className="h-4 w-4 text-green-500" />;
       case 'save_preference': return <Database className="h-4 w-4 text-purple-500" />;
-      default: return <Info className="h-4 w-4 text-gray-500" />;
+      default: return <Info className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

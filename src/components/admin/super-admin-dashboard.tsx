@@ -191,7 +191,7 @@ export const SuperAdminDashboard: React.FC = () => {
       case 'trial': return <Clock className="w-4 h-4 text-blue-500" />;
       case 'suspended': return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
       case 'expired': return <Ban className="w-4 h-4 text-red-500" />;
-      default: return <Activity className="w-4 h-4 text-gray-500" />;
+      default: return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

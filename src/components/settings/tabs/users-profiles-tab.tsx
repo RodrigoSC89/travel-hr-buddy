@@ -280,15 +280,15 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                         <span className="text-green-600">✓ Gestão de pessoal</span>
                         <span className="text-green-600">✓ Certificações</span>
                         <span className="text-green-600">✓ Relatórios RH</span>
-                        <span className="text-gray-400">✗ Configurações</span>
+                        <span className="text-muted-foreground">✗ Configurações</span>
                       </>
                     )}
                     {role.value === 'employee' && (
                       <>
                         <span className="text-green-600">✓ Dados pessoais</span>
                         <span className="text-green-600">✓ Comunicação</span>
-                        <span className="text-gray-400">✗ Gestão</span>
-                        <span className="text-gray-400">✗ Configurações</span>
+                        <span className="text-muted-foreground">✗ Gestão</span>
+                        <span className="text-muted-foreground">✗ Configurações</span>
                       </>
                     )}
                   </div>
@@ -337,14 +337,14 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                           {['crew', 'certificates', 'reports'].includes(module.id) ? (
                             <span className="text-green-600 text-lg">✓</span>
                           ) : (
-                            <span className="text-gray-400 text-lg">✗</span>
+                            <span className="text-muted-foreground text-lg">✗</span>
                           )}
                         </td>
                         <td className="text-center p-3">
                           {['communication'].includes(module.id) ? (
                             <span className="text-green-600 text-lg">✓</span>
                           ) : (
-                            <span className="text-gray-400 text-lg">✗</span>
+                            <span className="text-muted-foreground text-lg">✗</span>
                           )}
                         </td>
                       </tr>

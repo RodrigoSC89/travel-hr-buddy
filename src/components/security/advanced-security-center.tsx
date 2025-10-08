@@ -173,7 +173,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
       case 'low':
         return <CheckCircle className="h-4 w-4 text-blue-500" />;
       default:
-        return <CheckCircle className="h-4 w-4 text-gray-500" />;
+        return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

@@ -336,7 +336,7 @@ const SystemAuditor: React.FC = () => {
       case 'running':
         return <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />;
       default:
-        return <Activity className="w-4 h-4 text-gray-400" />;
+        return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -468,7 +468,7 @@ const SystemAuditor: React.FC = () => {
                             <h4 className="font-medium">{result.module}</h4>
                             <p className="text-sm text-muted-foreground">{result.description}</p>
                             {result.details && (
-                              <p className="text-xs text-gray-500 mt-1">{result.details}</p>
+                              <p className="text-xs text-muted-foreground mt-1">{result.details}</p>
                             )}
                             {result.actionRequired && (
                               <p className="text-xs text-blue-600 mt-1">

@@ -281,7 +281,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       case 'down':
         return <ArrowDown className="h-3 w-3 text-red-500" />;
       default:
-        return <Minus className="h-3 w-3 text-gray-500" />;
+        return <Minus className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
@@ -309,7 +309,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       case 'compliance':
         return <CheckCircle className="h-4 w-4 text-purple-500" />;
       default:
-        return <Briefcase className="h-4 w-4 text-gray-500" />;
+        return <Briefcase className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

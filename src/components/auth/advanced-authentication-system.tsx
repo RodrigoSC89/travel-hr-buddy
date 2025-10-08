@@ -136,7 +136,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">2FA</p>
                 <p className="text-lg font-bold">{isEnabled2FA ? 'Ativo' : 'Inativo'}</p>
               </div>
-              <Key className={`h-8 w-8 ${isEnabled2FA ? 'text-green-500' : 'text-gray-400'}`} />
+              <Key className={`h-8 w-8 ${isEnabled2FA ? 'text-green-500' : 'text-muted-foreground'}`} />
             </div>
           </CardContent>
         </Card>
@@ -148,7 +148,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Biometria</p>
                 <p className="text-lg font-bold">{isBiometricEnabled ? 'Ativo' : 'Inativo'}</p>
               </div>
-              <Fingerprint className={`h-8 w-8 ${isBiometricEnabled ? 'text-green-500' : 'text-gray-400'}`} />
+              <Fingerprint className={`h-8 w-8 ${isBiometricEnabled ? 'text-green-500' : 'text-muted-foreground'}`} />
             </div>
           </CardContent>
         </Card>
@@ -270,7 +270,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
             </div>
 
             <div className="p-4 border rounded-lg text-center">
-              <Fingerprint className={`w-16 h-16 mx-auto mb-4 ${isBiometricEnabled ? 'text-green-500' : 'text-gray-400'}`} />
+              <Fingerprint className={`w-16 h-16 mx-auto mb-4 ${isBiometricEnabled ? 'text-green-500' : 'text-muted-foreground'}`} />
               <p className="font-medium">
                 {isBiometricEnabled ? 'Biometria Ativa' : 'Biometria Inativa'}
               </p>

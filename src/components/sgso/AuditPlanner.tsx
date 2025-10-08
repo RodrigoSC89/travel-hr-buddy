@@ -339,7 +339,7 @@ export const AuditPlanner: React.FC = () => {
           </div>
 
           {filteredAudits.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-muted-foreground">
               <Calendar className="h-16 w-16 mx-auto mb-4 opacity-50" />
               <p className="text-lg font-semibold mb-2">Nenhuma auditoria encontrada</p>
               <p className="text-sm">Selecione outro tipo ou crie uma nova auditoria</p>

@@ -245,9 +245,9 @@ const ProductRoadmap: React.FC = () => {
       case 'in-progress':
         return <Clock className="w-4 h-4 text-blue-500" />;
       case 'planned':
-        return <AlertCircle className="w-4 h-4 text-gray-400" />;
+        return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
       default:
-        return <Clock className="w-4 h-4 text-gray-400" />;
+        return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

@@ -45,7 +45,7 @@ const VoiceConnectionMonitor: React.FC<VoiceConnectionMonitorProps> = ({
   }, []);
 
   const getConnectionQuality = () => {
-    if (!isConnected) return { label: 'Desconectado', color: 'text-gray-500', value: 0 };
+    if (!isConnected) return { label: 'Desconectado', color: 'text-muted-foreground', value: 0 };
     if (latency < 100 && signalStrength > 80) return { label: 'Excelente', color: 'text-green-500', value: 95 };
     if (latency < 200 && signalStrength > 60) return { label: 'Boa', color: 'text-yellow-500', value: 75 };
     if (latency < 500 && signalStrength > 40) return { label: 'Regular', color: 'text-orange-500', value: 50 };
@@ -67,7 +67,7 @@ const VoiceConnectionMonitor: React.FC<VoiceConnectionMonitorProps> = ({
           {isConnected ? (
             <Wifi className="h-5 w-5 text-green-500" />
           ) : (
-            <WifiOff className="h-5 w-5 text-gray-500" />
+            <WifiOff className="h-5 w-5 text-muted-foreground" />
           )}
           Monitor de Conexão
         </CardTitle>
