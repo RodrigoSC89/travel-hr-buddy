@@ -26,7 +26,19 @@ export default defineConfig(({ mode }) => ({
           vendor: ['react', 'react-dom', 'react-router-dom'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs'],
           charts: ['recharts'],
-          supabase: ['@supabase/supabase-js']
+          supabase: ['@supabase/supabase-js'],
+          // SGSO module chunking for better performance
+          sgso: [
+            './src/components/sgso/SgsoDashboard',
+            './src/components/sgso/AnpPracticesManager',
+            './src/components/sgso/RiskAssessmentMatrix',
+            './src/components/sgso/IncidentReporting',
+            './src/components/sgso/TrainingCompliance',
+            './src/components/sgso/AuditPlanner',
+            './src/components/sgso/NonConformityManager',
+            './src/components/sgso/ComplianceMetrics',
+            './src/components/sgso/EmergencyResponse'
+          ]
         }
       }
     },
