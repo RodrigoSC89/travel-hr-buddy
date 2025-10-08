@@ -22,13 +22,20 @@ const buttonVariants = cva(
         warning: "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg hover:from-amber-600 hover:to-orange-600 hover:shadow-xl focus:ring-2 focus:ring-amber-500/50 hover:scale-105 transition-all duration-300",
         premium: "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-xl hover:shadow-2xl hover:from-purple-700 hover:to-blue-700 focus:ring-2 focus:ring-purple-500/50 transform hover:scale-105 transition-all duration-300",
         glass: "bg-white/10 backdrop-blur-md border border-white/20 text-foreground hover:bg-white/20 shadow-lg hover:shadow-xl focus:ring-2 focus:ring-primary/50 hover:scale-105 transition-all duration-300",
+        // Maritime offshore high-contrast variants
+        maritime: "bg-blue-900 text-white border-2 border-blue-800 shadow-lg hover:bg-blue-800 hover:shadow-xl font-semibold focus:ring-4 focus:ring-blue-400/50",
+        "maritime-success": "bg-green-700 text-white border-2 border-green-800 shadow-lg hover:bg-green-600 hover:shadow-xl font-semibold focus:ring-4 focus:ring-green-400/50",
+        "maritime-danger": "bg-red-700 text-white border-2 border-red-800 shadow-lg hover:bg-red-600 hover:shadow-xl font-semibold focus:ring-4 focus:ring-red-400/50",
+        "maritime-warning": "bg-amber-600 text-white border-2 border-amber-700 shadow-lg hover:bg-amber-500 hover:shadow-xl font-semibold focus:ring-4 focus:ring-amber-400/50",
       },
       size: {
-        default: "h-11 px-6 py-2.5 text-sm font-medium",
-        sm: "h-9 rounded-md px-4 text-xs font-medium",
-        lg: "h-13 rounded-lg px-8 py-3 text-base font-semibold",
-        xl: "h-16 rounded-xl px-10 py-4 text-lg font-bold",
-        icon: "h-11 w-11 rounded-lg",
+        default: "h-11 px-6 py-2.5 text-sm font-medium min-h-[44px]",
+        sm: "h-9 rounded-md px-4 text-xs font-medium min-h-[40px]",
+        lg: "h-13 rounded-lg px-8 py-3 text-base font-semibold min-h-[52px]",
+        xl: "h-16 rounded-xl px-10 py-4 text-lg font-bold min-h-[64px]",
+        icon: "h-11 w-11 rounded-lg min-h-[44px] min-w-[44px]",
+        // Offshore optimized sizes
+        offshore: "h-12 px-8 py-3 text-base font-bold min-h-[48px]",
       },
     },
     defaultVariants: {

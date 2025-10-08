@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { useMaritimeActions } from '@/hooks/useMaritimeActions';
 import {
   XCircle,
   AlertTriangle,
@@ -141,6 +142,7 @@ const getStatusConfig = (status: string) => {
 
 export const NonConformityManager: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>('all');
+  const { handleViewDetails, handleUpdate, handleCreate, handleGenerateReport, showInfo, isLoading } = useMaritimeActions();
 
   const openCount = SAMPLE_NCS.filter(nc => nc.status === 'open').length;
   const inTreatmentCount = SAMPLE_NCS.filter(nc => nc.status === 'in_treatment').length;
@@ -150,6 +152,14 @@ export const NonConformityManager: React.FC = () => {
   const filteredNCs = selectedType === 'all'
     ? SAMPLE_NCS
     : SAMPLE_NCS.filter(nc => nc.type === selectedType);
+
+  const handleViewNC = (ncId: string, ncNumber: string) => {
+    handleViewDetails(`não conformidade ${ncNumber}`, ncId);
+  };
+
+  const handleUpdateNC = (ncId: string, ncNumber: string) => {
+    handleUpdate(`não conformidade ${ncNumber}`);
+  };
 
   return (
     <div className="space-y-6">
@@ -317,7 +327,8 @@ export const NonConformityManager: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => console.log('Ver detalhes', nc.id)}
+                          onClick={() => handleViewNC(nc.id, nc.number)}
+                          disabled={isLoading}
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Detalhes
@@ -326,7 +337,8 @@ export const NonConformityManager: React.FC = () => {
                           <Button
                             size="sm"
                             className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
-                            onClick={() => console.log('Atualizar NC', nc.id)}
+                            onClick={() => handleUpdateNC(nc.id, nc.number)}
+                            disabled={isLoading}
                           >
                             <CheckCircle className="h-4 w-4 mr-2" />
                             Atualizar
@@ -359,28 +371,32 @@ export const NonConformityManager: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-red-600 hover:bg-red-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Registrar NC')}
+              onClick={() => handleCreate('Não Conformidade')}
+              disabled={isLoading}
             >
               <Plus className="h-6 w-6" />
               <span className="font-semibold">Registrar NC</span>
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Relatório NCs')}
+              onClick={() => handleGenerateReport('Relatório de Não Conformidades')}
+              disabled={isLoading}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button
               className="bg-yellow-600 hover:bg-yellow-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('NCs vencendo')}
+              onClick={() => showInfo('NCs Vencendo', 'Abrindo lista de não conformidades próximas do vencimento')}
+              disabled={isLoading}
             >
               <AlertTriangle className="h-6 w-6" />
               <span className="font-semibold">Vencendo</span>
             </Button>
             <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Estatísticas')}
+              onClick={() => showInfo('Estatísticas', 'Abrindo painel de estatísticas de NCs')}
+              disabled={isLoading}
             >
               <TrendingDown className="h-6 w-6" />
               <span className="font-semibold">Estatísticas</span>

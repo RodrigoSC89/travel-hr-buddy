@@ -373,6 +373,31 @@
     transform: translateY(0);
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
+
+  /* Enhanced Button Standards - WCAG AA Compliance */
+  button, .btn, [role="button"] {
+    min-height: 44px !important;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  /* Focus Indicators - WCAG 2.1 Compliance */
+  button:focus-visible, .btn:focus-visible, [role="button"]:focus-visible,
+  input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 3px solid hsl(var(--primary)) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 4px hsla(var(--primary), 0.2) !important;
+  }
+
+  /* Touch Target Enhancement for Mobile/Offshore */
+  @media (max-width: 768px) {
+    button, .btn, [role="button"], 
+    input[type="checkbox"], input[type="radio"],
+    .touch-target {
+      min-height: 48px !important;
+      min-width: 48px !important;
+    }
+  }
   
   /* Maritime System Colors */
   .btn-peotram {
@@ -398,6 +423,74 @@
     border-width: var(--card-border-width);
     box-shadow: var(--card-shadow);
     background-color: hsl(var(--bg-primary));
+  }
+
+  /* High Contrast Text - WCAG AAA for Offshore */
+  .text-high-contrast {
+    color: hsl(var(--text-primary)) !important;
+    font-weight: 600;
+  }
+
+  .text-maritime-primary {
+    color: hsl(var(--text-primary));
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+
+  /* Enhanced Readability for Offshore Conditions */
+  .offshore-text {
+    color: #000000 !important;
+    font-weight: 600 !important;
+    text-shadow: 0 0 1px rgba(255,255,255,0.5);
+  }
+
+  .offshore-bg {
+    background-color: #ffffff !important;
+    border: 2px solid hsl(var(--primary)) !important;
+  }
+
+  /* High Visibility Badge - Maritime */
+  .badge-maritime {
+    min-height: 32px;
+    padding: 8px 16px;
+    font-weight: 700;
+    font-size: 14px;
+    border: 2px solid;
+  }
+
+  /* Accessible Links */
+  a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+    outline: 3px solid hsl(var(--primary)) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Skip to main content link for accessibility */
+  .skip-to-main {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    padding: 12px 24px;
+    z-index: 100;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 0 0 8px 0;
+  }
+
+  .skip-to-main:focus {
+    top: 0;
+  }
+
+  /* Offshore Loading State */
+  .offshore-loading {
+    border: 4px solid hsl(var(--primary));
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
   
   .card-maritime:hover {
@@ -882,5 +975,57 @@
   
   .travel-tabs {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Enhanced offshore mobile optimization */
+  h1, .text-4xl {
+    font-size: 1.875rem !important; /* 30px */
+  }
+
+  h2, .text-3xl {
+    font-size: 1.5rem !important; /* 24px */
+  }
+
+  h3, .text-2xl {
+    font-size: 1.25rem !important; /* 20px */
+  }
+
+  /* Increase card padding for better touch */
+  .card {
+    padding: 1.5rem;
+  }
+
+  /* Optimize table for mobile */
+  table {
+    font-size: 14px;
+  }
+
+  /* Stack columns on mobile */
+  .md\:grid-cols-2, .md\:grid-cols-3, .md\:grid-cols-4 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Tablet optimization for industrial tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  button, .btn {
+    min-height: 48px !important;
+    font-size: 16px !important;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  /* Optimize for landscape tablets */
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Large screen optimization */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1600px;
   }
 }
