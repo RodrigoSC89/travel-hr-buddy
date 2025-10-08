@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 import ModuleActionButton from '@/components/ui/module-action-button';
 import { PeoDpManager } from '@/components/peo-dp/peo-dp-manager';
+import { useMaritimeActions } from '@/hooks/useMaritimeActions';
 import {
   Shield,
   Anchor,
@@ -22,6 +23,7 @@ import {
 
 const PEODP = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const { handleCreate, handleGenerateReport, handleExport, handleRefresh, showInfo } = useMaritimeActions();
 
   useEffect(() => {
     setIsLoaded(true);
@@ -92,37 +94,37 @@ const PEODP = () => {
             id: 'plan',
             label: 'Plano Digitalizado',
             icon: <Target className="h-3 w-3" />,
-            action: () => console.log('Plano Digitalizado')
+            action: () => showInfo('Plano Digitalizado', 'Abrindo visualização do plano DP digitalizado')
           },
           {
             id: 'dashboard',
             label: 'Dashboard Gerencial',
             icon: <TrendingUp className="h-3 w-3" />,
-            action: () => console.log('Dashboard Gerencial')
+            action: () => showInfo('Dashboard Gerencial', 'Abrindo painel gerencial de DP')
           },
           {
             id: 'fmea',
             label: 'Integração FMEA',
             icon: <Settings className="h-3 w-3" />,
-            action: () => console.log('Integração FMEA')
+            action: () => showInfo('Integração FMEA', 'Acessando análise de modos de falha')
           },
           {
             id: 'trials',
             label: 'DP Trials',
             icon: <CheckCircle className="h-3 w-3" />,
-            action: () => console.log('DP Trials')
+            action: () => showInfo('DP Trials', 'Abrindo registro de trials de DP')
           },
           {
             id: 'validation',
             label: 'Validação IA',
             icon: <Brain className="h-3 w-3" />,
-            action: () => console.log('Validação IA')
+            action: () => showInfo('Validação IA', 'Iniciando validação com inteligência artificial')
           },
           {
             id: 'risk',
             label: 'Risk Assessment',
             icon: <Shield className="h-3 w-3" />,
-            action: () => console.log('Risk Assessment')
+            action: () => showInfo('Risk Assessment', 'Abrindo avaliação de riscos')
           }
         ]}
         quickActions={[
@@ -130,20 +132,20 @@ const PEODP = () => {
             id: 'new-plan',
             label: 'Novo Plano',
             icon: <Plus className="h-3 w-3" />,
-            action: () => console.log('Novo Plano DP')
+            action: () => handleCreate('Plano DP')
           },
           {
             id: 'refresh',
             label: 'Atualizar',
             icon: <RefreshCw className="h-3 w-3" />,
-            action: () => window.location.reload(),
+            action: () => handleRefresh('PEO-DP', async () => window.location.reload()),
             shortcut: 'F5'
           },
           {
             id: 'export',
             label: 'Exportar',
             icon: <Download className="h-3 w-3" />,
-            action: () => console.log('Exportar')
+            action: () => handleExport('PEO-DP')
           }
         ]}
       />

@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 import ModuleActionButton from '@/components/ui/module-action-button';
 import { SgsoDashboard } from '@/components/sgso/SgsoDashboard';
+import { useMaritimeActions } from '@/hooks/useMaritimeActions';
 import {
   Shield,
   AlertTriangle,
@@ -20,6 +21,7 @@ import {
 } from 'lucide-react';
 
 const SGSO = () => {
+  const { handleCreate, handleGenerateReport, handleExport, handleRefresh, showInfo } = useMaritimeActions();
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-red-500/5 to-orange-500/10 relative overflow-hidden">
       <BackToDashboard />
@@ -85,37 +87,37 @@ const SGSO = () => {
             id: 'practices',
             label: '17 Práticas ANP',
             icon: <Shield className="h-3 w-3" />,
-            action: () => console.log('17 Práticas ANP')
+            action: () => showInfo('17 Práticas ANP', 'Abrindo gestão das 17 práticas obrigatórias')
           },
           {
             id: 'risks',
             label: 'Matriz de Riscos',
             icon: <AlertTriangle className="h-3 w-3" />,
-            action: () => console.log('Matriz de Riscos')
+            action: () => showInfo('Matriz de Riscos', 'Abrindo matriz de riscos 5x5')
           },
           {
             id: 'incidents',
             label: 'Gestão Incidentes',
             icon: <Bell className="h-3 w-3" />,
-            action: () => console.log('Gestão Incidentes')
+            action: () => showInfo('Gestão de Incidentes', 'Abrindo sistema de gestão de incidentes')
           },
           {
             id: 'audits',
             label: 'Auditorias',
             icon: <FileCheck className="h-3 w-3" />,
-            action: () => console.log('Auditorias')
+            action: () => showInfo('Auditorias', 'Abrindo planejamento de auditorias')
           },
           {
             id: 'training',
             label: 'Treinamentos',
             icon: <Users className="h-3 w-3" />,
-            action: () => console.log('Treinamentos')
+            action: () => showInfo('Treinamentos', 'Abrindo gestão de treinamentos')
           },
           {
             id: 'reports',
             label: 'Relatórios ANP',
             icon: <BookOpen className="h-3 w-3" />,
-            action: () => console.log('Relatórios ANP')
+            action: () => handleGenerateReport('Relatórios ANP')
           }
         ]}
         quickActions={[
@@ -123,20 +125,20 @@ const SGSO = () => {
             id: 'new-incident',
             label: 'Novo Incidente',
             icon: <Plus className="h-3 w-3" />,
-            action: () => console.log('Novo Incidente')
+            action: () => handleCreate('Incidente')
           },
           {
             id: 'refresh',
             label: 'Atualizar',
             icon: <RefreshCw className="h-3 w-3" />,
-            action: () => window.location.reload(),
+            action: () => handleRefresh('SGSO', async () => window.location.reload()),
             shortcut: 'F5'
           },
           {
             id: 'export',
             label: 'Exportar',
             icon: <Download className="h-3 w-3" />,
-            action: () => console.log('Exportar')
+            action: () => handleExport('SGSO')
           }
         ]}
       />
