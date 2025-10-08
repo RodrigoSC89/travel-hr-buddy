@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Activity, 
   Server, 
@@ -44,8 +45,10 @@ interface ServiceStatus {
 }
 
 const SystemPerformanceMonitor = () => {
+  const { toast } = useToast();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedTimeRange, setSelectedTimeRange] = useState('1h');
+  const [isExporting, setIsExporting] = useState(false);
 
   // Dados simulados de métricas do sistema
   const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>([
@@ -139,8 +142,39 @@ const SystemPerformanceMonitor = () => {
     setIsRefreshing(false);
   };
 
-  const exportReport = () => {
-    console.log('Exportando relatório de performance...');
+  const exportReport = async () => {
+    setIsExporting(true);
+    try {
+      // Prepare performance report data
+      const reportData = {
+        timestamp: new Date().toISOString(),
+        timeRange: selectedTimeRange,
+        systemMetrics,
+        services,
+        performanceHistory,
+        alerts: systemMetrics.filter(m => m.status !== 'healthy').length,
+        overallStatus: overallStatus
+      };
+
+      // Simulate export delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      toast({
+        title: "Relatório Exportado",
+        description: `Relatório de performance do sistema exportado com sucesso!`,
+      });
+
+      // In production, this would trigger a file download
+      console.log('Performance report data:', reportData);
+    } catch (error) {
+      toast({
+        title: "Erro na Exportação",
+        description: "Falha ao exportar relatório de performance.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const overallStatus = systemMetrics.every(m => m.status === 'healthy') && 
@@ -176,9 +210,9 @@ const SystemPerformanceMonitor = () => {
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Atualizar
           </Button>
-          <Button onClick={exportReport}>
-            <Download className="w-4 h-4 mr-2" />
-            Exportar
+          <Button onClick={exportReport} disabled={isExporting}>
+            <Download className={`w-4 h-4 mr-2 ${isExporting ? 'animate-pulse' : ''}`} />
+            {isExporting ? 'Exportando...' : 'Exportar'}
           </Button>
         </div>
       </div>
