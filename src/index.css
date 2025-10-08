@@ -447,6 +447,51 @@
     background-color: #ffffff !important;
     border: 2px solid hsl(var(--primary)) !important;
   }
+
+  /* High Visibility Badge - Maritime */
+  .badge-maritime {
+    min-height: 32px;
+    padding: 8px 16px;
+    font-weight: 700;
+    font-size: 14px;
+    border: 2px solid;
+  }
+
+  /* Accessible Links */
+  a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+    outline: 3px solid hsl(var(--primary)) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Skip to main content link for accessibility */
+  .skip-to-main {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    padding: 12px 24px;
+    z-index: 100;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 0 0 8px 0;
+  }
+
+  .skip-to-main:focus {
+    top: 0;
+  }
+
+  /* Offshore Loading State */
+  .offshore-loading {
+    border: 4px solid hsl(var(--primary));
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
   
   .card-maritime:hover {
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);

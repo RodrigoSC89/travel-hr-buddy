@@ -1,36 +1,50 @@
 import React, { Component, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: ReactNode;
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
   errorInfo?: React.ErrorInfo;
+  errorCount: number;
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, errorCount: 0 };
   }
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
-    this.setState({ errorInfo });
+    this.setState(prevState => ({ 
+      errorInfo,
+      errorCount: prevState.errorCount + 1 
+    }));
+    
+    // Call optional error handler
+    if (this.props.onError) {
+      this.props.onError(error, errorInfo);
+    }
   }
 
   handleRetry = () => {
     this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+  };
+
+  handleGoHome = () => {
+    window.location.href = '/';
   };
 
   render() {
@@ -39,25 +53,62 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         return this.props.fallback;
       }
 
+      const { error, errorCount } = this.state;
+      const isCritical = errorCount > 2;
+
       return (
         <div className="min-h-[400px] flex items-center justify-center p-4">
-          <Alert className="max-w-md">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Oops! Algo deu errado</AlertTitle>
+          <Alert className={`max-w-md ${isCritical ? 'border-red-600 bg-red-50' : ''}`}>
+            <AlertTriangle className={`h-4 w-4 ${isCritical ? 'text-red-600' : ''}`} />
+            <AlertTitle className="font-bold">
+              {isCritical ? 'Erro Crítico Detectado' : 'Oops! Algo deu errado'}
+            </AlertTitle>
             <AlertDescription className="mt-2 space-y-3">
               <p>
-                Ocorreu um erro inesperado. Nossa equipe foi notificada e está trabalhando na correção.
+                {isCritical 
+                  ? 'Múltiplos erros foram detectados. Por favor, retorne à página inicial.'
+                  : 'Ocorreu um erro inesperado. Nossa equipe foi notificada e está trabalhando na correção.'}
               </p>
-              <div className="flex gap-2">
+              
+              {error && process.env.NODE_ENV === 'development' && (
+                <div className="mt-3 p-3 bg-gray-100 rounded-md">
+                  <p className="text-xs font-mono text-gray-700 break-all">
+                    {error.toString()}
+                  </p>
+                </div>
+              )}
+              
+              <div className="flex gap-2 mt-4">
+                {!isCritical && (
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={this.handleRetry}
+                    className="flex items-center gap-2 min-h-[44px]"
+                  >
+                    <RefreshCw className="h-3 w-3" />
+                    Tentar novamente
+                  </Button>
+                )}
                 <Button 
-                  variant="outline" 
+                  variant={isCritical ? "maritime-danger" : "default"}
                   size="sm" 
-                  onClick={this.handleRetry}
-                  className="flex items-center gap-2"
+                  onClick={this.handleGoHome}
+                  className="flex items-center gap-2 min-h-[44px]"
                 >
-                  <RefreshCw className="h-3 w-3" />
-                  Tentar novamente
+                  <Home className="h-3 w-3" />
+                  Ir para Início
                 </Button>
+              </div>
+            </AlertDescription>
+          </Alert>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
                 <Button 
                   variant="outline" 
                   size="sm" 
