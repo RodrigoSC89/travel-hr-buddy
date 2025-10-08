@@ -976,4 +976,56 @@
   .travel-tabs {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  /* Enhanced offshore mobile optimization */
+  h1, .text-4xl {
+    font-size: 1.875rem !important; /* 30px */
+  }
+
+  h2, .text-3xl {
+    font-size: 1.5rem !important; /* 24px */
+  }
+
+  h3, .text-2xl {
+    font-size: 1.25rem !important; /* 20px */
+  }
+
+  /* Increase card padding for better touch */
+  .card {
+    padding: 1.5rem;
+  }
+
+  /* Optimize table for mobile */
+  table {
+    font-size: 14px;
+  }
+
+  /* Stack columns on mobile */
+  .md\:grid-cols-2, .md\:grid-cols-3, .md\:grid-cols-4 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Tablet optimization for industrial tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  button, .btn {
+    min-height: 48px !important;
+    font-size: 16px !important;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  /* Optimize for landscape tablets */
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Large screen optimization */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1600px;
+  }
 }
