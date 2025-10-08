@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UserManagementDashboard from '@/components/admin/user-management-dashboard';
+import { HealthStatusDashboard } from '@/components/admin/health-status-dashboard';
 import { RoleBasedAccess } from './role-based-access';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -143,6 +144,8 @@ export const AdminPanel: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="system" className="space-y-4">
+            <HealthStatusDashboard />
+            
             <Card>
               <CardHeader>
                 <CardTitle>Configurações do Sistema</CardTitle>
