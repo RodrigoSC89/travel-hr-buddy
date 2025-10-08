@@ -30,10 +30,10 @@ export default defineConfig(({ mode }) => ({
         }
       }
     },
-    // Remove console.log/error/warn em produção
+    // Use our custom logger in production instead of dropping all console
+    // This allows logger.error and logger.warn to work in production
     esbuild: mode === 'production' ? {
-      drop: ['console', 'debugger'],
-      pure: ['console.log', 'console.error', 'console.warn', 'console.info'],
+      drop: ['debugger'],
     } : undefined,
   },
   preview: {
