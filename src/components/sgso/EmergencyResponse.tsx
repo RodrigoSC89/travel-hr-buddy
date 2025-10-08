@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useMaritimeActions } from '@/hooks/useMaritimeActions';
 import {
   AlertTriangle,
   Phone,
@@ -146,6 +147,7 @@ const getStatusConfig = (status: string) => {
 
 export const EmergencyResponse: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>('all');
+  const { handleViewDetails, showInfo, isLoading } = useMaritimeActions();
 
   const activeCount = EMERGENCY_PLANS.filter(p => p.status === 'active').length;
   const reviewCount = EMERGENCY_PLANS.filter(p => p.status === 'under_review').length;
@@ -159,6 +161,15 @@ export const EmergencyResponse: React.FC = () => {
   const filteredPlans = selectedType === 'all'
     ? EMERGENCY_PLANS
     : EMERGENCY_PLANS.filter(p => p.type === selectedType);
+
+  const handleViewPlan = (planId: string, planTitle: string) => {
+    handleViewDetails(`plano ${planTitle}`, planId);
+  };
+
+  const handleStartDrill = (planId: string, planTitle: string) => {
+    showInfo('Iniciando simulado', `Preparando simulado de ${planTitle}`);
+    console.log('Starting drill for plan:', planId);
+  };
 
   return (
     <div className="space-y-6">
@@ -336,7 +347,8 @@ export const EmergencyResponse: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => console.log('Ver plano', plan.id)}
+                          onClick={() => handleViewPlan(plan.id, plan.title)}
+                          disabled={isLoading}
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Ver Plano
@@ -344,7 +356,8 @@ export const EmergencyResponse: React.FC = () => {
                         <Button
                           size="sm"
                           className="min-h-[44px] px-6 bg-orange-600 hover:bg-orange-700 text-white"
-                          onClick={() => console.log('Iniciar simulado', plan.id)}
+                          onClick={() => handleStartDrill(plan.id, plan.title)}
+                          disabled={isLoading}
                         >
                           <Activity className="h-4 w-4 mr-2" />
                           Simulado
@@ -421,28 +434,32 @@ export const EmergencyResponse: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-red-600 hover:bg-red-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Novo plano emergência')}
+              onClick={() => showInfo('Novo Plano', 'Abrindo formulário para criar novo plano de emergência')}
+              disabled={isLoading}
             >
               <AlertTriangle className="h-6 w-6" />
               <span className="font-semibold">Novo Plano</span>
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Agendar simulado')}
+              onClick={() => showInfo('Agendar Simulado', 'Abrindo agenda de simulados')}
+              disabled={isLoading}
             >
               <Clock className="h-6 w-6" />
               <span className="font-semibold">Agendar</span>
             </Button>
             <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Relatório simulados')}
+              onClick={() => showInfo('Relatório', 'Gerando relatório de simulados')}
+              disabled={isLoading}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Mapa localização')}
+              onClick={() => showInfo('Localização', 'Abrindo mapa de pontos de encontro')}
+              disabled={isLoading}
             >
               <MapPin className="h-6 w-6" />
               <span className="font-semibold">Localização</span>

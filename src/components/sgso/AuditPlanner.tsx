@@ -1,3 +1,4 @@
+import { useMaritimeActions } from '@/hooks/useMaritimeActions';
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -314,7 +315,7 @@ export const AuditPlanner: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => console.log('Ver detalhes', audit.id)}
+                          onClick={() => handleViewDetails('audit', audit.id)} disabled={isLoading}
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Detalhes
@@ -323,7 +324,7 @@ export const AuditPlanner: React.FC = () => {
                           <Button
                             size="sm"
                             className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
-                            onClick={() => console.log('Iniciar auditoria', audit.id)}
+                            onClick={() => showInfo('Iniciando Auditoria', 'Preparando auditoria')} disabled={isLoading}
                           >
                             <CheckCircle className="h-4 w-4 mr-2" />
                             {audit.status === 'in_progress' ? 'Continuar' : 'Iniciar'}
@@ -356,28 +357,28 @@ export const AuditPlanner: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Nova auditoria')}
+              onClick={() => handleCreate('Auditoria')} disabled={isLoading}
             >
               <Plus className="h-6 w-6" />
               <span className="font-semibold">Nova Auditoria</span>
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Calendário auditorias')}
+              onClick={() => showInfo('Calendário', 'Abrindo calendário de auditorias')} disabled={isLoading}
             >
               <Calendar className="h-6 w-6" />
               <span className="font-semibold">Calendário</span>
             </Button>
             <Button
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Relatório auditorias')}
+              onClick={() => handleGenerateReport('Relatório de Auditorias')} disabled={isLoading}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button
               className="bg-purple-600 hover:bg-purple-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Tendências')}
+              onClick={() => showInfo('Tendências', 'Abrindo análise de tendências')} disabled={isLoading}
             >
               <TrendingUp className="h-6 w-6" />
               <span className="font-semibold">Tendências</span>
