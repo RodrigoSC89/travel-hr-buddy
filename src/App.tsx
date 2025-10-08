@@ -20,7 +20,8 @@ import Reservations from "./pages/Reservations";
 import ChecklistsInteligentes from "./pages/ChecklistsInteligentes";
 import PEOTRAM from "./pages/PEOTRAM";
 import PEODP from "./pages/PEODP";
-import SGSO from "./pages/SGSO";
+// Lazy load SGSO for better performance
+const SGSO = React.lazy(() => import("./pages/SGSO"));
 import Settings from "./pages/Settings";
 import Travel from "./pages/Travel";
 import Analytics from "./pages/Analytics";
