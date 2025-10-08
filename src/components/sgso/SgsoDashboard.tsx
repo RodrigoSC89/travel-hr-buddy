@@ -23,6 +23,7 @@ import { TrainingCompliance } from './TrainingCompliance';
 import { AuditPlanner } from './AuditPlanner';
 import { NonConformityManager } from './NonConformityManager';
 import { ComplianceMetrics } from './ComplianceMetrics';
+import { EmergencyResponse } from './EmergencyResponse';
 
 export const SgsoDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -167,7 +168,7 @@ export const SgsoDashboard: React.FC = () => {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 w-full h-auto gap-2 bg-gray-100 p-2">
+            <TabsList className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-9 w-full h-auto gap-2 bg-gray-100 p-2">
               <TabsTrigger 
                 value="overview" 
                 className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
@@ -195,6 +196,13 @@ export const SgsoDashboard: React.FC = () => {
               >
                 <Bell className="h-4 w-4 mr-2" />
                 Incidentes
+              </TabsTrigger>
+              <TabsTrigger 
+                value="emergency"
+                className="data-[state=active]:bg-white data-[state=active]:text-red-700 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <AlertTriangle className="h-4 w-4 mr-2" />
+                Emergência
               </TabsTrigger>
               <TabsTrigger 
                 value="audits"
@@ -332,6 +340,10 @@ export const SgsoDashboard: React.FC = () => {
 
             <TabsContent value="incidents">
               <IncidentReporting />
+            </TabsContent>
+
+            <TabsContent value="emergency">
+              <EmergencyResponse />
             </TabsContent>
 
             <TabsContent value="audits">
