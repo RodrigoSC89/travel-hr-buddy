@@ -31,6 +31,8 @@ const IoT = React.lazy(() => import('./pages/IoT'));
 const Blockchain = React.lazy(() => import('./pages/Blockchain'));
 const Gamification = React.lazy(() => import('./pages/Gamification'));
 const PredictiveAnalytics = React.lazy(() => import('./pages/PredictiveAnalytics'));
+const Admin = React.lazy(() => import('./pages/Admin'));
+const HealthMonitorDemo = React.lazy(() => import('./pages/HealthMonitorDemo'));
 
 // Create QueryClient
 const queryClient = new QueryClient();
@@ -56,6 +58,7 @@ const SimpleNavigation = () => {
     { path: '/peo-dp', label: 'PEO-DP' },
     { path: '/sgso', label: 'SGSO' },
     { path: '/analytics', label: 'Analytics' },
+    { path: '/admin', label: 'Admin' },
     { path: '/settings', label: 'Configurações' }
   ];
 
@@ -120,6 +123,8 @@ function App() {
                 <Route path="/blockchain" element={<Blockchain />} />
                 <Route path="/gamification" element={<Gamification />} />
                 <Route path="/predictive" element={<PredictiveAnalytics />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/health-monitor" element={<HealthMonitorDemo />} />
               </Routes>
             </React.Suspense>
           </main>
