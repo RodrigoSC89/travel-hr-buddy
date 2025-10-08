@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Brain, Bell, BarChart3, Sparkles, Users, Target } from 'lucide-react';
+import { Brain, Bell, BarChart3, Sparkles, Users, Target, Trophy, Activity, Lightbulb, LineChart, Star } from 'lucide-react';
 
 import { RealTimeCollaboration } from '@/components/innovation/RealTimeCollaboration';
 import { AIAssistantPanel } from '@/components/innovation/AIAssistantPanel';
@@ -26,16 +26,16 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
 
   const tabs = [
     { id: "overview", label: "Visão Geral", icon: BarChart3 },
-    { id: "collaboration", label: "Colaboração", icon: Brain },
+    { id: "collaboration", label: "Colaboração", icon: Users },
     { id: "ai-assistant", label: "Assistente IA", icon: Sparkles },
     { id: "advanced-ai", label: "IA Avançada", icon: Brain },
-    { id: "workflows", label: "Workflows", icon: Bell },
-    { id: "business-intelligence", label: "BI Analytics", icon: BarChart3 },
-    { id: "gamification", label: "Gamificação", icon: Brain },
-    { id: "system-health", label: "Status Sistema", icon: Brain },
-    { id: "recommendations", label: "Recomendações", icon: Sparkles },
+    { id: "workflows", label: "Workflows", icon: Target },
+    { id: "business-intelligence", label: "BI Analytics", icon: LineChart },
+    { id: "gamification", label: "Gamificação", icon: Trophy },
+    { id: "system-health", label: "Status Sistema", icon: Activity },
+    { id: "recommendations", label: "Recomendações", icon: Star },
     { id: "notifications", label: "Notificações", icon: Bell },
-    { id: "insights", label: "Insights IA", icon: Brain }
+    { id: "insights", label: "Insights IA", icon: Lightbulb }
   ];
 
   return (
