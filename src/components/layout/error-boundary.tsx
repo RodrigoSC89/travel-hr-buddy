@@ -58,8 +58,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
       return (
         <div className="min-h-[400px] flex items-center justify-center p-4">
-          <Alert className={`max-w-md ${isCritical ? 'border-red-600 bg-red-50' : ''}`}>
-            <AlertTriangle className={`h-4 w-4 ${isCritical ? 'text-red-600' : ''}`} />
+          <Alert className={`max-w-md ${isCritical ? 'border-destructive bg-destructive/10' : ''}`}>
+            <AlertTriangle className={`h-4 w-4 ${isCritical ? 'text-destructive' : ''}`} />
             <AlertTitle className="font-bold">
               {isCritical ? 'Erro Crítico Detectado' : 'Oops! Algo deu errado'}
             </AlertTitle>
@@ -71,8 +71,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               </p>
               
               {error && process.env.NODE_ENV === 'development' && (
-                <div className="mt-3 p-3 bg-gray-100 rounded-md">
-                  <p className="text-xs font-mono text-gray-700 break-all">
+                <div className="mt-3 p-3 bg-muted rounded-md">
+                  <p className="text-xs font-mono text-foreground break-all">
                     {error.toString()}
                   </p>
                 </div>
@@ -91,7 +91,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                   </Button>
                 )}
                 <Button 
-                  variant={isCritical ? "maritime-danger" : "default"}
+                  variant={isCritical ? "destructive" : "default"}
                   size="sm" 
                   onClick={this.handleGoHome}
                   className="flex items-center gap-2 min-h-[44px]"
@@ -100,30 +100,14 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                   Ir para Início
                 </Button>
               </div>
-            </AlertDescription>
-          </Alert>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => window.location.reload()}
-                >
-                  Recarregar página
-                </Button>
-              </div>
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+              
+              {process.env.NODE_ENV === 'development' && error && (
                 <details className="mt-4">
-                  <summary className="cursor-pointer text-xs text-muted-foreground">
+                  <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
                     Detalhes do erro (desenvolvimento)
                   </summary>
-                  <pre className="mt-2 text-xs text-red-600 overflow-auto">
-                    {this.state.error.toString()}
+                  <pre className="mt-2 text-xs text-destructive overflow-auto max-h-40 p-2 bg-muted rounded">
+                    {error.toString()}
                     {this.state.errorInfo?.componentStack}
                   </pre>
                 </details>

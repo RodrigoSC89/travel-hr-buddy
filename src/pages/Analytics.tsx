@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import AnalyticsDashboard from '@/components/analytics/analytics-dashboard';
 import PredictiveAnalytics from '@/components/analytics/PredictiveAnalytics';
 import { ThemeProvider } from '@/components/layout/theme-provider';
@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart3, TrendingUp, Brain, Target } from 'lucide-react';
 import { BackToDashboard } from '@/components/ui/back-to-dashboard';
+import { DashboardSkeleton, CardSkeleton } from '@/components/ui/loading-skeleton';
 
 const Analytics = () => {
   return (
@@ -44,11 +45,15 @@ const Analytics = () => {
             </TabsList>
 
             <TabsContent value="dashboard">
-              <AnalyticsDashboard />
+              <Suspense fallback={<DashboardSkeleton />}>
+                <AnalyticsDashboard />
+              </Suspense>
             </TabsContent>
 
             <TabsContent value="predictive">
-              <PredictiveAnalytics />
+              <Suspense fallback={<DashboardSkeleton />}>
+                <PredictiveAnalytics />
+              </Suspense>
             </TabsContent>
 
             <TabsContent value="kpis">
