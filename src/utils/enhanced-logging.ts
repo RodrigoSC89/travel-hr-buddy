@@ -3,6 +3,8 @@
  * Provides comprehensive logging and debugging capabilities
  */
 
+import { logger } from './logger';
+
 export interface LogEntry {
   timestamp: string;
   action: string;
@@ -26,7 +28,7 @@ export const logUserAction = (action: string, details?: any): void => {
     url: window.location.href
   };
   
-  console.log(`🎯 User Action:`, logEntry);
+  logger.log(`🎯 User Action:`, logEntry);
   
   // Persist to localStorage for debugging (keep last 50)
   try {
@@ -35,7 +37,7 @@ export const logUserAction = (action: string, details?: any): void => {
     const recentLogs = logs.slice(-50); // Keep only last 50 logs
     localStorage.setItem('user-actions', JSON.stringify(recentLogs));
   } catch (error) {
-    console.error('Error saving log to localStorage:', error);
+    logger.error('Error saving log to localStorage:', error);
   }
 };
 
@@ -47,7 +49,7 @@ export const getUserActionLogs = (): LogEntry[] => {
   try {
     return JSON.parse(localStorage.getItem('user-actions') || '[]');
   } catch (error) {
-    console.error('Error reading logs from localStorage:', error);
+    logger.error('Error reading logs from localStorage:', error);
     return [];
   }
 };
@@ -58,9 +60,9 @@ export const getUserActionLogs = (): LogEntry[] => {
 export const clearUserActionLogs = (): void => {
   try {
     localStorage.removeItem('user-actions');
-    console.log('✅ User action logs cleared');
+    logger.log('✅ User action logs cleared');
   } catch (error) {
-    console.error('Error clearing logs:', error);
+    logger.error('Error clearing logs:', error);
   }
 };
 
@@ -80,8 +82,8 @@ export const exportUserActionLogs = (): void => {
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
     
-    console.log('✅ Logs exported successfully');
+    logger.log('✅ Logs exported successfully');
   } catch (error) {
-    console.error('Error exporting logs:', error);
+    logger.error('Error exporting logs:', error);
   }
 };
