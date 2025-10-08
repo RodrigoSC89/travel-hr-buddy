@@ -31,7 +31,10 @@ import {
   Activity,
   Fuel,
   Calendar,
-  FileText
+  FileText,
+  Shield,
+  Anchor,
+  Leaf
 } from 'lucide-react';
 
 // Mock data for executive dashboard
@@ -143,6 +146,170 @@ export default function ExecutiveDashboard() {
             </Card>
           ))}
         </div>
+
+        {/* Maritime Safety Modules - PEO-DP, SGSO, PEOTRAM */}
+        <Card className="border-2 border-primary/20">
+          <CardHeader>
+            <CardTitle className="text-2xl flex items-center gap-2">
+              <Shield className="h-6 w-6 text-primary" />
+              Sistemas de Segurança Marítima
+            </CardTitle>
+            <p className="text-muted-foreground">
+              Status dos módulos críticos de compliance e segurança operacional
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* PEO-DP Card */}
+              <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-300 hover:shadow-xl transition-all cursor-pointer">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="p-3 bg-blue-600 rounded-xl">
+                      <Anchor className="h-8 w-8 text-white" />
+                    </div>
+                    <Badge className="bg-green-600 text-white font-bold">
+                      <CheckCircle className="h-3 w-3 mr-1" />
+                      Operacional
+                    </Badge>
+                  </div>
+                  <h3 className="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">
+                    PEO-DP
+                  </h3>
+                  <p className="text-sm text-blue-700 dark:text-blue-200 mb-4">
+                    Plano de Operações com Dynamic Positioning
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-blue-800 dark:text-blue-300 font-medium">Compliance Score</span>
+                      <span className="text-blue-900 dark:text-blue-100 font-bold">94%</span>
+                    </div>
+                    <div className="w-full bg-blue-200 dark:bg-blue-800 rounded-full h-2">
+                      <div className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full" style={{ width: '94%' }}></div>
+                    </div>
+                    <div className="flex gap-2 mt-3">
+                      <Badge variant="outline" className="text-xs bg-white dark:bg-blue-950 border-blue-300">
+                        6 Seções
+                      </Badge>
+                      <Badge variant="outline" className="text-xs bg-white dark:bg-blue-950 border-blue-300">
+                        IMCA Compliant
+                      </Badge>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                    onClick={() => window.location.href = '/peo-dp'}
+                  >
+                    Acessar PEO-DP
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* SGSO Card */}
+              <Card className="bg-gradient-to-br from-red-50 to-orange-100 dark:from-red-950 dark:to-orange-900 border-red-300 hover:shadow-xl transition-all cursor-pointer">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="p-3 bg-red-600 rounded-xl">
+                      <Shield className="h-8 w-8 text-white" />
+                    </div>
+                    <Badge className="bg-yellow-600 text-white font-bold">
+                      <AlertTriangle className="h-3 w-3 mr-1" />
+                      Atenção
+                    </Badge>
+                  </div>
+                  <h3 className="text-xl font-bold text-red-900 dark:text-red-100 mb-2">
+                    SGSO
+                  </h3>
+                  <p className="text-sm text-red-700 dark:text-red-200 mb-4">
+                    Sistema de Gestão de Segurança Operacional
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-red-800 dark:text-red-300 font-medium">Compliance ANP</span>
+                      <span className="text-red-900 dark:text-red-100 font-bold">84%</span>
+                    </div>
+                    <div className="w-full bg-red-200 dark:bg-red-800 rounded-full h-2">
+                      <div className="bg-red-600 dark:bg-red-400 h-2 rounded-full" style={{ width: '84%' }}></div>
+                    </div>
+                    <div className="flex gap-2 mt-3">
+                      <Badge variant="outline" className="text-xs bg-white dark:bg-red-950 border-red-300">
+                        17 Práticas
+                      </Badge>
+                      <Badge variant="outline" className="text-xs bg-white dark:bg-red-950 border-red-300">
+                        3 NC Abertas
+                      </Badge>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold"
+                    onClick={() => window.location.href = '/sgso'}
+                  >
+                    Acessar SGSO
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* PEOTRAM Card */}
+              <Card className="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950 dark:to-emerald-900 border-green-300 hover:shadow-xl transition-all cursor-pointer">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="p-3 bg-green-600 rounded-xl">
+                      <Leaf className="h-8 w-8 text-white" />
+                    </div>
+                    <Badge className="bg-green-600 text-white font-bold">
+                      <CheckCircle className="h-3 w-3 mr-1" />
+                      Operacional
+                    </Badge>
+                  </div>
+                  <h3 className="text-xl font-bold text-green-900 dark:text-green-100 mb-2">
+                    PEOTRAM
+                  </h3>
+                  <p className="text-sm text-green-700 dark:text-green-200 mb-4">
+                    Plano de Emergência e Gestão Ambiental
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-green-800 dark:text-green-300 font-medium">Compliance Score</span>
+                      <span className="text-green-900 dark:text-green-100 font-bold">91%</span>
+                    </div>
+                    <div className="w-full bg-green-200 dark:bg-green-800 rounded-full h-2">
+                      <div className="bg-green-600 dark:bg-green-400 h-2 rounded-full" style={{ width: '91%' }}></div>
+                    </div>
+                    <div className="flex gap-2 mt-3">
+                      <Badge variant="outline" className="text-xs bg-white dark:bg-green-950 border-green-300">
+                        Wizard 8 Etapas
+                      </Badge>
+                      <Badge variant="outline" className="text-xs bg-white dark:bg-green-950 border-green-300">
+                        ESG Ready
+                      </Badge>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold"
+                    onClick={() => window.location.href = '/peotram'}
+                  >
+                    Acessar PEOTRAM
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Quick Stats Row */}
+            <div className="grid grid-cols-3 gap-4 mt-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">89.7%</p>
+                <p className="text-sm text-muted-foreground">Compliance Geral</p>
+              </div>
+              <div className="text-center border-x border-gray-200 dark:border-gray-700">
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">4</p>
+                <p className="text-sm text-muted-foreground">Ações Pendentes</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">15 dias</p>
+                <p className="text-sm text-muted-foreground">Próxima Auditoria</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Main Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

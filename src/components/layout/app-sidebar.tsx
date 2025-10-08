@@ -380,6 +380,11 @@ const navigationItems = [
     icon: Anchor
   },
   {
+    title: "SGSO",
+    url: "/sgso",
+    icon: Shield
+  },
+  {
     title: "Templates",
     url: "/templates",
     icon: FileText,
