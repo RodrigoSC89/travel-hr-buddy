@@ -97,6 +97,33 @@
     --input: var(--azure-200);
     --ring: var(--azure-500);
     
+    /* === MARITIME OFFSHORE HIGH CONTRAST (WCAG AAA) === */
+    /* Cores específicas para uso marítimo offshore com alto contraste solar */
+    --maritime-peotram: 142 76% 36%;         /* #059669 - Verde ambiente */
+    --maritime-peotram-fg: 0 0% 100%;        /* Branco para contraste 7:1+ */
+    --maritime-peo-dp: 221 83% 38%;          /* #1e40af - Azul marinho DP */
+    --maritime-peo-dp-fg: 0 0% 100%;         /* Branco para contraste 7:1+ */
+    --maritime-sgso: 0 84% 45%;              /* #dc2626 - Vermelho segurança */
+    --maritime-sgso-fg: 0 0% 100%;           /* Branco para contraste 7:1+ */
+    
+    /* Text Colors - WCAG AAA Compliance (7:1 ratio) */
+    --text-primary: 0 0% 0%;                 /* #000000 - Preto puro */
+    --text-secondary: 0 0% 10%;              /* #1a1a1a - Quase preto */
+    --text-tertiary: 220 9% 30%;             /* Cinza escuro para contraste */
+    
+    /* Background Colors - Maximum Contrast */
+    --bg-primary: 0 0% 100%;                 /* #ffffff - Branco puro */
+    --bg-secondary: 220 13% 98%;             /* #f8fafc - Branco azulado muito claro */
+    --bg-tertiary: 220 13% 95%;              /* #f1f5f9 - Cinza muito claro */
+    
+    /* Button Minimum Heights - Touch Target Compliance */
+    --btn-min-height: 44px;                  /* WCAG AA+ mínimo para touch */
+    --btn-min-width: 44px;                   /* WCAG AA+ mínimo para touch */
+    
+    /* Card and Container - Enhanced Visibility */
+    --card-border-width: 2px;                /* Bordas mais visíveis */
+    --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    
     /* Gradients Azuis */
     --gradient-ocean: linear-gradient(135deg, hsl(var(--azure-500)), hsl(var(--azure-400)));
     --gradient-depth: linear-gradient(180deg, hsl(var(--azure-600)), hsl(var(--azure-800)));
@@ -325,6 +352,69 @@
   .dark .glass-effect {
     background: hsla(var(--azure-800), 0.4);
     border: 1px solid hsla(var(--azure-600), 0.2);
+  }
+  
+  /* === MARITIME MODULES - HIGH CONTRAST BUTTONS === */
+  .btn-maritime {
+    min-height: var(--btn-min-height);
+    min-width: var(--btn-min-width);
+    font-weight: 600;
+    border-width: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+  }
+  
+  .btn-maritime:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+  
+  .btn-maritime:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+  
+  /* Maritime System Colors */
+  .btn-peotram {
+    background-color: hsl(var(--maritime-peotram));
+    color: hsl(var(--maritime-peotram-fg));
+    border-color: hsl(142 76% 28%);
+  }
+  
+  .btn-peo-dp {
+    background-color: hsl(var(--maritime-peo-dp));
+    color: hsl(var(--maritime-peo-dp-fg));
+    border-color: hsl(221 83% 30%);
+  }
+  
+  .btn-sgso {
+    background-color: hsl(var(--maritime-sgso));
+    color: hsl(var(--maritime-sgso-fg));
+    border-color: hsl(0 84% 37%);
+  }
+  
+  /* Card Maritime - Enhanced Visibility */
+  .card-maritime {
+    border-width: var(--card-border-width);
+    box-shadow: var(--card-shadow);
+    background-color: hsl(var(--bg-primary));
+  }
+  
+  .card-maritime:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+  }
+  
+  /* Text Maritime - WCAG AAA */
+  .text-maritime-primary {
+    color: hsl(var(--text-primary));
+    font-weight: 600;
+  }
+  
+  .text-maritime-secondary {
+    color: hsl(var(--text-secondary));
+    font-weight: 500;
   }
 }
 

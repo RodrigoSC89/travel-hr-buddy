@@ -47,16 +47,7 @@ export class OCRService {
       await this.initialize();
     }
 
-    const { data } = await this.worker!.recognize(imageSource, {}, {
-      logger: (m) => {
-        if (onProgress && m.status === 'recognizing text') {
-          onProgress({
-            status: m.status,
-            progress: m.progress || 0,
-          });
-        }
-      },
-    });
+    const { data } = await this.worker!.recognize(imageSource);
 
     const processingTime = Date.now() - startTime;
 
@@ -70,7 +61,7 @@ export class OCRService {
     return {
       text: data.text,
       confidence: data.confidence,
-      language: data.data.text_direction || 'ltr',
+      language: 'por+eng',
       processingTime,
       blocks,
     };

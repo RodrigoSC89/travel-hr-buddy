@@ -14,6 +14,95 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import Dashboard from "./pages/Dashboard";
 import Auth from "./pages/Auth";
 import EnterpriseLayout from "./components/layout/enterprise-layout";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
+import Sidebar from './components/Sidebar';
+import Header from './components/Header';
+import Index from './pages/Index';
+import Dashboard from './pages/Dashboard';
+import PriceAlerts from './pages/PriceAlerts';
+import Reports from './pages/Reports';
+import Reservations from './pages/Reservations';
+import ChecklistsInteligentes from './pages/ChecklistsInteligentes';
+import PEOTRAM from './pages/PEOTRAM';
+import PEODP from './pages/PEODP';
+// Lazy load SGSO for better performance
+const SGSO = React.lazy(() => import('./pages/SGSO'));
+import Settings from './pages/Settings';
+import Travel from './pages/Travel';
+import Analytics from './pages/Analytics';
+import HumanResources from './pages/HumanResources';
+import Communication from './pages/Communication';
+import Intelligence from './pages/Intelligence';
+import Maritime from './pages/Maritime';
+import MaritimeSupremo from './pages/MaritimeSupremo';
+import Innovation from './pages/Innovation';
+import Optimization from './pages/Optimization';
+import Collaboration from './pages/Collaboration';
+import Voice from './pages/Voice';
+import Portal from './pages/Portal';
+import AR from './pages/AR';
+import IoT from './pages/IoT';
+import Blockchain from './pages/Blockchain';
+import Gamification from './pages/Gamification';
+import PredictiveAnalytics from './pages/PredictiveAnalytics';
+
+const queryClient = new QueryClient();
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <div className="flex h-screen bg-gray-100">
+          <Sidebar />
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <Header />
+            <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+              <React.Suspense fallback={<div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>}>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/price-alerts" element={<PriceAlerts />} />
+                  <Route path="/reports" element={<Reports />} />
+                  <Route path="/reservations" element={<Reservations />} />
+                  <Route path="/checklists" element={<ChecklistsInteligentes />} />
+                  <Route path="/peotram" element={<PEOTRAM />} />
+                  <Route path="/peo-dp" element={<PEODP />} />
+                  <Route path="/sgso" element={<SGSO />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/travel" element={<Travel />} />
+                  <Route path="/analytics" element={<Analytics />} />
+                  <Route path="/hr" element={<HumanResources />} />
+                  <Route path="/communication" element={<Communication />} />
+                  <Route path="/intelligence" element={<Intelligence />} />
+                  <Route path="/maritime" element={<Maritime />} />
+                  <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
+                  <Route path="/innovation" element={<Innovation />} />
+                  <Route path="/optimization" element={<Optimization />} />
+                  <Route path="/collaboration" element={<Collaboration />} />
+                  <Route path="/voice" element={<Voice />} />
+                  <Route path="/portal" element={<Portal />} />
+                  <Route path="/ar" element={<AR />} />
+                  <Route path="/iot" element={<IoT />} />
+                  <Route path="/blockchain" element={<Blockchain />} />
+                  <Route path="/gamification" element={<Gamification />} />
+                  <Route path="/predictive" element={<PredictiveAnalytics />} />
+                </Routes>
+              </React.Suspense>
+            </main>
+          </div>
+        </div>
+        <Toaster position="top-right" />
+      </Router>
+    </QueryClientProvider>
+  );
+}
+
+export default App;
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/protected-route";
 

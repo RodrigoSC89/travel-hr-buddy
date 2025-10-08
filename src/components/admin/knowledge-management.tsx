@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -90,7 +90,7 @@ export const KnowledgeManagement: React.FC = () => {
     { id: 'video', name: 'Vídeo' }
   ];
 
-  const loadKnowledgeItems = async () => {
+  const loadKnowledgeItems = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('knowledge_base')
@@ -154,11 +154,11 @@ export const KnowledgeManagement: React.FC = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     loadKnowledgeItems();
-  }, []);
+  }, [loadKnowledgeItems]);
 
   const filteredItems = knowledgeItems.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

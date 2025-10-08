@@ -3,6 +3,8 @@
  * Monitors the health of external API connections and implements circuit breaker pattern
  */
 
+import { logger } from './logger';
+
 interface APIHealthStatus {
   name: string;
   status: 'healthy' | 'degraded' | 'down';
@@ -71,10 +73,10 @@ export class APIHealthMonitor {
         // Check if we should transition to half-open
         if (now >= breaker.nextRetryTime) {
           breaker.state = 'half-open';
-          console.log(`Circuit breaker for ${apiName} transitioned to half-open`);
+          logger.log(`Circuit breaker for ${apiName} transitioned to half-open`);
           return true;
         }
-        console.warn(`Circuit breaker for ${apiName} is open, blocking request`);
+        logger.warn(`Circuit breaker for ${apiName} is open, blocking request`);
         return false;
       
       case 'half-open':
@@ -112,7 +114,7 @@ export class APIHealthMonitor {
       if (breaker.state === 'half-open') {
         breaker.state = 'closed';
         breaker.failures = 0;
-        console.log(`Circuit breaker for ${apiName} closed after successful request`);
+        logger.log(`Circuit breaker for ${apiName} closed after successful request`);
       } else if (breaker.state === 'closed') {
         breaker.failures = Math.max(0, breaker.failures - 1);
       }
@@ -148,18 +150,18 @@ export class APIHealthMonitor {
       if (breaker.failures >= this.failureThreshold && breaker.state === 'closed') {
         breaker.state = 'open';
         breaker.nextRetryTime = Date.now() + this.timeoutThreshold;
-        console.error(`Circuit breaker for ${apiName} opened after ${breaker.failures} failures`);
+        logger.error(`Circuit breaker for ${apiName} opened after ${breaker.failures} failures`);
       }
       
       // If already half-open and still failing, go back to open
       if (breaker.state === 'half-open') {
         breaker.state = 'open';
         breaker.nextRetryTime = Date.now() + this.timeoutThreshold;
-        console.error(`Circuit breaker for ${apiName} reopened after failed retry`);
+        logger.error(`Circuit breaker for ${apiName} reopened after failed retry`);
       }
     }
     
-    console.error(`API failure recorded for ${apiName}:`, error?.message);
+    logger.error(`API failure recorded for ${apiName}:`, error?.message);
     this.notifyListeners();
   }
 
@@ -244,7 +246,7 @@ export class APIHealthMonitor {
       breaker.failures = 0;
       breaker.lastFailureTime = 0;
       breaker.nextRetryTime = 0;
-      console.log(`Circuit breaker for ${apiName} manually reset`);
+      logger.log(`Circuit breaker for ${apiName} manually reset`);
     }
   }
 }

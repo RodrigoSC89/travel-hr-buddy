@@ -19,6 +19,11 @@ import {
 import { AnpPracticesManager } from './AnpPracticesManager';
 import { RiskAssessmentMatrix } from './RiskAssessmentMatrix';
 import { IncidentReporting } from './IncidentReporting';
+import { TrainingCompliance } from './TrainingCompliance';
+import { AuditPlanner } from './AuditPlanner';
+import { NonConformityManager } from './NonConformityManager';
+import { ComplianceMetrics } from './ComplianceMetrics';
+import { EmergencyResponse } from './EmergencyResponse';
 
 export const SgsoDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -163,41 +168,69 @@ export const SgsoDashboard: React.FC = () => {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid grid-cols-2 lg:grid-cols-5 w-full h-auto gap-2 bg-gray-100 p-2">
+            <TabsList className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-9 w-full h-auto gap-2 bg-gray-100 p-2">
               <TabsTrigger 
                 value="overview" 
-                className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold"
+                className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <Shield className="h-4 w-4 mr-2" />
                 Visão Geral
               </TabsTrigger>
               <TabsTrigger 
                 value="practices"
-                className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold"
+                className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <CheckCircle className="h-4 w-4 mr-2" />
-                17 Práticas ANP
+                17 Práticas
               </TabsTrigger>
               <TabsTrigger 
                 value="risks"
-                className="data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:font-bold"
+                className="data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
-                Matriz de Riscos
+                Riscos
               </TabsTrigger>
               <TabsTrigger 
                 value="incidents"
-                className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold"
+                className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <Bell className="h-4 w-4 mr-2" />
                 Incidentes
               </TabsTrigger>
               <TabsTrigger 
+                value="emergency"
+                className="data-[state=active]:bg-white data-[state=active]:text-red-700 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <AlertTriangle className="h-4 w-4 mr-2" />
+                Emergência
+              </TabsTrigger>
+              <TabsTrigger 
                 value="audits"
-                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:font-bold"
+                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 Auditorias
+              </TabsTrigger>
+              <TabsTrigger 
+                value="training"
+                className="data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <Users className="h-4 w-4 mr-2" />
+                Treinamentos
+              </TabsTrigger>
+              <TabsTrigger 
+                value="nc"
+                className="data-[state=active]:bg-white data-[state=active]:text-yellow-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <XCircle className="h-4 w-4 mr-2" />
+                NCs
+              </TabsTrigger>
+              <TabsTrigger 
+                value="metrics"
+                className="data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Métricas
               </TabsTrigger>
             </TabsList>
 
@@ -309,22 +342,24 @@ export const SgsoDashboard: React.FC = () => {
               <IncidentReporting />
             </TabsContent>
 
+            <TabsContent value="emergency">
+              <EmergencyResponse />
+            </TabsContent>
+
             <TabsContent value="audits">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Planejamento de Auditorias</CardTitle>
-                  <CardDescription>
-                    Gestão de auditorias internas e externas
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-12 text-gray-500">
-                    <FileText className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                    <p className="text-lg font-semibold mb-2">Módulo de Auditorias</p>
-                    <p className="text-sm">Sistema de planejamento e execução de auditorias em desenvolvimento</p>
-                  </div>
-                </CardContent>
-              </Card>
+              <AuditPlanner />
+            </TabsContent>
+
+            <TabsContent value="training">
+              <TrainingCompliance />
+            </TabsContent>
+
+            <TabsContent value="nc">
+              <NonConformityManager />
+            </TabsContent>
+
+            <TabsContent value="metrics">
+              <ComplianceMetrics />
             </TabsContent>
           </Tabs>
         </CardContent>

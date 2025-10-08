@@ -87,36 +87,42 @@ const PEODP = () => {
       <ModuleActionButton
         moduleId="peo-dp"
         moduleName="PEO-DP"
-        features={[
+        actions={[
           {
-            name: 'Plano Digitalizado',
+            id: 'plan',
+            label: 'Plano Digitalizado',
             icon: <Target className="h-3 w-3" />,
-            description: '6 seções estruturadas'
+            action: () => console.log('Plano Digitalizado')
           },
           {
-            name: 'Dashboard Gerencial',
+            id: 'dashboard',
+            label: 'Dashboard Gerencial',
             icon: <TrendingUp className="h-3 w-3" />,
-            description: 'KPIs em tempo real'
+            action: () => console.log('Dashboard Gerencial')
           },
           {
-            name: 'Integração FMEA',
+            id: 'fmea',
+            label: 'Integração FMEA',
             icon: <Settings className="h-3 w-3" />,
-            description: 'Análise de falhas'
+            action: () => console.log('Integração FMEA')
           },
           {
-            name: 'DP Trials',
+            id: 'trials',
+            label: 'DP Trials',
             icon: <CheckCircle className="h-3 w-3" />,
-            description: 'Importação de dados'
+            action: () => console.log('DP Trials')
           },
           {
-            name: 'Validação IA',
+            id: 'validation',
+            label: 'Validação IA',
             icon: <Brain className="h-3 w-3" />,
-            description: 'Gap analysis automático'
+            action: () => console.log('Validação IA')
           },
           {
-            name: 'Risk Assessment',
+            id: 'risk',
+            label: 'Risk Assessment',
             icon: <Shield className="h-3 w-3" />,
-            description: 'Análise de risco'
+            action: () => console.log('Risk Assessment')
           }
         ]}
         quickActions={[
