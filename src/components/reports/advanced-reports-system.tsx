@@ -6,11 +6,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calendar, FileText, TrendingUp, Users, DollarSign, AlertCircle, Download, Filter, RefreshCw } from 'lucide-react';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useToast } from '@/hooks/use-toast';
 
 const AdvancedReportsSystem = () => {
+  const { toast } = useToast();
   const [selectedReport, setSelectedReport] = useState('financial');
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Dados simulados para relatórios
   const financialData = [
@@ -46,13 +49,56 @@ const AdvancedReportsSystem = () => {
 
   const generateReport = async () => {
     setIsGenerating(true);
-    // Simular geração de relatório
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsGenerating(false);
+    try {
+      // Simular geração de relatório
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      toast({
+        title: "Relatório Gerado",
+        description: "O relatório foi gerado com sucesso!",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao Gerar Relatório",
+        description: "Ocorreu um erro ao gerar o relatório.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
-  const exportReport = (format: string) => {
-    console.log(`Exportando relatório em formato ${format}`);
+  const exportReport = async (format: string) => {
+    setIsExporting(true);
+    try {
+      // Simulate export process with data preparation
+      const reportData = {
+        type: selectedReport,
+        period: selectedPeriod,
+        timestamp: new Date().toISOString(),
+        data: selectedReport === 'financial' ? financialData : 
+              selectedReport === 'performance' ? performanceData : 
+              departmentData
+      };
+
+      // Simulate export delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      toast({
+        title: "Exportação Concluída",
+        description: `Relatório exportado em formato ${format.toUpperCase()} com sucesso!`,
+      });
+
+      // In a real implementation, this would trigger a file download
+      console.log('Export data:', reportData);
+    } catch (error) {
+      toast({
+        title: "Erro na Exportação",
+        description: "Falha ao exportar o relatório.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   return (
@@ -122,6 +168,7 @@ const AdvancedReportsSystem = () => {
                   size="sm" 
                   className="w-full justify-start"
                   onClick={() => exportReport('pdf')}
+                  disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
                   PDF
@@ -131,6 +178,7 @@ const AdvancedReportsSystem = () => {
                   size="sm" 
                   className="w-full justify-start"
                   onClick={() => exportReport('excel')}
+                  disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Excel
@@ -140,6 +188,7 @@ const AdvancedReportsSystem = () => {
                   size="sm" 
                   className="w-full justify-start"
                   onClick={() => exportReport('csv')}
+                  disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
                   CSV

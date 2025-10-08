@@ -397,6 +397,46 @@
       min-height: 48px !important;
       min-width: 48px !important;
     }
+    
+    /* Increase spacing for better touch accuracy */
+    .space-y-2 > * + * {
+      margin-top: 0.75rem !important;
+    }
+    
+    .space-x-2 > * + * {
+      margin-left: 0.75rem !important;
+    }
+  }
+  
+  /* Industrial Tablet Touch Targets (769-1024px) */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    button, .btn, [role="button"],
+    input[type="checkbox"], input[type="radio"],
+    .touch-target {
+      min-height: 48px !important;
+      min-width: 48px !important;
+    }
+    
+    /* Optimize for landscape tablet use */
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
+  /* Offshore XL Touch Targets (for gloves) */
+  .btn-offshore-xl, .touch-target-xl {
+    min-height: 56px !important;
+    min-width: 56px !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+  }
+  
+  @media (max-width: 768px) {
+    .btn-offshore-xl, .touch-target-xl {
+      min-height: 64px !important;
+      min-width: 64px !important;
+    }
   }
   
   /* Maritime System Colors */

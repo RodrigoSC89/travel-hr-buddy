@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
+import { ErrorBoundary } from './components/layout/error-boundary';
 
 // Lazy load all pages
 const Index = React.lazy(() => import('./pages/Index'));
@@ -89,49 +90,51 @@ const SimpleNavigation = () => {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <div className="min-h-screen bg-gray-100">
-          <SimpleNavigation />
-          <main className="container mx-auto p-6">
-            <React.Suspense fallback={<LoadingSpinner />}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/price-alerts" element={<PriceAlerts />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/reservations" element={<Reservations />} />
-                <Route path="/checklists" element={<ChecklistsInteligentes />} />
-                <Route path="/peotram" element={<PEOTRAM />} />
-                <Route path="/peo-dp" element={<PEODP />} />
-                <Route path="/sgso" element={<SGSO />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/travel" element={<Travel />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/hr" element={<HumanResources />} />
-                <Route path="/communication" element={<Communication />} />
-                <Route path="/intelligence" element={<Intelligence />} />
-                <Route path="/maritime" element={<Maritime />} />
-                <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
-                <Route path="/innovation" element={<Innovation />} />
-                <Route path="/optimization" element={<Optimization />} />
-                <Route path="/collaboration" element={<Collaboration />} />
-                <Route path="/voice" element={<Voice />} />
-                <Route path="/portal" element={<Portal />} />
-                <Route path="/ar" element={<AR />} />
-                <Route path="/iot" element={<IoT />} />
-                <Route path="/blockchain" element={<Blockchain />} />
-                <Route path="/gamification" element={<Gamification />} />
-                <Route path="/predictive" element={<PredictiveAnalytics />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/health-monitor" element={<HealthMonitorDemo />} />
-              </Routes>
-            </React.Suspense>
-          </main>
-        </div>
-        <Toaster position="top-right" />
-      </Router>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <div className="min-h-screen bg-gray-100">
+            <SimpleNavigation />
+            <main className="container mx-auto p-6">
+              <React.Suspense fallback={<LoadingSpinner />}>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/price-alerts" element={<PriceAlerts />} />
+                  <Route path="/reports" element={<Reports />} />
+                  <Route path="/reservations" element={<Reservations />} />
+                  <Route path="/checklists" element={<ChecklistsInteligentes />} />
+                  <Route path="/peotram" element={<PEOTRAM />} />
+                  <Route path="/peo-dp" element={<PEODP />} />
+                  <Route path="/sgso" element={<SGSO />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/travel" element={<Travel />} />
+                  <Route path="/analytics" element={<Analytics />} />
+                  <Route path="/hr" element={<HumanResources />} />
+                  <Route path="/communication" element={<Communication />} />
+                  <Route path="/intelligence" element={<Intelligence />} />
+                  <Route path="/maritime" element={<Maritime />} />
+                  <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
+                  <Route path="/innovation" element={<Innovation />} />
+                  <Route path="/optimization" element={<Optimization />} />
+                  <Route path="/collaboration" element={<Collaboration />} />
+                  <Route path="/voice" element={<Voice />} />
+                  <Route path="/portal" element={<Portal />} />
+                  <Route path="/ar" element={<AR />} />
+                  <Route path="/iot" element={<IoT />} />
+                  <Route path="/blockchain" element={<Blockchain />} />
+                  <Route path="/gamification" element={<Gamification />} />
+                  <Route path="/predictive" element={<PredictiveAnalytics />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="/health-monitor" element={<HealthMonitorDemo />} />
+                </Routes>
+              </React.Suspense>
+            </main>
+          </div>
+          <Toaster position="top-right" />
+        </Router>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
