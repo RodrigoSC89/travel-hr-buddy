@@ -80,36 +80,42 @@ const SGSO = () => {
       <ModuleActionButton
         moduleId="sgso"
         moduleName="SGSO"
-        features={[
+        actions={[
           {
-            name: '17 Práticas ANP',
+            id: 'practices',
+            label: '17 Práticas ANP',
             icon: <Shield className="h-3 w-3" />,
-            description: 'Resolução 43/2007'
+            action: () => console.log('17 Práticas ANP')
           },
           {
-            name: 'Matriz de Riscos',
+            id: 'risks',
+            label: 'Matriz de Riscos',
             icon: <AlertTriangle className="h-3 w-3" />,
-            description: 'Avaliação 5x5'
+            action: () => console.log('Matriz de Riscos')
           },
           {
-            name: 'Gestão Incidentes',
+            id: 'incidents',
+            label: 'Gestão Incidentes',
             icon: <Bell className="h-3 w-3" />,
-            description: 'Registro e análise'
+            action: () => console.log('Gestão Incidentes')
           },
           {
-            name: 'Auditorias',
+            id: 'audits',
+            label: 'Auditorias',
             icon: <FileCheck className="h-3 w-3" />,
-            description: 'Internas e externas'
+            action: () => console.log('Auditorias')
           },
           {
-            name: 'Treinamentos',
+            id: 'training',
+            label: 'Treinamentos',
             icon: <Users className="h-3 w-3" />,
-            description: 'Compliance tripulação'
+            action: () => console.log('Treinamentos')
           },
           {
-            name: 'Relatórios ANP',
+            id: 'reports',
+            label: 'Relatórios ANP',
             icon: <BookOpen className="h-3 w-3" />,
-            description: 'Regulatórios'
+            action: () => console.log('Relatórios ANP')
           }
         ]}
         quickActions={[

@@ -14,7 +14,7 @@ import {
   Zap,
   Calendar,
   BarChart3,
-  Tool,
+  Settings,
   AlertCircle,
   Battery,
   Gauge
@@ -180,7 +180,7 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
     switch (type) {
       case 'predictive': return <Zap className="h-5 w-5 text-purple-600" />;
       case 'preventive': return <CheckCircle className="h-5 w-5 text-blue-600" />;
-      case 'corrective': return <Tool className="h-5 w-5 text-orange-600" />;
+      case 'corrective': return <Settings className="h-5 w-5 text-orange-600" />;
       case 'emergency': return <AlertTriangle className="h-5 w-5 text-red-600" />;
       default: return <Wrench className="h-5 w-5" />;
     }
