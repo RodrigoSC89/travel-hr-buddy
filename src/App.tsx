@@ -10,90 +10,87 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { OrganizationProvider } from "@/contexts/OrganizationContext";
 import { TenantProvider } from "@/contexts/TenantContext";
 import { ThemeProvider } from "@/components/layout/theme-provider";
+// Critical imports - loaded immediately for fast initial load
 import Dashboard from "./pages/Dashboard";
 import Auth from "./pages/Auth";
-import Admin from "./pages/Admin";
 import EnterpriseLayout from "./components/layout/enterprise-layout";
-import PriceAlerts from "./pages/PriceAlerts";
-import Reports from "./pages/Reports";
-import Reservations from "./pages/Reservations";
-import ChecklistsInteligentes from "./pages/ChecklistsInteligentes";
-import PEOTRAM from "./pages/PEOTRAM";
-import PEODP from "./pages/PEODP";
-import SGSO from "./pages/SGSO";
-import Settings from "./pages/Settings";
-import Travel from "./pages/Travel";
-import Analytics from "./pages/Analytics";
-import HumanResources from "./pages/HumanResources";
-import Communication from "./pages/Communication";
-import Intelligence from "./pages/Intelligence";
-import Maritime from "./pages/Maritime";
-import MaritimeSupremo from "./pages/MaritimeSupremo";
-import Innovation from "./pages/Innovation";
-import Optimization from "./pages/Optimization";
-import Collaboration from "./pages/Collaboration";
-import Voice from "./pages/Voice";
-import Portal from "./pages/Portal";
-import AR from "./pages/AR";
-import IoT from "./pages/IoT";
-import Blockchain from "./pages/Blockchain";
-import Gamification from "./pages/Gamification";
-import PredictiveAnalytics from "./pages/PredictiveAnalytics";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/protected-route";
-import WorkflowPage from "./pages/Workflow";
-import { WorkflowAutomationHub } from "./components/automation/workflow-automation-hub";
-import { AdvancedDocumentCenter } from "./components/documents/advanced-document-center";
-import { MobileOptimizationCenter } from "./components/mobile/mobile-optimization-center";
-import AdvancedReports from "./pages/AdvancedReports";
-import Executive from "./pages/Executive";
-import SystemMonitor from "./pages/SystemMonitor";
-import NotificationCenter from "./pages/NotificationCenter";
-import IntegrationsHub from "./components/integration/integrations-hub";
-import BackupAudit from "./pages/BackupAudit";
-import SecurityPage from "./pages/Security";
-import UsersPage from "./pages/Users";
-import CollaborationPage from "./pages/Collaboration";
-import MobileOptimizationPage from "./pages/MobileOptimization";
-import AdvancedAnalyticsPage from "./pages/AdvancedAnalytics";
-import AdvancedSystemMonitorPage from "./pages/AdvancedSystemMonitor";
-import IntelligentDocumentsPage from "./pages/IntelligentDocuments";
-import AIAssistantPage from "./pages/AIAssistant";
-import BusinessIntelligencePage from "./pages/BusinessIntelligence";
-import SmartWorkflowPage from "./pages/SmartWorkflow";
-import Help from "./pages/Help";
-import Templates from "./pages/Templates";
-import SystemOverviewPage from "./pages/SystemOverview";
-import EnhancedMetrics from "./pages/EnhancedMetrics";
-import PerformanceOptimizerPage from "./pages/PerformanceOptimizer";
-import OptimizationGeneral from "./pages/OptimizationGeneral";
-import AIInsights from "./pages/AIInsights";
-import TestingDashboard from "./pages/TestingDashboard";
-import FeedbackPage from "./pages/Feedback";
-import RealTimeAnalyticsPage from "./pages/RealTimeAnalytics";
-import OfflineSyncPage from "./pages/OfflineSync";
-import IntelligentHelpCenter from "@/components/help/intelligent-help-center";
-import KnowledgeManagement from "@/components/admin/knowledge-management";
-import FleetManagement from "./pages/FleetManagement";
-import CrewManagement from "./pages/CrewManagement";
-import CrewDossier from "./pages/CrewDossier";
-import MaritimeCertifications from "./pages/MaritimeCertifications";
-import MaritimeChecklists from "./pages/MaritimeChecklists";
-import OrganizationSettings from "./pages/OrganizationSettings";
-import OrganizationSetup from "./pages/OrganizationSetup";
-import SuperAdmin from "./pages/SuperAdmin";
-import TaskManagement from "./pages/TaskManagement";
-import DocumentManagement from "./pages/DocumentManagement";
-import FleetDashboard from "./pages/FleetDashboard";
-import FleetTracking from "./pages/FleetTracking";
-import ExecutiveDashboard from "./pages/ExecutiveDashboard";
-import IntelligentAlerts from "./pages/IntelligentAlerts";
-import Automation from "./pages/Automation";
-import DropdownTests from "./pages/DropdownTests";
-import SystemValidation from "./pages/SystemValidation";
-import FABDemo from "./pages/FABDemo";
 
-// Lazy load the new advanced pages
+// Lazy load all non-critical pages for better performance
+const Admin = React.lazy(() => import("./pages/Admin"));
+const PriceAlerts = React.lazy(() => import("./pages/PriceAlerts"));
+const Reports = React.lazy(() => import("./pages/Reports"));
+const Reservations = React.lazy(() => import("./pages/Reservations"));
+const ChecklistsInteligentes = React.lazy(() => import("./pages/ChecklistsInteligentes"));
+const PEOTRAM = React.lazy(() => import("./pages/PEOTRAM"));
+const PEODP = React.lazy(() => import("./pages/PEODP"));
+const SGSO = React.lazy(() => import("./pages/SGSO"));
+const Settings = React.lazy(() => import("./pages/Settings"));
+const Travel = React.lazy(() => import("./pages/Travel"));
+const Analytics = React.lazy(() => import("./pages/Analytics"));
+const HumanResources = React.lazy(() => import("./pages/HumanResources"));
+const Communication = React.lazy(() => import("./pages/Communication"));
+const Intelligence = React.lazy(() => import("./pages/Intelligence"));
+const Maritime = React.lazy(() => import("./pages/Maritime"));
+const MaritimeSupremo = React.lazy(() => import("./pages/MaritimeSupremo"));
+const Innovation = React.lazy(() => import("./pages/Innovation"));
+const Optimization = React.lazy(() => import("./pages/Optimization"));
+const Collaboration = React.lazy(() => import("./pages/Collaboration"));
+const Voice = React.lazy(() => import("./pages/Voice"));
+const Portal = React.lazy(() => import("./pages/Portal"));
+const AR = React.lazy(() => import("./pages/AR"));
+const IoT = React.lazy(() => import("./pages/IoT"));
+const Blockchain = React.lazy(() => import("./pages/Blockchain"));
+const Gamification = React.lazy(() => import("./pages/Gamification"));
+const PredictiveAnalytics = React.lazy(() => import("./pages/PredictiveAnalytics"));
+const WorkflowPage = React.lazy(() => import("./pages/Workflow"));
+const AdvancedReports = React.lazy(() => import("./pages/AdvancedReports"));
+const Executive = React.lazy(() => import("./pages/Executive"));
+const SystemMonitor = React.lazy(() => import("./pages/SystemMonitor"));
+const NotificationCenter = React.lazy(() => import("./pages/NotificationCenter"));
+const BackupAudit = React.lazy(() => import("./pages/BackupAudit"));
+const SecurityPage = React.lazy(() => import("./pages/Security"));
+const UsersPage = React.lazy(() => import("./pages/Users"));
+const CollaborationPage = React.lazy(() => import("./pages/Collaboration"));
+const MobileOptimizationPage = React.lazy(() => import("./pages/MobileOptimization"));
+const AdvancedAnalyticsPage = React.lazy(() => import("./pages/AdvancedAnalytics"));
+const AdvancedSystemMonitorPage = React.lazy(() => import("./pages/AdvancedSystemMonitor"));
+const IntelligentDocumentsPage = React.lazy(() => import("./pages/IntelligentDocuments"));
+const AIAssistantPage = React.lazy(() => import("./pages/AIAssistant"));
+const BusinessIntelligencePage = React.lazy(() => import("./pages/BusinessIntelligence"));
+const SmartWorkflowPage = React.lazy(() => import("./pages/SmartWorkflow"));
+const Help = React.lazy(() => import("./pages/Help"));
+const Templates = React.lazy(() => import("./pages/Templates"));
+const SystemOverviewPage = React.lazy(() => import("./pages/SystemOverview"));
+const EnhancedMetrics = React.lazy(() => import("./pages/EnhancedMetrics"));
+const PerformanceOptimizerPage = React.lazy(() => import("./pages/PerformanceOptimizer"));
+const OptimizationGeneral = React.lazy(() => import("./pages/OptimizationGeneral"));
+const AIInsights = React.lazy(() => import("./pages/AIInsights"));
+const TestingDashboard = React.lazy(() => import("./pages/TestingDashboard"));
+const FeedbackPage = React.lazy(() => import("./pages/Feedback"));
+const RealTimeAnalyticsPage = React.lazy(() => import("./pages/RealTimeAnalytics"));
+const OfflineSyncPage = React.lazy(() => import("./pages/OfflineSync"));
+const FleetManagement = React.lazy(() => import("./pages/FleetManagement"));
+const CrewManagement = React.lazy(() => import("./pages/CrewManagement"));
+const CrewDossier = React.lazy(() => import("./pages/CrewDossier"));
+const MaritimeCertifications = React.lazy(() => import("./pages/MaritimeCertifications"));
+const MaritimeChecklists = React.lazy(() => import("./pages/MaritimeChecklists"));
+const OrganizationSettings = React.lazy(() => import("./pages/OrganizationSettings"));
+const OrganizationSetup = React.lazy(() => import("./pages/OrganizationSetup"));
+const SuperAdmin = React.lazy(() => import("./pages/SuperAdmin"));
+const TaskManagement = React.lazy(() => import("./pages/TaskManagement"));
+const DocumentManagement = React.lazy(() => import("./pages/DocumentManagement"));
+const FleetDashboard = React.lazy(() => import("./pages/FleetDashboard"));
+const FleetTracking = React.lazy(() => import("./pages/FleetTracking"));
+const ExecutiveDashboard = React.lazy(() => import("./pages/ExecutiveDashboard"));
+const IntelligentAlerts = React.lazy(() => import("./pages/IntelligentAlerts"));
+const Automation = React.lazy(() => import("./pages/Automation"));
+const DropdownTests = React.lazy(() => import("./pages/DropdownTests"));
+const SystemValidation = React.lazy(() => import("./pages/SystemValidation"));
+const FABDemo = React.lazy(() => import("./pages/FABDemo"));
+
+// Advanced pages - lazy loaded
 const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
 const MobileApp = React.lazy(() => import("./pages/MobileApp"));
 const SaaSManager = React.lazy(() => import("./pages/SaaSManager"));
@@ -112,7 +109,24 @@ const SystemMonitorPage = React.lazy(() => import("./pages/SystemMonitorPage"));
 const AdvancedSettingsPage = React.lazy(() => import("./pages/AdvancedSettingsPage"));
 const NautilusOne = React.lazy(() => import("./pages/NautilusOne"));
 
+// Lazy load components
+const WorkflowAutomationHub = React.lazy(() => import("./components/automation/workflow-automation-hub").then(m => ({ default: m.WorkflowAutomationHub })));
+const AdvancedDocumentCenter = React.lazy(() => import("./components/documents/advanced-document-center").then(m => ({ default: m.AdvancedDocumentCenter })));
+const IntegrationsHub = React.lazy(() => import("./components/integration/integrations-hub").then(m => ({ default: m.default })));
+const IntelligentHelpCenter = React.lazy(() => import("@/components/help/intelligent-help-center").then(m => ({ default: m.default })));
+const KnowledgeManagement = React.lazy(() => import("@/components/admin/knowledge-management").then(m => ({ default: m.default })));
+
 const queryClient = new QueryClient();
+
+// Common loading component for lazy loaded routes
+const RouteLoader = () => (
+  <div className="flex items-center justify-center h-64">
+    <div className="text-center">
+      <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+      <p className="mt-4 text-sm text-muted-foreground">Carregando...</p>
+    </div>
+  </div>
+);
 
 const App = () => {
   // Service Worker registration for PWA capabilities
@@ -140,187 +154,477 @@ const App = () => {
                 <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <Routes>
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/fab-demo" element={<FABDemo />} />
+                <Route path="/fab-demo" element={
+                  <React.Suspense fallback={<RouteLoader />}>
+                    <FABDemo />
+                  </React.Suspense>
+                } />
                 <Route path="/" element={
                   <ProtectedRoute>
                     <EnterpriseLayout />
                   </ProtectedRoute>
                 }>
                   <Route index element={<Dashboard />} />
-                  <Route path="admin" element={<Admin />} />
-                  <Route path="price-alerts" element={<PriceAlerts />} />
-                  <Route path="reports" element={<Reports />} />
-                  <Route path="settings" element={<Settings />} />
-                  <Route path="travel" element={<Travel />} />
-                  <Route path="analytics" element={<Analytics />} />
-                  <Route path="hr" element={<HumanResources />} />
-                  <Route path="reservations" element={<Reservations />} />
-                  <Route path="maritime" element={<Maritime />} />
-                  <Route path="maritime-supremo" element={<MaritimeSupremo />} />
-                  <Route path="communication" element={<Communication />} />
-                  <Route path="intelligence" element={<Intelligence />} />
-                  <Route path="optimization" element={<Optimization />} />
-                  <Route path="optimization-general" element={<OptimizationGeneral />} />
-                  <Route path="innovation" element={<Innovation />} />
-                  <Route path="collaboration" element={<Collaboration />} />
-                  <Route path="voice" element={<Voice />} />
-                  <Route path="portal" element={<Portal />} />
-                  <Route path="ar" element={<AR />} />
-                  <Route path="iot" element={<IoT />} />
-                  <Route path="blockchain" element={<Blockchain />} />
-                  <Route path="gamification" element={<Gamification />} />
-                  <Route path="predictive-analytics" element={<PredictiveAnalytics />} />
-                  <Route path="workflow" element={<WorkflowPage />} />
+                  <Route path="admin" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Admin />
+                    </React.Suspense>
+                  } />
+                  <Route path="price-alerts" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <PriceAlerts />
+                    </React.Suspense>
+                  } />
+                  <Route path="reports" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Reports />
+                    </React.Suspense>
+                  } />
+                  <Route path="settings" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Settings />
+                    </React.Suspense>
+                  } />
+                  <Route path="travel" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Travel />
+                    </React.Suspense>
+                  } />
+                  <Route path="analytics" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Analytics />
+                    </React.Suspense>
+                  } />
+                  <Route path="hr" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <HumanResources />
+                    </React.Suspense>
+                  } />
+                  <Route path="reservations" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Reservations />
+                    </React.Suspense>
+                  } />
+                  <Route path="maritime" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Maritime />
+                    </React.Suspense>
+                  } />
+                  <Route path="maritime-supremo" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <MaritimeSupremo />
+                    </React.Suspense>
+                  } />
+                  <Route path="communication" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Communication />
+                    </React.Suspense>
+                  } />
+                  <Route path="intelligence" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Intelligence />
+                    </React.Suspense>
+                  } />
+                  <Route path="optimization" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Optimization />
+                    </React.Suspense>
+                  } />
+                  <Route path="optimization-general" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <OptimizationGeneral />
+                    </React.Suspense>
+                  } />
+                  <Route path="innovation" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Innovation />
+                    </React.Suspense>
+                  } />
+                  <Route path="collaboration" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Collaboration />
+                    </React.Suspense>
+                  } />
+                  <Route path="voice" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Voice />
+                    </React.Suspense>
+                  } />
+                  <Route path="portal" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Portal />
+                    </React.Suspense>
+                  } />
+                  <Route path="ar" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <AR />
+                    </React.Suspense>
+                  } />
+                  <Route path="iot" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <IoT />
+                    </React.Suspense>
+                  } />
+                  <Route path="blockchain" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Blockchain />
+                    </React.Suspense>
+                  } />
+                  <Route path="gamification" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Gamification />
+                    </React.Suspense>
+                  } />
+                  <Route path="predictive-analytics" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <PredictiveAnalytics />
+                    </React.Suspense>
+                  } />
+                  <Route path="workflow" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <WorkflowPage />
+                    </React.Suspense>
+                  } />
                   <Route path="documents" element={
-                    <div className="container mx-auto p-6">
-                      <AdvancedDocumentCenter />
-                    </div>
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <div className="container mx-auto p-6">
+                        <AdvancedDocumentCenter />
+                      </div>
+                    </React.Suspense>
                   } />
-                  <Route path="mobile-optimization" element={<MobileOptimizationPage />} />
-                  <Route path="advanced-reports" element={<AdvancedReports />} />
-                  <Route path="executive" element={<Executive />} />
-                  <Route path="system-monitor" element={<SystemMonitor />} />
-                  <Route path="notification-center" element={<NotificationCenter />} />
+                  <Route path="mobile-optimization" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <MobileOptimizationPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="advanced-reports" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <AdvancedReports />
+                    </React.Suspense>
+                  } />
+                  <Route path="executive" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Executive />
+                    </React.Suspense>
+                  } />
+                  <Route path="system-monitor" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <SystemMonitor />
+                    </React.Suspense>
+                  } />
+                  <Route path="notification-center" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <NotificationCenter />
+                    </React.Suspense>
+                  } />
                   <Route path="integrations" element={
-                    <div className="container mx-auto p-6">
-                      <IntegrationsHub />
-                    </div>
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <div className="container mx-auto p-6">
+                        <IntegrationsHub />
+                      </div>
+                    </React.Suspense>
                   } />
-                  <Route path="backup-audit" element={<BackupAudit />} />
-                  <Route path="security" element={<SecurityPage />} />
-                  <Route path="users" element={<UsersPage />} />
-                  <Route path="collaboration" element={<CollaborationPage />} />
-                  <Route path="advanced-analytics" element={<AdvancedAnalyticsPage />} />
-                  <Route path="advanced-system-monitor" element={<AdvancedSystemMonitorPage />} />
-                  <Route path="intelligent-documents" element={<IntelligentDocumentsPage />} />
-                  <Route path="ai-assistant" element={<AIAssistantPage />} />
-                  <Route path="business-intelligence" element={<BusinessIntelligencePage />} />
-                  <Route path="smart-workflow" element={<SmartWorkflowPage />} />
-                   <Route path="help" element={<Help />} />
-                   <Route path="checklists-inteligentes" element={<ChecklistsInteligentes />} />
-                   <Route path="peotram" element={<PEOTRAM />} />
-                   <Route path="peo-dp" element={<PEODP />} />
-                   <Route path="sgso" element={<SGSO />} />
-                   <Route path="templates" element={<Templates />} />
-                  <Route path="system-overview" element={<SystemOverviewPage />} />
-                  <Route path="enhanced-metrics" element={<EnhancedMetrics />} />
-                  <Route path="performance-optimizer" element={<PerformanceOptimizerPage />} />
-                  <Route path="ai-insights" element={<AIInsights />} />
-                  <Route path="testing" element={<TestingDashboard />} />
-                  <Route path="feedback" element={<FeedbackPage />} />
-                  <Route path="real-time-analytics" element={<RealTimeAnalyticsPage />} />
-                  <Route path="offline-sync" element={<OfflineSyncPage />} />
+                  <Route path="backup-audit" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <BackupAudit />
+                    </React.Suspense>
+                  } />
+                  <Route path="security" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <SecurityPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="users" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <UsersPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="collaboration" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <CollaborationPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="advanced-analytics" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <AdvancedAnalyticsPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="advanced-system-monitor" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <AdvancedSystemMonitorPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="intelligent-documents" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <IntelligentDocumentsPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="ai-assistant" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <AIAssistantPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="business-intelligence" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <BusinessIntelligencePage />
+                    </React.Suspense>
+                  } />
+                  <Route path="smart-workflow" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <SmartWorkflowPage />
+                    </React.Suspense>
+                  } />
+                   <Route path="help" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Help />
+                    </React.Suspense>
+                  } />
+                   <Route path="checklists-inteligentes" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <ChecklistsInteligentes />
+                    </React.Suspense>
+                  } />
+                   <Route path="peotram" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <PEOTRAM />
+                    </React.Suspense>
+                  } />
+                   <Route path="peo-dp" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <PEODP />
+                    </React.Suspense>
+                  } />
+                   <Route path="sgso" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <SGSO />
+                    </React.Suspense>
+                  } />
+                   <Route path="templates" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Templates />
+                    </React.Suspense>
+                  } />
+                  <Route path="system-overview" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <SystemOverviewPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="enhanced-metrics" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <EnhancedMetrics />
+                    </React.Suspense>
+                  } />
+                  <Route path="performance-optimizer" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <PerformanceOptimizerPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="ai-insights" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <AIInsights />
+                    </React.Suspense>
+                  } />
+                  <Route path="testing" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <TestingDashboard />
+                    </React.Suspense>
+                  } />
+                  <Route path="feedback" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <FeedbackPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="real-time-analytics" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <RealTimeAnalyticsPage />
+                    </React.Suspense>
+                  } />
+                  <Route path="offline-sync" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <OfflineSyncPage />
+                    </React.Suspense>
+                  } />
                   <Route path="help-center" element={
-                    <div className="container mx-auto p-6">
-                      <IntelligentHelpCenter />
-                    </div>
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <div className="container mx-auto p-6">
+                        <IntelligentHelpCenter />
+                      </div>
+                    </React.Suspense>
                   } />
                   <Route path="knowledge-management" element={
-                    <div className="container mx-auto p-6">
-                      <KnowledgeManagement />
-                    </div>
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <div className="container mx-auto p-6">
+                        <KnowledgeManagement />
+                      </div>
+                    </React.Suspense>
                   } />
-                  <Route path="fleet-management" element={<FleetManagement />} />
-                  <Route path="fleet-dashboard" element={<FleetDashboard />} />
-                  <Route path="fleet-tracking" element={<FleetTracking />} />
-                   <Route path="crew-management" element={<CrewManagement />} />
-                   <Route path="crew-dossier" element={<CrewDossier />} />
-                  <Route path="maritime-certifications" element={<MaritimeCertifications />} />
-                  <Route path="maritime-checklists" element={<MaritimeChecklists />} />
-                  <Route path="automation" element={<Automation />} />
+                  <Route path="fleet-management" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <FleetManagement />
+                    </React.Suspense>
+                  } />
+                  <Route path="fleet-dashboard" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <FleetDashboard />
+                    </React.Suspense>
+                  } />
+                  <Route path="fleet-tracking" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <FleetTracking />
+                    </React.Suspense>
+                  } />
+                   <Route path="crew-management" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <CrewManagement />
+                    </React.Suspense>
+                  } />
+                   <Route path="crew-dossier" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <CrewDossier />
+                    </React.Suspense>
+                  } />
+                  <Route path="maritime-certifications" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <MaritimeCertifications />
+                    </React.Suspense>
+                  } />
+                  <Route path="maritime-checklists" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <MaritimeChecklists />
+                    </React.Suspense>
+                  } />
+                  <Route path="automation" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <Automation />
+                    </React.Suspense>
+                  } />
                   <Route path="organization-settings" element={
-                    <div className="container mx-auto p-6">
-                      <OrganizationSettings />
-                    </div>
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <div className="container mx-auto p-6">
+                        <OrganizationSettings />
+                      </div>
+                    </React.Suspense>
                   } />
-                   <Route path="organization-setup" element={<OrganizationSetup />} />
-                  <Route path="super-admin" element={<SuperAdmin />} />
-                  <Route path="saas-manager" element={<SaaSManager />} />
-                  <Route path="executive-dashboard" element={<ExecutiveDashboard />} />
-                   <Route path="intelligent-alerts" element={<IntelligentAlerts />} />
-                   <Route path="task-management" element={<TaskManagement />} />
-                   <Route path="document-management" element={<DocumentManagement />} />
+                   <Route path="organization-setup" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <OrganizationSetup />
+                    </React.Suspense>
+                  } />
+                  <Route path="super-admin" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <SuperAdmin />
+                    </React.Suspense>
+                  } />
+                  <Route path="saas-manager" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <SaaSManager />
+                    </React.Suspense>
+                  } />
+                  <Route path="executive-dashboard" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <ExecutiveDashboard />
+                    </React.Suspense>
+                  } />
+                   <Route path="intelligent-alerts" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <IntelligentAlerts />
+                    </React.Suspense>
+                  } />
+                   <Route path="task-management" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <TaskManagement />
+                    </React.Suspense>
+                  } />
+                   <Route path="document-management" element={
+                    <React.Suspense fallback={<RouteLoader />}>
+                      <DocumentManagement />
+                    </React.Suspense>
+                  } />
                    <Route path="advanced-documents" element={
-                     <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                     <React.Suspense fallback={<RouteLoader />}>
                        <AdvancedDocuments />
                      </React.Suspense>
                    } />
                     <Route path="mobile-app" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                      <React.Suspense fallback={<RouteLoader />}>
                         <MobileApp />
                       </React.Suspense>
                     } />
                     <Route path="academy" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                      <React.Suspense fallback={<RouteLoader />}>
                         <Academy />
                       </React.Suspense>
                     } />
                     <Route path="marketplace" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                      <React.Suspense fallback={<RouteLoader />}>
                         <Marketplace />
                       </React.Suspense>
                     } />
                     <Route path="real-time-monitoring" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                      <React.Suspense fallback={<RouteLoader />}>
                         <RealTimeMonitoring />
                       </React.Suspense>
                     } />
                     <Route path="advanced-auth" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                      <React.Suspense fallback={<RouteLoader />}>
                         <AdvancedAuth />
                       </React.Suspense>
                     } />
                      <Route path="business-continuity" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                       <React.Suspense fallback={<RouteLoader />}>
                          <BusinessContinuityPlan />
                        </React.Suspense>
                      } />
                      <Route path="roadmap" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                       <React.Suspense fallback={<RouteLoader />}>
                          <ProductRoadmapPage />
                        </React.Suspense>
                      } />
                      <Route path="system-auditor" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                       <React.Suspense fallback={<RouteLoader />}>
                          <SystemAuditorPage />
                        </React.Suspense>
                      } />
                      <Route path="nautilus-one" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                       <React.Suspense fallback={<RouteLoader />}>
                          <NautilusOne />
                        </React.Suspense>
                      } />
                      <Route path="production-deploy" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                       <React.Suspense fallback={<RouteLoader />}>
                          <ProductionDeployPage />
                        </React.Suspense>
                      } />
                       <Route path="user-onboarding" element={
-                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <React.Suspense fallback={<RouteLoader />}>
                           <UserOnboardingPage />
                         </React.Suspense>
                       } />
                       <Route path="strategic" element={
-                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <React.Suspense fallback={<RouteLoader />}>
                           <Strategic />
                         </React.Suspense>
                       } />
                       <Route path="notification-center-page" element={
-                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <React.Suspense fallback={<RouteLoader />}>
                           <NotificationCenterPage />
                         </React.Suspense>
                       } />
                       <Route path="system-monitor-page" element={
-                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <React.Suspense fallback={<RouteLoader />}>
                           <SystemMonitorPage />
                         </React.Suspense>
                       } />
                       <Route path="advanced-settings-page" element={
-                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
+                        <React.Suspense fallback={<RouteLoader />}>
                           <AdvancedSettingsPage />
                         </React.Suspense>
                        } />
-                      <Route path="system-validation" element={<SystemValidation />} />
+                      <Route path="system-validation" element={
+                        <React.Suspense fallback={<RouteLoader />}>
+                          <SystemValidation />
+                        </React.Suspense>
+                      } />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
