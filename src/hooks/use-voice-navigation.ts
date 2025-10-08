@@ -91,17 +91,9 @@ const ACTION_KEYWORDS = {
 };
 
 export const useVoiceNavigation = () => {
-  // Usar hooks de router de forma segura
-  let navigate: ReturnType<typeof useNavigate> | null = null;
-  let location: ReturnType<typeof useLocation> | null = null;
-  
-  try {
-    navigate = useNavigate();
-    location = useLocation();
-  } catch (error) {
-    console.warn('Router hooks not available, voice navigation will use fallback methods');
-  }
-  
+  // Always call hooks at the top level
+  const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const { handleNavigation } = useSidebarActions();
 

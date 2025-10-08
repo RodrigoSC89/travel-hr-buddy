@@ -233,7 +233,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     if (!selectedTemplate) return;
 
     switch (format) {
-      case 'json':
+      case 'json': {
         const blob = new Blob([JSON.stringify(selectedTemplate, null, 2)], {
           type: 'application/json',
         });
@@ -245,6 +245,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
         URL.revokeObjectURL(url);
         toast.success('Template exportado como JSON!');
         break;
+      }
       case 'excel':
         toast.info('Exportação Excel em desenvolvimento');
         break;

@@ -197,7 +197,7 @@ export const AdvancedAIAssistant = () => {
     }
   };
 
-  const useQuickAction = (action: any) => {
+  const handleQuickAction = (action: any) => {
     setInputMessage(action.prompt);
   };
 
@@ -325,7 +325,7 @@ export const AdvancedAIAssistant = () => {
                     key={action.id}
                     variant="outline"
                     size="sm"
-                    onClick={() => useQuickAction(action)}
+                    onClick={() => handleQuickAction(action)}
                     className="w-full justify-start h-auto p-3"
                   >
                     <IconComponent className="w-4 h-4 mr-2 flex-shrink-0" />

@@ -33,7 +33,9 @@ export const DraggableFloating: React.FC<DraggableFloatingProps> = ({
     try {
       const saved = localStorage.getItem(storageKey);
       if (saved) return JSON.parse(saved);
-    } catch { }
+    } catch {
+      // Ignore storage errors
+    }
     const initial = typeof defaultPosition === 'function' ? (defaultPosition as () => Position)() : defaultPosition;
     return initial;
   });
@@ -61,7 +63,11 @@ export const DraggableFloating: React.FC<DraggableFloatingProps> = ({
 
   // Persist position
   useEffect(() => {
-    try { localStorage.setItem(storageKey, JSON.stringify(pos)); } catch { }
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(pos));
+    } catch {
+      // Ignore storage errors  
+    }
   }, [pos, storageKey]);
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {

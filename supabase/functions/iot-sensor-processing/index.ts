@@ -32,9 +32,9 @@ serve(async (req) => {
     const timestamp = new Date().toISOString()
 
     // Process different types of sensor data
-    let processedData = { ...sensorData }
-    let alerts = []
-    let predictions = []
+    const processedData = { ...sensorData }
+    const alerts = []
+    const predictions = []
 
     switch (sensorType) {
       case 'engine_temperature':

@@ -245,7 +245,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       });
 
       // Search in database if organization exists
-      let dataResults: SearchResult[] = [];
+      const dataResults: SearchResult[] = [];
       if (currentOrganization && query.length >= 2) {
         await searchInDatabase(query, dataResults);
       }

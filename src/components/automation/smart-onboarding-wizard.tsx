@@ -220,7 +220,7 @@ const ModuleRecommendationStep: React.FC<{ data: any; onNext: (data: any) => voi
 
   const getRecommendedModules = () => {
     const { user_type, company_profile } = data;
-    let modules = [];
+    const modules = [];
 
     // Módulos baseados no tipo de usuário
     if (user_type === 'admin') {
