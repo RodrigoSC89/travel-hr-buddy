@@ -1,341 +1,133 @@
-import React from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { ErrorBoundaryWrapper } from "@/components/ui/error-boundary-wrapper";
-import { OfflineIndicator } from "@/components/ui/offline-indicator";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { OrganizationProvider } from "@/contexts/OrganizationContext";
-import { TenantProvider } from "@/contexts/TenantContext";
-import { ThemeProvider } from "@/components/layout/theme-provider";
-import Dashboard from "./pages/Dashboard";
-import Auth from "./pages/Auth";
-import Admin from "./pages/Admin";
-import EnterpriseLayout from "./components/layout/enterprise-layout";
-import PriceAlerts from "./pages/PriceAlerts";
-import Reports from "./pages/Reports";
-import Reservations from "./pages/Reservations";
-import ChecklistsInteligentes from "./pages/ChecklistsInteligentes";
-import PEOTRAM from "./pages/PEOTRAM";
-import PEODP from "./pages/PEODP";
-// Lazy load SGSO for better performance
-const SGSO = React.lazy(() => import("./pages/SGSO"));
-import Settings from "./pages/Settings";
-import Travel from "./pages/Travel";
-import Analytics from "./pages/Analytics";
-import HumanResources from "./pages/HumanResources";
-import Communication from "./pages/Communication";
-import Intelligence from "./pages/Intelligence";
-import Maritime from "./pages/Maritime";
-import MaritimeSupremo from "./pages/MaritimeSupremo";
-import Innovation from "./pages/Innovation";
-import Optimization from "./pages/Optimization";
-import Collaboration from "./pages/Collaboration";
-import Voice from "./pages/Voice";
-import Portal from "./pages/Portal";
-import AR from "./pages/AR";
-import IoT from "./pages/IoT";
-import Blockchain from "./pages/Blockchain";
-import Gamification from "./pages/Gamification";
-import PredictiveAnalytics from "./pages/PredictiveAnalytics";
-import NotFound from "./pages/NotFound";
-import ProtectedRoute from "./components/auth/protected-route";
-import WorkflowPage from "./pages/Workflow";
-import { WorkflowAutomationHub } from "./components/automation/workflow-automation-hub";
-import { AdvancedDocumentCenter } from "./components/documents/advanced-document-center";
-import { MobileOptimizationCenter } from "./components/mobile/mobile-optimization-center";
-import AdvancedReports from "./pages/AdvancedReports";
-import Executive from "./pages/Executive";
-import SystemMonitor from "./pages/SystemMonitor";
-import NotificationCenter from "./pages/NotificationCenter";
-import IntegrationsHub from "./components/integration/integrations-hub";
-import BackupAudit from "./pages/BackupAudit";
-import SecurityPage from "./pages/Security";
-import UsersPage from "./pages/Users";
-import CollaborationPage from "./pages/Collaboration";
-import MobileOptimizationPage from "./pages/MobileOptimization";
-import AdvancedAnalyticsPage from "./pages/AdvancedAnalytics";
-import AdvancedSystemMonitorPage from "./pages/AdvancedSystemMonitor";
-import IntelligentDocumentsPage from "./pages/IntelligentDocuments";
-import AIAssistantPage from "./pages/AIAssistant";
-import BusinessIntelligencePage from "./pages/BusinessIntelligence";
-import SmartWorkflowPage from "./pages/SmartWorkflow";
-import Help from "./pages/Help";
-import Templates from "./pages/Templates";
-import SystemOverviewPage from "./pages/SystemOverview";
-import EnhancedMetrics from "./pages/EnhancedMetrics";
-import PerformanceOptimizerPage from "./pages/PerformanceOptimizer";
-import OptimizationGeneral from "./pages/OptimizationGeneral";
-import AIInsights from "./pages/AIInsights";
-import TestingDashboard from "./pages/TestingDashboard";
-import FeedbackPage from "./pages/Feedback";
-import RealTimeAnalyticsPage from "./pages/RealTimeAnalytics";
-import OfflineSyncPage from "./pages/OfflineSync";
-import IntelligentHelpCenter from "@/components/help/intelligent-help-center";
-import KnowledgeManagement from "@/components/admin/knowledge-management";
-import FleetManagement from "./pages/FleetManagement";
-import CrewManagement from "./pages/CrewManagement";
-import CrewDossier from "./pages/CrewDossier";
-import MaritimeCertifications from "./pages/MaritimeCertifications";
-import MaritimeChecklists from "./pages/MaritimeChecklists";
-import OrganizationSettings from "./pages/OrganizationSettings";
-import OrganizationSetup from "./pages/OrganizationSetup";
-import SuperAdmin from "./pages/SuperAdmin";
-import TaskManagement from "./pages/TaskManagement";
-import DocumentManagement from "./pages/DocumentManagement";
-import FleetDashboard from "./pages/FleetDashboard";
-import FleetTracking from "./pages/FleetTracking";
-import ExecutiveDashboard from "./pages/ExecutiveDashboard";
-import IntelligentAlerts from "./pages/IntelligentAlerts";
-import Automation from "./pages/Automation";
-import DropdownTests from "./pages/DropdownTests";
-import SystemValidation from "./pages/SystemValidation";
-import FABDemo from "./pages/FABDemo";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
 
-// Lazy load the new advanced pages
-const AdvancedDocuments = React.lazy(() => import("./pages/AdvancedDocuments"));
-const MobileApp = React.lazy(() => import("./pages/MobileApp"));
-const SaaSManager = React.lazy(() => import("./pages/SaaSManager"));
-const Academy = React.lazy(() => import("./pages/Academy"));
-const Marketplace = React.lazy(() => import("./pages/Marketplace"));
-const RealTimeMonitoring = React.lazy(() => import("./pages/RealTimeMonitoring"));
-const AdvancedAuth = React.lazy(() => import("./pages/AdvancedAuth"));
-const BusinessContinuityPlan = React.lazy(() => import("./pages/BusinessContinuityPlan"));
-const ProductRoadmapPage = React.lazy(() => import("./pages/ProductRoadmap"));
-const SystemAuditorPage = React.lazy(() => import("./pages/SystemAuditor"));
-const ProductionDeployPage = React.lazy(() => import("./pages/ProductionDeploy"));
-const UserOnboardingPage = React.lazy(() => import("./pages/UserOnboarding"));
-const Strategic = React.lazy(() => import("./pages/Strategic"));
-const NotificationCenterPage = React.lazy(() => import("./pages/NotificationCenterPage"));
-const SystemMonitorPage = React.lazy(() => import("./pages/SystemMonitorPage"));
-const AdvancedSettingsPage = React.lazy(() => import("./pages/AdvancedSettingsPage"));
-const NautilusOne = React.lazy(() => import("./pages/NautilusOne"));
+// Lazy load all pages
+const Index = React.lazy(() => import('./pages/Index'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
+const PriceAlerts = React.lazy(() => import('./pages/PriceAlerts'));
+const Reports = React.lazy(() => import('./pages/Reports'));
+const Reservations = React.lazy(() => import('./pages/Reservations'));
+const ChecklistsInteligentes = React.lazy(() => import('./pages/ChecklistsInteligentes'));
+const PEOTRAM = React.lazy(() => import('./pages/PEOTRAM'));
+const PEODP = React.lazy(() => import('./pages/PEODP'));
+const SGSO = React.lazy(() => import('./pages/SGSO'));
+const Settings = React.lazy(() => import('./pages/Settings'));
+const Travel = React.lazy(() => import('./pages/Travel'));
+const Analytics = React.lazy(() => import('./pages/Analytics'));
+const HumanResources = React.lazy(() => import('./pages/HumanResources'));
+const Communication = React.lazy(() => import('./pages/Communication'));
+const Intelligence = React.lazy(() => import('./pages/Intelligence'));
+const Maritime = React.lazy(() => import('./pages/Maritime'));
+const MaritimeSupremo = React.lazy(() => import('./pages/MaritimeSupremo'));
+const Innovation = React.lazy(() => import('./pages/Innovation'));
+const Optimization = React.lazy(() => import('./pages/Optimization'));
+const Collaboration = React.lazy(() => import('./pages/Collaboration'));
+const Voice = React.lazy(() => import('./pages/Voice'));
+const Portal = React.lazy(() => import('./pages/Portal'));
+const AR = React.lazy(() => import('./pages/AR'));
+const IoT = React.lazy(() => import('./pages/IoT'));
+const Blockchain = React.lazy(() => import('./pages/Blockchain'));
+const Gamification = React.lazy(() => import('./pages/Gamification'));
+const PredictiveAnalytics = React.lazy(() => import('./pages/PredictiveAnalytics'));
 
+// Create QueryClient
 const queryClient = new QueryClient();
 
-const App = () => {
-  // Service Worker registration for PWA capabilities
-  React.useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => {
-          // Service Worker registered successfully
-        })
-        .catch(() => {
-          // Service Worker registration failed
-        });
-    }
-  }, []);
+// Loading component
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <p className="mt-4 text-gray-600">Carregando Nautilus One...</p>
+    </div>
+  </div>
+);
+
+// Simple Navigation Component (inline)
+const SimpleNavigation = () => {
+  const [currentPath, setCurrentPath] = React.useState(window.location.pathname);
+
+  const navItems = [
+    { path: '/', label: 'Início' },
+    { path: '/dashboard', label: 'Dashboard' },
+    { path: '/peotram', label: 'PEOTRAM' },
+    { path: '/peo-dp', label: 'PEO-DP' },
+    { path: '/sgso', label: 'SGSO' },
+    { path: '/analytics', label: 'Analytics' },
+    { path: '/settings', label: 'Configurações' }
+  ];
 
   return (
-    <ErrorBoundaryWrapper>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-        <AuthProvider>
-          <OrganizationProvider>
-            <TenantProvider>
-              <TooltipProvider>
-                <OfflineIndicator />
-                <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-              <Routes>
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/fab-demo" element={<FABDemo />} />
-                <Route path="/" element={
-                  <ProtectedRoute>
-                    <EnterpriseLayout />
-                  </ProtectedRoute>
-                }>
-                  <Route index element={<Dashboard />} />
-                  <Route path="admin" element={<Admin />} />
-                  <Route path="price-alerts" element={<PriceAlerts />} />
-                  <Route path="reports" element={<Reports />} />
-                  <Route path="settings" element={<Settings />} />
-                  <Route path="travel" element={<Travel />} />
-                  <Route path="analytics" element={<Analytics />} />
-                  <Route path="hr" element={<HumanResources />} />
-                  <Route path="reservations" element={<Reservations />} />
-                  <Route path="maritime" element={<Maritime />} />
-                  <Route path="maritime-supremo" element={<MaritimeSupremo />} />
-                  <Route path="communication" element={<Communication />} />
-                  <Route path="intelligence" element={<Intelligence />} />
-                  <Route path="optimization" element={<Optimization />} />
-                  <Route path="optimization-general" element={<OptimizationGeneral />} />
-                  <Route path="innovation" element={<Innovation />} />
-                  <Route path="collaboration" element={<Collaboration />} />
-                  <Route path="voice" element={<Voice />} />
-                  <Route path="portal" element={<Portal />} />
-                  <Route path="ar" element={<AR />} />
-                  <Route path="iot" element={<IoT />} />
-                  <Route path="blockchain" element={<Blockchain />} />
-                  <Route path="gamification" element={<Gamification />} />
-                  <Route path="predictive-analytics" element={<PredictiveAnalytics />} />
-                  <Route path="workflow" element={<WorkflowPage />} />
-                  <Route path="documents" element={
-                    <div className="container mx-auto p-6">
-                      <AdvancedDocumentCenter />
-                    </div>
-                  } />
-                  <Route path="mobile-optimization" element={<MobileOptimizationPage />} />
-                  <Route path="advanced-reports" element={<AdvancedReports />} />
-                  <Route path="executive" element={<Executive />} />
-                  <Route path="system-monitor" element={<SystemMonitor />} />
-                  <Route path="notification-center" element={<NotificationCenter />} />
-                  <Route path="integrations" element={
-                    <div className="container mx-auto p-6">
-                      <IntegrationsHub />
-                    </div>
-                  } />
-                  <Route path="backup-audit" element={<BackupAudit />} />
-                  <Route path="security" element={<SecurityPage />} />
-                  <Route path="users" element={<UsersPage />} />
-                  <Route path="collaboration" element={<CollaborationPage />} />
-                  <Route path="advanced-analytics" element={<AdvancedAnalyticsPage />} />
-                  <Route path="advanced-system-monitor" element={<AdvancedSystemMonitorPage />} />
-                  <Route path="intelligent-documents" element={<IntelligentDocumentsPage />} />
-                  <Route path="ai-assistant" element={<AIAssistantPage />} />
-                  <Route path="business-intelligence" element={<BusinessIntelligencePage />} />
-                  <Route path="smart-workflow" element={<SmartWorkflowPage />} />
-                   <Route path="help" element={<Help />} />
-                   <Route path="checklists-inteligentes" element={<ChecklistsInteligentes />} />
-                   <Route path="peotram" element={<PEOTRAM />} />
-                   <Route path="peo-dp" element={<PEODP />} />
-                   <Route path="sgso" element={<SGSO />} />
-                   <Route path="templates" element={<Templates />} />
-                  <Route path="system-overview" element={<SystemOverviewPage />} />
-                  <Route path="enhanced-metrics" element={<EnhancedMetrics />} />
-                  <Route path="performance-optimizer" element={<PerformanceOptimizerPage />} />
-                  <Route path="ai-insights" element={<AIInsights />} />
-                  <Route path="testing" element={<TestingDashboard />} />
-                  <Route path="feedback" element={<FeedbackPage />} />
-                  <Route path="real-time-analytics" element={<RealTimeAnalyticsPage />} />
-                  <Route path="offline-sync" element={<OfflineSyncPage />} />
-                  <Route path="help-center" element={
-                    <div className="container mx-auto p-6">
-                      <IntelligentHelpCenter />
-                    </div>
-                  } />
-                  <Route path="knowledge-management" element={
-                    <div className="container mx-auto p-6">
-                      <KnowledgeManagement />
-                    </div>
-                  } />
-                  <Route path="fleet-management" element={<FleetManagement />} />
-                  <Route path="fleet-dashboard" element={<FleetDashboard />} />
-                  <Route path="fleet-tracking" element={<FleetTracking />} />
-                   <Route path="crew-management" element={<CrewManagement />} />
-                   <Route path="crew-dossier" element={<CrewDossier />} />
-                  <Route path="maritime-certifications" element={<MaritimeCertifications />} />
-                  <Route path="maritime-checklists" element={<MaritimeChecklists />} />
-                  <Route path="automation" element={<Automation />} />
-                  <Route path="organization-settings" element={
-                    <div className="container mx-auto p-6">
-                      <OrganizationSettings />
-                    </div>
-                  } />
-                   <Route path="organization-setup" element={<OrganizationSetup />} />
-                  <Route path="super-admin" element={<SuperAdmin />} />
-                  <Route path="saas-manager" element={<SaaSManager />} />
-                  <Route path="executive-dashboard" element={<ExecutiveDashboard />} />
-                   <Route path="intelligent-alerts" element={<IntelligentAlerts />} />
-                   <Route path="task-management" element={<TaskManagement />} />
-                   <Route path="document-management" element={<DocumentManagement />} />
-                   <Route path="advanced-documents" element={
-                     <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                       <AdvancedDocuments />
-                     </React.Suspense>
-                   } />
-                    <Route path="mobile-app" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                        <MobileApp />
-                      </React.Suspense>
-                    } />
-                    <Route path="academy" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                        <Academy />
-                      </React.Suspense>
-                    } />
-                    <Route path="marketplace" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                        <Marketplace />
-                      </React.Suspense>
-                    } />
-                    <Route path="real-time-monitoring" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                        <RealTimeMonitoring />
-                      </React.Suspense>
-                    } />
-                    <Route path="advanced-auth" element={
-                      <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                        <AdvancedAuth />
-                      </React.Suspense>
-                    } />
-                     <Route path="business-continuity" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                         <BusinessContinuityPlan />
-                       </React.Suspense>
-                     } />
-                     <Route path="roadmap" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                         <ProductRoadmapPage />
-                       </React.Suspense>
-                     } />
-                     <Route path="system-auditor" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                         <SystemAuditorPage />
-                       </React.Suspense>
-                     } />
-                     <Route path="nautilus-one" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                         <NautilusOne />
-                       </React.Suspense>
-                     } />
-                     <Route path="production-deploy" element={
-                       <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                         <ProductionDeployPage />
-                       </React.Suspense>
-                     } />
-                      <Route path="user-onboarding" element={
-                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                          <UserOnboardingPage />
-                        </React.Suspense>
-                      } />
-                      <Route path="strategic" element={
-                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                          <Strategic />
-                        </React.Suspense>
-                      } />
-                      <Route path="notification-center-page" element={
-                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                          <NotificationCenterPage />
-                        </React.Suspense>
-                      } />
-                      <Route path="system-monitor-page" element={
-                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                          <SystemMonitorPage />
-                        </React.Suspense>
-                      } />
-                      <Route path="advanced-settings-page" element={
-                        <React.Suspense fallback={<div className="flex items-center justify-center h-64">Carregando...</div>}>
-                          <AdvancedSettingsPage />
-                        </React.Suspense>
-                       } />
-                      <Route path="system-validation" element={<SystemValidation />} />
-                </Route>
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              </BrowserRouter>
-              <Toaster />
-              <Sonner />
-            </TooltipProvider>
-            </TenantProvider>
-          </OrganizationProvider>
-        </AuthProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </ErrorBoundaryWrapper>
+    <nav className="bg-blue-900 text-white p-4">
+      <div className="container mx-auto">
+        <h1 className="text-xl font-bold mb-4">🚢 Nautilus One</h1>
+        <div className="flex flex-wrap gap-2">
+          {navItems.map((item) => (
+            <a
+              key={item.path}
+              href={item.path}
+              className={`px-3 py-2 rounded text-sm ${
+                currentPath === item.path 
+                  ? 'bg-blue-700 text-white' 
+                  : 'bg-blue-800 hover:bg-blue-700 text-blue-100'
+              }`}
+              onClick={() => setCurrentPath(item.path)}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </nav>
   );
 };
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <div className="min-h-screen bg-gray-100">
+          <SimpleNavigation />
+          <main className="container mx-auto p-6">
+            <React.Suspense fallback={<LoadingSpinner />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/price-alerts" element={<PriceAlerts />} />
+                <Route path="/reports" element={<Reports />} />
+                <Route path="/reservations" element={<Reservations />} />
+                <Route path="/checklists" element={<ChecklistsInteligentes />} />
+                <Route path="/peotram" element={<PEOTRAM />} />
+                <Route path="/peo-dp" element={<PEODP />} />
+                <Route path="/sgso" element={<SGSO />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/travel" element={<Travel />} />
+                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/hr" element={<HumanResources />} />
+                <Route path="/communication" element={<Communication />} />
+                <Route path="/intelligence" element={<Intelligence />} />
+                <Route path="/maritime" element={<Maritime />} />
+                <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
+                <Route path="/innovation" element={<Innovation />} />
+                <Route path="/optimization" element={<Optimization />} />
+                <Route path="/collaboration" element={<Collaboration />} />
+                <Route path="/voice" element={<Voice />} />
+                <Route path="/portal" element={<Portal />} />
+                <Route path="/ar" element={<AR />} />
+                <Route path="/iot" element={<IoT />} />
+                <Route path="/blockchain" element={<Blockchain />} />
+                <Route path="/gamification" element={<Gamification />} />
+                <Route path="/predictive" element={<PredictiveAnalytics />} />
+              </Routes>
+            </React.Suspense>
+          </main>
+        </div>
+        <Toaster position="top-right" />
+      </Router>
+    </QueryClientProvider>
+  );
+}
 
 export default App;
