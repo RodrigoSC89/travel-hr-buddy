@@ -61,6 +61,7 @@ export const TravelBookingSystem = () => {
   }>({});
   const [bookingProgress, setBookingProgress] = useState(0);
   const [isSearching, setIsSearching] = useState(false);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [searchCriteria, setSearchCriteria] = useState({
     origin: '',
     destination: '',
@@ -160,21 +161,74 @@ export const TravelBookingSystem = () => {
     }
   ];
 
+  const validateSearchForm = (): boolean => {
+    const errors: Record<string, string> = {};
+    
+    if (!searchCriteria.origin.trim()) {
+      errors.origin = 'Origem é obrigatória';
+    }
+    
+    if (!searchCriteria.destination.trim()) {
+      errors.destination = 'Destino é obrigatório';
+    }
+    
+    if (!searchCriteria.departureDate) {
+      errors.departureDate = 'Data de ida é obrigatória';
+    }
+    
+    if (searchCriteria.tripType === 'round-trip' && !searchCriteria.returnDate) {
+      errors.returnDate = 'Data de volta é obrigatória para viagens ida e volta';
+    }
+    
+    if (searchCriteria.departureDate && searchCriteria.returnDate) {
+      if (searchCriteria.returnDate < searchCriteria.departureDate) {
+        errors.returnDate = 'Data de volta deve ser posterior à data de ida';
+      }
+    }
+    
+    if (searchCriteria.passengers < 1 || searchCriteria.passengers > 9) {
+      errors.passengers = 'Número de passageiros deve estar entre 1 e 9';
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSearch = async () => {
+    // Validate form before searching
+    if (!validateSearchForm()) {
+      toast({
+        title: "Erro de Validação",
+        description: "Por favor, preencha todos os campos obrigatórios corretamente.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setIsSearching(true);
     setBookingProgress(20);
+    setFormErrors({}); // Clear any previous errors
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       setSearchResults([...mockFlights, ...mockHotels, ...mockCars]);
-      setIsSearching(false);
       setCurrentStep(1);
       setBookingProgress(40);
       toast({
         title: "Busca realizada",
         description: "Encontramos as melhores opções para sua viagem!"
       });
-    }, 2000);
+    } catch (error) {
+      toast({
+        title: "Erro na busca",
+        description: "Ocorreu um erro ao buscar opções de viagem. Tente novamente.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const handleSelectOption = (option: BookingOption) => {
@@ -198,43 +252,60 @@ export const TravelBookingSystem = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="origin">Origem</Label>
+          <Label htmlFor="origin">Origem *</Label>
           <div className="relative">
             <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               id="origin"
               placeholder="São Paulo, SP"
               value={searchCriteria.origin}
-              onChange={(e) => setSearchCriteria(prev => ({ ...prev, origin: e.target.value }))}
-              className="pl-10"
+              onChange={(e) => {
+                setSearchCriteria(prev => ({ ...prev, origin: e.target.value }));
+                if (formErrors.origin) {
+                  setFormErrors(prev => ({ ...prev, origin: '' }));
+                }
+              }}
+              className={cn("pl-10", formErrors.origin && "border-destructive")}
             />
           </div>
+          {formErrors.origin && (
+            <p className="text-sm text-destructive mt-1">{formErrors.origin}</p>
+          )}
         </div>
         <div>
-          <Label htmlFor="destination">Destino</Label>
+          <Label htmlFor="destination">Destino *</Label>
           <div className="relative">
             <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               id="destination"
               placeholder="Rio de Janeiro, RJ"
               value={searchCriteria.destination}
-              onChange={(e) => setSearchCriteria(prev => ({ ...prev, destination: e.target.value }))}
-              className="pl-10"
+              onChange={(e) => {
+                setSearchCriteria(prev => ({ ...prev, destination: e.target.value }));
+                if (formErrors.destination) {
+                  setFormErrors(prev => ({ ...prev, destination: '' }));
+                }
+              }}
+              className={cn("pl-10", formErrors.destination && "border-destructive")}
             />
           </div>
+          {formErrors.destination && (
+            <p className="text-sm text-destructive mt-1">{formErrors.destination}</p>
+          )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <Label>Data de Ida</Label>
+          <Label>Data de Ida *</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
                 className={cn(
                   "w-full justify-start text-left font-normal",
-                  !searchCriteria.departureDate && "text-muted-foreground"
+                  !searchCriteria.departureDate && "text-muted-foreground",
+                  formErrors.departureDate && "border-destructive"
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
@@ -245,22 +316,31 @@ export const TravelBookingSystem = () => {
               <Calendar
                 mode="single"
                 selected={searchCriteria.departureDate}
-                onSelect={(date) => setSearchCriteria(prev => ({ ...prev, departureDate: date }))}
+                onSelect={(date) => {
+                  setSearchCriteria(prev => ({ ...prev, departureDate: date }));
+                  if (formErrors.departureDate) {
+                    setFormErrors(prev => ({ ...prev, departureDate: '' }));
+                  }
+                }}
                 initialFocus
                 className="pointer-events-auto"
               />
             </PopoverContent>
           </Popover>
+          {formErrors.departureDate && (
+            <p className="text-sm text-destructive mt-1">{formErrors.departureDate}</p>
+          )}
         </div>
         <div>
-          <Label>Data de Volta</Label>
+          <Label>Data de Volta {searchCriteria.tripType === 'round-trip' && '*'}</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
                 className={cn(
                   "w-full justify-start text-left font-normal",
-                  !searchCriteria.returnDate && "text-muted-foreground"
+                  !searchCriteria.returnDate && "text-muted-foreground",
+                  formErrors.returnDate && "border-destructive"
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
@@ -271,12 +351,20 @@ export const TravelBookingSystem = () => {
               <Calendar
                 mode="single"
                 selected={searchCriteria.returnDate}
-                onSelect={(date) => setSearchCriteria(prev => ({ ...prev, returnDate: date }))}
+                onSelect={(date) => {
+                  setSearchCriteria(prev => ({ ...prev, returnDate: date }));
+                  if (formErrors.returnDate) {
+                    setFormErrors(prev => ({ ...prev, returnDate: '' }));
+                  }
+                }}
                 initialFocus
                 className="pointer-events-auto"
               />
             </PopoverContent>
           </Popover>
+          {formErrors.returnDate && (
+            <p className="text-sm text-destructive mt-1">{formErrors.returnDate}</p>
+          )}
         </div>
         <div>
           <Label>Passageiros</Label>
