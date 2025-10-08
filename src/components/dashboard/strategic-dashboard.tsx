@@ -260,6 +260,49 @@ const StrategicDashboard: React.FC = () => {
     }
   };
 
+  // Customize dashboard
+  const handleCustomizeDashboard = () => {
+    toast({
+      title: "Personalização",
+      description: "Abrindo configurações de personalização do dashboard...",
+    });
+    // Navigate to settings or open customization modal
+    navigate('/settings?tab=dashboard');
+  };
+
+  // Open alerts center
+  const handleAlertsCenter = () => {
+    toast({
+      title: "Central de Alertas",
+      description: "Abrindo central de alertas do sistema...",
+    });
+    // Navigate to alerts page or open alerts panel
+    setActiveTab('alerts');
+  };
+
+  // Global search handler
+  const handleGlobalSearch = () => {
+    toast({
+      title: "Busca Global",
+      description: "Ativando busca global do sistema (Ctrl+K)...",
+    });
+    // Focus on search input or open search modal
+    const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
+    if (searchInput) {
+      searchInput.focus();
+    }
+  };
+
+  // AI Insights handler
+  const handleAIInsights = () => {
+    toast({
+      title: "IA Insights",
+      description: "Gerando insights inteligentes baseados em IA...",
+    });
+    // Navigate to AI insights or open insights panel
+    setActiveTab('ai-insights');
+  };
+
   // Initialize dashboard
   useEffect(() => {
     loadDashboardData();
@@ -627,21 +670,21 @@ const StrategicDashboard: React.FC = () => {
             id: 'export',
             label: 'Exportar Dashboard',
             icon: <Download className="h-4 w-4" />,
-            action: () => console.log('Exportar dashboard'),
+            action: () => handleExport('pdf'),
             variant: 'outline'
           },
           {
             id: 'customize',
             label: 'Personalizar',
             icon: <Settings className="h-4 w-4" />,
-            action: () => console.log('Personalizar dashboard'),
+            action: handleCustomizeDashboard,
             variant: 'outline'
           },
           {
             id: 'alerts',
             label: 'Central de Alertas',
             icon: <Bell className="h-4 w-4" />,
-            action: () => console.log('Central de alertas'),
+            action: handleAlertsCenter,
             variant: 'outline'
           }
         ]}
@@ -650,14 +693,14 @@ const StrategicDashboard: React.FC = () => {
             id: 'global-search',
             label: 'Busca Global',
             icon: <Search className="h-3 w-3" />,
-            action: () => console.log('Busca global'),
+            action: handleGlobalSearch,
             shortcut: 'Ctrl+K'
           },
           {
             id: 'ai-insights',
             label: 'IA Insights',
             icon: <Brain className="h-3 w-3" />,
-            action: () => console.log('IA Insights')
+            action: handleAIInsights
           }
         ]}
       />
