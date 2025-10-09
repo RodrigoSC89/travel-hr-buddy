@@ -1,11 +1,12 @@
 import React from 'react';
 import RealTimeAnalytics from '@/components/analytics/real-time-analytics';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 
 const RealTimeAnalyticsPage = () => {
   return (
-    <div className="container mx-auto p-6">
+    <ModulePageWrapper gradient="green">
       <RealTimeAnalytics />
-    </div>
+    </ModulePageWrapper>
   );
 };
 

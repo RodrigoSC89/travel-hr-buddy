@@ -1,26 +1,27 @@
 import React from 'react';
 import RealTimeWorkspace from '@/components/collaboration/real-time-workspace';
-import { Users } from 'lucide-react';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import { ModuleHeader } from '@/components/ui/module-header';
+import { Users, MessageSquare, Share2 } from 'lucide-react';
 
 const Collaboration = () => {
   return (
-    <div className="p-6">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="p-3 rounded-lg bg-primary/10">
-              <Users className="h-8 w-8 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">Colaboração em Tempo Real</h1>
-              <p className="text-muted-foreground">
-                Workspace colaborativo para equipes marítimas
-              </p>
-            </div>
-          </div>
-          
-      <div className="h-[calc(100vh-200px)]">
+    <ModulePageWrapper gradient="green">
+      <ModuleHeader
+        icon={Users}
+        title="Colaboração em Tempo Real"
+        description="Workspace colaborativo para equipes marítimas"
+        gradient="green"
+        badges={[
+          { icon: MessageSquare, label: 'Chat em Tempo Real' },
+          { icon: Share2, label: 'Compartilhamento' }
+        ]}
+      />
+      
+      <div className="h-[calc(100vh-400px)]">
         <RealTimeWorkspace />
       </div>
-    </div>
+    </ModulePageWrapper>
   );
 };
 

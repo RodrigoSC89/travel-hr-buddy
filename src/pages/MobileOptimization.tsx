@@ -1,11 +1,12 @@
 import React from 'react';
 import { MobileOptimizationCenter } from '@/components/mobile/mobile-optimization-center';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 
 const MobileOptimizationPage = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <ModulePageWrapper gradient="blue">
       <MobileOptimizationCenter />
-    </div>
+    </ModulePageWrapper>
   );
 };
 

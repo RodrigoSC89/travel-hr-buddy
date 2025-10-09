@@ -1,11 +1,12 @@
 import React from 'react';
 import { EnhancedCommunicationCenter } from '@/components/communication/enhanced-communication-center';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 
 const Communication = () => {
   return (
-    <div className="p-6">
+    <ModulePageWrapper gradient="blue">
       <EnhancedCommunicationCenter />
-    </div>
+    </ModulePageWrapper>
   );
 };
 

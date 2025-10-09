@@ -1,11 +1,12 @@
 import React from 'react';
 import TemplateManager from '@/components/templates/template-manager';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 
 const Templates = () => {
   return (
-    <div className="container mx-auto p-6">
+    <ModulePageWrapper gradient="green">
       <TemplateManager />
-    </div>
+    </ModulePageWrapper>
   );
 };
 

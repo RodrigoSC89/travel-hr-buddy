@@ -1,11 +1,12 @@
 import React from 'react';
 import HelpCenter from '@/components/help/help-center';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 
 const Help = () => {
   return (
-    <div className="container mx-auto p-6">
+    <ModulePageWrapper gradient="orange">
       <HelpCenter />
-    </div>
+    </ModulePageWrapper>
   );
 };
 

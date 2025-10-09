@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
 import {
   Bot, Brain, Zap, Trophy, Eye, Shield, Smartphone,
   TrendingUp, BarChart3, Lightbulb, Rocket, Target, 
@@ -19,21 +21,18 @@ const Innovation = () => {
   };
 
   return (
-    <div className="p-6 space-y-6 min-h-screen bg-background">
-      {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
-        <div className="p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-pink-500/20">
-          <Brain className="h-8 w-8 text-purple-500" />
-        </div>
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-            Centro de Inovação & IA
-          </h1>
-          <p className="text-muted-foreground">
-            Tecnologias avançadas e inteligência artificial para o futuro marítimo
-          </p>
-        </div>
-      </div>
+    <ModulePageWrapper gradient="purple">
+      <ModuleHeader
+        icon={Brain}
+        title="Centro de Inovação & IA"
+        description="Tecnologias avançadas e inteligência artificial para o futuro marítimo"
+        gradient="purple"
+        badges={[
+          { icon: Bot, label: 'IA Avançada' },
+          { icon: Rocket, label: 'Inovação' },
+          { icon: Sparkles, label: 'Tecnologia' }
+        ]}
+      />
 
       {/* Innovation Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -538,7 +537,7 @@ const Innovation = () => {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </ModulePageWrapper>
   );
 };
 

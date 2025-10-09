@@ -1,5 +1,6 @@
 import React from "react";
 import { MainLayout } from "@/components/layouts/MainLayout";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PerformanceOptimizer from "@/components/optimization/performance-optimizer";
 import { UserExperienceEnhancer } from "@/components/optimization/UserExperienceEnhancer";
@@ -18,16 +19,17 @@ import {
 
 const Optimization = () => {
   return (
-    <MainLayout>
-      <div className="flex-1 flex flex-col">
-          <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container flex h-14 items-center px-6">
-              <div className="flex items-center gap-2">
-                <Zap className="h-6 w-6 text-primary" />
-                <h1 className="text-xl font-semibold">Centro de Otimização</h1>
+    <ModulePageWrapper gradient="green">
+      <MainLayout>
+        <div className="flex-1 flex flex-col">
+            <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+              <div className="container flex h-14 items-center px-6">
+                <div className="flex items-center gap-2">
+                  <Zap className="h-6 w-6 text-primary" />
+                  <h1 className="text-xl font-semibold">Centro de Otimização</h1>
+                </div>
               </div>
-            </div>
-          </header>
+            </header>
 
           <main className="flex-1 p-6">
             <div className="max-w-7xl mx-auto space-y-6">
@@ -117,8 +119,9 @@ const Optimization = () => {
               </Tabs>
             </div>
           </main>
-      </div>
-    </MainLayout>
+        </div>
+      </MainLayout>
+    </ModulePageWrapper>
   );
 };
 
