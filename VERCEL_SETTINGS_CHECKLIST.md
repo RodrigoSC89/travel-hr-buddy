@@ -2,6 +2,8 @@
 
 Quick reference for optimal Vercel project configuration for Nautilus One.
 
+> 💡 **New to Vercel?** Start with [VERCEL_QUICK_START.md](./VERCEL_QUICK_START.md) for a visual 5-minute setup guide!
+
 ---
 
 ## 🏗️ Build Settings

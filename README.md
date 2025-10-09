@@ -110,11 +110,14 @@ This project is built with:
 
 ### Deployment Documentation
 
-For comprehensive deployment guides and optimization:
+**🚀 Start Here:**
+- **[VERCEL_QUICK_START.md](./VERCEL_QUICK_START.md)** - 5-minute visual setup guide
+
+**📚 Comprehensive Guides:**
 - **[QUICK_DEPLOY.md](./QUICK_DEPLOY.md)** - Quick deployment guide for all platforms
+- **[VERCEL_SETTINGS_CHECKLIST.md](./VERCEL_SETTINGS_CHECKLIST.md)** - Interactive settings checklist
+- **[VERCEL_OPTIMIZATION_GUIDE.md](./VERCEL_OPTIMIZATION_GUIDE.md)** - Performance optimization strategies
 - **[VERCEL_DEPLOYMENT_READINESS.md](./VERCEL_DEPLOYMENT_READINESS.md)** - Complete deployment readiness checklist
-- **[VERCEL_OPTIMIZATION_GUIDE.md](./VERCEL_OPTIMIZATION_GUIDE.md)** - Performance optimization and settings recommendations
-- **[VERCEL_SETTINGS_CHECKLIST.md](./VERCEL_SETTINGS_CHECKLIST.md)** - Quick reference for Vercel dashboard settings
 - **[DEPLOYMENT_CONFIG_REPORT.md](./DEPLOYMENT_CONFIG_REPORT.md)** - Detailed configuration report
 
 ## Can I connect a custom domain to my Lovable project?
