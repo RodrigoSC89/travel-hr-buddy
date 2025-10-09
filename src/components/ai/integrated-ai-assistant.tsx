@@ -389,6 +389,7 @@ Como posso ajudá-lo especificamente hoje?`,
       // For now, we'll just show a success message
       // Conversation saved to history
     } catch (error) {
+      // Error saving conversation
     }
   };
 

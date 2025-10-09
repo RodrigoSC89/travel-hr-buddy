@@ -460,7 +460,7 @@ What would you like assistance with today?`,
                           setInputValue(example);
                         }}
                       >
-                        "{example}"
+                        &ldquo;{example}&rdquo;
                       </Button>
                     ))}
                   </div>
