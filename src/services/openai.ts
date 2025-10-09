@@ -435,3 +435,44 @@ Forneça:
 
 // Export singleton instance
 export const openaiService = new OpenAIService();
+
+// Backward compatibility - test function for api-tester.tsx
+export interface OpenAITestResult {
+  success: boolean;
+  message: string;
+  responseTime?: number;
+  data?: any;
+  error?: string;
+}
+
+export async function testOpenAIConnection(): Promise<OpenAITestResult> {
+  const startTime = Date.now();
+  
+  if (!openaiService.isConfigured()) {
+    return {
+      success: false,
+      message: 'OpenAI API key not configured',
+      error: 'Missing VITE_OPENAI_API_KEY',
+    };
+  }
+
+  try {
+    // Test by listing models
+    await openaiService.listModels();
+    
+    return {
+      success: true,
+      message: 'OpenAI API connection successful',
+      responseTime: Date.now() - startTime,
+      data: { configured: true },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: 'Failed to connect to OpenAI API',
+      responseTime: Date.now() - startTime,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
