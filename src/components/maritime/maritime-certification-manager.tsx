@@ -128,7 +128,6 @@ export const MaritimeCertificationManager = () => {
 
       setCertificates(mockCertificates);
     } catch (error) {
-      console.error("Error loading certifications:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar certificações",
@@ -165,7 +164,6 @@ export const MaritimeCertificationManager = () => {
 
       setAlerts(mockAlerts);
     } catch (error) {
-      console.error("Error loading alerts:", error);
     }
   };
 

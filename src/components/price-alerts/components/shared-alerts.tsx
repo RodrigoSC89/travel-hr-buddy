@@ -94,7 +94,6 @@ export const SharedAlerts = () => {
         .limit(20);
 
       if (error) {
-        console.error("Error loading shared alerts:", error);
         return;
       }
 
@@ -122,7 +121,6 @@ export const SharedAlerts = () => {
         setSharedAlerts(data || []);
       }
     } catch (error) {
-      console.error("Error loading shared alerts:", error);
     } finally {
       setLoading(false);
     }
@@ -137,13 +135,11 @@ export const SharedAlerts = () => {
         .eq("is_active", true);
 
       if (error) {
-        console.error("Error loading user alerts:", error);
         return;
       }
 
       setUserAlerts(data || []);
     } catch (error) {
-      console.error("Error loading user alerts:", error);
     }
   };
 
@@ -239,7 +235,6 @@ export const SharedAlerts = () => {
         description: "Seu voto foi registrado com sucesso!",
       });
     } catch (error) {
-      console.error("Error voting:", error);
       toast({
         title: "Erro",
         description: "Erro ao registrar seu voto. Tente novamente.",
@@ -279,7 +274,6 @@ export const SharedAlerts = () => {
       setIsShareDialogOpen(false);
       loadSharedAlerts();
     } catch (error) {
-      console.error("Error sharing alert:", error);
       toast({
         title: "Erro",
         description: "Erro ao compartilhar alerta. Tente novamente.",

@@ -150,7 +150,6 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
 
       setAnalyticsData(mockData);
     } catch (error) {
-      console.error("Error loading analytics data:", error);
     } finally {
       setLoading(false);
     }

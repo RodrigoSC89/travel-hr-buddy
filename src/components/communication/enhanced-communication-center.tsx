@@ -73,7 +73,6 @@ export const EnhancedCommunicationCenter = () => {
         responseRate: 95
       });
     } catch (error) {
-      console.error("Error loading communication stats:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar estatísticas de comunicação",

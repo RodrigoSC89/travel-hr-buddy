@@ -70,7 +70,6 @@ export const CertificateAlerts: React.FC = () => {
 
       setAlerts(alertsWithEmployeeNames);
     } catch (error) {
-      console.error("Error loading certificate alerts:", error);
     } finally {
       setIsLoading(false);
     }

@@ -68,7 +68,6 @@ export class APIManager {
         }
       }
       
-      console.error("API request failed after max retries", error);
       throw error;
     }
   }
@@ -117,7 +116,6 @@ export class APIManager {
       await this.get("/health");
       return true;
     } catch (error) {
-      console.error("API health check failed:", error);
       return false;
     }
   }

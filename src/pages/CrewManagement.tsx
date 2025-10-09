@@ -130,7 +130,6 @@ export default function CrewManagement() {
       setCrewMembers(demoCrewMembers);
       
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados da tripulação",

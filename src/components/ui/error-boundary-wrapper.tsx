@@ -38,7 +38,6 @@ export class ErrorBoundaryWrapper extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
     
     this.setState({
       error,

@@ -118,7 +118,6 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       const conflictChecked = detectConflicts(enhancedData);
       setReservations(conflictChecked);
     } catch (error) {
-      console.error("Error fetching reservations:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar reservas",
@@ -192,7 +191,6 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       });
       fetchReservations();
     } catch (error) {
-      console.error("Error deleting reservation:", error);
       toast({
         title: "Erro",
         description: "Erro ao excluir reserva",

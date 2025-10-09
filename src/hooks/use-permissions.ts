@@ -48,7 +48,6 @@ export const usePermissions = () => {
           .maybeSingle();
 
         if (roleError) {
-          console.error("Error fetching user role:", roleError);
           setUserRole("employee"); // default
         } else {
           setUserRole(roleData?.role || "employee");
@@ -62,13 +61,11 @@ export const usePermissions = () => {
             .eq("role", roleData.role);
 
           if (permissionsError) {
-            console.error("Error fetching permissions:", permissionsError);
           } else {
             setPermissions(permissionsData as RolePermission[] || []);
           }
         }
       } catch (error) {
-        console.error("Error in fetchUserRoleAndPermissions:", error);
       } finally {
         setIsLoading(false);
       }

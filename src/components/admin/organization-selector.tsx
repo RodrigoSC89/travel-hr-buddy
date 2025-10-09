@@ -45,7 +45,6 @@ export const OrganizationSelector: React.FC = () => {
 
       setOrganizations(orgs);
     } catch (error) {
-      console.error("Erro ao carregar organizações:", error);
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +60,6 @@ export const OrganizationSelector: React.FC = () => {
     try {
       await switchOrganization(orgId);
     } catch (error) {
-      console.error("Erro ao trocar organização:", error);
     }
   };
 

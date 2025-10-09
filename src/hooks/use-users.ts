@@ -65,7 +65,6 @@ export const useUsers = () => {
 
       setUsers(usersWithRoles);
     } catch (err) {
-      console.error("Error fetching users:", err);
       setError("Erro ao carregar usuários");
     } finally {
       setIsLoading(false);
@@ -92,7 +91,6 @@ export const useUsers = () => {
 
       return { success: true };
     } catch (err) {
-      console.error("Error updating user role:", err);
       return { success: false, error: "Erro ao atualizar role do usuário" };
     }
   };
@@ -131,7 +129,6 @@ export const useUsers = () => {
 
       return { success: true };
     } catch (err) {
-      console.error("Error updating user profile:", err);
       return { success: false, error: "Erro ao atualizar perfil do usuário" };
     }
   };

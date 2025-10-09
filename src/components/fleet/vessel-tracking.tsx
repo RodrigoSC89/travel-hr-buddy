@@ -96,7 +96,6 @@ export const VesselTracking = () => {
         setSelectedVessel(trackingData[0]);
       }
     } catch (error) {
-      console.error("Error loading vessels:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados dos navios",

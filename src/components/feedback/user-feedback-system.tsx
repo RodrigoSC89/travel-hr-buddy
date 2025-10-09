@@ -71,7 +71,6 @@ export const UserFeedbackSystem: React.FC = () => {
       if (error) throw error;
       setFeedbacks(data || []);
     } catch (error) {
-      console.error("Error loading feedbacks:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os feedbacks",
@@ -131,7 +130,6 @@ export const UserFeedbackSystem: React.FC = () => {
       // Reload feedbacks
       loadFeedbacks();
     } catch (error) {
-      console.error("Error submitting feedback:", error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar o feedback",

@@ -39,7 +39,6 @@ export class SupabaseManager {
         return this.executeWithRetry(operation, retryCount + 1);
       }
       
-      console.error("Supabase operation failed after max retries", error);
       throw error;
     }
   }
@@ -64,7 +63,6 @@ export class SupabaseManager {
       
       return !error || error.code === "PGRST116"; // No rows is ok
     } catch (error) {
-      console.error("Supabase health check failed:", error);
       return false;
     }
   }

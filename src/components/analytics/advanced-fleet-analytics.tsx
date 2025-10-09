@@ -182,7 +182,6 @@ export const AdvancedFleetAnalytics = () => {
       setPredictiveInsights(mockPredictiveInsights);
       
     } catch (error) {
-      console.error("Error loading analytics data:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados de analytics",

@@ -115,7 +115,6 @@ export const PeotramOCRProcessor: React.FC = () => {
         setSelectedDoc(processedDocs[0]);
       }
     } catch (error) {
-      console.error("Error processing documents:", error);
       toast.error("Erro ao processar documentos", {
         description: error instanceof Error ? error.message : "Erro desconhecido",
       });

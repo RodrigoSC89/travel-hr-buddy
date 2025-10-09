@@ -53,7 +53,6 @@ export const EnhancedNotificationCenter: React.FC = () => {
         priority: (item.priority as "low" | "medium" | "high" | "urgent") || "medium"
       })));
     } catch (error) {
-      console.error("Erro ao carregar notificações:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar notificações",

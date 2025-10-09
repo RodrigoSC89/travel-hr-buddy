@@ -125,7 +125,6 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
         description: "A análise inteligente do elemento foi realizada com sucesso.",
       });
     } catch (error) {
-      console.error("Error running AI analysis:", error);
       toast({
         title: "Erro na Análise",
         description: "Não foi possível executar a análise IA.",
@@ -143,7 +142,6 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
       for (const [elementNumber, responses] of Object.entries(auditResponses)) {
         for (const response of responses) {
           // For now, store as JSON in audit metadata
-          console.log("Saving response:", response);
         }
       }
 
@@ -171,7 +169,6 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
 
       onSave();
     } catch (error) {
-      console.error("Error saving audit:", error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar a auditoria.",

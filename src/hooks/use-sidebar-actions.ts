@@ -17,7 +17,6 @@ export const useSidebarActions = () => {
         duration: 1000
       });
     } catch (error) {
-      console.error("Navigation error:", error);
       toast({
         title: "Erro",
         description: "Erro ao navegar para o módulo",

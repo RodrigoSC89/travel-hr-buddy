@@ -84,7 +84,6 @@ export const OperationalCommandCenter: React.FC = () => {
         loadStats()
       ]);
     } catch (error) {
-      console.error("Error loading dashboard data:", error);
       toast({
         title: "Erro ao carregar dados",
         description: "Não foi possível carregar os dados do centro de comando.",
@@ -146,7 +145,6 @@ export const OperationalCommandCenter: React.FC = () => {
         schema: "public",
         table: "operational_alerts"
       }, (payload) => {
-        console.log("Real-time alert update:", payload);
         loadAlerts();
       })
       .subscribe();
@@ -158,7 +156,6 @@ export const OperationalCommandCenter: React.FC = () => {
         schema: "public",
         table: "operational_metrics"
       }, (payload) => {
-        console.log("Real-time metric update:", payload);
         loadMetrics();
       })
       .subscribe();
@@ -185,7 +182,6 @@ export const OperationalCommandCenter: React.FC = () => {
 
       loadAlerts();
     } catch (error) {
-      console.error("Error acknowledging alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível reconhecer o alerta.",
@@ -213,7 +209,6 @@ export const OperationalCommandCenter: React.FC = () => {
 
       loadAlerts();
     } catch (error) {
-      console.error("Error resolving alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível resolver o alerta.",

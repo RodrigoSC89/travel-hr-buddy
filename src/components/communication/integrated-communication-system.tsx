@@ -99,7 +99,6 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
       setContacts(formattedContacts);
     } catch (error) {
-      console.error("Error loading contacts:", error);
     }
   };
 
@@ -129,7 +128,6 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       // Mark messages as read
       await markMessagesAsRead(contactId);
     } catch (error) {
-      console.error("Error loading messages:", error);
     } finally {
       setIsLoading(false);
     }
@@ -147,7 +145,6 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         .eq("recipient_id", currentUserId)
         .eq("is_read", false);
     } catch (error) {
-      console.error("Error marking messages as read:", error);
     }
   };
 
@@ -186,7 +183,6 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         description: `Mensagem enviada para ${selectedContact.full_name}`,
       });
     } catch (error) {
-      console.error("Error sending message:", error);
       toast({
         title: "Erro ao enviar mensagem",
         description: "Não foi possível enviar a mensagem. Tente novamente.",
@@ -243,7 +239,6 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         description: `Arquivo ${file.name} enviado com sucesso`,
       });
     } catch (error) {
-      console.error("Error uploading file:", error);
       toast({
         title: "Erro ao enviar arquivo",
         description: "Não foi possível enviar o arquivo. Tente novamente.",

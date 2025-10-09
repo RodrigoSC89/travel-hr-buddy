@@ -29,7 +29,6 @@ export const useServiceIntegrations = () => {
       refreshServices();
       return result;
     } catch (error) {
-      console.error(`Failed to check ${serviceName}:`, error);
       return { 
         success: false, 
         error: error instanceof Error ? error.message : "Unknown error" 
@@ -48,7 +47,6 @@ export const useServiceIntegrations = () => {
       );
       refreshServices();
     } catch (error) {
-      console.error("Failed to check services:", error);
     } finally {
       setIsChecking(false);
     }

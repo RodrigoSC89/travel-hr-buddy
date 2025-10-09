@@ -208,7 +208,6 @@ const StrategicDashboard: React.FC = () => {
       setLastUpdated(new Date());
 
     } catch (error) {
-      console.error("Error loading dashboard data:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados do dashboard",

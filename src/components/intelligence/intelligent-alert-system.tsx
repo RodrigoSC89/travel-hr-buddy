@@ -268,7 +268,6 @@ export const IntelligentAlertSystem = () => {
       setSystemHealth(mockSystemHealth);
       
     } catch (error) {
-      console.error("Error loading intelligent data:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados inteligentes",
@@ -283,7 +282,6 @@ export const IntelligentAlertSystem = () => {
     // Set up real-time updates for critical alerts
     const interval = setInterval(() => {
       // In production, this would listen to Supabase real-time updates
-      console.log("Checking for new intelligent alerts...");
     }, 30000);
 
     return () => clearInterval(interval);

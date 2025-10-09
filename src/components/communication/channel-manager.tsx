@@ -171,7 +171,6 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
       setChannels(mockChannels);
     } catch (error) {
-      console.error("Error loading channels:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar canais",
@@ -263,7 +262,6 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         description: "Canal criado com sucesso"
       });
     } catch (error) {
-      console.error("Error creating channel:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar canal",
@@ -288,7 +286,6 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         description: "Você entrou no canal"
       });
     } catch (error) {
-      console.error("Error joining channel:", error);
     }
   };
 

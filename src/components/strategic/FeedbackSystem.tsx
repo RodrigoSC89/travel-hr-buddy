@@ -167,7 +167,6 @@ export const FeedbackSystem = () => {
 
   const handleSubmitFeedback = () => {
     // Implementar lógica de envio do feedback
-    console.log("Novo feedback:", newFeedback);
     setNewFeedback({ title: "", description: "", category: "", module: "" });
   };
 

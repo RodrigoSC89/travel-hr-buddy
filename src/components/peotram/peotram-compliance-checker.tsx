@@ -86,7 +86,6 @@ export const PeotramComplianceChecker: React.FC = () => {
       setComplianceItems(getMockComplianceItems());
       setComplianceReport(getMockComplianceReport());
     } catch (error) {
-      console.error("Erro ao carregar dados de conformidade:", error);
     } finally {
       setIsLoading(false);
     }

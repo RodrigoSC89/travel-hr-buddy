@@ -153,7 +153,6 @@ export const DocumentManagement: React.FC = () => {
       
       setDocuments(mockDocuments);
     } catch (error) {
-      console.error("Erro ao carregar documentos:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os documentos",
@@ -176,7 +175,6 @@ export const DocumentManagement: React.FC = () => {
       
       setCategories(mockCategories);
     } catch (error) {
-      console.error("Erro ao carregar categorias:", error);
     }
   };
 

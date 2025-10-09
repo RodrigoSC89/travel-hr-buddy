@@ -171,7 +171,6 @@ const IntegrationsHub = () => {
     }
 
     setIsLoading(true);
-    console.log("Triggering Zapier webhook:", zapierWebhook);
 
     try {
       const response = await fetch(zapierWebhook, {
@@ -193,7 +192,6 @@ const IntegrationsHub = () => {
         description: "A requisição foi enviada para o Zapier. Verifique o histórico do seu Zap para confirmar.",
       });
     } catch (error) {
-      console.error("Error triggering webhook:", error);
       toast({
         title: "Erro",
         description: "Falha ao enviar webhook. Verifique a URL e tente novamente.",

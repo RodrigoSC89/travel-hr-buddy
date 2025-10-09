@@ -145,7 +145,6 @@ export const AIAssistantPanel = () => {
       if (error) throw error;
       setAiInsights(data || []);
     } catch (error) {
-      console.error("Error fetching AI insights:", error);
     } finally {
       setIsLoading(false);
     }
@@ -172,7 +171,6 @@ export const AIAssistantPanel = () => {
         setQuery("");
         fetchAIInsights(); // Refresh insights
       } catch (error) {
-        console.error("Error processing query:", error);
         toast({
           title: "Erro na análise",
           description: "Não foi possível processar sua consulta.",

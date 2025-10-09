@@ -126,7 +126,6 @@ export const SettingsPanel = () => {
       // Mock loading settings - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-      console.error("Error loading settings:", error);
     }
   };
 
@@ -154,7 +153,6 @@ export const SettingsPanel = () => {
         description: "Configurações salvas com sucesso"
       });
     } catch (error) {
-      console.error("Error saving settings:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar configurações",
@@ -265,7 +263,6 @@ export const SettingsPanel = () => {
         description: "Dados exportados com sucesso"
       });
     } catch (error) {
-      console.error("Error exporting data:", error);
       toast({
         title: "Erro",
         description: "Erro ao exportar dados",

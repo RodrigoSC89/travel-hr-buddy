@@ -384,7 +384,6 @@ export const SmartOnboardingWizard: React.FC = () => {
           is_completed: currentStep === steps.length - 1
         });
     } catch (error) {
-      console.error("Erro ao salvar progresso:", error);
     }
 
     if (currentStep < steps.length - 1) {
@@ -440,7 +439,6 @@ export const SmartOnboardingWizard: React.FC = () => {
       }
 
     } catch (error) {
-      console.error("Erro ao criar automações:", error);
     } finally {
       setIsLoading(false);
     }

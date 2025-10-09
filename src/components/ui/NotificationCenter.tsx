@@ -96,7 +96,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
           schema: "public",
           table: "maritime_alerts"
         }, (payload) => {
-          console.log("New alert received:", payload);
           createNotificationFromAlert(payload.new);
         })
         .subscribe();
@@ -108,7 +107,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
           schema: "public",
           table: "maintenance_records"
         }, (payload) => {
-          console.log("New maintenance record:", payload);
           createNotificationFromMaintenance(payload.new);
         })
         .subscribe();
@@ -164,7 +162,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       setNotifications(formattedNotifications);
       setUnreadCount(formattedNotifications.filter(n => !n.isRead).length);
     } catch (error) {
-      console.error("Error loading notifications:", error);
       toast({
         title: "Erro ao carregar notificações",
         description: "Não foi possível carregar as notificações",
@@ -246,7 +243,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (error) {
-      console.error("Error marking notification as read:", error);
     }
   };
 
@@ -273,7 +269,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         description: `${unreadIds.length} notificações foram marcadas como lidas`,
       });
     } catch (error) {
-      console.error("Error marking all as read:", error);
     }
   };
 
@@ -293,7 +288,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         setUnreadCount(prev => Math.max(0, prev - 1));
       }
     } catch (error) {
-      console.error("Error deleting notification:", error);
     }
   };
 

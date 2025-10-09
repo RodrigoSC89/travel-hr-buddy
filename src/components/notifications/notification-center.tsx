@@ -177,7 +177,6 @@ export const NotificationCenter: React.FC = () => {
               variant="ghost" 
               className="w-full text-xs h-8 text-popover-foreground hover:bg-muted"
               onClick={() => {
-                console.log("Navegando para página completa de notificações");
               }}
             >
               Ver todas as notificações

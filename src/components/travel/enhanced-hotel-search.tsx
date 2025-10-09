@@ -280,7 +280,6 @@ export const EnhancedHotelSearch: React.FC = () => {
       ];
       setAiSuggestions(suggestions);
     } catch (error) {
-      console.error("Erro ao gerar sugestões:", error);
     }
   };
 
@@ -347,7 +346,6 @@ export const EnhancedHotelSearch: React.FC = () => {
         throw new Error("Nenhum hotel encontrado");
       }
     } catch (error) {
-      console.error("Erro na busca:", error);
       // Usar dados mock como fallback
       const filteredHotels = mockHotels.filter(hotel => 
         hotel.location.toLowerCase().includes(destination.toLowerCase())

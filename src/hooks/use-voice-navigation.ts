@@ -148,7 +148,6 @@ export const useVoiceNavigation = () => {
       }
 
       // Log da ação para feedback
-      console.log("Executing navigation:", intent);
       
       // Navegar para o módulo
       handleNavigation(intent.module);
@@ -178,7 +177,6 @@ export const useVoiceNavigation = () => {
 
       return true;
     } catch (error) {
-      console.error("Error executing navigation:", error);
       toast({
         title: "Erro de navegação",
         description: "Ocorreu um erro ao navegar para o módulo solicitado.",
@@ -198,7 +196,6 @@ export const useVoiceNavigation = () => {
       return { success: false };
     }
 
-    console.log("Processing voice command:", command);
 
     // Analisar comando
     const intent = parseVoiceCommand(command);

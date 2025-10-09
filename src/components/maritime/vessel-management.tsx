@@ -89,7 +89,6 @@ export function VesselManagement() {
       if (error) throw error;
       setVessels(data || []);
     } catch (error) {
-      console.error("Error fetching vessels:", error);
       toast.error("Erro ao carregar navios");
     } finally {
       setLoading(false);
@@ -127,7 +126,6 @@ export function VesselManagement() {
       setFormData(initialFormData);
       fetchVessels();
     } catch (error) {
-      console.error("Error saving vessel:", error);
       toast.error("Erro ao salvar navio");
     }
   };
@@ -145,7 +143,6 @@ export function VesselManagement() {
       toast.success("Navio excluído com sucesso");
       fetchVessels();
     } catch (error) {
-      console.error("Error deleting vessel:", error);
       toast.error("Erro ao excluir navio");
     }
   };

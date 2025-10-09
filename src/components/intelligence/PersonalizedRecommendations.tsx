@@ -103,7 +103,6 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
         throw new Error(data.error || "Erro ao gerar recomendações");
       }
     } catch (error) {
-      console.error("Error generating recommendations:", error);
       
       // Mock recommendations for demonstration
       const mockRecommendations: Recommendation[] = [

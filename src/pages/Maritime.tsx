@@ -93,7 +93,6 @@ export default function Maritime() {
       });
       
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados do dashboard",

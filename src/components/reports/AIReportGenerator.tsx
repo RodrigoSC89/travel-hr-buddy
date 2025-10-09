@@ -84,7 +84,6 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         throw new Error(data.error || "Erro ao gerar relatório");
       }
     } catch (error) {
-      console.error("Error generating report:", error);
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Falha ao gerar relatório",

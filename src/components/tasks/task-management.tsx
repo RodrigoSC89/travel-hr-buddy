@@ -68,7 +68,6 @@ export const TaskManagement: React.FC = () => {
       setIsLoading(true);
       
       // Using mock data for now - database integration will be added later
-      console.log("Loading tasks with mock data");
       // Mock data
       const mockTasks: Task[] = [
         {
@@ -128,7 +127,6 @@ export const TaskManagement: React.FC = () => {
         
       setTasks(mockTasks);
     } catch (error) {
-      console.error("Erro ao carregar tarefas:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as tarefas",

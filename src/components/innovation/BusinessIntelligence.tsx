@@ -72,7 +72,6 @@ export const BusinessIntelligence = () => {
       if (error) throw error;
       setAiReports(data || []);
     } catch (error) {
-      console.error("Error fetching reports:", error);
     }
   };
 
@@ -96,7 +95,6 @@ export const BusinessIntelligence = () => {
       
       fetchReports();
     } catch (error) {
-      console.error("Error generating report:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar o relatório.",

@@ -66,12 +66,10 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
       recognitionInstance.lang = "pt-BR";
       
       recognitionInstance.onstart = () => {
-        console.log("Voice recognition started");
         setIsListening(true);
       };
       
       recognitionInstance.onend = () => {
-        console.log("Voice recognition ended");
         setIsListening(false);
       };
       
@@ -92,7 +90,6 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
       };
       
       recognitionInstance.onerror = (event) => {
-        console.error("Voice recognition error:", event.error);
         toast({
           title: "Erro no reconhecimento",
           description: `Erro: ${event.error}`,
@@ -119,7 +116,6 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
 
   const processCommand = (command: string) => {
     const lowerCommand = command.toLowerCase().trim();
-    console.log("Processing command:", lowerCommand);
     
     // Mapeamento de comandos
     const commandMap: Record<string, string> = {
@@ -172,7 +168,6 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
     // Procurar correspondência
     for (const [cmd, module] of Object.entries(commandMap)) {
       if (lowerCommand.includes(cmd)) {
-        console.log(`Command matched: ${cmd} -> ${module}`);
         
         if (onNavigate) {
           onNavigate(module);

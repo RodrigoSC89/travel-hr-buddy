@@ -90,7 +90,6 @@ export const ResponsiveHotelSearch: React.FC = () => {
       });
 
       if (error) {
-        console.error("Amadeus hotel search error:", error);
         throw error;
       }
       
@@ -121,7 +120,6 @@ export const ResponsiveHotelSearch: React.FC = () => {
         throw new Error("Resposta inválida da API");
       }
     } catch (error) {
-      console.error("Hotel search error:", error);
       // Usar dados originais como fallback
       toast({
         title: "Dados de demonstração",

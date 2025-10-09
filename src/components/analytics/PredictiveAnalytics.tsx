@@ -67,7 +67,6 @@ const PredictiveAnalytics: React.FC = () => {
         throw new Error(data.error || "Erro ao gerar previsões");
       }
     } catch (error) {
-      console.error("Error generating predictions:", error);
       
       // Mock data for demonstration
       const mockPredictions: PredictionData[] = [

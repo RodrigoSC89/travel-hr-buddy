@@ -236,7 +236,6 @@ export const ProfessionalCrewDossier: React.FC = () => {
           .single();
 
         if (error) {
-          console.log("Tripulante não encontrado, criando...");
           await createCrewMember();
           return;
         }
@@ -245,7 +244,6 @@ export const ProfessionalCrewDossier: React.FC = () => {
         setSelectedCrewId(ownCrew.id);
       }
     } catch (error) {
-      console.error("Erro ao inicializar dossiê:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
@@ -285,7 +283,6 @@ export const ProfessionalCrewDossier: React.FC = () => {
         description: "Seu perfil de tripulante foi criado com sucesso"
       });
     } catch (error) {
-      console.error("Erro ao criar tripulante:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar perfil de tripulante",
@@ -375,7 +372,6 @@ export const ProfessionalCrewDossier: React.FC = () => {
       await generateAIRecommendations();
 
     } catch (error) {
-      console.error("Erro ao buscar dados do dossiê:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
@@ -406,7 +402,6 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
       setAIRecommendations(aiData || []);
     } catch (error) {
-      console.error("Erro ao gerar recomendações:", error);
     }
   };
 

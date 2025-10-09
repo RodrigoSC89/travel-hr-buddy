@@ -99,7 +99,6 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         template_data: item.template_data as any
       })));
     } catch (error) {
-      console.error("Error fetching templates:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar templates",
@@ -170,7 +169,6 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       setEditingTemplate(null);
       fetchTemplates();
     } catch (error) {
-      console.error("Error saving template:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar template",
@@ -197,7 +195,6 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
 
       fetchTemplates();
     } catch (error) {
-      console.error("Error deleting template:", error);
       toast({
         title: "Erro",
         description: "Erro ao excluir template",

@@ -97,7 +97,6 @@ export const AIAnalyticsDashboard: React.FC = () => {
         description: "Dados de IA atualizados com sucesso",
       });
     } catch (error) {
-      console.error("Error loading analytics:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar analytics de IA",

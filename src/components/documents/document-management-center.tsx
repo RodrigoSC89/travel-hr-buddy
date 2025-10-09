@@ -164,7 +164,6 @@ export const DocumentManagementCenter = () => {
 
       setDocuments(mockDocuments);
     } catch (error) {
-      console.error("Error loading documents:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar documentos",

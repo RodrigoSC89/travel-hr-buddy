@@ -193,7 +193,6 @@ const IntegratedAIAssistant = () => {
       }
       
     } catch (error) {
-      console.error("Erro ao processar mensagem:", error);
       toast({
         title: "Erro",
         description: "Falha ao processar mensagem. Tente novamente.",
@@ -390,7 +389,6 @@ Como posso ajudá-lo especificamente hoje?`,
       // For now, we'll just show a success message
       // Conversation saved to history
     } catch (error) {
-      console.error("Error saving conversation:", error);
     }
   };
 

@@ -52,7 +52,6 @@ export const AISuggestionsPanel: React.FC = () => {
       if (error) throw error;
       setSuggestions(data as AISuggestion[] || []);
     } catch (error) {
-      console.error("Erro ao carregar sugestões:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as sugestões da IA.",
@@ -103,7 +102,6 @@ export const AISuggestionsPanel: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Erro ao processar ação:", error);
       toast({
         title: "Erro",
         description: "Não foi possível processar a ação.",

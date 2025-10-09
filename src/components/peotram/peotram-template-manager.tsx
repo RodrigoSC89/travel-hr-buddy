@@ -58,7 +58,6 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
         description: "Template PEOTRAM criado com sucesso!",
       });
     } catch (error) {
-      console.error("Error creating template:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o template.",
@@ -84,7 +83,6 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
         description: "Template atualizado com sucesso!",
       });
     } catch (error) {
-      console.error("Error updating template:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o template.",

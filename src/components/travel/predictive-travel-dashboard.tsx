@@ -88,7 +88,6 @@ export const PredictiveTravelDashboard: React.FC = () => {
         loadAlerts()
       ]);
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
     }
   };
 
@@ -107,7 +106,6 @@ export const PredictiveTravelDashboard: React.FC = () => {
       if (error) throw error;
       setRecommendations(data.data || []);
     } catch (error) {
-      console.error("Erro ao carregar recomendações:", error);
     }
   };
 
@@ -126,7 +124,6 @@ export const PredictiveTravelDashboard: React.FC = () => {
       if (error) throw error;
       setAlerts(data || []);
     } catch (error) {
-      console.error("Erro ao carregar alertas:", error);
     }
   };
 
@@ -149,7 +146,6 @@ export const PredictiveTravelDashboard: React.FC = () => {
         description: `Predições geradas para ${searchType === "flight" ? "voos" : "hotéis"} - ${searchRoute}`
       });
     } catch (error) {
-      console.error("Erro ao gerar predições:", error);
       toast({
         title: "Erro",
         description: "Erro ao gerar predições. Tente novamente.",
@@ -206,7 +202,6 @@ export const PredictiveTravelDashboard: React.FC = () => {
       setNewAlert({ route: "", targetPrice: "", travelDate: "", type: "flight" });
       loadAlerts();
     } catch (error) {
-      console.error("Erro ao criar alerta:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar alerta. Tente novamente.",

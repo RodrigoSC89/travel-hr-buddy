@@ -55,7 +55,6 @@ export const StatisticsDashboard = () => {
         .single();
 
       if (error && error.code !== "PGRST116") {
-        console.error("Error loading statistics:", error);
         return;
       }
 
@@ -63,7 +62,6 @@ export const StatisticsDashboard = () => {
         setStatistics(data);
       }
     } catch (error) {
-      console.error("Error loading statistics:", error);
     }
   };
 
@@ -75,7 +73,6 @@ export const StatisticsDashboard = () => {
         .eq("user_id", user?.id);
 
       if (error) {
-        console.error("Error loading alerts:", error);
         return;
       }
 
@@ -112,7 +109,6 @@ export const StatisticsDashboard = () => {
         });
       }
     } catch (error) {
-      console.error("Error loading metrics:", error);
     } finally {
       setLoading(false);
     }

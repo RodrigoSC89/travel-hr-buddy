@@ -34,7 +34,6 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       stream.getTracks().forEach(track => track.stop());
       return true;
     } catch (error) {
-      console.error("Erro ao solicitar permissão de microfone:", error);
       setAudioPermission(false);
       toast({
         title: "Permissão negada",
@@ -71,7 +70,6 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       setIsListening(true);
       setTranscript("Ouvindo...");
     } catch (error) {
-      console.error("Erro ao iniciar gravação:", error);
       toast({
         title: "Erro",
         description: "Não foi possível iniciar a gravação",
@@ -138,7 +136,6 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       reader.readAsDataURL(audioBlob);
 
     } catch (error) {
-      console.error("Erro ao processar áudio:", error);
       setTranscript("Erro no processamento");
       toast({
         title: "Erro",
@@ -172,7 +169,6 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       await audio.play();
 
     } catch (error) {
-      console.error("Erro na síntese de fala:", error);
       setIsSpeaking(false);
       
       // Fallback para síntese nativa do navegador

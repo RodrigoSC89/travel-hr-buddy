@@ -157,7 +157,6 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
 
       setMessages(mockMessages);
     } catch (error) {
-      console.error("Error loading messages:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar mensagens",
@@ -246,7 +245,6 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         description: "Mensagem marcada como lida"
       });
     } catch (error) {
-      console.error("Error marking message as read:", error);
     }
   };
 
@@ -265,7 +263,6 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         description: "Mensagem arquivada"
       });
     } catch (error) {
-      console.error("Error archiving message:", error);
     }
   };
 

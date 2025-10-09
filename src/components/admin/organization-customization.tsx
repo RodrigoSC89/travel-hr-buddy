@@ -84,7 +84,6 @@ export const OrganizationCustomization: React.FC = () => {
         description: "Personalização salva com sucesso",
       });
     } catch (error) {
-      console.error("Erro ao salvar personalização:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar personalização",

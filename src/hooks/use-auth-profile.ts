@@ -42,7 +42,6 @@ export const useAuthProfile = () => {
           .single();
 
         if (error && error.code !== "PGRST116") {
-          console.error("Error fetching profile:", error);
           throw error;
         }
 
@@ -71,7 +70,6 @@ export const useAuthProfile = () => {
             .single();
 
           if (createError) {
-            console.error("Error creating profile:", createError);
             setProfile(defaultProfile);
           } else {
             // Map the new profile to our UserProfile interface
@@ -112,7 +110,6 @@ export const useAuthProfile = () => {
           setProfile(mappedProfile);
         }
       } catch (error) {
-        console.error("Error in fetchProfile:", error);
         // Fallback profile
         setProfile({
           id: user.id,
@@ -150,7 +147,6 @@ export const useAuthProfile = () => {
         .single();
 
       if (error) {
-        console.error("Error updating profile:", error);
         toast({
           title: "Erro",
           description: "Não foi possível atualizar o perfil",
@@ -178,7 +174,6 @@ export const useAuthProfile = () => {
       });
       return true;
     } catch (error) {
-      console.error("Error in updateProfile:", error);
       toast({
         title: "Erro",
         description: "Erro inesperado ao atualizar perfil",
@@ -204,7 +199,6 @@ export const useAuthProfile = () => {
         .upload(filePath, file);
 
       if (uploadError) {
-        console.error("Error uploading avatar:", uploadError);
         toast({
           title: "Erro",
           description: "Não foi possível fazer upload da imagem",
@@ -227,7 +221,6 @@ export const useAuthProfile = () => {
       
       return success;
     } catch (error) {
-      console.error("Error in uploadAvatar:", error);
       toast({
         title: "Erro",
         description: "Erro inesperado ao fazer upload do avatar",

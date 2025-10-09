@@ -210,7 +210,6 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
         setIsProcessing(false);
       }, 1500);
     } catch (error) {
-      console.error("Erro no chat:", error);
       setIsProcessing(false);
     }
   };

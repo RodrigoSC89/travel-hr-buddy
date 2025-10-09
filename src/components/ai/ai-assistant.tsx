@@ -184,7 +184,6 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       }
 
     } catch (error) {
-      console.error("AI Assistant error:", error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: "system",

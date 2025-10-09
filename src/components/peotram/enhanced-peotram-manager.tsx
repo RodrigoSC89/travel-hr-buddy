@@ -121,7 +121,6 @@ export const EnhancedPeotramManager: React.FC = () => {
       setNonConformities(getDemoNonConformities());
       setTemplates(getDemoTemplates());
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
     } finally {
       setIsLoading(false);
     }
@@ -220,14 +219,12 @@ export const EnhancedPeotramManager: React.FC = () => {
   ];
 
   const handleSaveAudit = async (auditData: any) => {
-    console.log("Salvando auditoria:", auditData);
     // Implementar salvamento na API Supabase
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay
     await loadData(); // Recarregar dados
   };
 
   const handleCompleteAudit = async (auditData: any) => {
-    console.log("Finalizando auditoria:", auditData);
     setIsNewAuditOpen(false);
     setSelectedAudit(null);
     // Implementar finalização na API
@@ -235,13 +232,11 @@ export const EnhancedPeotramManager: React.FC = () => {
   };
 
   const handleUpdateNonConformity = async (id: string, updates: any) => {
-    console.log("Atualizando não conformidade:", id, updates);
     // Implementar atualização na API
     await loadData();
   };
 
   const handleUpdateTemplate = async (template: any) => {
-    console.log("Atualizando template:", template);
     // Implementar atualização na API
     await loadData();
   };

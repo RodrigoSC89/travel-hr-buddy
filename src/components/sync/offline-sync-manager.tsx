@@ -56,7 +56,6 @@ export const OfflineSyncManager: React.FC = () => {
       const pending = await getPendingChanges();
       setSyncItems(pending);
     } catch (error) {
-      console.error("Error loading pending items:", error);
     }
   };
 
@@ -99,7 +98,6 @@ export const OfflineSyncManager: React.FC = () => {
           await simulateSyncAction(item);
           
         } catch (error) {
-          console.error(`Error syncing item ${item.id}:`, error);
         }
       }
 
@@ -116,7 +114,6 @@ export const OfflineSyncManager: React.FC = () => {
       await loadPendingItems();
       
     } catch (error) {
-      console.error("Sync error:", error);
       toast({
         title: "Erro na Sincronização",
         description: "Alguns itens podem não ter sido sincronizados",
@@ -135,10 +132,8 @@ export const OfflineSyncManager: React.FC = () => {
     case "update_profile":
     case "save_preference":
       // Simular salvamento no banco
-      console.log("Syncing action:", item.action, item.data);
       break;
     default:
-      console.log("Unknown sync action:", item.action);
     }
   };
 

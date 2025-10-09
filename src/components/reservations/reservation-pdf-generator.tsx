@@ -49,7 +49,6 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
         printWindow.print();
       };
     } catch (error) {
-      console.error("Error generating PDF:", error);
     } finally {
       setGenerating(false);
     }

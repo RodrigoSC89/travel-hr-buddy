@@ -12,7 +12,6 @@ export const useNotifications = () => {
 
   const initializeNotifications = async () => {
     if (!Capacitor.isNativePlatform()) {
-      console.log("Not on native platform, skipping notification setup");
       return;
     }
 
@@ -31,7 +30,6 @@ export const useNotifications = () => {
         
         // Add listeners
         PushNotifications.addListener("registration", (token) => {
-          console.log("Push registration success, token: " + token.value);
         });
 
         PushNotifications.addListener("registrationError", (error) => {
@@ -47,7 +45,6 @@ export const useNotifications = () => {
         });
       }
     } catch (error) {
-      console.error("Error initializing notifications:", error);
     }
   };
 
@@ -58,7 +55,6 @@ export const useNotifications = () => {
     schedule?: Date;
   }) => {
     if (!permissionGranted) {
-      console.warn("Notification permission not granted");
       return;
     }
 
@@ -79,9 +75,7 @@ export const useNotifications = () => {
       };
 
       await LocalNotifications.schedule(notificationOptions);
-      console.log("Notification scheduled successfully");
     } catch (error) {
-      console.error("Error scheduling notification:", error);
     }
   };
 
@@ -89,7 +83,6 @@ export const useNotifications = () => {
     try {
       await LocalNotifications.cancel({ notifications: [{ id }] });
     } catch (error) {
-      console.error("Error canceling notification:", error);
     }
   };
 

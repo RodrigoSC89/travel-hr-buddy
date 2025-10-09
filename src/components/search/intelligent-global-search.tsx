@@ -222,7 +222,6 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       try {
         setRecentSearches(JSON.parse(saved));
       } catch (error) {
-        console.error("Error loading recent searches:", error);
       }
     }
   }, []);
@@ -257,7 +256,6 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
       setResults(allResults);
     } catch (error) {
-      console.error("Search error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -340,7 +338,6 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       }
 
     } catch (error) {
-      console.error("Database search error:", error);
     }
   };
 

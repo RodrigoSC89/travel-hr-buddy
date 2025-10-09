@@ -39,7 +39,6 @@ export const useMaritimeActions = () => {
       showSuccess("Exportação concluída", `Dados de ${moduleName} exportados com sucesso`);
       
       // In a real implementation, this would trigger actual export
-      console.log(`Exporting ${moduleName} data:`, data);
     } catch (error) {
       showError("Erro na exportação", "Não foi possível exportar os dados");
     } finally {
@@ -107,7 +106,6 @@ export const useMaritimeActions = () => {
 
   const handleViewDetails = useCallback((itemName: string, id?: string | number) => {
     showInfo("Visualizando detalhes", `Abrindo detalhes de ${itemName}${id ? ` #${id}` : ""}`);
-    console.log(`View details for ${itemName}`, id);
   }, [showInfo]);
 
   const handleGenerateReport = useCallback(async (reportName: string, callback?: () => Promise<void>) => {

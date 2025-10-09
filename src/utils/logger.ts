@@ -11,7 +11,6 @@ export const logger = {
    */
   log: (...args: any[]) => {
     if (isDevelopment) {
-      console.log(...args);
     }
   },
 
@@ -20,7 +19,6 @@ export const logger = {
    */
   info: (...args: any[]) => {
     if (isDevelopment) {
-      console.info(...args);
     }
   },
 
@@ -28,14 +26,12 @@ export const logger = {
    * Log warnings (always shown)
    */
   warn: (...args: any[]) => {
-    console.warn(...args);
   },
 
   /**
    * Log errors (always shown)
    */
   error: (...args: any[]) => {
-    console.error(...args);
   },
 
   /**
@@ -43,7 +39,6 @@ export const logger = {
    */
   debug: (...args: any[]) => {
     if (isDevelopment) {
-      console.debug(...args);
     }
   },
 

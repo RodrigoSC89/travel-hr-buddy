@@ -98,14 +98,12 @@ export const RealTimeFleetMonitor = () => {
       setVessels(transformedVessels);
       
     } catch (error) {
-      console.error("Error loading fleet data:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleFleetUpdate = (payload: any) => {
-    console.log("Fleet update received:", payload);
     // Update specific vessel data
     if (payload.eventType === "UPDATE") {
       setVessels(prev => prev.map(vessel => 
@@ -139,7 +137,6 @@ export const RealTimeFleetMonitor = () => {
 
       setWeatherData(data.weather);
     } catch (error) {
-      console.error("Error fetching weather:", error);
     }
   };
 

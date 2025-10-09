@@ -234,7 +234,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       await loadTenantUsage(defaultTenant.id);
 
     } catch (err) {
-      console.error("Erro ao carregar dados do tenant:", err);
       setError("Erro ao carregar dados da empresa");
     } finally {
       setIsLoading(false);
@@ -305,7 +304,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       applyBrandingTheme(finalBranding);
 
     } catch (err) {
-      console.error("Erro ao carregar branding:", err);
     }
   };
 
@@ -339,7 +337,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setCurrentUser(tenantUser || defaultUser);
 
     } catch (err) {
-      console.error("Erro ao carregar usuário do tenant:", err);
     }
   };
 
@@ -379,7 +376,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setTenantUsage(usage || defaultUsage);
 
     } catch (err) {
-      console.error("Erro ao carregar usage do tenant:", err);
     }
   };
 
@@ -395,7 +391,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setTenantPlans(plans || []);
 
     } catch (err) {
-      console.error("Erro ao carregar planos:", err);
     }
   };
 
@@ -439,7 +434,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       await loadTenantUsage(tenantId);
 
     } catch (err) {
-      console.error("Erro ao trocar tenant:", err);
       setError("Erro ao trocar empresa");
     } finally {
       setIsLoading(false);
@@ -463,7 +457,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       applyBrandingTheme(data);
 
     } catch (err) {
-      console.error("Erro ao atualizar branding:", err);
       throw err;
     }
   };
@@ -483,7 +476,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setCurrentTenant(data);
 
     } catch (err) {
-      console.error("Erro ao atualizar configurações:", err);
       throw err;
     }
   };
@@ -495,12 +487,10 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const updateUserRole = async (userId: string, role: string) => {
     if (!currentTenant) return;
-    console.log("Funcionalidade de atualização de role será implementada");
   };
 
   const removeTenantUser = async (userId: string) => {
     if (!currentTenant) return;
-    console.log("Funcionalidade de remoção será implementada");
   };
 
   const getTenantUsers = async (): Promise<TenantUser[]> => {
@@ -564,11 +554,9 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const upgradePlan = async (planId: string) => {
-    console.log("Funcionalidade de upgrade será implementada");
   };
 
   const downgradeplan = async (planId: string) => {
-    console.log("Funcionalidade de downgrade será implementada");
   };
 
   const formatCurrency = (amount: number): string => {

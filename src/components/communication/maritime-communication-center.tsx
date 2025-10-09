@@ -150,7 +150,6 @@ export const MaritimeCommunicationCenter = () => {
 
       setCommunications(mockCommunications);
     } catch (error) {
-      console.error("Error loading communications:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar comunicações",
@@ -200,7 +199,6 @@ export const MaritimeCommunicationCenter = () => {
 
       setChannels(mockChannels);
     } catch (error) {
-      console.error("Error loading channels:", error);
     }
   };
 
@@ -257,7 +255,6 @@ export const MaritimeCommunicationCenter = () => {
       // Reload communications
       loadCommunications();
     } catch (error) {
-      console.error("Error sending message:", error);
       toast({
         title: "Erro",
         description: "Erro ao enviar mensagem",

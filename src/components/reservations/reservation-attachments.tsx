@@ -61,7 +61,6 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
       if (error) throw error;
       setAttachments(data || []);
     } catch (error) {
-      console.error("Error fetching attachments:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar anexos",
@@ -128,7 +127,6 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
 
       fetchAttachments();
     } catch (error) {
-      console.error("Error uploading files:", error);
       toast({
         title: "Erro",
         description: "Erro ao enviar anexos",
@@ -166,7 +164,6 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
 
       fetchAttachments();
     } catch (error) {
-      console.error("Error deleting attachment:", error);
       toast({
         title: "Erro",
         description: "Erro ao excluir anexo",

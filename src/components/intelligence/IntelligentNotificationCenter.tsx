@@ -136,7 +136,6 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
 
       setNotifications(mockNotifications);
     } catch (error) {
-      console.error("Error loading notifications:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar notificações",
@@ -148,7 +147,6 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
   };
 
   const handleNewNotification = (payload: any) => {
-    console.log("New notification received:", payload);
     loadNotifications(); // Reload notifications
     
     toast({
@@ -183,7 +181,6 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         loadNotifications();
       }
     } catch (error) {
-      console.error("Error generating notification:", error);
       toast({
         title: "Erro",
         description: "Falha ao gerar notificação",

@@ -185,7 +185,6 @@ export const IntelligentHelpCenter: React.FC = () => {
       });
 
     } catch (error) {
-      console.error("Error in smart search:", error);
       toast({
         title: "Erro na busca",
         description: "Não foi possível realizar a busca",
@@ -207,7 +206,6 @@ export const IntelligentHelpCenter: React.FC = () => {
           user_id: null // Seria auth.uid() se autenticado
         });
     } catch (error) {
-      console.error("Error tracking analytics:", error);
     }
   };
 

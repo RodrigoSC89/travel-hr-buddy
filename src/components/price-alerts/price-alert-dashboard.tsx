@@ -84,7 +84,6 @@ export const PriceAlertDashboardLegacy = () => {
       if (error) throw error;
       setAlerts(data || []);
     } catch (error) {
-      console.error("Error loading alerts:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os alertas",
@@ -108,7 +107,6 @@ export const PriceAlertDashboardLegacy = () => {
       if (error) throw error;
       setNotifications(data || []);
     } catch (error) {
-      console.error("Error loading notifications:", error);
     }
   };
 
@@ -125,7 +123,6 @@ export const PriceAlertDashboardLegacy = () => {
       if (error) throw error;
       return data?.price || 0;
     } catch (error) {
-      console.error("Error checking price:", error);
       // Improved fallback with more realistic price simulation
       return Math.random() * 2000 + 500; // More realistic price range
     }
@@ -184,7 +181,6 @@ export const PriceAlertDashboardLegacy = () => {
         description: `Alerta para ${newAlert.product_name} foi adicionado com sucesso.`
       });
     } catch (error) {
-      console.error("Error creating alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o alerta",
@@ -211,7 +207,6 @@ export const PriceAlertDashboardLegacy = () => {
         alert.id === id ? { ...alert, is_active: !alert.is_active } : alert
       ));
     } catch (error) {
-      console.error("Error toggling alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o alerta",
@@ -235,7 +230,6 @@ export const PriceAlertDashboardLegacy = () => {
         description: "O alerta de preço foi removido com sucesso."
       });
     } catch (error) {
-      console.error("Error removing alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível remover o alerta",
@@ -262,7 +256,6 @@ export const PriceAlertDashboardLegacy = () => {
         });
       }
     } catch (error) {
-      console.error("Error refreshing prices:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar os preços",

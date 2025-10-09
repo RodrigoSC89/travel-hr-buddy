@@ -266,7 +266,6 @@ export const TravelPolicySystem: React.FC = () => {
       setPolicies(mockPolicies);
       setViolations(mockViolations);
     } catch (error) {
-      console.error("Error loading policies:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar políticas",

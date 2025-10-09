@@ -111,7 +111,6 @@ export const CrewManagementDashboard = () => {
 
       setAssignments(mockAssignments);
     } catch (error) {
-      console.error("Error loading crew data:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados da tripulação",

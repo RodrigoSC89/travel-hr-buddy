@@ -135,7 +135,6 @@ export const PeoDpManager: React.FC = () => {
   };
 
   const handleWizardComplete = async (data: any) => {
-    console.log("Wizard completed with data:", data);
     // TODO: Create plan in database
     setIsWizardOpen(false);
     toast.success("Plano PEO-DP criado com sucesso!");

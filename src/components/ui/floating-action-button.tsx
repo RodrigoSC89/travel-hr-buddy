@@ -27,7 +27,6 @@ export const FloatingActionButton: React.FC = () => {
       label: "Buscar",
       action: () => {
         logUserAction("FAB_SEARCH_CLICKED", { source: "floating-action-button" });
-        console.log("🔍 Busca Global ativada");
         toast({ title: "🔍 Busca Global", description: "Sistema de busca ativado" });
       }
     },
@@ -36,7 +35,6 @@ export const FloatingActionButton: React.FC = () => {
       label: "Notificações",
       action: () => {
         logUserAction("FAB_NOTIFICATIONS_CLICKED", { source: "floating-action-button" });
-        console.log("🔔 Notificações ativada");
         navigate("/notifications");
         toast({ title: "🔔 Notificações", description: "Abrindo centro de notificações" });
       }
@@ -46,7 +44,6 @@ export const FloatingActionButton: React.FC = () => {
       label: "Mensagens",
       action: () => {
         logUserAction("FAB_MESSAGES_CLICKED", { source: "floating-action-button" });
-        console.log("💬 Mensagens ativada");
         navigate("/communication");
         toast({ title: "💬 Mensagens", description: "Abrindo sistema de comunicação" });
       }
@@ -56,7 +53,6 @@ export const FloatingActionButton: React.FC = () => {
       label: "Configurações",
       action: () => {
         logUserAction("FAB_SETTINGS_CLICKED", { source: "floating-action-button" });
-        console.log("⚙️ Configurações ativada");
         navigate("/settings");
         toast({ title: "⚙️ Configurações", description: "Abrindo configurações do sistema" });
       }
@@ -66,7 +62,6 @@ export const FloatingActionButton: React.FC = () => {
   const handleMainButtonClick = () => {
     const newState = !isOpen;
     logUserAction("FAB_MAIN_BUTTON_CLICKED", { isOpen: newState });
-    console.log("🎯 FAB Main Button clicked, isOpen:", newState);
     setIsOpen(newState);
     if (newState) {
       setFocusedIndex(0);
@@ -76,7 +71,6 @@ export const FloatingActionButton: React.FC = () => {
   };
 
   const handleActionClick = (action: typeof actions[0]) => {
-    console.log(`🎯 FAB Action clicked: ${action.label}`);
     action.action();
     setIsOpen(false);
     setFocusedIndex(-1);

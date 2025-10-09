@@ -79,7 +79,6 @@ export default function MaritimeChecklists() {
         criticalIssues: 0 // TODO: Calculate from checklist items
       });
     } catch (error) {
-      console.error("Error fetching maritime stats:", error);
       toast.error("Erro ao carregar estatísticas");
     } finally {
       setLoading(false);

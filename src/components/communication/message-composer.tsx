@@ -132,7 +132,6 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       setRecipients(mockRecipients);
     } catch (error) {
-      console.error("Error loading recipients:", error);
     }
   };
 
@@ -172,7 +171,6 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       setTemplates(mockTemplates);
     } catch (error) {
-      console.error("Error loading templates:", error);
     }
   };
 
@@ -293,7 +291,6 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         description: "Rascunho salvo com sucesso"
       });
     } catch (error) {
-      console.error("Error saving draft:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar rascunho",
@@ -333,7 +330,6 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       onMessageSent();
     } catch (error) {
-      console.error("Error sending message:", error);
       toast({
         title: "Erro",
         description: "Erro ao enviar mensagem",

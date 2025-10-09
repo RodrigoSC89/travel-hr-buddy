@@ -100,7 +100,6 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
 
       toast.success("Evidência enviada com sucesso!");
     } catch (error) {
-      console.error("Error uploading evidence:", error);
       toast.error("Erro ao enviar evidência");
     } finally {
       setUploading(false);
@@ -125,7 +124,6 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       setRecording(true);
       toast.info("Gravação iniciada...");
     } catch (error) {
-      console.error("Error starting recording:", error);
       toast.error("Erro ao iniciar gravação");
     }
   };
@@ -181,7 +179,6 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       setEvidence(updatedEvidence);
       onEvidenceUpdate?.(updatedEvidence);
     } catch (error) {
-      console.error("Error uploading audio:", error);
       toast.error("Erro ao enviar áudio");
     } finally {
       setUploading(false);
@@ -213,7 +210,6 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
 
       toast.success("Evidência removida");
     } catch (error) {
-      console.error("Error removing evidence:", error);
       toast.error("Erro ao remover evidência");
     }
   };

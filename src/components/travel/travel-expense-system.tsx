@@ -176,7 +176,6 @@ export const TravelExpenseSystem: React.FC = () => {
       setExpenses(mockExpenses);
       setBudgets(mockBudgets);
     } catch (error) {
-      console.error("Error loading expenses:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar despesas",
@@ -229,7 +228,6 @@ export const TravelExpenseSystem: React.FC = () => {
         description: "Despesa criada com sucesso",
       });
     } catch (error) {
-      console.error("Error adding expense:", error);
       toast({
         title: "Erro",
         description: "Erro ao adicionar despesa",

@@ -125,7 +125,6 @@ export const ModernEmployeePortal: React.FC = () => {
         loadDocuments()
       ]);
     } catch (error) {
-      console.error("Erro ao inicializar portal:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do portal",
@@ -170,7 +169,6 @@ export const ModernEmployeePortal: React.FC = () => {
         setUserProfile(profile);
       }
     } catch (error) {
-      console.error("Erro ao carregar perfil:", error);
     }
   };
 
@@ -211,7 +209,6 @@ export const ModernEmployeePortal: React.FC = () => {
         nextEmbarkation: null
       });
     } catch (error) {
-      console.error("Erro ao carregar estatísticas:", error);
     }
   };
 
@@ -243,7 +240,6 @@ export const ModernEmployeePortal: React.FC = () => {
         medicalExams: [] // Implementar quando houver tabela
       });
     } catch (error) {
-      console.error("Erro ao carregar calendário:", error);
     }
   };
 
@@ -280,7 +276,6 @@ export const ModernEmployeePortal: React.FC = () => {
 
       setAIInsights(formattedInsights);
     } catch (error) {
-      console.error("Erro ao carregar insights de IA:", error);
     }
   };
 
@@ -297,7 +292,6 @@ export const ModernEmployeePortal: React.FC = () => {
       if (error) throw error;
       setDocuments(docs || []);
     } catch (error) {
-      console.error("Erro ao carregar documentos:", error);
     }
   };
 
@@ -333,7 +327,6 @@ export const ModernEmployeePortal: React.FC = () => {
 
       setChatMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      console.error("Erro no chat de IA:", error);
       const errorMessage = {
         role: "assistant",
         content: "Desculpe, ocorreu um erro. Tente novamente.",
@@ -381,7 +374,6 @@ export const ModernEmployeePortal: React.FC = () => {
 
       await loadDocuments();
     } catch (error) {
-      console.error("Erro no upload:", error);
       toast({
         title: "Erro no upload",
         description: "Não foi possível enviar o documento",

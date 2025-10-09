@@ -95,7 +95,6 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         });
       }
     } catch (error) {
-      console.error("Voice interaction error:", error);
       toast({
         title: "Erro na interação por voz",
         description: "Tente novamente em alguns instantes.",
@@ -111,7 +110,6 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       const response = `Processando comando: "${text}". Esta funcionalidade será expandida em breve.`;
       await speak(response);
     } catch (error) {
-      console.error("Error processing voice command:", error);
     }
   };
 
@@ -134,7 +132,6 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
 
       await loadAIInsights();
     } catch (error) {
-      console.error("Error generating AI insights:", error);
       toast({
         title: "Erro ao gerar insights",
         description: "Não foi possível gerar a análise de IA.",
@@ -157,7 +154,6 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       if (error) throw error;
       setAiInsights(data || []);
     } catch (error) {
-      console.error("Error loading AI insights:", error);
     }
   };
 
@@ -174,7 +170,6 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       if (error) throw error;
       setGamificationProfile(data.profile);
     } catch (error) {
-      console.error("Error loading gamification profile:", error);
     } finally {
       setIsLoadingGamification(false);
     }
@@ -192,7 +187,6 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       if (error) throw error;
       setGoals(data.result?.goals || []);
     } catch (error) {
-      console.error("Error loading goals:", error);
     }
   };
 
@@ -212,7 +206,6 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         description: "Novas metas personalizadas foram sugeridas para você!",
       });
     } catch (error) {
-      console.error("Error generating goal suggestions:", error);
     }
   };
 

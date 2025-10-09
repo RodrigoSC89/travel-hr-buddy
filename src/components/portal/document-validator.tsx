@@ -135,7 +135,6 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       });
 
     } catch (error) {
-      console.error("Erro na validação:", error);
       toast({
         title: "Erro na validação",
         description: "Não foi possível validar o documento",

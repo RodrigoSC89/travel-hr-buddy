@@ -139,7 +139,6 @@ const SystemAuditor: React.FC = () => {
       }
 
     } catch (error) {
-      console.error("Erro na auditoria:", error);
       toast.error("Erro durante a auditoria do sistema");
     } finally {
       setIsAuditing(false);

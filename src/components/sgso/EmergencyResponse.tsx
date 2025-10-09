@@ -168,7 +168,6 @@ export const EmergencyResponse: React.FC = () => {
 
   const handleStartDrill = (planId: string, planTitle: string) => {
     showInfo("Iniciando simulado", `Preparando simulado de ${planTitle}`);
-    console.log("Starting drill for plan:", planId);
   };
 
   return (

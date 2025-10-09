@@ -105,7 +105,6 @@ export const ChatInterface = () => {
       if (error) throw error;
       setAllUsers(data || []);
     } catch (error) {
-      console.error("Erro ao carregar usuários:", error);
     }
   }, [currentUser?.id]);
 
@@ -180,7 +179,6 @@ export const ChatInterface = () => {
 
       setConversations(conversationsWithDetails);
     } catch (error) {
-      console.error("Erro ao carregar conversas:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as conversas",
@@ -220,7 +218,6 @@ export const ChatInterface = () => {
       // Marcar mensagens como lidas
       await markMessagesAsRead(conversationId);
     } catch (error) {
-      console.error("Erro ao carregar mensagens:", error);
     }
   }, [currentUser?.id]);
 
@@ -269,7 +266,6 @@ export const ChatInterface = () => {
           .insert(readStatuses);
       }
     } catch (error) {
-      console.error("Erro ao marcar mensagens como lidas:", error);
     }
   };
 
@@ -339,7 +335,6 @@ export const ChatInterface = () => {
 
       setNewMessage("");
     } catch (error) {
-      console.error("Erro ao enviar mensagem:", error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar a mensagem",
@@ -411,7 +406,6 @@ export const ChatInterface = () => {
         description: "Nova conversa criada",
       });
     } catch (error) {
-      console.error("Erro ao criar conversa:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar a conversa",

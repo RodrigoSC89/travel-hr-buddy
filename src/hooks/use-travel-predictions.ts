@@ -59,7 +59,6 @@ export const useTravelPredictions = () => {
       setPredictions(data.data);
       return data.data;
     } catch (error) {
-      console.error("Erro ao gerar predições:", error);
       toast({
         title: "Erro",
         description: "Erro ao gerar predições. Tente novamente.",
@@ -84,7 +83,6 @@ export const useTravelPredictions = () => {
       
       return { success: true };
     } catch (error) {
-      console.error("Erro ao armazenar dados de preço:", error);
       return { success: false, error };
     }
   }, []);
@@ -123,7 +121,6 @@ export const useTravelPredictions = () => {
       
       return { success: true };
     } catch (error) {
-      console.error("Erro ao criar alerta:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar alerta. Tente novamente.",
@@ -151,7 +148,6 @@ export const useTravelPredictions = () => {
       
       return data.data || [];
     } catch (error) {
-      console.error("Erro ao carregar recomendações:", error);
       return [];
     }
   }, []);
@@ -170,7 +166,6 @@ export const useTravelPredictions = () => {
       
       return data.data;
     } catch (error) {
-      console.error("Erro ao analisar tendências:", error);
       return null;
     }
   }, []);

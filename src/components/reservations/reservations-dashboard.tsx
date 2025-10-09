@@ -52,7 +52,6 @@ export const ReservationsDashboard: React.FC = () => {
     try {
       await Haptics.impact({ style: ImpactStyle.Medium });
     } catch (error) {
-      console.log("Haptics not available");
     }
   };
 
@@ -67,7 +66,6 @@ export const ReservationsDashboard: React.FC = () => {
       if (error) throw error;
       setReservations((data || []) as Reservation[]);
     } catch (error) {
-      console.error("Error fetching reservations:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar reservas",
@@ -119,7 +117,6 @@ export const ReservationsDashboard: React.FC = () => {
       resetForm();
       fetchReservations();
     } catch (error) {
-      console.error("Error saving reservation:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar reserva",
@@ -145,7 +142,6 @@ export const ReservationsDashboard: React.FC = () => {
       });
       fetchReservations();
     } catch (error) {
-      console.error("Error deleting reservation:", error);
       toast({
         title: "Erro",
         description: "Erro ao excluir reserva",

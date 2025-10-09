@@ -176,7 +176,6 @@ export const OrganizationHealthCheck: React.FC = () => {
 
       setHealthChecks(checks);
     } catch (error) {
-      console.error("Error loading health data:", error);
     } finally {
       setIsLoading(false);
     }

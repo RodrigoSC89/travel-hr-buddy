@@ -67,7 +67,6 @@ export const NotificationSettings = () => {
         .single();
 
       if (error && error.code !== "PGRST116") {
-        console.error("Error loading notification settings:", error);
         return;
       }
 
@@ -81,7 +80,6 @@ export const NotificationSettings = () => {
         });
       }
     } catch (error) {
-      console.error("Error loading notification settings:", error);
     } finally {
       setLoading(false);
     }
@@ -106,7 +104,6 @@ export const NotificationSettings = () => {
         description: "Suas preferências de notificação foram atualizadas.",
       });
     } catch (error) {
-      console.error("Error saving notification settings:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar configurações. Tente novamente.",
@@ -138,7 +135,6 @@ export const NotificationSettings = () => {
         });
       }
     } catch (error) {
-      console.error("Error requesting push permission:", error);
     }
   };
 

@@ -143,7 +143,6 @@ const AdvancedSystemMonitor: React.FC = () => {
       setPerformanceData(mockPerformance);
       
     } catch (error) {
-      console.error("Erro ao carregar métricas:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar métricas do sistema",

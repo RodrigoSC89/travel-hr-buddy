@@ -211,7 +211,6 @@ export const PeotramDocumentManager: React.FC = () => {
       setDocuments(mockDocuments);
       updateCategoryCompletion(mockDocuments);
     } catch (error) {
-      console.error("Erro ao carregar documentos:", error);
     }
   };
 

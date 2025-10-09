@@ -51,7 +51,6 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         }
       }
     } catch (error) {
-      console.error("Error checking MFA factors:", error);
     }
   };
 

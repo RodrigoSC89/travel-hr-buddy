@@ -86,7 +86,6 @@ export const SmartInsights: React.FC = () => {
         })));
       }
     } catch (error) {
-      console.error("Error generating insights:", error);
       // Fallback to mock data
       generateMockInsights();
     } finally {
@@ -193,7 +192,6 @@ export const SmartInsights: React.FC = () => {
         setPredictions(predictiveData);
       }
     } catch (error) {
-      console.error("Error generating predictions:", error);
       generateMockPredictions();
     }
   };
@@ -268,7 +266,6 @@ export const SmartInsights: React.FC = () => {
         description: `${insight.title} foi aplicado com sucesso!`,
       });
     } catch (error) {
-      console.error("Error implementing insight:", error);
       toast({
         title: "Insight Implementado",
         description: `${insight.title} foi aplicado com sucesso!`,

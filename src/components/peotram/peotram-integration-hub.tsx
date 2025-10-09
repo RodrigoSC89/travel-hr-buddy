@@ -167,7 +167,6 @@ export const PeotramIntegrationHub: React.FC = () => {
 
   const syncIntegration = (id: string) => {
     // Simular sincronização
-    console.log("Sincronizando integração:", id);
   };
 
   return (

@@ -131,7 +131,6 @@ export const EnhancedMobileSupport: React.FC = () => {
           info.batteryLevel = Math.round(battery.level * 100);
           info.isCharging = battery.charging;
         } catch (error) {
-          console.log("Battery API não disponível");
         }
       }
 
@@ -143,7 +142,6 @@ export const EnhancedMobileSupport: React.FC = () => {
 
       setDeviceInfo(info);
     } catch (error) {
-      console.error("Erro ao detectar capacidades do dispositivo:", error);
     } finally {
       setIsLoading(false);
     }
@@ -298,7 +296,6 @@ export const EnhancedMobileSupport: React.FC = () => {
         break;
       }
     } catch (error) {
-      console.error(`Erro ao solicitar permissão ${permission}:`, error);
       toast({
         title: "Erro",
         description: `Não foi possível ativar ${permission}`,

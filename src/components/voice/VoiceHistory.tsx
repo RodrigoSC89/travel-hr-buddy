@@ -46,7 +46,6 @@ const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
   
   const loadConversationHistory = (id: string) => {
     // Implementation would load from localStorage or API
-    console.log("Loading conversation:", id);
   };
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);

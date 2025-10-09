@@ -50,7 +50,6 @@ export const UserManagementMultiTenant: React.FC = () => {
       const organizationUsers = await getCurrentOrganizationUsers();
       setUsers(organizationUsers);
     } catch (error) {
-      console.error("Erro ao carregar usuários:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os usuários da organização",

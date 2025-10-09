@@ -86,7 +86,6 @@ export const RealTimeNotificationCenter: React.FC = () => {
       setNotifications((regularNotifications || []) as Notification[]);
       setIntelligentNotifications(smartNotifications || []);
     } catch (error) {
-      console.error("Error loading notifications:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as notificações",
@@ -125,7 +124,6 @@ export const RealTimeNotificationCenter: React.FC = () => {
         description: "Notificação marcada como lida"
       });
     } catch (error) {
-      console.error("Error marking notification as read:", error);
       toast({
         title: "Erro",
         description: "Não foi possível marcar como lida",
@@ -165,7 +163,6 @@ export const RealTimeNotificationCenter: React.FC = () => {
         description: "Todas as notificações foram marcadas como lidas"
       });
     } catch (error) {
-      console.error("Error marking all as read:", error);
       toast({
         title: "Erro",
         description: "Não foi possível marcar todas como lidas",
@@ -191,13 +188,11 @@ export const RealTimeNotificationCenter: React.FC = () => {
         window.open(notification.action_data.url, "_blank");
         break;
       default:
-        console.log("Action executed:", notification.action_type, notification.action_data);
       }
 
       // Marcar como lida após executar ação
       await markAsRead(notification.id, true);
     } catch (error) {
-      console.error("Error executing action:", error);
       toast({
         title: "Erro",
         description: "Não foi possível executar a ação",
@@ -223,7 +218,6 @@ export const RealTimeNotificationCenter: React.FC = () => {
           filter: `user_id=eq.${user.id}`
         }, 
         (payload) => {
-          console.log("Notification change received:", payload);
           loadNotifications();
         }
       )
@@ -240,7 +234,6 @@ export const RealTimeNotificationCenter: React.FC = () => {
           filter: `user_id=eq.${user.id}`
         }, 
         (payload) => {
-          console.log("Intelligent notification change received:", payload);
           loadNotifications();
         }
       )

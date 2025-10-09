@@ -38,7 +38,6 @@ const VesselTrackingMap = () => {
         if (error) throw error;
         setMapboxToken(data.token);
       } catch (error) {
-        console.error("Error fetching Mapbox token:", error);
         toast({
           title: "Erro de Configuração",
           description: "Token do Mapbox não configurado",
@@ -147,7 +146,6 @@ const VesselTrackingMap = () => {
         updateVesselMarkers(mockVessels);
       }
     } catch (error) {
-      console.error("Error loading vessel data:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados das embarcações",

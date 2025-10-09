@@ -537,7 +537,6 @@ export const EnhancedSettingsHub: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Error sharing:", error);
     }
   };
 
@@ -551,7 +550,6 @@ export const EnhancedSettingsHub: React.FC = () => {
       ipAddress: "auto-detect" // In real app, get actual IP
     };
     
-    console.log("Settings audit log:", logEntry);
     // In real app, save to audit_logs table
   };
 

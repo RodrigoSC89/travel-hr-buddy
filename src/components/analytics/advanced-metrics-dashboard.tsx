@@ -117,7 +117,6 @@ export const AdvancedMetricsDashboard: React.FC = () => {
       }, 1000);
       
     } catch (error) {
-      console.error("Error loading metrics:", error);
       toast({
         title: "Erro ao carregar métricas",
         description: "Não foi possível carregar os dados das métricas",
@@ -149,7 +148,6 @@ export const AdvancedMetricsDashboard: React.FC = () => {
         description: "O relatório de análise foi gerado com sucesso",
       });
     } catch (error) {
-      console.error("Error generating report:", error);
       toast({
         title: "Erro ao gerar relatório",
         description: "Não foi possível gerar o relatório",

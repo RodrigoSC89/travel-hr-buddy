@@ -92,7 +92,6 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
           table: "vessels"
         },
         (payload) => {
-          console.log("Vessel change received:", payload);
           
           if (payload.eventType === "INSERT") {
             setVessels(prev => [payload.new as Vessel, ...prev]);
@@ -203,7 +202,6 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
         setVessels(vessels || []);
       }
     } catch (error) {
-      console.error("Erro ao carregar embarcações:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as embarcações",
@@ -269,7 +267,6 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
         description: `${data.name} foi adicionada com sucesso à frota`,
       });
     } catch (error) {
-      console.error("Error adding vessel:", error);
       toast({
         title: "Erro",
         description: "Não foi possível adicionar a embarcação",

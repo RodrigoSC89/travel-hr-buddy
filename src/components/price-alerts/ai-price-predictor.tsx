@@ -114,7 +114,6 @@ export const AIPricePredictor: React.FC = () => {
       generateAIInsights();
 
     } catch (error) {
-      console.error("Error generating prediction:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar a previsão",

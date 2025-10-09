@@ -98,7 +98,6 @@ export const TenantSetupWizard: React.FC = () => {
     setIsLoading(true);
     try {
       // Aqui você implementaria a criação do tenant
-      console.log("Creating tenant with data:", formData);
       
       toast({
         title: "Tenant criado com sucesso!",

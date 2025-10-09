@@ -73,7 +73,6 @@ export const TravelMap: React.FC<TravelMapProps> = ({ locations, className = "" 
         }
 
       } catch (error) {
-        console.error("Error initializing map:", error);
         // Fallback without map
       }
     };

@@ -192,7 +192,6 @@ export const FlightSearch = () => {
       });
 
       if (error) {
-        console.error("Amadeus search error:", error);
         throw error;
       }
       
@@ -244,7 +243,6 @@ export const FlightSearch = () => {
         throw new Error("Resposta inválida da API");
       }
     } catch (error) {
-      console.error("Flight search error:", error);
       // Fallback para dados mock com URLs específicas
       const newFlights = mockFlights.map(flight => ({
         ...flight,

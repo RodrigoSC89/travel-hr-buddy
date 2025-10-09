@@ -70,7 +70,6 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       updateCacheSize();
     } catch (error) {
-      console.error("Error saving to cache:", error);
     }
   }, [initDB, updateCacheSize]);
 
@@ -90,7 +89,6 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         request.onerror = () => reject(request.error);
       });
     } catch (error) {
-      console.error("Error getting from cache:", error);
       return null;
     }
   }, [initDB]);
@@ -111,9 +109,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       };
       
       await store.add(offlineData);
-      console.log("Added pending change:", offlineData);
     } catch (error) {
-      console.error("Error adding pending change:", error);
     }
   }, [initDB]);
 
@@ -131,7 +127,6 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         request.onerror = () => reject(request.error);
       });
     } catch (error) {
-      console.error("Error getting pending changes:", error);
       return [];
     }
   }, [initDB]);
@@ -142,7 +137,6 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
     
     try {
       const pendingChanges = await getPendingChanges();
-      console.log("Syncing pending changes:", pendingChanges.length);
       
       const db = await initDB();
       const transaction = db.transaction([OFFLINE_STORE], "readwrite");
@@ -151,7 +145,6 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       for (const change of pendingChanges) {
         try {
           // Simulate API sync - replace with actual API calls
-          console.log("Syncing change:", change.action, change.data);
           
           // Mark as synced
           change.synced = true;
@@ -161,13 +154,10 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
           // await syncToAPI(change.action, change.data);
           
         } catch (error) {
-          console.error("Error syncing change:", change.id, error);
         }
       }
       
-      console.log("Sync completed");
     } catch (error) {
-      console.error("Error during sync:", error);
     }
   }, [isOnline, getPendingChanges, initDB]);
 
@@ -195,9 +185,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       };
       
       updateCacheSize();
-      console.log("Cache cleared");
     } catch (error) {
-      console.error("Error clearing cache:", error);
     }
   }, [initDB, updateCacheSize]);
 
@@ -219,7 +207,6 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       setCacheSize(cacheCount + offlineCount);
     } catch (error) {
-      console.error("Error updating cache size:", error);
     }
   }, [initDB]);
 
@@ -251,7 +238,6 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.type === "OFFLINE_SYNC_COMPLETE") {
-        console.log("Offline sync completed:", event.data.data);
         updateCacheSize();
       }
     };

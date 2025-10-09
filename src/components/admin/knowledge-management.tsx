@@ -147,7 +147,6 @@ export const KnowledgeManagement: React.FC = () => {
       });
 
     } catch (error) {
-      console.error("Error loading knowledge items:", error);
       toast({
         title: "Erro ao carregar",
         description: "Não foi possível carregar os itens da base de conhecimento",
@@ -256,7 +255,6 @@ export const KnowledgeManagement: React.FC = () => {
       loadKnowledgeItems(); // Recarregar dados
       
     } catch (error) {
-      console.error("Error saving item:", error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar o item",
@@ -282,7 +280,6 @@ export const KnowledgeManagement: React.FC = () => {
 
         loadKnowledgeItems(); // Recarregar dados
       } catch (error) {
-        console.error("Error deleting item:", error);
         toast({
           title: "Erro",
           description: "Não foi possível excluir o item",

@@ -209,7 +209,6 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
 
       onSaved();
     } catch (error) {
-      console.error("Error saving reservation:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar reserva. Tente novamente.",

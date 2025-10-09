@@ -4,3 +4,5 @@ build
 coverage
 *.min.js
 public/sw.js
+supabase/functions
+scripts

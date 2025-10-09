@@ -92,7 +92,6 @@ export const SuperAdminDashboard: React.FC = () => {
 
       setOrganizations(processedOrgs);
     } catch (error) {
-      console.error("Erro ao carregar organizações:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar organizações",
@@ -151,7 +150,6 @@ export const SuperAdminDashboard: React.FC = () => {
       
       loadOrganizations();
     } catch (error) {
-      console.error("Erro ao criar organização:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar organização",
@@ -176,7 +174,6 @@ export const SuperAdminDashboard: React.FC = () => {
 
       loadOrganizations();
     } catch (error) {
-      console.error("Erro ao atualizar status:", error);
       toast({
         title: "Erro",
         description: "Erro ao atualizar status da organização",

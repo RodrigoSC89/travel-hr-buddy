@@ -89,7 +89,6 @@ export const PeotramPermissionsManager: React.FC = () => {
       if (error) throw error;
       setUsers(data || []);
     } catch (error) {
-      console.error("Error fetching users:", error);
     }
   };
 
@@ -116,7 +115,6 @@ export const PeotramPermissionsManager: React.FC = () => {
       
       setPermissions(mappedPermissions);
     } catch (error) {
-      console.error("Error fetching permissions:", error);
     }
   };
 
@@ -130,7 +128,6 @@ export const PeotramPermissionsManager: React.FC = () => {
       if (error) throw error;
       setVessels(data || []);
     } catch (error) {
-      console.error("Error fetching vessels:", error);
     }
   };
 
@@ -165,7 +162,6 @@ export const PeotramPermissionsManager: React.FC = () => {
       });
       fetchPermissions();
     } catch (error) {
-      console.error("Error creating permission:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar a permissão.",
@@ -190,7 +186,6 @@ export const PeotramPermissionsManager: React.FC = () => {
 
       fetchPermissions();
     } catch (error) {
-      console.error("Error updating permission:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar a permissão.",
@@ -219,7 +214,6 @@ export const PeotramPermissionsManager: React.FC = () => {
 
       fetchPermissions();
     } catch (error) {
-      console.error("Error deleting permission:", error);
       toast({
         title: "Erro",
         description: "Não foi possível remover a permissão.",

@@ -165,7 +165,6 @@ const SystemPerformanceMonitor = () => {
       });
 
       // In production, this would trigger a file download
-      console.log("Performance report data:", reportData);
     } catch (error) {
       toast({
         title: "Erro na Exportação",

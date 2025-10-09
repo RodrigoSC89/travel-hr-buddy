@@ -78,7 +78,6 @@ export const useMaritimeChecklists = (userId: string) => {
 
       setChecklists(transformedChecklists);
     } catch (err) {
-      console.error("Error fetching checklists:", err);
       setError("Erro ao carregar checklists");
       toast.error("Erro ao carregar checklists");
     } finally {
@@ -202,7 +201,6 @@ export const useMaritimeChecklists = (userId: string) => {
       
       toast.success("Checklist salvo com sucesso!");
     } catch (err) {
-      console.error("Error saving checklist:", err);
       toast.error("Erro ao salvar checklist");
       throw err;
     }
@@ -227,7 +225,6 @@ export const useMaritimeChecklists = (userId: string) => {
       
       toast.success("Checklist enviado para revisão!");
     } catch (err) {
-      console.error("Error submitting checklist:", err);
       toast.error("Erro ao enviar checklist");
       throw err;
     }
@@ -269,7 +266,6 @@ export const useMaritimeChecklists = (userId: string) => {
       toast.success("Checklist criado com sucesso!");
       return checklist;
     } catch (err) {
-      console.error("Error creating checklist:", err);
       toast.error("Erro ao criar checklist");
       throw err;
     }

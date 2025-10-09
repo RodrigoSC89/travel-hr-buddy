@@ -53,7 +53,6 @@ const FloatingMenu = () => {
       delay: 0,
       ariaLabel: "Abrir Assistente de IA",
       action: () => {
-        console.log("🧠 IA Assistant clicked");
         navigate("/intelligence");
         toast({
           title: "🧠 IA Assistant",
@@ -68,7 +67,6 @@ const FloatingMenu = () => {
       delay: 100,
       ariaLabel: "Abrir Chat Premium",
       action: () => {
-        console.log("💬 Chat Premium clicked");
         navigate("/communication");
         toast({
           title: "💬 Chat Premium",
@@ -83,7 +81,6 @@ const FloatingMenu = () => {
       delay: 200,
       ariaLabel: "Abrir Analytics",
       action: () => {
-        console.log("📊 Analytics clicked");
         navigate("/analytics");
         toast({
           title: "📊 Analytics",
@@ -98,7 +95,6 @@ const FloatingMenu = () => {
       delay: 300,
       ariaLabel: "Abrir Relatórios Globais",
       action: () => {
-        console.log("🌍 Global Sync clicked");
         navigate("/reports");
         toast({
           title: "🌍 Global Sync",
@@ -157,7 +153,6 @@ const FloatingMenu = () => {
         <div className="relative group">
           <Button
             onClick={() => {
-              console.log("🚀 Central Hub clicked");
               toast({
                 title: "🚀 Central Hub",
                 description: "Acesso rápido às principais funcionalidades do sistema"

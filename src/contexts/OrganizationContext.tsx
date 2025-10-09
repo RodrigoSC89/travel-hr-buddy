@@ -134,7 +134,6 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
           applyBrandingTheme(demoBranding);
         }
       } catch (err) {
-        console.error("Erro ao carregar branding:", err);
         // Usar branding demo em caso de erro
         const demoBranding: OrganizationBranding = {
           id: "demo-branding",
@@ -158,7 +157,6 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         applyBrandingTheme(demoBranding);
       }
     } catch (err) {
-      console.error("Erro ao carregar organização:", err);
       setError("Erro ao carregar dados da organização");
     } finally {
       setIsLoading(false);
@@ -205,7 +203,6 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setCurrentBranding(data as any);
       applyBrandingTheme(data as any);
     } catch (err) {
-      console.error("Erro ao atualizar branding:", err);
       throw err;
     }
   };
@@ -260,11 +257,9 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   const removeUser = async (userId: string) => {
-    console.log("Funcionalidade de remoção será implementada em breve");
   };
 
   const updateUserRole = async (userId: string, role: string) => {
-    console.log("Funcionalidade de atualização de role será implementada em breve");
   };
 
   const value: OrganizationContextType = {

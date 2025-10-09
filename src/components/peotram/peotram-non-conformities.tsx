@@ -98,7 +98,6 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
       setIsEditDialogOpen(false);
       setSelectedNC(null);
     } catch (error) {
-      console.error("Erro ao atualizar não conformidade:", error);
     }
   };
 

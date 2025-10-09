@@ -275,7 +275,6 @@ export const EnhancedDashboard = () => {
       icon: BarChart3, 
       label: "Relatórios IA", 
       action: () => {
-        console.log("📊 Relatórios IA clicked");
         navigate("/reports");
         toast({ title: "📊 Relatórios IA", description: "Abrindo sistema de relatórios inteligentes" });
       }
@@ -284,7 +283,6 @@ export const EnhancedDashboard = () => {
       icon: Brain, 
       label: "Analytics", 
       action: () => {
-        console.log("🧠 Analytics clicked");
         navigate("/analytics");
         toast({ title: "🧠 Analytics", description: "Abrindo painel de análises" });
       }
@@ -293,7 +291,6 @@ export const EnhancedDashboard = () => {
       icon: Users, 
       label: "RH Maritime", 
       action: () => {
-        console.log("👥 RH Maritime clicked");
         navigate("/hr");
         toast({ title: "👥 RH Maritime", description: "Abrindo recursos humanos marítimos" });
       }
@@ -302,7 +299,6 @@ export const EnhancedDashboard = () => {
       icon: Rocket, 
       label: "Inovação", 
       action: () => {
-        console.log("🚀 Inovação clicked");
         navigate("/intelligence");
         toast({ title: "🚀 Inovação", description: "Abrindo centro de inteligência e inovação" });
       }

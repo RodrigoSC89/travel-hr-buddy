@@ -16,7 +16,6 @@ export const ModuleErrorBoundary: React.FC<ModuleErrorBoundaryProps> = ({
 }) => {
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
     // Log error to monitoring service (if available)
-    console.error(`Error in ${moduleName}:`, error, errorInfo);
     
     // Could send to error tracking service here
     // Example: Sentry.captureException(error, { tags: { module: moduleName } });

@@ -137,12 +137,10 @@ export const PeotramAnalyticsPanel: React.FC = () => {
 
   const refreshData = () => {
     // Simular atualização dos dados
-    console.log("Atualizando dados de analytics...");
   };
 
   const exportData = () => {
     // Implementar exportação dos dados
-    console.log("Exportando dados de analytics...");
   };
 
   const getTrendIcon = (trend: number) => {

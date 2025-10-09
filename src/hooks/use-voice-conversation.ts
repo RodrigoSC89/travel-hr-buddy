@@ -31,9 +31,7 @@ export class VoiceRecorder {
       };
       
       this.mediaRecorder.start(1000); // Collect data every second
-      console.log("Recording started");
     } catch (error) {
-      console.error("Error starting recording:", error);
       throw error;
     }
   }
@@ -63,7 +61,6 @@ export class VoiceRecorder {
       };
 
       this.mediaRecorder.stop();
-      console.log("Recording stopped");
     });
   }
 
@@ -99,7 +96,6 @@ export const useVoiceRecording = () => {
       await recorderRef.current.startRecording();
       setIsRecording(true);
     } catch (error) {
-      console.error("Failed to start recording:", error);
       throw error;
     }
   };
@@ -123,14 +119,11 @@ export const useVoiceRecording = () => {
       });
 
       if (error) {
-        console.error("Transcription error:", error);
         throw error;
       }
 
-      console.log("Transcription result:", data);
       return data?.text || null;
     } catch (error) {
-      console.error("Failed to stop recording:", error);
       throw error;
     } finally {
       setIsProcessing(false);
@@ -163,7 +156,6 @@ export const useTextToSpeech = () => {
       });
 
       if (error) {
-        console.error("Text-to-speech error:", error);
         throw error;
       }
 
@@ -189,10 +181,8 @@ export const useTextToSpeech = () => {
         };
 
         await audioRef.current.play();
-        console.log("Speech playback started");
       }
     } catch (error) {
-      console.error("Failed to generate speech:", error);
       setIsSpeaking(false);
       throw error;
     }
@@ -219,7 +209,6 @@ export const useAIChat = () => {
   const sendMessage = async (message: string, context: string = ""): Promise<string> => {
     try {
       setIsThinking(true);
-      console.log("Sending message to AI:", message);
 
       const { data, error } = await supabase.functions.invoke("ai-chat", {
         body: { 
@@ -230,14 +219,11 @@ export const useAIChat = () => {
       });
 
       if (error) {
-        console.error("AI chat error:", error);
         throw error;
       }
 
-      console.log("AI response received:", data?.reply);
       return data?.reply || "Desculpe, não consegui processar sua solicitação.";
     } catch (error) {
-      console.error("Failed to send message to AI:", error);
       throw error;
     } finally {
       setIsThinking(false);

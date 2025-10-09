@@ -195,7 +195,6 @@ const RealTimeWorkspace: React.FC = () => {
         });
 
       } catch (error) {
-        console.error("Error setting up realtime:", error);
         toast({
           title: "Erro",
           description: "Falha ao conectar ao workspace em tempo real",
@@ -267,7 +266,6 @@ const RealTimeWorkspace: React.FC = () => {
 
       setNewMessage("");
     } catch (error) {
-      console.error("Error sending message:", error);
       toast({
         title: "Erro",
         description: "Falha ao enviar mensagem",
@@ -294,7 +292,6 @@ const RealTimeWorkspace: React.FC = () => {
         }
       });
     } catch (error) {
-      console.error("Error sending workspace update:", error);
     }
   };
 
@@ -315,7 +312,6 @@ const RealTimeWorkspace: React.FC = () => {
         current_page: window.location.pathname
       });
     } catch (error) {
-      console.error("Error updating status:", error);
     }
   };
 

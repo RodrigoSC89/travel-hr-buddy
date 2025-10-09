@@ -59,7 +59,6 @@ export const PriceHistoryChart = () => {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error loading alerts:", error);
         return;
       }
 
@@ -70,7 +69,6 @@ export const PriceHistoryChart = () => {
         }
       }
     } catch (error) {
-      console.error("Error loading alerts:", error);
     } finally {
       setLoading(false);
     }
@@ -92,7 +90,6 @@ export const PriceHistoryChart = () => {
         .order("checked_at", { ascending: true });
 
       if (error) {
-        console.error("Error loading price history:", error);
         return;
       }
 
@@ -112,7 +109,6 @@ export const PriceHistoryChart = () => {
         setChartData(formattedData);
       }
     } catch (error) {
-      console.error("Error loading price history:", error);
     }
   };
 

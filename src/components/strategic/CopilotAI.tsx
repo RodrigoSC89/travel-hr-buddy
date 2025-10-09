@@ -133,7 +133,6 @@ export const CopilotAI = () => {
   const handleSendQuery = () => {
     if (query.trim()) {
       // Aqui implementaria o processamento da query
-      console.log("Query enviada:", query);
       setQuery("");
     }
   };

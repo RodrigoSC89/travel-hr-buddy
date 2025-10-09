@@ -198,7 +198,6 @@ export const OrganizationSetupWizard: React.FC = () => {
       navigate("/");
       
     } catch (error: any) {
-      console.error("Setup error:", error);
       toast({
         title: "Erro na Configuração",
         description: error.message || "Erro ao salvar configurações",

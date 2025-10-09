@@ -170,7 +170,6 @@ export const TravelApprovalSystem: React.FC = () => {
       // const { data, error } = await supabase.from('travel_requests').select('*');
       setRequests(mockRequests);
     } catch (error) {
-      console.error("Error loading requests:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar solicitações",
@@ -212,7 +211,6 @@ export const TravelApprovalSystem: React.FC = () => {
         description: `A solicitação foi ${approved ? "aprovada" : "rejeitada"} com sucesso`,
       });
     } catch (error) {
-      console.error("Error updating approval:", error);
       toast({
         title: "Erro",
         description: "Erro ao processar aprovação",

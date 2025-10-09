@@ -115,7 +115,6 @@ export const EnhancedDocumentScanner: React.FC = () => {
         description: "Posicione o documento e capture a imagem"
       });
     } catch (error) {
-      console.error("Erro ao acessar câmera:", error);
       toast({
         title: "Erro na câmera",
         description: "Não foi possível acessar a câmera. Use o upload de arquivo.",
@@ -214,7 +213,6 @@ export const EnhancedDocumentScanner: React.FC = () => {
       });
 
     } catch (error) {
-      console.error("Erro no processamento:", error);
       toast({
         title: "Erro no processamento",
         description: "Não foi possível processar o documento",

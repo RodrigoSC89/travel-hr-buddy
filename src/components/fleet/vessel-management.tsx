@@ -115,7 +115,6 @@ const VesselManagement: React.FC = () => {
         setVessels(vessels || []);
       }
     } catch (error) {
-      console.error("Erro ao carregar embarcações:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as embarcações",

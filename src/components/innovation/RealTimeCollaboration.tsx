@@ -83,7 +83,6 @@ export const RealTimeCollaboration = () => {
       fetchMessages(conversationId);
       fetchActiveUsers();
     } catch (error) {
-      console.error("Error initializing collaboration:", error);
     }
   };
 
@@ -111,7 +110,6 @@ export const RealTimeCollaboration = () => {
       
       setRealtimeMessages(formattedMessages);
     } catch (error) {
-      console.error("Error fetching messages:", error);
     }
   };
 
@@ -134,7 +132,6 @@ export const RealTimeCollaboration = () => {
       
       setActiveUsers(formattedUsers);
     } catch (error) {
-      console.error("Error fetching active users:", error);
     }
   };
 
@@ -177,7 +174,6 @@ export const RealTimeCollaboration = () => {
           description: "Sua mensagem foi compartilhada com a equipe."
         });
       } catch (error) {
-        console.error("Error sending message:", error);
         toast({
           title: "Erro",
           description: "Não foi possível enviar a mensagem.",

@@ -105,7 +105,6 @@ export const AutomationWorkflowsManager: React.FC = () => {
       if (error) throw error;
       setWorkflows(data as AutomationWorkflow[] || []);
     } catch (error) {
-      console.error("Erro ao carregar workflows:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as automações.",
@@ -132,7 +131,6 @@ export const AutomationWorkflowsManager: React.FC = () => {
       if (error) throw error;
       setExecutions(data as AutomationExecution[] || []);
     } catch (error) {
-      console.error("Erro ao carregar execuções:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar o histórico de execuções.",
@@ -163,7 +161,6 @@ export const AutomationWorkflowsManager: React.FC = () => {
         description: `${workflow.name} foi ${workflow.is_active ? "pausada" : "ativada"}.`,
       });
     } catch (error) {
-      console.error("Erro ao atualizar workflow:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar a automação.",
@@ -189,7 +186,6 @@ export const AutomationWorkflowsManager: React.FC = () => {
         description: `${workflow.name} foi removida.`,
       });
     } catch (error) {
-      console.error("Erro ao excluir workflow:", error);
       toast({
         title: "Erro",
         description: "Não foi possível excluir a automação.",
@@ -227,7 +223,6 @@ export const AutomationWorkflowsManager: React.FC = () => {
         description: "Nova automação foi configurada com sucesso.",
       });
     } catch (error) {
-      console.error("Erro ao criar workflow:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar a automação.",

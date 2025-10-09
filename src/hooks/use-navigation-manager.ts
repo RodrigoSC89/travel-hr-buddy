@@ -28,7 +28,6 @@ export const useNavigationManager = () => {
         });
       }
     } catch (error) {
-      console.error("Navigation error:", error);
       toast({
         title: "Erro de Navegação",
         description: "Falha ao navegar. Tente novamente.",
@@ -41,7 +40,6 @@ export const useNavigationManager = () => {
     try {
       navigate(-1);
     } catch (error) {
-      console.error("Navigation back error:", error);
       toast({
         title: "Erro de Navegação",
         description: "Não foi possível voltar.",

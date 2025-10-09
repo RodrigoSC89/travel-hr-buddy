@@ -152,7 +152,6 @@ const MyMenu = () => {
     isOpen,
     itemCount: items.length,
     onSelect: (index) => {
-      console.log('Selected:', items[index]);
       setIsOpen(false);
     },
     onClose: () => setIsOpen(false),

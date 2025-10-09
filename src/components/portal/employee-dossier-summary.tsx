@@ -73,7 +73,6 @@ export const EmployeeDossierSummary: React.FC = () => {
         .maybeSingle();
 
       if (memberError) {
-        console.error("Erro ao buscar dados do tripulante:", memberError);
         return;
       }
 
@@ -95,7 +94,6 @@ export const EmployeeDossierSummary: React.FC = () => {
           .single();
 
         if (createError) {
-          console.error("Erro ao criar tripulante:", createError);
           return;
         }
 
@@ -114,7 +112,6 @@ export const EmployeeDossierSummary: React.FC = () => {
           .limit(5);
 
         if (certError) {
-          console.error("Erro ao buscar certificações:", certError);
         } else {
           setCertifications(certData || []);
         }
@@ -128,13 +125,11 @@ export const EmployeeDossierSummary: React.FC = () => {
           .limit(3);
 
         if (embarkError) {
-          console.error("Erro ao buscar embarques:", embarkError);
         } else {
           setEmbarkations(embarkData || []);
         }
       }
     } catch (error) {
-      console.error("Erro geral:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",

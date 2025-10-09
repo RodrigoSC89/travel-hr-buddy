@@ -89,7 +89,6 @@ const AdvancedReportsSystem = () => {
       });
 
       // In a real implementation, this would trigger a file download
-      console.log("Export data:", reportData);
     } catch (error) {
       toast({
         title: "Erro na Exportação",

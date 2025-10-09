@@ -128,7 +128,6 @@ export const DocumentProcessor: React.FC = () => {
       }
 
     } catch (error) {
-      console.error("Error processing document:", error);
       toast({
         title: "Erro no Processamento",
         description: error instanceof Error ? error.message : "Falha ao processar documento",

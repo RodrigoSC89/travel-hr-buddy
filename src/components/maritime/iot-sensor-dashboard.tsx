@@ -211,7 +211,6 @@ export const IoTSensorDashboard = () => {
       }
       
     } catch (error) {
-      console.error("Error processing sensor data:", error);
     }
   };
 

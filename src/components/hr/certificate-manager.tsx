@@ -96,7 +96,6 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       if (error) throw error;
       setCertificates((data || []) as Certificate[]);
     } catch (error) {
-      console.error("Error loading certificates:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar certificados",
@@ -128,7 +127,6 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         });
       }
     } catch (error) {
-      console.error("Error capturing photo:", error);
       toast({
         title: "Erro na câmera",
         description: "Não foi possível acessar a câmera. Tente fazer upload de um arquivo.",
@@ -212,7 +210,6 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       loadCertificates();
 
     } catch (error) {
-      console.error("Error uploading certificate:", error);
       toast({
         title: "Erro no upload",
         description: "Erro ao enviar certificado",
@@ -238,7 +235,6 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       a.click();
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error downloading certificate:", error);
       toast({
         title: "Erro no download",
         description: "Erro ao baixar certificado",
@@ -271,7 +267,6 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
 
       loadCertificates();
     } catch (error) {
-      console.error("Error deleting certificate:", error);
       toast({
         title: "Erro ao remover",
         description: "Erro ao remover certificado",

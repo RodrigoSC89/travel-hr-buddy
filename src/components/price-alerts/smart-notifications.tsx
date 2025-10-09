@@ -117,7 +117,6 @@ export const SmartNotifications: React.FC = () => {
         setSettings(defaultSettings);
       }
     } catch (error) {
-      console.error("Error loading notification settings:", error);
     } finally {
       setIsLoading(false);
     }
@@ -167,7 +166,6 @@ export const SmartNotifications: React.FC = () => {
         description: "Suas preferências de notificação foram atualizadas.",
       });
     } catch (error) {
-      console.error("Error saving settings:", error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar as configurações",
@@ -199,7 +197,6 @@ export const SmartNotifications: React.FC = () => {
         description: `Teste enviado via ${testNotification.type}`,
       });
     } catch (error) {
-      console.error("Error sending test notification:", error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar a notificação de teste",

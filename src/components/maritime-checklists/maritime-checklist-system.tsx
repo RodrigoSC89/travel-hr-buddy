@@ -34,12 +34,10 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
 
   const handleSaveChecklist = async (checklist: Checklist) => {
     // TODO: Implement save to Supabase
-    console.log("Saving checklist:", checklist.id);
   };
 
   const handleSubmitChecklist = async (checklist: Checklist) => {
     // TODO: Implement submit to Supabase
-    console.log("Submitting checklist:", checklist.id);
   };
 
   const handleBackToManager = () => {

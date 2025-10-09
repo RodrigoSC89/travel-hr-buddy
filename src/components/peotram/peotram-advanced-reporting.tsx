@@ -137,12 +137,10 @@ export const PeotramAdvancedReporting: React.FC = () => {
   };
 
   const generateReport = (reportId: string) => {
-    console.log("Gerando relatório:", reportId);
     // Implementar geração de relatório
   };
 
   const scheduleReport = (reportId: string) => {
-    console.log("Agendando relatório:", reportId);
     // Implementar agendamento
   };
 

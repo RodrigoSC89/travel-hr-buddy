@@ -87,7 +87,6 @@ export const WhiteLabelCustomizer: React.FC = () => {
         description: "As configurações de marca foram atualizadas com sucesso",
       });
     } catch (error) {
-      console.error("Erro ao salvar personalização:", error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar as configurações",

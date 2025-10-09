@@ -116,7 +116,6 @@ export const AutomatedReportsManager: React.FC = () => {
       if (error) throw error;
       setReports(data as AutomatedReport[] || []);
     } catch (error) {
-      console.error("Erro ao carregar relatórios:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os relatórios automáticos.",
@@ -155,7 +154,6 @@ export const AutomatedReportsManager: React.FC = () => {
         description: "Relatório automático configurado com sucesso.",
       });
     } catch (error) {
-      console.error("Erro ao criar relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o relatório automático.",
@@ -186,7 +184,6 @@ export const AutomatedReportsManager: React.FC = () => {
         description: `${report.name} foi ${report.is_active ? "pausado" : "ativado"}.`,
       });
     } catch (error) {
-      console.error("Erro ao atualizar relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o relatório.",
@@ -212,7 +209,6 @@ export const AutomatedReportsManager: React.FC = () => {
         description: `${report.name} foi removido.`,
       });
     } catch (error) {
-      console.error("Erro ao excluir relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível excluir o relatório.",
@@ -233,7 +229,6 @@ export const AutomatedReportsManager: React.FC = () => {
       // Por exemplo, chamar uma edge function que gera o relatório
       
     } catch (error) {
-      console.error("Erro ao gerar relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar o relatório.",

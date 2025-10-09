@@ -178,7 +178,6 @@ export const NotificationCenter = () => {
 
       setNotifications(mockNotifications);
     } catch (error) {
-      console.error("Error loading notifications:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar notificações",
@@ -194,7 +193,6 @@ export const NotificationCenter = () => {
       // Mock settings loading - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-      console.error("Error loading settings:", error);
     }
   };
 
@@ -272,7 +270,6 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
-      console.error("Error marking as read:", error);
     }
   };
 
@@ -287,7 +284,6 @@ export const NotificationCenter = () => {
         description: "Todas as notificações foram marcadas como lidas"
       });
     } catch (error) {
-      console.error("Error marking all as read:", error);
     }
   };
 
@@ -301,7 +297,6 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
-      console.error("Error toggling important:", error);
     }
   };
 
@@ -314,7 +309,6 @@ export const NotificationCenter = () => {
         description: "Notificação removida"
       });
     } catch (error) {
-      console.error("Error deleting notification:", error);
     }
   };
 
@@ -327,7 +321,6 @@ export const NotificationCenter = () => {
         description: "Configurações atualizadas"
       });
     } catch (error) {
-      console.error("Error updating settings:", error);
     }
   };
 

@@ -33,7 +33,6 @@ export const useProfile = () => {
           .single();
 
         if (error) {
-          console.error("Error fetching profile:", error);
           // Se não encontrar perfil, criar um básico
           setProfile({
             id: user.id,
@@ -48,7 +47,6 @@ export const useProfile = () => {
           setProfile(data);
         }
       } catch (error) {
-        console.error("Error fetching profile:", error);
       } finally {
         setIsLoading(false);
       }

@@ -148,7 +148,6 @@ export const AdvancedPriceAlerts: React.FC = () => {
       
       setAlerts(enhancedAlerts as PriceAlert[]);
     } catch (error) {
-      console.error("Error loading alerts:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os alertas",
@@ -174,7 +173,6 @@ export const AdvancedPriceAlerts: React.FC = () => {
       if (error) throw error;
       setHistory(data || []);
     } catch (error) {
-      console.error("Error loading history:", error);
     }
   };
 
@@ -286,7 +284,6 @@ export const AdvancedPriceAlerts: React.FC = () => {
       });
 
     } catch (error) {
-      console.error("Error creating alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o alerta",
@@ -318,7 +315,6 @@ export const AdvancedPriceAlerts: React.FC = () => {
         description: `O alerta foi ${alert.is_active ? "pausado" : "ativado"} com sucesso.`,
       });
     } catch (error) {
-      console.error("Error toggling alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o alerta",
@@ -342,7 +338,6 @@ export const AdvancedPriceAlerts: React.FC = () => {
         description: `${data?.checked_alerts || 0} alertas foram verificados`,
       });
     } catch (error) {
-      console.error("Error refreshing prices:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar os preços",
