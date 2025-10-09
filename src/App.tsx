@@ -6,9 +6,11 @@ import { ErrorBoundary } from "./components/layout/error-boundary";
 import { AuthProvider } from "./contexts/AuthContext";
 import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
+import { ProtectedRoute } from "./components/layout/protected-route";
 
 // Lazy load all pages
 const Index = React.lazy(() => import("./pages/Index"));
+const Auth = React.lazy(() => import("./pages/Auth"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const PriceAlerts = React.lazy(() => import("./pages/PriceAlerts"));
 const Reports = React.lazy(() => import("./pages/Reports"));
@@ -106,37 +108,44 @@ function App() {
                   <main className="container mx-auto p-6">
                     <React.Suspense fallback={<LoadingSpinner />}>
                       <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/price-alerts" element={<PriceAlerts />} />
-                        <Route path="/reports" element={<Reports />} />
-                        <Route path="/reservations" element={<Reservations />} />
-                        <Route path="/checklists" element={<ChecklistsInteligentes />} />
-                        <Route path="/peotram" element={<PEOTRAM />} />
-                        <Route path="/peo-dp" element={<PEODP />} />
-                        <Route path="/sgso" element={<SGSO />} />
-                        <Route path="/settings" element={<Settings />} />
-                        <Route path="/travel" element={<Travel />} />
-                        <Route path="/analytics" element={<Analytics />} />
-                        <Route path="/hr" element={<HumanResources />} />
-                        <Route path="/communication" element={<Communication />} />
-                        <Route path="/intelligence" element={<Intelligence />} />
-                        <Route path="/maritime" element={<Maritime />} />
-                        <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
-                        <Route path="/innovation" element={<Innovation />} />
-                        <Route path="/optimization" element={<Optimization />} />
-                        <Route path="/collaboration" element={<Collaboration />} />
-                        <Route path="/voice" element={<Voice />} />
-                        <Route path="/portal" element={<Portal />} />
-                        <Route path="/ar" element={<AR />} />
-                        <Route path="/iot" element={<IoT />} />
-                        <Route path="/blockchain" element={<Blockchain />} />
-                        <Route path="/gamification" element={<Gamification />} />
-                        <Route path="/predictive" element={<PredictiveAnalytics />} />
-                        <Route path="/admin" element={<Admin />} />
-                        <Route path="/admin/api-tester" element={<APITester />} />
-                        <Route path="/admin/control-panel" element={<ControlPanel />} />
-                        <Route path="/health-monitor" element={<HealthMonitorDemo />} />
+                        {/* Public routes */}
+                        <Route path="/auth" element={<Auth />} />
+                        
+                        {/* Protected routes */}
+                        <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+                        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                        <Route path="/price-alerts" element={<ProtectedRoute><PriceAlerts /></ProtectedRoute>} />
+                        <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+                        <Route path="/reservations" element={<ProtectedRoute><Reservations /></ProtectedRoute>} />
+                        <Route path="/checklists" element={<ProtectedRoute><ChecklistsInteligentes /></ProtectedRoute>} />
+                        <Route path="/peotram" element={<ProtectedRoute><PEOTRAM /></ProtectedRoute>} />
+                        <Route path="/peo-dp" element={<ProtectedRoute><PEODP /></ProtectedRoute>} />
+                        <Route path="/sgso" element={<ProtectedRoute><SGSO /></ProtectedRoute>} />
+                        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                        <Route path="/travel" element={<ProtectedRoute><Travel /></ProtectedRoute>} />
+                        <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+                        <Route path="/hr" element={<ProtectedRoute><HumanResources /></ProtectedRoute>} />
+                        <Route path="/communication" element={<ProtectedRoute><Communication /></ProtectedRoute>} />
+                        <Route path="/intelligence" element={<ProtectedRoute><Intelligence /></ProtectedRoute>} />
+                        <Route path="/maritime" element={<ProtectedRoute><Maritime /></ProtectedRoute>} />
+                        <Route path="/maritime-supremo" element={<ProtectedRoute><MaritimeSupremo /></ProtectedRoute>} />
+                        <Route path="/innovation" element={<ProtectedRoute><Innovation /></ProtectedRoute>} />
+                        <Route path="/optimization" element={<ProtectedRoute><Optimization /></ProtectedRoute>} />
+                        <Route path="/collaboration" element={<ProtectedRoute><Collaboration /></ProtectedRoute>} />
+                        <Route path="/voice" element={<ProtectedRoute><Voice /></ProtectedRoute>} />
+                        <Route path="/portal" element={<ProtectedRoute><Portal /></ProtectedRoute>} />
+                        <Route path="/ar" element={<ProtectedRoute><AR /></ProtectedRoute>} />
+                        <Route path="/iot" element={<ProtectedRoute><IoT /></ProtectedRoute>} />
+                        <Route path="/blockchain" element={<ProtectedRoute><Blockchain /></ProtectedRoute>} />
+                        <Route path="/gamification" element={<ProtectedRoute><Gamification /></ProtectedRoute>} />
+                        <Route path="/predictive" element={<ProtectedRoute><PredictiveAnalytics /></ProtectedRoute>} />
+                        
+                        {/* Admin routes - protected */}
+                        <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+                        <Route path="/admin/api-tester" element={<ProtectedRoute><APITester /></ProtectedRoute>} />
+                        <Route path="/admin/control-panel" element={<ProtectedRoute><ControlPanel /></ProtectedRoute>} />
+                        
+                        <Route path="/health-monitor" element={<ProtectedRoute><HealthMonitorDemo /></ProtectedRoute>} />
                       </Routes>
                     </React.Suspense>
                   </main>

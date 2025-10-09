@@ -47,18 +47,34 @@ export const usePermissions = () => {
           .eq("user_id", user.id)
           .maybeSingle();
 
-        if (roleError) {
-          setUserRole("employee"); // default
+        // If no role found in database, try user_metadata as fallback
+        let role: UserRole = "employee"; // default
+        
+        if (roleError || !roleData?.role) {
+          // Check user_metadata for role
+          if (user.user_metadata?.role) {
+            const metadataRole = user.user_metadata.role as string;
+            // Validate that the metadata role is a valid UserRole
+            const validRoles: UserRole[] = [
+              "admin", "hr_manager", "hr_analyst", "department_manager",
+              "supervisor", "coordinator", "manager", "employee"
+            ];
+            if (validRoles.includes(metadataRole as UserRole)) {
+              role = metadataRole as UserRole;
+            }
+          }
         } else {
-          setUserRole(roleData?.role || "employee");
+          role = roleData.role as UserRole;
         }
+        
+        setUserRole(role);
 
         // Buscar permissões baseadas no role
-        if (roleData?.role) {
+        if (role) {
           const { data: permissionsData, error: permissionsError } = await supabase
             .from("role_permissions")
             .select("*")
-            .eq("role", roleData.role);
+            .eq("role", role);
 
           if (permissionsError) {
           } else {
