@@ -7,10 +7,10 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
-  resetPassword: (email: string) => Promise<{ error: any }>;
+  resetPassword: (email: string) => Promise<{ error: Error | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -52,7 +52,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             description: "Você foi desconectado com sucesso.",
           });
         } else if (event === "TOKEN_REFRESHED") {
+          // Token refreshed successfully
         } else if (event === "USER_UPDATED") {
+          // User data updated
         }
       }
     );

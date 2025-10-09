@@ -6,7 +6,7 @@ export class APIError extends Error {
   constructor(
     message: string,
     public status: number,
-    public response?: any
+    public response?: Record<string, unknown>
   ) {
     super(message);
     this.name = "APIError";
@@ -82,7 +82,7 @@ export class APIManager {
   /**
    * POST request
    */
-  async post<T>(endpoint: string, data?: any, options?: RequestInit): Promise<T> {
+  async post<T>(endpoint: string, data?: Record<string, unknown>, options?: RequestInit): Promise<T> {
     return this.makeRequest<T>(endpoint, {
       ...options,
       method: "POST",
@@ -93,7 +93,7 @@ export class APIManager {
   /**
    * PUT request
    */
-  async put<T>(endpoint: string, data?: any, options?: RequestInit): Promise<T> {
+  async put<T>(endpoint: string, data?: Record<string, unknown>, options?: RequestInit): Promise<T> {
     return this.makeRequest<T>(endpoint, {
       ...options,
       method: "PUT",
