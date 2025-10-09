@@ -32,9 +32,37 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Configure environment variables
+cp .env.example .env
+# Edit .env with your API keys - see .env.example for details
+
+# Step 5: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
+
+### Environment Variables
+
+This project requires several API keys to function properly. Copy `.env.example` to `.env` and configure:
+
+**Required:**
+- `VITE_SUPABASE_URL` - Your Supabase project URL
+- `VITE_SUPABASE_ANON_KEY` - Your Supabase anonymous key
+
+**Optional (for enhanced features):**
+- **Maps & Weather:**
+  - `VITE_MAPBOX_TOKEN` - Mapbox API token for interactive maps
+  - `VITE_OPENWEATHER_API_KEY` - OpenWeather API key for weather data
+  - `WINDY_API_KEY` - Windy API key (future integration)
+- **Other Services:**
+  - `VITE_OPENAI_API_KEY` - OpenAI API key for AI features
+  - `VITE_AMADEUS_API_KEY` - Amadeus API key for travel data
+  - `VITE_ELEVENLABS_API_KEY` - ElevenLabs API key for voice features
+
+For Supabase Edge Functions, also configure these in your Supabase Dashboard under Edge Functions Secrets:
+- `MAPBOX_PUBLIC_TOKEN` - For mapbox-token function
+- `OPENWEATHER_API_KEY` - For weather-integration and maritime-weather functions
+
+See `.env.example` for complete configuration details.
 
 **Edit a file directly in GitHub**
 
