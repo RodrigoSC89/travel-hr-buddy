@@ -109,7 +109,7 @@ const FloatingMenu = () => {
   ];
 
   return (
-    <div className="fixed bottom-8 right-80 z-35 hidden md:block">
+    <div className="fixed bottom-8 right-80 z-40 hidden md:block">
       <div className={`flex flex-col gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         {actions.map((action, index) => (
           <div
@@ -212,7 +212,7 @@ const StatusWidget = () => {
   }, []);
 
   return (
-    <Card className="fixed top-8 right-8 z-40 w-64 bg-gradient-to-br from-card/90 to-primary/10 
+    <Card className="fixed top-8 right-8 z-50 w-64 bg-gradient-to-br from-card/90 to-primary/10 
       backdrop-blur-xl border border-azure-200/30 shadow-2xl">
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-4">
