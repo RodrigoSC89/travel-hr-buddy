@@ -23,8 +23,40 @@ import { useAuth } from "@/contexts/AuthContext";
 // Extend the global Window interface to include webkitSpeechRecognition
 declare global {
   interface Window {
-    webkitSpeechRecognition: any;
+    webkitSpeechRecognition: new () => SpeechRecognition;
   }
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: Event) => void;
+  onend: () => void;
+}
+
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  item(index: number): SpeechRecognitionResult;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  length: number;
+  item(index: number): SpeechRecognitionAlternative;
+  [index: number]: SpeechRecognitionAlternative;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
 }
 
 interface Message {
@@ -37,7 +69,7 @@ interface Message {
     actions?: Array<{
       label: string;
       action: string;
-      data?: any;
+      data?: Record<string, unknown>;
     }>;
   };
 }
@@ -45,7 +77,7 @@ interface Message {
 interface AIAssistantProps {
   context?: string;
   module?: string;
-  onAction?: (action: string, data?: any) => void;
+  onAction?: (action: string, data?: Record<string, unknown>) => void;
 }
 
 export const AIAssistant: React.FC<AIAssistantProps> = ({
@@ -57,7 +89,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [recognition, setRecognition] = useState<any>(null);
+  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const { user } = useAuth();
@@ -65,12 +97,12 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
   useEffect(() => {
     // Initialize speech recognition
     if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
-      const recognition = new (window as any).webkitSpeechRecognition();
+      const recognition = new window.webkitSpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = "pt-BR";
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);
@@ -176,7 +208,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
       // Execute any actions returned by the AI
       if (data.actions && data.actions.length > 0) {
-        data.actions.forEach((action: any) => {
+        data.actions.forEach((action: { action: string; data?: Record<string, unknown> }) => {
           if (onAction) {
             onAction(action.action, action.data);
           }
@@ -206,7 +238,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
     setInput(suggestion);
   };
 
-  const handleActionClick = (action: string, data?: any) => {
+  const handleActionClick = (action: string, data?: Record<string, unknown>) => {
     if (onAction) {
       onAction(action, data);
     }

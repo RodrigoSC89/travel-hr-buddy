@@ -17,6 +17,14 @@ interface Organization {
   role: string;
 }
 
+interface OrganizationUser {
+  role: string;
+  organization: {
+    id: string;
+    name: string;
+  };
+}
+
 export const OrganizationSelector: React.FC = () => {
   const { user } = useAuth();
   const { currentOrganization, switchOrganization } = useOrganization();
@@ -37,7 +45,7 @@ export const OrganizationSelector: React.FC = () => {
 
       if (error) throw error;
 
-      const orgs = (data || []).map((item: any) => ({
+      const orgs = (data || []).map((item: OrganizationUser) => ({
         id: item.organization.id,
         name: item.organization.name,
         role: item.role
@@ -45,6 +53,7 @@ export const OrganizationSelector: React.FC = () => {
 
       setOrganizations(orgs);
     } catch (error) {
+      // Error loading organizations
     } finally {
       setIsLoading(false);
     }
@@ -60,6 +69,7 @@ export const OrganizationSelector: React.FC = () => {
     try {
       await switchOrganization(orgId);
     } catch (error) {
+      // Error switching organization
     }
   };
 

@@ -6,9 +6,7 @@ import {
   Clock, 
   Activity, 
   Server, 
-  Database,
   Zap,
-  TrendingUp,
   RefreshCw
 } from "lucide-react";
 

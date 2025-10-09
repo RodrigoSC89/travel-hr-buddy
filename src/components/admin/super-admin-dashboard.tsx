@@ -16,8 +16,6 @@ import {
   TrendingUp,
   DollarSign,
   Plus,
-  Edit,
-  Trash2,
   Eye,
   Settings,
   Activity,
@@ -26,6 +24,15 @@ import {
   Clock,
   Ban
 } from "lucide-react";
+
+interface OrganizationUser {
+  id: string;
+  status: string;
+}
+
+interface Vessel {
+  id: string;
+}
 
 interface Organization {
   id: string;
@@ -41,6 +48,8 @@ interface Organization {
   created_at: string;
   user_count?: number;
   vessel_count?: number;
+  organization_users?: OrganizationUser[];
+  vessels?: Vessel[];
   branding?: {
     company_name: string;
     primary_color: string;
@@ -50,10 +59,8 @@ interface Organization {
 
 export const SuperAdminDashboard: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
   const { toast } = useToast();
 
   // Formulário para nova organização
@@ -85,7 +92,7 @@ export const SuperAdminDashboard: React.FC = () => {
       // Processar dados das organizações
       const processedOrgs = orgs?.map(org => ({
         ...org,
-        user_count: org.organization_users?.filter((u: any) => u.status === "active").length || 0,
+        user_count: org.organization_users?.filter((u: OrganizationUser) => u.status === "active").length || 0,
         vessel_count: org.vessels?.length || 0,
         branding: org.organization_branding?.[0] || null
       })) || [];
@@ -124,7 +131,7 @@ export const SuperAdminDashboard: React.FC = () => {
         return;
       }
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("organizations")
         .insert([newOrgForm])
         .select()
