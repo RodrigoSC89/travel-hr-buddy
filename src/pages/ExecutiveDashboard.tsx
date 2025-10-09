@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OrganizationLayout } from '@/components/layout/organization-layout';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -80,16 +81,19 @@ export default function ExecutiveDashboard() {
 
   if (isLoading) {
     return (
-      <OrganizationLayout title="Dashboard Executivo">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-        </div>
-      </OrganizationLayout>
+      <ModulePageWrapper gradient="blue">
+        <OrganizationLayout title="Dashboard Executivo">
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+          </div>
+        </OrganizationLayout>
+      </ModulePageWrapper>
     );
   }
 
   return (
-    <OrganizationLayout title="Dashboard Executivo">
+    <ModulePageWrapper gradient="blue">
+      <OrganizationLayout title="Dashboard Executivo">
       <div className="space-y-6">
         {/* Header with period selector */}
         <div className="flex justify-between items-center">
@@ -525,5 +529,6 @@ export default function ExecutiveDashboard() {
         </Card>
       </div>
     </OrganizationLayout>
+    </ModulePageWrapper>
   );
 }
