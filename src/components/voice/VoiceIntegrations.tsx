@@ -166,7 +166,7 @@ const VoiceIntegrations: React.FC<VoiceIntegrationsProps> = ({
                   <div className="flex flex-wrap gap-1">
                     {integration.actions.map((action, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
-                        "{action}"
+                        &quot;{action}&quot;
                       </Badge>
                     ))}
                   </div>

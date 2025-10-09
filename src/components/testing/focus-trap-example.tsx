@@ -218,8 +218,8 @@ const MyModal = ({ isOpen, onClose }) => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm text-orange-800 dark:text-orange-200">
-              <p>• Always add <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">role="dialog"</code> to modal containers</p>
-              <p>• Use <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">aria-modal="true"</code> to indicate modal state</p>
+              <p>• Always add <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">role=&quot;dialog&quot;</code> to modal containers</p>
+              <p>• Use <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">aria-modal=&quot;true&quot;</code> to indicate modal state</p>
               <p>• Include <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">aria-labelledby</code> pointing to the title</p>
               <p>• Add <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">aria-describedby</code> for descriptions</p>
               <p>• Provide a clear way to close (X button, Cancel, Escape key)</p>

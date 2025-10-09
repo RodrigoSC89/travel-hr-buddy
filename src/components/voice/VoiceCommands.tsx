@@ -169,7 +169,7 @@ const VoiceCommands: React.FC<VoiceCommandsProps> = ({ onTestCommand }) => {
             <div className="flex items-start gap-2">
               <div className="w-2 h-2 rounded-full bg-primary mt-2" />
               <div>
-                <strong>Use palavras-chave:</strong> Incluir palavras como "abrir", "ir para", "mostrar" ajuda na compreensão.
+                <strong>Use palavras-chave:</strong> Incluir palavras como &quot;abrir&quot;, &quot;ir para&quot;, &quot;mostrar&quot; ajuda na compreensão.
               </div>
             </div>
             <div className="flex items-start gap-2">
