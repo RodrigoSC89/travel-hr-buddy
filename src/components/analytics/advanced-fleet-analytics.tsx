@@ -5,26 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { supabase } from "@/integrations/supabase/client";
+import { LineChart, Line, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 import { 
   TrendingUp, 
   TrendingDown, 
   BarChart3, 
-  PieChart as PieChartIcon,
   Activity,
   Fuel,
   DollarSign,
   Clock,
-  MapPin,
-  AlertTriangle,
   CheckCircle,
   Target,
   Zap,
   Ship,
-  Users,
-  Gauge
+  Users
 } from "lucide-react";
 
 interface FleetMetrics {

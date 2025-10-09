@@ -11,7 +11,6 @@ import {
   AlertTriangle, 
   BarChart3,
   Brain,
-  Calendar,
   RefreshCw,
   Zap
 } from "lucide-react";

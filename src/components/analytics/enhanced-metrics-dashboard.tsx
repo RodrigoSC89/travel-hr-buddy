@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,14 +12,11 @@ import {
   Target, 
   Activity,
   BarChart3,
-  PieChart,
-  LineChart,
   Clock,
   Zap,
   Award,
   AlertTriangle,
   CheckCircle,
-  Calendar,
   RefreshCw
 } from "lucide-react";
 import { 
@@ -32,8 +29,6 @@ import {
   ResponsiveContainer,
   AreaChart,
   Area,
-  BarChart,
-  Bar,
   PieChart as RechartsPieChart,
   Pie,
   Cell

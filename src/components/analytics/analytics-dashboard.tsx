@@ -5,7 +5,7 @@ import { TrendingUp, BarChart3, Brain, Target } from "lucide-react";
 import PredictiveAnalytics from "./PredictiveAnalytics";
 
 const AnalyticsDashboard = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState("30d");
+  const [selectedPeriod] = useState("30d");
 
   return (
     <div className="space-y-6">

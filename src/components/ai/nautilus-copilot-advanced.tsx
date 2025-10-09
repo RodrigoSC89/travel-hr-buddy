@@ -12,7 +12,6 @@ import {
   Mic, 
   MicOff, 
   Paperclip, 
-  MoreHorizontal,
   Sparkles,
   Brain,
   Zap,

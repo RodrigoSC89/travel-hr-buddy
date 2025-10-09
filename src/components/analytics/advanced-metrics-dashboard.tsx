@@ -5,15 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { 
-  BarChart3, 
   TrendingUp, 
   TrendingDown,
-  Target,
-  Clock,
-  Users,
   Activity,
   Zap,
-  Brain,
   Filter,
   Download,
   RefreshCw
@@ -132,7 +127,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
 
   const generateReport = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke("generate-ai-report", {
+      const { error } = await supabase.functions.invoke("generate-ai-report", {
         body: {
           type: "metrics_analysis",
           timeRange: selectedTimeRange,
