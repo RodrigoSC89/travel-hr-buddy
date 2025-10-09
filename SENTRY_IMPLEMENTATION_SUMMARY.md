@@ -48,7 +48,7 @@ This Pull Request implements Sentry error tracking and monitoring for the Travel
 - Best practices for security and privacy
 - Performance configuration recommendations
 
-**`src/utils/sentry-examples.ts`** (NEW)
+**`src/utils/sentry-examples.tsx`** (NEW)
 - Comprehensive examples of Sentry usage:
   - Manual error capture
   - Adding user context

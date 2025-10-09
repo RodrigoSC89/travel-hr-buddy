@@ -117,7 +117,7 @@ export function ErrorFallback({ error }: { error: Error }) {
  */
 export async function fetchDataWithSentry() {
   try {
-    const response = await fetch('/api/data');
+    const response = await fetch("/api/data");
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -125,8 +125,8 @@ export async function fetchDataWithSentry() {
   } catch (error) {
     Sentry.captureException(error, {
       tags: {
-        api: 'data-fetch',
-        endpoint: '/api/data',
+        api: "data-fetch",
+        endpoint: "/api/data",
       },
       extra: {
         timestamp: new Date().toISOString(),
@@ -145,9 +145,9 @@ export async function fetchDataWithSentry() {
  */
 export function trackUserAction(action: string, data?: Record<string, unknown>) {
   Sentry.addBreadcrumb({
-    category: 'user-action',
+    category: "user-action",
     message: action,
-    level: 'info',
+    level: "info",
     data,
   });
 }
@@ -156,10 +156,10 @@ export function trackUserAction(action: string, data?: Record<string, unknown>) 
  * Exemplo de uso de breadcrumbs em um fluxo
  */
 export function bookingFlow() {
-  trackUserAction('Iniciou busca de voo', { destination: 'São Paulo' });
-  trackUserAction('Selecionou voo', { flightId: '123' });
-  trackUserAction('Adicionou passageiros', { count: 2 });
-  trackUserAction('Finalizou reserva', { bookingId: '456' });
+  trackUserAction("Iniciou busca de voo", { destination: "São Paulo" });
+  trackUserAction("Selecionou voo", { flightId: "123" });
+  trackUserAction("Adicionou passageiros", { count: 2 });
+  trackUserAction("Finalizou reserva", { bookingId: "456" });
 }
 
 // ============================================
