@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MaritimeChecklistSystem } from '@/components/maritime-checklists/maritime-checklist-system';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -43,13 +43,7 @@ export default function MaritimeChecklists() {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      fetchMaritimeStats();
-    }
-  }, [user]);
-
-  const fetchMaritimeStats = async () => {
+  const fetchMaritimeStats = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -90,7 +84,13 @@ export default function MaritimeChecklists() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (user) {
+      fetchMaritimeStats();
+    }
+  }, [user, fetchMaritimeStats]);
 
   if (view === 'checklists') {
     return (
