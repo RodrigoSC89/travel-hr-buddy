@@ -170,6 +170,9 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (user) {
       loadTenantData();
       loadPlans();
+    } else {
+      // Se não há usuário, parar o loading
+      setIsLoading(false);
     }
   }, [user]);
 
