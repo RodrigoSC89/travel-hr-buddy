@@ -11,8 +11,6 @@ import {
   Mic, 
   MicOff, 
   Lightbulb,
-  TrendingUp,
-  FileText,
   Settings,
   Sparkles
 } from "lucide-react";
