@@ -52,6 +52,7 @@ export const ReservationsDashboard: React.FC = () => {
     try {
       await Haptics.impact({ style: ImpactStyle.Medium });
     } catch (error) {
+      // Haptics not available on this platform
     }
   };
 

@@ -88,6 +88,7 @@ export const PredictiveTravelDashboard: React.FC = () => {
         loadAlerts()
       ]);
     } catch (error) {
+      // Error loading user data
     }
   };
 

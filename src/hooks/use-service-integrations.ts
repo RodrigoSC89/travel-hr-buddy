@@ -47,6 +47,7 @@ export const useServiceIntegrations = () => {
       );
       refreshServices();
     } catch (error) {
+      // Error checking services
     } finally {
       setIsChecking(false);
     }

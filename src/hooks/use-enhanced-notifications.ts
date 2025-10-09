@@ -105,6 +105,7 @@ export const useEnhancedNotifications = () => {
       setNotifications(mockNotifications);
       setUnreadCount(mockNotifications.filter(n => !n.read).length);
     } catch (error) {
+      // Error fetching notifications
     } finally {
       setIsLoading(false);
     }
