@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -42,11 +42,7 @@ const PredictiveAnalytics: React.FC = () => {
     { value: '1_year', label: '1 Ano' }
   ];
 
-  useEffect(() => {
-    generatePredictions();
-  }, [selectedTimeframe]);
-
-  const generatePredictions = async () => {
+  const generatePredictions = useCallback(async () => {
     setIsGenerating(true);
 
     try {
@@ -133,7 +129,11 @@ const PredictiveAnalytics: React.FC = () => {
     } finally {
       setIsGenerating(false);
     }
-  };
+  }, [selectedTimeframe, toast]);
+
+  useEffect(() => {
+    generatePredictions();
+  }, [generatePredictions]);
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

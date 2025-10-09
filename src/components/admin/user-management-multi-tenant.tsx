@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useOrganization } from '@/contexts/OrganizationContext';
 import { useOrganizationPermissions } from '@/hooks/use-organization-permissions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,13 +42,7 @@ export const UserManagementMultiTenant: React.FC = () => {
   const [inviteRole, setInviteRole] = useState('member');
   const { toast } = useToast();
 
-  useEffect(() => {
-    if (currentOrganization && canManageUsers()) {
-      loadUsers();
-    }
-  }, [currentOrganization, canManageUsers]);
-
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     if (!currentOrganization) return;
 
     try {
@@ -65,7 +59,13 @@ export const UserManagementMultiTenant: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentOrganization, getCurrentOrganizationUsers, toast]);
+
+  useEffect(() => {
+    if (currentOrganization && canManageUsers()) {
+      loadUsers();
+    }
+  }, [currentOrganization, canManageUsers, loadUsers]);
 
   const handleInviteUser = async () => {
     if (!inviteEmail || !inviteRole) return;

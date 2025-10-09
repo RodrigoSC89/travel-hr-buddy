@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -91,9 +91,9 @@ export const AdvancedFleetAnalytics = () => {
     }, 60000); // Update every minute
 
     return () => clearInterval(interval);
-  }, [timeRange]);
+  }, [timeRange, loadAnalyticsData]);
 
-  const loadAnalyticsData = async () => {
+  const loadAnalyticsData = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -191,7 +191,7 @@ export const AdvancedFleetAnalytics = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
 
   const getStatusColor = (status: VesselPerformance['status']) => {
     switch (status) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useOrganization } from '@/contexts/OrganizationContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -23,13 +23,7 @@ export const OrganizationSelector: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      loadUserOrganizations();
-    }
-  }, [user]);
-
-  const loadUserOrganizations = async () => {
+  const loadUserOrganizations = useCallback(async () => {
     try {
       setIsLoading(true);
       const { data, error } = await supabase
@@ -55,7 +49,13 @@ export const OrganizationSelector: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadUserOrganizations();
+    }
+  }, [user, loadUserOrganizations]);
 
   const handleOrganizationChange = async (orgId: string) => {
     try {
