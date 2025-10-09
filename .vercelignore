@@ -5,6 +5,5 @@ node_modules
 .env.local
 .DS_Store
 *.sw?
-dist
-src
-public
+# Do not ignore src and public - they are needed for build
+# Do not ignore dist - it can be cleaned by Vercel before build
