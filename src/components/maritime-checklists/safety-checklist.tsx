@@ -273,9 +273,9 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
       case 'Escape': return 'text-green-600 bg-green-50';
       case 'Ventilação': return 'text-cyan-600 bg-cyan-50';
       case 'Materiais Perigosos': return 'text-red-600 bg-red-50';
-      case 'Controle': return 'text-gray-600 bg-gray-50';
+      case 'Controle': return 'text-muted-foreground bg-gray-50';
       case 'Observações': return 'text-indigo-600 bg-indigo-50';
-      default: return 'text-gray-600 bg-gray-50';
+      default: return 'text-muted-foreground bg-gray-50';
     }
   };
 

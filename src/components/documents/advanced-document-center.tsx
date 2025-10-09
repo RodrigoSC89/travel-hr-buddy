@@ -254,8 +254,8 @@ export const AdvancedDocumentCenter: React.FC = () => {
       case 'approved': return 'text-green-600 bg-green-100';
       case 'review': return 'text-yellow-600 bg-yellow-100';
       case 'draft': return 'text-blue-600 bg-blue-100';
-      case 'archived': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'archived': return 'text-muted-foreground bg-gray-100';
+      default: return 'text-muted-foreground bg-gray-100';
     }
   };
 

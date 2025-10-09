@@ -205,7 +205,7 @@ export const BusinessIntelligenceDashboard: React.FC = () => {
       case 'healthy': return 'text-green-600';
       case 'warning': return 'text-yellow-600';
       case 'critical': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-muted-foreground';
     }
   };
 
@@ -214,7 +214,7 @@ export const BusinessIntelligenceDashboard: React.FC = () => {
       case 'healthy': return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
       case 'critical': return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      default: return <Clock className="h-4 w-4 text-gray-600" />;
+      default: return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

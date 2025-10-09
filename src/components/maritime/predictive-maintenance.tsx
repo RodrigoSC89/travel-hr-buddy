@@ -166,7 +166,7 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
       case 'inprogress': return 'text-blue-600';
       case 'scheduled': return 'text-yellow-600';
       case 'overdue': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-muted-foreground';
     }
   };
 

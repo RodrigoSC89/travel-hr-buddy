@@ -258,9 +258,9 @@ const ProductRoadmap: React.FC = () => {
       case 'in-progress':
         return 'text-blue-600 bg-blue-50 border-blue-200';
       case 'planned':
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-muted-foreground bg-gray-50 border-gray-200';
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-muted-foreground bg-gray-50 border-gray-200';
     }
   };
 
@@ -523,7 +523,7 @@ const ProductRoadmap: React.FC = () => {
                     <div key={sprint.id} className="border rounded-lg p-4">
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-medium">Sprint {sprint.id}: {sprint.name}</h4>
-                        <Badge className="text-gray-600 bg-gray-50 border-gray-200">
+                        <Badge className="text-muted-foreground bg-gray-50 border-gray-200">
                           Planejado
                         </Badge>
                       </div>

@@ -227,7 +227,7 @@ export const TravelApprovalSystem: React.FC = () => {
       case 'rejected': return <XCircle className="h-4 w-4 text-red-600" />;
       case 'in_review': return <Clock className="h-4 w-4 text-yellow-600" />;
       case 'pending': return <Clock className="h-4 w-4 text-blue-600" />;
-      default: return <Clock className="h-4 w-4 text-gray-600" />;
+      default: return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -237,7 +237,7 @@ export const TravelApprovalSystem: React.FC = () => {
       case 'rejected': return 'bg-red-100 text-red-800 border-red-300';
       case 'in_review': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
       case 'pending': return 'bg-blue-100 text-blue-800 border-blue-300';
-      default: return 'bg-gray-100 text-gray-800 border-gray-300';
+      default: return 'bg-secondary text-secondary-foreground border-border';
     }
   };
 
@@ -247,7 +247,7 @@ export const TravelApprovalSystem: React.FC = () => {
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-300';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
       case 'low': return 'bg-green-100 text-green-800 border-green-300';
-      default: return 'bg-gray-100 text-gray-800 border-gray-300';
+      default: return 'bg-secondary text-secondary-foreground border-border';
     }
   };
 

@@ -130,8 +130,8 @@ export const BlockchainDocuments: React.FC = () => {
       case 'verified': return 'text-green-600 bg-green-100';
       case 'pending': return 'text-yellow-600 bg-yellow-100';
       case 'invalid': return 'text-red-600 bg-red-100';
-      case 'expired': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'expired': return 'text-muted-foreground bg-gray-100';
+      default: return 'text-muted-foreground bg-gray-100';
     }
   };
 

@@ -182,7 +182,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
       case 'good': return 'text-green-600';
       case 'warning': return 'text-yellow-600';
       case 'critical': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-muted-foreground';
     }
   };
 

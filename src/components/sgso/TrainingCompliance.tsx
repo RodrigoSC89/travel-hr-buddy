@@ -276,27 +276,27 @@ export const TrainingCompliance: React.FC = () => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Taxa de Conclusão</p>
+                              <p className="text-xs text-muted-foreground font-medium">Taxa de Conclusão</p>
                               <p className="text-xl font-bold text-gray-900">{training.completion_rate}%</p>
                               <Progress value={training.completion_rate} className="mt-1" />
                             </div>
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Certificados</p>
+                              <p className="text-xs text-muted-foreground font-medium">Certificados</p>
                               <p className="text-xl font-bold text-gray-900">
                                 {training.certified} / {training.total}
                               </p>
-                              <p className="text-xs text-gray-600 mt-1">
+                              <p className="text-xs text-muted-foreground mt-1">
                                 <Users className="h-3 w-3 inline mr-1" />
                                 tripulantes
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Próxima Data</p>
+                              <p className="text-xs text-muted-foreground font-medium">Próxima Data</p>
                               <p className="text-sm font-bold text-gray-900">
                                 <Calendar className="h-3 w-3 inline mr-1" />
                                 {training.next_due || 'A definir'}
                               </p>
-                              <p className="text-xs text-gray-600 mt-1">
+                              <p className="text-xs text-muted-foreground mt-1">
                                 Validade: {training.validity_months} meses
                               </p>
                             </div>

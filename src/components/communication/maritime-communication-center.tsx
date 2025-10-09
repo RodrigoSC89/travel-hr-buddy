@@ -296,7 +296,7 @@ export const MaritimeCommunicationCenter = () => {
       case 'high': return 'text-orange-600 bg-orange-100';
       case 'normal': return 'text-blue-600 bg-blue-100';
       case 'low': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
+      default: return 'text-muted-foreground bg-gray-100';
     }
   };
 

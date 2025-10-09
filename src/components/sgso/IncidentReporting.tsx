@@ -101,7 +101,7 @@ const getStatusColor = (status: string) => {
     reported: 'bg-yellow-100 text-yellow-800 border-yellow-300',
     investigating: 'bg-blue-100 text-blue-800 border-blue-300',
     resolved: 'bg-green-100 text-green-800 border-green-300',
-    closed: 'bg-gray-100 text-gray-800 border-gray-300'
+    closed: 'bg-secondary text-secondary-foreground border-border'
   };
   return colors[status as keyof typeof colors] || 'bg-gray-100';
 };
@@ -231,7 +231,7 @@ export const IncidentReporting: React.FC = () => {
                 <p className="text-sm font-medium text-gray-700">Total</p>
                 <p className="text-3xl font-bold text-gray-900">{SAMPLE_INCIDENTS.length}</p>
               </div>
-              <FileText className="h-12 w-12 text-gray-600 opacity-70" />
+              <FileText className="h-12 w-12 text-muted-foreground opacity-70" />
             </div>
           </CardContent>
         </Card>
@@ -397,7 +397,7 @@ export const IncidentReporting: React.FC = () => {
                           <h3 className="font-bold text-lg text-gray-900">{incident.title}</h3>
                         </div>
                         
-                        <div className="flex gap-3 text-sm text-gray-600">
+                        <div className="flex gap-3 text-sm text-muted-foreground">
                           <span>📅 {incident.date}</span>
                           {incident.vessel && <span>🚢 {incident.vessel}</span>}
                           <span>👤 {incident.reportedBy}</span>

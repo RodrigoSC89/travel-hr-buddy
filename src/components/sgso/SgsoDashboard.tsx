@@ -258,12 +258,12 @@ export const SgsoDashboard: React.FC = () => {
                             <Activity className={`h-4 w-4 ${
                               activity.severity === 'high' ? 'text-red-600' :
                               activity.severity === 'warning' ? 'text-yellow-600' :
-                              activity.severity === 'info' ? 'text-blue-600' : 'text-gray-600'
+                              activity.severity === 'info' ? 'text-blue-600' : 'text-muted-foreground'
                             }`} />
                           </div>
                           <div className="flex-1">
                             <p className="font-semibold text-sm text-gray-900">{activity.title}</p>
-                            <p className="text-xs text-gray-600">{activity.time}</p>
+                            <p className="text-xs text-muted-foreground">{activity.time}</p>
                           </div>
                         </div>
                       ))}

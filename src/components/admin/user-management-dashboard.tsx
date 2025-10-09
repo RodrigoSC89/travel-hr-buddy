@@ -85,10 +85,10 @@ const UserManagementDashboard = () => {
       'Admin': 'bg-red-100 text-red-800',
       'HR Manager': 'bg-blue-100 text-blue-800',
       'Manager': 'bg-green-100 text-green-800',
-      'Employee': 'bg-gray-100 text-gray-800'
+      'Employee': 'bg-secondary text-secondary-foreground'
     };
     return (
-      <Badge className={roleColors[role as keyof typeof roleColors] || 'bg-gray-100 text-gray-800'}>
+      <Badge className={roleColors[role as keyof typeof roleColors] || 'bg-secondary text-secondary-foreground'}>
         {role}
       </Badge>
     );
@@ -435,7 +435,7 @@ const UserManagementDashboard = () => {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <h3 className="font-semibold">Employee</h3>
-                        <Badge className="bg-gray-100 text-gray-800">Básico</Badge>
+                        <Badge className="bg-secondary text-secondary-foreground">Básico</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Acesso limitado

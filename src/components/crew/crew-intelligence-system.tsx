@@ -247,7 +247,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
 
   const getPriorityColor = (priority: TrainingModule['priority']) => {
     switch (priority) {
-      case 'low': return 'text-gray-600';
+      case 'low': return 'text-muted-foreground';
       case 'medium': return 'text-yellow-600';
       case 'high': return 'text-red-600';
     }

@@ -282,7 +282,7 @@ const IoTRealtimeSensors: React.FC = () => {
               <Radio className="h-4 w-4 text-muted-foreground" />
               <div>
                 <div className="text-sm font-medium text-gray-700">Offline</div>
-                <div className="text-lg font-bold text-gray-600">
+                <div className="text-lg font-bold text-muted-foreground">
                   {sensors.filter(s => s.status === 'offline').length}
                 </div>
               </div>

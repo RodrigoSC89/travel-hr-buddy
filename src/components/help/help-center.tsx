@@ -173,7 +173,7 @@ const HelpCenter = () => {
       case 'advanced':
         return 'text-red-600 bg-red-100';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-muted-foreground bg-gray-100';
     }
   };
 

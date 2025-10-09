@@ -151,7 +151,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
   const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
     if (trend === 'up') return <TrendingUp className="h-4 w-4 text-green-600" />;
     if (trend === 'down') return <TrendingDown className="h-4 w-4 text-red-600" />;
-    return <Activity className="h-4 w-4 text-gray-600" />;
+    return <Activity className="h-4 w-4 text-muted-foreground" />;
   };
 
   const markAlertAsRead = (alertId: string) => {
@@ -368,7 +368,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
                           index === 0 ? 'bg-yellow-100 text-yellow-800' :
-                          index === 1 ? 'bg-gray-100 text-gray-800' :
+                          index === 1 ? 'bg-secondary text-secondary-foreground' :
                           index === 2 ? 'bg-orange-100 text-orange-800' :
                           'bg-muted text-muted-foreground'
                         }`}>

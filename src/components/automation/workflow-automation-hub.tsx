@@ -258,8 +258,8 @@ export const WorkflowAutomationHub: React.FC = () => {
       case 'failed': return 'text-red-600 bg-red-100';
       case 'active': return 'text-green-600 bg-green-100';
       case 'paused': return 'text-orange-600 bg-orange-100';
-      case 'draft': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'draft': return 'text-muted-foreground bg-gray-100';
+      default: return 'text-muted-foreground bg-gray-100';
     }
   };
 
@@ -281,7 +281,7 @@ export const WorkflowAutomationHub: React.FC = () => {
       case 'high': return 'text-orange-600 bg-orange-100';
       case 'medium': return 'text-yellow-600 bg-yellow-100';
       case 'low': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
+      default: return 'text-muted-foreground bg-gray-100';
     }
   };
 
@@ -610,7 +610,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                       <div className="flex items-center space-x-3 mb-2">
                         <h4 className="font-medium">{rule.name}</h4>
                         <Badge variant="outline">{rule.category}</Badge>
-                        <Badge className={rule.isActive ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}>
+                        <Badge className={rule.isActive ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-muted-foreground'}>
                           {rule.isActive ? 'Ativa' : 'Inativa'}
                         </Badge>
                       </div>

@@ -99,7 +99,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
   const getStatusBadge = (status: string) => {
     return status === 'active' 
       ? <Badge className="bg-green-100 text-green-800">Ativo</Badge>
-      : <Badge variant="outline" className="text-gray-600">Inativo</Badge>;
+      : <Badge variant="outline" className="text-muted-foreground">Inativo</Badge>;
   };
 
   const filteredUsers = users.filter(user => {

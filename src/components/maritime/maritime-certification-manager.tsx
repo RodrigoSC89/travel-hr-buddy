@@ -194,7 +194,7 @@ export const MaritimeCertificationManager = () => {
       case 'expiring_soon': return 'bg-yellow-100 border-yellow-500 text-yellow-800';
       case 'expired': return 'bg-red-100 border-red-500 text-red-800';
       case 'renewal_required': return 'bg-orange-100 border-orange-500 text-orange-800';
-      default: return 'bg-gray-100 border-gray-500 text-gray-800';
+      default: return 'bg-secondary border-muted text-secondary-foreground';
     }
   };
 

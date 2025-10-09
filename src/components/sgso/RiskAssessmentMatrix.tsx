@@ -247,7 +247,7 @@ export const RiskAssessmentMatrix: React.FC = () => {
                         </Badge>
                         <h3 className="font-bold text-gray-900">{risk.title}</h3>
                       </div>
-                      <div className="flex gap-4 text-sm text-gray-600">
+                      <div className="flex gap-4 text-sm text-muted-foreground">
                         <span>Probabilidade: <strong>{risk.probability}/5</strong></span>
                         <span>Impacto: <strong>{risk.impact}/5</strong></span>
                         <span>Score: <strong className="text-red-600">{risk.riskScore}</strong></span>

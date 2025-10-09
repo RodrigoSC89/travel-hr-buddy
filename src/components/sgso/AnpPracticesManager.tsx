@@ -56,7 +56,7 @@ const getStatusIcon = (status: string) => {
     case 'in_progress':
       return <Clock className="h-5 w-5 text-yellow-600" />;
     case 'pending':
-      return <AlertCircle className="h-5 w-5 text-gray-600" />;
+      return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
     default:
       return null;
   }
@@ -67,7 +67,7 @@ const getStatusBadge = (status: string) => {
     compliant: 'bg-green-100 text-green-800 border-green-200',
     non_compliant: 'bg-red-100 text-red-800 border-red-200',
     in_progress: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    pending: 'bg-gray-100 text-gray-800 border-gray-200'
+    pending: 'bg-secondary text-secondary-foreground border-border'
   };
 
   const labels = {
@@ -185,7 +185,7 @@ export const AnpPracticesManager: React.FC = () => {
                               </Badge>
                               <h3 className="font-bold text-lg text-gray-900">{practice.name}</h3>
                             </div>
-                            <p className="text-sm text-gray-600">{practice.description}</p>
+                            <p className="text-sm text-muted-foreground">{practice.description}</p>
                           </div>
                         </div>
                         
@@ -234,7 +234,7 @@ export const AnpPracticesManager: React.FC = () => {
                                 </Badge>
                                 <h3 className="font-bold text-lg text-gray-900">{practice.name}</h3>
                               </div>
-                              <p className="text-sm text-gray-600">{practice.description}</p>
+                              <p className="text-sm text-muted-foreground">{practice.description}</p>
                             </div>
                           </div>
                           
