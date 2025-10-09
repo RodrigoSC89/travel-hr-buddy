@@ -67,6 +67,13 @@ Before deploying, configure these variables in your hosting platform:
 - `VITE_SUPABASE_PROJECT_ID` - Your Supabase project ID
 - `VITE_SUPABASE_PUBLISHABLE_KEY` - Your Supabase publishable key
 
+**Note:** The application supports flexible environment variable naming:
+- **VITE_ prefix** (recommended): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
+- **NEXT_PUBLIC_ prefix** (for Next.js compatibility): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- **Plain names**: `SUPABASE_URL`, `SUPABASE_ANON_KEY`
+
+These are checked in priority order, so you can use any naming convention that fits your deployment platform.
+
 ### Optional (for full functionality):
 - `VITE_OPENAI_API_KEY` - OpenAI API key for AI features
 - `VITE_AMADEUS_API_KEY` - Amadeus API for travel features

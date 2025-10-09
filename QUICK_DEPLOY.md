@@ -15,6 +15,11 @@ VITE_SUPABASE_PROJECT_ID=your-project-id
 VITE_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
 ```
 
+**Note:** The app supports multiple naming conventions for flexibility:
+- `VITE_*` prefix (recommended for Vite)
+- `NEXT_PUBLIC_*` prefix (for Next.js compatibility)
+- Plain names like `SUPABASE_URL` and `SUPABASE_ANON_KEY`
+
 ### Step 2: Deploy
 ```bash
 npm run deploy:vercel
