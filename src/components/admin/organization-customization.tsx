@@ -20,6 +20,13 @@ import {
   RefreshCw
 } from "lucide-react";
 
+interface BusinessRules {
+  max_reservations?: string;
+  min_advance_hours?: string;
+  custom_alert_types?: string;
+  integration_settings?: string;
+}
+
 export const OrganizationCustomization: React.FC = () => {
   const { currentOrganization, currentBranding, updateBranding, checkPermission } = useOrganization();
   const { toast } = useToast();
@@ -38,7 +45,7 @@ export const OrganizationCustomization: React.FC = () => {
     default_currency: "BRL",
     timezone: "America/Sao_Paulo",
     custom_fields: {},
-    business_rules: {},
+    business_rules: {} as BusinessRules,
     enabled_modules: ["fleet", "crew", "certificates", "analytics"],
     module_settings: {}
   });
@@ -483,11 +490,11 @@ export const OrganizationCustomization: React.FC = () => {
                   <Input
                     type="number"
                     placeholder="Ex: 5"
-                    value={(customization.business_rules as any)?.max_reservations || ""}
+                    value={customization.business_rules.max_reservations || ""}
                     onChange={(e) => setCustomization({
                       ...customization,
                       business_rules: {
-                        ...(customization.business_rules as any || {}),
+                        ...customization.business_rules,
                         max_reservations: e.target.value
                       }
                     })}
@@ -499,11 +506,11 @@ export const OrganizationCustomization: React.FC = () => {
                   <Input
                     type="number"
                     placeholder="Ex: 24"
-                    value={(customization.business_rules as any)?.min_advance_hours || ""}
+                    value={customization.business_rules.min_advance_hours || ""}
                     onChange={(e) => setCustomization({
                       ...customization,
                       business_rules: {
-                        ...(customization.business_rules as any || {}),
+                        ...customization.business_rules,
                         min_advance_hours: e.target.value
                       }
                     })}
@@ -515,11 +522,11 @@ export const OrganizationCustomization: React.FC = () => {
                 <Label>Tipos de Alerta Personalizados</Label>
                 <Textarea
                   placeholder="Ex: Alerta de Manutenção Programada, Inspeção de Segurança..."
-                  value={(customization.business_rules as any)?.custom_alert_types || ""}
+                  value={customization.business_rules.custom_alert_types || ""}
                   onChange={(e) => setCustomization({
                     ...customization,
                     business_rules: {
-                      ...(customization.business_rules as any || {}),
+                      ...customization.business_rules,
                       custom_alert_types: e.target.value
                     }
                   })}
@@ -530,11 +537,11 @@ export const OrganizationCustomization: React.FC = () => {
                 <Label>Configurações de Integração Específicas</Label>
                 <Textarea
                   placeholder="APIs específicas, webhooks, integrações com sistemas legados..."
-                  value={(customization.business_rules as any)?.integration_settings || ""}
+                  value={customization.business_rules.integration_settings || ""}
                   onChange={(e) => setCustomization({
                     ...customization,
                     business_rules: {
-                      ...(customization.business_rules as any || {}),
+                      ...customization.business_rules,
                       integration_settings: e.target.value
                     }
                   })}

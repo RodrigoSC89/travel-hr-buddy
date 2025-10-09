@@ -102,7 +102,7 @@ export const APIStatus: React.FC = () => {
     setServices(prev => prev.map(service => ({
       ...service,
       lastTest: new Date(),
-      status: Math.random() > 0.2 ? "connected" : "disconnected" as any,
+      status: (Math.random() > 0.2 ? "connected" : "disconnected") as "connected" | "disconnected" | "warning" | "error",
       responseTime: Math.floor(Math.random() * 1500) + 100
     })));
     

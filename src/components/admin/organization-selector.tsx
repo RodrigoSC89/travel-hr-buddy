@@ -37,7 +37,7 @@ export const OrganizationSelector: React.FC = () => {
 
       if (error) throw error;
 
-      const orgs = (data || []).map((item: any) => ({
+      const orgs = (data || []).map((item: { organization: { id: string; name: string }; role: string }) => ({
         id: item.organization.id,
         name: item.organization.name,
         role: item.role
@@ -45,6 +45,7 @@ export const OrganizationSelector: React.FC = () => {
 
       setOrganizations(orgs);
     } catch (error) {
+      console.error("Error loading organizations:", error);
     } finally {
       setIsLoading(false);
     }
@@ -60,6 +61,7 @@ export const OrganizationSelector: React.FC = () => {
     try {
       await switchOrganization(orgId);
     } catch (error) {
+      console.error("Error switching organization:", error);
     }
   };
 

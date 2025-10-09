@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Plus, Search, Edit, Trash2, Save, Eye, 
-  BookOpen, Video, FileText, Users, Settings,
-  Upload, Download, Tag, Filter, BarChart3
+  BookOpen, Video, FileText, Users,
+  Download, BarChart3
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,7 +26,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 interface KnowledgeItem {
@@ -44,8 +43,8 @@ interface KnowledgeItem {
   views: number;
   rating: number;
   helpful_votes?: number;
-  steps?: any[];
-  metadata?: any;
+  steps?: { title: string; description: string }[];
+  metadata?: Record<string, unknown>;
 }
 
 interface Analytics {
@@ -642,7 +641,7 @@ export const KnowledgeManagement: React.FC = () => {
                     <label className="text-sm font-medium">Tipo</label>
                     <Select 
                       value={editingItem.type} 
-                      onValueChange={(value: any) => setEditingItem({ ...editingItem, type: value })}
+                      onValueChange={(value: "tutorial" | "faq" | "guide" | "video") => setEditingItem({ ...editingItem, type: value })}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -681,7 +680,7 @@ export const KnowledgeManagement: React.FC = () => {
                     <label className="text-sm font-medium">Dificuldade</label>
                     <Select 
                       value={editingItem.difficulty} 
-                      onValueChange={(value: any) => setEditingItem({ ...editingItem, difficulty: value })}
+                      onValueChange={(value: "beginner" | "intermediate" | "advanced") => setEditingItem({ ...editingItem, difficulty: value })}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -698,7 +697,7 @@ export const KnowledgeManagement: React.FC = () => {
                     <label className="text-sm font-medium">Status</label>
                     <Select 
                       value={editingItem.status} 
-                      onValueChange={(value: any) => setEditingItem({ ...editingItem, status: value })}
+                      onValueChange={(value: "draft" | "published" | "archived") => setEditingItem({ ...editingItem, status: value })}
                     >
                       <SelectTrigger>
                         <SelectValue />
