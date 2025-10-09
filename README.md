@@ -17,6 +17,7 @@ A smart, modular, and extensible platform for managing maritime systems, intelli
 * **Tailwind CSS** - Utility-first CSS framework
 * **Supabase (Auth + DB)** - Backend as a service with real-time capabilities
 * **OpenAI APIs (Chat, Whisper)** - AI-powered features and voice assistance
+* **Sentry** - Error monitoring and performance tracking
 * **Mapbox, Windy, Skyscanner, MarineTraffic, and others** - External integrations
 * **Vercel** (CI/CD + Hosting) - Deployment and hosting platform
 
@@ -123,6 +124,16 @@ VITE_SUPABASE_PUBLISHABLE_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
 VITE_OPENAI_API_KEY=sk-proj-...
 ```
 
+### Error Monitoring
+
+```env
+# Sentry - Error tracking and performance monitoring
+VITE_SENTRY_DSN=https://your-sentry-dsn@sentry.io/your-project-id
+SENTRY_ORG=your-organization-name          # Optional: for source maps upload
+SENTRY_PROJECT=your-project-name            # Optional: for source maps upload
+SENTRY_AUTH_TOKEN=your-auth-token           # Optional: for source maps upload in CI/CD
+```
+
 ### Maps & Weather
 
 ```env
@@ -206,6 +217,62 @@ npm run preview
 # Deploy to Vercel (requires Vercel CLI)
 npm run deploy:vercel
 ```
+
+---
+
+## 🔍 Error Monitoring with Sentry
+
+Nautilus One uses **Sentry** for comprehensive error tracking and performance monitoring in production.
+
+### What Sentry Captures
+
+* **Runtime errors** - JavaScript exceptions and unhandled promise rejections
+* **React component errors** - Errors caught by ErrorBoundary
+* **Performance metrics** - Page load times and transaction traces
+* **Session replays** - Visual playback of user sessions with errors
+* **API failures** - Failed network requests and backend errors
+* **Build failures** - Compilation and deployment issues
+
+### Setting Up Sentry
+
+1. **Create a Sentry account** at [sentry.io](https://sentry.io)
+2. **Create a new project** for React
+3. **Copy your DSN** from project settings
+4. **Add to `.env`**:
+   ```env
+   VITE_SENTRY_DSN=https://your-sentry-dsn@sentry.io/your-project-id
+   ```
+5. **Deploy** - Sentry will automatically start capturing errors
+
+### Optional: Source Maps Upload
+
+To see actual source code in error stack traces (not minified):
+
+1. Generate an auth token in Sentry settings
+2. Add to your CI/CD environment:
+   ```env
+   SENTRY_ORG=your-organization-name
+   SENTRY_PROJECT=your-project-name
+   SENTRY_AUTH_TOKEN=your-auth-token
+   ```
+3. Source maps will be uploaded automatically during build
+
+### Testing Sentry Integration
+
+You can trigger a test error to verify Sentry is working:
+
+```javascript
+// In browser console or temporary button
+throw new Error("Test Sentry Integration");
+```
+
+### User Context Tracking
+
+Sentry automatically captures:
+* User sessions and behavior
+* Browser and device information
+* URL paths and navigation
+* Custom tags (can be added via `Sentry.setTag()`)
 
 ---
 
