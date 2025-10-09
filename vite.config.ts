@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
     minify: 'esbuild',
     target: 'es2020', // Atualizado para suportar big integers
-    chunkSizeWarningLimit: 600, // Reduced from 2000 - with proper code splitting, no chunk should exceed 600kB
+    chunkSizeWarningLimit: 1700, // Increased to accommodate mapbox-gl (1.6MB) - other chunks remain well below 600kB
     rollupOptions: {
       output: {
         manualChunks: (id) => {
