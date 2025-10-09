@@ -30,6 +30,42 @@ export class IntegrationManager {
    * Initialize known services
    */
   private initializeServices() {
+    // ====================================
+    // AI & LLM SERVICES
+    // ====================================
+    
+    // OpenAI (GPT + Whisper)
+    const openaiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    if (openaiKey) {
+      this.services.set('openai', {
+        name: 'OpenAI',
+        apiKey: openaiKey,
+        baseUrl: 'https://api.openai.com',
+        status: 'disconnected',
+        healthCheckUrl: '/v1/models',
+      });
+    }
+
+    // ====================================
+    // VOICE SERVICES
+    // ====================================
+    
+    // ElevenLabs TTS
+    const elevenlabsKey = import.meta.env.VITE_ELEVENLABS_API_KEY;
+    if (elevenlabsKey) {
+      this.services.set('elevenlabs', {
+        name: 'ElevenLabs',
+        apiKey: elevenlabsKey,
+        baseUrl: 'https://api.elevenlabs.io',
+        status: 'disconnected',
+        healthCheckUrl: '/v1/voices',
+      });
+    }
+
+    // ====================================
+    // TRAVEL & FLIGHT SERVICES
+    // ====================================
+    
     // Amadeus API
     const amadeusKey = import.meta.env.VITE_AMADEUS_API_KEY;
     if (amadeusKey) {
@@ -42,8 +78,38 @@ export class IntegrationManager {
       });
     }
 
+    // Skyscanner API (Planned)
+    const skyscannerKey = import.meta.env.VITE_SKYSCANNER_API_KEY;
+    if (skyscannerKey) {
+      this.services.set('skyscanner', {
+        name: 'Skyscanner',
+        apiKey: skyscannerKey,
+        baseUrl: 'https://partners.api.skyscanner.net',
+        status: 'disconnected',
+      });
+    }
+
+    // ====================================
+    // HOTEL & ACCOMMODATION
+    // ====================================
+    
+    // Booking.com API (Planned)
+    const bookingKey = import.meta.env.VITE_BOOKING_API_KEY;
+    if (bookingKey) {
+      this.services.set('booking', {
+        name: 'Booking.com',
+        apiKey: bookingKey,
+        baseUrl: 'https://distribution-xml.booking.com',
+        status: 'disconnected',
+      });
+    }
+
+    // ====================================
+    // MAPS & GEOLOCATION
+    // ====================================
+    
     // Mapbox
-    const mapboxKey = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+    const mapboxKey = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_MAPBOX_TOKEN;
     if (mapboxKey) {
       this.services.set('mapbox', {
         name: 'Mapbox',
@@ -53,6 +119,63 @@ export class IntegrationManager {
       });
     }
 
+    // ====================================
+    // WEATHER SERVICES
+    // ====================================
+    
+    // OpenWeatherMap
+    const openWeatherKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
+    if (openWeatherKey) {
+      this.services.set('openweather', {
+        name: 'OpenWeatherMap',
+        apiKey: openWeatherKey,
+        baseUrl: 'https://api.openweathermap.org',
+        status: 'disconnected',
+        healthCheckUrl: '/data/2.5/weather?q=London&appid=' + openWeatherKey,
+      });
+    }
+
+    // Windy API (Planned)
+    const windyKey = import.meta.env.VITE_WINDY_API_KEY;
+    if (windyKey) {
+      this.services.set('windy', {
+        name: 'Windy',
+        apiKey: windyKey,
+        baseUrl: 'https://api.windy.com',
+        status: 'disconnected',
+      });
+    }
+
+    // ====================================
+    // FLEET & VESSEL TRACKING
+    // ====================================
+    
+    // MarineTraffic API (Planned)
+    const marineTrafficKey = import.meta.env.VITE_MARINETRAFFIC_API_KEY;
+    if (marineTrafficKey) {
+      this.services.set('marinetraffic', {
+        name: 'MarineTraffic',
+        apiKey: marineTrafficKey,
+        baseUrl: 'https://services.marinetraffic.com',
+        status: 'disconnected',
+      });
+    }
+
+    // VesselFinder API (Planned)
+    const vesselFinderKey = import.meta.env.VITE_VESSELFINDER_API_KEY;
+    if (vesselFinderKey) {
+      this.services.set('vesselfinder', {
+        name: 'VesselFinder',
+        apiKey: vesselFinderKey,
+        baseUrl: 'https://api.vesselfinder.com',
+        status: 'disconnected',
+      });
+    }
+
+    // ====================================
+    // PAYMENT SERVICES
+    // ====================================
+    
     // Stripe
     const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
     if (stripeKey) {
