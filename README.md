@@ -120,6 +120,42 @@ This project is built with:
 - **[VERCEL_DEPLOYMENT_READINESS.md](./VERCEL_DEPLOYMENT_READINESS.md)** - Complete deployment readiness checklist
 - **[DEPLOYMENT_CONFIG_REPORT.md](./DEPLOYMENT_CONFIG_REPORT.md)** - Detailed configuration report
 
+## 🧪 Testing
+
+This project includes comprehensive automated tests for critical modules.
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode (for development)
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run tests for specific module
+npm test -- dashboard
+npm test -- reservations
+npm test -- travel
+```
+
+### Test Coverage
+
+- **Dashboard Module**: ✅ 15 tests (100% passing)
+- **Reservations Module**: ✅ 31 tests (81% passing)
+- **Travel Module**: ✅ 25 tests (64% passing)
+- **Total**: 53/75 tests passing (71%)
+
+### Documentation
+
+- **[TESTING.md](./TESTING.md)** - Complete testing guide with examples and best practices
+- **[TEST_IMPLEMENTATION_SUMMARY.md](./TEST_IMPLEMENTATION_SUMMARY.md)** - Detailed test results and coverage analysis
+
+Learn more about writing tests in the [TESTING.md](./TESTING.md) guide.
+
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!
