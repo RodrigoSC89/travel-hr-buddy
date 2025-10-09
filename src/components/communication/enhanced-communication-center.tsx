@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 import { 
   MessageSquare, 
   Users, 
@@ -26,13 +26,13 @@ import {
   VolumeX,
   Eye,
   EyeOff
-} from 'lucide-react';
-import { InboxManager } from './inbox-manager';
-import { ChannelManager } from './channel-manager';
-import { MessageComposer } from './message-composer';
-import { NotificationCenter } from './notification-center';
-import { SettingsPanel } from './settings-panel';
-import { CommunicationAnalytics } from './communication-analytics';
+} from "lucide-react";
+import { InboxManager } from "./inbox-manager";
+import { ChannelManager } from "./channel-manager";
+import { MessageComposer } from "./message-composer";
+import { NotificationCenter } from "./notification-center";
+import { SettingsPanel } from "./settings-panel";
+import { CommunicationAnalytics } from "./communication-analytics";
 
 interface CommunicationStats {
   totalMessages: number;
@@ -44,7 +44,7 @@ interface CommunicationStats {
 }
 
 export const EnhancedCommunicationCenter = () => {
-  const [activeTab, setActiveTab] = useState('inbox');
+  const [activeTab, setActiveTab] = useState("inbox");
   const [stats, setStats] = useState<CommunicationStats>({
     totalMessages: 0,
     unreadMessages: 0,
@@ -73,7 +73,6 @@ export const EnhancedCommunicationCenter = () => {
         responseRate: 95
       });
     } catch (error) {
-      console.error('Error loading communication stats:', error);
       toast({
         title: "Erro",
         description: "Erro ao carregar estatísticas de comunicação",
@@ -86,13 +85,13 @@ export const EnhancedCommunicationCenter = () => {
 
   const getTabIcon = (tab: string) => {
     switch (tab) {
-      case 'inbox': return Inbox;
-      case 'channels': return Hash;
-      case 'compose': return Send;
-      case 'notifications': return Bell;
-      case 'analytics': return Archive;
-      case 'settings': return Settings;
-      default: return MessageSquare;
+    case "inbox": return Inbox;
+    case "channels": return Hash;
+    case "compose": return Send;
+    case "notifications": return Bell;
+    case "analytics": return Archive;
+    case "settings": return Settings;
+    default: return MessageSquare;
     }
   };
 

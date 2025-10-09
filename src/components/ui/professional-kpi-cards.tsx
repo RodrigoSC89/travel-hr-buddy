@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
 import { 
   TrendingUp, 
   TrendingDown,
@@ -25,49 +25,49 @@ import {
   Globe,
   Ship,
   Anchor
-} from 'lucide-react';
+} from "lucide-react";
 
 const ProfessionalKPICards = () => {
   const kpiData = [
     {
-      title: 'Receita Operacional',
-      value: 'R$ 2.45M',
-      change: '+12.5%',
-      trend: 'up',
-      subtitle: 'Meta: R$ 3.0M',
+      title: "Receita Operacional",
+      value: "R$ 2.45M",
+      change: "+12.5%",
+      trend: "up",
+      subtitle: "Meta: R$ 3.0M",
       progress: 81.7,
       icon: DollarSign,
-      color: 'green',
+      color: "green",
       details: {
-        previous: 'R$ 2.18M',
-        forecast: 'R$ 2.85M',
-        target: 'R$ 3.0M'
+        previous: "R$ 2.18M",
+        forecast: "R$ 2.85M",
+        target: "R$ 3.0M"
       }
     },
     {
-      title: 'Eficiência da Frota',
-      value: '94.2%',
-      change: '+2.8%',
-      trend: 'up',
-      subtitle: 'Meta: 95%',
+      title: "Eficiência da Frota",
+      value: "94.2%",
+      change: "+2.8%",
+      trend: "up",
+      subtitle: "Meta: 95%",
       progress: 94.2,
       icon: Ship,
-      color: 'blue',
+      color: "blue",
       details: {
-        fuel: '92.1%',
-        utilization: '87.3%',
-        maintenance: '96.8%'
+        fuel: "92.1%",
+        utilization: "87.3%",
+        maintenance: "96.8%"
       }
     },
     {
-      title: 'Equipe Ativa',
-      value: '125',
-      change: '+4.2%',
-      trend: 'up',
-      subtitle: '118 Ativos',
+      title: "Equipe Ativa",
+      value: "125",
+      change: "+4.2%",
+      trend: "up",
+      subtitle: "118 Ativos",
       progress: 94.4,
       icon: Users,
-      color: 'purple',
+      color: "purple",
       details: {
         active: 118,
         onLeave: 7,
@@ -75,18 +75,18 @@ const ProfessionalKPICards = () => {
       }
     },
     {
-      title: 'Score de Segurança',
-      value: '98.5%',
-      change: '+1.2%',
-      trend: 'up',
-      subtitle: 'Excelente',
+      title: "Score de Segurança",
+      value: "98.5%",
+      change: "+1.2%",
+      trend: "up",
+      subtitle: "Excelente",
       progress: 98.5,
       icon: Award,
-      color: 'orange',
+      color: "orange",
       details: {
         incidents: 0,
-        compliance: '99.2%',
-        training: '96.8%'
+        compliance: "99.2%",
+        training: "96.8%"
       }
     }
   ];
@@ -94,36 +94,36 @@ const ProfessionalKPICards = () => {
   const getColorClasses = (color: string) => {
     const colors = {
       green: {
-        bg: 'from-emerald-700/90 to-green-800/90',
-        icon: 'from-emerald-500 to-green-600',
-        text: 'text-white',
-        progress: 'bg-emerald-200',
-        border: 'border-emerald-400',
-        card: 'bg-emerald-800/95 border-emerald-600/50'
+        bg: "from-emerald-700/90 to-green-800/90",
+        icon: "from-emerald-500 to-green-600",
+        text: "text-white",
+        progress: "bg-emerald-200",
+        border: "border-emerald-400",
+        card: "bg-emerald-800/95 border-emerald-600/50"
       },
       blue: {
-        bg: 'from-azure-700/90 to-azure-800/90',
-        icon: 'from-azure-400 to-azure-500',
-        text: 'text-white',
-        progress: 'bg-azure-200',
-        border: 'border-azure-400',
-        card: 'bg-azure-800/95 border-azure-600/50'
+        bg: "from-azure-700/90 to-azure-800/90",
+        icon: "from-azure-400 to-azure-500",
+        text: "text-white",
+        progress: "bg-azure-200",
+        border: "border-azure-400",
+        card: "bg-azure-800/95 border-azure-600/50"
       },
       purple: {
-        bg: 'from-purple-700/90 to-violet-800/90',
-        icon: 'from-purple-400 to-violet-500',
-        text: 'text-white',
-        progress: 'bg-purple-200',
-        border: 'border-purple-400',
-        card: 'bg-purple-800/95 border-purple-600/50'
+        bg: "from-purple-700/90 to-violet-800/90",
+        icon: "from-purple-400 to-violet-500",
+        text: "text-white",
+        progress: "bg-purple-200",
+        border: "border-purple-400",
+        card: "bg-purple-800/95 border-purple-600/50"
       },
       orange: {
-        bg: 'from-orange-700/90 to-amber-800/90',
-        icon: 'from-orange-400 to-amber-500',
-        text: 'text-white',
-        progress: 'bg-orange-200',
-        border: 'border-orange-400',
-        card: 'bg-orange-800/95 border-orange-600/50'
+        bg: "from-orange-700/90 to-amber-800/90",
+        icon: "from-orange-400 to-amber-500",
+        text: "text-white",
+        progress: "bg-orange-200",
+        border: "border-orange-400",
+        card: "bg-orange-800/95 border-orange-600/50"
       }
     };
     return colors[color as keyof typeof colors];
@@ -166,13 +166,13 @@ const ProfessionalKPICards = () => {
                     {kpi.title}
                   </h3>
                   <div className="flex items-center gap-1">
-                    {kpi.trend === 'up' ? (
+                    {kpi.trend === "up" ? (
                       <TrendingUp className="w-4 h-4 text-green-300" />
                     ) : (
                       <TrendingDown className="w-4 h-4 text-red-300" />
                     )}
                     <span className={`text-sm font-bold ${
-                      kpi.trend === 'up' ? 'text-green-300' : 'text-red-300'
+                      kpi.trend === "up" ? "text-green-300" : "text-red-300"
                     }`}>
                       {kpi.change}
                     </span>
@@ -199,7 +199,7 @@ const ProfessionalKPICards = () => {
                   {Object.entries(kpi.details).map(([key, value]) => (
                     <div key={key} className="flex justify-between text-xs">
                       <span className="text-white/80 font-medium capitalize">
-                        {key.replace('_', ' ')}:
+                        {key.replace("_", " ")}:
                       </span>
                       <span className="font-bold text-white">
                         {value}

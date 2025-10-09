@@ -1,5 +1,5 @@
-import React from 'react';
-import { OfflineSyncManager } from '@/components/sync/offline-sync-manager';
+import React from "react";
+import { OfflineSyncManager } from "@/components/sync/offline-sync-manager";
 
 const OfflineSyncPage = () => {
   return (

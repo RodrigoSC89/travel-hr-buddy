@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import React, { useState, useEffect } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Shield, 
   Key, 
@@ -17,64 +17,64 @@ import {
   Copy,
   RefreshCw,
   Lock
-} from 'lucide-react';
+} from "lucide-react";
 
 export const AdvancedAuthenticationSystem: React.FC = () => {
   const [isEnabled2FA, setIsEnabled2FA] = useState(false);
   const [isBiometricEnabled, setIsBiometricEnabled] = useState(false);
-  const [totpSecret, setTotpSecret] = useState('JBSWY3DPEHPK3PXP');
+  const [totpSecret, setTotpSecret] = useState("JBSWY3DPEHPK3PXP");
   const [backupCodes] = useState([
-    '123456789',
-    '987654321',
-    '456789123',
-    '789123456',
-    '321654987'
+    "123456789",
+    "987654321",
+    "456789123",
+    "789123456",
+    "321654987"
   ]);
   const [activeSessions] = useState([
     {
-      id: '1',
-      device: 'Chrome - Windows',
-      location: 'São Paulo, Brasil',
-      lastActive: '2 minutos atrás',
+      id: "1",
+      device: "Chrome - Windows",
+      location: "São Paulo, Brasil",
+      lastActive: "2 minutos atrás",
       current: true
     },
     {
-      id: '2', 
-      device: 'Safari - iPhone',
-      location: 'Rio de Janeiro, Brasil',
-      lastActive: '1 hora atrás',
+      id: "2", 
+      device: "Safari - iPhone",
+      location: "Rio de Janeiro, Brasil",
+      lastActive: "1 hora atrás",
       current: false
     },
     {
-      id: '3',
-      device: 'Chrome - Android',
-      location: 'Santos, Brasil', 
-      lastActive: '1 dia atrás',
+      id: "3",
+      device: "Chrome - Android",
+      location: "Santos, Brasil", 
+      lastActive: "1 dia atrás",
       current: false
     }
   ]);
 
   const [authLogs] = useState([
     {
-      id: '1',
-      action: 'Login bem-sucedido',
-      device: 'Chrome - Windows',
-      timestamp: '2024-01-15 14:30:15',
-      status: 'success'
+      id: "1",
+      action: "Login bem-sucedido",
+      device: "Chrome - Windows",
+      timestamp: "2024-01-15 14:30:15",
+      status: "success"
     },
     {
-      id: '2',
-      action: 'Tentativa de login falhada',
-      device: 'Unknown',
-      timestamp: '2024-01-15 12:15:30',
-      status: 'failed'
+      id: "2",
+      action: "Tentativa de login falhada",
+      device: "Unknown",
+      timestamp: "2024-01-15 12:15:30",
+      status: "failed"
     },
     {
-      id: '3',
-      action: '2FA configurado',
-      device: 'Chrome - Windows',
-      timestamp: '2024-01-15 10:45:22',
-      status: 'success'
+      id: "3",
+      action: "2FA configurado",
+      device: "Chrome - Windows",
+      timestamp: "2024-01-15 10:45:22",
+      status: "success"
     }
   ]);
 
@@ -83,12 +83,11 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
   };
 
   const handleEnableBiometric = async () => {
-    if ('credentials' in navigator) {
+    if ("credentials" in navigator) {
       try {
         // Simular autenticação biométrica
         setIsBiometricEnabled(!isBiometricEnabled);
       } catch (error) {
-        console.error('Biometric authentication not supported');
       }
     }
   };
@@ -134,9 +133,9 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">2FA</p>
-                <p className="text-lg font-bold">{isEnabled2FA ? 'Ativo' : 'Inativo'}</p>
+                <p className="text-lg font-bold">{isEnabled2FA ? "Ativo" : "Inativo"}</p>
               </div>
-              <Key className={`h-8 w-8 ${isEnabled2FA ? 'text-green-500' : 'text-muted-foreground'}`} />
+              <Key className={`h-8 w-8 ${isEnabled2FA ? "text-green-500" : "text-muted-foreground"}`} />
             </div>
           </CardContent>
         </Card>
@@ -146,9 +145,9 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Biometria</p>
-                <p className="text-lg font-bold">{isBiometricEnabled ? 'Ativo' : 'Inativo'}</p>
+                <p className="text-lg font-bold">{isBiometricEnabled ? "Ativo" : "Inativo"}</p>
               </div>
-              <Fingerprint className={`h-8 w-8 ${isBiometricEnabled ? 'text-green-500' : 'text-muted-foreground'}`} />
+              <Fingerprint className={`h-8 w-8 ${isBiometricEnabled ? "text-green-500" : "text-muted-foreground"}`} />
             </div>
           </CardContent>
         </Card>
@@ -180,14 +179,14 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
               <div>
                 <p className="font-medium">Status do 2FA</p>
                 <p className="text-sm text-muted-foreground">
-                  {isEnabled2FA ? 'Proteção ativa' : 'Configurar para maior segurança'}
+                  {isEnabled2FA ? "Proteção ativa" : "Configurar para maior segurança"}
                 </p>
               </div>
               <Button 
                 onClick={handleEnable2FA}
-                variant={isEnabled2FA ? 'outline' : 'default'}
+                variant={isEnabled2FA ? "outline" : "default"}
               >
-                {isEnabled2FA ? 'Desativar' : 'Ativar'} 2FA
+                {isEnabled2FA ? "Desativar" : "Ativar"} 2FA
               </Button>
             </div>
 
@@ -258,26 +257,26 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
               <div>
                 <p className="font-medium">Biometria</p>
                 <p className="text-sm text-muted-foreground">
-                  {isBiometricEnabled ? 'Impressão digital configurada' : 'Configure sua impressão digital'}
+                  {isBiometricEnabled ? "Impressão digital configurada" : "Configure sua impressão digital"}
                 </p>
               </div>
               <Button 
                 onClick={handleEnableBiometric}
-                variant={isBiometricEnabled ? 'outline' : 'default'}
+                variant={isBiometricEnabled ? "outline" : "default"}
               >
-                {isBiometricEnabled ? 'Remover' : 'Configurar'}
+                {isBiometricEnabled ? "Remover" : "Configurar"}
               </Button>
             </div>
 
             <div className="p-4 border rounded-lg text-center">
-              <Fingerprint className={`w-16 h-16 mx-auto mb-4 ${isBiometricEnabled ? 'text-green-500' : 'text-muted-foreground'}`} />
+              <Fingerprint className={`w-16 h-16 mx-auto mb-4 ${isBiometricEnabled ? "text-green-500" : "text-muted-foreground"}`} />
               <p className="font-medium">
-                {isBiometricEnabled ? 'Biometria Ativa' : 'Biometria Inativa'}
+                {isBiometricEnabled ? "Biometria Ativa" : "Biometria Inativa"}
               </p>
               <p className="text-sm text-muted-foreground">
                 {isBiometricEnabled 
-                  ? 'Toque no sensor para fazer login rapidamente'
-                  : 'Configure para login mais rápido e seguro'
+                  ? "Toque no sensor para fazer login rapidamente"
+                  : "Configure para login mais rápido e seguro"
                 }
               </p>
             </div>
@@ -311,7 +310,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
               <div
                 key={session.id}
                 className={`flex items-center justify-between p-4 border rounded-lg ${
-                  session.current ? 'border-green-200 bg-green-50 dark:bg-green-900/20' : ''
+                  session.current ? "border-green-200 bg-green-50 dark:bg-green-900/20" : ""
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -324,7 +323,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                     <p className="font-medium">{session.device}</p>
                     <p className="text-sm text-muted-foreground">{session.location}</p>
                     <p className="text-sm text-muted-foreground">
-                      {session.current ? 'Sessão atual' : `Ativo ${session.lastActive}`}
+                      {session.current ? "Sessão atual" : `Ativo ${session.lastActive}`}
                     </p>
                   </div>
                 </div>
@@ -363,7 +362,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
             {authLogs.map((log) => (
               <div key={log.id} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3">
-                  {log.status === 'success' ? (
+                  {log.status === "success" ? (
                     <CheckCircle className="w-5 h-5 text-green-500" />
                   ) : (
                     <AlertTriangle className="w-5 h-5 text-red-500" />
@@ -376,10 +375,10 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                 <div className="text-right">
                   <p className="text-sm font-medium">{log.timestamp}</p>
                   <Badge 
-                    variant={log.status === 'success' ? 'default' : 'destructive'}
+                    variant={log.status === "success" ? "default" : "destructive"}
                     className="text-xs"
                   >
-                    {log.status === 'success' ? 'Sucesso' : 'Falhou'}
+                    {log.status === "success" ? "Sucesso" : "Falhou"}
                   </Badge>
                 </div>
               </div>

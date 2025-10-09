@@ -66,12 +66,12 @@ export const priorityColors = {
 
 // Helper functions
 export const getStatusColor = (status: string): string => {
-  const normalizedStatus = status.toLowerCase().replace(/\s+/g, '_');
+  const normalizedStatus = status.toLowerCase().replace(/\s+/g, "_");
   return statusColors[normalizedStatus as keyof typeof statusColors] || statusColors.default;
 };
 
 export const getStatusDot = (status: string): string => {
-  const normalizedStatus = status.toLowerCase().replace(/\s+/g, '_');
+  const normalizedStatus = status.toLowerCase().replace(/\s+/g, "_");
   return statusDots[normalizedStatus as keyof typeof statusDots] || statusDots.default;
 };
 

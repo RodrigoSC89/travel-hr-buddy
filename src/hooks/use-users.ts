@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { UserRole } from './use-permissions';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { UserRole } from "./use-permissions";
 
 interface UserWithRole {
   id: string;
@@ -29,7 +29,7 @@ export const useUsers = () => {
 
       // Buscar todos os profiles
       const { data: profiles, error: profilesError } = await supabase
-        .from('profiles')
+        .from("profiles")
         .select(`
           id,
           email,
@@ -43,7 +43,7 @@ export const useUsers = () => {
           manager_id,
           created_at
         `)
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
 
       if (profilesError) throw profilesError;
 
@@ -51,22 +51,21 @@ export const useUsers = () => {
       const usersWithRoles = await Promise.all(
         (profiles || []).map(async (profile) => {
           const { data: roleData } = await supabase
-            .from('user_roles')
-            .select('role')
-            .eq('user_id', profile.id)
+            .from("user_roles")
+            .select("role")
+            .eq("user_id", profile.id)
             .maybeSingle();
 
           return {
             ...profile,
-            role: (roleData?.role || 'employee') as UserRole
+            role: (roleData?.role || "employee") as UserRole
           };
         })
       );
 
       setUsers(usersWithRoles);
     } catch (err) {
-      console.error('Error fetching users:', err);
-      setError('Erro ao carregar usuários');
+      setError("Erro ao carregar usuários");
     } finally {
       setIsLoading(false);
     }
@@ -75,9 +74,9 @@ export const useUsers = () => {
   const updateUserRole = async (userId: string, newRole: UserRole) => {
     try {
       const { error } = await supabase
-        .from('user_roles')
+        .from("user_roles")
         .update({ role: newRole })
-        .eq('user_id', userId);
+        .eq("user_id", userId);
 
       if (error) throw error;
 
@@ -92,15 +91,14 @@ export const useUsers = () => {
 
       return { success: true };
     } catch (err) {
-      console.error('Error updating user role:', err);
-      return { success: false, error: 'Erro ao atualizar role do usuário' };
+      return { success: false, error: "Erro ao atualizar role do usuário" };
     }
   };
 
   const updateUserProfile = async (userId: string, profileData: Partial<UserWithRole>) => {
     try {
       const { error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update({
           full_name: profileData.full_name,
           department: profileData.department,
@@ -111,7 +109,7 @@ export const useUsers = () => {
           hire_date: profileData.hire_date,
           manager_id: profileData.manager_id
         })
-        .eq('id', userId);
+        .eq("id", userId);
 
       if (error) throw error;
 
@@ -131,8 +129,7 @@ export const useUsers = () => {
 
       return { success: true };
     } catch (err) {
-      console.error('Error updating user profile:', err);
-      return { success: false, error: 'Erro ao atualizar perfil do usuário' };
+      return { success: false, error: "Erro ao atualizar perfil do usuário" };
     }
   };
 
@@ -144,8 +141,8 @@ export const useUsers = () => {
 
     return {
       total: users.length,
-      active: users.filter(u => u.status === 'active').length,
-      inactive: users.filter(u => u.status === 'inactive').length,
+      active: users.filter(u => u.status === "active").length,
+      inactive: users.filter(u => u.status === "inactive").length,
       byRole: stats
     };
   };

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Bell, 
   AlertTriangle, 
@@ -24,18 +24,18 @@ import {
   Ship,
   Users,
   MapPin
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SmartAlert {
   id: string;
-  type: 'critical' | 'warning' | 'info' | 'success';
-  category: 'maintenance' | 'safety' | 'efficiency' | 'compliance' | 'crew' | 'weather';
+  type: "critical" | "warning" | "info" | "success";
+  category: "maintenance" | "safety" | "efficiency" | "compliance" | "crew" | "weather";
   title: string;
   description: string;
   vessel_id?: string;
   vessel_name?: string;
-  priority: 'high' | 'medium' | 'low';
-  status: 'new' | 'acknowledged' | 'in_progress' | 'resolved';
+  priority: "high" | "medium" | "low";
+  status: "new" | "acknowledged" | "in_progress" | "resolved";
   created_at: string;
   resolved_at?: string;
   ai_confidence: number;
@@ -45,11 +45,11 @@ interface SmartAlert {
 
 interface AIInsight {
   id: string;
-  insight_type: 'predictive' | 'diagnostic' | 'prescriptive';
+  insight_type: "predictive" | "diagnostic" | "prescriptive";
   title: string;
   description: string;
   confidence_score: number;
-  business_impact: 'high' | 'medium' | 'low';
+  business_impact: "high" | "medium" | "low";
   data_sources: string[];
   recommendations: string[];
   timeline: string;
@@ -75,8 +75,8 @@ export const IntelligentAlertSystem = () => {
   const [smartAlerts, setSmartAlerts] = useState<SmartAlert[]>([]);
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
   const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null);
-  const [activeTab, setActiveTab] = useState('alerts');
-  const [filterType, setFilterType] = useState('all');
+  const [activeTab, setActiveTab] = useState("alerts");
+  const [filterType, setFilterType] = useState("all");
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -92,118 +92,118 @@ export const IntelligentAlertSystem = () => {
       // Mock intelligent alerts
       const mockAlerts: SmartAlert[] = [
         {
-          id: '1',
-          type: 'critical',
-          category: 'maintenance',
-          title: 'Falha Iminente do Motor - MV Atlantic Explorer',
-          description: 'IA detectou padrões anômalos na temperatura e vibração do motor principal. Falha prevista em 72h.',
-          vessel_id: '1',
-          vessel_name: 'MV Atlantic Explorer',
-          priority: 'high',
-          status: 'new',
-          created_at: '2024-01-20T14:30:00Z',
+          id: "1",
+          type: "critical",
+          category: "maintenance",
+          title: "Falha Iminente do Motor - MV Atlantic Explorer",
+          description: "IA detectou padrões anômalos na temperatura e vibração do motor principal. Falha prevista em 72h.",
+          vessel_id: "1",
+          vessel_name: "MV Atlantic Explorer",
+          priority: "high",
+          status: "new",
+          created_at: "2024-01-20T14:30:00Z",
           ai_confidence: 94,
           recommended_actions: [
-            'Inspecionar sistema de refrigeração imediatamente',
-            'Verificar níveis de óleo e filtros',
-            'Agendar parada para manutenção preventiva',
-            'Preparar equipe de engenharia para reparo'
+            "Inspecionar sistema de refrigeração imediatamente",
+            "Verificar níveis de óleo e filtros",
+            "Agendar parada para manutenção preventiva",
+            "Preparar equipe de engenharia para reparo"
           ],
-          impact_assessment: 'Potencial parada operacional de 48-72h, custo estimado R$ 85.000'
+          impact_assessment: "Potencial parada operacional de 48-72h, custo estimado R$ 85.000"
         },
         {
-          id: '2',
-          type: 'warning',
-          category: 'weather',
-          title: 'Condições Meteorológicas Adversas - Rota Santos',
-          description: 'Tempestade tropical se aproximando da rota. Ventos de até 45 nós previstos.',
-          vessel_id: '2',
-          vessel_name: 'MS Ocean Pioneer',
-          priority: 'high',
-          status: 'acknowledged',
-          created_at: '2024-01-20T12:15:00Z',
+          id: "2",
+          type: "warning",
+          category: "weather",
+          title: "Condições Meteorológicas Adversas - Rota Santos",
+          description: "Tempestade tropical se aproximando da rota. Ventos de até 45 nós previstos.",
+          vessel_id: "2",
+          vessel_name: "MS Ocean Pioneer",
+          priority: "high",
+          status: "acknowledged",
+          created_at: "2024-01-20T12:15:00Z",
           ai_confidence: 87,
           recommended_actions: [
-            'Considerar rota alternativa via Canal de São Sebastião',
-            'Reduzir velocidade para 8 nós',
-            'Alertar tripulação sobre condições adversas',
-            'Monitorar previsão meteorológica a cada 2h'
+            "Considerar rota alternativa via Canal de São Sebastião",
+            "Reduzir velocidade para 8 nós",
+            "Alertar tripulação sobre condições adversas",
+            "Monitorar previsão meteorológica a cada 2h"
           ],
-          impact_assessment: 'Atraso estimado de 6-8h, consumo adicional de combustível'
+          impact_assessment: "Atraso estimado de 6-8h, consumo adicional de combustível"
         },
         {
-          id: '3',
-          type: 'info',
-          category: 'efficiency',
-          title: 'Oportunidade de Otimização - Consumo de Combustível',
-          description: 'IA identificou rota 12% mais eficiente para próxima viagem da MV Pacific Star.',
-          vessel_id: '3',
-          vessel_name: 'MV Pacific Star',
-          priority: 'medium',
-          status: 'new',
-          created_at: '2024-01-20T10:45:00Z',
+          id: "3",
+          type: "info",
+          category: "efficiency",
+          title: "Oportunidade de Otimização - Consumo de Combustível",
+          description: "IA identificou rota 12% mais eficiente para próxima viagem da MV Pacific Star.",
+          vessel_id: "3",
+          vessel_name: "MV Pacific Star",
+          priority: "medium",
+          status: "new",
+          created_at: "2024-01-20T10:45:00Z",
           ai_confidence: 91,
           recommended_actions: [
-            'Implementar rota otimizada no sistema de navegação',
-            'Ajustar velocidade para 14 nós durante o trajeto',
-            'Monitorar consumo em tempo real'
+            "Implementar rota otimizada no sistema de navegação",
+            "Ajustar velocidade para 14 nós durante o trajeto",
+            "Monitorar consumo em tempo real"
           ],
-          impact_assessment: 'Economia estimada de R$ 15.000 em combustível'
+          impact_assessment: "Economia estimada de R$ 15.000 em combustível"
         },
         {
-          id: '4',
-          type: 'warning',
-          category: 'crew',
-          title: 'Fadiga da Tripulação Detectada - MS Baltic Wind',
-          description: 'Padrões de trabalho indicam níveis elevados de fadiga em 60% da tripulação.',
-          vessel_id: '4',
-          vessel_name: 'MS Baltic Wind',
-          priority: 'medium',
-          status: 'in_progress',
-          created_at: '2024-01-20T08:30:00Z',
+          id: "4",
+          type: "warning",
+          category: "crew",
+          title: "Fadiga da Tripulação Detectada - MS Baltic Wind",
+          description: "Padrões de trabalho indicam níveis elevados de fadiga em 60% da tripulação.",
+          vessel_id: "4",
+          vessel_name: "MS Baltic Wind",
+          priority: "medium",
+          status: "in_progress",
+          created_at: "2024-01-20T08:30:00Z",
           ai_confidence: 83,
           recommended_actions: [
-            'Reorganizar escalas de trabalho',
-            'Implementar pausas obrigatórias de 2h',
-            'Considerar rotação de pessoal no próximo porto',
-            'Monitorar sinais vitais da equipe'
+            "Reorganizar escalas de trabalho",
+            "Implementar pausas obrigatórias de 2h",
+            "Considerar rotação de pessoal no próximo porto",
+            "Monitorar sinais vitais da equipe"
           ],
-          impact_assessment: 'Risco de acidentes aumentado em 35%'
+          impact_assessment: "Risco de acidentes aumentado em 35%"
         },
         {
-          id: '5',
-          type: 'success',
-          category: 'compliance',
-          title: 'Conformidade Certificações - Frota Completa',
-          description: 'Todas as certificações da frota estão em conformidade. Próxima revisão em 30 dias.',
-          priority: 'low',
-          status: 'resolved',
-          created_at: '2024-01-20T06:00:00Z',
-          resolved_at: '2024-01-20T14:00:00Z',
+          id: "5",
+          type: "success",
+          category: "compliance",
+          title: "Conformidade Certificações - Frota Completa",
+          description: "Todas as certificações da frota estão em conformidade. Próxima revisão em 30 dias.",
+          priority: "low",
+          status: "resolved",
+          created_at: "2024-01-20T06:00:00Z",
+          resolved_at: "2024-01-20T14:00:00Z",
           ai_confidence: 99,
           recommended_actions: [
-            'Manter cronograma de renovações',
-            'Agendar treinamentos de atualização'
+            "Manter cronograma de renovações",
+            "Agendar treinamentos de atualização"
           ],
-          impact_assessment: 'Zero riscos de conformidade identificados'
+          impact_assessment: "Zero riscos de conformidade identificados"
         }
       ];
 
       const mockInsights: AIInsight[] = [
         {
-          id: '1',
-          insight_type: 'predictive',
-          title: 'Previsão de Demanda de Combustível',
-          description: 'Baseado em padrões históricos e condições meteorológicas, prevê-se aumento de 18% no consumo de combustível nos próximos 15 dias.',
+          id: "1",
+          insight_type: "predictive",
+          title: "Previsão de Demanda de Combustível",
+          description: "Baseado em padrões históricos e condições meteorológicas, prevê-se aumento de 18% no consumo de combustível nos próximos 15 dias.",
           confidence_score: 89,
-          business_impact: 'high',
-          data_sources: ['Consumo histórico', 'Previsão meteorológica', 'Rotas planejadas'],
+          business_impact: "high",
+          data_sources: ["Consumo histórico", "Previsão meteorológica", "Rotas planejadas"],
           recommendations: [
-            'Negociar contratos de combustível com fornecedores',
-            'Otimizar rotas para reduzir consumo',
-            'Considerar compra antecipada com desconto'
+            "Negociar contratos de combustível com fornecedores",
+            "Otimizar rotas para reduzir consumo",
+            "Considerar compra antecipada com desconto"
           ],
-          timeline: '15 dias',
+          timeline: "15 dias",
           cost_benefit: {
             potential_savings: 45000,
             implementation_cost: 8000,
@@ -211,19 +211,19 @@ export const IntelligentAlertSystem = () => {
           }
         },
         {
-          id: '2',
-          insight_type: 'prescriptive',
-          title: 'Otimização de Escalas da Tripulação',
-          description: 'Análise de produtividade sugere nova configuração de escalas que pode aumentar eficiência em 23%.',
+          id: "2",
+          insight_type: "prescriptive",
+          title: "Otimização de Escalas da Tripulação",
+          description: "Análise de produtividade sugere nova configuração de escalas que pode aumentar eficiência em 23%.",
           confidence_score: 92,
-          business_impact: 'medium',
-          data_sources: ['Dados de produtividade', 'Satisfação da tripulação', 'Incidentes de segurança'],
+          business_impact: "medium",
+          data_sources: ["Dados de produtividade", "Satisfação da tripulação", "Incidentes de segurança"],
           recommendations: [
-            'Implementar escalas de 6h com 2h de descanso',
-            'Rotacionar funções críticas a cada 12h',
-            'Adicionar período de recreação de 1h'
+            "Implementar escalas de 6h com 2h de descanso",
+            "Rotacionar funções críticas a cada 12h",
+            "Adicionar período de recreação de 1h"
           ],
-          timeline: '30 dias',
+          timeline: "30 dias",
           cost_benefit: {
             potential_savings: 28000,
             implementation_cost: 5000,
@@ -231,19 +231,19 @@ export const IntelligentAlertSystem = () => {
           }
         },
         {
-          id: '3',
-          insight_type: 'diagnostic',
-          title: 'Análise de Padrões de Manutenção',
-          description: 'Identificados padrões que sugerem manutenção preditiva pode reduzir custos de reparo em 35%.',
+          id: "3",
+          insight_type: "diagnostic",
+          title: "Análise de Padrões de Manutenção",
+          description: "Identificados padrões que sugerem manutenção preditiva pode reduzir custos de reparo em 35%.",
           confidence_score: 87,
-          business_impact: 'high',
-          data_sources: ['Histórico de manutenção', 'Sensores IoT', 'Relatórios de inspeção'],
+          business_impact: "high",
+          data_sources: ["Histórico de manutenção", "Sensores IoT", "Relatórios de inspeção"],
           recommendations: [
-            'Instalar sensores IoT adicionais',
-            'Implementar algoritmo de manutenção preditiva',
-            'Treinar equipe em novas práticas'
+            "Instalar sensores IoT adicionais",
+            "Implementar algoritmo de manutenção preditiva",
+            "Treinar equipe em novas práticas"
           ],
-          timeline: '60 dias',
+          timeline: "60 dias",
           cost_benefit: {
             potential_savings: 75000,
             implementation_cost: 25000,
@@ -268,7 +268,6 @@ export const IntelligentAlertSystem = () => {
       setSystemHealth(mockSystemHealth);
       
     } catch (error) {
-      console.error('Error loading intelligent data:', error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados inteligentes",
@@ -283,56 +282,55 @@ export const IntelligentAlertSystem = () => {
     // Set up real-time updates for critical alerts
     const interval = setInterval(() => {
       // In production, this would listen to Supabase real-time updates
-      console.log('Checking for new intelligent alerts...');
     }, 30000);
 
     return () => clearInterval(interval);
   };
 
-  const getAlertIcon = (type: SmartAlert['type']) => {
+  const getAlertIcon = (type: SmartAlert["type"]) => {
     switch (type) {
-      case 'critical': return AlertTriangle;
-      case 'warning': return Bell;
-      case 'info': return Activity;
-      case 'success': return CheckCircle;
-      default: return Bell;
+    case "critical": return AlertTriangle;
+    case "warning": return Bell;
+    case "info": return Activity;
+    case "success": return CheckCircle;
+    default: return Bell;
     }
   };
 
-  const getAlertColor = (type: SmartAlert['type']) => {
+  const getAlertColor = (type: SmartAlert["type"]) => {
     switch (type) {
-      case 'critical': return 'border-red-500 bg-red-50';
-      case 'warning': return 'border-yellow-500 bg-yellow-50';
-      case 'info': return 'border-blue-500 bg-blue-50';
-      case 'success': return 'border-green-500 bg-green-50';
-      default: return 'border-gray-500 bg-gray-50';
+    case "critical": return "border-red-500 bg-red-50";
+    case "warning": return "border-yellow-500 bg-yellow-50";
+    case "info": return "border-blue-500 bg-blue-50";
+    case "success": return "border-green-500 bg-green-50";
+    default: return "border-gray-500 bg-gray-50";
     }
   };
 
-  const getCategoryIcon = (category: SmartAlert['category']) => {
+  const getCategoryIcon = (category: SmartAlert["category"]) => {
     switch (category) {
-      case 'maintenance': return Ship;
-      case 'safety': return Shield;
-      case 'efficiency': return TrendingUp;
-      case 'compliance': return CheckCircle;
-      case 'crew': return Users;
-      case 'weather': return Thermometer;
-      default: return Activity;
+    case "maintenance": return Ship;
+    case "safety": return Shield;
+    case "efficiency": return TrendingUp;
+    case "compliance": return CheckCircle;
+    case "crew": return Users;
+    case "weather": return Thermometer;
+    default: return Activity;
     }
   };
 
   const getHealthColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 75) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 90) return "text-green-600";
+    if (score >= 75) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const filteredAlerts = smartAlerts.filter(alert => 
-    filterType === 'all' || alert.category === filterType
+    filterType === "all" || alert.category === filterType
   );
 
-  const criticalAlerts = smartAlerts.filter(alert => alert.type === 'critical').length;
-  const warningAlerts = smartAlerts.filter(alert => alert.type === 'warning').length;
+  const criticalAlerts = smartAlerts.filter(alert => alert.type === "critical").length;
+  const warningAlerts = smartAlerts.filter(alert => alert.type === "warning").length;
 
   if (loading) {
     return (
@@ -436,37 +434,37 @@ export const IntelligentAlertSystem = () => {
             <CardContent className="pt-6">
               <div className="flex gap-2">
                 <Button 
-                  variant={filterType === 'all' ? 'default' : 'outline'} 
+                  variant={filterType === "all" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType('all')}
+                  onClick={() => setFilterType("all")}
                 >
                   Todos
                 </Button>
                 <Button 
-                  variant={filterType === 'maintenance' ? 'default' : 'outline'} 
+                  variant={filterType === "maintenance" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType('maintenance')}
+                  onClick={() => setFilterType("maintenance")}
                 >
                   Manutenção
                 </Button>
                 <Button 
-                  variant={filterType === 'safety' ? 'default' : 'outline'} 
+                  variant={filterType === "safety" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType('safety')}
+                  onClick={() => setFilterType("safety")}
                 >
                   Segurança
                 </Button>
                 <Button 
-                  variant={filterType === 'efficiency' ? 'default' : 'outline'} 
+                  variant={filterType === "efficiency" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType('efficiency')}
+                  onClick={() => setFilterType("efficiency")}
                 >
                   Eficiência
                 </Button>
                 <Button 
-                  variant={filterType === 'crew' ? 'default' : 'outline'} 
+                  variant={filterType === "crew" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType('crew')}
+                  onClick={() => setFilterType("crew")}
                 >
                   Tripulação
                 </Button>
@@ -568,12 +566,12 @@ export const IntelligentAlertSystem = () => {
                           {insight.insight_type}
                         </Badge>
                         <Badge className={
-                          insight.business_impact === 'high' ? 'bg-red-100 text-red-800' :
-                          insight.business_impact === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-green-100 text-green-800'
+                          insight.business_impact === "high" ? "bg-red-100 text-red-800" :
+                            insight.business_impact === "medium" ? "bg-yellow-100 text-yellow-800" :
+                              "bg-green-100 text-green-800"
                         }>
-                          {insight.business_impact === 'high' ? 'Alto Impacto' :
-                           insight.business_impact === 'medium' ? 'Médio Impacto' : 'Baixo Impacto'}
+                          {insight.business_impact === "high" ? "Alto Impacto" :
+                            insight.business_impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
                         </Badge>
                       </div>
                       

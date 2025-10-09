@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { 
   Settings, 
   Play, 
@@ -23,15 +23,15 @@ import {
   Activity,
   AlertTriangle,
   Eye
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AutomationWorkflow {
   id: string;
   name: string;
   description: string;
-  trigger_type: 'schedule' | 'event' | 'condition';
+  trigger_type: "schedule" | "event" | "condition";
   trigger_config: any;
   actions: any[];
   is_active: boolean;
@@ -42,7 +42,7 @@ interface AutomationWorkflow {
 
 interface AutomationExecution {
   id: string;
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  status: "pending" | "running" | "completed" | "failed";
   triggered_by: string;
   started_at: string;
   completed_at?: string;
@@ -52,28 +52,28 @@ interface AutomationExecution {
 
 const actionTemplates = {
   check_certificates: {
-    name: 'Verificar Certificados',
-    description: 'Verifica certificados que estão vencendo',
+    name: "Verificar Certificados",
+    description: "Verifica certificados que estão vencendo",
     icon: CheckCircle,
     config: { days_ahead: 30 }
   },
   send_notification: {
-    name: 'Enviar Notificação',
-    description: 'Envia notificação para usuários',
+    name: "Enviar Notificação",
+    description: "Envia notificação para usuários",
     icon: AlertTriangle,
-    config: { template: 'default', users: [] }
+    config: { template: "default", users: [] }
   },
   email_notification: {
-    name: 'Email Automático',
-    description: 'Envia email para destinatários',
+    name: "Email Automático",
+    description: "Envia email para destinatários",
     icon: Mail,
-    config: { recipients: [], template: 'default' }
+    config: { recipients: [], template: "default" }
   },
   generate_report: {
-    name: 'Gerar Relatório',
-    description: 'Gera relatório automático',
+    name: "Gerar Relatório",
+    description: "Gera relatório automático",
     icon: Activity,
-    config: { report_type: 'summary', format: 'pdf' }
+    config: { report_type: "summary", format: "pdf" }
   }
 };
 
@@ -88,24 +88,23 @@ export const AutomationWorkflowsManager: React.FC = () => {
 
   // Form state para criação/edição
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    trigger_type: 'schedule' as const,
-    trigger_config: { cron: '0 9 * * *', timezone: 'America/Sao_Paulo' },
+    name: "",
+    description: "",
+    trigger_type: "schedule" as const,
+    trigger_config: { cron: "0 9 * * *", timezone: "America/Sao_Paulo" },
     actions: [] as any[]
   });
 
   const loadWorkflows = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from('automation_workflows')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("automation_workflows")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setWorkflows(data as AutomationWorkflow[] || []);
     } catch (error) {
-      console.error('Erro ao carregar workflows:', error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as automações.",
@@ -123,16 +122,15 @@ export const AutomationWorkflowsManager: React.FC = () => {
   const loadExecutions = async (workflowId: string) => {
     try {
       const { data, error } = await supabase
-        .from('automation_executions')
-        .select('*')
-        .eq('workflow_id', workflowId)
-        .order('started_at', { ascending: false })
+        .from("automation_executions")
+        .select("*")
+        .eq("workflow_id", workflowId)
+        .order("started_at", { ascending: false })
         .limit(20);
 
       if (error) throw error;
       setExecutions(data as AutomationExecution[] || []);
     } catch (error) {
-      console.error('Erro ao carregar execuções:', error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar o histórico de execuções.",
@@ -144,9 +142,9 @@ export const AutomationWorkflowsManager: React.FC = () => {
   const toggleWorkflow = async (workflow: AutomationWorkflow) => {
     try {
       const { error } = await supabase
-        .from('automation_workflows')
+        .from("automation_workflows")
         .update({ is_active: !workflow.is_active })
-        .eq('id', workflow.id);
+        .eq("id", workflow.id);
 
       if (error) throw error;
 
@@ -160,10 +158,9 @@ export const AutomationWorkflowsManager: React.FC = () => {
 
       toast({
         title: workflow.is_active ? "Automação pausada" : "Automação ativada",
-        description: `${workflow.name} foi ${workflow.is_active ? 'pausada' : 'ativada'}.`,
+        description: `${workflow.name} foi ${workflow.is_active ? "pausada" : "ativada"}.`,
       });
     } catch (error) {
-      console.error('Erro ao atualizar workflow:', error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar a automação.",
@@ -177,9 +174,9 @@ export const AutomationWorkflowsManager: React.FC = () => {
 
     try {
       const { error } = await supabase
-        .from('automation_workflows')
+        .from("automation_workflows")
         .delete()
-        .eq('id', workflow.id);
+        .eq("id", workflow.id);
 
       if (error) throw error;
 
@@ -189,7 +186,6 @@ export const AutomationWorkflowsManager: React.FC = () => {
         description: `${workflow.name} foi removida.`,
       });
     } catch (error) {
-      console.error('Erro ao excluir workflow:', error);
       toast({
         title: "Erro",
         description: "Não foi possível excluir a automação.",
@@ -203,7 +199,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
       const { data: user } = await supabase.auth.getUser();
       
       const { error } = await supabase
-        .from('automation_workflows')
+        .from("automation_workflows")
         .insert({
           ...formData,
           created_by: user.user?.id,
@@ -214,10 +210,10 @@ export const AutomationWorkflowsManager: React.FC = () => {
 
       setIsCreateDialogOpen(false);
       setFormData({
-        name: '',
-        description: '',
-        trigger_type: 'schedule',
-        trigger_config: { cron: '0 9 * * *', timezone: 'America/Sao_Paulo' },
+        name: "",
+        description: "",
+        trigger_type: "schedule",
+        trigger_config: { cron: "0 9 * * *", timezone: "America/Sao_Paulo" },
         actions: []
       });
       
@@ -227,7 +223,6 @@ export const AutomationWorkflowsManager: React.FC = () => {
         description: "Nova automação foi configurada com sucesso.",
       });
     } catch (error) {
-      console.error('Erro ao criar workflow:', error);
       toast({
         title: "Erro",
         description: "Não foi possível criar a automação.",
@@ -255,14 +250,14 @@ export const AutomationWorkflowsManager: React.FC = () => {
     const { trigger_type, trigger_config } = workflow;
     
     switch (trigger_type) {
-      case 'schedule':
-        return `Agendado: ${trigger_config.cron}`;
-      case 'event':
-        return `Evento: ${trigger_config.event_type}`;
-      case 'condition':
-        return `Condição: ${trigger_config.condition}`;
-      default:
-        return 'Não configurado';
+    case "schedule":
+      return `Agendado: ${trigger_config.cron}`;
+    case "event":
+      return `Evento: ${trigger_config.event_type}`;
+    case "condition":
+      return `Condição: ${trigger_config.condition}`;
+    default:
+      return "Não configurado";
     }
   };
 
@@ -275,16 +270,16 @@ export const AutomationWorkflowsManager: React.FC = () => {
 
   const getExecutionStatusBadge = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <Badge variant="default" className="bg-green-100 text-green-800">Sucesso</Badge>;
-      case 'failed':
-        return <Badge variant="destructive">Falha</Badge>;
-      case 'running':
-        return <Badge variant="default" className="bg-blue-100 text-blue-800">Executando</Badge>;
-      case 'pending':
-        return <Badge variant="outline">Pendente</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "completed":
+      return <Badge variant="default" className="bg-green-100 text-green-800">Sucesso</Badge>;
+    case "failed":
+      return <Badge variant="destructive">Falha</Badge>;
+    case "running":
+      return <Badge variant="default" className="bg-blue-100 text-blue-800">Executando</Badge>;
+    case "pending":
+      return <Badge variant="outline">Pendente</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
@@ -363,7 +358,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
                 />
               </div>
               
-              {formData.trigger_type === 'schedule' && (
+              {formData.trigger_type === "schedule" && (
                 <div className="space-y-2">
                   <Label htmlFor="cron">Expressão Cron</Label>
                   <Input
@@ -488,8 +483,8 @@ export const AutomationWorkflowsManager: React.FC = () => {
                     <TableCell>
                       <div className="text-sm">
                         {workflow.last_executed_at 
-                          ? new Date(workflow.last_executed_at).toLocaleString('pt-BR')
-                          : 'Nunca'
+                          ? new Date(workflow.last_executed_at).toLocaleString("pt-BR")
+                          : "Nunca"
                         }
                       </div>
                     </TableCell>
@@ -572,14 +567,14 @@ export const AutomationWorkflowsManager: React.FC = () => {
                         {getExecutionStatusBadge(execution.status)}
                       </TableCell>
                       <TableCell>
-                        {new Date(execution.started_at).toLocaleString('pt-BR')}
+                        {new Date(execution.started_at).toLocaleString("pt-BR")}
                       </TableCell>
                       <TableCell>
                         {execution.duration_ms 
                           ? `${execution.duration_ms}ms`
-                          : execution.status === 'running' 
-                            ? 'Executando...'
-                            : '-'
+                          : execution.status === "running" 
+                            ? "Executando..."
+                            : "-"
                         }
                       </TableCell>
                       <TableCell>
@@ -590,10 +585,10 @@ export const AutomationWorkflowsManager: React.FC = () => {
                           <div className="text-red-600 text-sm">
                             {execution.error_message}
                           </div>
-                        ) : execution.status === 'completed' ? (
+                        ) : execution.status === "completed" ? (
                           <div className="text-green-600 text-sm">Sucesso</div>
                         ) : (
-                          '-'
+                          "-"
                         )}
                       </TableCell>
                     </TableRow>

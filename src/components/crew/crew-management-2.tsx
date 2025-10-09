@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { 
   Users, 
   Calendar,
@@ -18,17 +18,17 @@ import {
   Briefcase,
   FileText,
   Bell
-} from 'lucide-react';
+} from "lucide-react";
 
 interface CrewMember {
   id: string;
   name: string;
   position: string;
   vessel: string;
-  status: 'active' | 'onleave' | 'training' | 'standby';
+  status: "active" | "onleave" | "training" | "standby";
   certifications: {
     name: string;
-    status: 'valid' | 'expiring' | 'expired';
+    status: "valid" | "expiring" | "expired";
     expiryDate: string;
     daysRemaining: number;
   }[];
@@ -40,13 +40,13 @@ interface CrewMember {
   };
   performance: {
     score: number;
-    trend: 'up' | 'down' | 'stable';
+    trend: "up" | "down" | "stable";
     incidents: number;
     commendations: number;
   };
   health: {
     lastCheckup: string;
-    status: 'fit' | 'restricted' | 'pending';
+    status: "fit" | "restricted" | "pending";
     restrictions?: string[];
   };
   training: {
@@ -59,171 +59,171 @@ interface CrewMember {
 export const CrewManagement2: React.FC = () => {
   const [crew, setCrew] = useState<CrewMember[]>([
     {
-      id: '1',
-      name: 'João Silva',
-      position: 'Capitão',
-      vessel: 'MV-Atlas',
-      status: 'active',
+      id: "1",
+      name: "João Silva",
+      position: "Capitão",
+      vessel: "MV-Atlas",
+      status: "active",
       certifications: [
-        { name: 'STCW Master', status: 'valid', expiryDate: '2025-12-10', daysRemaining: 220 },
-        { name: 'DP Advanced', status: 'expiring', expiryDate: '2025-08-20', daysRemaining: 110 },
-        { name: 'ISM Code', status: 'valid', expiryDate: '2026-03-15', daysRemaining: 345 },
+        { name: "STCW Master", status: "valid", expiryDate: "2025-12-10", daysRemaining: 220 },
+        { name: "DP Advanced", status: "expiring", expiryDate: "2025-08-20", daysRemaining: 110 },
+        { name: "ISM Code", status: "valid", expiryDate: "2026-03-15", daysRemaining: 345 },
       ],
       schedule: {
-        currentCycle: '28/28 dias',
+        currentCycle: "28/28 dias",
         daysOnboard: 18,
         daysRemaining: 10,
-        nextRotation: '2025-05-22'
+        nextRotation: "2025-05-22"
       },
       performance: {
         score: 94,
-        trend: 'up',
+        trend: "up",
         incidents: 0,
         commendations: 3
       },
       health: {
-        lastCheckup: '2025-03-10',
-        status: 'fit'
+        lastCheckup: "2025-03-10",
+        status: "fit"
       },
       training: {
         completed: 12,
         pending: 2,
-        nextTraining: 'Leadership Avançado - 2025-06-01'
+        nextTraining: "Leadership Avançado - 2025-06-01"
       }
     },
     {
-      id: '2',
-      name: 'Maria Santos',
-      position: 'Chefe de Máquinas',
-      vessel: 'MV-Neptune',
-      status: 'active',
+      id: "2",
+      name: "Maria Santos",
+      position: "Chefe de Máquinas",
+      vessel: "MV-Neptune",
+      status: "active",
       certifications: [
-        { name: 'STCW Chief Engineer', status: 'valid', expiryDate: '2026-02-20', daysRemaining: 310 },
-        { name: 'Diesel Maintenance', status: 'expiring', expiryDate: '2025-06-15', daysRemaining: 45 },
-        { name: 'Safety Management', status: 'valid', expiryDate: '2025-11-30', daysRemaining: 200 },
+        { name: "STCW Chief Engineer", status: "valid", expiryDate: "2026-02-20", daysRemaining: 310 },
+        { name: "Diesel Maintenance", status: "expiring", expiryDate: "2025-06-15", daysRemaining: 45 },
+        { name: "Safety Management", status: "valid", expiryDate: "2025-11-30", daysRemaining: 200 },
       ],
       schedule: {
-        currentCycle: '21/21 dias',
+        currentCycle: "21/21 dias",
         daysOnboard: 15,
         daysRemaining: 6,
-        nextRotation: '2025-05-18'
+        nextRotation: "2025-05-18"
       },
       performance: {
         score: 89,
-        trend: 'stable',
+        trend: "stable",
         incidents: 1,
         commendations: 2
       },
       health: {
-        lastCheckup: '2025-04-02',
-        status: 'fit'
+        lastCheckup: "2025-04-02",
+        status: "fit"
       },
       training: {
         completed: 10,
         pending: 3,
-        nextTraining: 'Automação de Sistemas - 2025-05-25'
+        nextTraining: "Automação de Sistemas - 2025-05-25"
       }
     },
     {
-      id: '3',
-      name: 'Pedro Oliveira',
-      position: 'Imediato',
-      vessel: 'MV-Poseidon',
-      status: 'training',
+      id: "3",
+      name: "Pedro Oliveira",
+      position: "Imediato",
+      vessel: "MV-Poseidon",
+      status: "training",
       certifications: [
-        { name: 'STCW Officer', status: 'valid', expiryDate: '2025-07-22', daysRemaining: 80 },
-        { name: 'DP Basic', status: 'expired', expiryDate: '2025-04-01', daysRemaining: -10 },
-        { name: 'First Aid', status: 'valid', expiryDate: '2025-10-08', daysRemaining: 155 },
+        { name: "STCW Officer", status: "valid", expiryDate: "2025-07-22", daysRemaining: 80 },
+        { name: "DP Basic", status: "expired", expiryDate: "2025-04-01", daysRemaining: -10 },
+        { name: "First Aid", status: "valid", expiryDate: "2025-10-08", daysRemaining: 155 },
       ],
       schedule: {
-        currentCycle: '28/28 dias',
+        currentCycle: "28/28 dias",
         daysOnboard: 0,
         daysRemaining: 28,
-        nextRotation: '2025-06-10'
+        nextRotation: "2025-06-10"
       },
       performance: {
         score: 85,
-        trend: 'up',
+        trend: "up",
         incidents: 0,
         commendations: 1
       },
       health: {
-        lastCheckup: '2025-03-20',
-        status: 'fit'
+        lastCheckup: "2025-03-20",
+        status: "fit"
       },
       training: {
         completed: 8,
         pending: 4,
-        nextTraining: 'Em andamento - DP Advanced Certification'
+        nextTraining: "Em andamento - DP Advanced Certification"
       }
     },
     {
-      id: '4',
-      name: 'Ana Costa',
-      position: 'Oficial de Náutica',
-      vessel: 'MV-Atlas',
-      status: 'active',
+      id: "4",
+      name: "Ana Costa",
+      position: "Oficial de Náutica",
+      vessel: "MV-Atlas",
+      status: "active",
       certifications: [
-        { name: 'STCW Navigation', status: 'valid', expiryDate: '2025-09-18', daysRemaining: 135 },
-        { name: 'ARPA/RADAR', status: 'valid', expiryDate: '2026-06-30', daysRemaining: 420 },
-        { name: 'Medical Care', status: 'expiring', expiryDate: '2025-05-30', daysRemaining: 28 },
+        { name: "STCW Navigation", status: "valid", expiryDate: "2025-09-18", daysRemaining: 135 },
+        { name: "ARPA/RADAR", status: "valid", expiryDate: "2026-06-30", daysRemaining: 420 },
+        { name: "Medical Care", status: "expiring", expiryDate: "2025-05-30", daysRemaining: 28 },
       ],
       schedule: {
-        currentCycle: '28/28 dias',
+        currentCycle: "28/28 dias",
         daysOnboard: 22,
         daysRemaining: 6,
-        nextRotation: '2025-05-18'
+        nextRotation: "2025-05-18"
       },
       performance: {
         score: 91,
-        trend: 'stable',
+        trend: "stable",
         incidents: 0,
         commendations: 2
       },
       health: {
-        lastCheckup: '2025-04-05',
-        status: 'fit'
+        lastCheckup: "2025-04-05",
+        status: "fit"
       },
       training: {
         completed: 11,
         pending: 1,
-        nextTraining: 'Meteorologia Avançada - 2025-06-15'
+        nextTraining: "Meteorologia Avançada - 2025-06-15"
       }
     }
   ]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-600';
-      case 'onleave': return 'bg-blue-600';
-      case 'training': return 'bg-purple-600';
-      case 'standby': return 'bg-yellow-600';
-      default: return 'bg-gray-600';
+    case "active": return "bg-green-600";
+    case "onleave": return "bg-blue-600";
+    case "training": return "bg-purple-600";
+    case "standby": return "bg-yellow-600";
+    default: return "bg-gray-600";
     }
   };
 
   const getCertStatusColor = (status: string) => {
     switch (status) {
-      case 'valid': return 'default';
-      case 'expiring': return 'secondary';
-      case 'expired': return 'destructive';
-      default: return 'outline';
+    case "valid": return "default";
+    case "expiring": return "secondary";
+    case "expired": return "destructive";
+    default: return "outline";
     }
   };
 
   const getHealthStatusColor = (status: string) => {
     switch (status) {
-      case 'fit': return 'text-green-600';
-      case 'restricted': return 'text-yellow-600';
-      case 'pending': return 'text-orange-600';
-      default: return 'text-muted-foreground';
+    case "fit": return "text-green-600";
+    case "restricted": return "text-yellow-600";
+    case "pending": return "text-orange-600";
+    default: return "text-muted-foreground";
     }
   };
 
   const totalCrew = crew.length;
-  const activeCrew = crew.filter(c => c.status === 'active').length;
+  const activeCrew = crew.filter(c => c.status === "active").length;
   const expiringCerts = crew.reduce((sum, c) => 
-    sum + c.certifications.filter(cert => cert.status === 'expiring' || cert.status === 'expired').length, 0
+    sum + c.certifications.filter(cert => cert.status === "expiring" || cert.status === "expired").length, 0
   );
   const avgPerformance = Math.round(crew.reduce((sum, c) => sum + c.performance.score, 0) / crew.length);
 
@@ -362,16 +362,16 @@ export const CrewManagement2: React.FC = () => {
                     </div>
 
                     {/* Alerts */}
-                    {(member.certifications.some(c => c.status !== 'valid') || 
+                    {(member.certifications.some(c => c.status !== "valid") || 
                       member.training.pending > 0) && (
                       <div className="space-y-2">
                         {member.certifications
-                          .filter(c => c.status !== 'valid')
+                          .filter(c => c.status !== "valid")
                           .map((cert, idx) => (
                             <div key={idx} className="flex items-center gap-2 p-2 bg-yellow-50 dark:bg-yellow-950 rounded-lg">
                               <AlertTriangle className="h-4 w-4 text-yellow-600" />
                               <span className="text-sm flex-1">
-                                {cert.name} - {cert.status === 'expired' ? 'Vencida' : `Vence em ${cert.daysRemaining} dias`}
+                                {cert.name} - {cert.status === "expired" ? "Vencida" : `Vence em ${cert.daysRemaining} dias`}
                               </span>
                               <Button size="sm" variant="outline">Renovar</Button>
                             </div>
@@ -427,14 +427,14 @@ export const CrewManagement2: React.FC = () => {
                               <div>
                                 <div className="font-medium text-sm">{cert.name}</div>
                                 <div className="text-xs text-muted-foreground">
-                                  Vencimento: {new Date(cert.expiryDate).toLocaleDateString('pt-BR')}
+                                  Vencimento: {new Date(cert.expiryDate).toLocaleDateString("pt-BR")}
                                 </div>
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
                               <div className="text-right">
                                 <div className="text-sm font-medium">
-                                  {cert.daysRemaining > 0 ? `${cert.daysRemaining} dias` : 'Vencida'}
+                                  {cert.daysRemaining > 0 ? `${cert.daysRemaining} dias` : "Vencida"}
                                 </div>
                               </div>
                               <Badge variant={getCertStatusColor(cert.status) as any}>
@@ -473,7 +473,7 @@ export const CrewManagement2: React.FC = () => {
                         <div>
                           <div className="text-muted-foreground">Próxima Rotação</div>
                           <div className="text-lg font-medium">
-                            {new Date(member.schedule.nextRotation).toLocaleDateString('pt-BR')}
+                            {new Date(member.schedule.nextRotation).toLocaleDateString("pt-BR")}
                           </div>
                         </div>
                       </div>
@@ -495,9 +495,9 @@ export const CrewManagement2: React.FC = () => {
                       <CardTitle className="text-base flex items-center justify-between">
                         <span>{member.name} - {member.position}</span>
                         <Badge className={
-                          member.performance.score >= 90 ? 'bg-green-600' :
-                          member.performance.score >= 75 ? 'bg-blue-600' :
-                          'bg-yellow-600'
+                          member.performance.score >= 90 ? "bg-green-600" :
+                            member.performance.score >= 75 ? "bg-blue-600" :
+                              "bg-yellow-600"
                         }>
                           {member.performance.score}%
                         </Badge>
@@ -535,9 +535,9 @@ export const CrewManagement2: React.FC = () => {
                       <CardTitle className="text-base flex items-center justify-between">
                         <span>{member.name}</span>
                         <Badge className={
-                          member.health.status === 'fit' ? 'bg-green-600' :
-                          member.health.status === 'restricted' ? 'bg-yellow-600' :
-                          'bg-orange-600'
+                          member.health.status === "fit" ? "bg-green-600" :
+                            member.health.status === "restricted" ? "bg-yellow-600" :
+                              "bg-orange-600"
                         }>
                           {member.health.status.toUpperCase()}
                         </Badge>
@@ -551,7 +551,7 @@ export const CrewManagement2: React.FC = () => {
                             <div>
                               <div className="font-medium text-sm">Último Exame</div>
                               <div className="text-xs text-muted-foreground">
-                                {new Date(member.health.lastCheckup).toLocaleDateString('pt-BR')}
+                                {new Date(member.health.lastCheckup).toLocaleDateString("pt-BR")}
                               </div>
                             </div>
                           </div>

@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { 
   Plug, 
   Plus, 
@@ -29,14 +29,14 @@ import {
   Upload,
   Link,
   AlertTriangle
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Integration {
   id: string;
   name: string;
   description: string;
-  category: 'database' | 'communication' | 'reporting' | 'storage' | 'mobile' | 'external-api';
-  status: 'connected' | 'disconnected' | 'error' | 'configuring';
+  category: "database" | "communication" | "reporting" | "storage" | "mobile" | "external-api";
+  status: "connected" | "disconnected" | "error" | "configuring";
   lastSync?: string;
   config: Record<string, any>;
   isActive: boolean;
@@ -46,66 +46,66 @@ export const PeotramIntegrationHub: React.FC = () => {
   const [integrations, setIntegrations] = useState<Integration[]>(getDemoIntegrations());
   const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   function getDemoIntegrations(): Integration[] {
     return [
       {
-        id: 'INT001',
-        name: 'Sistema ERP',
-        description: 'Integração com sistema ERP corporativo para sincronização de dados',
-        category: 'database',
-        status: 'connected',
-        lastSync: '2024-01-22 14:30',
-        config: { endpoint: 'https://erp.empresa.com/api', apiKey: '***' },
+        id: "INT001",
+        name: "Sistema ERP",
+        description: "Integração com sistema ERP corporativo para sincronização de dados",
+        category: "database",
+        status: "connected",
+        lastSync: "2024-01-22 14:30",
+        config: { endpoint: "https://erp.empresa.com/api", apiKey: "***" },
         isActive: true
       },
       {
-        id: 'INT002',
-        name: 'Email Notifications',
-        description: 'Envio automático de notificações por email',
-        category: 'communication',
-        status: 'connected',
-        lastSync: '2024-01-22 15:45',
-        config: { smtpServer: 'smtp.empresa.com', port: 587 },
+        id: "INT002",
+        name: "Email Notifications",
+        description: "Envio automático de notificações por email",
+        category: "communication",
+        status: "connected",
+        lastSync: "2024-01-22 15:45",
+        config: { smtpServer: "smtp.empresa.com", port: 587 },
         isActive: true
       },
       {
-        id: 'INT003',
-        name: 'Power BI',
-        description: 'Exportação de dados para dashboards corporativos',
-        category: 'reporting',
-        status: 'disconnected',
-        config: { workspace: '', datasetId: '' },
+        id: "INT003",
+        name: "Power BI",
+        description: "Exportação de dados para dashboards corporativos",
+        category: "reporting",
+        status: "disconnected",
+        config: { workspace: "", datasetId: "" },
         isActive: false
       },
       {
-        id: 'INT004',
-        name: 'SharePoint',
-        description: 'Armazenamento de documentos em SharePoint',
-        category: 'storage',
-        status: 'error',
-        lastSync: '2024-01-21 10:15',
-        config: { siteUrl: 'https://empresa.sharepoint.com', folder: '/PEOTRAM' },
+        id: "INT004",
+        name: "SharePoint",
+        description: "Armazenamento de documentos em SharePoint",
+        category: "storage",
+        status: "error",
+        lastSync: "2024-01-21 10:15",
+        config: { siteUrl: "https://empresa.sharepoint.com", folder: "/PEOTRAM" },
         isActive: true
       },
       {
-        id: 'INT005',
-        name: 'App Mobile',
-        description: 'Sincronização com aplicativo mobile para auditorias offline',
-        category: 'mobile',
-        status: 'connected',
-        lastSync: '2024-01-22 16:00',
-        config: { deviceCount: 12, lastVersion: '2.1.4' },
+        id: "INT005",
+        name: "App Mobile",
+        description: "Sincronização com aplicativo mobile para auditorias offline",
+        category: "mobile",
+        status: "connected",
+        lastSync: "2024-01-22 16:00",
+        config: { deviceCount: 12, lastVersion: "2.1.4" },
         isActive: true
       },
       {
-        id: 'INT006',
-        name: 'API Externa ANTAQ',
-        description: 'Integração com dados públicos da ANTAQ',
-        category: 'external-api',
-        status: 'configuring',
-        config: { endpoint: 'https://api.antaq.gov.br', token: '' },
+        id: "INT006",
+        name: "API Externa ANTAQ",
+        description: "Integração com dados públicos da ANTAQ",
+        category: "external-api",
+        status: "configuring",
+        config: { endpoint: "https://api.antaq.gov.br", token: "" },
         isActive: false
       }
     ];
@@ -113,45 +113,45 @@ export const PeotramIntegrationHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected': return 'bg-success/20 text-success border-success/30';
-      case 'error': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'configuring': return 'bg-warning/20 text-warning border-warning/30';
-      case 'disconnected': return 'bg-muted/20 text-muted-foreground border-muted/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "connected": return "bg-success/20 text-success border-success/30";
+    case "error": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "configuring": return "bg-warning/20 text-warning border-warning/30";
+    case "disconnected": return "bg-muted/20 text-muted-foreground border-muted/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected': return <Check className="w-4 h-4 text-success" />;
-      case 'error': return <X className="w-4 h-4 text-destructive" />;
-      case 'configuring': return <Settings className="w-4 h-4 text-warning" />;
-      case 'disconnected': return <X className="w-4 h-4 text-muted-foreground" />;
-      default: return <X className="w-4 h-4 text-muted-foreground" />;
+    case "connected": return <Check className="w-4 h-4 text-success" />;
+    case "error": return <X className="w-4 h-4 text-destructive" />;
+    case "configuring": return <Settings className="w-4 h-4 text-warning" />;
+    case "disconnected": return <X className="w-4 h-4 text-muted-foreground" />;
+    default: return <X className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'database': return <Database className="w-5 h-5" />;
-      case 'communication': return <Mail className="w-5 h-5" />;
-      case 'reporting': return <FileText className="w-5 h-5" />;
-      case 'storage': return <Cloud className="w-5 h-5" />;
-      case 'mobile': return <Smartphone className="w-5 h-5" />;
-      case 'external-api': return <Globe className="w-5 h-5" />;
-      default: return <Plug className="w-5 h-5" />;
+    case "database": return <Database className="w-5 h-5" />;
+    case "communication": return <Mail className="w-5 h-5" />;
+    case "reporting": return <FileText className="w-5 h-5" />;
+    case "storage": return <Cloud className="w-5 h-5" />;
+    case "mobile": return <Smartphone className="w-5 h-5" />;
+    case "external-api": return <Globe className="w-5 h-5" />;
+    default: return <Plug className="w-5 h-5" />;
     }
   };
 
   const getCategoryName = (category: string) => {
     switch (category) {
-      case 'database': return 'Banco de Dados';
-      case 'communication': return 'Comunicação';
-      case 'reporting': return 'Relatórios';
-      case 'storage': return 'Armazenamento';
-      case 'mobile': return 'Mobile';
-      case 'external-api': return 'API Externa';
-      default: return category;
+    case "database": return "Banco de Dados";
+    case "communication": return "Comunicação";
+    case "reporting": return "Relatórios";
+    case "storage": return "Armazenamento";
+    case "mobile": return "Mobile";
+    case "external-api": return "API Externa";
+    default: return category;
     }
   };
 
@@ -167,7 +167,6 @@ export const PeotramIntegrationHub: React.FC = () => {
 
   const syncIntegration = (id: string) => {
     // Simular sincronização
-    console.log('Sincronizando integração:', id);
   };
 
   return (
@@ -252,7 +251,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Check className="w-8 h-8 text-success" />
                   <div>
-                    <p className="text-2xl font-bold">{integrations.filter(i => i.status === 'connected').length}</p>
+                    <p className="text-2xl font-bold">{integrations.filter(i => i.status === "connected").length}</p>
                     <p className="text-sm text-muted-foreground">Conectadas</p>
                   </div>
                 </div>
@@ -264,7 +263,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <AlertTriangle className="w-8 h-8 text-warning" />
                   <div>
-                    <p className="text-2xl font-bold">{integrations.filter(i => i.status === 'error').length}</p>
+                    <p className="text-2xl font-bold">{integrations.filter(i => i.status === "error").length}</p>
                     <p className="text-sm text-muted-foreground">Com Erro</p>
                   </div>
                 </div>
@@ -333,7 +332,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                       size="sm" 
                       className="flex-1"
                       onClick={() => syncIntegration(integration.id)}
-                      disabled={integration.status !== 'connected'}
+                      disabled={integration.status !== "connected"}
                     >
                       <RefreshCw className="w-3 h-3 mr-1" />
                       Sincronizar

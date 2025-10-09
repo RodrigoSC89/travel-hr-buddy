@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -33,15 +33,15 @@ import {
   Send,
   X,
   Plus
-} from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+} from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface AuditRequirement {
   id: string;
   code: string;
   description: string;
   evidenceRequired: string[];
-  criticalityLevel: 'low' | 'medium' | 'high' | 'critical';
+  criticalityLevel: "low" | "medium" | "high" | "critical";
   helpText: string;
   score?: number;
   evidence?: string[];
@@ -56,12 +56,12 @@ interface AuditElement {
   description: string;
   requirements: AuditRequirement[];
   progress: number;
-  status: 'pending' | 'in-progress' | 'completed';
+  status: "pending" | "in-progress" | "completed";
 }
 
 interface AuditData {
   auditId: string;
-  auditType: 'vessel' | 'shore';
+  auditType: "vessel" | "shore";
   auditPeriod: string;
   auditDate: string;
   auditorName: string;
@@ -85,66 +85,66 @@ interface AuditData {
 
 const PEOTRAM_ELEMENTS: AuditElement[] = [
   {
-    id: 'ELEMENTO_01',
-    name: 'Liderança, Gerenciamento e Responsabilidade',
-    description: 'Compromisso da alta administração com SMS e segurança operacional',
+    id: "ELEMENTO_01",
+    name: "Liderança, Gerenciamento e Responsabilidade",
+    description: "Compromisso da alta administração com SMS e segurança operacional",
     requirements: [
       {
-        id: '1.1.1',
-        code: '1.1.1',
-        description: 'A alta administração da empresa demonstra compromisso claro em implementar e manter a gestão de segurança, meio ambiente e saúde?',
-        evidenceRequired: ['Entrevistas com alta administração', 'Definição de atribuições e responsabilidades', 'Visitas periódicas nas embarcações'],
-        criticalityLevel: 'high',
-        helpText: 'Verificar se as lideranças demonstram compromisso efetivo com SMS através de ações práticas e visitas regulares.'
+        id: "1.1.1",
+        code: "1.1.1",
+        description: "A alta administração da empresa demonstra compromisso claro em implementar e manter a gestão de segurança, meio ambiente e saúde?",
+        evidenceRequired: ["Entrevistas com alta administração", "Definição de atribuições e responsabilidades", "Visitas periódicas nas embarcações"],
+        criticalityLevel: "high",
+        helpText: "Verificar se as lideranças demonstram compromisso efetivo com SMS através de ações práticas e visitas regulares."
       },
       {
-        id: '1.1.2',
-        code: '1.1.2',
-        description: 'A empresa demonstra ter setores de Operação, Manutenção/Técnico, RH, SMS adequadamente estruturados?',
-        evidenceRequired: ['Organograma estruturado', 'Matriz de responsabilidades', 'Evidências de articulação entre setores'],
-        criticalityLevel: 'high',
-        helpText: 'Avaliar a estrutura organizacional e competência técnica dos setores críticos.'
+        id: "1.1.2",
+        code: "1.1.2",
+        description: "A empresa demonstra ter setores de Operação, Manutenção/Técnico, RH, SMS adequadamente estruturados?",
+        evidenceRequired: ["Organograma estruturado", "Matriz de responsabilidades", "Evidências de articulação entre setores"],
+        criticalityLevel: "high",
+        helpText: "Avaliar a estrutura organizacional e competência técnica dos setores críticos."
       }
     ],
     progress: 0,
-    status: 'pending'
+    status: "pending"
   },
   {
-    id: 'ELEMENTO_02',
-    name: 'Conformidade Legal',
-    description: 'Identificação e atendimento a requisitos legais e normativos',
+    id: "ELEMENTO_02",
+    name: "Conformidade Legal",
+    description: "Identificação e atendimento a requisitos legais e normativos",
     requirements: [
       {
-        id: '2.1.1',
-        code: '2.1.1',
-        description: 'A empresa possui sistema que identifique e atualize as legislações e normas pertinentes às operações?',
-        evidenceRequired: ['Lista atualizada de requisitos legais', 'Software de gestão legal', 'Correlação com estudos de risco'],
-        criticalityLevel: 'critical',
-        helpText: 'Sistema deve incluir legislações federais, estaduais, municipais e normas técnicas aplicáveis.'
+        id: "2.1.1",
+        code: "2.1.1",
+        description: "A empresa possui sistema que identifique e atualize as legislações e normas pertinentes às operações?",
+        evidenceRequired: ["Lista atualizada de requisitos legais", "Software de gestão legal", "Correlação com estudos de risco"],
+        criticalityLevel: "critical",
+        helpText: "Sistema deve incluir legislações federais, estaduais, municipais e normas técnicas aplicáveis."
       }
     ],
     progress: 0,
-    status: 'pending'
+    status: "pending"
   }
 ];
 
 const SCORING_CRITERIA = {
-  'N/A': { value: null, label: 'Não Aplicável', percentage: 0, color: 'hsl(var(--muted))' },
-  '0': { value: 0, label: 'Não Evidenciado', percentage: 0, color: 'hsl(var(--destructive))' },
-  '1': { value: 1, label: 'Falhas Sistemáticas', percentage: 20, color: 'hsl(var(--destructive))' },
-  '2': { value: 2, label: 'Falhas Pontuais', percentage: 50, color: 'hsl(var(--warning))' },
-  '3': { value: 3, label: 'Sem Falhas', percentage: 90, color: 'hsl(var(--success))' },
-  '4': { value: 4, label: 'Excelência', percentage: 100, color: 'hsl(var(--success))' }
+  "N/A": { value: null, label: "Não Aplicável", percentage: 0, color: "hsl(var(--muted))" },
+  "0": { value: 0, label: "Não Evidenciado", percentage: 0, color: "hsl(var(--destructive))" },
+  "1": { value: 1, label: "Falhas Sistemáticas", percentage: 20, color: "hsl(var(--destructive))" },
+  "2": { value: 2, label: "Falhas Pontuais", percentage: 50, color: "hsl(var(--warning))" },
+  "3": { value: 3, label: "Sem Falhas", percentage: 90, color: "hsl(var(--success))" },
+  "4": { value: 4, label: "Excelência", percentage: 100, color: "hsl(var(--success))" }
 };
 
 const CRITICALITY_LEVELS = {
-  'N/A': { label: 'Não Aplicável', color: 'hsl(var(--muted))' },
-  'A': { label: 'Crítica', color: 'hsl(var(--destructive))' },
-  'B': { label: 'Grave', color: 'hsl(var(--destructive))' },
-  'C': { label: 'Moderada', color: 'hsl(var(--warning))' },
-  'D': { label: 'Leve', color: 'hsl(var(--warning))' },
-  '✓': { label: 'Conforme', color: 'hsl(var(--success))' },
-  '✓✓': { label: 'Excelência', color: 'hsl(var(--success))' }
+  "N/A": { label: "Não Aplicável", color: "hsl(var(--muted))" },
+  "A": { label: "Crítica", color: "hsl(var(--destructive))" },
+  "B": { label: "Grave", color: "hsl(var(--destructive))" },
+  "C": { label: "Moderada", color: "hsl(var(--warning))" },
+  "D": { label: "Leve", color: "hsl(var(--warning))" },
+  "✓": { label: "Conforme", color: "hsl(var(--success))" },
+  "✓✓": { label: "Excelência", color: "hsl(var(--success))" }
 };
 
 interface PeotramAuditWizardProps {
@@ -165,13 +165,13 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
   const [currentRequirement, setCurrentRequirement] = useState(0);
   const [auditData, setAuditData] = useState<AuditData>({
     auditId: auditId || `AUDIT_${Date.now()}`,
-    auditType: 'vessel',
-    auditPeriod: '2024-Q4',
-    auditDate: new Date().toISOString().split('T')[0],
-    auditorName: '',
-    scope: '',
-    operationSummary: '',
-    observations: '',
+    auditType: "vessel",
+    auditPeriod: "2024-Q4",
+    auditDate: new Date().toISOString().split("T")[0],
+    auditorName: "",
+    scope: "",
+    operationSummary: "",
+    observations: "",
     auditors: [],
     auditees: []
   });
@@ -180,9 +180,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
   const { toast } = useToast();
 
   const steps = [
-    { id: 'info', title: 'Informações Gerais', icon: Info },
-    { id: 'audit', title: 'Auditoria por Elementos', icon: FileCheck },
-    { id: 'review', title: 'Revisão e Finalização', icon: CheckCircle }
+    { id: "info", title: "Informações Gerais", icon: Info },
+    { id: "audit", title: "Auditoria por Elementos", icon: FileCheck },
+    { id: "review", title: "Revisão e Finalização", icon: CheckCircle }
   ];
 
   const totalRequirements = elements.reduce((total, element) => total + element.requirements.length, 0);
@@ -205,9 +205,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       
       // Update element status
       if (newElements[elementIndex].progress === 100) {
-        newElements[elementIndex].status = 'completed';
+        newElements[elementIndex].status = "completed";
       } else if (newElements[elementIndex].progress > 0) {
-        newElements[elementIndex].status = 'in-progress';
+        newElements[elementIndex].status = "in-progress";
       }
       
       return newElements;
@@ -226,7 +226,6 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       
       await onSave?.(auditResult);
     } catch (error) {
-      console.error('Erro ao salvar auditoria:', error);
     } finally {
       setIsSaving(false);
     }
@@ -234,7 +233,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
 
   const handleComplete = async () => {
     if (overallProgress < 100) {
-      alert('Todas as avaliações devem ser completadas antes de finalizar a auditoria.');
+      alert("Todas as avaliações devem ser completadas antes de finalizar a auditoria.");
       return;
     }
     
@@ -245,12 +244,11 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
         elements,
         progress: overallProgress,
         completedAt: new Date().toISOString(),
-        status: 'completed'
+        status: "completed"
       };
       
       await onComplete?.(auditResult);
     } catch (error) {
-      console.error('Erro ao finalizar auditoria:', error);
     } finally {
       setIsSaving(false);
     }
@@ -291,19 +289,19 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
           <div key={step.id} className="flex items-center">
             <div className={`
               flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors
-              ${isActive ? 'border-primary bg-primary text-primary-foreground' : 
-                isCompleted ? 'border-success bg-success text-success-foreground' : 
-                'border-muted bg-background text-muted-foreground'}
+              ${isActive ? "border-primary bg-primary text-primary-foreground" : 
+            isCompleted ? "border-success bg-success text-success-foreground" : 
+              "border-muted bg-background text-muted-foreground"}
             `}>
               <StepIcon className="w-5 h-5" />
             </div>
             <div className="ml-3 mr-8">
-              <p className={`text-sm font-medium ${isActive ? 'text-foreground' : 'text-muted-foreground'}`}>
+              <p className={`text-sm font-medium ${isActive ? "text-foreground" : "text-muted-foreground"}`}>
                 {step.title}
               </p>
             </div>
             {index < steps.length - 1 && (
-              <div className={`h-0.5 w-16 ${isCompleted ? 'bg-success' : 'bg-border'}`} />
+              <div className={`h-0.5 w-16 ${isCompleted ? "bg-success" : "bg-border"}`} />
             )}
           </div>
         );
@@ -328,7 +326,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Label htmlFor="auditType">Tipo de Auditoria</Label>
             <Select 
               value={auditData.auditType} 
-              onValueChange={(value: 'vessel' | 'shore') => 
+              onValueChange={(value: "vessel" | "shore") => 
                 setAuditData(prev => ({ ...prev, auditType: value }))
               }
             >
@@ -383,7 +381,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
           </div>
         </div>
 
-        {auditData.auditType === 'vessel' && (
+        {auditData.auditType === "vessel" && (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold flex items-center gap-2">
               <Ship className="w-5 h-5" />
@@ -393,7 +391,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               <div className="space-y-2">
                 <Label>Nome da Embarcação</Label>
                 <Input
-                  value={auditData.vessel?.name || ''}
+                  value={auditData.vessel?.name || ""}
                   onChange={(e) => setAuditData(prev => ({
                     ...prev,
                     vessel: { ...prev.vessel!, name: e.target.value }
@@ -404,7 +402,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               <div className="space-y-2">
                 <Label>Indicação Petrobras</Label>
                 <Input
-                  value={auditData.vessel?.indication || ''}
+                  value={auditData.vessel?.indication || ""}
                   onChange={(e) => setAuditData(prev => ({
                     ...prev,
                     vessel: { ...prev.vessel!, indication: e.target.value }
@@ -416,7 +414,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
           </div>
         )}
 
-        {auditData.auditType === 'shore' && (
+        {auditData.auditType === "shore" && (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold flex items-center gap-2">
               <Building className="w-5 h-5" />
@@ -426,7 +424,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               <div className="space-y-2">
                 <Label>Base/Terminal</Label>
                 <Input
-                  value={auditData.location?.base || ''}
+                  value={auditData.location?.base || ""}
                   onChange={(e) => setAuditData(prev => ({
                     ...prev,
                     location: { ...prev.location!, base: e.target.value }
@@ -437,7 +435,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               <div className="space-y-2">
                 <Label>Cidade</Label>
                 <Input
-                  value={auditData.location?.city || ''}
+                  value={auditData.location?.city || ""}
                   onChange={(e) => setAuditData(prev => ({
                     ...prev,
                     location: { ...prev.location!, city: e.target.value }
@@ -448,7 +446,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               <div className="space-y-2">
                 <Label>Estado</Label>
                 <Input
-                  value={auditData.location?.state || ''}
+                  value={auditData.location?.state || ""}
                   onChange={(e) => setAuditData(prev => ({
                     ...prev,
                     location: { ...prev.location!, state: e.target.value }
@@ -524,7 +522,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               {elements.map((el, index) => (
                 <Button
                   key={el.id}
-                  variant={index === currentElement ? 'default' : 'outline'}
+                  variant={index === currentElement ? "default" : "outline"}
                   size="sm"
                   onClick={() => {
                     setCurrentElement(index);
@@ -625,9 +623,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               <div className="space-y-3">
                 <Label htmlFor="score">Pontuação</Label>
                 <Select
-                  value={requirement.score?.toString() || ''}
+                  value={requirement.score?.toString() || ""}
                   onValueChange={(value) => {
-                    const scoreValue = value === 'N/A' ? null : parseInt(value);
+                    const scoreValue = value === "N/A" ? null : parseInt(value);
                     updateRequirement(currentElement, currentRequirement, { 
                       score: scoreValue,
                       nonConformity: scoreValue !== null && scoreValue < 3
@@ -666,7 +664,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label htmlFor="comments">Comentários do Auditor</Label>
                 <Textarea
                   id="comments"
-                  value={requirement.comments || ''}
+                  value={requirement.comments || ""}
                   onChange={(e) => updateRequirement(currentElement, currentRequirement, { 
                     comments: e.target.value 
                   })}
@@ -732,7 +730,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
           <div className="flex gap-2">
             <Button variant="outline" onClick={handleSave} disabled={isSaving}>
               <Save className="w-4 h-4 mr-2" />
-              {isSaving ? 'Salvando...' : 'Salvar'}
+              {isSaving ? "Salvando..." : "Salvar"}
             </Button>
           </div>
 
@@ -810,9 +808,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                     <Progress value={element.progress} className="w-24" />
                     <Badge 
                       variant="outline"
-                      className={element.progress === 100 ? 'border-success text-success' : 'border-warning text-warning'}
+                      className={element.progress === 100 ? "border-success text-success" : "border-warning text-warning"}
                     >
-                      {element.progress === 100 ? 'Completo' : 'Pendente'}
+                      {element.progress === 100 ? "Completo" : "Pendente"}
                     </Badge>
                   </div>
                 </div>

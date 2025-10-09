@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -8,9 +8,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, Settings, LogOut } from 'lucide-react';
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User, Settings, LogOut } from "lucide-react";
 
 export const UserMenu: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -18,7 +18,7 @@ export const UserMenu: React.FC = () => {
   if (!user) return null;
 
   const getInitials = (email: string) => {
-    return email.split('@')[0].substring(0, 2).toUpperCase();
+    return email.split("@")[0].substring(0, 2).toUpperCase();
   };
 
   const handleSignOut = async () => {
@@ -32,7 +32,7 @@ export const UserMenu: React.FC = () => {
           <Avatar className="h-8 w-8 border-2 border-border">
             <AvatarImage src={user.user_metadata?.avatar_url} alt="Avatar" />
             <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
-              {getInitials(user.email || 'U')}
+              {getInitials(user.email || "U")}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -41,7 +41,7 @@ export const UserMenu: React.FC = () => {
         <DropdownMenuLabel className="font-normal p-3">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none text-foreground">
-              {user.user_metadata?.full_name || user.email?.split('@')[0]}
+              {user.user_metadata?.full_name || user.email?.split("@")[0]}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
               {user.email}

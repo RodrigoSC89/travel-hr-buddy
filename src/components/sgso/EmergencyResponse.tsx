@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { useMaritimeActions } from '@/hooks/useMaritimeActions';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import {
   AlertTriangle,
   Phone,
@@ -13,13 +13,13 @@ import {
   Activity,
   CheckCircle,
   Shield
-} from 'lucide-react';
+} from "lucide-react";
 
 interface EmergencyPlan {
   id: string;
-  type: 'fire' | 'oil_spill' | 'man_overboard' | 'collision' | 'medical' | 'abandon_ship';
+  type: "fire" | "oil_spill" | "man_overboard" | "collision" | "medical" | "abandon_ship";
   title: string;
-  status: 'active' | 'under_review' | 'expired';
+  status: "active" | "under_review" | "expired";
   last_drill: string;
   next_drill: string;
   drill_frequency_days: number;
@@ -29,58 +29,58 @@ interface EmergencyPlan {
 
 const EMERGENCY_PLANS: EmergencyPlan[] = [
   {
-    id: '1',
-    type: 'fire',
-    title: 'Plano de Combate a Incêndio',
-    status: 'active',
-    last_drill: '2024-09-15',
-    next_drill: '2024-12-15',
+    id: "1",
+    type: "fire",
+    title: "Plano de Combate a Incêndio",
+    status: "active",
+    last_drill: "2024-09-15",
+    next_drill: "2024-12-15",
     drill_frequency_days: 90,
-    responsible: 'Capitão Silva',
+    responsible: "Capitão Silva",
     contacts: 8
   },
   {
-    id: '2',
-    type: 'oil_spill',
-    title: 'Plano de Resposta a Derramamento',
-    status: 'active',
-    last_drill: '2024-08-20',
-    next_drill: '2025-02-20',
+    id: "2",
+    type: "oil_spill",
+    title: "Plano de Resposta a Derramamento",
+    status: "active",
+    last_drill: "2024-08-20",
+    next_drill: "2025-02-20",
     drill_frequency_days: 180,
-    responsible: 'Eng. Ambiental Costa',
+    responsible: "Eng. Ambiental Costa",
     contacts: 12
   },
   {
-    id: '3',
-    type: 'man_overboard',
-    title: 'Procedimento Homem ao Mar',
-    status: 'active',
-    last_drill: '2024-09-30',
-    next_drill: '2024-10-30',
+    id: "3",
+    type: "man_overboard",
+    title: "Procedimento Homem ao Mar",
+    status: "active",
+    last_drill: "2024-09-30",
+    next_drill: "2024-10-30",
     drill_frequency_days: 30,
-    responsible: 'Imediato Santos',
+    responsible: "Imediato Santos",
     contacts: 6
   },
   {
-    id: '4',
-    type: 'medical',
-    title: 'Emergência Médica',
-    status: 'active',
-    last_drill: '2024-09-10',
-    next_drill: '2024-12-10',
+    id: "4",
+    type: "medical",
+    title: "Emergência Médica",
+    status: "active",
+    last_drill: "2024-09-10",
+    next_drill: "2024-12-10",
     drill_frequency_days: 90,
-    responsible: 'Enfermeiro Bordo',
+    responsible: "Enfermeiro Bordo",
     contacts: 5
   },
   {
-    id: '5',
-    type: 'abandon_ship',
-    title: 'Abandono de Embarcação',
-    status: 'under_review',
-    last_drill: '2024-07-01',
-    next_drill: '2025-01-01',
+    id: "5",
+    type: "abandon_ship",
+    title: "Abandono de Embarcação",
+    status: "under_review",
+    last_drill: "2024-07-01",
+    next_drill: "2025-01-01",
     drill_frequency_days: 180,
-    responsible: 'Capitão Silva',
+    responsible: "Capitão Silva",
     contacts: 10
   }
 ];
@@ -89,39 +89,39 @@ const getTypeConfig = (type: string) => {
   const configs = {
     fire: {
       icon: AlertTriangle,
-      color: 'bg-red-600 text-white',
-      label: 'Incêndio',
-      badgeColor: 'bg-red-600'
+      color: "bg-red-600 text-white",
+      label: "Incêndio",
+      badgeColor: "bg-red-600"
     },
     oil_spill: {
       icon: Activity,
-      color: 'bg-green-600 text-white',
-      label: 'Derramamento',
-      badgeColor: 'bg-green-600'
+      color: "bg-green-600 text-white",
+      label: "Derramamento",
+      badgeColor: "bg-green-600"
     },
     man_overboard: {
       icon: Users,
-      color: 'bg-blue-600 text-white',
-      label: 'Homem ao Mar',
-      badgeColor: 'bg-blue-600'
+      color: "bg-blue-600 text-white",
+      label: "Homem ao Mar",
+      badgeColor: "bg-blue-600"
     },
     collision: {
       icon: AlertTriangle,
-      color: 'bg-orange-600 text-white',
-      label: 'Colisão',
-      badgeColor: 'bg-orange-600'
+      color: "bg-orange-600 text-white",
+      label: "Colisão",
+      badgeColor: "bg-orange-600"
     },
     medical: {
       icon: Shield,
-      color: 'bg-purple-600 text-white',
-      label: 'Médica',
-      badgeColor: 'bg-purple-600'
+      color: "bg-purple-600 text-white",
+      label: "Médica",
+      badgeColor: "bg-purple-600"
     },
     abandon_ship: {
       icon: AlertTriangle,
-      color: 'bg-red-700 text-white',
-      label: 'Abandono',
-      badgeColor: 'bg-red-700'
+      color: "bg-red-700 text-white",
+      label: "Abandono",
+      badgeColor: "bg-red-700"
     }
   };
   return configs[type as keyof typeof configs] || configs.fire;
@@ -130,35 +130,35 @@ const getTypeConfig = (type: string) => {
 const getStatusConfig = (status: string) => {
   const configs = {
     active: {
-      color: 'bg-green-600 text-white',
-      label: 'Ativo'
+      color: "bg-green-600 text-white",
+      label: "Ativo"
     },
     under_review: {
-      color: 'bg-yellow-600 text-white',
-      label: 'Em Revisão'
+      color: "bg-yellow-600 text-white",
+      label: "Em Revisão"
     },
     expired: {
-      color: 'bg-red-600 text-white',
-      label: 'Expirado'
+      color: "bg-red-600 text-white",
+      label: "Expirado"
     }
   };
   return configs[status as keyof typeof configs] || configs.active;
 };
 
 export const EmergencyResponse: React.FC = () => {
-  const [selectedType, setSelectedType] = useState<string>('all');
+  const [selectedType, setSelectedType] = useState<string>("all");
   const { handleViewDetails, showInfo, isLoading } = useMaritimeActions();
 
-  const activeCount = EMERGENCY_PLANS.filter(p => p.status === 'active').length;
-  const reviewCount = EMERGENCY_PLANS.filter(p => p.status === 'under_review').length;
+  const activeCount = EMERGENCY_PLANS.filter(p => p.status === "active").length;
+  const reviewCount = EMERGENCY_PLANS.filter(p => p.status === "under_review").length;
   const totalDrillsThisMonth = 3;
   const nextDrill = EMERGENCY_PLANS.reduce((next, plan) => {
     const planDate = new Date(plan.next_drill);
     const nextDate = new Date(next);
     return planDate < nextDate ? plan.next_drill : next;
-  }, '2099-12-31');
+  }, "2099-12-31");
 
-  const filteredPlans = selectedType === 'all'
+  const filteredPlans = selectedType === "all"
     ? EMERGENCY_PLANS
     : EMERGENCY_PLANS.filter(p => p.type === selectedType);
 
@@ -167,8 +167,7 @@ export const EmergencyResponse: React.FC = () => {
   };
 
   const handleStartDrill = (planId: string, planTitle: string) => {
-    showInfo('Iniciando simulado', `Preparando simulado de ${planTitle}`);
-    console.log('Starting drill for plan:', planId);
+    showInfo("Iniciando simulado", `Preparando simulado de ${planTitle}`);
   };
 
   return (
@@ -219,7 +218,7 @@ export const EmergencyResponse: React.FC = () => {
             </div>
             <h3 className="text-sm font-medium text-orange-700 mb-1">Próximo Simulado</h3>
             <p className="text-xl font-bold text-orange-900">
-              {new Date(nextDrill).toLocaleDateString('pt-BR')}
+              {new Date(nextDrill).toLocaleDateString("pt-BR")}
             </p>
             <p className="text-xs text-orange-600 mt-2">Agendado</p>
           </CardContent>
@@ -234,43 +233,43 @@ export const EmergencyResponse: React.FC = () => {
         <CardContent>
           <div className="flex flex-wrap gap-2">
             <Button
-              variant={selectedType === 'all' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('all')}
+              variant={selectedType === "all" ? "default" : "outline"}
+              onClick={() => setSelectedType("all")}
               className="min-h-[44px]"
             >
               Todos
             </Button>
             <Button
-              variant={selectedType === 'fire' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('fire')}
+              variant={selectedType === "fire" ? "default" : "outline"}
+              onClick={() => setSelectedType("fire")}
               className="min-h-[44px]"
             >
               Incêndio
             </Button>
             <Button
-              variant={selectedType === 'oil_spill' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('oil_spill')}
+              variant={selectedType === "oil_spill" ? "default" : "outline"}
+              onClick={() => setSelectedType("oil_spill")}
               className="min-h-[44px]"
             >
               Derramamento
             </Button>
             <Button
-              variant={selectedType === 'man_overboard' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('man_overboard')}
+              variant={selectedType === "man_overboard" ? "default" : "outline"}
+              onClick={() => setSelectedType("man_overboard")}
               className="min-h-[44px]"
             >
               Homem ao Mar
             </Button>
             <Button
-              variant={selectedType === 'medical' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('medical')}
+              variant={selectedType === "medical" ? "default" : "outline"}
+              onClick={() => setSelectedType("medical")}
               className="min-h-[44px]"
             >
               Médica
             </Button>
             <Button
-              variant={selectedType === 'abandon_ship' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('abandon_ship')}
+              variant={selectedType === "abandon_ship" ? "default" : "outline"}
+              onClick={() => setSelectedType("abandon_ship")}
               className="min-h-[44px]"
             >
               Abandono
@@ -305,7 +304,7 @@ export const EmergencyResponse: React.FC = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h3 className="text-lg font-bold text-gray-900">{plan.title}</h3>
-                            <Badge className={typeConfig.badgeColor + ' text-white'}>
+                            <Badge className={typeConfig.badgeColor + " text-white"}>
                               {typeConfig.label}
                             </Badge>
                             <Badge className={statusConfig.color}>
@@ -316,13 +315,13 @@ export const EmergencyResponse: React.FC = () => {
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Último Simulado</p>
                               <p className="text-sm font-bold text-gray-900">
-                                {new Date(plan.last_drill).toLocaleDateString('pt-BR')}
+                                {new Date(plan.last_drill).toLocaleDateString("pt-BR")}
                               </p>
                             </div>
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Próximo Simulado</p>
                               <p className="text-sm font-bold text-gray-900">
-                                {new Date(plan.next_drill).toLocaleDateString('pt-BR')}
+                                {new Date(plan.next_drill).toLocaleDateString("pt-BR")}
                               </p>
                             </div>
                             <div>
@@ -434,7 +433,7 @@ export const EmergencyResponse: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-red-600 hover:bg-red-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo('Novo Plano', 'Abrindo formulário para criar novo plano de emergência')}
+              onClick={() => showInfo("Novo Plano", "Abrindo formulário para criar novo plano de emergência")}
               disabled={isLoading}
             >
               <AlertTriangle className="h-6 w-6" />
@@ -442,7 +441,7 @@ export const EmergencyResponse: React.FC = () => {
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo('Agendar Simulado', 'Abrindo agenda de simulados')}
+              onClick={() => showInfo("Agendar Simulado", "Abrindo agenda de simulados")}
               disabled={isLoading}
             >
               <Clock className="h-6 w-6" />
@@ -450,7 +449,7 @@ export const EmergencyResponse: React.FC = () => {
             </Button>
             <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo('Relatório', 'Gerando relatório de simulados')}
+              onClick={() => showInfo("Relatório", "Gerando relatório de simulados")}
               disabled={isLoading}
             >
               <FileText className="h-6 w-6" />
@@ -458,7 +457,7 @@ export const EmergencyResponse: React.FC = () => {
             </Button>
             <Button
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo('Localização', 'Abrindo mapa de pontos de encontro')}
+              onClick={() => showInfo("Localização", "Abrindo mapa de pontos de encontro")}
               disabled={isLoading}
             >
               <MapPin className="h-6 w-6" />

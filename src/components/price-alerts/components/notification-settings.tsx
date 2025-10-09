@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { 
   Bell, 
   Mail, 
@@ -16,10 +16,10 @@ import {
   TrendingDown,
   Save,
   Check
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface NotificationSettings {
   email_enabled: boolean;
@@ -42,7 +42,7 @@ export const NotificationSettings = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [pushSupported, setPushSupported] = useState(false);
-  const [pushPermission, setPushPermission] = useState<NotificationPermission>('default');
+  const [pushPermission, setPushPermission] = useState<NotificationPermission>("default");
 
   useEffect(() => {
     if (user) {
@@ -52,7 +52,7 @@ export const NotificationSettings = () => {
   }, [user]);
 
   const checkPushSupport = () => {
-    if ('Notification' in window && 'serviceWorker' in navigator) {
+    if ("Notification" in window && "serviceWorker" in navigator) {
       setPushSupported(true);
       setPushPermission(Notification.permission);
     }
@@ -61,13 +61,12 @@ export const NotificationSettings = () => {
   const loadSettings = async () => {
     try {
       const { data, error } = await supabase
-        .from('notification_settings')
-        .select('*')
-        .eq('user_id', user?.id)
+        .from("notification_settings")
+        .select("*")
+        .eq("user_id", user?.id)
         .single();
 
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error loading notification settings:', error);
+      if (error && error.code !== "PGRST116") {
         return;
       }
 
@@ -81,7 +80,6 @@ export const NotificationSettings = () => {
         });
       }
     } catch (error) {
-      console.error('Error loading notification settings:', error);
     } finally {
       setLoading(false);
     }
@@ -93,7 +91,7 @@ export const NotificationSettings = () => {
     setSaving(true);
     try {
       const { error } = await supabase
-        .from('notification_settings')
+        .from("notification_settings")
         .upsert({
           user_id: user.id,
           ...settings,
@@ -106,7 +104,6 @@ export const NotificationSettings = () => {
         description: "Suas preferências de notificação foram atualizadas.",
       });
     } catch (error) {
-      console.error('Error saving notification settings:', error);
       toast({
         title: "Erro",
         description: "Erro ao salvar configurações. Tente novamente.",
@@ -124,7 +121,7 @@ export const NotificationSettings = () => {
       const permission = await Notification.requestPermission();
       setPushPermission(permission);
       
-      if (permission === 'granted') {
+      if (permission === "granted") {
         setSettings(prev => ({ ...prev, push_enabled: true }));
         toast({
           title: "Notificações ativadas",
@@ -138,16 +135,15 @@ export const NotificationSettings = () => {
         });
       }
     } catch (error) {
-      console.error('Error requesting push permission:', error);
     }
   };
 
   const testPushNotification = () => {
-    if (pushPermission === 'granted') {
-      new Notification('Alerta de Preço', {
-        body: 'Este é um exemplo de notificação! 🎉',
-        icon: '/favicon.ico',
-        badge: '/favicon.ico',
+    if (pushPermission === "granted") {
+      new Notification("Alerta de Preço", {
+        body: "Este é um exemplo de notificação! 🎉",
+        icon: "/favicon.ico",
+        badge: "/favicon.ico",
       });
     }
   };
@@ -204,7 +200,7 @@ export const NotificationSettings = () => {
               </div>
               <Switch
                 checked={settings.email_enabled}
-                onCheckedChange={(checked) => updateSetting('email_enabled', checked)}
+                onCheckedChange={(checked) => updateSetting("email_enabled", checked)}
               />
             </div>
             <Separator />
@@ -225,7 +221,7 @@ export const NotificationSettings = () => {
                       Não suportado neste navegador
                     </Badge>
                   )}
-                  {pushSupported && pushPermission === 'denied' && (
+                  {pushSupported && pushPermission === "denied" && (
                     <Badge variant="destructive" className="mt-1">
                       Permissão negada
                     </Badge>
@@ -233,7 +229,7 @@ export const NotificationSettings = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {pushSupported && pushPermission === 'granted' && (
+                {pushSupported && pushPermission === "granted" && (
                   <Button
                     variant="outline"
                     size="sm"
@@ -242,7 +238,7 @@ export const NotificationSettings = () => {
                     Testar
                   </Button>
                 )}
-                {pushSupported && pushPermission !== 'granted' ? (
+                {pushSupported && pushPermission !== "granted" ? (
                   <Button
                     variant="outline"
                     size="sm"
@@ -252,9 +248,9 @@ export const NotificationSettings = () => {
                   </Button>
                 ) : (
                   <Switch
-                    checked={settings.push_enabled && pushPermission === 'granted'}
-                    onCheckedChange={(checked) => updateSetting('push_enabled', checked)}
-                    disabled={!pushSupported || pushPermission !== 'granted'}
+                    checked={settings.push_enabled && pushPermission === "granted"}
+                    onCheckedChange={(checked) => updateSetting("push_enabled", checked)}
+                    disabled={!pushSupported || pushPermission !== "granted"}
                   />
                 )}
               </div>
@@ -279,7 +275,7 @@ export const NotificationSettings = () => {
                 type="number"
                 placeholder="0"
                 value={settings.price_drop_threshold}
-                onChange={(e) => updateSetting('price_drop_threshold', Number(e.target.value))}
+                onChange={(e) => updateSetting("price_drop_threshold", Number(e.target.value))}
                 className="w-32"
                 min="0"
                 step="0.01"
@@ -308,7 +304,7 @@ export const NotificationSettings = () => {
                 </div>
                 <Switch
                   checked={settings.daily_summary}
-                  onCheckedChange={(checked) => updateSetting('daily_summary', checked)}
+                  onCheckedChange={(checked) => updateSetting("daily_summary", checked)}
                 />
               </div>
               
@@ -321,7 +317,7 @@ export const NotificationSettings = () => {
                 </div>
                 <Switch
                   checked={settings.weekly_report}
-                  onCheckedChange={(checked) => updateSetting('weekly_report', checked)}
+                  onCheckedChange={(checked) => updateSetting("weekly_report", checked)}
                 />
               </div>
             </div>
@@ -373,11 +369,11 @@ export const NotificationSettings = () => {
                 <span>Push</span>
               </div>
               <Badge variant={
-                settings.push_enabled && pushPermission === 'granted' 
+                settings.push_enabled && pushPermission === "granted" 
                   ? "default" 
                   : "secondary"
               }>
-                {settings.push_enabled && pushPermission === 'granted' 
+                {settings.push_enabled && pushPermission === "granted" 
                   ? "Ativo" 
                   : "Inativo"}
               </Badge>

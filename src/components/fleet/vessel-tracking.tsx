@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Ship, 
   Navigation, 
@@ -17,7 +17,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock
-} from 'lucide-react';
+} from "lucide-react";
 
 interface VesselPosition {
   id: string;
@@ -26,7 +26,7 @@ interface VesselPosition {
   longitude: number;
   speed: number;
   heading: number;
-  status: 'sailing' | 'anchored' | 'docked' | 'maintenance' | 'emergency';
+  status: "sailing" | "anchored" | "docked" | "maintenance" | "emergency";
   fuel_level: number;
   last_update: string;
   weather: {
@@ -43,7 +43,7 @@ interface VesselPosition {
 export const VesselTracking = () => {
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
-  const [trackingMode, setTrackingMode] = useState<'real-time' | 'historical'>('real-time');
+  const [trackingMode, setTrackingMode] = useState<"real-time" | "historical">("real-time");
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -52,7 +52,7 @@ export const VesselTracking = () => {
     
     // Set up real-time tracking
     const interval = setInterval(() => {
-      if (trackingMode === 'real-time') {
+      if (trackingMode === "real-time") {
         loadVessels();
       }
     }, 30000); // Update every 30 seconds
@@ -63,9 +63,9 @@ export const VesselTracking = () => {
   const loadVessels = async () => {
     try {
       const { data, error } = await supabase
-        .from('vessels')
-        .select('*')
-        .eq('status', 'active');
+        .from("vessels")
+        .select("*")
+        .eq("status", "active");
 
       if (error) throw error;
 
@@ -77,7 +77,7 @@ export const VesselTracking = () => {
         longitude: -46.6333 + (Math.random() - 0.5) * 0.1,
         speed: Math.random() * 20,
         heading: Math.random() * 360,
-        status: ['sailing', 'anchored', 'docked'][Math.floor(Math.random() * 3)] as any,
+        status: ["sailing", "anchored", "docked"][Math.floor(Math.random() * 3)] as any,
         fuel_level: 50 + Math.random() * 50,
         last_update: new Date().toISOString(),
         weather: {
@@ -87,7 +87,7 @@ export const VesselTracking = () => {
           visibility: 5 + Math.random() * 5
         },
         crew_count: Math.floor(10 + Math.random() * 20),
-        destination: 'Porto de Santos',
+        destination: "Porto de Santos",
         eta: new Date(Date.now() + Math.random() * 86400000 * 7).toISOString()
       })) || [];
 
@@ -96,7 +96,6 @@ export const VesselTracking = () => {
         setSelectedVessel(trackingData[0]);
       }
     } catch (error) {
-      console.error('Error loading vessels:', error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados dos navios",
@@ -107,25 +106,25 @@ export const VesselTracking = () => {
     }
   };
 
-  const getStatusColor = (status: VesselPosition['status']) => {
+  const getStatusColor = (status: VesselPosition["status"]) => {
     switch (status) {
-      case 'sailing': return 'bg-blue-500';
-      case 'anchored': return 'bg-yellow-500';
-      case 'docked': return 'bg-green-500';
-      case 'maintenance': return 'bg-orange-500';
-      case 'emergency': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "sailing": return "bg-blue-500";
+    case "anchored": return "bg-yellow-500";
+    case "docked": return "bg-green-500";
+    case "maintenance": return "bg-orange-500";
+    case "emergency": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
-  const getStatusText = (status: VesselPosition['status']) => {
+  const getStatusText = (status: VesselPosition["status"]) => {
     switch (status) {
-      case 'sailing': return 'Navegando';
-      case 'anchored': return 'Ancorado';
-      case 'docked': return 'Atracado';
-      case 'maintenance': return 'Manutenção';
-      case 'emergency': return 'Emergência';
-      default: return 'Desconhecido';
+    case "sailing": return "Navegando";
+    case "anchored": return "Ancorado";
+    case "docked": return "Atracado";
+    case "maintenance": return "Manutenção";
+    case "emergency": return "Emergência";
+    default: return "Desconhecido";
     }
   };
 
@@ -176,8 +175,8 @@ export const VesselTracking = () => {
                   key={vessel.id}
                   className={`p-3 rounded-lg border cursor-pointer transition-colors ${
                     selectedVessel?.id === vessel.id 
-                      ? 'border-primary bg-primary/5' 
-                      : 'border-border hover:bg-accent'
+                      ? "border-primary bg-primary/5" 
+                      : "border-border hover:bg-accent"
                   }`}
                   onClick={() => setSelectedVessel(vessel)}
                 >
@@ -310,7 +309,7 @@ export const VesselTracking = () => {
                       <Navigation className="h-4 w-4" />
                       Ver Rota
                     </Button>
-                    {selectedVessel.status === 'emergency' && (
+                    {selectedVessel.status === "emergency" && (
                       <Button variant="destructive" className="flex items-center gap-2">
                         <AlertTriangle className="h-4 w-4" />
                         Protocolo Emergência

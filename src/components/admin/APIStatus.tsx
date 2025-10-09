@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   CheckCircle, 
   XCircle, 
@@ -16,15 +16,15 @@ import {
   Activity,
   RefreshCw,
   ExternalLink
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface APIService {
   id: string;
   name: string;
   description: string;
   icon: React.ElementType;
-  status: 'connected' | 'disconnected' | 'testing' | 'unknown';
+  status: "connected" | "disconnected" | "testing" | "unknown";
   lastTest?: Date;
   responseTime?: number;
 }
@@ -33,63 +33,63 @@ export const APIStatus: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [services, setServices] = useState<APIService[]>([
     {
-      id: 'mapbox',
-      name: 'Mapbox',
-      description: 'Serviço de mapas e geolocalização',
+      id: "mapbox",
+      name: "Mapbox",
+      description: "Serviço de mapas e geolocalização",
       icon: MapPin,
-      status: 'connected',
+      status: "connected",
       lastTest: new Date(Date.now() - 120000),
       responseTime: 145
     },
     {
-      id: 'openai',
-      name: 'OpenAI (Chat)',
-      description: 'API de chat e assistente IA',
+      id: "openai",
+      name: "OpenAI (Chat)",
+      description: "API de chat e assistente IA",
       icon: MessageSquare,
-      status: 'connected',
+      status: "connected",
       lastTest: new Date(Date.now() - 180000),
       responseTime: 892
     },
     {
-      id: 'whisper',
-      name: 'Whisper',
-      description: 'Transcrição de áudio',
+      id: "whisper",
+      name: "Whisper",
+      description: "Transcrição de áudio",
       icon: Mic,
-      status: 'connected',
+      status: "connected",
       lastTest: new Date(Date.now() - 240000),
       responseTime: 1250
     },
     {
-      id: 'skyscanner',
-      name: 'Skyscanner',
-      description: 'Busca de voos',
+      id: "skyscanner",
+      name: "Skyscanner",
+      description: "Busca de voos",
       icon: Plane,
-      status: 'unknown',
+      status: "unknown",
       lastTest: new Date(Date.now() - 3600000)
     },
     {
-      id: 'booking',
-      name: 'Booking.com',
-      description: 'Reservas de hotéis',
+      id: "booking",
+      name: "Booking.com",
+      description: "Reservas de hotéis",
       icon: Hotel,
-      status: 'unknown',
+      status: "unknown",
       lastTest: new Date(Date.now() - 3600000)
     },
     {
-      id: 'windy',
-      name: 'Windy',
-      description: 'Dados meteorológicos',
+      id: "windy",
+      name: "Windy",
+      description: "Dados meteorológicos",
       icon: Cloud,
-      status: 'connected',
+      status: "connected",
       lastTest: new Date(Date.now() - 300000),
       responseTime: 234
     },
     {
-      id: 'marinetraffic',
-      name: 'Marine Traffic',
-      description: 'Rastreamento de navios',
+      id: "marinetraffic",
+      name: "Marine Traffic",
+      description: "Rastreamento de navios",
       icon: Ship,
-      status: 'unknown',
+      status: "unknown",
       lastTest: new Date(Date.now() - 7200000)
     }
   ]);
@@ -102,51 +102,51 @@ export const APIStatus: React.FC = () => {
     setServices(prev => prev.map(service => ({
       ...service,
       lastTest: new Date(),
-      status: Math.random() > 0.2 ? 'connected' : 'disconnected' as any,
+      status: Math.random() > 0.2 ? "connected" : "disconnected" as any,
       responseTime: Math.floor(Math.random() * 1500) + 100
     })));
     
     setIsRefreshing(false);
   };
 
-  const getStatusIcon = (status: APIService['status']) => {
+  const getStatusIcon = (status: APIService["status"]) => {
     switch (status) {
-      case 'connected':
-        return <CheckCircle className="h-5 w-5 text-success" />;
-      case 'disconnected':
-        return <XCircle className="h-5 w-5 text-destructive" />;
-      case 'testing':
-        return <Loader2 className="h-5 w-5 text-primary animate-spin" />;
-      case 'unknown':
-        return <Activity className="h-5 w-5 text-muted-foreground" />;
+    case "connected":
+      return <CheckCircle className="h-5 w-5 text-success" />;
+    case "disconnected":
+      return <XCircle className="h-5 w-5 text-destructive" />;
+    case "testing":
+      return <Loader2 className="h-5 w-5 text-primary animate-spin" />;
+    case "unknown":
+      return <Activity className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
-  const getStatusBadge = (status: APIService['status']) => {
+  const getStatusBadge = (status: APIService["status"]) => {
     switch (status) {
-      case 'connected':
-        return <Badge className="bg-success/20 text-success border-success/30">✅ Conectado</Badge>;
-      case 'disconnected':
-        return <Badge className="bg-destructive/20 text-destructive border-destructive/30">❌ Falhou</Badge>;
-      case 'testing':
-        return <Badge className="bg-primary/20 text-primary border-primary/30">⏳ Testando</Badge>;
-      case 'unknown':
-        return <Badge variant="outline">Não Testado</Badge>;
+    case "connected":
+      return <Badge className="bg-success/20 text-success border-success/30">✅ Conectado</Badge>;
+    case "disconnected":
+      return <Badge className="bg-destructive/20 text-destructive border-destructive/30">❌ Falhou</Badge>;
+    case "testing":
+      return <Badge className="bg-primary/20 text-primary border-primary/30">⏳ Testando</Badge>;
+    case "unknown":
+      return <Badge variant="outline">Não Testado</Badge>;
     }
   };
 
   const getResponseTimeBadge = (responseTime?: number) => {
     if (!responseTime) return null;
     
-    let className = 'bg-success/20 text-success';
-    if (responseTime > 1000) className = 'bg-destructive/20 text-destructive';
-    else if (responseTime > 500) className = 'bg-warning/20 text-warning';
+    let className = "bg-success/20 text-success";
+    if (responseTime > 1000) className = "bg-destructive/20 text-destructive";
+    else if (responseTime > 500) className = "bg-warning/20 text-warning";
     
     return <Badge variant="outline" className={className}>{responseTime}ms</Badge>;
   };
 
   const getRelativeTime = (date?: Date) => {
-    if (!date) return 'Nunca testado';
+    if (!date) return "Nunca testado";
     
     const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
     
@@ -156,9 +156,9 @@ export const APIStatus: React.FC = () => {
     return `${Math.floor(seconds / 86400)}d atrás`;
   };
 
-  const connectedCount = services.filter(s => s.status === 'connected').length;
-  const disconnectedCount = services.filter(s => s.status === 'disconnected').length;
-  const unknownCount = services.filter(s => s.status === 'unknown').length;
+  const connectedCount = services.filter(s => s.status === "connected").length;
+  const disconnectedCount = services.filter(s => s.status === "disconnected").length;
+  const unknownCount = services.filter(s => s.status === "unknown").length;
 
   return (
     <Card>
@@ -180,7 +180,7 @@ export const APIStatus: React.FC = () => {
               onClick={handleRefresh}
               disabled={isRefreshing}
             >
-              <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
               Testar Todas
             </Button>
             <Link to="/admin/api-tester">

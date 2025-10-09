@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Webhook,
   Code,
@@ -30,17 +30,17 @@ import {
   BarChart3,
   Activity,
   MessageSquare
-} from 'lucide-react';
+} from "lucide-react";
 
 interface WebhookConfig {
   id: string;
   name: string;
   url: string;
-  method: 'POST' | 'PUT' | 'PATCH';
+  method: "POST" | "PUT" | "PATCH";
   headers: Record<string, string>;
   payload: string;
   authentication: {
-    type: 'none' | 'api_key' | 'bearer' | 'signature';
+    type: "none" | "api_key" | "bearer" | "signature";
     value: string;
   };
   triggers: string[];
@@ -48,7 +48,7 @@ interface WebhookConfig {
   retryConfig: {
     enabled: boolean;
     maxRetries: number;
-    backoffStrategy: 'fixed' | 'exponential';
+    backoffStrategy: "fixed" | "exponential";
   };
 }
 
@@ -56,7 +56,7 @@ interface WebhookEvent {
   id: string;
   webhookId: string;
   timestamp: string;
-  status: 'success' | 'failed' | 'retrying';
+  status: "success" | "failed" | "retrying";
   statusCode?: number;
   response?: string;
   duration: number;
@@ -64,96 +64,96 @@ interface WebhookEvent {
 }
 
 export const WebhookBuilder: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('builder');
+  const [selectedTab, setSelectedTab] = useState("builder");
   const [isCreating, setIsCreating] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
   const { toast } = useToast();
 
   const [webhookConfig, setWebhookConfig] = useState<Partial<WebhookConfig>>({
-    name: '',
-    url: '',
-    method: 'POST',
+    name: "",
+    url: "",
+    method: "POST",
     headers: {},
-    payload: '',
-    authentication: { type: 'none', value: '' },
+    payload: "",
+    authentication: { type: "none", value: "" },
     triggers: [],
     isActive: true,
     retryConfig: {
       enabled: true,
       maxRetries: 3,
-      backoffStrategy: 'exponential'
+      backoffStrategy: "exponential"
     }
   });
 
   const [webhooks] = useState<WebhookConfig[]>([
     {
-      id: '1',
-      name: 'Slack Notifications',
-      url: 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      payload: '{"text": "Nova integração ativada: {{integration_name}}"}',
-      authentication: { type: 'none', value: '' },
-      triggers: ['integration_connected', 'integration_error'],
+      id: "1",
+      name: "Slack Notifications",
+      url: "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX",
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      payload: "{\"text\": \"Nova integração ativada: {{integration_name}}\"}",
+      authentication: { type: "none", value: "" },
+      triggers: ["integration_connected", "integration_error"],
       isActive: true,
-      retryConfig: { enabled: true, maxRetries: 3, backoffStrategy: 'exponential' }
+      retryConfig: { enabled: true, maxRetries: 3, backoffStrategy: "exponential" }
     },
     {
-      id: '2',
-      name: 'Teams Alert',
-      url: 'https://outlook.office.com/webhook/XXXXXXXX',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      payload: '{"title": "Sistema Nautilus", "text": "{{event_description}}"}',
-      authentication: { type: 'bearer', value: 'xxxxx' },
-      triggers: ['high_error_rate', 'system_health_critical'],
+      id: "2",
+      name: "Teams Alert",
+      url: "https://outlook.office.com/webhook/XXXXXXXX",
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      payload: "{\"title\": \"Sistema Nautilus\", \"text\": \"{{event_description}}\"}",
+      authentication: { type: "bearer", value: "xxxxx" },
+      triggers: ["high_error_rate", "system_health_critical"],
       isActive: false,
-      retryConfig: { enabled: true, maxRetries: 5, backoffStrategy: 'fixed' }
+      retryConfig: { enabled: true, maxRetries: 5, backoffStrategy: "fixed" }
     }
   ]);
 
   const [recentEvents] = useState<WebhookEvent[]>([
     {
-      id: '1',
-      webhookId: '1',
-      timestamp: '2024-01-20T16:30:00Z',
-      status: 'success',
+      id: "1",
+      webhookId: "1",
+      timestamp: "2024-01-20T16:30:00Z",
+      status: "success",
       statusCode: 200,
-      response: 'ok',
+      response: "ok",
       duration: 234,
       retryCount: 0
     },
     {
-      id: '2',
-      webhookId: '1',
-      timestamp: '2024-01-20T16:15:00Z',
-      status: 'failed',
+      id: "2",
+      webhookId: "1",
+      timestamp: "2024-01-20T16:15:00Z",
+      status: "failed",
       statusCode: 500,
-      response: 'Internal Server Error',
+      response: "Internal Server Error",
       duration: 1240,
       retryCount: 2
     },
     {
-      id: '3',
-      webhookId: '2',
-      timestamp: '2024-01-20T15:45:00Z',
-      status: 'success',
+      id: "3",
+      webhookId: "2",
+      timestamp: "2024-01-20T15:45:00Z",
+      status: "success",
       statusCode: 200,
-      response: 'Message delivered',
+      response: "Message delivered",
       duration: 567,
       retryCount: 0
     }
   ]);
 
   const availableTriggers = [
-    { value: 'integration_connected', label: 'Integração Conectada', description: 'Quando uma nova integração é ativada' },
-    { value: 'integration_disconnected', label: 'Integração Desconectada', description: 'Quando uma integração é desativada' },
-    { value: 'integration_error', label: 'Erro de Integração', description: 'Quando ocorre falha em uma integração' },
-    { value: 'high_error_rate', label: 'Alta Taxa de Erro', description: 'Quando taxa de erro excede limite' },
-    { value: 'system_health_critical', label: 'Saúde Crítica', description: 'Quando saúde do sistema fica crítica' },
-    { value: 'performance_degradation', label: 'Degradação de Performance', description: 'Quando performance fica abaixo do esperado' },
-    { value: 'token_expiring', label: 'Token Expirando', description: 'Quando token está próximo do vencimento' },
-    { value: 'daily_report', label: 'Relatório Diário', description: 'Relatório automático diário' }
+    { value: "integration_connected", label: "Integração Conectada", description: "Quando uma nova integração é ativada" },
+    { value: "integration_disconnected", label: "Integração Desconectada", description: "Quando uma integração é desativada" },
+    { value: "integration_error", label: "Erro de Integração", description: "Quando ocorre falha em uma integração" },
+    { value: "high_error_rate", label: "Alta Taxa de Erro", description: "Quando taxa de erro excede limite" },
+    { value: "system_health_critical", label: "Saúde Crítica", description: "Quando saúde do sistema fica crítica" },
+    { value: "performance_degradation", label: "Degradação de Performance", description: "Quando performance fica abaixo do esperado" },
+    { value: "token_expiring", label: "Token Expirando", description: "Quando token está próximo do vencimento" },
+    { value: "daily_report", label: "Relatório Diário", description: "Relatório automático diário" }
   ];
 
   const payloadTemplates = {
@@ -216,18 +216,18 @@ export const WebhookBuilder: React.FC = () => {
       
       // Reset form
       setWebhookConfig({
-        name: '',
-        url: '',
-        method: 'POST',
+        name: "",
+        url: "",
+        method: "POST",
         headers: {},
-        payload: '',
-        authentication: { type: 'none', value: '' },
+        payload: "",
+        authentication: { type: "none", value: "" },
         triggers: [],
         isActive: true,
         retryConfig: {
           enabled: true,
           maxRetries: 3,
-          backoffStrategy: 'exponential'
+          backoffStrategy: "exponential"
         }
       });
     }, 1500);
@@ -265,19 +265,19 @@ export const WebhookBuilder: React.FC = () => {
     });
   };
 
-  const getStatusColor = (status: WebhookEvent['status']) => {
+  const getStatusColor = (status: WebhookEvent["status"]) => {
     switch (status) {
-      case 'success': return 'text-success';
-      case 'failed': return 'text-destructive';
-      case 'retrying': return 'text-warning';
+    case "success": return "text-success";
+    case "failed": return "text-destructive";
+    case "retrying": return "text-warning";
     }
   };
 
-  const getStatusIcon = (status: WebhookEvent['status']) => {
+  const getStatusIcon = (status: WebhookEvent["status"]) => {
     switch (status) {
-      case 'success': return <CheckCircle className="w-4 h-4 text-success" />;
-      case 'failed': return <AlertTriangle className="w-4 h-4 text-destructive" />;
-      case 'retrying': return <RefreshCw className="w-4 h-4 text-warning animate-spin" />;
+    case "success": return <CheckCircle className="w-4 h-4 text-success" />;
+    case "failed": return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    case "retrying": return <RefreshCw className="w-4 h-4 text-warning animate-spin" />;
     }
   };
 
@@ -411,21 +411,21 @@ export const WebhookBuilder: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => loadTemplate('slack')}
+                        onClick={() => loadTemplate("slack")}
                       >
                         Slack
                       </Button>
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => loadTemplate('teams')}
+                        onClick={() => loadTemplate("teams")}
                       >
                         Teams
                       </Button>
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => loadTemplate('generic')}
+                        onClick={() => loadTemplate("generic")}
                       >
                         Generic
                       </Button>
@@ -438,7 +438,7 @@ export const WebhookBuilder: React.FC = () => {
                     className="font-mono text-sm min-h-32"
                   />
                   <p className="text-xs text-muted-foreground">
-                    Use variáveis como {'{{event_type}}'}, {'{{timestamp}}'}, {'{{event_description}}'}
+                    Use variáveis como {"{{event_type}}"}, {"{{timestamp}}"}, {"{{event_description}}"}
                   </p>
                 </div>
                 
@@ -463,7 +463,7 @@ export const WebhookBuilder: React.FC = () => {
                   </Select>
                 </div>
                 
-                {webhookConfig.authentication?.type !== 'none' && (
+                {webhookConfig.authentication?.type !== "none" && (
                   <div className="space-y-2">
                     <Label>Valor da Autenticação</Label>
                     <Input
@@ -604,7 +604,7 @@ export const WebhookBuilder: React.FC = () => {
                         </p>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <Clock className="w-3 h-3" />
-                          {new Date(event.timestamp).toLocaleString('pt-BR')}
+                          {new Date(event.timestamp).toLocaleString("pt-BR")}
                           <span>•</span>
                           <span>{event.duration}ms</span>
                           {event.retryCount > 0 && (
@@ -618,9 +618,9 @@ export const WebhookBuilder: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <Badge 
-                        className={`${event.status === 'success' ? 'bg-success/20 text-success border-success/30' : 
-                                   event.status === 'failed' ? 'bg-destructive/20 text-destructive border-destructive/30' :
-                                   'bg-warning/20 text-warning border-warning/30'}`}
+                        className={`${event.status === "success" ? "bg-success/20 text-success border-success/30" : 
+                          event.status === "failed" ? "bg-destructive/20 text-destructive border-destructive/30" :
+                            "bg-warning/20 text-warning border-warning/30"}`}
                       >
                         {event.statusCode}
                       </Badge>
@@ -656,7 +656,7 @@ export const WebhookBuilder: React.FC = () => {
                     size="sm" 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => loadTemplate('slack')}
+                    onClick={() => loadTemplate("slack")}
                   >
                     <Download className="w-3 h-3 mr-1" />
                     Usar Template
@@ -685,7 +685,7 @@ export const WebhookBuilder: React.FC = () => {
                     size="sm" 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => loadTemplate('teams')}
+                    onClick={() => loadTemplate("teams")}
                   >
                     <Download className="w-3 h-3 mr-1" />
                     Usar Template
@@ -714,7 +714,7 @@ export const WebhookBuilder: React.FC = () => {
                     size="sm" 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => loadTemplate('generic')}
+                    onClick={() => loadTemplate("generic")}
                   >
                     <Download className="w-3 h-3 mr-1" />
                     Usar Template

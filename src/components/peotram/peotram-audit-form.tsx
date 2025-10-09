@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
-import { CheckCircle, AlertCircle, FileText, Save, Send, Camera, Mic, Upload, Plus, Trash2, Star, Award, Brain } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
+import { CheckCircle, AlertCircle, FileText, Save, Send, Camera, Mic, Upload, Plus, Trash2, Star, Award, Brain } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface AuditElement {
   number: string;
@@ -24,19 +24,19 @@ interface AuditElement {
 interface AuditResponse {
   element_number: string;
   requirement_code: string;
-  score: 'compliant' | 'partial' | 'non-compliant' | 'not-applicable';
-  evidence_type: 'document' | 'photo' | 'voice' | 'observation';
+  score: "compliant" | "partial" | "non-compliant" | "not-applicable";
+  evidence_type: "document" | "photo" | "voice" | "observation";
   evidence_description: string;
   evidence_urls: string[];
   auditor_comments: string;
   recommendations: string;
-  criticality: 'low' | 'medium' | 'high' | 'critical';
+  criticality: "low" | "medium" | "high" | "critical";
 }
 
 interface NonConformity {
   element_number: string;
   element_name: string;
-  type: 'major' | 'minor' | 'observation';
+  type: "major" | "minor" | "observation";
   description: string;
   evidence_urls: string[];
   corrective_action: string;
@@ -104,7 +104,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
     try {
       const elementResponses = auditResponses[elementNumber] || [];
       
-      const { data, error } = await supabase.functions.invoke('peotram-ai-analysis', {
+      const { data, error } = await supabase.functions.invoke("peotram-ai-analysis", {
         body: {
           audit_id: auditId,
           element_number: elementNumber,
@@ -125,7 +125,6 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
         description: "A análise inteligente do elemento foi realizada com sucesso.",
       });
     } catch (error) {
-      console.error('Error running AI analysis:', error);
       toast({
         title: "Erro na Análise",
         description: "Não foi possível executar a análise IA.",
@@ -143,14 +142,13 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
       for (const [elementNumber, responses] of Object.entries(auditResponses)) {
         for (const response of responses) {
           // For now, store as JSON in audit metadata
-          console.log('Saving response:', response);
         }
       }
 
       // Save non-conformities
       for (const nc of nonConformities) {
         await supabase
-          .from('peotram_non_conformities')
+          .from("peotram_non_conformities")
           .insert({
             audit_id: auditId,
             element_number: nc.element_number,
@@ -171,7 +169,6 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
 
       onSave();
     } catch (error) {
-      console.error('Error saving audit:', error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar a auditoria.",
@@ -187,14 +184,14 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
     const complianceScore = calculateComplianceScore();
     
     await supabase
-      .from('peotram_audits')
+      .from("peotram_audits")
       .update({
-        status: 'completed',
+        status: "completed",
         compliance_score: complianceScore,
         elements_evaluated: elements.length,
         non_conformities_count: nonConformities.length
       })
-      .eq('id', auditId);
+      .eq("id", auditId);
 
     toast({
       title: "Auditoria Concluída",
@@ -206,31 +203,31 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
 
   const calculateComplianceScore = () => {
     const allResponses = Object.values(auditResponses).flat();
-    const compliantResponses = allResponses.filter(r => r.score === 'compliant').length;
+    const compliantResponses = allResponses.filter(r => r.score === "compliant").length;
     return allResponses.length > 0 ? Math.round((compliantResponses / allResponses.length) * 100) : 0;
   };
 
   const getScoreColor = (score: string) => {
     switch (score) {
-      case 'compliant':
-        return 'text-green-600';
-      case 'partial':
-        return 'text-yellow-600';
-      case 'non-compliant':
-        return 'text-red-600';
-      default:
-        return 'text-muted-foreground';
+    case "compliant":
+      return "text-green-600";
+    case "partial":
+      return "text-yellow-600";
+    case "non-compliant":
+      return "text-red-600";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getScoreIcon = (score: string) => {
     switch (score) {
-      case 'compliant':
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'non-compliant':
-        return <AlertCircle className="h-4 w-4 text-red-600" />;
-      default:
-        return <FileText className="h-4 w-4 text-muted-foreground" />;
+    case "compliant":
+      return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case "non-compliant":
+      return <AlertCircle className="h-4 w-4 text-red-600" />;
+    default:
+      return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -284,7 +281,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                   return (
                     <Button
                       key={element.number}
-                      variant={index === currentElementIndex ? 'default' : 'ghost'}
+                      variant={index === currentElementIndex ? "default" : "ghost"}
                       className="w-full justify-start text-left h-auto p-3"
                       onClick={() => setCurrentElementIndex(index)}
                     >
@@ -464,30 +461,30 @@ const RequirementForm: React.FC<{
     existingResponse || {
       element_number: elementNumber,
       requirement_code: requirementCode,
-      score: 'compliant',
-      evidence_type: 'document',
-      evidence_description: '',
+      score: "compliant",
+      evidence_type: "document",
+      evidence_description: "",
       evidence_urls: [],
-      auditor_comments: '',
-      recommendations: '',
-      criticality: 'low'
+      auditor_comments: "",
+      recommendations: "",
+      criticality: "low"
     }
   );
 
   const handleSave = () => {
     onSave(formData);
     
-    if (formData.score === 'non-compliant') {
+    if (formData.score === "non-compliant") {
       // Automatically suggest creating a non-conformity
       onAddNonConformity({
         element_number: elementNumber,
         element_name: `Elemento ${elementNumber}`,
-        type: formData.criticality === 'critical' ? 'major' : 'minor',
+        type: formData.criticality === "critical" ? "major" : "minor",
         description: formData.auditor_comments,
         evidence_urls: formData.evidence_urls,
-        corrective_action: '',
-        responsible_person: '',
-        target_date: ''
+        corrective_action: "",
+        responsible_person: "",
+        target_date: ""
       });
     }
     

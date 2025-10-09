@@ -7,4 +7,4 @@
 export { 
   EmptyState,
   type EmptyStateProps
-} from './EmptyState';
+} from "./EmptyState";

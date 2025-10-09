@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { useOrganization } from '@/contexts/OrganizationContext';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { useOrganization } from "@/contexts/OrganizationContext";
 import {
   Palette,
   Upload,
@@ -18,7 +18,7 @@ import {
   Save,
   Eye,
   RefreshCw
-} from 'lucide-react';
+} from "lucide-react";
 
 export const OrganizationCustomization: React.FC = () => {
   const { currentOrganization, currentBranding, updateBranding, checkPermission } = useOrganization();
@@ -28,45 +28,45 @@ export const OrganizationCustomization: React.FC = () => {
 
   // Formulário de personalização
   const [customization, setCustomization] = useState({
-    company_name: '',
-    logo_url: '',
-    primary_color: '#1e40af',
-    secondary_color: '#3b82f6',
-    accent_color: '#06b6d4',
-    theme_mode: 'light',
-    default_language: 'pt-BR',
-    default_currency: 'BRL',
-    timezone: 'America/Sao_Paulo',
+    company_name: "",
+    logo_url: "",
+    primary_color: "#1e40af",
+    secondary_color: "#3b82f6",
+    accent_color: "#06b6d4",
+    theme_mode: "light",
+    default_language: "pt-BR",
+    default_currency: "BRL",
+    timezone: "America/Sao_Paulo",
     custom_fields: {},
     business_rules: {},
-    enabled_modules: ['fleet', 'crew', 'certificates', 'analytics'],
+    enabled_modules: ["fleet", "crew", "certificates", "analytics"],
     module_settings: {}
   });
 
   useEffect(() => {
     if (currentBranding) {
       setCustomization({
-        company_name: currentBranding.company_name || '',
-        logo_url: currentBranding.logo_url || '',
-        primary_color: currentBranding.primary_color || '#1e40af',
-        secondary_color: currentBranding.secondary_color || '#3b82f6',
-        accent_color: currentBranding.accent_color || '#06b6d4',
-        theme_mode: currentBranding.theme_mode || 'light',
-        default_language: currentBranding.default_language || 'pt-BR',
-        default_currency: currentBranding.default_currency || 'BRL',
-        timezone: currentBranding.timezone || 'America/Sao_Paulo',
+        company_name: currentBranding.company_name || "",
+        logo_url: currentBranding.logo_url || "",
+        primary_color: currentBranding.primary_color || "#1e40af",
+        secondary_color: currentBranding.secondary_color || "#3b82f6",
+        accent_color: currentBranding.accent_color || "#06b6d4",
+        theme_mode: currentBranding.theme_mode || "light",
+        default_language: currentBranding.default_language || "pt-BR",
+        default_currency: currentBranding.default_currency || "BRL",
+        timezone: currentBranding.timezone || "America/Sao_Paulo",
         custom_fields: currentBranding.custom_fields || {},
         business_rules: currentBranding.business_rules || {},
         enabled_modules: Array.isArray(currentBranding.enabled_modules) 
           ? currentBranding.enabled_modules 
-          : ['fleet', 'crew', 'certificates', 'analytics'],
+          : ["fleet", "crew", "certificates", "analytics"],
         module_settings: currentBranding.module_settings || {}
       });
     }
   }, [currentBranding]);
 
   const handleSave = async () => {
-    if (!checkPermission('manage_settings')) {
+    if (!checkPermission("manage_settings")) {
       toast({
         title: "Acesso Negado",
         description: "Você não tem permissão para alterar as configurações",
@@ -84,7 +84,6 @@ export const OrganizationCustomization: React.FC = () => {
         description: "Personalização salva com sucesso",
       });
     } catch (error) {
-      console.error('Erro ao salvar personalização:', error);
       toast({
         title: "Erro",
         description: "Erro ao salvar personalização",
@@ -96,36 +95,36 @@ export const OrganizationCustomization: React.FC = () => {
   };
 
   const availableModules = [
-    { id: 'fleet', name: 'Gestão de Frota', description: 'Gerenciar embarcações e frotas' },
-    { id: 'crew', name: 'Gestão de Tripulação', description: 'Gerenciar tripulantes e escalas' },
-    { id: 'certificates', name: 'Certificações', description: 'Gerenciar certificados e documentos' },
-    { id: 'analytics', name: 'Analytics', description: 'Relatórios e métricas' },
-    { id: 'travel', name: 'Viagens', description: 'Planejamento de viagens' },
-    { id: 'price_alerts', name: 'Alertas de Preço', description: 'Monitoramento de preços' },
-    { id: 'communication', name: 'Comunicação', description: 'Chat e mensagens' },
-    { id: 'documents', name: 'Documentos', description: 'Gestão documental' }
+    { id: "fleet", name: "Gestão de Frota", description: "Gerenciar embarcações e frotas" },
+    { id: "crew", name: "Gestão de Tripulação", description: "Gerenciar tripulantes e escalas" },
+    { id: "certificates", name: "Certificações", description: "Gerenciar certificados e documentos" },
+    { id: "analytics", name: "Analytics", description: "Relatórios e métricas" },
+    { id: "travel", name: "Viagens", description: "Planejamento de viagens" },
+    { id: "price_alerts", name: "Alertas de Preço", description: "Monitoramento de preços" },
+    { id: "communication", name: "Comunicação", description: "Chat e mensagens" },
+    { id: "documents", name: "Documentos", description: "Gestão documental" }
   ];
 
   const languages = [
-    { code: 'pt-BR', name: 'Português (Brasil)' },
-    { code: 'en-US', name: 'English (United States)' },
-    { code: 'es-ES', name: 'Español (España)' },
-    { code: 'fr-FR', name: 'Français (France)' }
+    { code: "pt-BR", name: "Português (Brasil)" },
+    { code: "en-US", name: "English (United States)" },
+    { code: "es-ES", name: "Español (España)" },
+    { code: "fr-FR", name: "Français (France)" }
   ];
 
   const currencies = [
-    { code: 'BRL', name: 'Real (R$)', symbol: 'R$' },
-    { code: 'USD', name: 'Dólar (US$)', symbol: '$' },
-    { code: 'EUR', name: 'Euro (€)', symbol: '€' },
-    { code: 'GBP', name: 'Libra (£)', symbol: '£' }
+    { code: "BRL", name: "Real (R$)", symbol: "R$" },
+    { code: "USD", name: "Dólar (US$)", symbol: "$" },
+    { code: "EUR", name: "Euro (€)", symbol: "€" },
+    { code: "GBP", name: "Libra (£)", symbol: "£" }
   ];
 
   const timezones = [
-    { value: 'America/Sao_Paulo', label: 'São Paulo (UTC-3)' },
-    { value: 'America/New_York', label: 'Nova York (UTC-5)' },
-    { value: 'Europe/London', label: 'Londres (UTC+0)' },
-    { value: 'Europe/Paris', label: 'Paris (UTC+1)' },
-    { value: 'Asia/Tokyo', label: 'Tóquio (UTC+9)' }
+    { value: "America/Sao_Paulo", label: "São Paulo (UTC-3)" },
+    { value: "America/New_York", label: "Nova York (UTC-5)" },
+    { value: "Europe/London", label: "Londres (UTC+0)" },
+    { value: "Europe/Paris", label: "Paris (UTC+1)" },
+    { value: "Asia/Tokyo", label: "Tóquio (UTC+9)" }
   ];
 
   if (!currentOrganization) {
@@ -153,7 +152,7 @@ export const OrganizationCustomization: React.FC = () => {
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => setPreview(!preview)}>
             <Eye className="w-4 h-4 mr-2" />
-            {preview ? 'Sair da Pré-visualização' : 'Pré-visualizar'}
+            {preview ? "Sair da Pré-visualização" : "Pré-visualizar"}
           </Button>
           <Button onClick={handleSave} disabled={isLoading}>
             {isLoading ? (
@@ -320,12 +319,12 @@ export const OrganizationCustomization: React.FC = () => {
                 <div 
                   className="border rounded-lg p-4 space-y-4"
                   style={{
-                    '--primary': customization.primary_color,
-                    '--secondary': customization.secondary_color,
-                    '--accent': customization.accent_color
+                    "--primary": customization.primary_color,
+                    "--secondary": customization.secondary_color,
+                    "--accent": customization.accent_color
                   } as React.CSSProperties}
                 >
-                  <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: customization.primary_color + '10' }}>
+                  <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: customization.primary_color + "10" }}>
                     {customization.logo_url ? (
                       <img src={customization.logo_url} alt="Logo" className="h-8 w-auto" />
                     ) : (
@@ -333,10 +332,10 @@ export const OrganizationCustomization: React.FC = () => {
                         className="w-8 h-8 rounded flex items-center justify-center text-azure-50 font-bold"
                         style={{ backgroundColor: customization.primary_color }}
                       >
-                        {customization.company_name.charAt(0) || 'N'}
+                        {customization.company_name.charAt(0) || "N"}
                       </div>
                     )}
-                    <span className="font-semibold">{customization.company_name || 'Nautilus One'}</span>
+                    <span className="font-semibold">{customization.company_name || "Nautilus One"}</span>
                   </div>
                   
                   <div className="space-y-2">
@@ -355,7 +354,7 @@ export const OrganizationCustomization: React.FC = () => {
                   </div>
 
                   <div className="text-xs text-muted-foreground">
-                    Tema: {customization.theme_mode === 'light' ? 'Claro' : customization.theme_mode === 'dark' ? 'Escuro' : 'Automático'}
+                    Tema: {customization.theme_mode === "light" ? "Claro" : customization.theme_mode === "dark" ? "Escuro" : "Automático"}
                   </div>
                 </div>
               </CardContent>
@@ -484,7 +483,7 @@ export const OrganizationCustomization: React.FC = () => {
                   <Input
                     type="number"
                     placeholder="Ex: 5"
-                    value={(customization.business_rules as any)?.max_reservations || ''}
+                    value={(customization.business_rules as any)?.max_reservations || ""}
                     onChange={(e) => setCustomization({
                       ...customization,
                       business_rules: {
@@ -500,7 +499,7 @@ export const OrganizationCustomization: React.FC = () => {
                   <Input
                     type="number"
                     placeholder="Ex: 24"
-                    value={(customization.business_rules as any)?.min_advance_hours || ''}
+                    value={(customization.business_rules as any)?.min_advance_hours || ""}
                     onChange={(e) => setCustomization({
                       ...customization,
                       business_rules: {
@@ -516,7 +515,7 @@ export const OrganizationCustomization: React.FC = () => {
                 <Label>Tipos de Alerta Personalizados</Label>
                 <Textarea
                   placeholder="Ex: Alerta de Manutenção Programada, Inspeção de Segurança..."
-                  value={(customization.business_rules as any)?.custom_alert_types || ''}
+                  value={(customization.business_rules as any)?.custom_alert_types || ""}
                   onChange={(e) => setCustomization({
                     ...customization,
                     business_rules: {
@@ -531,7 +530,7 @@ export const OrganizationCustomization: React.FC = () => {
                 <Label>Configurações de Integração Específicas</Label>
                 <Textarea
                   placeholder="APIs específicas, webhooks, integrações com sistemas legados..."
-                  value={(customization.business_rules as any)?.integration_settings || ''}
+                  value={(customization.business_rules as any)?.integration_settings || ""}
                   onChange={(e) => setCustomization({
                     ...customization,
                     business_rules: {

@@ -21,8 +21,8 @@ export async function testMarineTrafficConnection(): Promise<MarineTrafficTestRe
   if (!apiKey) {
     return {
       success: false,
-      message: 'MarineTraffic API key not configured',
-      error: 'Missing VITE_MARINETRAFFIC_API_KEY. Note: MarineTraffic requires paid subscription.',
+      message: "MarineTraffic API key not configured",
+      error: "Missing VITE_MARINETRAFFIC_API_KEY. Note: MarineTraffic requires paid subscription.",
     };
   }
 
@@ -32,7 +32,7 @@ export async function testMarineTrafficConnection(): Promise<MarineTrafficTestRe
     const response = await fetch(
       `https://services.marinetraffic.com/api/exportvessel/v:8/${apiKey}/timespan:10/protocol:json`,
       {
-        method: 'GET',
+        method: "GET",
       }
     );
 
@@ -53,26 +53,26 @@ export async function testMarineTrafficConnection(): Promise<MarineTrafficTestRe
     if (data) {
       return {
         success: true,
-        message: 'MarineTraffic API connection successful',
+        message: "MarineTraffic API connection successful",
         responseTime,
         data: {
-          vesselsCount: Array.isArray(data) ? data.length : 'N/A',
+          vesselsCount: Array.isArray(data) ? data.length : "N/A",
         },
       };
     }
 
     return {
       success: false,
-      message: 'MarineTraffic API returned unexpected data',
+      message: "MarineTraffic API returned unexpected data",
       responseTime,
-      error: 'Invalid response format',
+      error: "Invalid response format",
     };
   } catch (error) {
     return {
       success: false,
-      message: 'Failed to connect to MarineTraffic API',
+      message: "Failed to connect to MarineTraffic API",
       responseTime: Date.now() - startTime,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }

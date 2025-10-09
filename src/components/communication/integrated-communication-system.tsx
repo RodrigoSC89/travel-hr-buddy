@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Send, 
   Paperclip, 
@@ -15,16 +15,16 @@ import {
   Phone,
   Video,
   MoreVertical
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   id: string;
   sender_id: string;
   recipient_id?: string;
   content: string;
-  message_type: 'text' | 'voice' | 'file' | 'alert';
+  message_type: "text" | "voice" | "file" | "alert";
   file_url?: string;
   voice_duration?: number;
   is_read: boolean;
@@ -37,7 +37,7 @@ interface Contact {
   id: string;
   full_name: string;
   position: string;
-  status: 'available' | 'busy' | 'offline';
+  status: "available" | "busy" | "offline";
   avatar_url?: string;
 }
 
@@ -53,9 +53,9 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
   const [messages, setMessages] = useState<Message[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
 
@@ -78,28 +78,27 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
   }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const loadContacts = async () => {
     try {
       const { data, error } = await supabase
-        .from('crew_members')
-        .select('id, full_name, position')
-        .neq('user_id', currentUserId)
-        .order('full_name');
+        .from("crew_members")
+        .select("id, full_name, position")
+        .neq("user_id", currentUserId)
+        .order("full_name");
 
       if (error) throw error;
 
       const formattedContacts: Contact[] = (data || []).map(contact => ({
         ...contact,
-        status: 'available' as const, // This would be dynamic in a real implementation
+        status: "available" as const, // This would be dynamic in a real implementation
         avatar_url: undefined
       }));
 
       setContacts(formattedContacts);
     } catch (error) {
-      console.error('Error loading contacts:', error);
     }
   };
 
@@ -107,21 +106,21 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     setIsLoading(true);
     try {
       const { data, error } = await supabase
-        .from('crew_communications')
+        .from("crew_communications")
         .select(`
           *,
           sender:sender_id(full_name),
           recipient:recipient_id(full_name)
         `)
         .or(`and(sender_id.eq.${currentUserId},recipient_id.eq.${contactId}),and(sender_id.eq.${contactId},recipient_id.eq.${currentUserId})`)
-        .order('created_at', { ascending: true });
+        .order("created_at", { ascending: true });
 
       if (error) throw error;
 
       const formattedMessages: Message[] = (data || []).map((msg: any) => ({
         ...msg,
-        message_type: msg.message_type as 'text' | 'voice' | 'file' | 'alert',
-        sender_name: msg.sender?.full_name || 'Unknown'
+        message_type: msg.message_type as "text" | "voice" | "file" | "alert",
+        sender_name: msg.sender?.full_name || "Unknown"
       }));
 
       setMessages(formattedMessages);
@@ -129,7 +128,6 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       // Mark messages as read
       await markMessagesAsRead(contactId);
     } catch (error) {
-      console.error('Error loading messages:', error);
     } finally {
       setIsLoading(false);
     }
@@ -138,16 +136,15 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
   const markMessagesAsRead = async (senderId: string) => {
     try {
       await supabase
-        .from('crew_communications')
+        .from("crew_communications")
         .update({ 
           is_read: true, 
           read_at: new Date().toISOString() 
         })
-        .eq('sender_id', senderId)
-        .eq('recipient_id', currentUserId)
-        .eq('is_read', false);
+        .eq("sender_id", senderId)
+        .eq("recipient_id", currentUserId)
+        .eq("is_read", false);
     } catch (error) {
-      console.error('Error marking messages as read:', error);
     }
   };
 
@@ -159,13 +156,13 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         sender_id: crewMemberId || currentUserId,
         recipient_id: selectedContact.id,
         content: newMessage.trim(),
-        message_type: 'text' as const,
+        message_type: "text" as const,
         is_urgent: false,
         conversation_id: conversationId
       };
 
       const { data, error } = await supabase
-        .from('crew_communications')
+        .from("crew_communications")
         .insert(messageData)
         .select()
         .single();
@@ -175,18 +172,17 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       // Add message to local state
       setMessages(prev => [...prev, {
         ...data,
-        message_type: data.message_type as 'text' | 'voice' | 'file' | 'alert',
-        sender_name: 'Você'
+        message_type: data.message_type as "text" | "voice" | "file" | "alert",
+        sender_name: "Você"
       }]);
 
-      setNewMessage('');
+      setNewMessage("");
 
       toast({
         title: "Mensagem enviada",
         description: `Mensagem enviada para ${selectedContact.full_name}`,
       });
     } catch (error) {
-      console.error('Error sending message:', error);
       toast({
         title: "Erro ao enviar mensagem",
         description: "Não foi possível enviar a mensagem. Tente novamente.",
@@ -203,14 +199,14 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       // Upload file to Supabase Storage
       const fileName = `communications/${Date.now()}-${file.name}`;
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('crew-documents')
+        .from("crew-documents")
         .upload(fileName, file);
 
       if (uploadError) throw uploadError;
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('crew-documents')
+        .from("crew-documents")
         .getPublicUrl(fileName);
 
       // Send file message
@@ -218,14 +214,14 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         sender_id: crewMemberId || currentUserId,
         recipient_id: selectedContact.id,
         content: `Arquivo enviado: ${file.name}`,
-        message_type: 'file' as const,
+        message_type: "file" as const,
         file_url: publicUrl,
         is_urgent: false,
         conversation_id: conversationId
       };
 
       const { data, error } = await supabase
-        .from('crew_communications')
+        .from("crew_communications")
         .insert(messageData)
         .select()
         .single();
@@ -234,8 +230,8 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
       setMessages(prev => [...prev, {
         ...data,
-        message_type: data.message_type as 'text' | 'voice' | 'file' | 'alert',
-        sender_name: 'Você'
+        message_type: data.message_type as "text" | "voice" | "file" | "alert",
+        sender_name: "Você"
       }]);
 
       toast({
@@ -243,7 +239,6 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         description: `Arquivo ${file.name} enviado com sucesso`,
       });
     } catch (error) {
-      console.error('Error uploading file:', error);
       toast({
         title: "Erro ao enviar arquivo",
         description: "Não foi possível enviar o arquivo. Tente novamente.",
@@ -273,10 +268,10 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'available': return 'bg-green-500';
-      case 'busy': return 'bg-yellow-500';
-      case 'offline': return 'bg-gray-500';
-      default: return 'bg-gray-500';
+    case "available": return "bg-green-500";
+    case "busy": return "bg-yellow-500";
+    case "offline": return "bg-gray-500";
+    default: return "bg-gray-500";
     }
   };
 
@@ -286,9 +281,9 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     const isToday = date.toDateString() === now.toDateString();
     
     if (isToday) {
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     } else {
-      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+      return date.toLocaleDateString([], { month: "short", day: "numeric" });
     }
   };
 
@@ -317,8 +312,8 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                 onClick={() => setSelectedContact(contact)}
                 className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
                   selectedContact?.id === contact.id 
-                    ? 'bg-primary/10 border border-primary/20' 
-                    : 'hover:bg-muted'
+                    ? "bg-primary/10 border border-primary/20" 
+                    : "hover:bg-muted"
                 }`}
               >
                 <div className="relative">
@@ -376,14 +371,14 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                   return (
                     <div
                       key={message.id}
-                      className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
+                      className={`flex ${isOwn ? "justify-end" : "justify-start"}`}
                     >
-                      <div className={`max-w-[70%] ${isOwn ? 'order-2' : 'order-1'}`}>
+                      <div className={`max-w-[70%] ${isOwn ? "order-2" : "order-1"}`}>
                         <div
                           className={`p-3 rounded-lg ${
                             isOwn
-                              ? 'bg-primary text-primary-foreground'
-                              : 'bg-muted'
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted"
                           }`}
                         >
                           {message.is_urgent && (
@@ -405,7 +400,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                             </div>
                           )}
                         </div>
-                        <p className={`text-xs text-muted-foreground mt-1 ${isOwn ? 'text-right' : 'text-left'}`}>
+                        <p className={`text-xs text-muted-foreground mt-1 ${isOwn ? "text-right" : "text-left"}`}>
                           {formatMessageTime(message.created_at)}
                         </p>
                       </div>
@@ -431,7 +426,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                   variant="outline"
                   onMouseDown={startVoiceRecording}
                   onMouseUp={stopVoiceRecording}
-                  className={isRecording ? 'bg-red-100' : ''}
+                  className={isRecording ? "bg-red-100" : ""}
                 >
                   {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                 </Button>
@@ -439,7 +434,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                   placeholder="Digite sua mensagem..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                  onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                   className="flex-1"
                 />
                 <Button onClick={sendMessage} disabled={!newMessage.trim()}>

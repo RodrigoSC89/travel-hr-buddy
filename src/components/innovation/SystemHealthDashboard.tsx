@@ -27,14 +27,14 @@ interface SystemMetric {
   current: number;
   target: number;
   unit: string;
-  status: 'healthy' | 'warning' | 'critical';
-  trend: 'up' | 'down' | 'stable';
+  status: "healthy" | "warning" | "critical";
+  trend: "up" | "down" | "stable";
 }
 
 interface SecurityEvent {
   id: string;
-  type: 'login' | 'access' | 'security' | 'system';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "login" | "access" | "security" | "system";
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
   timestamp: string;
   resolved: boolean;
@@ -47,45 +47,45 @@ export const SystemHealthDashboard = () => {
 
   useEffect(() => {
     setMetrics([
-      { name: 'CPU Usage', current: 45, target: 80, unit: '%', status: 'healthy', trend: 'stable' },
-      { name: 'Memory Usage', current: 72, target: 85, unit: '%', status: 'healthy', trend: 'up' },
-      { name: 'Disk Usage', current: 83, target: 90, unit: '%', status: 'warning', trend: 'up' },
-      { name: 'Network I/O', current: 234, target: 1000, unit: 'MB/s', status: 'healthy', trend: 'down' },
-      { name: 'Active Sessions', current: 1247, target: 2000, unit: '', status: 'healthy', trend: 'up' },
-      { name: 'Response Time', current: 127, target: 200, unit: 'ms', status: 'healthy', trend: 'stable' }
+      { name: "CPU Usage", current: 45, target: 80, unit: "%", status: "healthy", trend: "stable" },
+      { name: "Memory Usage", current: 72, target: 85, unit: "%", status: "healthy", trend: "up" },
+      { name: "Disk Usage", current: 83, target: 90, unit: "%", status: "warning", trend: "up" },
+      { name: "Network I/O", current: 234, target: 1000, unit: "MB/s", status: "healthy", trend: "down" },
+      { name: "Active Sessions", current: 1247, target: 2000, unit: "", status: "healthy", trend: "up" },
+      { name: "Response Time", current: 127, target: 200, unit: "ms", status: "healthy", trend: "stable" }
     ]);
 
     setSecurityEvents([
       {
-        id: '1',
-        type: 'security',
-        severity: 'medium',
-        message: 'Tentativa de login com credenciais inválidas detectada',
-        timestamp: '2 min atrás',
+        id: "1",
+        type: "security",
+        severity: "medium",
+        message: "Tentativa de login com credenciais inválidas detectada",
+        timestamp: "2 min atrás",
         resolved: false
       },
       {
-        id: '2',
-        type: 'access',
-        severity: 'low',
-        message: 'Novo dispositivo conectado ao sistema',
-        timestamp: '15 min atrás',
+        id: "2",
+        type: "access",
+        severity: "low",
+        message: "Novo dispositivo conectado ao sistema",
+        timestamp: "15 min atrás",
         resolved: true
       },
       {
-        id: '3',
-        type: 'system',
-        severity: 'high',
-        message: 'Uso elevado de CPU detectado no servidor web',
-        timestamp: '1 hora atrás',
+        id: "3",
+        type: "system",
+        severity: "high",
+        message: "Uso elevado de CPU detectado no servidor web",
+        timestamp: "1 hora atrás",
         resolved: true
       },
       {
-        id: '4',
-        type: 'login',
-        severity: 'low',
-        message: 'Login bem-sucedido de administrador',
-        timestamp: '2 horas atrás',
+        id: "4",
+        type: "login",
+        severity: "low",
+        message: "Login bem-sucedido de administrador",
+        timestamp: "2 horas atrás",
         resolved: true
       }
     ]);
@@ -100,49 +100,49 @@ export const SystemHealthDashboard = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy': return 'text-success';
-      case 'warning': return 'text-warning';
-      case 'critical': return 'text-destructive';
-      default: return 'text-muted-foreground';
+    case "healthy": return "text-success";
+    case "warning": return "text-warning";
+    case "critical": return "text-destructive";
+    default: return "text-muted-foreground";
     }
   };
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-      case 'healthy': return 'bg-success/10 text-success border-success/20';
-      case 'warning': return 'bg-warning/10 text-warning border-warning/20';
-      case 'critical': return 'bg-destructive/10 text-destructive border-destructive/20';
-      default: return 'bg-muted/10 text-muted-foreground border-muted/20';
+    case "healthy": return "bg-success/10 text-success border-success/20";
+    case "warning": return "bg-warning/10 text-warning border-warning/20";
+    case "critical": return "bg-destructive/10 text-destructive border-destructive/20";
+    default: return "bg-muted/10 text-muted-foreground border-muted/20";
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'low': return 'bg-blue-100 text-blue-700';
-      case 'medium': return 'bg-yellow-100 text-yellow-700';
-      case 'high': return 'bg-orange-100 text-orange-700';
-      case 'critical': return 'bg-red-100 text-red-700';
-      default: return 'bg-secondary text-secondary-foreground';
+    case "low": return "bg-blue-100 text-blue-700";
+    case "medium": return "bg-yellow-100 text-yellow-700";
+    case "high": return "bg-orange-100 text-orange-700";
+    case "critical": return "bg-red-100 text-red-700";
+    default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-3 w-3 text-green-500" />;
-      case 'down': return <TrendingDown className="h-3 w-3 text-red-500" />;
-      default: return <Activity className="h-3 w-3 text-muted-foreground" />;
+    case "up": return <TrendingUp className="h-3 w-3 text-green-500" />;
+    case "down": return <TrendingDown className="h-3 w-3 text-red-500" />;
+    default: return <Activity className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
   const getMetricIcon = (name: string) => {
     switch (name.toLowerCase()) {
-      case 'cpu usage': return <Cpu className="h-4 w-4" />;
-      case 'memory usage': return <MemoryStick className="h-4 w-4" />;
-      case 'disk usage': return <HardDrive className="h-4 w-4" />;
-      case 'network i/o': return <Network className="h-4 w-4" />;
-      case 'active sessions': return <Activity className="h-4 w-4" />;
-      case 'response time': return <Clock className="h-4 w-4" />;
-      default: return <Server className="h-4 w-4" />;
+    case "cpu usage": return <Cpu className="h-4 w-4" />;
+    case "memory usage": return <MemoryStick className="h-4 w-4" />;
+    case "disk usage": return <HardDrive className="h-4 w-4" />;
+    case "network i/o": return <Network className="h-4 w-4" />;
+    case "active sessions": return <Activity className="h-4 w-4" />;
+    case "response time": return <Clock className="h-4 w-4" />;
+    default: return <Server className="h-4 w-4" />;
     }
   };
 
@@ -275,7 +275,7 @@ export const SystemHealthDashboard = () => {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
                       <div className={`p-2 rounded-lg ${
-                        event.resolved ? 'bg-success/10' : 'bg-warning/10'
+                        event.resolved ? "bg-success/10" : "bg-warning/10"
                       }`}>
                         {event.resolved ? (
                           <CheckCircle className="h-4 w-4 text-success" />

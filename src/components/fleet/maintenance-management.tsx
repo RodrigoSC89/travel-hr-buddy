@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { 
   Wrench, 
   Plus, 
@@ -27,16 +27,16 @@ import {
   Zap,
   Shield,
   Eye
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface MaintenanceRecord {
   id: string;
   vessel_name: string;
   vessel_id: string;
-  maintenance_type: 'preventive' | 'corrective' | 'emergency' | 'inspection';
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  status: 'scheduled' | 'in_progress' | 'completed' | 'overdue' | 'cancelled';
+  maintenance_type: "preventive" | "corrective" | "emergency" | "inspection";
+  priority: "low" | "medium" | "high" | "critical";
+  status: "scheduled" | "in_progress" | "completed" | "overdue" | "cancelled";
   title: string;
   description: string;
   scheduled_date: string;
@@ -55,9 +55,9 @@ interface MaintenanceRecord {
 const MaintenanceManagement: React.FC = () => {
   const [maintenanceRecords, setMaintenanceRecords] = useState<MaintenanceRecord[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<MaintenanceRecord | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [priorityFilter, setPriorityFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,18 +65,18 @@ const MaintenanceManagement: React.FC = () => {
 
   // Form state for new maintenance
   const [newMaintenance, setNewMaintenance] = useState({
-    vessel_name: '',
-    vessel_id: '',
-    maintenance_type: '',
-    priority: '',
-    title: '',
-    description: '',
-    scheduled_date: '',
-    estimated_duration: '',
-    cost_estimate: '',
-    assigned_technician: '',
-    location: '',
-    parts_required: ''
+    vessel_name: "",
+    vessel_id: "",
+    maintenance_type: "",
+    priority: "",
+    title: "",
+    description: "",
+    scheduled_date: "",
+    estimated_duration: "",
+    cost_estimate: "",
+    assigned_technician: "",
+    location: "",
+    parts_required: ""
   });
 
   useEffect(() => {
@@ -87,77 +87,77 @@ const MaintenanceManagement: React.FC = () => {
     // Mock data for maintenance records
     const mockRecords: MaintenanceRecord[] = [
       {
-        id: '1',
-        vessel_name: 'MV Atlântico Explorer',
-        vessel_id: '1',
-        maintenance_type: 'preventive',
-        priority: 'medium',
-        status: 'scheduled',
-        title: 'Inspeção Anual do Motor Principal',
-        description: 'Inspeção completa do motor principal incluindo filtros, válvulas e sistema de refrigeração',
-        scheduled_date: '2024-02-15T09:00:00Z',
+        id: "1",
+        vessel_name: "MV Atlântico Explorer",
+        vessel_id: "1",
+        maintenance_type: "preventive",
+        priority: "medium",
+        status: "scheduled",
+        title: "Inspeção Anual do Motor Principal",
+        description: "Inspeção completa do motor principal incluindo filtros, válvulas e sistema de refrigeração",
+        scheduled_date: "2024-02-15T09:00:00Z",
         estimated_duration: 48,
         cost_estimate: 25000,
-        assigned_technician: 'Carlos Silva',
-        location: 'Porto de Santos',
-        parts_required: ['Filtro de óleo', 'Junta do cabeçote', 'Válvula de segurança'],
-        created_at: '2024-01-10T00:00:00Z',
-        next_maintenance: '2025-02-15'
+        assigned_technician: "Carlos Silva",
+        location: "Porto de Santos",
+        parts_required: ["Filtro de óleo", "Junta do cabeçote", "Válvula de segurança"],
+        created_at: "2024-01-10T00:00:00Z",
+        next_maintenance: "2025-02-15"
       },
       {
-        id: '2',
-        vessel_name: 'MV Pacífico Star',
-        vessel_id: '2',
-        maintenance_type: 'corrective',
-        priority: 'high',
-        status: 'in_progress',
-        title: 'Reparo do Sistema de Navegação',
-        description: 'Correção de falha no sistema GPS e atualização do software de navegação',
-        scheduled_date: '2024-01-20T14:00:00Z',
+        id: "2",
+        vessel_name: "MV Pacífico Star",
+        vessel_id: "2",
+        maintenance_type: "corrective",
+        priority: "high",
+        status: "in_progress",
+        title: "Reparo do Sistema de Navegação",
+        description: "Correção de falha no sistema GPS e atualização do software de navegação",
+        scheduled_date: "2024-01-20T14:00:00Z",
         estimated_duration: 24,
         cost_estimate: 15000,
         actual_cost: 18500,
-        assigned_technician: 'Maria Santos',
-        location: 'Porto de Paranaguá',
-        parts_required: ['Módulo GPS', 'Antena de comunicação'],
-        created_at: '2024-01-15T00:00:00Z'
+        assigned_technician: "Maria Santos",
+        location: "Porto de Paranaguá",
+        parts_required: ["Módulo GPS", "Antena de comunicação"],
+        created_at: "2024-01-15T00:00:00Z"
       },
       {
-        id: '3',
-        vessel_name: 'MV Índico Pioneer',
-        vessel_id: '3',
-        maintenance_type: 'emergency',
-        priority: 'critical',
-        status: 'completed',
-        title: 'Reparo Emergencial do Leme',
-        description: 'Reparo urgente do sistema de direção após falha durante navegação',
-        scheduled_date: '2024-01-12T02:00:00Z',
-        completed_date: '2024-01-13T18:00:00Z',
+        id: "3",
+        vessel_name: "MV Índico Pioneer",
+        vessel_id: "3",
+        maintenance_type: "emergency",
+        priority: "critical",
+        status: "completed",
+        title: "Reparo Emergencial do Leme",
+        description: "Reparo urgente do sistema de direção após falha durante navegação",
+        scheduled_date: "2024-01-12T02:00:00Z",
+        completed_date: "2024-01-13T18:00:00Z",
         estimated_duration: 12,
         actual_duration: 16,
         cost_estimate: 35000,
         actual_cost: 42000,
-        assigned_technician: 'João Oliveira',
-        location: 'Estaleiro Suape',
-        parts_required: ['Sistema hidráulico', 'Bomba de direção', 'Sensores'],
-        created_at: '2024-01-12T00:00:00Z'
+        assigned_technician: "João Oliveira",
+        location: "Estaleiro Suape",
+        parts_required: ["Sistema hidráulico", "Bomba de direção", "Sensores"],
+        created_at: "2024-01-12T00:00:00Z"
       },
       {
-        id: '4',
-        vessel_name: 'MV Mediterrâneo',
-        vessel_id: '4',
-        maintenance_type: 'inspection',
-        priority: 'medium',
-        status: 'overdue',
-        title: 'Inspeção de Segurança Trimestral',
-        description: 'Inspeção obrigatória de equipamentos de segurança e sistemas de emergência',
-        scheduled_date: '2024-01-10T08:00:00Z',
+        id: "4",
+        vessel_name: "MV Mediterrâneo",
+        vessel_id: "4",
+        maintenance_type: "inspection",
+        priority: "medium",
+        status: "overdue",
+        title: "Inspeção de Segurança Trimestral",
+        description: "Inspeção obrigatória de equipamentos de segurança e sistemas de emergência",
+        scheduled_date: "2024-01-10T08:00:00Z",
         estimated_duration: 8,
         cost_estimate: 5000,
-        assigned_technician: 'Ana Costa',
-        location: 'Porto de Vitória',
-        parts_required: ['Botes salva-vidas', 'Extintores'],
-        created_at: '2024-01-05T00:00:00Z'
+        assigned_technician: "Ana Costa",
+        location: "Porto de Vitória",
+        parts_required: ["Botes salva-vidas", "Extintores"],
+        created_at: "2024-01-05T00:00:00Z"
       }
     ];
 
@@ -172,7 +172,7 @@ const MaintenanceManagement: React.FC = () => {
       vessel_id: newMaintenance.vessel_id,
       maintenance_type: newMaintenance.maintenance_type as any,
       priority: newMaintenance.priority as any,
-      status: 'scheduled',
+      status: "scheduled",
       title: newMaintenance.title,
       description: newMaintenance.description,
       scheduled_date: new Date(newMaintenance.scheduled_date).toISOString(),
@@ -180,7 +180,7 @@ const MaintenanceManagement: React.FC = () => {
       cost_estimate: parseFloat(newMaintenance.cost_estimate),
       assigned_technician: newMaintenance.assigned_technician,
       location: newMaintenance.location,
-      parts_required: newMaintenance.parts_required.split(',').map(p => p.trim()),
+      parts_required: newMaintenance.parts_required.split(",").map(p => p.trim()),
       created_at: new Date().toISOString()
     };
 
@@ -189,18 +189,18 @@ const MaintenanceManagement: React.FC = () => {
     
     // Reset form
     setNewMaintenance({
-      vessel_name: '',
-      vessel_id: '',
-      maintenance_type: '',
-      priority: '',
-      title: '',
-      description: '',
-      scheduled_date: '',
-      estimated_duration: '',
-      cost_estimate: '',
-      assigned_technician: '',
-      location: '',
-      parts_required: ''
+      vessel_name: "",
+      vessel_id: "",
+      maintenance_type: "",
+      priority: "",
+      title: "",
+      description: "",
+      scheduled_date: "",
+      estimated_duration: "",
+      cost_estimate: "",
+      assigned_technician: "",
+      location: "",
+      parts_required: ""
     });
 
     toast({
@@ -211,43 +211,43 @@ const MaintenanceManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'scheduled': return 'bg-info text-info-foreground';
-      case 'in_progress': return 'bg-warning text-warning-foreground';
-      case 'completed': return 'bg-success text-success-foreground';
-      case 'overdue': return 'bg-destructive text-destructive-foreground';
-      case 'cancelled': return 'bg-muted text-muted-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "scheduled": return "bg-info text-info-foreground";
+    case "in_progress": return "bg-warning text-warning-foreground";
+    case "completed": return "bg-success text-success-foreground";
+    case "overdue": return "bg-destructive text-destructive-foreground";
+    case "cancelled": return "bg-muted text-muted-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'scheduled': return 'Agendada';
-      case 'in_progress': return 'Em Andamento';
-      case 'completed': return 'Concluída';
-      case 'overdue': return 'Atrasada';
-      case 'cancelled': return 'Cancelada';
-      default: return 'Desconhecido';
+    case "scheduled": return "Agendada";
+    case "in_progress": return "Em Andamento";
+    case "completed": return "Concluída";
+    case "overdue": return "Atrasada";
+    case "cancelled": return "Cancelada";
+    default: return "Desconhecido";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'low': return 'text-success';
-      case 'medium': return 'text-warning';
-      case 'high': return 'text-orange-500';
-      case 'critical': return 'text-destructive';
-      default: return 'text-muted-foreground';
+    case "low": return "text-success";
+    case "medium": return "text-warning";
+    case "high": return "text-orange-500";
+    case "critical": return "text-destructive";
+    default: return "text-muted-foreground";
     }
   };
 
   const getMaintenanceTypeIcon = (type: string) => {
     switch (type) {
-      case 'preventive': return <Shield className="h-4 w-4 text-success" />;
-      case 'corrective': return <Wrench className="h-4 w-4 text-warning" />;
-      case 'emergency': return <AlertTriangle className="h-4 w-4 text-destructive" />;
-      case 'inspection': return <CheckCircle className="h-4 w-4 text-info" />;
-      default: return <Settings className="h-4 w-4 text-muted-foreground" />;
+    case "preventive": return <Shield className="h-4 w-4 text-success" />;
+    case "corrective": return <Wrench className="h-4 w-4 text-warning" />;
+    case "emergency": return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    case "inspection": return <CheckCircle className="h-4 w-4 text-info" />;
+    default: return <Settings className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -256,8 +256,8 @@ const MaintenanceManagement: React.FC = () => {
                          record.vessel_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          record.assigned_technician.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesStatus = statusFilter === 'all' || record.status === statusFilter;
-    const matchesPriority = priorityFilter === 'all' || record.priority === priorityFilter;
+    const matchesStatus = statusFilter === "all" || record.status === statusFilter;
+    const matchesPriority = priorityFilter === "all" || record.priority === priorityFilter;
     
     return matchesSearch && matchesStatus && matchesPriority;
   });
@@ -265,10 +265,10 @@ const MaintenanceManagement: React.FC = () => {
   // Calculate stats
   const stats = {
     total: maintenanceRecords.length,
-    scheduled: maintenanceRecords.filter(r => r.status === 'scheduled').length,
-    inProgress: maintenanceRecords.filter(r => r.status === 'in_progress').length,
-    overdue: maintenanceRecords.filter(r => r.status === 'overdue').length,
-    completed: maintenanceRecords.filter(r => r.status === 'completed').length,
+    scheduled: maintenanceRecords.filter(r => r.status === "scheduled").length,
+    inProgress: maintenanceRecords.filter(r => r.status === "in_progress").length,
+    overdue: maintenanceRecords.filter(r => r.status === "overdue").length,
+    completed: maintenanceRecords.filter(r => r.status === "completed").length,
     totalCost: maintenanceRecords.reduce((sum, r) => sum + (r.actual_cost || r.cost_estimate), 0)
   };
 
@@ -330,9 +330,9 @@ const MaintenanceManagement: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Custo Total</p>
                 <p className="text-2xl font-bold text-success">
-                  {new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL'
+                  {new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL"
                   }).format(stats.totalCost)}
                 </p>
               </div>
@@ -557,11 +557,11 @@ const MaintenanceManagement: React.FC = () => {
               <Wrench className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <h3 className="text-lg font-medium mb-2">Nenhuma manutenção encontrada</h3>
               <p className="text-muted-foreground mb-4">
-                {searchTerm || statusFilter !== 'all' || priorityFilter !== 'all' 
-                  ? 'Tente ajustar os filtros de busca' 
-                  : 'Agende a primeira manutenção para sua frota'}
+                {searchTerm || statusFilter !== "all" || priorityFilter !== "all" 
+                  ? "Tente ajustar os filtros de busca" 
+                  : "Agende a primeira manutenção para sua frota"}
               </p>
-              {!searchTerm && statusFilter === 'all' && priorityFilter === 'all' && (
+              {!searchTerm && statusFilter === "all" && priorityFilter === "all" && (
                 <Button onClick={() => setShowAddDialog(true)}>
                   <Plus className="h-4 w-4 mr-2" />
                   Agendar Manutenção
@@ -602,7 +602,7 @@ const MaintenanceManagement: React.FC = () => {
                         </div>
                         <div>
                           <span className="font-medium">Data Agendada:</span>
-                          <p>{new Date(record.scheduled_date).toLocaleDateString('pt-BR')}</p>
+                          <p>{new Date(record.scheduled_date).toLocaleDateString("pt-BR")}</p>
                         </div>
                         <div>
                           <span className="font-medium">Técnico:</span>
@@ -614,7 +614,7 @@ const MaintenanceManagement: React.FC = () => {
                         </div>
                       </div>
                       
-                      {record.status === 'in_progress' && (
+                      {record.status === "in_progress" && (
                         <div className="mt-4">
                           <div className="flex justify-between text-sm mb-1">
                             <span>Progresso</span>
@@ -698,7 +698,7 @@ const MaintenanceManagement: React.FC = () => {
                   <div>
                     <Label>Data Agendada</Label>
                     <p className="mt-1 text-sm">
-                      {new Date(selectedRecord.scheduled_date).toLocaleString('pt-BR')}
+                      {new Date(selectedRecord.scheduled_date).toLocaleString("pt-BR")}
                     </p>
                   </div>
                   <div>
@@ -717,9 +717,9 @@ const MaintenanceManagement: React.FC = () => {
                   <div>
                     <Label>Custo Estimado</Label>
                     <p className="mt-1 text-lg font-semibold text-success">
-                      {new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL'
+                      {new Intl.NumberFormat("pt-BR", {
+                        style: "currency",
+                        currency: "BRL"
                       }).format(selectedRecord.cost_estimate)}
                     </p>
                   </div>
@@ -727,9 +727,9 @@ const MaintenanceManagement: React.FC = () => {
                     <div>
                       <Label>Custo Real</Label>
                       <p className="mt-1 text-lg font-semibold">
-                        {new Intl.NumberFormat('pt-BR', {
-                          style: 'currency',
-                          currency: 'BRL'
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL"
                         }).format(selectedRecord.actual_cost)}
                       </p>
                     </div>
@@ -755,18 +755,18 @@ const MaintenanceManagement: React.FC = () => {
                     <div>
                       <p className="font-medium text-sm">Manutenção Agendada</p>
                       <p className="text-xs text-muted-foreground">
-                        {new Date(selectedRecord.created_at).toLocaleString('pt-BR')}
+                        {new Date(selectedRecord.created_at).toLocaleString("pt-BR")}
                       </p>
                     </div>
                   </div>
                   
-                  {selectedRecord.status === 'in_progress' && (
+                  {selectedRecord.status === "in_progress" && (
                     <div className="flex items-center gap-3 p-3 border rounded-lg">
                       <Activity className="h-4 w-4 text-warning" />
                       <div>
                         <p className="font-medium text-sm">Manutenção Iniciada</p>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(selectedRecord.scheduled_date).toLocaleString('pt-BR')}
+                          {new Date(selectedRecord.scheduled_date).toLocaleString("pt-BR")}
                         </p>
                       </div>
                     </div>
@@ -778,7 +778,7 @@ const MaintenanceManagement: React.FC = () => {
                       <div>
                         <p className="font-medium text-sm">Manutenção Concluída</p>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(selectedRecord.completed_date).toLocaleString('pt-BR')}
+                          {new Date(selectedRecord.completed_date).toLocaleString("pt-BR")}
                         </p>
                       </div>
                     </div>

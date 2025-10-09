@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { 
   Users, 
   MessageSquare, 
@@ -23,17 +23,17 @@ import {
   Calendar,
   MapPin,
   AlertTriangle
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface UserPresence {
   user_id: string;
   name: string;
   email: string;
   avatar_url?: string;
-  status: 'online' | 'busy' | 'away' | 'offline';
+  status: "online" | "busy" | "away" | "offline";
   last_seen: string;
   current_page?: string;
   vessel_id?: string;
@@ -45,7 +45,7 @@ interface ChatMessage {
   user_name: string;
   message: string;
   timestamp: string;
-  type: 'text' | 'system' | 'file' | 'location';
+  type: "text" | "system" | "file" | "location";
   metadata?: any;
 }
 
@@ -56,7 +56,7 @@ interface WorkspaceUpdate {
   action: string;
   description: string;
   timestamp: string;
-  priority: 'low' | 'medium' | 'high';
+  priority: "low" | "medium" | "high";
   vessel_id?: string;
   related_data?: any;
 }
@@ -65,9 +65,9 @@ const RealTimeWorkspace: React.FC = () => {
   const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [workspaceUpdates, setWorkspaceUpdates] = useState<WorkspaceUpdate[]>([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [selectedRoom, setSelectedRoom] = useState('general');
-  const [myStatus, setMyStatus] = useState<'online' | 'busy' | 'away'>('online');
+  const [newMessage, setNewMessage] = useState("");
+  const [selectedRoom, setSelectedRoom] = useState("general");
+  const [myStatus, setMyStatus] = useState<"online" | "busy" | "away">("online");
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
@@ -76,7 +76,7 @@ const RealTimeWorkspace: React.FC = () => {
 
   // Scroll para última mensagem
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const RealTimeWorkspace: React.FC = () => {
         setIsLoading(true);
 
         // Canal principal do workspace
-        const channel = supabase.channel('maritime_workspace', {
+        const channel = supabase.channel("maritime_workspace", {
           config: {
             presence: {
               key: user.id,
@@ -104,7 +104,7 @@ const RealTimeWorkspace: React.FC = () => {
 
         // Configurar presença
         channel
-          .on('presence', { event: 'sync' }, () => {
+          .on("presence", { event: "sync" }, () => {
             const presenceState = channel.presenceState();
             const users: UserPresence[] = [];
             
@@ -114,10 +114,10 @@ const RealTimeWorkspace: React.FC = () => {
                 const presence = presences[0] as any;
                 users.push({
                   user_id: userId,
-                  name: presence.name || 'Usuário',
-                  email: presence.email || '',
+                  name: presence.name || "Usuário",
+                  email: presence.email || "",
                   avatar_url: presence.avatar_url,
-                  status: presence.status || 'online',
+                  status: presence.status || "online",
                   last_seen: presence.last_seen || new Date().toISOString(),
                   current_page: presence.current_page,
                   vessel_id: presence.vessel_id
@@ -127,30 +127,30 @@ const RealTimeWorkspace: React.FC = () => {
             
             setOnlineUsers(users);
           })
-          .on('presence', { event: 'join' }, ({ key, newPresences }) => {
+          .on("presence", { event: "join" }, ({ key, newPresences }) => {
             const newUser = newPresences[0];
             toast({
               title: `${newUser.name} entrou no workspace`,
-              description: 'Usuário conectado',
+              description: "Usuário conectado",
             });
           })
-          .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
+          .on("presence", { event: "leave" }, ({ key, leftPresences }) => {
             const leftUser = leftPresences[0];
             toast({
               title: `${leftUser.name} saiu do workspace`,
-              description: 'Usuário desconectado',
+              description: "Usuário desconectado",
             });
           });
 
         // Configurar mensagens de chat
-        channel.on('broadcast', { event: 'chat_message' }, (payload) => {
+        channel.on("broadcast", { event: "chat_message" }, (payload) => {
           const message: ChatMessage = {
             id: Date.now().toString(),
             user_id: payload.payload.user_id,
             user_name: payload.payload.user_name,
             message: payload.payload.message,
             timestamp: payload.payload.timestamp,
-            type: payload.payload.type || 'text',
+            type: payload.payload.type || "text",
             metadata: payload.payload.metadata
           };
           
@@ -158,7 +158,7 @@ const RealTimeWorkspace: React.FC = () => {
         });
 
         // Configurar atualizações do workspace
-        channel.on('broadcast', { event: 'workspace_update' }, (payload) => {
+        channel.on("broadcast", { event: "workspace_update" }, (payload) => {
           const update: WorkspaceUpdate = {
             id: Date.now().toString(),
             user_id: payload.user_id,
@@ -166,7 +166,7 @@ const RealTimeWorkspace: React.FC = () => {
             action: payload.action,
             description: payload.description,
             timestamp: payload.timestamp,
-            priority: payload.priority || 'low',
+            priority: payload.priority || "low",
             vessel_id: payload.vessel_id,
             related_data: payload.related_data
           };
@@ -176,11 +176,11 @@ const RealTimeWorkspace: React.FC = () => {
 
         // Fazer subscribe
         await channel.subscribe(async (status) => {
-          if (status === 'SUBSCRIBED') {
+          if (status === "SUBSCRIBED") {
             // Trackear presença
             await channel.track({
               user_id: user.id,
-              name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuário',
+              name: user.user_metadata?.full_name || user.email?.split("@")[0] || "Usuário",
               email: user.email,
               avatar_url: user.user_metadata?.avatar_url,
               status: myStatus,
@@ -195,11 +195,10 @@ const RealTimeWorkspace: React.FC = () => {
         });
 
       } catch (error) {
-        console.error('Error setting up realtime:', error);
         toast({
-          title: 'Erro',
-          description: 'Falha ao conectar ao workspace em tempo real',
-          variant: 'destructive'
+          title: "Erro",
+          description: "Falha ao conectar ao workspace em tempo real",
+          variant: "destructive"
         });
       } finally {
         setIsLoading(false);
@@ -221,25 +220,25 @@ const RealTimeWorkspace: React.FC = () => {
     // Simular mensagens iniciais
     const initialMessages: ChatMessage[] = [
       {
-        id: '1',
-        user_id: 'system',
-        user_name: 'Sistema',
-        message: 'Bem-vindo ao workspace marítimo em tempo real!',
+        id: "1",
+        user_id: "system",
+        user_name: "Sistema",
+        message: "Bem-vindo ao workspace marítimo em tempo real!",
         timestamp: new Date().toISOString(),
-        type: 'system'
+        type: "system"
       }
     ];
 
     // Simular atualizações do workspace
     const initialUpdates: WorkspaceUpdate[] = [
       {
-        id: '1',
-        user_id: 'system',
-        user_name: 'Sistema',
-        action: 'workspace_started',
-        description: 'Workspace iniciado com sucesso',
+        id: "1",
+        user_id: "system",
+        user_name: "Sistema",
+        action: "workspace_started",
+        description: "Workspace iniciado com sucesso",
         timestamp: new Date().toISOString(),
-        priority: 'low'
+        priority: "low"
       }
     ];
 
@@ -253,40 +252,39 @@ const RealTimeWorkspace: React.FC = () => {
 
     try {
       await channelRef.current.send({
-        type: 'broadcast',
-        event: 'chat_message',
+        type: "broadcast",
+        event: "chat_message",
         payload: {
           user_id: user.id,
-          user_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuário',
+          user_name: user.user_metadata?.full_name || user.email?.split("@")[0] || "Usuário",
           message: newMessage,
           timestamp: new Date().toISOString(),
-          type: 'text',
+          type: "text",
           room: selectedRoom
         }
       });
 
-      setNewMessage('');
+      setNewMessage("");
     } catch (error) {
-      console.error('Error sending message:', error);
       toast({
-        title: 'Erro',
-        description: 'Falha ao enviar mensagem',
-        variant: 'destructive'
+        title: "Erro",
+        description: "Falha ao enviar mensagem",
+        variant: "destructive"
       });
     }
   };
 
   // Enviar atualização do workspace
-  const sendWorkspaceUpdate = async (action: string, description: string, priority: 'low' | 'medium' | 'high' = 'medium') => {
+  const sendWorkspaceUpdate = async (action: string, description: string, priority: "low" | "medium" | "high" = "medium") => {
     if (!user || !channelRef.current) return;
 
     try {
       await channelRef.current.send({
-        type: 'broadcast',
-        event: 'workspace_update',
+        type: "broadcast",
+        event: "workspace_update",
         payload: {
           user_id: user.id,
-          user_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuário',
+          user_name: user.user_metadata?.full_name || user.email?.split("@")[0] || "Usuário",
           action,
           description,
           timestamp: new Date().toISOString(),
@@ -294,12 +292,11 @@ const RealTimeWorkspace: React.FC = () => {
         }
       });
     } catch (error) {
-      console.error('Error sending workspace update:', error);
     }
   };
 
   // Alterar status
-  const changeStatus = async (newStatus: 'online' | 'busy' | 'away') => {
+  const changeStatus = async (newStatus: "online" | "busy" | "away") => {
     if (!channelRef.current) return;
 
     setMyStatus(newStatus);
@@ -307,7 +304,7 @@ const RealTimeWorkspace: React.FC = () => {
     try {
       await channelRef.current.track({
         user_id: user?.id,
-        name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuário',
+        name: user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Usuário",
         email: user?.email,
         avatar_url: user?.user_metadata?.avatar_url,
         status: newStatus,
@@ -315,34 +312,33 @@ const RealTimeWorkspace: React.FC = () => {
         current_page: window.location.pathname
       });
     } catch (error) {
-      console.error('Error updating status:', error);
     }
   };
 
   // Obter cor do status
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'online': return 'bg-green-500';
-      case 'busy': return 'bg-red-500';
-      case 'away': return 'bg-yellow-500';
-      default: return 'bg-gray-400';
+    case "online": return "bg-green-500";
+    case "busy": return "bg-red-500";
+    case "away": return "bg-yellow-500";
+    default: return "bg-gray-400";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'online': return <Circle className="h-3 w-3 fill-current" />;
-      case 'busy': return <AlertTriangle className="h-3 w-3" />;
-      case 'away': return <Clock className="h-3 w-3" />;
-      default: return <Circle className="h-3 w-3" />;
+    case "online": return <Circle className="h-3 w-3 fill-current" />;
+    case "busy": return <AlertTriangle className="h-3 w-3" />;
+    case "away": return <Clock className="h-3 w-3" />;
+    default: return <Circle className="h-3 w-3" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-600 bg-red-50 border-red-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      default: return 'text-blue-600 bg-blue-50 border-blue-200';
+    case "high": return "text-red-600 bg-red-50 border-red-200";
+    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    default: return "text-blue-600 bg-blue-50 border-blue-200";
     }
   };
 
@@ -362,27 +358,27 @@ const RealTimeWorkspace: React.FC = () => {
               <div className="text-sm font-medium">Seu Status:</div>
               <div className="flex gap-1">
                 <Button
-                  variant={myStatus === 'online' ? 'default' : 'outline'}
+                  variant={myStatus === "online" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => changeStatus('online')}
+                  onClick={() => changeStatus("online")}
                   className="text-xs"
                 >
                   <Circle className="h-3 w-3 mr-1 fill-current text-green-500" />
                   Online
                 </Button>
                 <Button
-                  variant={myStatus === 'busy' ? 'default' : 'outline'}
+                  variant={myStatus === "busy" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => changeStatus('busy')}
+                  onClick={() => changeStatus("busy")}
                   className="text-xs"
                 >
                   <AlertTriangle className="h-3 w-3 mr-1 text-red-500" />
                   Ocupado
                 </Button>
                 <Button
-                  variant={myStatus === 'away' ? 'default' : 'outline'}
+                  variant={myStatus === "away" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => changeStatus('away')}
+                  onClick={() => changeStatus("away")}
                   className="text-xs"
                 >
                   <Clock className="h-3 w-3 mr-1 text-yellow-500" />
@@ -429,7 +425,7 @@ const RealTimeWorkspace: React.FC = () => {
             <Button 
               size="sm" 
               className="w-full justify-start"
-              onClick={() => sendWorkspaceUpdate('emergency_drill', 'Simulado de emergência iniciado', 'high')}
+              onClick={() => sendWorkspaceUpdate("emergency_drill", "Simulado de emergência iniciado", "high")}
             >
               <AlertTriangle className="h-4 w-4 mr-2" />
               Simulado de Emergência
@@ -438,7 +434,7 @@ const RealTimeWorkspace: React.FC = () => {
               size="sm" 
               variant="outline"
               className="w-full justify-start"
-              onClick={() => sendWorkspaceUpdate('shift_change', 'Troca de turno em andamento', 'medium')}
+              onClick={() => sendWorkspaceUpdate("shift_change", "Troca de turno em andamento", "medium")}
             >
               <Clock className="h-4 w-4 mr-2" />
               Troca de Turno
@@ -447,7 +443,7 @@ const RealTimeWorkspace: React.FC = () => {
               size="sm" 
               variant="outline"
               className="w-full justify-start"
-              onClick={() => sendWorkspaceUpdate('maintenance_alert', 'Manutenção programada', 'low')}
+              onClick={() => sendWorkspaceUpdate("maintenance_alert", "Manutenção programada", "low")}
             >
               <Activity className="h-4 w-4 mr-2" />
               Alerta de Manutenção
@@ -499,16 +495,16 @@ const RealTimeWorkspace: React.FC = () => {
                 <ScrollArea className="flex-1 p-4">
                   <div className="space-y-4">
                     {chatMessages.map((message) => (
-                      <div key={message.id} className={`flex gap-3 ${message.type === 'system' ? 'justify-center' : ''}`}>
-                        {message.type !== 'system' && (
+                      <div key={message.id} className={`flex gap-3 ${message.type === "system" ? "justify-center" : ""}`}>
+                        {message.type !== "system" && (
                           <Avatar className="h-8 w-8 flex-shrink-0">
                             <AvatarFallback className="text-xs">
                               {message.user_name.substring(0, 2).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                         )}
-                        <div className={`flex-1 ${message.type === 'system' ? 'text-center' : ''}`}>
-                          {message.type === 'system' ? (
+                        <div className={`flex-1 ${message.type === "system" ? "text-center" : ""}`}>
+                          {message.type === "system" ? (
                             <Badge variant="secondary" className="text-xs">
                               {message.message}
                             </Badge>
@@ -517,7 +513,7 @@ const RealTimeWorkspace: React.FC = () => {
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="font-medium text-sm">{message.user_name}</span>
                                 <span className="text-xs text-muted-foreground">
-                                  {new Date(message.timestamp).toLocaleTimeString('pt-BR')}
+                                  {new Date(message.timestamp).toLocaleTimeString("pt-BR")}
                                 </span>
                               </div>
                               <div className="text-sm bg-accent/20 rounded-lg p-2">
@@ -539,7 +535,7 @@ const RealTimeWorkspace: React.FC = () => {
                       placeholder="Digite sua mensagem..."
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                      onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                       className="flex-1"
                     />
                     <Button onClick={sendMessage} disabled={!newMessage.trim()}>
@@ -574,12 +570,12 @@ const RealTimeWorkspace: React.FC = () => {
                             </div>
                             <p className="text-sm mb-2">{update.description}</p>
                             <p className="text-xs text-muted-foreground">
-                              {new Date(update.timestamp).toLocaleString('pt-BR')}
+                              {new Date(update.timestamp).toLocaleString("pt-BR")}
                             </p>
                           </div>
                           <div className={`w-2 h-2 rounded-full ${
-                            update.priority === 'high' ? 'bg-red-500' :
-                            update.priority === 'medium' ? 'bg-yellow-500' : 'bg-blue-500'
+                            update.priority === "high" ? "bg-red-500" :
+                              update.priority === "medium" ? "bg-yellow-500" : "bg-blue-500"
                           }`} />
                         </div>
                       </div>

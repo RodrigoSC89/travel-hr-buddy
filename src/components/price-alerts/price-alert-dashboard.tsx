@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { EnhancedAlertManagement } from './enhanced-alert-management';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { AlertCircle, Plus, TrendingDown, TrendingUp, Bell, Loader2, RefreshCw, ArrowLeft } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase as supabaseClient } from '@/integrations/supabase/client';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EnhancedAlertManagement } from "./enhanced-alert-management";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { AlertCircle, Plus, TrendingDown, TrendingUp, Bell, Loader2, RefreshCw, ArrowLeft } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase as supabaseClient } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 const supabase: any = supabaseClient;
 
 
@@ -57,9 +57,9 @@ export const PriceAlertDashboardLegacy = () => {
   const [isCreatingAlert, setIsCreatingAlert] = useState(false);
   const [isCheckingPrices, setIsCheckingPrices] = useState(false);
   const [newAlert, setNewAlert] = useState({
-    product_name: '',
-    target_price: '',
-    product_url: ''
+    product_name: "",
+    target_price: "",
+    product_url: ""
   });
   const { toast } = useToast();
   const { user } = useAuth();
@@ -76,15 +76,14 @@ export const PriceAlertDashboardLegacy = () => {
   const loadAlerts = async () => {
     try {
       const { data, error } = await supabase
-        .from('price_alerts')
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
+        .from("price_alerts")
+        .select("*")
+        .eq("user_id", user?.id)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setAlerts(data || []);
     } catch (error) {
-      console.error('Error loading alerts:', error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os alertas",
@@ -98,24 +97,23 @@ export const PriceAlertDashboardLegacy = () => {
   const loadNotifications = async () => {
     try {
       const { data, error } = await supabase
-        .from('price_notifications')
-        .select('*')
-        .eq('user_id', user?.id)
-        .eq('is_read', false)
-        .order('created_at', { ascending: false })
+        .from("price_notifications")
+        .select("*")
+        .eq("user_id", user?.id)
+        .eq("is_read", false)
+        .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       setNotifications(data || []);
     } catch (error) {
-      console.error('Error loading notifications:', error);
     }
   };
 
   const checkPriceForAlert = async (alert: PriceAlert) => {
     try {
       // Call Supabase Edge Function for price checking
-      const { data, error } = await supabase.functions.invoke('check-price', {
+      const { data, error } = await supabase.functions.invoke("check-price", {
         body: {
           product_name: alert.product_name,
           product_url: alert.product_url
@@ -125,7 +123,6 @@ export const PriceAlertDashboardLegacy = () => {
       if (error) throw error;
       return data?.price || 0;
     } catch (error) {
-      console.error('Error checking price:', error);
       // Improved fallback with more realistic price simulation
       return Math.random() * 2000 + 500; // More realistic price range
     }
@@ -152,7 +149,7 @@ export const PriceAlertDashboardLegacy = () => {
 
       // Create alert in Supabase
       const { data, error } = await supabase
-        .from('price_alerts')
+        .from("price_alerts")
         .insert([{
           user_id: user?.id,
           product_name: newAlert.product_name,
@@ -168,14 +165,14 @@ export const PriceAlertDashboardLegacy = () => {
 
       // Add to price history
       await supabase
-        .from('price_history')
+        .from("price_history")
         .insert([{
           alert_id: data.id,
           price: currentPrice,
           checked_at: new Date().toISOString()
         }]);
 
-      setNewAlert({ product_name: '', target_price: '', product_url: '' });
+      setNewAlert({ product_name: "", target_price: "", product_url: "" });
       setIsAddingAlert(false);
       loadAlerts(); // Reload alerts
       
@@ -184,7 +181,6 @@ export const PriceAlertDashboardLegacy = () => {
         description: `Alerta para ${newAlert.product_name} foi adicionado com sucesso.`
       });
     } catch (error) {
-      console.error('Error creating alert:', error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o alerta",
@@ -201,9 +197,9 @@ export const PriceAlertDashboardLegacy = () => {
 
     try {
       const { error } = await supabase
-        .from('price_alerts')
+        .from("price_alerts")
         .update({ is_active: !alert.is_active })
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
       
@@ -211,7 +207,6 @@ export const PriceAlertDashboardLegacy = () => {
         alert.id === id ? { ...alert, is_active: !alert.is_active } : alert
       ));
     } catch (error) {
-      console.error('Error toggling alert:', error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o alerta",
@@ -223,9 +218,9 @@ export const PriceAlertDashboardLegacy = () => {
   const removeAlert = async (id: string) => {
     try {
       const { error } = await supabase
-        .from('price_alerts')
+        .from("price_alerts")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
       
@@ -235,7 +230,6 @@ export const PriceAlertDashboardLegacy = () => {
         description: "O alerta de preço foi removido com sucesso."
       });
     } catch (error) {
-      console.error('Error removing alert:', error);
       toast({
         title: "Erro",
         description: "Não foi possível remover o alerta",
@@ -248,7 +242,7 @@ export const PriceAlertDashboardLegacy = () => {
     setIsCheckingPrices(true);
     try {
       // Use Supabase Edge Function instead of direct API call
-      const { data, error } = await supabase.functions.invoke('monitor-prices', {
+      const { data, error } = await supabase.functions.invoke("monitor-prices", {
         body: { user_id: user?.id }
       });
       
@@ -262,7 +256,6 @@ export const PriceAlertDashboardLegacy = () => {
         });
       }
     } catch (error) {
-      console.error('Error refreshing prices:', error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar os preços",
@@ -297,7 +290,7 @@ export const PriceAlertDashboardLegacy = () => {
           <Button 
             variant="outline" 
             size="sm"
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -370,7 +363,7 @@ export const PriceAlertDashboardLegacy = () => {
                         Criando...
                       </>
                     ) : (
-                      'Criar Alerta'
+                      "Criar Alerta"
                     )}
                   </Button>
                 </div>
@@ -463,7 +456,7 @@ export const PriceAlertDashboardLegacy = () => {
                       <div>
                         <CardTitle className="text-lg">{alert.product_name}</CardTitle>
                         <p className="text-sm text-muted-foreground">
-                          Criado em {new Date(alert.created_at).toLocaleDateString('pt-BR')}
+                          Criado em {new Date(alert.created_at).toLocaleDateString("pt-BR")}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -483,11 +476,11 @@ export const PriceAlertDashboardLegacy = () => {
                       <div>
                         <p className="text-sm text-muted-foreground">Preço Atual</p>
                         <p className="text-2xl font-bold">
-                          R$ {alert.current_price ? alert.current_price.toFixed(2) : '---'}
+                          R$ {alert.current_price ? alert.current_price.toFixed(2) : "---"}
                         </p>
                         {priceChange !== 0 && (
                           <div className={`flex items-center gap-1 text-sm ${
-                            priceChange < 0 ? 'text-green-500' : 'text-red-500'
+                            priceChange < 0 ? "text-green-500" : "text-red-500"
                           }`}>
                             {priceChange < 0 ? (
                               <TrendingDown className="w-4 h-4" />
@@ -509,7 +502,7 @@ export const PriceAlertDashboardLegacy = () => {
                             ? `R$ ${(alert.current_price - alert.target_price).toFixed(2)} acima`
                             : alert.current_price 
                               ? `R$ ${(alert.target_price - alert.current_price).toFixed(2)} abaixo`
-                              : 'Aguardando verificação'
+                              : "Aguardando verificação"
                           }
                         </p>
                       </div>
@@ -518,8 +511,8 @@ export const PriceAlertDashboardLegacy = () => {
                         <p className="text-sm text-muted-foreground">Última Verificação</p>
                         <p className="text-sm">
                           {alert.last_checked_at 
-                            ? new Date(alert.last_checked_at).toLocaleString('pt-BR')
-                            : 'Nunca verificado'
+                            ? new Date(alert.last_checked_at).toLocaleString("pt-BR")
+                            : "Nunca verificado"
                           }
                         </p>
                         <div className="flex gap-2 mt-2">
@@ -528,7 +521,7 @@ export const PriceAlertDashboardLegacy = () => {
                             variant="outline"
                             onClick={() => toggleAlert(alert.id)}
                           >
-                            {alert.is_active ? 'Pausar' : 'Ativar'}
+                            {alert.is_active ? "Pausar" : "Ativar"}
                           </Button>
                           <Button
                             size="sm"

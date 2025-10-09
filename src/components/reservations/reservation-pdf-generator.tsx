@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { 
   FileText, 
   Download, 
@@ -15,8 +15,8 @@ import {
   Phone,
   ExternalLink,
   QrCode
-} from 'lucide-react';
-import { EnhancedReservation } from './enhanced-reservations-dashboard';
+} from "lucide-react";
+import { EnhancedReservation } from "./enhanced-reservations-dashboard";
 
 interface ReservationPDFGeneratorProps {
   reservation: EnhancedReservation;
@@ -36,7 +36,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
     
     try {
       // Create a new window for the PDF content
-      const printWindow = window.open('', '_blank');
+      const printWindow = window.open("", "_blank");
       if (!printWindow) return;
 
       const pdfContent = generatePDFContent();
@@ -49,7 +49,6 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
         printWindow.print();
       };
     } catch (error) {
-      console.error('Error generating PDF:', error);
     } finally {
       setGenerating(false);
     }
@@ -58,28 +57,28 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
   const generatePDFContent = () => {
     const getStatusLabel = (status: string) => {
       switch (status) {
-        case 'confirmed': return 'Confirmada';
-        case 'pending': return 'Pendente';
-        case 'cancelled': return 'Cancelada';
-        case 'completed': return 'Concluída';
-        default: return 'Desconhecida';
+      case "confirmed": return "Confirmada";
+      case "pending": return "Pendente";
+      case "cancelled": return "Cancelada";
+      case "completed": return "Concluída";
+      default: return "Desconhecida";
       }
     };
 
     const getTypeLabel = (type: string) => {
       switch (type) {
-        case 'hotel': return 'Hotel / Hospedagem';
-        case 'flight': return 'Voo';
-        case 'transport': return 'Transporte';
-        case 'embarkation': return 'Embarque';
-        case 'other': return 'Outro';
-        default: return type;
+      case "hotel": return "Hotel / Hospedagem";
+      case "flight": return "Voo";
+      case "transport": return "Transporte";
+      case "embarkation": return "Embarque";
+      case "other": return "Outro";
+      default: return type;
       }
     };
 
-    const formatCurrency = (amount: number, currency: string = 'BRL') => {
-      return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
+    const formatCurrency = (amount: number, currency: string = "BRL") => {
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
         currency: currency
       }).format(amount);
     };
@@ -258,7 +257,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
     <div class="header">
         <h1>COMPROVANTE DE RESERVA</h1>
         <p>Sistema Nautilus One - Gestão de Reservas</p>
-        <p>Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
+        <p>Gerado em: ${new Date().toLocaleDateString("pt-BR")} às ${new Date().toLocaleTimeString("pt-BR")}</p>
     </div>
     
     <div class="reservation-info">
@@ -277,15 +276,15 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
             <div class="info-row">
                 <span class="info-label">Início:</span>
                 <span class="info-value">
-                    ${new Date(reservation.start_date).toLocaleDateString('pt-BR')} às 
-                    ${new Date(reservation.start_date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                    ${new Date(reservation.start_date).toLocaleDateString("pt-BR")} às 
+                    ${new Date(reservation.start_date).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                 </span>
             </div>
             <div class="info-row">
                 <span class="info-label">Término:</span>
                 <span class="info-value">
-                    ${new Date(reservation.end_date).toLocaleDateString('pt-BR')} às 
-                    ${new Date(reservation.end_date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                    ${new Date(reservation.end_date).toLocaleDateString("pt-BR")} às 
+                    ${new Date(reservation.end_date).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                 </span>
             </div>
             <div class="info-row">
@@ -303,19 +302,19 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
                 <span class="info-label">Local:</span>
                 <span class="info-value">${reservation.location}</span>
             </div>
-            ` : ''}
+            ` : ""}
             ${reservation.address ? `
             <div class="info-row">
                 <span class="info-label">Endereço:</span>
                 <span class="info-value">${reservation.address}</span>
             </div>
-            ` : ''}
+            ` : ""}
             ${reservation.contact_info ? `
             <div class="info-row">
                 <span class="info-label">Contato:</span>
                 <span class="info-value">${reservation.contact_info}</span>
             </div>
-            ` : ''}
+            ` : ""}
         </div>
         
         ${reservation.confirmation_number || reservation.room_type || reservation.total_amount ? `
@@ -326,13 +325,13 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
                 <span class="info-label">Confirmação:</span>
                 <span class="info-value confirmation-code">${reservation.confirmation_number}</span>
             </div>
-            ` : ''}
+            ` : ""}
             ${reservation.room_type ? `
             <div class="info-row">
                 <span class="info-label">Tipo/Serviço:</span>
                 <span class="info-value">${reservation.room_type}</span>
             </div>
-            ` : ''}
+            ` : ""}
             ${reservation.total_amount ? `
             <div class="info-row">
                 <span class="info-label">Valor Total:</span>
@@ -340,26 +339,26 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
                     ${formatCurrency(reservation.total_amount, reservation.currency)}
                 </span>
             </div>
-            ` : ''}
+            ` : ""}
         </div>
-        ` : ''}
+        ` : ""}
         
         <div class="info-section">
             <h3>👤 Informações do Responsável</h3>
             <div class="info-row">
                 <span class="info-label">Tripulante:</span>
-                <span class="info-value">${reservation.crew_member_name || 'N/A'}</span>
+                <span class="info-value">${reservation.crew_member_name || "N/A"}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Criado em:</span>
-                <span class="info-value">${new Date(reservation.created_at).toLocaleDateString('pt-BR')}</span>
+                <span class="info-value">${new Date(reservation.created_at).toLocaleDateString("pt-BR")}</span>
             </div>
             ${reservation.updated_at !== reservation.created_at ? `
             <div class="info-row">
                 <span class="info-label">Atualizado:</span>
-                <span class="info-value">${new Date(reservation.updated_at).toLocaleDateString('pt-BR')}</span>
+                <span class="info-value">${new Date(reservation.updated_at).toLocaleDateString("pt-BR")}</span>
             </div>
-            ` : ''}
+            ` : ""}
         </div>
     </div>
     
@@ -368,14 +367,14 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
         <h3 style="margin-bottom: 10px; color: #2563eb;">📝 Observações:</h3>
         <p>${reservation.description}</p>
     </div>
-    ` : ''}
+    ` : ""}
     
     ${reservation.notes ? `
     <div class="description">
         <h3 style="margin-bottom: 10px; color: #2563eb;">📋 Notas Internas:</h3>
         <p>${reservation.notes}</p>
     </div>
-    ` : ''}
+    ` : ""}
     
     ${reservation.supplier_url ? `
     <div style="text-align: center; margin: 20px 0;">
@@ -384,7 +383,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
             ${reservation.supplier_url}
         </a>
     </div>
-    ` : ''}
+    ` : ""}
     
     <div class="qr-placeholder">
         QR Code
@@ -415,18 +414,18 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
       });
     } else {
       // Fallback - copy to clipboard
-      const shareText = `Reserva: ${reservation.title}\nData: ${new Date(reservation.start_date).toLocaleDateString('pt-BR')}\nStatus: ${getStatusLabel(reservation.status)}`;
+      const shareText = `Reserva: ${reservation.title}\nData: ${new Date(reservation.start_date).toLocaleDateString("pt-BR")}\nStatus: ${getStatusLabel(reservation.status)}`;
       navigator.clipboard.writeText(shareText);
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'Confirmada';
-      case 'pending': return 'Pendente';
-      case 'cancelled': return 'Cancelada';
-      case 'completed': return 'Concluída';
-      default: return 'Desconhecida';
+    case "confirmed": return "Confirmada";
+    case "pending": return "Pendente";
+    case "cancelled": return "Cancelada";
+    case "completed": return "Concluída";
+    default: return "Desconhecida";
     }
   };
 
@@ -451,10 +450,10 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
               <div className="flex items-center gap-2">
                 <Badge 
                   className={
-                    reservation.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                    reservation.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                    reservation.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                    'bg-blue-100 text-blue-800'
+                    reservation.status === "confirmed" ? "bg-green-100 text-green-800" :
+                      reservation.status === "pending" ? "bg-yellow-100 text-yellow-800" :
+                        reservation.status === "cancelled" ? "bg-red-100 text-red-800" :
+                          "bg-blue-100 text-blue-800"
                   }
                 >
                   {getStatusLabel(reservation.status)}
@@ -467,8 +466,8 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
                   <div className="flex items-center gap-2 text-sm">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <span>
-                      {new Date(reservation.start_date).toLocaleDateString('pt-BR')} - 
-                      {new Date(reservation.end_date).toLocaleDateString('pt-BR')}
+                      {new Date(reservation.start_date).toLocaleDateString("pt-BR")} - 
+                      {new Date(reservation.end_date).toLocaleDateString("pt-BR")}
                     </span>
                   </div>
                   
@@ -483,9 +482,9 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
                     <div className="flex items-center gap-2 text-sm">
                       <DollarSign className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium text-green-600">
-                        {new Intl.NumberFormat('pt-BR', {
-                          style: 'currency',
-                          currency: reservation.currency || 'BRL'
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: reservation.currency || "BRL"
                         }).format(reservation.total_amount)}
                       </span>
                     </div>
@@ -515,7 +514,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
                       <a 
                         href={reservation.supplier_url} 
                         target="_blank" 
-                        className="text-primary hover:underline truncate"
+                        className="text-primary hover:underline truncate" rel="noreferrer"
                       >
                         Site do fornecedor
                       </a>
@@ -540,7 +539,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
               className="flex-1"
             >
               <FileText className="h-4 w-4 mr-2" />
-              {generating ? 'Gerando PDF...' : 'Gerar PDF / Imprimir'}
+              {generating ? "Gerando PDF..." : "Gerar PDF / Imprimir"}
             </Button>
             
             <Button 

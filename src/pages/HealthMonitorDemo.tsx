@@ -1,10 +1,10 @@
-import React from 'react';
-import { HealthStatusDashboard } from '@/components/admin/health-status-dashboard';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ThemeProvider } from '@/components/layout/theme-provider';
-import { ArrowLeft, Activity } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { HealthStatusDashboard } from "@/components/admin/health-status-dashboard";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ThemeProvider } from "@/components/layout/theme-provider";
+import { ArrowLeft, Activity } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 /**
  * Demo page to showcase the Health Status Monitoring Dashboard

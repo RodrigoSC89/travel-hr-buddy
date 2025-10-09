@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface Position { x: number; y: number }
 
@@ -36,7 +36,7 @@ export const DraggableFloating: React.FC<DraggableFloatingProps> = ({
     } catch {
       // Ignore storage errors
     }
-    const initial = typeof defaultPosition === 'function' ? (defaultPosition as () => Position)() : defaultPosition;
+    const initial = typeof defaultPosition === "function" ? (defaultPosition as () => Position)() : defaultPosition;
     return initial;
   });
   const dragState = useRef<{ dragging: boolean; startX: number; startY: number; origX: number; origY: number }>({
@@ -57,8 +57,8 @@ export const DraggableFloating: React.FC<DraggableFloatingProps> = ({
       const maxY = window.innerHeight - rect.height - boundsPadding;
       setPos((p) => ({ x: clamp(p.x, boundsPadding, maxX), y: clamp(p.y, boundsPadding, maxY) }));
     };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [boundsPadding]);
 
   // Persist position
@@ -107,11 +107,11 @@ export const DraggableFloating: React.FC<DraggableFloatingProps> = ({
 
   // Compose style
   const mergedStyle: React.CSSProperties = useMemo(() => ({
-    position: 'fixed',
+    position: "fixed",
     left: pos.x,
     top: pos.y,
     zIndex,
-    touchAction: 'none',
+    touchAction: "none",
     ...style,
   }), [pos.x, pos.y, zIndex, style]);
 

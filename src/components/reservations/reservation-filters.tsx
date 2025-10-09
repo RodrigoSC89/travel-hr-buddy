@@ -1,10 +1,10 @@
-import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Search, Filter, X } from 'lucide-react';
-import { EnhancedReservation } from './enhanced-reservations-dashboard';
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Search, Filter, X } from "lucide-react";
+import { EnhancedReservation } from "./enhanced-reservations-dashboard";
 
 interface ReservationFiltersProps {
   filters: {
@@ -29,11 +29,11 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
 
   const clearFilters = () => {
     onFiltersChange({
-      type: 'all',
-      status: 'all',
+      type: "all",
+      status: "all",
       dateRange: null,
-      searchTerm: '',
-      crewMember: 'all'
+      searchTerm: "",
+      crewMember: "all"
     });
   };
 
@@ -42,11 +42,11 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
   );
 
   const hasActiveFilters = 
-    filters.type !== 'all' || 
-    filters.status !== 'all' || 
+    filters.type !== "all" || 
+    filters.status !== "all" || 
     filters.searchTerm || 
     filters.dateRange || 
-    filters.crewMember !== 'all';
+    filters.crewMember !== "all";
 
   return (
     <Card>
@@ -64,7 +64,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
               <Input
                 placeholder="Buscar por título ou local..."
                 value={filters.searchTerm}
-                onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
+                onChange={(e) => handleFilterChange("searchTerm", e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -72,7 +72,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
             {/* Type Filter */}
             <Select
               value={filters.type}
-              onValueChange={(value) => handleFilterChange('type', value)}
+              onValueChange={(value) => handleFilterChange("type", value)}
             >
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Tipo" />
@@ -90,7 +90,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
             {/* Status Filter */}
             <Select
               value={filters.status}
-              onValueChange={(value) => handleFilterChange('status', value)}
+              onValueChange={(value) => handleFilterChange("status", value)}
             >
               <SelectTrigger className="w-[140px]">
                 <SelectValue placeholder="Status" />
@@ -107,7 +107,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
             {/* Crew Member Filter */}
             <Select
               value={filters.crewMember}
-              onValueChange={(value) => handleFilterChange('crewMember', value)}
+              onValueChange={(value) => handleFilterChange("crewMember", value)}
             >
               <SelectTrigger className="w-[160px]">
                 <SelectValue placeholder="Tripulante" />
@@ -115,7 +115,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
               <SelectContent>
                 <SelectItem value="all">Todos tripulantes</SelectItem>
                 {uniqueCrewMembers.map(member => (
-                  <SelectItem key={member} value={member || ''}>
+                  <SelectItem key={member} value={member || ""}>
                     {member}
                   </SelectItem>
                 ))}
@@ -126,16 +126,16 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
             <div className="flex gap-2">
               <Input
                 type="date"
-                value={filters.dateRange?.from || ''}
-                onChange={(e) => handleFilterChange('dateRange', 
+                value={filters.dateRange?.from || ""}
+                onChange={(e) => handleFilterChange("dateRange", 
                   e.target.value ? { ...filters.dateRange, from: e.target.value } : null
                 )}
                 className="w-[130px]"
               />
               <Input
                 type="date"
-                value={filters.dateRange?.to || ''}
-                onChange={(e) => handleFilterChange('dateRange', 
+                value={filters.dateRange?.to || ""}
+                onChange={(e) => handleFilterChange("dateRange", 
                   filters.dateRange ? { ...filters.dateRange, to: e.target.value } : null
                 )}
                 className="w-[130px]"

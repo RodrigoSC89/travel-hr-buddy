@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Brain, TrendingUp, Download } from 'lucide-react';
-import AIReportGenerator from './AIReportGenerator';
-import DocumentProcessor from '../intelligence/DocumentProcessor';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileText, Brain, TrendingUp, Download } from "lucide-react";
+import AIReportGenerator from "./AIReportGenerator";
+import DocumentProcessor from "../intelligence/DocumentProcessor";
 
 const ReportsDashboard = () => {
   const [activeReport, setActiveReport] = useState<any>(null);

@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import {
   Upload,
   FileText,
@@ -36,26 +36,26 @@ import {
   Users,
   Tag,
   Edit3
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 interface TravelDocument {
   id: string;
   name: string;
-  type: 'passport' | 'visa' | 'ticket' | 'hotel' | 'insurance' | 'receipt' | 'other';
-  category: 'personal' | 'booking' | 'financial' | 'legal';
+  type: "passport" | "visa" | "ticket" | "hotel" | "insurance" | "receipt" | "other";
+  category: "personal" | "booking" | "financial" | "legal";
   fileType: string;
   fileSize: number;
   uploadDate: Date;
   expiryDate?: Date;
-  status: 'valid' | 'expiring' | 'expired' | 'pending';
+  status: "valid" | "expiring" | "expired" | "pending";
   tags: string[];
   isStarred: boolean;
   isShared: boolean;
   sharedWith: string[];
-  visibility: 'private' | 'team' | 'public';
+  visibility: "private" | "team" | "public";
   relatedTrip?: string;
   url: string;
   thumbnailUrl?: string;
@@ -75,10 +75,10 @@ export const TravelDocumentManager = () => {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [documents, setDocuments] = useState<TravelDocument[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedDocument, setSelectedDocument] = useState<TravelDocument | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -87,95 +87,95 @@ export const TravelDocumentManager = () => {
   useState(() => {
     const mockDocuments: TravelDocument[] = [
       {
-        id: '1',
-        name: 'Passaporte - João Silva',
-        type: 'passport',
-        category: 'personal',
-        fileType: 'PDF',
+        id: "1",
+        name: "Passaporte - João Silva",
+        type: "passport",
+        category: "personal",
+        fileType: "PDF",
         fileSize: 2.4,
-        uploadDate: new Date('2024-01-15'),
-        expiryDate: new Date('2029-06-20'),
-        status: 'valid',
-        tags: ['pessoal', 'identificação'],
+        uploadDate: new Date("2024-01-15"),
+        expiryDate: new Date("2029-06-20"),
+        status: "valid",
+        tags: ["pessoal", "identificação"],
         isStarred: true,
         isShared: false,
         sharedWith: [],
-        visibility: 'private',
-        url: '/documents/passport.pdf',
-        uploadedBy: 'João Silva'
+        visibility: "private",
+        url: "/documents/passport.pdf",
+        uploadedBy: "João Silva"
       },
       {
-        id: '2',
-        name: 'Passagem Aérea - Rio Janeiro',
-        type: 'ticket',
-        category: 'booking',
-        fileType: 'PDF',
+        id: "2",
+        name: "Passagem Aérea - Rio Janeiro",
+        type: "ticket",
+        category: "booking",
+        fileType: "PDF",
         fileSize: 0.8,
-        uploadDate: new Date('2024-02-10'),
-        status: 'valid',
-        tags: ['viagem', 'rio de janeiro'],
+        uploadDate: new Date("2024-02-10"),
+        status: "valid",
+        tags: ["viagem", "rio de janeiro"],
         isStarred: false,
         isShared: true,
-        sharedWith: ['maria@empresa.com', 'pedro@empresa.com'],
-        visibility: 'team',
-        relatedTrip: 'Viagem Rio - Fev 2024',
-        url: '/documents/ticket-rio.pdf',
-        uploadedBy: 'João Silva',
-        description: 'Passagem aérea de ida e volta para reunião no Rio de Janeiro'
+        sharedWith: ["maria@empresa.com", "pedro@empresa.com"],
+        visibility: "team",
+        relatedTrip: "Viagem Rio - Fev 2024",
+        url: "/documents/ticket-rio.pdf",
+        uploadedBy: "João Silva",
+        description: "Passagem aérea de ida e volta para reunião no Rio de Janeiro"
       },
       {
-        id: '3',
-        name: 'Voucher Hotel Copacabana',
-        type: 'hotel',
-        category: 'booking',
-        fileType: 'PDF',
+        id: "3",
+        name: "Voucher Hotel Copacabana",
+        type: "hotel",
+        category: "booking",
+        fileType: "PDF",
         fileSize: 1.2,
-        uploadDate: new Date('2024-02-12'),
-        status: 'valid',
-        tags: ['hotel', 'copacabana'],
+        uploadDate: new Date("2024-02-12"),
+        status: "valid",
+        tags: ["hotel", "copacabana"],
         isStarred: false,
         isShared: true,
-        sharedWith: ['equipe-rio@empresa.com'],
-        visibility: 'team',
-        relatedTrip: 'Viagem Rio - Fev 2024',
-        url: '/documents/hotel-voucher.pdf',
-        uploadedBy: 'Maria Santos'
+        sharedWith: ["equipe-rio@empresa.com"],
+        visibility: "team",
+        relatedTrip: "Viagem Rio - Fev 2024",
+        url: "/documents/hotel-voucher.pdf",
+        uploadedBy: "Maria Santos"
       },
       {
-        id: '4',
-        name: 'Seguro Viagem Internacional',
-        type: 'insurance',
-        category: 'legal',
-        fileType: 'PDF',
+        id: "4",
+        name: "Seguro Viagem Internacional",
+        type: "insurance",
+        category: "legal",
+        fileType: "PDF",
         fileSize: 0.6,
-        uploadDate: new Date('2024-01-20'),
-        expiryDate: new Date('2024-12-31'),
-        status: 'expiring',
-        tags: ['seguro', 'internacional'],
+        uploadDate: new Date("2024-01-20"),
+        expiryDate: new Date("2024-12-31"),
+        status: "expiring",
+        tags: ["seguro", "internacional"],
         isStarred: true,
         isShared: false,
         sharedWith: [],
-        visibility: 'private',
-        url: '/documents/travel-insurance.pdf',
-        uploadedBy: 'João Silva'
+        visibility: "private",
+        url: "/documents/travel-insurance.pdf",
+        uploadedBy: "João Silva"
       },
       {
-        id: '5',
-        name: 'Recibo Taxi Aeroporto',
-        type: 'receipt',
-        category: 'financial',
-        fileType: 'JPG',
+        id: "5",
+        name: "Recibo Taxi Aeroporto",
+        type: "receipt",
+        category: "financial",
+        fileType: "JPG",
         fileSize: 1.8,
-        uploadDate: new Date('2024-02-15'),
-        status: 'valid',
-        tags: ['transporte', 'reembolso'],
+        uploadDate: new Date("2024-02-15"),
+        status: "valid",
+        tags: ["transporte", "reembolso"],
         isStarred: false,
         isShared: false,
         sharedWith: [],
-        visibility: 'private',
-        url: '/documents/taxi-receipt.jpg',
-        thumbnailUrl: '/thumbnails/taxi-receipt-thumb.jpg',
-        uploadedBy: 'Pedro Costa'
+        visibility: "private",
+        url: "/documents/taxi-receipt.jpg",
+        thumbnailUrl: "/thumbnails/taxi-receipt-thumb.jpg",
+        uploadedBy: "Pedro Costa"
       }
     ];
     setDocuments(mockDocuments);
@@ -183,31 +183,31 @@ export const TravelDocumentManager = () => {
 
   const folders: DocumentFolder[] = [
     {
-      id: 'personal',
-      name: 'Documentos Pessoais',
-      documentsCount: documents.filter(d => d.category === 'personal').length,
-      color: 'bg-blue-100 text-blue-700',
+      id: "personal",
+      name: "Documentos Pessoais",
+      documentsCount: documents.filter(d => d.category === "personal").length,
+      color: "bg-blue-100 text-blue-700",
       icon: <FileText className="h-5 w-5" />
     },
     {
-      id: 'booking',
-      name: 'Reservas',
-      documentsCount: documents.filter(d => d.category === 'booking').length,
-      color: 'bg-green-100 text-green-700',
+      id: "booking",
+      name: "Reservas",
+      documentsCount: documents.filter(d => d.category === "booking").length,
+      color: "bg-green-100 text-green-700",
       icon: <Plane className="h-5 w-5" />
     },
     {
-      id: 'financial',
-      name: 'Financeiro',
-      documentsCount: documents.filter(d => d.category === 'financial').length,
-      color: 'bg-yellow-100 text-yellow-700',
+      id: "financial",
+      name: "Financeiro",
+      documentsCount: documents.filter(d => d.category === "financial").length,
+      color: "bg-yellow-100 text-yellow-700",
       icon: <CreditCard className="h-5 w-5" />
     },
     {
-      id: 'legal',
-      name: 'Documentos Legais',
-      documentsCount: documents.filter(d => d.category === 'legal').length,
-      color: 'bg-purple-100 text-purple-700',
+      id: "legal",
+      name: "Documentos Legais",
+      documentsCount: documents.filter(d => d.category === "legal").length,
+      color: "bg-purple-100 text-purple-700",
       icon: <Lock className="h-5 w-5" />
     }
   ];
@@ -230,19 +230,19 @@ export const TravelDocumentManager = () => {
           const newDoc: TravelDocument = {
             id: Date.now().toString(),
             name: files[0].name,
-            type: 'other',
-            category: 'personal',
-            fileType: files[0].name.split('.').pop()?.toUpperCase() || 'FILE',
+            type: "other",
+            category: "personal",
+            fileType: files[0].name.split(".").pop()?.toUpperCase() || "FILE",
             fileSize: files[0].size / (1024 * 1024),
             uploadDate: new Date(),
-            status: 'valid',
+            status: "valid",
             tags: [],
             isStarred: false,
             isShared: false,
             sharedWith: [],
-            visibility: 'private',
+            visibility: "private",
             url: URL.createObjectURL(files[0]),
-            uploadedBy: 'Usuário Atual'
+            uploadedBy: "Usuário Atual"
           };
           
           setDocuments(prev => [...prev, newDoc]);
@@ -261,43 +261,43 @@ export const TravelDocumentManager = () => {
   const filteredDocuments = documents.filter(doc => {
     const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          doc.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || doc.category === selectedCategory;
-    const matchesStatus = selectedStatus === 'all' || doc.status === selectedStatus;
+    const matchesCategory = selectedCategory === "all" || doc.category === selectedCategory;
+    const matchesStatus = selectedStatus === "all" || doc.status === selectedStatus;
     
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'valid': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'expiring': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'expired': return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'pending': return <Clock className="h-4 w-4 text-blue-500" />;
-      default: return <FileText className="h-4 w-4" />;
+    case "valid": return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "expiring": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "expired": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "pending": return <Clock className="h-4 w-4 text-blue-500" />;
+    default: return <FileText className="h-4 w-4" />;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'passport': return <FileText className="h-5 w-5" />;
-      case 'visa': return <FileText className="h-5 w-5" />;
-      case 'ticket': return <Plane className="h-5 w-5" />;
-      case 'hotel': return <Hotel className="h-5 w-5" />;
-      case 'insurance': return <Lock className="h-5 w-5" />;
-      case 'receipt': return <CreditCard className="h-5 w-5" />;
-      default: return <File className="h-5 w-5" />;
+    case "passport": return <FileText className="h-5 w-5" />;
+    case "visa": return <FileText className="h-5 w-5" />;
+    case "ticket": return <Plane className="h-5 w-5" />;
+    case "hotel": return <Hotel className="h-5 w-5" />;
+    case "insurance": return <Lock className="h-5 w-5" />;
+    case "receipt": return <CreditCard className="h-5 w-5" />;
+    default: return <File className="h-5 w-5" />;
     }
   };
 
   const getFileIcon = (fileType: string) => {
     switch (fileType.toLowerCase()) {
-      case 'pdf': return <FileText className="h-8 w-8 text-red-500" />;
-      case 'jpg':
-      case 'jpeg':
-      case 'png': return <FileImage className="h-8 w-8 text-blue-500" />;
-      case 'mp4':
-      case 'avi': return <FileVideo className="h-8 w-8 text-purple-500" />;
-      default: return <File className="h-8 w-8 text-muted-foreground" />;
+    case "pdf": return <FileText className="h-8 w-8 text-red-500" />;
+    case "jpg":
+    case "jpeg":
+    case "png": return <FileImage className="h-8 w-8 text-blue-500" />;
+    case "mp4":
+    case "avi": return <FileVideo className="h-8 w-8 text-purple-500" />;
+    default: return <File className="h-8 w-8 text-muted-foreground" />;
     }
   };
 
@@ -540,16 +540,16 @@ export const TravelDocumentManager = () => {
             </Select>
             <div className="flex gap-2">
               <Button
-                variant={viewMode === 'grid' ? 'default' : 'outline'}
+                variant={viewMode === "grid" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode('grid')}
+                onClick={() => setViewMode("grid")}
               >
                 Grid
               </Button>
               <Button
-                variant={viewMode === 'list' ? 'default' : 'outline'}
+                variant={viewMode === "list" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode('list')}
+                onClick={() => setViewMode("list")}
               >
                 Lista
               </Button>
@@ -560,7 +560,7 @@ export const TravelDocumentManager = () => {
 
       {/* Documents Display */}
       <div>
-        {viewMode === 'grid' ? renderDocumentGrid() : renderDocumentList()}
+        {viewMode === "grid" ? renderDocumentGrid() : renderDocumentList()}
       </div>
 
       {filteredDocuments.length === 0 && (

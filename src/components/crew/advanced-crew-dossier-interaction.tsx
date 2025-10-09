@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useVoiceRecording, useTextToSpeech } from '@/hooks/use-voice-conversation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { useVoiceRecording, useTextToSpeech } from "@/hooks/use-voice-conversation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Mic, 
   MicOff, 
@@ -16,9 +16,9 @@ import {
   TrendingUp,
   Star,
   Award
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface VoiceInteractionPanelProps {
   crewMemberId: string;
@@ -58,7 +58,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
   crewMemberId,
   crewMemberName
 }) => {
-  const [activeTab, setActiveTab] = useState<'voice' | 'ai' | 'gamification' | 'goals'>('voice');
+  const [activeTab, setActiveTab] = useState<"voice" | "ai" | "gamification" | "goals">("voice");
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
   const [gamificationProfile, setGamificationProfile] = useState<GamificationProfile | null>(null);
   const [goals, setGoals] = useState<Goal[]>([]);
@@ -95,7 +95,6 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         });
       }
     } catch (error) {
-      console.error('Voice interaction error:', error);
       toast({
         title: "Erro na interação por voz",
         description: "Tente novamente em alguns instantes.",
@@ -111,17 +110,16 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       const response = `Processando comando: "${text}". Esta funcionalidade será expandida em breve.`;
       await speak(response);
     } catch (error) {
-      console.error('Error processing voice command:', error);
     }
   };
 
   const generateAIInsights = async () => {
     setIsLoadingAI(true);
     try {
-      const { data, error } = await supabase.functions.invoke('crew-ai-insights', {
+      const { data, error } = await supabase.functions.invoke("crew-ai-insights", {
         body: { 
           crew_member_id: crewMemberId,
-          analysis_type: 'comprehensive'
+          analysis_type: "comprehensive"
         }
       });
 
@@ -134,7 +132,6 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
 
       await loadAIInsights();
     } catch (error) {
-      console.error('Error generating AI insights:', error);
       toast({
         title: "Erro ao gerar insights",
         description: "Não foi possível gerar a análise de IA.",
@@ -148,33 +145,31 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
   const loadAIInsights = async () => {
     try {
       const { data, error } = await supabase
-        .from('crew_ai_insights')
-        .select('*')
-        .eq('crew_member_id', crewMemberId)
-        .order('created_at', { ascending: false })
+        .from("crew_ai_insights")
+        .select("*")
+        .eq("crew_member_id", crewMemberId)
+        .order("created_at", { ascending: false })
         .limit(3);
 
       if (error) throw error;
       setAiInsights(data || []);
     } catch (error) {
-      console.error('Error loading AI insights:', error);
     }
   };
 
   const loadGamificationProfile = async () => {
     setIsLoadingGamification(true);
     try {
-      const { data, error } = await supabase.functions.invoke('crew-gamification', {
+      const { data, error } = await supabase.functions.invoke("crew-gamification", {
         body: { 
           crew_member_id: crewMemberId,
-          action_type: 'get_profile'
+          action_type: "get_profile"
         }
       });
 
       if (error) throw error;
       setGamificationProfile(data.profile);
     } catch (error) {
-      console.error('Error loading gamification profile:', error);
     } finally {
       setIsLoadingGamification(false);
     }
@@ -182,26 +177,25 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
 
   const loadGoals = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('crew-goal-tracker', {
+      const { data, error } = await supabase.functions.invoke("crew-goal-tracker", {
         body: { 
           crew_member_id: crewMemberId,
-          action: 'get_goals'
+          action: "get_goals"
         }
       });
 
       if (error) throw error;
       setGoals(data.result?.goals || []);
     } catch (error) {
-      console.error('Error loading goals:', error);
     }
   };
 
   const createNewGoal = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('crew-goal-tracker', {
+      const { data, error } = await supabase.functions.invoke("crew-goal-tracker", {
         body: { 
           crew_member_id: crewMemberId,
-          action: 'suggest_goals'
+          action: "suggest_goals"
         }
       });
 
@@ -212,7 +206,6 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         description: "Novas metas personalizadas foram sugeridas para você!",
       });
     } catch (error) {
-      console.error('Error generating goal suggestions:', error);
     }
   };
 
@@ -231,27 +224,27 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
               onClick={handleVoiceInteraction}
               variant={isRecording ? "destructive" : "default"}
               size="lg"
-              className={`w-32 h-32 rounded-full ${isRecording ? 'animate-pulse' : ''}`}
+              className={`w-32 h-32 rounded-full ${isRecording ? "animate-pulse" : ""}`}
               disabled={isProcessing}
             >
               {isRecording ? <MicOff className="h-8 w-8" /> : <Mic className="h-8 w-8" />}
             </Button>
             
             <p className="text-center text-sm text-muted-foreground">
-              {isRecording ? 'Gravando... Clique para parar' : 
-               isProcessing ? 'Processando...' : 
-               'Clique para iniciar gravação'}
+              {isRecording ? "Gravando... Clique para parar" : 
+                isProcessing ? "Processando..." : 
+                  "Clique para iniciar gravação"}
             </p>
           </div>
 
           <div className="flex items-center justify-center space-x-2">
             <Button
-              onClick={isSpeaking ? stopSpeaking : () => speak('Olá! Como posso ajudar você hoje?')}
+              onClick={isSpeaking ? stopSpeaking : () => speak("Olá! Como posso ajudar você hoje?")}
               variant="outline"
               size="sm"
             >
               {isSpeaking ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-              {isSpeaking ? 'Parar' : 'Teste de Voz'}
+              {isSpeaking ? "Parar" : "Teste de Voz"}
             </Button>
           </div>
         </CardContent>
@@ -268,7 +261,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
             Insights de IA
           </CardTitle>
           <Button onClick={generateAIInsights} disabled={isLoadingAI}>
-            {isLoadingAI ? 'Gerando...' : 'Gerar Análise'}
+            {isLoadingAI ? "Gerando..." : "Gerar Análise"}
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -289,7 +282,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
                     </span>
                   </div>
                   <p className="text-sm">
-                    {insight.insights_data.summary || 'Análise disponível nos dados detalhados.'}
+                    {insight.insights_data.summary || "Análise disponível nos dados detalhados."}
                   </p>
                 </CardContent>
               </Card>
@@ -350,7 +343,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
                   <span className="font-medium">Ranking Global</span>
                 </div>
                 <Badge variant="secondary">
-                  #{gamificationProfile.leaderboard_rank || 'N/A'}
+                  #{gamificationProfile.leaderboard_rank || "N/A"}
                 </Badge>
               </div>
             </>
@@ -390,7 +383,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
                 <CardContent className="pt-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-semibold">{goal.title}</h4>
-                    <Badge variant={goal.status === 'completed' ? 'default' : 'secondary'}>
+                    <Badge variant={goal.status === "completed" ? "default" : "secondary"}>
                       {goal.status}
                     </Badge>
                   </div>
@@ -431,18 +424,18 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       {/* Navigation Tabs */}
       <div className="flex space-x-1 mb-6 bg-muted p-1 rounded-lg">
         {[
-          { id: 'voice', label: 'Voz', icon: Mic },
-          { id: 'ai', label: 'IA', icon: Brain },
-          { id: 'gamification', label: 'Conquistas', icon: Trophy },
-          { id: 'goals', label: 'Metas', icon: Target }
+          { id: "voice", label: "Voz", icon: Mic },
+          { id: "ai", label: "IA", icon: Brain },
+          { id: "gamification", label: "Conquistas", icon: Trophy },
+          { id: "goals", label: "Metas", icon: Target }
         ].map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id as any)}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md transition-colors ${
               activeTab === id
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground'
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             <Icon className="h-4 w-4" />
@@ -452,10 +445,10 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'voice' && renderVoiceTab()}
-      {activeTab === 'ai' && renderAITab()}
-      {activeTab === 'gamification' && renderGamificationTab()}
-      {activeTab === 'goals' && renderGoalsTab()}
+      {activeTab === "voice" && renderVoiceTab()}
+      {activeTab === "ai" && renderAITab()}
+      {activeTab === "gamification" && renderGamificationTab()}
+      {activeTab === "goals" && renderGoalsTab()}
     </div>
   );
 };

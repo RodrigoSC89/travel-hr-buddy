@@ -44,7 +44,8 @@ npm run dev
   "lint": "eslint .",
   "lint:fix": "eslint . --fix",
   "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-  "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
+  "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+  "clean:logs": "node scripts/clean-console-logs.cjs"
 }
 ```
 

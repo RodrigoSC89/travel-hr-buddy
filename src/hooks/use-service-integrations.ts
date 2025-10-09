@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { integrationManager } from '@/lib/integration-manager';
+import { useState, useEffect, useCallback } from "react";
+import { integrationManager } from "@/lib/integration-manager";
 
 /**
  * Hook to manage external service integrations
@@ -29,10 +29,9 @@ export const useServiceIntegrations = () => {
       refreshServices();
       return result;
     } catch (error) {
-      console.error(`Failed to check ${serviceName}:`, error);
       return { 
         success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+        error: error instanceof Error ? error.message : "Unknown error" 
       };
     } finally {
       setIsChecking(false);
@@ -48,7 +47,6 @@ export const useServiceIntegrations = () => {
       );
       refreshServices();
     } catch (error) {
-      console.error('Failed to check services:', error);
     } finally {
       setIsChecking(false);
     }

@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useOrganization } from '@/contexts/OrganizationContext';
-import { useOrganizationPermissions } from '@/hooks/use-organization-permissions';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect, useCallback } from "react";
+import { useOrganization } from "@/contexts/OrganizationContext";
+import { useOrganizationPermissions } from "@/hooks/use-organization-permissions";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
   UserPlus, 
@@ -20,7 +20,7 @@ import {
   MoreHorizontal,
   Edit,
   Trash2
-} from 'lucide-react';
+} from "lucide-react";
 
 interface OrganizationUser {
   id: string;
@@ -38,8 +38,8 @@ export const UserManagementMultiTenant: React.FC = () => {
   const [users, setUsers] = useState<OrganizationUser[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState('member');
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState("member");
   const { toast } = useToast();
 
   const loadUsers = useCallback(async () => {
@@ -50,7 +50,6 @@ export const UserManagementMultiTenant: React.FC = () => {
       const organizationUsers = await getCurrentOrganizationUsers();
       setUsers(organizationUsers);
     } catch (error) {
-      console.error('Erro ao carregar usuários:', error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os usuários da organização",
@@ -72,8 +71,8 @@ export const UserManagementMultiTenant: React.FC = () => {
 
     try {
       await inviteUser(inviteEmail, inviteRole as any);
-      setInviteEmail('');
-      setInviteRole('member');
+      setInviteEmail("");
+      setInviteRole("member");
       setShowInviteDialog(false);
       loadUsers();
       toast({
@@ -125,19 +124,19 @@ export const UserManagementMultiTenant: React.FC = () => {
 
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {
-      case 'owner': return 'default';
-      case 'admin': return 'secondary';
-      case 'manager': return 'outline';
-      default: return 'secondary';
+    case "owner": return "default";
+    case "admin": return "secondary";
+    case "manager": return "outline";
+    default: return "secondary";
     }
   };
 
   const getRoleLabel = (role: string) => {
     switch (role) {
-      case 'owner': return 'Proprietário';
-      case 'admin': return 'Administrador';
-      case 'manager': return 'Gerente';
-      default: return 'Membro';
+    case "owner": return "Proprietário";
+    case "admin": return "Administrador";
+    case "manager": return "Gerente";
+    default: return "Membro";
     }
   };
 
@@ -238,7 +237,7 @@ export const UserManagementMultiTenant: React.FC = () => {
                   <TableRow key={user.id}>
                     <TableCell>
                       <div>
-                        <p className="font-medium">{user.full_name || 'Nome não informado'}</p>
+                        <p className="font-medium">{user.full_name || "Nome não informado"}</p>
                         <p className="text-sm text-muted-foreground">ID: {user.id.slice(0, 8)}...</p>
                       </div>
                     </TableCell>
@@ -249,19 +248,19 @@ export const UserManagementMultiTenant: React.FC = () => {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={user.status === 'active' ? 'default' : 'secondary'}>
-                        {user.status === 'active' ? 'Ativo' : 'Inativo'}
+                      <Badge variant={user.status === "active" ? "default" : "secondary"}>
+                        {user.status === "active" ? "Ativo" : "Inativo"}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       {user.last_active_at 
-                        ? new Date(user.last_active_at).toLocaleDateString('pt-BR')
-                        : 'Nunca'
+                        ? new Date(user.last_active_at).toLocaleDateString("pt-BR")
+                        : "Nunca"
                       }
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-2 justify-end">
-                        {(isAdmin() || user.role !== 'owner') && (
+                        {(isAdmin() || user.role !== "owner") && (
                           <>
                             <Select
                               value={user.role}
@@ -277,7 +276,7 @@ export const UserManagementMultiTenant: React.FC = () => {
                               </SelectContent>
                             </Select>
                             
-                            {user.role !== 'owner' && userRole !== user.id && (
+                            {user.role !== "owner" && userRole !== user.id && (
                               <Button
                                 variant="outline"
                                 size="sm"

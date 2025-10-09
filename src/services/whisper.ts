@@ -22,17 +22,17 @@ export async function testWhisperConnection(): Promise<WhisperTestResult> {
   if (!apiKey) {
     return {
       success: false,
-      message: 'OpenAI API key not configured (Whisper uses OpenAI key)',
-      error: 'Missing VITE_OPENAI_API_KEY',
+      message: "OpenAI API key not configured (Whisper uses OpenAI key)",
+      error: "Missing VITE_OPENAI_API_KEY",
     };
   }
 
   try {
     // Test by checking models endpoint - Whisper uses same OpenAI key
-    const response = await fetch('https://api.openai.com/v1/models/whisper-1', {
-      method: 'GET',
+    const response = await fetch("https://api.openai.com/v1/models/whisper-1", {
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        "Authorization": `Bearer ${apiKey}`,
       },
     });
 
@@ -50,10 +50,10 @@ export async function testWhisperConnection(): Promise<WhisperTestResult> {
 
     const data = await response.json();
 
-    if (data.id === 'whisper-1') {
+    if (data.id === "whisper-1") {
       return {
         success: true,
-        message: 'Whisper API connection successful',
+        message: "Whisper API connection successful",
         responseTime,
         data: {
           model: data.id,
@@ -64,16 +64,16 @@ export async function testWhisperConnection(): Promise<WhisperTestResult> {
 
     return {
       success: false,
-      message: 'Whisper API returned unexpected data',
+      message: "Whisper API returned unexpected data",
       responseTime,
-      error: 'Invalid response format',
+      error: "Invalid response format",
     };
   } catch (error) {
     return {
       success: false,
-      message: 'Failed to connect to Whisper API',
+      message: "Failed to connect to Whisper API",
       responseTime: Date.now() - startTime,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }

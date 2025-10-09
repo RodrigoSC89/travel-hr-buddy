@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
-import { PushNotifications } from '@capacitor/push-notifications';
-import { Capacitor } from '@capacitor/core';
+import { useEffect, useState } from "react";
+import { LocalNotifications, ScheduleOptions } from "@capacitor/local-notifications";
+import { PushNotifications } from "@capacitor/push-notifications";
+import { Capacitor } from "@capacitor/core";
 
 export const useNotifications = () => {
   const [permissionGranted, setPermissionGranted] = useState(false);
@@ -12,7 +12,6 @@ export const useNotifications = () => {
 
   const initializeNotifications = async () => {
     if (!Capacitor.isNativePlatform()) {
-      console.log('Not on native platform, skipping notification setup');
       return;
     }
 
@@ -20,7 +19,7 @@ export const useNotifications = () => {
       // Request permission for local notifications
       const localPermissions = await LocalNotifications.requestPermissions();
       
-      if (localPermissions.display === 'granted') {
+      if (localPermissions.display === "granted") {
         setPermissionGranted(true);
         
         // Request permission for push notifications
@@ -30,24 +29,22 @@ export const useNotifications = () => {
         await PushNotifications.register();
         
         // Add listeners
-        PushNotifications.addListener('registration', (token) => {
-          console.log('Push registration success, token: ' + token.value);
+        PushNotifications.addListener("registration", (token) => {
         });
 
-        PushNotifications.addListener('registrationError', (error) => {
-          console.error('Error on registration: ' + JSON.stringify(error));
+        PushNotifications.addListener("registrationError", (error) => {
+          console.error("Error on registration: " + JSON.stringify(error));
         });
 
-        PushNotifications.addListener('pushNotificationReceived', (notification) => {
-          console.log('Push received: ' + JSON.stringify(notification));
+        PushNotifications.addListener("pushNotificationReceived", (notification) => {
+          console.log("Push received: " + JSON.stringify(notification));
         });
 
-        PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-          console.log('Push action performed: ' + JSON.stringify(notification));
+        PushNotifications.addListener("pushNotificationActionPerformed", (notification) => {
+          console.log("Push action performed: " + JSON.stringify(notification));
         });
       }
     } catch (error) {
-      console.error('Error initializing notifications:', error);
     }
   };
 
@@ -58,7 +55,6 @@ export const useNotifications = () => {
     schedule?: Date;
   }) => {
     if (!permissionGranted) {
-      console.warn('Notification permission not granted');
       return;
     }
 
@@ -70,18 +66,16 @@ export const useNotifications = () => {
             body: options.body,
             id: options.id,
             schedule: options.schedule ? { at: options.schedule } : undefined,
-            sound: 'default',
+            sound: "default",
             attachments: undefined,
-            actionTypeId: '',
+            actionTypeId: "",
             extra: {}
           }
         ]
       };
 
       await LocalNotifications.schedule(notificationOptions);
-      console.log('Notification scheduled successfully');
     } catch (error) {
-      console.error('Error scheduling notification:', error);
     }
   };
 
@@ -89,7 +83,6 @@ export const useNotifications = () => {
     try {
       await LocalNotifications.cancel({ notifications: [{ id }] });
     } catch (error) {
-      console.error('Error canceling notification:', error);
     }
   };
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import { 
   Plus, 
   Search, 
@@ -7,11 +7,11 @@ import {
   Bell, 
   MessageSquare,
   X 
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
-import { logUserAction } from '@/utils/enhanced-logging';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { logUserAction } from "@/utils/enhanced-logging";
 
 export const FloatingActionButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,40 +24,36 @@ export const FloatingActionButton: React.FC = () => {
   const actions = [
     {
       icon: Search,
-      label: 'Buscar',
+      label: "Buscar",
       action: () => {
-        logUserAction('FAB_SEARCH_CLICKED', { source: 'floating-action-button' });
-        console.log('🔍 Busca Global ativada');
+        logUserAction("FAB_SEARCH_CLICKED", { source: "floating-action-button" });
         toast({ title: "🔍 Busca Global", description: "Sistema de busca ativado" });
       }
     },
     {
       icon: Bell,
-      label: 'Notificações',
+      label: "Notificações",
       action: () => {
-        logUserAction('FAB_NOTIFICATIONS_CLICKED', { source: 'floating-action-button' });
-        console.log('🔔 Notificações ativada');
-        navigate('/notifications');
+        logUserAction("FAB_NOTIFICATIONS_CLICKED", { source: "floating-action-button" });
+        navigate("/notifications");
         toast({ title: "🔔 Notificações", description: "Abrindo centro de notificações" });
       }
     },
     {
       icon: MessageSquare,
-      label: 'Mensagens',
+      label: "Mensagens",
       action: () => {
-        logUserAction('FAB_MESSAGES_CLICKED', { source: 'floating-action-button' });
-        console.log('💬 Mensagens ativada');
-        navigate('/communication');
+        logUserAction("FAB_MESSAGES_CLICKED", { source: "floating-action-button" });
+        navigate("/communication");
         toast({ title: "💬 Mensagens", description: "Abrindo sistema de comunicação" });
       }
     },
     {
       icon: Settings,
-      label: 'Configurações',
+      label: "Configurações",
       action: () => {
-        logUserAction('FAB_SETTINGS_CLICKED', { source: 'floating-action-button' });
-        console.log('⚙️ Configurações ativada');
-        navigate('/settings');
+        logUserAction("FAB_SETTINGS_CLICKED", { source: "floating-action-button" });
+        navigate("/settings");
         toast({ title: "⚙️ Configurações", description: "Abrindo configurações do sistema" });
       }
     }
@@ -65,8 +61,7 @@ export const FloatingActionButton: React.FC = () => {
 
   const handleMainButtonClick = () => {
     const newState = !isOpen;
-    logUserAction('FAB_MAIN_BUTTON_CLICKED', { isOpen: newState });
-    console.log('🎯 FAB Main Button clicked, isOpen:', newState);
+    logUserAction("FAB_MAIN_BUTTON_CLICKED", { isOpen: newState });
     setIsOpen(newState);
     if (newState) {
       setFocusedIndex(0);
@@ -76,7 +71,6 @@ export const FloatingActionButton: React.FC = () => {
   };
 
   const handleActionClick = (action: typeof actions[0]) => {
-    console.log(`🎯 FAB Action clicked: ${action.label}`);
     action.action();
     setIsOpen(false);
     setFocusedIndex(-1);
@@ -88,37 +82,37 @@ export const FloatingActionButton: React.FC = () => {
 
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
-        case 'Escape':
-          e.preventDefault();
-          setIsOpen(false);
-          setFocusedIndex(-1);
-          mainButtonRef.current?.focus();
-          break;
+      case "Escape":
+        e.preventDefault();
+        setIsOpen(false);
+        setFocusedIndex(-1);
+        mainButtonRef.current?.focus();
+        break;
         
-        case 'ArrowDown':
-        case 'ArrowUp':
-          e.preventDefault();
-          const direction = e.key === 'ArrowDown' ? 1 : -1;
-          setFocusedIndex(prev => {
-            const newIndex = prev + direction;
-            if (newIndex < 0) return actions.length - 1;
-            if (newIndex >= actions.length) return 0;
-            return newIndex;
-          });
-          break;
+      case "ArrowDown":
+      case "ArrowUp":
+        e.preventDefault();
+        const direction = e.key === "ArrowDown" ? 1 : -1;
+        setFocusedIndex(prev => {
+          const newIndex = prev + direction;
+          if (newIndex < 0) return actions.length - 1;
+          if (newIndex >= actions.length) return 0;
+          return newIndex;
+        });
+        break;
         
-        case 'Enter':
-        case ' ':
-          e.preventDefault();
-          if (focusedIndex >= 0 && focusedIndex < actions.length) {
-            handleActionClick(actions[focusedIndex]);
-          }
-          break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        if (focusedIndex >= 0 && focusedIndex < actions.length) {
+          handleActionClick(actions[focusedIndex]);
+        }
+        break;
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, focusedIndex, actions]);
 
   // Focus management
@@ -153,7 +147,7 @@ export const FloatingActionButton: React.FC = () => {
             }}
             onClick={() => handleActionClick(action)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
+              if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
                 handleActionClick(action);
               }
@@ -180,7 +174,7 @@ export const FloatingActionButton: React.FC = () => {
         style={{ zIndex: 70 }}
         onClick={handleMainButtonClick}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             handleMainButtonClick();
           }

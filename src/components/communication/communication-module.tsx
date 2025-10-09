@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChatInterface } from './chat-interface';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ChatInterface } from "./chat-interface";
 import { 
   MessageSquare, 
   Users, 
@@ -15,10 +15,10 @@ import {
   Zap,
   Globe,
   Shield
-} from 'lucide-react';
+} from "lucide-react";
 
 export const CommunicationModule = () => {
-  const [activeTab, setActiveTab] = useState('chat');
+  const [activeTab, setActiveTab] = useState("chat");
 
   const communicationStats = [
     {
@@ -156,21 +156,21 @@ export const CommunicationModule = () => {
                 <div className="flex items-center justify-between">
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
-                      <Icon className={`w-5 h-5 ${colorClasses[stat.color].split(' ')[5]}`} />
+                      <Icon className={`w-5 h-5 ${colorClasses[stat.color].split(" ")[5]}`} />
                       <span className="text-sm font-medium text-muted-foreground">{stat.title}</span>
                     </div>
                     <div className="text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
                       {stat.value}
                     </div>
                     <div className="flex items-center gap-2">
-                      <TrendingUp className={`w-4 h-4 ${stat.trend === 'up' ? 'text-green-500' : 'text-red-500'} group-hover:scale-110 transition-transform`} />
-                      <span className={`text-sm font-medium ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                      <TrendingUp className={`w-4 h-4 ${stat.trend === "up" ? "text-green-500" : "text-red-500"} group-hover:scale-110 transition-transform`} />
+                      <span className={`text-sm font-medium ${stat.trend === "up" ? "text-green-600" : "text-red-600"}`}>
                         {stat.change}
                       </span>
                     </div>
                   </div>
-                  <div className={`p-4 rounded-2xl bg-opacity-10 backdrop-blur-sm group-hover:scale-105 transition-all duration-300`}>
-                    <Icon className={`w-8 h-8 ${colorClasses[stat.color].split(' ')[5]}`} />
+                  <div className={"p-4 rounded-2xl bg-opacity-10 backdrop-blur-sm group-hover:scale-105 transition-all duration-300"}>
+                    <Icon className={`w-8 h-8 ${colorClasses[stat.color].split(" ")[5]}`} />
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-3 opacity-70 group-hover:opacity-100 transition-opacity">
@@ -204,7 +204,7 @@ export const CommunicationModule = () => {
                     key={index}
                     variant="outline"
                     className="w-full justify-start h-auto p-4 hover:scale-105 transition-all duration-200"
-                    onClick={() => setActiveTab('chat')}
+                    onClick={() => setActiveTab("chat")}
                   >
                     <div className={`p-2 rounded-lg ${action.color} mr-3`}>
                       <Icon className="h-4 w-4 text-azure-50" />

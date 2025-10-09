@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Slider } from '@/components/ui/slider';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { 
   Search, 
   Filter, 
@@ -19,10 +19,10 @@ import {
   TrendingDown,
   Store,
   Activity 
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 export interface FilterOptions {
   search: string;
@@ -36,7 +36,7 @@ export interface FilterOptions {
     to?: Date;
   };
   sortBy: string;
-  sortOrder: 'asc' | 'desc';
+  sortOrder: "asc" | "desc";
 }
 
 interface AdvancedFiltersProps {
@@ -60,18 +60,18 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   const [tempFilters, setTempFilters] = useState<FilterOptions>(filters);
 
   const statusOptions = [
-    { value: 'active', label: 'Ativo', color: 'bg-green-500' },
-    { value: 'inactive', label: 'Inativo', color: 'bg-gray-500' },
-    { value: 'triggered', label: 'Acionado', color: 'bg-blue-500' },
+    { value: "active", label: "Ativo", color: "bg-green-500" },
+    { value: "inactive", label: "Inativo", color: "bg-gray-500" },
+    { value: "triggered", label: "Acionado", color: "bg-blue-500" },
   ];
 
   const sortOptions = [
-    { value: 'created_at', label: 'Data de Criação' },
-    { value: 'product_name', label: 'Nome do Produto' },
-    { value: 'current_price', label: 'Preço Atual' },
-    { value: 'target_price', label: 'Preço Meta' },
-    { value: 'discount_percentage', label: 'Desconto' },
-    { value: 'last_checked_at', label: 'Última Verificação' },
+    { value: "created_at", label: "Data de Criação" },
+    { value: "product_name", label: "Nome do Produto" },
+    { value: "current_price", label: "Preço Atual" },
+    { value: "target_price", label: "Preço Meta" },
+    { value: "discount_percentage", label: "Desconto" },
+    { value: "last_checked_at", label: "Última Verificação" },
   ];
 
   const updateFilter = (key: keyof FilterOptions, value: any) => {
@@ -86,15 +86,15 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
   const clearFilters = () => {
     const defaultFilters: FilterOptions = {
-      search: '',
+      search: "",
       category: [],
       store: [],
       priceRange: [0, maxPrice],
       discountRange: [0, 100],
       status: [],
       dateRange: {},
-      sortBy: 'created_at',
-      sortOrder: 'desc',
+      sortBy: "created_at",
+      sortOrder: "desc",
     };
     setTempFilters(defaultFilters);
     onFiltersChange(defaultFilters);
@@ -123,8 +123,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
           <Input
             placeholder="Buscar produtos..."
             value={tempFilters.search}
-            onChange={(e) => updateFilter('search', e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
+            onChange={(e) => updateFilter("search", e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && applyFilters()}
             className="pl-10"
           />
         </div>
@@ -147,10 +147,10 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
           <Select 
             value={`${tempFilters.sortBy}-${tempFilters.sortOrder}`} 
             onValueChange={(value) => {
-              const [sortBy, sortOrder] = value.split('-');
-              updateFilter('sortBy', sortBy);
-              updateFilter('sortOrder', sortOrder);
-              onFiltersChange({ ...tempFilters, sortBy, sortOrder: sortOrder as 'asc' | 'desc' });
+              const [sortBy, sortOrder] = value.split("-");
+              updateFilter("sortBy", sortBy);
+              updateFilter("sortOrder", sortOrder);
+              onFiltersChange({ ...tempFilters, sortBy, sortOrder: sortOrder as "asc" | "desc" });
             }}
           >
             <SelectTrigger className="w-48">
@@ -201,9 +201,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                         checked={tempFilters.category.includes(category)}
                         onCheckedChange={(checked) => {
                           if (checked) {
-                            updateFilter('category', [...tempFilters.category, category]);
+                            updateFilter("category", [...tempFilters.category, category]);
                           } else {
-                            updateFilter('category', tempFilters.category.filter(c => c !== category));
+                            updateFilter("category", tempFilters.category.filter(c => c !== category));
                           }
                         }}
                       />
@@ -231,9 +231,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                         checked={tempFilters.store.includes(store)}
                         onCheckedChange={(checked) => {
                           if (checked) {
-                            updateFilter('store', [...tempFilters.store, store]);
+                            updateFilter("store", [...tempFilters.store, store]);
                           } else {
-                            updateFilter('store', tempFilters.store.filter(s => s !== store));
+                            updateFilter("store", tempFilters.store.filter(s => s !== store));
                           }
                         }}
                       />
@@ -254,7 +254,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </Label>
               <Slider
                 value={tempFilters.priceRange}
-                onValueChange={(value) => updateFilter('priceRange', value)}
+                onValueChange={(value) => updateFilter("priceRange", value)}
                 max={maxPrice}
                 min={0}
                 step={10}
@@ -270,7 +270,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </Label>
               <Slider
                 value={tempFilters.discountRange}
-                onValueChange={(value) => updateFilter('discountRange', value)}
+                onValueChange={(value) => updateFilter("discountRange", value)}
                 max={100}
                 min={0}
                 step={5}
@@ -292,9 +292,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                       checked={tempFilters.status.includes(status.value)}
                       onCheckedChange={(checked) => {
                         if (checked) {
-                          updateFilter('status', [...tempFilters.status, status.value]);
+                          updateFilter("status", [...tempFilters.status, status.value]);
                         } else {
-                          updateFilter('status', tempFilters.status.filter(s => s !== status.value));
+                          updateFilter("status", tempFilters.status.filter(s => s !== status.value));
                         }
                       }}
                     />
@@ -329,7 +329,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                     <Calendar
                       mode="single"
                       selected={tempFilters.dateRange.from}
-                      onSelect={(date) => updateFilter('dateRange', { ...tempFilters.dateRange, from: date })}
+                      onSelect={(date) => updateFilter("dateRange", { ...tempFilters.dateRange, from: date })}
                       initialFocus
                       className="pointer-events-auto"
                     />
@@ -351,7 +351,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                     <Calendar
                       mode="single"
                       selected={tempFilters.dateRange.to}
-                      onSelect={(date) => updateFilter('dateRange', { ...tempFilters.dateRange, to: date })}
+                      onSelect={(date) => updateFilter("dateRange", { ...tempFilters.dateRange, to: date })}
                       initialFocus
                       className="pointer-events-auto"
                     />
@@ -385,8 +385,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 size="sm"
                 className="h-auto p-0 ml-1"
                 onClick={() => {
-                  updateFilter('search', '');
-                  onFiltersChange({ ...filters, search: '' });
+                  updateFilter("search", "");
+                  onFiltersChange({ ...filters, search: "" });
                 }}
               >
                 <X className="h-3 w-3" />
@@ -404,7 +404,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 className="h-auto p-0 ml-1"
                 onClick={() => {
                   const newCategories = filters.category.filter(c => c !== category);
-                  updateFilter('category', newCategories);
+                  updateFilter("category", newCategories);
                   onFiltersChange({ ...filters, category: newCategories });
                 }}
               >
@@ -423,7 +423,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 className="h-auto p-0 ml-1"
                 onClick={() => {
                   const newStores = filters.store.filter(s => s !== store);
-                  updateFilter('store', newStores);
+                  updateFilter("store", newStores);
                   onFiltersChange({ ...filters, store: newStores });
                 }}
               >

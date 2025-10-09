@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   User, 
   Ship, 
@@ -14,12 +14,12 @@ import {
   Clock,
   ExternalLink,
   TrendingUp
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface CrewMember {
   id: string;
@@ -67,35 +67,33 @@ export const EmployeeDossierSummary: React.FC = () => {
 
       // Buscar dados do tripulante
       const { data: memberData, error: memberError } = await supabase
-        .from('crew_members')
-        .select('*')
-        .eq('user_id', user.id)
+        .from("crew_members")
+        .select("*")
+        .eq("user_id", user.id)
         .maybeSingle();
 
       if (memberError) {
-        console.error('Erro ao buscar dados do tripulante:', memberError);
         return;
       }
 
       if (!memberData) {
         // Criar registro de tripulante se não existir
         const { data: newMember, error: createError } = await supabase
-          .from('crew_members')
+          .from("crew_members")
           .insert({
             user_id: user.id,
-            employee_id: user.email?.split('@')[0] || 'temp_id',
-            full_name: user.email?.split('@')[0] || 'Usuário',
-            position: 'Marinheiro',
-            rank: 'Ordinary Seaman',
-            nationality: 'Brasil',
+            employee_id: user.email?.split("@")[0] || "temp_id",
+            full_name: user.email?.split("@")[0] || "Usuário",
+            position: "Marinheiro",
+            rank: "Ordinary Seaman",
+            nationality: "Brasil",
             email: user.email,
-            status: 'available'
+            status: "available"
           })
           .select()
           .single();
 
         if (createError) {
-          console.error('Erro ao criar tripulante:', createError);
           return;
         }
 
@@ -107,34 +105,31 @@ export const EmployeeDossierSummary: React.FC = () => {
       // Buscar certificações
       if (memberData) {
         const { data: certData, error: certError } = await supabase
-          .from('crew_certifications')
-          .select('*')
-          .eq('crew_member_id', memberData.id)
-          .order('expiry_date', { ascending: true })
+          .from("crew_certifications")
+          .select("*")
+          .eq("crew_member_id", memberData.id)
+          .order("expiry_date", { ascending: true })
           .limit(5);
 
         if (certError) {
-          console.error('Erro ao buscar certificações:', certError);
         } else {
           setCertifications(certData || []);
         }
 
         // Buscar embarques
         const { data: embarkData, error: embarkError } = await supabase
-          .from('crew_embarkations')
-          .select('*')
-          .eq('crew_member_id', memberData.id)
-          .order('embark_date', { ascending: false })
+          .from("crew_embarkations")
+          .select("*")
+          .eq("crew_member_id", memberData.id)
+          .order("embark_date", { ascending: false })
           .limit(3);
 
         if (embarkError) {
-          console.error('Erro ao buscar embarques:', embarkError);
         } else {
           setEmbarkations(embarkData || []);
         }
       }
     } catch (error) {
-      console.error('Erro geral:', error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
@@ -147,37 +142,37 @@ export const EmployeeDossierSummary: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'valid':
-      case 'active':
-        return 'bg-green-100 text-green-800';
-      case 'expiring_soon':
-      case 'expiring':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'expired':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-secondary text-secondary-foreground';
+    case "valid":
+    case "active":
+      return "bg-green-100 text-green-800";
+    case "expiring_soon":
+    case "expiring":
+      return "bg-yellow-100 text-yellow-800";
+    case "expired":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'valid':
-      case 'active':
-        return <CheckCircle className="h-4 w-4" />;
-      case 'expiring_soon':
-      case 'expiring':
-        return <Clock className="h-4 w-4" />;
-      case 'expired':
-        return <AlertTriangle className="h-4 w-4" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "valid":
+    case "active":
+      return <CheckCircle className="h-4 w-4" />;
+    case "expiring_soon":
+    case "expiring":
+      return <Clock className="h-4 w-4" />;
+    case "expired":
+      return <AlertTriangle className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 
   const calculateComplianceScore = () => {
     if (certifications.length === 0) return 0;
-    const validCerts = certifications.filter(cert => cert.status === 'valid').length;
+    const validCerts = certifications.filter(cert => cert.status === "valid").length;
     return Math.round((validCerts / certifications.length) * 100);
   };
 
@@ -298,11 +293,11 @@ export const EmployeeDossierSummary: React.FC = () => {
                   </div>
                   <div className="text-right">
                     <Badge className={getStatusColor(cert.status)}>
-                      {cert.status === 'valid' ? 'Válido' :
-                       cert.status === 'expiring_soon' ? 'Vencendo' : 'Expirado'}
+                      {cert.status === "valid" ? "Válido" :
+                        cert.status === "expiring_soon" ? "Vencendo" : "Expirado"}
                     </Badge>
                     <div className="text-xs text-muted-foreground mt-1">
-                      {format(new Date(cert.expiry_date), 'dd/MM/yyyy')}
+                      {format(new Date(cert.expiry_date), "dd/MM/yyyy")}
                     </div>
                   </div>
                 </div>
@@ -341,7 +336,7 @@ export const EmployeeDossierSummary: React.FC = () => {
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-medium">
-                      {format(new Date(embark.embark_date), 'dd/MM/yyyy', { locale: ptBR })}
+                      {format(new Date(embark.embark_date), "dd/MM/yyyy", { locale: ptBR })}
                     </div>
                     <div className="text-xs text-muted-foreground">
                       {embark.hours_worked || 0}h trabalhadas
@@ -357,7 +352,7 @@ export const EmployeeDossierSummary: React.FC = () => {
       {/* Ações */}
       <div className="flex gap-4">
         <Button 
-          onClick={() => window.open('/crew-dossier', '_blank')} 
+          onClick={() => window.open("/crew-dossier", "_blank")} 
           className="flex-1"
         >
           <ExternalLink className="h-4 w-4 mr-2" />

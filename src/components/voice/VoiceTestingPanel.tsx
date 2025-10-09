@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Mic, 
   MicOff, 
@@ -16,7 +16,7 @@ import {
   Zap,
   Anchor,
   Compass
-} from 'lucide-react';
+} from "lucide-react";
 
 // Declarações de tipos para Web Speech API
 declare global {
@@ -35,48 +35,46 @@ interface VoiceTestingProps {
 const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible = false, onClose }) => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [transcript, setTranscript] = useState('');
-  const [lastCommand, setLastCommand] = useState('');
+  const [transcript, setTranscript] = useState("");
+  const [lastCommand, setLastCommand] = useState("");
   const [recognition, setRecognition] = useState<any>(null);
   const [synthesis] = useState(window.speechSynthesis);
   const { toast } = useToast();
 
   // Comandos de teste disponíveis
   const testCommands = [
-    { text: 'dashboard', module: 'dashboard', description: 'Ir para dashboard' },
-    { text: 'recursos humanos', module: 'hr', description: 'Abrir RH' },
-    { text: 'viagens', module: 'travel', description: 'Sistema de viagens' },
-    { text: 'sistema marítimo', module: 'maritime', description: 'Gestão marítima' },
-    { text: 'alertas', module: 'price-alerts', description: 'Alertas de preço' },
-    { text: 'analytics', module: 'analytics', description: 'Análises' },
-    { text: 'relatórios', module: 'reports', description: 'Relatórios' },
-    { text: 'comunicação', module: 'communication', description: 'Chat e mensagens' },
-    { text: 'configurações', module: 'settings', description: 'Configurações' },
-    { text: 'estratégico', module: 'strategic', description: 'Central estratégica' }
+    { text: "dashboard", module: "dashboard", description: "Ir para dashboard" },
+    { text: "recursos humanos", module: "hr", description: "Abrir RH" },
+    { text: "viagens", module: "travel", description: "Sistema de viagens" },
+    { text: "sistema marítimo", module: "maritime", description: "Gestão marítima" },
+    { text: "alertas", module: "price-alerts", description: "Alertas de preço" },
+    { text: "analytics", module: "analytics", description: "Análises" },
+    { text: "relatórios", module: "reports", description: "Relatórios" },
+    { text: "comunicação", module: "communication", description: "Chat e mensagens" },
+    { text: "configurações", module: "settings", description: "Configurações" },
+    { text: "estratégico", module: "strategic", description: "Central estratégica" }
   ];
 
   useEffect(() => {
     // Inicializar reconhecimento de voz
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       const recognitionInstance = new SpeechRecognition();
       
       recognitionInstance.continuous = true;
       recognitionInstance.interimResults = true;
-      recognitionInstance.lang = 'pt-BR';
+      recognitionInstance.lang = "pt-BR";
       
       recognitionInstance.onstart = () => {
-        console.log('Voice recognition started');
         setIsListening(true);
       };
       
       recognitionInstance.onend = () => {
-        console.log('Voice recognition ended');
         setIsListening(false);
       };
       
       recognitionInstance.onresult = (event) => {
-        let finalTranscript = '';
+        let finalTranscript = "";
         
         for (let i = event.resultIndex; i < event.results.length; i++) {
           if (event.results[i].isFinal) {
@@ -92,7 +90,6 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
       };
       
       recognitionInstance.onerror = (event) => {
-        console.error('Voice recognition error:', event.error);
         toast({
           title: "Erro no reconhecimento",
           description: `Erro: ${event.error}`,
@@ -119,60 +116,58 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
 
   const processCommand = (command: string) => {
     const lowerCommand = command.toLowerCase().trim();
-    console.log('Processing command:', lowerCommand);
     
     // Mapeamento de comandos
     const commandMap: Record<string, string> = {
-      'dashboard': 'dashboard',
-      'painel': 'dashboard',
-      'início': 'dashboard',
-      'home': 'dashboard',
+      "dashboard": "dashboard",
+      "painel": "dashboard",
+      "início": "dashboard",
+      "home": "dashboard",
       
-      'recursos humanos': 'hr',
-      'rh': 'hr',
-      'funcionários': 'hr',
-      'tripulação': 'hr',
+      "recursos humanos": "hr",
+      "rh": "hr",
+      "funcionários": "hr",
+      "tripulação": "hr",
       
-      'viagens': 'travel',
-      'travel': 'travel',
-      'voos': 'travel',
-      'hotéis': 'travel',
-      'passagens': 'travel',
+      "viagens": "travel",
+      "travel": "travel",
+      "voos": "travel",
+      "hotéis": "travel",
+      "passagens": "travel",
       
-      'sistema marítimo': 'maritime',
-      'marítimo': 'maritime',
-      'frota': 'maritime',
-      'navios': 'maritime',
+      "sistema marítimo": "maritime",
+      "marítimo": "maritime",
+      "frota": "maritime",
+      "navios": "maritime",
       
-      'alertas': 'price-alerts',
-      'preços': 'price-alerts',
-      'monitoramento': 'price-alerts',
+      "alertas": "price-alerts",
+      "preços": "price-alerts",
+      "monitoramento": "price-alerts",
       
-      'analytics': 'analytics',
-      'análises': 'analytics',
-      'estatísticas': 'analytics',
-      'métricas': 'analytics',
+      "analytics": "analytics",
+      "análises": "analytics",
+      "estatísticas": "analytics",
+      "métricas": "analytics",
       
-      'relatórios': 'reports',
-      'reports': 'reports',
+      "relatórios": "reports",
+      "reports": "reports",
       
-      'comunicação': 'communication',
-      'mensagens': 'communication',
-      'chat': 'communication',
+      "comunicação": "communication",
+      "mensagens": "communication",
+      "chat": "communication",
       
-      'configurações': 'settings',
-      'settings': 'settings',
-      'preferências': 'settings',
+      "configurações": "settings",
+      "settings": "settings",
+      "preferências": "settings",
       
-      'estratégico': 'strategic',
-      'strategic': 'strategic',
-      'estratégia': 'strategic'
+      "estratégico": "strategic",
+      "strategic": "strategic",
+      "estratégia": "strategic"
     };
     
     // Procurar correspondência
     for (const [cmd, module] of Object.entries(commandMap)) {
       if (lowerCommand.includes(cmd)) {
-        console.log(`Command matched: ${cmd} -> ${module}`);
         
         if (onNavigate) {
           onNavigate(module);
@@ -203,7 +198,7 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
     
     setIsSpeaking(true);
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'pt-BR';
+    utterance.lang = "pt-BR";
     utterance.rate = 0.9;
     utterance.pitch = 1;
     
@@ -261,7 +256,7 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
             <Settings className="w-5 h-5 text-primary" />
             Teste de Comando de Voz
             <Badge variant="outline" className="ml-auto mr-2">
-              {isListening ? 'Ouvindo' : 'Inativo'}
+              {isListening ? "Ouvindo" : "Inativo"}
             </Badge>
             {onClose && (
               <Button 

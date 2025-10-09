@@ -1,5 +1,5 @@
-import { supabase } from '@/integrations/supabase/client';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { supabase } from "@/integrations/supabase/client";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * Enhanced Supabase Manager with retry logic and error handling
@@ -39,7 +39,6 @@ export class SupabaseManager {
         return this.executeWithRetry(operation, retryCount + 1);
       }
       
-      console.error('Supabase operation failed after max retries', error);
       throw error;
     }
   }
@@ -57,14 +56,13 @@ export class SupabaseManager {
   async healthCheck(): Promise<boolean> {
     try {
       const { error } = await this.client
-        .from('profiles')
-        .select('id')
+        .from("profiles")
+        .select("id")
         .limit(1)
         .single();
       
-      return !error || error.code === 'PGRST116'; // No rows is ok
+      return !error || error.code === "PGRST116"; // No rows is ok
     } catch (error) {
-      console.error('Supabase health check failed:', error);
       return false;
     }
   }

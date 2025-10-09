@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
-import { useKeyboardShortcuts } from './use-keyboard-shortcuts';
-import { useOfflineStorage } from './use-offline-storage';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { useKeyboardShortcuts } from "./use-keyboard-shortcuts";
+import { useOfflineStorage } from "./use-offline-storage";
 
 // Hook para funcionalidades globais do sistema
 export const useSystemActions = () => {
@@ -18,7 +18,7 @@ export const useSystemActions = () => {
   useKeyboardShortcuts(handleGlobalSearch);
 
   const handleNavigateToSettings = () => {
-    navigate('/settings');
+    navigate("/settings");
     toast({
       title: "Navegando",
       description: "Redirecionando para configurações",
@@ -26,7 +26,7 @@ export const useSystemActions = () => {
   };
 
   const handleNavigateToReports = () => {
-    navigate('/reports');
+    navigate("/reports");
     toast({
       title: "Navegando",
       description: "Redirecionando para relatórios",

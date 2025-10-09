@@ -1,11 +1,11 @@
-import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface PredictionData {
   current_avg_price: number;
   predicted_price: number;
-  price_trend: 'rising' | 'falling' | 'stable';
+  price_trend: "rising" | "falling" | "stable";
   confidence_score: number;
   best_booking_window_start: string;
   best_booking_window_end: string;
@@ -14,7 +14,7 @@ interface PredictionData {
 }
 
 interface PriceData {
-  type: 'flight' | 'hotel';
+  type: "flight" | "hotel";
   routeCode?: string;
   airlineCode?: string;
   flightNumber?: string;
@@ -43,12 +43,12 @@ export const useTravelPredictions = () => {
   const [loading, setLoading] = useState(false);
   const [predictions, setPredictions] = useState<PredictionData | null>(null);
 
-  const generatePrediction = useCallback(async (type: 'flight' | 'hotel', route: string) => {
+  const generatePrediction = useCallback(async (type: "flight" | "hotel", route: string) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('travel-predictive-analysis', {
+      const { data, error } = await supabase.functions.invoke("travel-predictive-analysis", {
         body: {
-          action: 'generate_predictions',
+          action: "generate_predictions",
           type,
           route
         }
@@ -59,7 +59,6 @@ export const useTravelPredictions = () => {
       setPredictions(data.data);
       return data.data;
     } catch (error) {
-      console.error('Erro ao gerar predições:', error);
       toast({
         title: "Erro",
         description: "Erro ao gerar predições. Tente novamente.",
@@ -73,9 +72,9 @@ export const useTravelPredictions = () => {
 
   const storePriceData = useCallback(async (priceData: PriceData) => {
     try {
-      const { error } = await supabase.functions.invoke('travel-predictive-analysis', {
+      const { error } = await supabase.functions.invoke("travel-predictive-analysis", {
         body: {
-          action: 'store_price_data',
+          action: "store_price_data",
           data: priceData
         }
       });
@@ -84,13 +83,12 @@ export const useTravelPredictions = () => {
       
       return { success: true };
     } catch (error) {
-      console.error('Erro ao armazenar dados de preço:', error);
       return { success: false, error };
     }
   }, []);
 
   const createPriceAlert = useCallback(async (alertData: {
-    type: 'flight' | 'hotel';
+    type: "flight" | "hotel";
     route: string;
     targetPrice: number;
     currentPrice?: number;
@@ -101,12 +99,12 @@ export const useTravelPredictions = () => {
     try {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData?.user) {
-        throw new Error('Usuário não autenticado');
+        throw new Error("Usuário não autenticado");
       }
 
-      const { error } = await supabase.functions.invoke('travel-predictive-analysis', {
+      const { error } = await supabase.functions.invoke("travel-predictive-analysis", {
         body: {
-          action: 'create_price_alert',
+          action: "create_price_alert",
           data: {
             userId: userData.user.id,
             ...alertData
@@ -123,7 +121,6 @@ export const useTravelPredictions = () => {
       
       return { success: true };
     } catch (error) {
-      console.error('Erro ao criar alerta:', error);
       toast({
         title: "Erro",
         description: "Erro ao criar alerta. Tente novamente.",
@@ -137,12 +134,12 @@ export const useTravelPredictions = () => {
     try {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData?.user) {
-        throw new Error('Usuário não autenticado');
+        throw new Error("Usuário não autenticado");
       }
 
-      const { data, error } = await supabase.functions.invoke('travel-predictive-analysis', {
+      const { data, error } = await supabase.functions.invoke("travel-predictive-analysis", {
         body: {
-          action: 'get_recommendations',
+          action: "get_recommendations",
           data: { userId: userData.user.id }
         }
       });
@@ -151,16 +148,15 @@ export const useTravelPredictions = () => {
       
       return data.data || [];
     } catch (error) {
-      console.error('Erro ao carregar recomendações:', error);
       return [];
     }
   }, []);
 
-  const analyzeTrends = useCallback(async (type: 'flight' | 'hotel', route: string) => {
+  const analyzeTrends = useCallback(async (type: "flight" | "hotel", route: string) => {
     try {
-      const { data, error } = await supabase.functions.invoke('travel-predictive-analysis', {
+      const { data, error } = await supabase.functions.invoke("travel-predictive-analysis", {
         body: {
-          action: 'analyze_trends',
+          action: "analyze_trends",
           type,
           route
         }
@@ -170,7 +166,6 @@ export const useTravelPredictions = () => {
       
       return data.data;
     } catch (error) {
-      console.error('Erro ao analisar tendências:', error);
       return null;
     }
   }, []);
@@ -184,8 +179,8 @@ export const useTravelPredictions = () => {
     return {
       priceChange,
       priceChangePercent,
-      shouldBookNow: predictions.price_trend === 'rising' && priceChangePercent > 5,
-      shouldWait: predictions.price_trend === 'falling' && priceChangePercent < -3,
+      shouldBookNow: predictions.price_trend === "rising" && priceChangePercent > 5,
+      shouldWait: predictions.price_trend === "falling" && priceChangePercent < -3,
       confidence: predictions.confidence_score,
       isHighConfidence: predictions.confidence_score > 0.7,
       demandLevel: predictions.demand_level,
@@ -203,8 +198,8 @@ export const useTravelPredictions = () => {
     const insights = getInsights(predictions);
     if (!insights) return "Erro ao processar predição";
 
-    const trend = predictions.price_trend === 'rising' ? 'alta' : 
-                  predictions.price_trend === 'falling' ? 'baixa' : 'estável';
+    const trend = predictions.price_trend === "rising" ? "alta" : 
+      predictions.price_trend === "falling" ? "baixa" : "estável";
     
     return `Tendência de ${trend} com ${Math.round(insights.confidence * 100)}% de confiança. ${insights.recommendation}`;
   }, [getInsights]);

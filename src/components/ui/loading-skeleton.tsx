@@ -9,4 +9,4 @@ export {
   LoadingDashboard as DashboardSkeleton,
   LoadingCard as CardSkeleton,
   type LoadingSkeletonProps as SkeletonProps
-} from './Loading';
+} from "./Loading";

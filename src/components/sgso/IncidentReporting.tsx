@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +11,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { useToast } from '@/hooks/use-toast';
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 import {
   Bell,
   AlertTriangle,
@@ -24,14 +24,14 @@ import {
   Filter,
   Plus,
   Eye
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Incident {
   id: string;
   number: string;
-  type: 'accident' | 'near_miss' | 'environmental' | 'security' | 'operational' | 'other';
-  severity: 'critical' | 'high' | 'medium' | 'low' | 'negligible';
-  status: 'reported' | 'investigating' | 'resolved' | 'closed';
+  type: "accident" | "near_miss" | "environmental" | "security" | "operational" | "other";
+  severity: "critical" | "high" | "medium" | "low" | "negligible";
+  status: "reported" | "investigating" | "resolved" | "closed";
   title: string;
   date: string;
   vessel?: string;
@@ -40,108 +40,108 @@ interface Incident {
 
 const SAMPLE_INCIDENTS: Incident[] = [
   {
-    id: '1',
-    number: 'INC-2024-001',
-    type: 'near_miss',
-    severity: 'high',
-    status: 'investigating',
-    title: 'Quase colisão durante manobra de aproximação',
-    date: '2024-10-05',
-    vessel: 'MV Atlântico',
-    reportedBy: 'Capitão Silva'
+    id: "1",
+    number: "INC-2024-001",
+    type: "near_miss",
+    severity: "high",
+    status: "investigating",
+    title: "Quase colisão durante manobra de aproximação",
+    date: "2024-10-05",
+    vessel: "MV Atlântico",
+    reportedBy: "Capitão Silva"
   },
   {
-    id: '2',
-    number: 'INC-2024-002',
-    type: 'environmental',
-    severity: 'medium',
-    status: 'resolved',
-    title: 'Pequeno vazamento de óleo hidráulico',
-    date: '2024-10-03',
-    vessel: 'MV Pacífico',
-    reportedBy: 'Eng. Santos'
+    id: "2",
+    number: "INC-2024-002",
+    type: "environmental",
+    severity: "medium",
+    status: "resolved",
+    title: "Pequeno vazamento de óleo hidráulico",
+    date: "2024-10-03",
+    vessel: "MV Pacífico",
+    reportedBy: "Eng. Santos"
   },
   {
-    id: '3',
-    number: 'INC-2024-003',
-    type: 'accident',
-    severity: 'low',
-    status: 'closed',
-    title: 'Lesão menor em membro da tripulação',
-    date: '2024-10-01',
-    vessel: 'MV Índico',
-    reportedBy: 'Médico de Bordo'
+    id: "3",
+    number: "INC-2024-003",
+    type: "accident",
+    severity: "low",
+    status: "closed",
+    title: "Lesão menor em membro da tripulação",
+    date: "2024-10-01",
+    vessel: "MV Índico",
+    reportedBy: "Médico de Bordo"
   },
   {
-    id: '4',
-    number: 'INC-2024-004',
-    type: 'operational',
-    severity: 'critical',
-    status: 'reported',
-    title: 'Falha temporária sistema DP durante operação crítica',
-    date: '2024-10-06',
-    vessel: 'MV Atlântico',
-    reportedBy: 'DPO João'
+    id: "4",
+    number: "INC-2024-004",
+    type: "operational",
+    severity: "critical",
+    status: "reported",
+    title: "Falha temporária sistema DP durante operação crítica",
+    date: "2024-10-06",
+    vessel: "MV Atlântico",
+    reportedBy: "DPO João"
   }
 ];
 
 const getSeverityColor = (severity: string) => {
   const colors = {
-    critical: 'bg-red-600 text-white border-red-700',
-    high: 'bg-orange-600 text-white border-orange-700',
-    medium: 'bg-yellow-600 text-white border-yellow-700',
-    low: 'bg-blue-600 text-white border-blue-700',
-    negligible: 'bg-gray-600 text-white border-gray-700'
+    critical: "bg-red-600 text-white border-red-700",
+    high: "bg-orange-600 text-white border-orange-700",
+    medium: "bg-yellow-600 text-white border-yellow-700",
+    low: "bg-blue-600 text-white border-blue-700",
+    negligible: "bg-gray-600 text-white border-gray-700"
   };
-  return colors[severity as keyof typeof colors] || 'bg-gray-600';
+  return colors[severity as keyof typeof colors] || "bg-gray-600";
 };
 
 const getStatusColor = (status: string) => {
   const colors = {
-    reported: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    investigating: 'bg-blue-100 text-blue-800 border-blue-300',
-    resolved: 'bg-green-100 text-green-800 border-green-300',
-    closed: 'bg-secondary text-secondary-foreground border-border'
+    reported: "bg-yellow-100 text-yellow-800 border-yellow-300",
+    investigating: "bg-blue-100 text-blue-800 border-blue-300",
+    resolved: "bg-green-100 text-green-800 border-green-300",
+    closed: "bg-secondary text-secondary-foreground border-border"
   };
-  return colors[status as keyof typeof colors] || 'bg-gray-100';
+  return colors[status as keyof typeof colors] || "bg-gray-100";
 };
 
 const getTypeLabel = (type: string) => {
   const labels = {
-    accident: 'Acidente',
-    near_miss: 'Quase Acidente',
-    environmental: 'Ambiental',
-    security: 'Segurança',
-    operational: 'Operacional',
-    other: 'Outro'
+    accident: "Acidente",
+    near_miss: "Quase Acidente",
+    environmental: "Ambiental",
+    security: "Segurança",
+    operational: "Operacional",
+    other: "Outro"
   };
   return labels[type as keyof typeof labels] || type;
 };
 
 const getStatusLabel = (status: string) => {
   const labels = {
-    reported: 'Reportado',
-    investigating: 'Investigando',
-    resolved: 'Resolvido',
-    closed: 'Fechado'
+    reported: "Reportado",
+    investigating: "Investigando",
+    resolved: "Resolvido",
+    closed: "Fechado"
   };
   return labels[status as keyof typeof labels] || status;
 };
 
 const getSeverityLabel = (severity: string) => {
   const labels = {
-    critical: 'Crítico',
-    high: 'Alto',
-    medium: 'Médio',
-    low: 'Baixo',
-    negligible: 'Negligível'
+    critical: "Crítico",
+    high: "Alto",
+    medium: "Médio",
+    low: "Baixo",
+    negligible: "Negligível"
   };
   return labels[severity as keyof typeof labels] || severity;
 };
 
 export const IncidentReporting: React.FC = () => {
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showSearchDialog, setShowSearchDialog] = useState(false);
   const [filterSeverity, setFilterSeverity] = useState({
     critical: true,
@@ -160,9 +160,9 @@ export const IncidentReporting: React.FC = () => {
   });
   const { toast } = useToast();
 
-  const criticalCount = SAMPLE_INCIDENTS.filter(i => i.severity === 'critical').length;
-  const highCount = SAMPLE_INCIDENTS.filter(i => i.severity === 'high').length;
-  const openCount = SAMPLE_INCIDENTS.filter(i => i.status === 'reported' || i.status === 'investigating').length;
+  const criticalCount = SAMPLE_INCIDENTS.filter(i => i.severity === "critical").length;
+  const highCount = SAMPLE_INCIDENTS.filter(i => i.severity === "high").length;
+  const openCount = SAMPLE_INCIDENTS.filter(i => i.status === "reported" || i.status === "investigating").length;
 
   const handleSearch = () => {
     setShowSearchDialog(!showSearchDialog);
@@ -173,7 +173,7 @@ export const IncidentReporting: React.FC = () => {
   };
 
   const filteredIncidents = SAMPLE_INCIDENTS.filter(incident => {
-    const matchesSearch = searchQuery === '' || 
+    const matchesSearch = searchQuery === "" || 
       incident.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       incident.number.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (incident.vessel && incident.vessel.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -417,19 +417,19 @@ export const IncidentReporting: React.FC = () => {
                       </div>
                       
                       <div className="flex flex-col items-end gap-2">
-                        {incident.status === 'reported' && (
+                        {incident.status === "reported" && (
                           <Badge className="bg-yellow-600 text-white">
                             <Clock className="h-3 w-3 mr-1" />
                             Aguardando
                           </Badge>
                         )}
-                        {incident.status === 'investigating' && (
+                        {incident.status === "investigating" && (
                           <Badge className="bg-blue-600 text-white">
                             <Search className="h-3 w-3 mr-1" />
                             Em Análise
                           </Badge>
                         )}
-                        {incident.status === 'resolved' && (
+                        {incident.status === "resolved" && (
                           <Badge className="bg-green-600 text-white">
                             <CheckCircle className="h-3 w-3 mr-1" />
                             Resolvido
@@ -446,13 +446,13 @@ export const IncidentReporting: React.FC = () => {
               ))}
             </TabsContent>
 
-            {['open', 'critical', 'investigating', 'closed'].map((tab) => (
+            {["open", "critical", "investigating", "closed"].map((tab) => (
               <TabsContent key={tab} value={tab} className="space-y-3">
                 {filteredIncidents.filter(i => {
-                  if (tab === 'open') return i.status === 'reported' || i.status === 'investigating';
-                  if (tab === 'critical') return i.severity === 'critical';
-                  if (tab === 'investigating') return i.status === 'investigating';
-                  if (tab === 'closed') return i.status === 'closed';
+                  if (tab === "open") return i.status === "reported" || i.status === "investigating";
+                  if (tab === "critical") return i.severity === "critical";
+                  if (tab === "investigating") return i.status === "investigating";
+                  if (tab === "closed") return i.status === "closed";
                   return true;
                 }).map((incident) => (
                   <Card 

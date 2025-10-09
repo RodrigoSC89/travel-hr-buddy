@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import {
   Plane,
   Upload,
@@ -37,7 +37,7 @@ import {
   Plus,
   Bookmark,
   CreditCard
-} from 'lucide-react';
+} from "lucide-react";
 
 interface TravelAssistantProps {
   className?: string;
@@ -46,16 +46,16 @@ interface TravelAssistantProps {
 interface TravelDocument {
   id: string;
   name: string;
-  type: 'passport' | 'visa' | 'ticket' | 'hotel' | 'insurance' | 'other';
+  type: "passport" | "visa" | "ticket" | "hotel" | "insurance" | "other";
   url: string;
   expiryDate?: Date;
-  status: 'valid' | 'expiring' | 'expired';
+  status: "valid" | "expiring" | "expired";
   uploadDate: Date;
 }
 
 interface TravelInsight {
   id: string;
-  type: 'cost_saving' | 'route_optimization' | 'timing' | 'alternative';
+  type: "cost_saving" | "route_optimization" | "timing" | "alternative";
   title: string;
   description: string;
   impact: number;
@@ -67,7 +67,7 @@ interface PricePrediction {
   route: string;
   currentPrice: number;
   predictedPrice: number;
-  trend: 'rising' | 'falling' | 'stable';
+  trend: "rising" | "falling" | "stable";
   confidence: number;
   recommendation: string;
   bestBookingWindow: string;
@@ -75,10 +75,10 @@ interface PricePrediction {
 
 export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className }) => {
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('assistant');
+  const [activeTab, setActiveTab] = useState("assistant");
   const [isProcessing, setIsProcessing] = useState(false);
   const [chatMessages, setChatMessages] = useState<any[]>([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   const [documents, setDocuments] = useState<TravelDocument[]>([]);
   const [insights, setInsights] = useState<TravelInsight[]>([]);
   const [predictions, setPredictions] = useState<PricePrediction[]>([]);
@@ -96,52 +96,52 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
   const loadMockData = () => {
     const mockDocuments: TravelDocument[] = [
       {
-        id: '1',
-        name: 'Passaporte Brasileiro',
-        type: 'passport',
-        url: '/documents/passport.pdf',
-        expiryDate: new Date('2028-06-15'),
-        status: 'valid',
-        uploadDate: new Date('2024-01-10')
+        id: "1",
+        name: "Passaporte Brasileiro",
+        type: "passport",
+        url: "/documents/passport.pdf",
+        expiryDate: new Date("2028-06-15"),
+        status: "valid",
+        uploadDate: new Date("2024-01-10")
       },
       {
-        id: '2',
-        name: 'Bilhete LATAM - GRU/SDU',
-        type: 'ticket',
-        url: '/documents/ticket-latam.pdf',
-        status: 'valid',
-        uploadDate: new Date('2024-01-15')
+        id: "2",
+        name: "Bilhete LATAM - GRU/SDU",
+        type: "ticket",
+        url: "/documents/ticket-latam.pdf",
+        status: "valid",
+        uploadDate: new Date("2024-01-15")
       },
       {
-        id: '3',
-        name: 'Seguro Viagem',
-        type: 'insurance',
-        url: '/documents/insurance.pdf',
-        expiryDate: new Date('2024-12-31'),
-        status: 'valid',
-        uploadDate: new Date('2024-01-08')
+        id: "3",
+        name: "Seguro Viagem",
+        type: "insurance",
+        url: "/documents/insurance.pdf",
+        expiryDate: new Date("2024-12-31"),
+        status: "valid",
+        uploadDate: new Date("2024-01-08")
       }
     ];
     setDocuments(mockDocuments);
 
     const mockPredictions: PricePrediction[] = [
       {
-        route: 'GRU-SDU',
+        route: "GRU-SDU",
         currentPrice: 299,
         predictedPrice: 259,
-        trend: 'falling',
+        trend: "falling",
         confidence: 0.85,
-        recommendation: 'Aguarde mais 2 semanas para comprar. Preços devem cair 13%.',
-        bestBookingWindow: '15-30 dias antes da viagem'
+        recommendation: "Aguarde mais 2 semanas para comprar. Preços devem cair 13%.",
+        bestBookingWindow: "15-30 dias antes da viagem"
       },
       {
-        route: 'GRU-MAD',
+        route: "GRU-MAD",
         currentPrice: 2890,
         predictedPrice: 3200,
-        trend: 'rising',
+        trend: "rising",
         confidence: 0.78,
-        recommendation: 'Compre agora! Preços devem subir nos próximos dias.',
-        bestBookingWindow: 'Imediatamente'
+        recommendation: "Compre agora! Preços devem subir nos próximos dias.",
+        bestBookingWindow: "Imediatamente"
       }
     ];
     setPredictions(mockPredictions);
@@ -150,28 +150,28 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
   const generateInitialInsights = () => {
     const mockInsights: TravelInsight[] = [
       {
-        id: '1',
-        type: 'cost_saving',
-        title: 'Economia Identificada',
-        description: 'Alterando seu voo para terça-feira, você pode economizar R$ 150',
+        id: "1",
+        type: "cost_saving",
+        title: "Economia Identificada",
+        description: "Alterando seu voo para terça-feira, você pode economizar R$ 150",
         impact: 150,
         confidence: 0.9,
         actionable: true
       },
       {
-        id: '2',
-        type: 'route_optimization',
-        title: 'Rota Alternativa',
-        description: 'Conexão via Brasília pode ser 20% mais barata',
+        id: "2",
+        type: "route_optimization",
+        title: "Rota Alternativa",
+        description: "Conexão via Brasília pode ser 20% mais barata",
         impact: 200,
         confidence: 0.75,
         actionable: true
       },
       {
-        id: '3',
-        type: 'timing',
-        title: 'Melhor Momento',
-        description: 'Preços para Europa estão 15% abaixo da média histórica',
+        id: "3",
+        type: "timing",
+        title: "Melhor Momento",
+        description: "Preços para Europa estão 15% abaixo da média histórica",
         impact: 500,
         confidence: 0.85,
         actionable: true
@@ -184,24 +184,24 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
     if (!message.trim() || isProcessing) return;
 
     setIsProcessing(true);
-    const userMessage = { role: 'user', content: message, timestamp: new Date() };
+    const userMessage = { role: "user", content: message, timestamp: new Date() };
     setChatMessages(prev => [...prev, userMessage]);
-    setNewMessage('');
+    setNewMessage("");
 
     try {
       // Simular resposta da IA
       setTimeout(() => {
         const responses = [
-          'Posso ajudar você a encontrar os melhores preços de passagens. Para onde você gostaria de viajar?',
-          'Com base nos seus dados, recomendo aguardar 2 semanas para comprar passagens para o Rio de Janeiro. Os preços devem cair 13%.',
-          'Encontrei 3 opções de hotéis com excelente custo-benefício na sua data. Gostaria de ver as sugestões?',
-          'Seu passaporte está válido até 2028. Para viagens internacionais, recomendo verificar se o destino exige visto.',
-          'Analisando seu histórico de viagens, identifiquei que você pode economizar R$ 800 por ano escolhendo melhor os dias da semana.'
+          "Posso ajudar você a encontrar os melhores preços de passagens. Para onde você gostaria de viajar?",
+          "Com base nos seus dados, recomendo aguardar 2 semanas para comprar passagens para o Rio de Janeiro. Os preços devem cair 13%.",
+          "Encontrei 3 opções de hotéis com excelente custo-benefício na sua data. Gostaria de ver as sugestões?",
+          "Seu passaporte está válido até 2028. Para viagens internacionais, recomendo verificar se o destino exige visto.",
+          "Analisando seu histórico de viagens, identifiquei que você pode economizar R$ 800 por ano escolhendo melhor os dias da semana."
         ];
         
         const randomResponse = responses[Math.floor(Math.random() * responses.length)];
         const aiMessage = {
-          role: 'assistant',
+          role: "assistant",
           content: randomResponse,
           timestamp: new Date()
         };
@@ -210,7 +210,6 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
         setIsProcessing(false);
       }, 1500);
     } catch (error) {
-      console.error('Erro no chat:', error);
       setIsProcessing(false);
     }
   };
@@ -227,9 +226,9 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
         const newDoc: TravelDocument = {
           id: Date.now().toString(),
           name: file.name,
-          type: 'other',
+          type: "other",
           url: URL.createObjectURL(file),
-          status: 'valid',
+          status: "valid",
           uploadDate: new Date()
         };
 
@@ -264,29 +263,29 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'rising': return <TrendingUp className="h-4 w-4 text-red-500" />;
-      case 'falling': return <TrendingUp className="h-4 w-4 text-green-500 rotate-180" />;
-      default: return <BarChart3 className="h-4 w-4 text-yellow-500" />;
+    case "rising": return <TrendingUp className="h-4 w-4 text-red-500" />;
+    case "falling": return <TrendingUp className="h-4 w-4 text-green-500 rotate-180" />;
+    default: return <BarChart3 className="h-4 w-4 text-yellow-500" />;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'valid': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'expiring': return <Clock className="h-4 w-4 text-yellow-500" />;
-      case 'expired': return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      default: return <Clock className="h-4 w-4" />;
+    case "valid": return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "expiring": return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "expired": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    default: return <Clock className="h-4 w-4" />;
     }
   };
 
   const getDocumentIcon = (type: string) => {
     switch (type) {
-      case 'passport': return '🛂';
-      case 'visa': return '📋';
-      case 'ticket': return '✈️';
-      case 'hotel': return '🏨';
-      case 'insurance': return '🛡️';
-      default: return '📄';
+    case "passport": return "🛂";
+    case "visa": return "📋";
+    case "ticket": return "✈️";
+    case "hotel": return "🏨";
+    case "insurance": return "🛡️";
+    default: return "📄";
     }
   };
 
@@ -360,13 +359,13 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
                     chatMessages.map((msg, index) => (
                       <div
                         key={index}
-                        className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                        className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                       >
                         <div
                           className={`max-w-[80%] p-3 rounded-lg ${
-                            msg.role === 'user'
-                              ? 'bg-primary text-primary-foreground'
-                              : 'bg-background border'
+                            msg.role === "user"
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-background border"
                           }`}
                         >
                           <p className="text-sm">{msg.content}</p>
@@ -394,7 +393,7 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
                     placeholder="Digite sua pergunta sobre viagens..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleChatMessage(newMessage)}
+                    onKeyPress={(e) => e.key === "Enter" && handleChatMessage(newMessage)}
                     disabled={isProcessing}
                   />
                   <Button 
@@ -511,11 +510,11 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
                       <div className="flex items-center gap-2">
                         {getTrendIcon(prediction.trend)}
                         <Badge variant={
-                          prediction.trend === 'falling' ? 'default' :
-                          prediction.trend === 'rising' ? 'destructive' : 'secondary'
+                          prediction.trend === "falling" ? "default" :
+                            prediction.trend === "rising" ? "destructive" : "secondary"
                         }>
-                          {prediction.trend === 'falling' ? 'Caindo' :
-                           prediction.trend === 'rising' ? 'Subindo' : 'Estável'}
+                          {prediction.trend === "falling" ? "Caindo" :
+                            prediction.trend === "rising" ? "Subindo" : "Estável"}
                         </Badge>
                       </div>
                     </div>
@@ -587,7 +586,7 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
                       files.forEach(handleDocumentUpload);
                     }}
                   />
-                  <Button onClick={() => document.getElementById('doc-upload')?.click()}>
+                  <Button onClick={() => document.getElementById("doc-upload")?.click()}>
                     <Upload className="h-4 w-4 mr-2" />
                     Selecionar Arquivos
                   </Button>
@@ -609,13 +608,13 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
                       </div>
                       <div className="flex items-center space-x-2">
                         <Badge variant={
-                          doc.status === 'valid' ? 'default' :
-                          doc.status === 'expiring' ? 'secondary' : 'destructive'
+                          doc.status === "valid" ? "default" :
+                            doc.status === "expiring" ? "secondary" : "destructive"
                         }>
                           {getStatusIcon(doc.status)}
                           <span className="ml-1">
-                            {doc.status === 'valid' ? 'Válido' :
-                             doc.status === 'expiring' ? 'Vencendo' : 'Expirado'}
+                            {doc.status === "valid" ? "Válido" :
+                              doc.status === "expiring" ? "Vencendo" : "Expirado"}
                           </span>
                         </Badge>
                         <Button variant="ghost" size="sm">

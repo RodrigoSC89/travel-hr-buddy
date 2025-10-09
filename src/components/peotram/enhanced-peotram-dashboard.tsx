@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { 
   FileCheck, 
   TrendingUp, 
@@ -29,9 +29,9 @@ import {
   HelpCircle,
   Search,
   Filter
-} from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
-import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+} from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
+import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface PeotramMetrics {
   totalAudits: number;
@@ -51,7 +51,7 @@ interface AuditProgress {
   elementId: string;
   elementName: string;
   progress: number;
-  status: 'completed' | 'in-progress' | 'pending' | 'overdue';
+  status: "completed" | "in-progress" | "pending" | "overdue";
   dueDate: string;
   assignedTo: string;
   lastUpdate: string;
@@ -65,29 +65,29 @@ interface ComplianceTrend {
 }
 
 const PEOTRAM_ELEMENTS = [
-  { id: 'ELEMENTO_01', name: 'Liderança, Gerenciamento e Responsabilidade', icon: Users },
-  { id: 'ELEMENTO_02', name: 'Conformidade Legal', icon: Shield },
-  { id: 'ELEMENTO_03', name: 'Gestão de Riscos e Análise de Perigos', icon: AlertTriangle },
-  { id: 'ELEMENTO_04', name: 'Competência e Treinamento', icon: Award },
-  { id: 'ELEMENTO_05', name: 'Segurança Técnica e Eficiência Energética', icon: Zap },
-  { id: 'ELEMENTO_06', name: 'Manutenção e Confiabilidade', icon: Settings },
-  { id: 'ELEMENTO_07', name: 'Gestão de Emergências e Contingências', icon: AlertTriangle },
-  { id: 'ELEMENTO_08', name: 'Segurança Operacional', icon: Shield },
-  { id: 'ELEMENTO_09', name: 'Meio Ambiente', icon: Leaf },
-  { id: 'ELEMENTO_10', name: 'Monitoramento e Análise Crítica', icon: BarChart3 }
+  { id: "ELEMENTO_01", name: "Liderança, Gerenciamento e Responsabilidade", icon: Users },
+  { id: "ELEMENTO_02", name: "Conformidade Legal", icon: Shield },
+  { id: "ELEMENTO_03", name: "Gestão de Riscos e Análise de Perigos", icon: AlertTriangle },
+  { id: "ELEMENTO_04", name: "Competência e Treinamento", icon: Award },
+  { id: "ELEMENTO_05", name: "Segurança Técnica e Eficiência Energética", icon: Zap },
+  { id: "ELEMENTO_06", name: "Manutenção e Confiabilidade", icon: Settings },
+  { id: "ELEMENTO_07", name: "Gestão de Emergências e Contingências", icon: AlertTriangle },
+  { id: "ELEMENTO_08", name: "Segurança Operacional", icon: Shield },
+  { id: "ELEMENTO_09", name: "Meio Ambiente", icon: Leaf },
+  { id: "ELEMENTO_10", name: "Monitoramento e Análise Crítica", icon: BarChart3 }
 ];
 
 const COMPLIANCE_COLORS = {
-  excellent: 'hsl(var(--success))',
-  good: 'hsl(var(--info))',
-  fair: 'hsl(var(--warning))',
-  poor: 'hsl(var(--destructive))'
+  excellent: "hsl(var(--success))",
+  good: "hsl(var(--info))",
+  fair: "hsl(var(--warning))",
+  poor: "hsl(var(--destructive))"
 };
 
 export const EnhancedPeotramDashboard: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('2024');
-  const [auditType, setAuditType] = useState<'all' | 'vessel' | 'shore'>('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedPeriod, setSelectedPeriod] = useState("2024");
+  const [auditType, setAuditType] = useState<"all" | "vessel" | "shore">("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
   // Mock data - será substituído por dados reais da API
@@ -101,7 +101,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
     tasoScore: 92.3,
     idembScore: 88.7,
     innovationScore: 75.2,
-    certificationStatus: 'Válida',
+    certificationStatus: "Válida",
     supplierPerformance: 89.1
   };
 
@@ -109,52 +109,52 @@ export const EnhancedPeotramDashboard: React.FC = () => {
     elementId: element.id,
     elementName: element.name,
     progress: Math.floor(Math.random() * 100),
-    status: ['completed', 'in-progress', 'pending', 'overdue'][Math.floor(Math.random() * 4)] as any,
-    dueDate: `2024-${String(12 - index % 12).padStart(2, '0')}-15`,
+    status: ["completed", "in-progress", "pending", "overdue"][Math.floor(Math.random() * 4)] as any,
+    dueDate: `2024-${String(12 - index % 12).padStart(2, "0")}-15`,
     assignedTo: `Auditor ${index + 1}`,
-    lastUpdate: `2024-12-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`
+    lastUpdate: `2024-12-${String(Math.floor(Math.random() * 28) + 1).padStart(2, "0")}`
   }));
 
   const complianceTrend: ComplianceTrend[] = [
-    { period: 'Jan 2024', score: 85.2, nonConformities: 15, target: 90 },
-    { period: 'Fev 2024', score: 86.1, nonConformities: 13, target: 90 },
-    { period: 'Mar 2024', score: 87.3, nonConformities: 11, target: 90 },
-    { period: 'Abr 2024', score: 88.7, nonConformities: 9, target: 90 },
-    { period: 'Mai 2024', score: 87.9, nonConformities: 10, target: 90 },
-    { period: 'Jun 2024', score: 89.1, nonConformities: 8, target: 90 },
-    { period: 'Jul 2024', score: 88.5, nonConformities: 9, target: 90 },
-    { period: 'Ago 2024', score: 90.2, nonConformities: 7, target: 90 },
-    { period: 'Set 2024', score: 89.8, nonConformities: 8, target: 90 },
-    { period: 'Out 2024', score: 91.1, nonConformities: 6, target: 90 },
-    { period: 'Nov 2024', score: 88.9, nonConformities: 9, target: 90 },
-    { period: 'Dez 2024', score: 87.5, nonConformities: 12, target: 90 }
+    { period: "Jan 2024", score: 85.2, nonConformities: 15, target: 90 },
+    { period: "Fev 2024", score: 86.1, nonConformities: 13, target: 90 },
+    { period: "Mar 2024", score: 87.3, nonConformities: 11, target: 90 },
+    { period: "Abr 2024", score: 88.7, nonConformities: 9, target: 90 },
+    { period: "Mai 2024", score: 87.9, nonConformities: 10, target: 90 },
+    { period: "Jun 2024", score: 89.1, nonConformities: 8, target: 90 },
+    { period: "Jul 2024", score: 88.5, nonConformities: 9, target: 90 },
+    { period: "Ago 2024", score: 90.2, nonConformities: 7, target: 90 },
+    { period: "Set 2024", score: 89.8, nonConformities: 8, target: 90 },
+    { period: "Out 2024", score: 91.1, nonConformities: 6, target: 90 },
+    { period: "Nov 2024", score: 88.9, nonConformities: 9, target: 90 },
+    { period: "Dez 2024", score: 87.5, nonConformities: 12, target: 90 }
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'hsl(var(--success))';
-      case 'in-progress': return 'hsl(var(--info))';
-      case 'pending': return 'hsl(var(--warning))';
-      case 'overdue': return 'hsl(var(--destructive))';
-      default: return 'hsl(var(--muted))';
+    case "completed": return "hsl(var(--success))";
+    case "in-progress": return "hsl(var(--info))";
+    case "pending": return "hsl(var(--warning))";
+    case "overdue": return "hsl(var(--destructive))";
+    default: return "hsl(var(--muted))";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return CheckCircle;
-      case 'in-progress': return Clock;
-      case 'pending': return Target;
-      case 'overdue': return AlertTriangle;
-      default: return Clock;
+    case "completed": return CheckCircle;
+    case "in-progress": return Clock;
+    case "pending": return Target;
+    case "overdue": return AlertTriangle;
+    default: return Clock;
     }
   };
 
   const getComplianceLevel = (score: number) => {
-    if (score >= 95) return { level: 'Excelente', color: 'hsl(var(--success))' };
-    if (score >= 85) return { level: 'Bom', color: 'hsl(var(--info))' };
-    if (score >= 70) return { level: 'Regular', color: 'hsl(var(--warning))' };
-    return { level: 'Insuficiente', color: 'hsl(var(--destructive))' };
+    if (score >= 95) return { level: "Excelente", color: "hsl(var(--success))" };
+    if (score >= 85) return { level: "Bom", color: "hsl(var(--info))" };
+    if (score >= 70) return { level: "Regular", color: "hsl(var(--warning))" };
+    return { level: "Insuficiente", color: "hsl(var(--destructive))" };
   };
 
   return (
@@ -247,7 +247,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                   <p className="text-sm font-medium text-muted-foreground">Score de Conformidade</p>
                   <p className="text-3xl font-bold text-foreground">{metrics.complianceScore}%</p>
                   <div className="flex items-center gap-2 mt-2">
-                    <Badge variant="outline" style={{ backgroundColor: getComplianceLevel(metrics.complianceScore).color + '20', color: getComplianceLevel(metrics.complianceScore).color }}>
+                    <Badge variant="outline" style={{ backgroundColor: getComplianceLevel(metrics.complianceScore).color + "20", color: getComplianceLevel(metrics.complianceScore).color }}>
                       {getComplianceLevel(metrics.complianceScore).level}
                     </Badge>
                   </div>
@@ -360,9 +360,9 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                       <YAxis stroke="hsl(var(--muted-foreground))" />
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: 'hsl(var(--card))', 
-                          border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px'
+                          backgroundColor: "hsl(var(--card))", 
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "8px"
                         }} 
                       />
                       <Line 
@@ -370,7 +370,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                         dataKey="score" 
                         stroke="hsl(var(--primary))" 
                         strokeWidth={2}
-                        dot={{ fill: 'hsl(var(--primary))' }}
+                        dot={{ fill: "hsl(var(--primary))" }}
                       />
                       <Line 
                         type="monotone" 
@@ -378,7 +378,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                         stroke="hsl(var(--success))" 
                         strokeWidth={2}
                         strokeDasharray="5 5"
-                        dot={{ fill: 'hsl(var(--success))' }}
+                        dot={{ fill: "hsl(var(--success))" }}
                       />
                     </LineChart>
                   </ResponsiveContainer>
@@ -432,7 +432,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                             value={element.progress} 
                             className="h-2"
                             style={{ 
-                              background: getStatusColor(element.status) + '20'
+                              background: getStatusColor(element.status) + "20"
                             }}
                           />
                         </div>
@@ -593,9 +593,9 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                       <YAxis stroke="hsl(var(--muted-foreground))" />
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: 'hsl(var(--card))', 
-                          border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px'
+                          backgroundColor: "hsl(var(--card))", 
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "8px"
                         }} 
                       />
                       <Bar dataKey="nonConformities" fill="hsl(var(--destructive))" />
@@ -626,9 +626,9 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                             <Badge 
                               variant="outline" 
                               style={{ 
-                                backgroundColor: compliance.color + '20',
+                                backgroundColor: compliance.color + "20",
                                 color: compliance.color,
-                                borderColor: compliance.color + '40'
+                                borderColor: compliance.color + "40"
                               }}
                             >
                               {compliance.level}

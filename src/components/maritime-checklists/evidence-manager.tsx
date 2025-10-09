@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Camera, 
   Mic, 
@@ -13,13 +13,13 @@ import {
   CheckCircle,
   AlertTriangle,
   Download
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface EvidenceItem {
   id: string;
-  type: 'photo' | 'audio' | 'document';
+  type: "photo" | "audio" | "document";
   name: string;
   url: string;
   size: number;
@@ -42,11 +42,11 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
 
-  const handleFileUpload = async (files: FileList, type: 'photo' | 'document') => {
+  const handleFileUpload = async (files: FileList, type: "photo" | "document") => {
     if (!files.length) return;
 
     const file = files[0];
-    const maxSize = type === 'photo' ? 10 * 1024 * 1024 : 50 * 1024 * 1024; // 10MB for photos, 50MB for documents
+    const maxSize = type === "photo" ? 10 * 1024 * 1024 : 50 * 1024 * 1024; // 10MB for photos, 50MB for documents
 
     if (file.size > maxSize) {
       toast.error(`Arquivo muito grande. Máximo: ${maxSize / 1024 / 1024}MB`);
@@ -57,19 +57,19 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       setUploading(true);
 
       // Generate unique filename
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.split(".").pop();
       const fileName = `${checklistItemId}/${Date.now()}.${fileExt}`;
 
       // Upload to Supabase Storage
       const { data, error } = await supabase.storage
-        .from('checklist-evidence')
+        .from("checklist-evidence")
         .upload(fileName, file);
 
       if (error) throw error;
 
       // Get public URL
       const { data: urlData } = supabase.storage
-        .from('checklist-evidence')
+        .from("checklist-evidence")
         .getPublicUrl(fileName);
 
       const newEvidence: EvidenceItem = {
@@ -83,7 +83,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
 
       // Save to database
       const { error: dbError } = await supabase
-        .from('checklist_evidence')
+        .from("checklist_evidence")
         .insert({
           checklist_item_id: checklistItemId,
           file_type: type,
@@ -98,10 +98,9 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       setEvidence(updatedEvidence);
       onEvidenceUpdate?.(updatedEvidence);
 
-      toast.success('Evidência enviada com sucesso!');
+      toast.success("Evidência enviada com sucesso!");
     } catch (error) {
-      console.error('Error uploading evidence:', error);
-      toast.error('Erro ao enviar evidência');
+      toast.error("Erro ao enviar evidência");
     } finally {
       setUploading(false);
     }
@@ -115,7 +114,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
 
       recorder.ondataavailable = (e) => chunks.push(e.data);
       recorder.onstop = async () => {
-        const blob = new Blob(chunks, { type: 'audio/wav' });
+        const blob = new Blob(chunks, { type: "audio/wav" });
         await uploadAudioBlob(blob);
         stream.getTracks().forEach(track => track.stop());
       };
@@ -123,10 +122,9 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       recorder.start();
       setMediaRecorder(recorder);
       setRecording(true);
-      toast.info('Gravação iniciada...');
+      toast.info("Gravação iniciada...");
     } catch (error) {
-      console.error('Error starting recording:', error);
-      toast.error('Erro ao iniciar gravação');
+      toast.error("Erro ao iniciar gravação");
     }
   };
 
@@ -135,7 +133,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       mediaRecorder.stop();
       setRecording(false);
       setMediaRecorder(null);
-      toast.success('Gravação finalizada');
+      toast.success("Gravação finalizada");
     }
   };
 
@@ -146,18 +144,18 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       const fileName = `${checklistItemId}/audio_${Date.now()}.wav`;
       
       const { data, error } = await supabase.storage
-        .from('checklist-evidence')
+        .from("checklist-evidence")
         .upload(fileName, blob);
 
       if (error) throw error;
 
       const { data: urlData } = supabase.storage
-        .from('checklist-evidence')
+        .from("checklist-evidence")
         .getPublicUrl(fileName);
 
       const newEvidence: EvidenceItem = {
         id: Date.now().toString(),
-        type: 'audio',
+        type: "audio",
         name: `Audio_${new Date().toLocaleTimeString()}.wav`,
         url: urlData.publicUrl,
         size: blob.size,
@@ -166,10 +164,10 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
 
       // Save to database
       const { error: dbError } = await supabase
-        .from('checklist_evidence')
+        .from("checklist_evidence")
         .insert({
           checklist_item_id: checklistItemId,
-          file_type: 'audio',
+          file_type: "audio",
           file_url: urlData.publicUrl,
           description: `Audio recording ${new Date().toLocaleTimeString()}`,
           file_size: blob.size
@@ -181,8 +179,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       setEvidence(updatedEvidence);
       onEvidenceUpdate?.(updatedEvidence);
     } catch (error) {
-      console.error('Error uploading audio:', error);
-      toast.error('Erro ao enviar áudio');
+      toast.error("Erro ao enviar áudio");
     } finally {
       setUploading(false);
     }
@@ -194,44 +191,43 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       if (!item) return;
 
       // Remove from storage
-      const fileName = item.url.split('/').pop();
+      const fileName = item.url.split("/").pop();
       if (fileName) {
         await supabase.storage
-          .from('checklist-evidence')
+          .from("checklist-evidence")
           .remove([`${checklistItemId}/${fileName}`]);
       }
 
       // Remove from database
       await supabase
-        .from('checklist_evidence')
+        .from("checklist_evidence")
         .delete()
-        .eq('file_url', item.url);
+        .eq("file_url", item.url);
 
       const updatedEvidence = evidence.filter(e => e.id !== evidenceId);
       setEvidence(updatedEvidence);
       onEvidenceUpdate?.(updatedEvidence);
 
-      toast.success('Evidência removida');
+      toast.success("Evidência removida");
     } catch (error) {
-      console.error('Error removing evidence:', error);
-      toast.error('Erro ao remover evidência');
+      toast.error("Erro ao remover evidência");
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const getEvidenceIcon = (type: string) => {
     switch (type) {
-      case 'photo': return <Camera className="w-4 h-4" />;
-      case 'audio': return <Mic className="w-4 h-4" />;
-      case 'document': return <File className="w-4 h-4" />;
-      default: return <File className="w-4 h-4" />;
+    case "photo": return <Camera className="w-4 h-4" />;
+    case "audio": return <Mic className="w-4 h-4" />;
+    case "document": return <File className="w-4 h-4" />;
+    default: return <File className="w-4 h-4" />;
     }
   };
 
@@ -250,7 +246,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => e.target.files && handleFileUpload(e.target.files, 'photo')}
+              onChange={(e) => e.target.files && handleFileUpload(e.target.files, "photo")}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={uploading}
             />
@@ -265,17 +261,17 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
             size="sm"
             onClick={recording ? stopRecording : startRecording}
             disabled={uploading}
-            className={recording ? 'bg-red-50 border-red-200' : ''}
+            className={recording ? "bg-red-50 border-red-200" : ""}
           >
-            <Mic className={`w-4 h-4 mr-2 ${recording ? 'text-red-500' : ''}`} />
-            {recording ? 'Parar' : 'Gravar'}
+            <Mic className={`w-4 h-4 mr-2 ${recording ? "text-red-500" : ""}`} />
+            {recording ? "Parar" : "Gravar"}
           </Button>
 
           <div className="relative">
             <input
               type="file"
               accept=".pdf,.doc,.docx,.txt"
-              onChange={(e) => e.target.files && handleFileUpload(e.target.files, 'document')}
+              onChange={(e) => e.target.files && handleFileUpload(e.target.files, "document")}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={uploading}
             />
@@ -315,7 +311,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => window.open(item.url, '_blank')}
+                    onClick={() => window.open(item.url, "_blank")}
                   >
                     <Download className="w-4 h-4" />
                   </Button>

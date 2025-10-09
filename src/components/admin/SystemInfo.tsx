@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Clock, 
   Activity, 
@@ -10,11 +10,11 @@ import {
   Zap,
   TrendingUp,
   RefreshCw
-} from 'lucide-react';
+} from "lucide-react";
 
 export const SystemInfo: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [uptime, setUptime] = useState('0d 0h 0m');
+  const [uptime, setUptime] = useState("0d 0h 0m");
   const [lastRefresh, setLastRefresh] = useState(new Date());
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export const SystemInfo: React.FC = () => {
   };
 
   const systemHealth = {
-    status: 'healthy',
+    status: "healthy",
     cpu: 45,
     memory: 62,
     activeUsers: 87,
@@ -82,9 +82,9 @@ export const SystemInfo: React.FC = () => {
             <div>
               <p className="text-sm text-muted-foreground">Data e Hora Atual</p>
               <p className="text-lg font-semibold">
-                {currentTime.toLocaleString('pt-BR', { 
-                  dateStyle: 'short', 
-                  timeStyle: 'medium' 
+                {currentTime.toLocaleString("pt-BR", { 
+                  dateStyle: "short", 
+                  timeStyle: "medium" 
                 })}
               </p>
             </div>
@@ -112,7 +112,7 @@ export const SystemInfo: React.FC = () => {
                 <span className="text-xs text-muted-foreground">CPU</span>
                 <Badge 
                   variant="outline" 
-                  className={systemHealth.cpu > 80 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}
+                  className={systemHealth.cpu > 80 ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}
                 >
                   {systemHealth.cpu}%
                 </Badge>
@@ -124,7 +124,7 @@ export const SystemInfo: React.FC = () => {
                 <span className="text-xs text-muted-foreground">Memória</span>
                 <Badge 
                   variant="outline" 
-                  className={systemHealth.memory > 80 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}
+                  className={systemHealth.memory > 80 ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}
                 >
                   {systemHealth.memory}%
                 </Badge>
@@ -158,7 +158,7 @@ export const SystemInfo: React.FC = () => {
             <span className="font-medium text-success">Sistema Operacional</span>
           </div>
           <span className="text-xs text-muted-foreground">
-            Última atualização: {lastRefresh.toLocaleTimeString('pt-BR')}
+            Última atualização: {lastRefresh.toLocaleTimeString("pt-BR")}
           </span>
         </div>
       </CardContent>

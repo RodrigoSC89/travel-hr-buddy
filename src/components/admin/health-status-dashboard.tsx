@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { 
   Activity,
   AlertCircle,
@@ -15,9 +15,9 @@ import {
   AlertTriangle,
   Database,
   Cloud
-} from 'lucide-react';
-import { useAPIHealth } from '@/hooks/use-api-health';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+} from "lucide-react";
+import { useAPIHealth } from "@/hooks/use-api-health";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface SystemMetrics {
   uptime: string;
@@ -29,7 +29,7 @@ interface SystemMetrics {
 export const HealthStatusDashboard: React.FC = () => {
   const { healthStatus, resetCircuitBreaker } = useAPIHealth();
   const [systemMetrics, setSystemMetrics] = useState<SystemMetrics>({
-    uptime: '0d 0h 0m',
+    uptime: "0d 0h 0m",
     memoryUsage: 0,
     requestCount: 0,
     avgResponseTime: 0
@@ -80,46 +80,46 @@ export const HealthStatusDashboard: React.FC = () => {
     }
   }, [healthStatus]);
 
-  const getStatusIcon = (status: 'healthy' | 'degraded' | 'down') => {
+  const getStatusIcon = (status: "healthy" | "degraded" | "down") => {
     switch (status) {
-      case 'healthy':
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case 'degraded':
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case 'down':
-        return <AlertCircle className="h-5 w-5 text-red-500" />;
+    case "healthy":
+      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+    case "degraded":
+      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    case "down":
+      return <AlertCircle className="h-5 w-5 text-red-500" />;
     }
   };
 
-  const getStatusColor = (status: 'healthy' | 'degraded' | 'down') => {
+  const getStatusColor = (status: "healthy" | "degraded" | "down") => {
     switch (status) {
-      case 'healthy':
-        return 'bg-green-500';
-      case 'degraded':
-        return 'bg-yellow-500';
-      case 'down':
-        return 'bg-red-500';
+    case "healthy":
+      return "bg-green-500";
+    case "degraded":
+      return "bg-yellow-500";
+    case "down":
+      return "bg-red-500";
     }
   };
 
-  const getStatusBadge = (status: 'healthy' | 'degraded' | 'down') => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      healthy: 'default',
-      degraded: 'secondary',
-      down: 'destructive'
+  const getStatusBadge = (status: "healthy" | "degraded" | "down") => {
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      healthy: "default",
+      degraded: "secondary",
+      down: "destructive"
     };
     
     return (
       <Badge variant={variants[status]}>
-        {status === 'healthy' ? 'Saudável' : status === 'degraded' ? 'Degradado' : 'Fora do Ar'}
+        {status === "healthy" ? "Saudável" : status === "degraded" ? "Degradado" : "Fora do Ar"}
       </Badge>
     );
   };
 
   const healthStatusArray = Array.from(healthStatus.entries());
-  const overallHealthy = healthStatusArray.every(([_, status]) => status.status === 'healthy');
-  const hasWarnings = healthStatusArray.some(([_, status]) => status.status === 'degraded');
-  const hasCritical = healthStatusArray.some(([_, status]) => status.status === 'down');
+  const overallHealthy = healthStatusArray.every(([_, status]) => status.status === "healthy");
+  const hasWarnings = healthStatusArray.some(([_, status]) => status.status === "degraded");
+  const hasCritical = healthStatusArray.some(([_, status]) => status.status === "down");
 
   return (
     <div className="space-y-6">
@@ -161,7 +161,7 @@ export const HealthStatusDashboard: React.FC = () => {
                 <AlertTriangle className="h-6 w-6 text-yellow-500" />
               )}
               <div className="text-2xl font-bold">
-                {overallHealthy ? 'OK' : hasCritical ? 'Crítico' : 'Atenção'}
+                {overallHealthy ? "OK" : hasCritical ? "Crítico" : "Atenção"}
               </div>
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -239,14 +239,14 @@ export const HealthStatusDashboard: React.FC = () => {
 
               const getServiceIcon = (serviceName: string) => {
                 switch (serviceName.toLowerCase()) {
-                  case 'openai':
-                    return <Cloud className="h-5 w-5" />;
-                  case 'supabase':
-                    return <Database className="h-5 w-5" />;
-                  case 'realtime':
-                    return <Activity className="h-5 w-5" />;
-                  default:
-                    return <Server className="h-5 w-5" />;
+                case "openai":
+                  return <Cloud className="h-5 w-5" />;
+                case "supabase":
+                  return <Database className="h-5 w-5" />;
+                case "realtime":
+                  return <Activity className="h-5 w-5" />;
+                default:
+                  return <Server className="h-5 w-5" />;
                 }
               };
 
@@ -258,7 +258,7 @@ export const HealthStatusDashboard: React.FC = () => {
                       <div>
                         <h4 className="font-semibold capitalize">{name}</h4>
                         <p className="text-sm text-muted-foreground">
-                          Última verificação: {new Date(status.lastCheck).toLocaleTimeString('pt-BR')}
+                          Última verificação: {new Date(status.lastCheck).toLocaleTimeString("pt-BR")}
                         </p>
                       </div>
                     </div>
@@ -287,17 +287,17 @@ export const HealthStatusDashboard: React.FC = () => {
                     <div>
                       <p className="text-muted-foreground">Tempo de Resposta</p>
                       <p className="font-medium">
-                        {status.responseTime ? `${status.responseTime}ms` : 'N/A'}
+                        {status.responseTime ? `${status.responseTime}ms` : "N/A"}
                       </p>
                     </div>
                   </div>
 
-                  {status.status !== 'healthy' && (
+                  {status.status !== "healthy" && (
                     <div className="flex items-center justify-between pt-2 border-t">
                       <p className="text-sm text-muted-foreground">
-                        {status.status === 'down' 
-                          ? 'Circuit breaker pode estar ativo. Tentativas automáticas em andamento.'
-                          : 'Performance degradada detectada. Monitore atentamente.'}
+                        {status.status === "down" 
+                          ? "Circuit breaker pode estar ativo. Tentativas automáticas em andamento."
+                          : "Performance degradada detectada. Monitore atentamente."}
                       </p>
                       <Button
                         variant="outline"
@@ -357,14 +357,14 @@ export const HealthStatusDashboard: React.FC = () => {
               <div className="border rounded-lg p-3">
                 <p className="text-sm text-muted-foreground mb-1">Última Atualização</p>
                 <span className="font-medium">
-                  {lastUpdate.toLocaleTimeString('pt-BR')}
+                  {lastUpdate.toLocaleTimeString("pt-BR")}
                 </span>
               </div>
               
               <div className="border rounded-lg p-3">
                 <p className="text-sm text-muted-foreground mb-1">Connection</p>
                 <div className="flex items-center gap-2">
-                  <div className={`h-2 w-2 rounded-full ${overallHealthy ? 'bg-green-500' : 'bg-red-500'} animate-pulse`}></div>
+                  <div className={`h-2 w-2 rounded-full ${overallHealthy ? "bg-green-500" : "bg-red-500"} animate-pulse`}></div>
                   <span className="font-medium">Online</span>
                 </div>
               </div>

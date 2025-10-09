@@ -1,13 +1,13 @@
-import React, { Suspense } from 'react';
-import AnalyticsDashboard from '@/components/analytics/analytics-dashboard';
-import PredictiveAnalytics from '@/components/analytics/PredictiveAnalytics';
-import { ThemeProvider } from '@/components/layout/theme-provider';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
-import { ModuleHeader } from '@/components/ui/module-header';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, TrendingUp, Brain, Target } from 'lucide-react';
-import { DashboardSkeleton } from '@/components/ui/loading-skeleton';
+import React, { Suspense } from "react";
+import AnalyticsDashboard from "@/components/analytics/analytics-dashboard";
+import PredictiveAnalytics from "@/components/analytics/PredictiveAnalytics";
+import { ThemeProvider } from "@/components/layout/theme-provider";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarChart3, TrendingUp, Brain, Target } from "lucide-react";
+import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
 
 const Analytics = () => {
   return (
@@ -19,9 +19,9 @@ const Analytics = () => {
           description="Insights avançados e análise preditiva"
           gradient="blue"
           badges={[
-            { icon: Brain, label: 'IA Preditiva' },
-            { icon: TrendingUp, label: 'Tendências' },
-            { icon: Target, label: 'KPIs' }
+            { icon: Brain, label: "IA Preditiva" },
+            { icon: TrendingUp, label: "Tendências" },
+            { icon: Target, label: "KPIs" }
           ]}
         />
 

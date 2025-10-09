@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Bot, 
   MessageCircle, 
@@ -17,14 +17,14 @@ import {
   BarChart3,
   Users,
   Calendar
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Suggestion {
   id: string;
   title: string;
   description: string;
   module: string;
-  impact: 'high' | 'medium' | 'low';
+  impact: "high" | "medium" | "low";
   confidence: number;
   action: string;
 }
@@ -39,89 +39,89 @@ interface QuickAction {
 }
 
 export const CopilotAI = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [isListening, setIsListening] = useState(false);
 
   const suggestions: Suggestion[] = [
     {
-      id: '1',
-      title: 'Otimização de Rotas Detectada',
-      description: 'Baseado nos dados históricos, alterando a rota Rio-Santos pode economizar 15% em combustível.',
-      module: 'Logística',
-      impact: 'high',
+      id: "1",
+      title: "Otimização de Rotas Detectada",
+      description: "Baseado nos dados históricos, alterando a rota Rio-Santos pode economizar 15% em combustível.",
+      module: "Logística",
+      impact: "high",
       confidence: 87,
-      action: 'review_routes'
+      action: "review_routes"
     },
     {
-      id: '2',
-      title: 'Renovação de Certificados',
-      description: '3 certificados de tripulação expiram em 30 dias. Sugerido agendamento automático.',
-      module: 'RH Marítimo',
-      impact: 'high',
+      id: "2",
+      title: "Renovação de Certificados",
+      description: "3 certificados de tripulação expiram em 30 dias. Sugerido agendamento automático.",
+      module: "RH Marítimo",
+      impact: "high",
       confidence: 95,
-      action: 'schedule_renewals'
+      action: "schedule_renewals"
     },
     {
-      id: '3',
-      title: 'Tendência de Reservas',
-      description: 'Aumento de 40% nas reservas para dezembro. Considere expandir capacidade.',
-      module: 'Reservas',
-      impact: 'medium',
+      id: "3",
+      title: "Tendência de Reservas",
+      description: "Aumento de 40% nas reservas para dezembro. Considere expandir capacidade.",
+      module: "Reservas",
+      impact: "medium",
       confidence: 78,
-      action: 'plan_capacity'
+      action: "plan_capacity"
     },
     {
-      id: '4',
-      title: 'Anomalia de Custos',
-      description: 'Gastos portuários 25% acima da média. Investigação recomendada.',
-      module: 'Viagens',
-      impact: 'medium',
+      id: "4",
+      title: "Anomalia de Custos",
+      description: "Gastos portuários 25% acima da média. Investigação recomendada.",
+      module: "Viagens",
+      impact: "medium",
       confidence: 82,
-      action: 'investigate_costs'
+      action: "investigate_costs"
     }
   ];
 
   const quickActions: QuickAction[] = [
     {
-      id: '1',
-      name: 'Gerar Relatório',
-      description: 'Criar relatório automático de qualquer módulo',
+      id: "1",
+      name: "Gerar Relatório",
+      description: "Criar relatório automático de qualquer módulo",
       icon: <FileText className="h-5 w-5" />,
-      module: 'Geral',
+      module: "Geral",
       usage: 156
     },
     {
-      id: '2',
-      name: 'Análise de Dados',
-      description: 'Analisar tendências e padrões nos dados',
+      id: "2",
+      name: "Análise de Dados",
+      description: "Analisar tendências e padrões nos dados",
       icon: <BarChart3 className="h-5 w-5" />,
-      module: 'Analytics',
+      module: "Analytics",
       usage: 98
     },
     {
-      id: '3',
-      name: 'Encontrar Tripulação',
-      description: 'Buscar tripulação disponível para embarque',
+      id: "3",
+      name: "Encontrar Tripulação",
+      description: "Buscar tripulação disponível para embarque",
       icon: <Users className="h-5 w-5" />,
-      module: 'RH Marítimo',
+      module: "RH Marítimo",
       usage: 73
     },
     {
-      id: '4',
-      name: 'Agendar Operação',
-      description: 'Criar agendamento de operação portuária',
+      id: "4",
+      name: "Agendar Operação",
+      description: "Criar agendamento de operação portuária",
       icon: <Calendar className="h-5 w-5" />,
-      module: 'Logística',
+      module: "Logística",
       usage: 64
     }
   ];
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'high': return 'bg-danger text-danger-foreground';
-      case 'medium': return 'bg-warning text-warning-foreground';
-      case 'low': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "high": return "bg-danger text-danger-foreground";
+    case "medium": return "bg-warning text-warning-foreground";
+    case "low": return "bg-info text-info-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -133,8 +133,7 @@ export const CopilotAI = () => {
   const handleSendQuery = () => {
     if (query.trim()) {
       // Aqui implementaria o processamento da query
-      console.log('Query enviada:', query);
-      setQuery('');
+      setQuery("");
     }
   };
 
@@ -186,7 +185,7 @@ export const CopilotAI = () => {
                   placeholder="Pergunte qualquer coisa sobre o sistema... Ex: 'Mostrar reservas da próxima semana'"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendQuery()}
+                  onKeyPress={(e) => e.key === "Enter" && handleSendQuery()}
                 />
               </div>
               <Button

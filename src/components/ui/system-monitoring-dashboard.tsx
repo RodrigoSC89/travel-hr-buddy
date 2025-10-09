@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Activity, 
   Users, 
@@ -16,11 +16,11 @@ import {
   Globe,
   Shield,
   Target
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SystemStatus {
   name: string;
-  status: 'online' | 'warning' | 'offline';
+  status: "online" | "warning" | "offline";
   uptime: number;
   lastCheck: string;
 }
@@ -29,53 +29,53 @@ interface KPIMetric {
   title: string;
   value: string;
   change: string;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   icon: React.ComponentType<{ className?: string }>;
   color: string;
 }
 
 const systemStatus: SystemStatus[] = [
-  { name: 'Sistema Marítimo', status: 'online', uptime: 99.9, lastCheck: '2 min ago' },
-  { name: 'Analytics IA', status: 'online', uptime: 98.7, lastCheck: '1 min ago' },
-  { name: 'Blockchain Docs', status: 'warning', uptime: 95.3, lastCheck: '5 min ago' },
-  { name: 'IoT Dashboard', status: 'online', uptime: 99.2, lastCheck: '3 min ago' },
-  { name: 'Voice Interface', status: 'online', uptime: 97.8, lastCheck: '1 min ago' },
-  { name: 'AR Interface', status: 'warning', uptime: 92.1, lastCheck: '8 min ago' }
+  { name: "Sistema Marítimo", status: "online", uptime: 99.9, lastCheck: "2 min ago" },
+  { name: "Analytics IA", status: "online", uptime: 98.7, lastCheck: "1 min ago" },
+  { name: "Blockchain Docs", status: "warning", uptime: 95.3, lastCheck: "5 min ago" },
+  { name: "IoT Dashboard", status: "online", uptime: 99.2, lastCheck: "3 min ago" },
+  { name: "Voice Interface", status: "online", uptime: 97.8, lastCheck: "1 min ago" },
+  { name: "AR Interface", status: "warning", uptime: 92.1, lastCheck: "8 min ago" }
 ];
 
 const kpiMetrics: KPIMetric[] = [
-  { title: 'Usuários Ativos', value: '1,247', change: '+12%', trend: 'up', icon: Users, color: 'text-blue-600' },
-  { title: 'Embarcações Monitoradas', value: '34', change: '+2', trend: 'up', icon: Ship, color: 'text-cyan-600' },
-  { title: 'Eficiência IA', value: '94.8%', change: '+3.2%', trend: 'up', icon: Zap, color: 'text-purple-600' },
-  { title: 'Compliance Score', value: '97.2%', change: '+1.8%', trend: 'up', icon: Shield, color: 'text-green-600' },
-  { title: 'Performance Geral', value: '96.5%', change: '+2.1%', trend: 'up', icon: Target, color: 'text-orange-600' },
-  { title: 'Satisfação', value: '4.8/5', change: '+0.2', trend: 'up', icon: TrendingUp, color: 'text-pink-600' }
+  { title: "Usuários Ativos", value: "1,247", change: "+12%", trend: "up", icon: Users, color: "text-blue-600" },
+  { title: "Embarcações Monitoradas", value: "34", change: "+2", trend: "up", icon: Ship, color: "text-cyan-600" },
+  { title: "Eficiência IA", value: "94.8%", change: "+3.2%", trend: "up", icon: Zap, color: "text-purple-600" },
+  { title: "Compliance Score", value: "97.2%", change: "+1.8%", trend: "up", icon: Shield, color: "text-green-600" },
+  { title: "Performance Geral", value: "96.5%", change: "+2.1%", trend: "up", icon: Target, color: "text-orange-600" },
+  { title: "Satisfação", value: "4.8/5", change: "+0.2", trend: "up", icon: TrendingUp, color: "text-pink-600" }
 ];
 
 export const SystemMonitoringDashboard: React.FC = () => {
   const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
 
-  const getStatusColor = (status: 'online' | 'warning' | 'offline') => {
+  const getStatusColor = (status: "online" | "warning" | "offline") => {
     switch (status) {
-      case 'online': return 'text-green-600 bg-green-100';
-      case 'warning': return 'text-yellow-600 bg-yellow-100';
-      case 'offline': return 'text-red-600 bg-red-100';
+    case "online": return "text-green-600 bg-green-100";
+    case "warning": return "text-yellow-600 bg-yellow-100";
+    case "offline": return "text-red-600 bg-red-100";
     }
   };
 
-  const getStatusIcon = (status: 'online' | 'warning' | 'offline') => {
+  const getStatusIcon = (status: "online" | "warning" | "offline") => {
     switch (status) {
-      case 'online': return CheckCircle;
-      case 'warning': return AlertTriangle;
-      case 'offline': return AlertTriangle;
+    case "online": return CheckCircle;
+    case "warning": return AlertTriangle;
+    case "offline": return AlertTriangle;
     }
   };
 
-  const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
+  const getTrendIcon = (trend: "up" | "down" | "stable") => {
     switch (trend) {
-      case 'up': return '↗️';
-      case 'down': return '↘️';
-      case 'stable': return '→';
+    case "up": return "↗️";
+    case "down": return "↘️";
+    case "stable": return "→";
     }
   };
 
@@ -138,7 +138,7 @@ export const SystemMonitoringDashboard: React.FC = () => {
                 <Card 
                   key={index} 
                   className={`p-4 cursor-pointer transition-all hover:shadow-md ${
-                    selectedMetric === metric.title ? 'ring-2 ring-primary' : ''
+                    selectedMetric === metric.title ? "ring-2 ring-primary" : ""
                   }`}
                   onClick={() => setSelectedMetric(selectedMetric === metric.title ? null : metric.title)}
                 >
@@ -153,8 +153,8 @@ export const SystemMonitoringDashboard: React.FC = () => {
                     <h4 className="font-medium text-sm text-muted-foreground">{metric.title}</h4>
                     <p className="text-2xl font-bold">{metric.value}</p>
                     <p className={`text-sm flex items-center gap-1 ${
-                      metric.trend === 'up' ? 'text-green-600' : 
-                      metric.trend === 'down' ? 'text-red-600' : 'text-muted-foreground'
+                      metric.trend === "up" ? "text-green-600" : 
+                        metric.trend === "down" ? "text-red-600" : "text-muted-foreground"
                     }`}>
                       {metric.change} vs mês anterior
                     </p>

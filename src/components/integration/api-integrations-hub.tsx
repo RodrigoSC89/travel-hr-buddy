@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Zap, 
   Cloud, 
@@ -19,16 +19,16 @@ import {
   Plus,
   Trash2,
   RefreshCw
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Integration {
   id: string;
   name: string;
   description: string;
-  category: 'payment' | 'crm' | 'analytics' | 'security' | 'communication' | 'storage';
-  status: 'connected' | 'disconnected' | 'error';
+  category: "payment" | "crm" | "analytics" | "security" | "communication" | "storage";
+  status: "connected" | "disconnected" | "error";
   icon: React.ReactNode;
   configurable: boolean;
   webhookUrl?: string;
@@ -51,40 +51,40 @@ export const APIIntegrationsHub: React.FC = () => {
   
   const [integrations, setIntegrations] = useState<Integration[]>([
     {
-      id: '1',
-      name: 'Stripe',
-      description: 'Processamento de pagamentos',
-      category: 'payment',
-      status: 'connected',
+      id: "1",
+      name: "Stripe",
+      description: "Processamento de pagamentos",
+      category: "payment",
+      status: "connected",
       icon: <Zap className="h-5 w-5" />,
       configurable: true,
       lastSync: new Date(Date.now() - 2 * 60000)
     },
     {
-      id: '2',
-      name: 'HubSpot',
-      description: 'CRM e automação de marketing',
-      category: 'crm',
-      status: 'disconnected',
+      id: "2",
+      name: "HubSpot",
+      description: "CRM e automação de marketing",
+      category: "crm",
+      status: "disconnected",
       icon: <Database className="h-5 w-5" />,
       configurable: true
     },
     {
-      id: '3',
-      name: 'Google Analytics',
-      description: 'Análise de dados e métricas',
-      category: 'analytics',
-      status: 'connected',
+      id: "3",
+      name: "Google Analytics",
+      description: "Análise de dados e métricas",
+      category: "analytics",
+      status: "connected",
       icon: <Cloud className="h-5 w-5" />,
       configurable: false,
       lastSync: new Date(Date.now() - 5 * 60000)
     },
     {
-      id: '4',
-      name: 'Auth0',
-      description: 'Autenticação e segurança',
-      category: 'security',
-      status: 'error',
+      id: "4",
+      name: "Auth0",
+      description: "Autenticação e segurança",
+      category: "security",
+      status: "error",
       icon: <Shield className="h-5 w-5" />,
       configurable: true
     }
@@ -92,19 +92,19 @@ export const APIIntegrationsHub: React.FC = () => {
 
   const [apiKeys, setApiKeys] = useState<APIKey[]>([
     {
-      id: '1',
-      name: 'Production API',
-      key: 'naut_prod_' + Math.random().toString(36).substring(7),
-      permissions: ['read', 'write', 'admin'],
+      id: "1",
+      name: "Production API",
+      key: "naut_prod_" + Math.random().toString(36).substring(7),
+      permissions: ["read", "write", "admin"],
       createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       lastUsed: new Date(Date.now() - 30 * 60000),
       active: true
     },
     {
-      id: '2',
-      name: 'Development API',
-      key: 'naut_dev_' + Math.random().toString(36).substring(7),
-      permissions: ['read', 'write'],
+      id: "2",
+      name: "Development API",
+      key: "naut_dev_" + Math.random().toString(36).substring(7),
+      permissions: ["read", "write"],
       createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
       lastUsed: new Date(Date.now() - 2 * 60 * 60 * 1000),
       active: true
@@ -113,50 +113,50 @@ export const APIIntegrationsHub: React.FC = () => {
 
   const [webhooks, setWebhooks] = useState([
     {
-      id: '1',
-      url: 'https://api.nautilus.com/webhooks/stripe',
-      events: ['payment.completed', 'payment.failed'],
+      id: "1",
+      url: "https://api.nautilus.com/webhooks/stripe",
+      events: ["payment.completed", "payment.failed"],
       active: true,
       lastTrigger: new Date(Date.now() - 15 * 60000)
     },
     {
-      id: '2',
-      url: 'https://api.nautilus.com/webhooks/notifications',
-      events: ['user.created', 'user.updated'],
+      id: "2",
+      url: "https://api.nautilus.com/webhooks/notifications",
+      events: ["user.created", "user.updated"],
       active: true,
       lastTrigger: new Date(Date.now() - 45 * 60000)
     }
   ]);
 
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [newKeyName, setNewKeyName] = useState('');
-  const [newWebhookUrl, setNewWebhookUrl] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [newKeyName, setNewKeyName] = useState("");
+  const [newWebhookUrl, setNewWebhookUrl] = useState("");
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected': return 'bg-green-500';
-      case 'disconnected': return 'bg-gray-500';
-      case 'error': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "connected": return "bg-green-500";
+    case "disconnected": return "bg-gray-500";
+    case "error": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'error': return <AlertCircle className="h-4 w-4 text-red-500" />;
-      default: return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
+    case "connected": return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "error": return <AlertCircle className="h-4 w-4 text-red-500" />;
+    default: return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const filteredIntegrations = integrations.filter(integration => 
-    selectedCategory === 'all' || integration.category === selectedCategory
+    selectedCategory === "all" || integration.category === selectedCategory
   );
 
   const handleConnect = (integration: Integration) => {
     setIntegrations(prev => prev.map(int => 
       int.id === integration.id 
-        ? { ...int, status: 'connected', lastSync: new Date() }
+        ? { ...int, status: "connected", lastSync: new Date() }
         : int
     ));
     
@@ -169,7 +169,7 @@ export const APIIntegrationsHub: React.FC = () => {
   const handleDisconnect = (integration: Integration) => {
     setIntegrations(prev => prev.map(int => 
       int.id === integration.id 
-        ? { ...int, status: 'disconnected', lastSync: undefined }
+        ? { ...int, status: "disconnected", lastSync: undefined }
         : int
     ));
     
@@ -198,14 +198,14 @@ export const APIIntegrationsHub: React.FC = () => {
     const newKey: APIKey = {
       id: Date.now().toString(),
       name: newKeyName,
-      key: 'naut_' + Math.random().toString(36).substring(2, 15),
-      permissions: ['read'],
+      key: "naut_" + Math.random().toString(36).substring(2, 15),
+      permissions: ["read"],
       createdAt: new Date(),
       active: true
     };
 
     setApiKeys(prev => [...prev, newKey]);
-    setNewKeyName('');
+    setNewKeyName("");
     
     toast({
       title: "Chave API criada",
@@ -230,13 +230,13 @@ export const APIIntegrationsHub: React.FC = () => {
     const newWebhook = {
       id: Date.now().toString(),
       url: newWebhookUrl,
-      events: ['user.created'],
+      events: ["user.created"],
       active: true,
       lastTrigger: undefined
     };
 
     setWebhooks(prev => [...prev, newWebhook]);
-    setNewWebhookUrl('');
+    setNewWebhookUrl("");
     
     toast({
       title: "Webhook criado",
@@ -301,9 +301,9 @@ export const APIIntegrationsHub: React.FC = () => {
                       <Badge variant="outline" className="capitalize">
                         {integration.category}
                       </Badge>
-                      <Badge variant={integration.status === 'connected' ? 'default' : 'secondary'}>
-                        {integration.status === 'connected' ? 'Conectado' : 
-                         integration.status === 'error' ? 'Erro' : 'Desconectado'}
+                      <Badge variant={integration.status === "connected" ? "default" : "secondary"}>
+                        {integration.status === "connected" ? "Conectado" : 
+                          integration.status === "error" ? "Erro" : "Desconectado"}
                       </Badge>
                     </div>
 
@@ -314,7 +314,7 @@ export const APIIntegrationsHub: React.FC = () => {
                     )}
 
                     <div className="flex space-x-2">
-                      {integration.status === 'connected' ? (
+                      {integration.status === "connected" ? (
                         <>
                           <Button
                             size="sm"

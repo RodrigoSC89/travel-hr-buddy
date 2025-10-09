@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import {
   Send,
   Paperclip,
@@ -31,7 +31,7 @@ import {
   UserCheck,
   Globe,
   Shield
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MessageComposerProps {
   onMessageSent: () => void;
@@ -41,7 +41,7 @@ interface Recipient {
   id: string;
   name: string;
   role?: string;
-  type: 'user' | 'channel' | 'department' | 'broadcast';
+  type: "user" | "channel" | "department" | "broadcast";
 }
 
 interface MessageTemplate {
@@ -57,18 +57,18 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 }) => {
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [selectedRecipients, setSelectedRecipients] = useState<string[]>([]);
-  const [messageContent, setMessageContent] = useState('');
-  const [subject, setSubject] = useState('');
-  const [priority, setPriority] = useState<'low' | 'normal' | 'high' | 'critical'>('normal');
-  const [category, setCategory] = useState<'general' | 'hr' | 'operations' | 'emergency'>('general');
+  const [messageContent, setMessageContent] = useState("");
+  const [subject, setSubject] = useState("");
+  const [priority, setPriority] = useState<"low" | "normal" | "high" | "critical">("normal");
+  const [category, setCategory] = useState<"general" | "hr" | "operations" | "emergency">("general");
   const [isUrgent, setIsUrgent] = useState(false);
   const [isBroadcast, setIsBroadcast] = useState(false);
   const [attachments, setAttachments] = useState<File[]>([]);
   const [templates, setTemplates] = useState<MessageTemplate[]>([]);
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('');
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [recipientSearch, setRecipientSearch] = useState('');
+  const [recipientSearch, setRecipientSearch] = useState("");
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const { toast } = useToast();
 
@@ -77,20 +77,20 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     const errors: string[] = [];
     
     if (messageContent.length > 5000) {
-      errors.push('Mensagem excede o limite de 5000 caracteres');
+      errors.push("Mensagem excede o limite de 5000 caracteres");
     }
     
     if (selectedRecipients.length === 0 && messageContent.trim()) {
-      errors.push('Selecione ao menos um destinatário');
+      errors.push("Selecione ao menos um destinatário");
     }
     
     if (attachments.length > 10) {
-      errors.push('Máximo de 10 anexos permitidos');
+      errors.push("Máximo de 10 anexos permitidos");
     }
     
     const totalSize = attachments.reduce((sum, file) => sum + file.size, 0);
     if (totalSize > 50 * 1024 * 1024) {
-      errors.push('Tamanho total dos anexos excede 50MB');
+      errors.push("Tamanho total dos anexos excede 50MB");
     }
     
     setValidationErrors(errors);
@@ -106,33 +106,32 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       // Mock recipients data - replace with real Supabase query
       const mockRecipients: Recipient[] = [
         // Users
-        { id: 'user-1', name: 'Ana Silva', role: 'Gerente de RH', type: 'user' },
-        { id: 'user-2', name: 'Carlos Mendes', role: 'Coordenador de Operações', type: 'user' },
-        { id: 'user-3', name: 'Marina Santos', role: 'Capitã', type: 'user' },
-        { id: 'user-4', name: 'João Oliveira', role: 'DPO', type: 'user' },
-        { id: 'user-5', name: 'Pedro Costa', role: 'Engenheiro Chefe', type: 'user' },
+        { id: "user-1", name: "Ana Silva", role: "Gerente de RH", type: "user" },
+        { id: "user-2", name: "Carlos Mendes", role: "Coordenador de Operações", type: "user" },
+        { id: "user-3", name: "Marina Santos", role: "Capitã", type: "user" },
+        { id: "user-4", name: "João Oliveira", role: "DPO", type: "user" },
+        { id: "user-5", name: "Pedro Costa", role: "Engenheiro Chefe", type: "user" },
         
         // Channels
-        { id: 'channel-1', name: 'Geral', type: 'channel' },
-        { id: 'channel-2', name: 'RH - Recursos Humanos', type: 'channel' },
-        { id: 'channel-3', name: 'Operações Marítimas', type: 'channel' },
-        { id: 'channel-4', name: 'Emergência', type: 'channel' },
+        { id: "channel-1", name: "Geral", type: "channel" },
+        { id: "channel-2", name: "RH - Recursos Humanos", type: "channel" },
+        { id: "channel-3", name: "Operações Marítimas", type: "channel" },
+        { id: "channel-4", name: "Emergência", type: "channel" },
         
         // Departments
-        { id: 'dept-1', name: 'Departamento de RH', type: 'department' },
-        { id: 'dept-2', name: 'Operações', type: 'department' },
-        { id: 'dept-3', name: 'Engenharia e Máquinas', type: 'department' },
-        { id: 'dept-4', name: 'Deck e Navegação', type: 'department' },
+        { id: "dept-1", name: "Departamento de RH", type: "department" },
+        { id: "dept-2", name: "Operações", type: "department" },
+        { id: "dept-3", name: "Engenharia e Máquinas", type: "department" },
+        { id: "dept-4", name: "Deck e Navegação", type: "department" },
         
         // Broadcast
-        { id: 'broadcast-1', name: 'Todos os Usuários', type: 'broadcast' },
-        { id: 'broadcast-2', name: 'Tripulantes Embarcados', type: 'broadcast' },
-        { id: 'broadcast-3', name: 'Equipe em Terra', type: 'broadcast' }
+        { id: "broadcast-1", name: "Todos os Usuários", type: "broadcast" },
+        { id: "broadcast-2", name: "Tripulantes Embarcados", type: "broadcast" },
+        { id: "broadcast-3", name: "Equipe em Terra", type: "broadcast" }
       ];
 
       setRecipients(mockRecipients);
     } catch (error) {
-      console.error('Error loading recipients:', error);
     }
   };
 
@@ -141,38 +140,37 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       // Mock templates data
       const mockTemplates: MessageTemplate[] = [
         {
-          id: '1',
-          name: 'Confirmação de Embarque',
-          content: 'Prezado {{nome}}, confirmo seu embarque para o dia {{data}} na embarcação {{embarcacao}}. Favor confirmar recebimento.',
-          category: 'operations',
-          variables: ['nome', 'data', 'embarcacao']
+          id: "1",
+          name: "Confirmação de Embarque",
+          content: "Prezado {{nome}}, confirmo seu embarque para o dia {{data}} na embarcação {{embarcacao}}. Favor confirmar recebimento.",
+          category: "operations",
+          variables: ["nome", "data", "embarcacao"]
         },
         {
-          id: '2',
-          name: 'Lembrete de Certificação',
-          content: 'Olá {{nome}}, sua certificação {{certificacao}} vence em {{dias}} dias. Favor providenciar a renovação.',
-          category: 'hr',
-          variables: ['nome', 'certificacao', 'dias']
+          id: "2",
+          name: "Lembrete de Certificação",
+          content: "Olá {{nome}}, sua certificação {{certificacao}} vence em {{dias}} dias. Favor providenciar a renovação.",
+          category: "hr",
+          variables: ["nome", "certificacao", "dias"]
         },
         {
-          id: '3',
-          name: 'Comunicado Geral',
-          content: 'Comunicamos que {{assunto}}. Para mais informações, entre em contato com {{contato}}.',
-          category: 'general',
-          variables: ['assunto', 'contato']
+          id: "3",
+          name: "Comunicado Geral",
+          content: "Comunicamos que {{assunto}}. Para mais informações, entre em contato com {{contato}}.",
+          category: "general",
+          variables: ["assunto", "contato"]
         },
         {
-          id: '4',
-          name: 'Alerta de Emergência',
-          content: 'ALERTA: {{situacao}}. Todos devem {{acao}}. Confirmem recebimento imediatamente.',
-          category: 'emergency',
-          variables: ['situacao', 'acao']
+          id: "4",
+          name: "Alerta de Emergência",
+          content: "ALERTA: {{situacao}}. Todos devem {{acao}}. Confirmem recebimento imediatamente.",
+          category: "emergency",
+          variables: ["situacao", "acao"]
         }
       ];
 
       setTemplates(mockTemplates);
     } catch (error) {
-      console.error('Error loading templates:', error);
     }
   };
 
@@ -192,7 +190,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       setIsTemplateDialogOpen(false);
       
       // Auto-set category based on template
-      if (['general', 'hr', 'operations', 'emergency'].includes(template.category)) {
+      if (["general", "hr", "operations", "emergency"].includes(template.category)) {
         setCategory(template.category as any);
       }
     }
@@ -208,9 +206,9 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   };
 
   const handleImageUpload = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
     input.multiple = true;
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement;
@@ -237,9 +235,9 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   };
 
   const handleAudioUpload = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'audio/*';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "audio/*";
     input.multiple = true;
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement;
@@ -293,7 +291,6 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         description: "Rascunho salvo com sucesso"
       });
     } catch (error) {
-      console.error('Error saving draft:', error);
       toast({
         title: "Erro",
         description: "Erro ao salvar rascunho",
@@ -321,19 +318,18 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       // Reset form
-      setMessageContent('');
-      setSubject('');
+      setMessageContent("");
+      setSubject("");
       setSelectedRecipients([]);
       setAttachments([]);
-      setPriority('normal');
-      setCategory('general');
+      setPriority("normal");
+      setCategory("general");
       setIsUrgent(false);
       setIsBroadcast(false);
-      setSelectedTemplate('');
+      setSelectedTemplate("");
 
       onMessageSent();
     } catch (error) {
-      console.error('Error sending message:', error);
       toast({
         title: "Erro",
         description: "Erro ao enviar mensagem",
@@ -346,21 +342,21 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
   const getRecipientIcon = (type: string) => {
     switch (type) {
-      case 'user': return User;
-      case 'channel': return Hash;
-      case 'department': return Building;
-      case 'broadcast': return Globe;
-      default: return Users;
+    case "user": return User;
+    case "channel": return Hash;
+    case "department": return Building;
+    case "broadcast": return Globe;
+    default: return Users;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'text-destructive';
-      case 'high': return 'text-warning';
-      case 'normal': return 'text-primary';
-      case 'low': return 'text-muted-foreground';
-      default: return 'text-muted-foreground';
+    case "critical": return "text-destructive";
+    case "high": return "text-warning";
+    case "normal": return "text-primary";
+    case "low": return "text-muted-foreground";
+    default: return "text-muted-foreground";
     }
   };
 
@@ -433,8 +429,8 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                     key={recipient.id}
                     className={`flex items-center gap-2 p-2 rounded cursor-pointer transition-colors ${
                       isSelected 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'hover:bg-muted'
+                        ? "bg-primary text-primary-foreground" 
+                        : "hover:bg-muted"
                     }`}
                     onClick={() => handleRecipientToggle(recipient.id)}
                   >
@@ -649,7 +645,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           )}
 
           {/* Message Preview */}
-          {(isUrgent || priority === 'critical' || isBroadcast) && (
+          {(isUrgent || priority === "critical" || isBroadcast) && (
             <div className="p-4 border rounded-lg bg-muted/50">
               <div className="flex items-center gap-2 mb-2">
                 <Eye className="h-4 w-4" />
@@ -657,7 +653,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2">
-                  {priority === 'critical' && (
+                  {priority === "critical" && (
                     <Badge variant="destructive">CRÍTICA</Badge>
                   )}
                   {isUrgent && (

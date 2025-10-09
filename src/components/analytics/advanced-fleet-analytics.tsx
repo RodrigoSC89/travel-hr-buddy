@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Progress } from '@/components/ui/progress';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Progress } from "@/components/ui/progress";
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -25,7 +25,7 @@ import {
   Ship,
   Users,
   Gauge
-} from 'lucide-react';
+} from "lucide-react";
 
 interface FleetMetrics {
   efficiency: number;
@@ -57,15 +57,15 @@ interface VesselPerformance {
   utilization: number;
   maintenance_score: number;
   profit: number;
-  status: 'excellent' | 'good' | 'average' | 'poor';
+  status: "excellent" | "good" | "average" | "poor";
 }
 
 interface PredictiveInsight {
   id: string;
-  type: 'maintenance' | 'fuel' | 'route' | 'crew' | 'cost';
+  type: "maintenance" | "fuel" | "route" | "crew" | "cost";
   title: string;
   description: string;
-  impact: 'high' | 'medium' | 'low';
+  impact: "high" | "medium" | "low";
   confidence: number;
   potential_savings: number;
   action_required: boolean;
@@ -77,8 +77,8 @@ export const AdvancedFleetAnalytics = () => {
   const [performanceData, setPerformanceData] = useState<PerformanceData[]>([]);
   const [vesselPerformance, setVesselPerformance] = useState<VesselPerformance[]>([]);
   const [predictiveInsights, setPredictiveInsights] = useState<PredictiveInsight[]>([]);
-  const [timeRange, setTimeRange] = useState('30d');
-  const [activeTab, setActiveTab] = useState('overview');
+  const [timeRange, setTimeRange] = useState("30d");
+  const [activeTab, setActiveTab] = useState("overview");
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -112,67 +112,67 @@ export const AdvancedFleetAnalytics = () => {
       };
 
       const mockPerformanceData: PerformanceData[] = [
-        { date: '2024-01-01', fuel_efficiency: 85, operational_cost: 120000, revenue: 420000, vessel_count: 5, crew_satisfaction: 87, safety_incidents: 2 },
-        { date: '2024-01-02', fuel_efficiency: 87, operational_cost: 118000, revenue: 435000, vessel_count: 5, crew_satisfaction: 89, safety_incidents: 1 },
-        { date: '2024-01-03', fuel_efficiency: 89, operational_cost: 115000, revenue: 445000, vessel_count: 5, crew_satisfaction: 91, safety_incidents: 0 },
-        { date: '2024-01-04', fuel_efficiency: 86, operational_cost: 122000, revenue: 430000, vessel_count: 5, crew_satisfaction: 88, safety_incidents: 1 },
-        { date: '2024-01-05', fuel_efficiency: 90, operational_cost: 112000, revenue: 465000, vessel_count: 5, crew_satisfaction: 93, safety_incidents: 0 },
-        { date: '2024-01-06', fuel_efficiency: 88, operational_cost: 119000, revenue: 450000, vessel_count: 5, crew_satisfaction: 90, safety_incidents: 1 },
-        { date: '2024-01-07', fuel_efficiency: 91, operational_cost: 110000, revenue: 470000, vessel_count: 5, crew_satisfaction: 94, safety_incidents: 0 }
+        { date: "2024-01-01", fuel_efficiency: 85, operational_cost: 120000, revenue: 420000, vessel_count: 5, crew_satisfaction: 87, safety_incidents: 2 },
+        { date: "2024-01-02", fuel_efficiency: 87, operational_cost: 118000, revenue: 435000, vessel_count: 5, crew_satisfaction: 89, safety_incidents: 1 },
+        { date: "2024-01-03", fuel_efficiency: 89, operational_cost: 115000, revenue: 445000, vessel_count: 5, crew_satisfaction: 91, safety_incidents: 0 },
+        { date: "2024-01-04", fuel_efficiency: 86, operational_cost: 122000, revenue: 430000, vessel_count: 5, crew_satisfaction: 88, safety_incidents: 1 },
+        { date: "2024-01-05", fuel_efficiency: 90, operational_cost: 112000, revenue: 465000, vessel_count: 5, crew_satisfaction: 93, safety_incidents: 0 },
+        { date: "2024-01-06", fuel_efficiency: 88, operational_cost: 119000, revenue: 450000, vessel_count: 5, crew_satisfaction: 90, safety_incidents: 1 },
+        { date: "2024-01-07", fuel_efficiency: 91, operational_cost: 110000, revenue: 470000, vessel_count: 5, crew_satisfaction: 94, safety_incidents: 0 }
       ];
 
       const mockVesselPerformance: VesselPerformance[] = [
-        { vessel_name: 'MV Atlantic Explorer', efficiency: 94, fuel_consumption: 185, utilization: 96, maintenance_score: 92, profit: 85000, status: 'excellent' },
-        { vessel_name: 'MS Ocean Pioneer', efficiency: 89, fuel_consumption: 220, utilization: 91, maintenance_score: 88, profit: 78000, status: 'good' },
-        { vessel_name: 'MV Pacific Star', efficiency: 85, fuel_consumption: 245, utilization: 87, maintenance_score: 85, profit: 72000, status: 'good' },
-        { vessel_name: 'MS Baltic Wind', efficiency: 82, fuel_consumption: 265, utilization: 89, maintenance_score: 79, profit: 65000, status: 'average' },
-        { vessel_name: 'MV Nordic Crown', efficiency: 79, fuel_consumption: 285, utilization: 84, maintenance_score: 76, profit: 58000, status: 'average' }
+        { vessel_name: "MV Atlantic Explorer", efficiency: 94, fuel_consumption: 185, utilization: 96, maintenance_score: 92, profit: 85000, status: "excellent" },
+        { vessel_name: "MS Ocean Pioneer", efficiency: 89, fuel_consumption: 220, utilization: 91, maintenance_score: 88, profit: 78000, status: "good" },
+        { vessel_name: "MV Pacific Star", efficiency: 85, fuel_consumption: 245, utilization: 87, maintenance_score: 85, profit: 72000, status: "good" },
+        { vessel_name: "MS Baltic Wind", efficiency: 82, fuel_consumption: 265, utilization: 89, maintenance_score: 79, profit: 65000, status: "average" },
+        { vessel_name: "MV Nordic Crown", efficiency: 79, fuel_consumption: 285, utilization: 84, maintenance_score: 76, profit: 58000, status: "average" }
       ];
 
       const mockPredictiveInsights: PredictiveInsight[] = [
         {
-          id: '1',
-          type: 'maintenance',
-          title: 'Manutenção Preventiva Recomendada',
-          description: 'MV Pacific Star requer manutenção do motor em 15 dias para evitar falhas',
-          impact: 'high',
+          id: "1",
+          type: "maintenance",
+          title: "Manutenção Preventiva Recomendada",
+          description: "MV Pacific Star requer manutenção do motor em 15 dias para evitar falhas",
+          impact: "high",
           confidence: 92,
           potential_savings: 45000,
           action_required: true,
-          timeline: '15 dias'
+          timeline: "15 dias"
         },
         {
-          id: '2',
-          type: 'fuel',
-          title: 'Otimização de Rota',
-          description: 'Rota alternativa pode reduzir consumo de combustível em 12%',
-          impact: 'medium',
+          id: "2",
+          type: "fuel",
+          title: "Otimização de Rota",
+          description: "Rota alternativa pode reduzir consumo de combustível em 12%",
+          impact: "medium",
           confidence: 87,
           potential_savings: 15000,
           action_required: false,
-          timeline: 'Próxima viagem'
+          timeline: "Próxima viagem"
         },
         {
-          id: '3',
-          type: 'crew',
-          title: 'Rotação de Tripulação',
-          description: 'Otimização de escalas pode melhorar eficiência em 8%',
-          impact: 'medium',
+          id: "3",
+          type: "crew",
+          title: "Rotação de Tripulação",
+          description: "Otimização de escalas pode melhorar eficiência em 8%",
+          impact: "medium",
           confidence: 84,
           potential_savings: 12000,
           action_required: false,
-          timeline: '30 dias'
+          timeline: "30 dias"
         },
         {
-          id: '4',
-          type: 'cost',
-          title: 'Negociação de Contratos',
-          description: 'Renegociação de fornecedores pode reduzir custos em 6%',
-          impact: 'low',
+          id: "4",
+          type: "cost",
+          title: "Negociação de Contratos",
+          description: "Renegociação de fornecedores pode reduzir custos em 6%",
+          impact: "low",
           confidence: 78,
           potential_savings: 8000,
           action_required: false,
-          timeline: '60 dias'
+          timeline: "60 dias"
         }
       ];
 
@@ -182,7 +182,6 @@ export const AdvancedFleetAnalytics = () => {
       setPredictiveInsights(mockPredictiveInsights);
       
     } catch (error) {
-      console.error('Error loading analytics data:', error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados de analytics",
@@ -193,36 +192,36 @@ export const AdvancedFleetAnalytics = () => {
     }
   }, [toast]);
 
-  const getStatusColor = (status: VesselPerformance['status']) => {
+  const getStatusColor = (status: VesselPerformance["status"]) => {
     switch (status) {
-      case 'excellent': return 'bg-success';
-      case 'good': return 'bg-info';
-      case 'average': return 'bg-warning';
-      case 'poor': return 'bg-status-error';
-      default: return 'bg-muted';
+    case "excellent": return "bg-success";
+    case "good": return "bg-info";
+    case "average": return "bg-warning";
+    case "poor": return "bg-status-error";
+    default: return "bg-muted";
     }
   };
 
-  const getStatusText = (status: VesselPerformance['status']) => {
+  const getStatusText = (status: VesselPerformance["status"]) => {
     switch (status) {
-      case 'excellent': return 'Excelente';
-      case 'good': return 'Bom';
-      case 'average': return 'Médio';
-      case 'poor': return 'Ruim';
-      default: return 'Desconhecido';
+    case "excellent": return "Excelente";
+    case "good": return "Bom";
+    case "average": return "Médio";
+    case "poor": return "Ruim";
+    default: return "Desconhecido";
     }
   };
 
-  const getImpactColor = (impact: PredictiveInsight['impact']) => {
+  const getImpactColor = (impact: PredictiveInsight["impact"]) => {
     switch (impact) {
-      case 'high': return 'text-red-600 bg-red-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'low': return 'text-green-600 bg-green-100';
-      default: return 'text-muted-foreground bg-gray-100';
+    case "high": return "text-red-600 bg-red-100";
+    case "medium": return "text-yellow-600 bg-yellow-100";
+    case "low": return "text-green-600 bg-green-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 
-  const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7c7c', '#8dd1e1'];
+  const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7c7c", "#8dd1e1"];
 
   if (loading) {
     return (
@@ -490,10 +489,10 @@ export const AdvancedFleetAnalytics = () => {
                   <PieChart>
                     <Pie
                       data={[
-                        { name: 'Combustível', value: 45, fill: '#8884d8' },
-                        { name: 'Manutenção', value: 25, fill: '#82ca9d' },
-                        { name: 'Tripulação', value: 20, fill: '#ffc658' },
-                        { name: 'Outros', value: 10, fill: '#ff7c7c' }
+                        { name: "Combustível", value: 45, fill: "#8884d8" },
+                        { name: "Manutenção", value: 25, fill: "#82ca9d" },
+                        { name: "Tripulação", value: 20, fill: "#ffc658" },
+                        { name: "Outros", value: 10, fill: "#ff7c7c" }
                       ]}
                       cx="50%"
                       cy="50%"
@@ -504,10 +503,10 @@ export const AdvancedFleetAnalytics = () => {
                       dataKey="value"
                     >
                       {[
-                        { name: 'Combustível', value: 45, fill: '#8884d8' },
-                        { name: 'Manutenção', value: 25, fill: '#82ca9d' },
-                        { name: 'Tripulação', value: 20, fill: '#ffc658' },
-                        { name: 'Outros', value: 10, fill: '#ff7c7c' }
+                        { name: "Combustível", value: 45, fill: "#8884d8" },
+                        { name: "Manutenção", value: 25, fill: "#82ca9d" },
+                        { name: "Tripulação", value: 20, fill: "#ffc658" },
+                        { name: "Outros", value: 10, fill: "#ff7c7c" }
                       ].map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
@@ -593,8 +592,8 @@ export const AdvancedFleetAnalytics = () => {
                         <div className="flex items-center gap-2 mb-2">
                           <h3 className="font-semibold">{insight.title}</h3>
                           <Badge className={getImpactColor(insight.impact)}>
-                            {insight.impact === 'high' ? 'Alto Impacto' : 
-                             insight.impact === 'medium' ? 'Médio Impacto' : 'Baixo Impacto'}
+                            {insight.impact === "high" ? "Alto Impacto" : 
+                              insight.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
                           </Badge>
                           {insight.action_required && (
                             <Badge variant="destructive">Ação Necessária</Badge>

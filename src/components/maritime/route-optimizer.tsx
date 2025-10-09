@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { 
   Navigation, 
   MapPin, 
@@ -15,7 +15,7 @@ import {
   CheckCircle,
   Route,
   Zap
-} from 'lucide-react';
+} from "lucide-react";
 
 interface RouteOptimization {
   id: string;
@@ -26,13 +26,13 @@ interface RouteOptimization {
     distance: number;
     estimatedTime: number;
     fuelConsumption: number;
-    weatherRisk: 'low' | 'medium' | 'high';
+    weatherRisk: "low" | "medium" | "high";
   };
   optimizedRoute: {
     distance: number;
     estimatedTime: number;
     fuelConsumption: number;
-    weatherRisk: 'low' | 'medium' | 'high';
+    weatherRisk: "low" | "medium" | "high";
   };
   savings: {
     fuel: number;
@@ -46,27 +46,27 @@ interface RouteOptimization {
     visibility: number;
   };
   recommendation: string;
-  status: 'active' | 'pending' | 'applied';
+  status: "active" | "pending" | "applied";
 }
 
 export const RealTimeRouteOptimizer: React.FC = () => {
   const [optimizations, setOptimizations] = useState<RouteOptimization[]>([
     {
-      id: '1',
-      vessel: 'MV-Atlas',
-      origin: 'Santos, SP',
-      destination: 'Rio de Janeiro, RJ',
+      id: "1",
+      vessel: "MV-Atlas",
+      origin: "Santos, SP",
+      destination: "Rio de Janeiro, RJ",
       currentRoute: {
         distance: 425,
         estimatedTime: 8.5,
         fuelConsumption: 1850,
-        weatherRisk: 'medium'
+        weatherRisk: "medium"
       },
       optimizedRoute: {
         distance: 418,
         estimatedTime: 8.2,
         fuelConsumption: 1628,
-        weatherRisk: 'low'
+        weatherRisk: "low"
       },
       savings: {
         fuel: 12,
@@ -79,25 +79,25 @@ export const RealTimeRouteOptimizer: React.FC = () => {
         waveHeight: 1.8,
         visibility: 8
       },
-      recommendation: 'Desviar 7nm a leste para evitar zona de vento forte. Economia de 12% em combustível.',
-      status: 'active'
+      recommendation: "Desviar 7nm a leste para evitar zona de vento forte. Economia de 12% em combustível.",
+      status: "active"
     },
     {
-      id: '2',
-      vessel: 'MV-Neptune',
-      origin: 'Paranaguá, PR',
-      destination: 'Santos, SP',
+      id: "2",
+      vessel: "MV-Neptune",
+      origin: "Paranaguá, PR",
+      destination: "Santos, SP",
       currentRoute: {
         distance: 285,
         estimatedTime: 5.8,
         fuelConsumption: 1240,
-        weatherRisk: 'low'
+        weatherRisk: "low"
       },
       optimizedRoute: {
         distance: 282,
         estimatedTime: 5.6,
         fuelConsumption: 1175,
-        weatherRisk: 'low'
+        weatherRisk: "low"
       },
       savings: {
         fuel: 5.2,
@@ -110,25 +110,25 @@ export const RealTimeRouteOptimizer: React.FC = () => {
         waveHeight: 0.9,
         visibility: 10
       },
-      recommendation: 'Condições ideais. Ajustar velocidade para 12.5 nós para otimização de consumo.',
-      status: 'pending'
+      recommendation: "Condições ideais. Ajustar velocidade para 12.5 nós para otimização de consumo.",
+      status: "pending"
     },
     {
-      id: '3',
-      vessel: 'MV-Poseidon',
-      origin: 'Rio de Janeiro, RJ',
-      destination: 'Vitória, ES',
+      id: "3",
+      vessel: "MV-Poseidon",
+      origin: "Rio de Janeiro, RJ",
+      destination: "Vitória, ES",
       currentRoute: {
         distance: 380,
         estimatedTime: 7.2,
         fuelConsumption: 1680,
-        weatherRisk: 'high'
+        weatherRisk: "high"
       },
       optimizedRoute: {
         distance: 395,
         estimatedTime: 7.8,
         fuelConsumption: 1520,
-        weatherRisk: 'low'
+        weatherRisk: "low"
       },
       savings: {
         fuel: 9.5,
@@ -141,26 +141,26 @@ export const RealTimeRouteOptimizer: React.FC = () => {
         waveHeight: 2.8,
         visibility: 5
       },
-      recommendation: 'URGENTE: Desviar para rota alternativa mais longa para evitar tempestade. Prioridade: segurança.',
-      status: 'active'
+      recommendation: "URGENTE: Desviar para rota alternativa mais longa para evitar tempestade. Prioridade: segurança.",
+      status: "active"
     }
   ]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'default';
-      case 'pending': return 'secondary';
-      case 'applied': return 'outline';
-      default: return 'outline';
+    case "active": return "default";
+    case "pending": return "secondary";
+    case "applied": return "outline";
+    default: return "outline";
     }
   };
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'high': return 'text-red-600';
-      case 'medium': return 'text-yellow-600';
-      case 'low': return 'text-green-600';
-      default: return 'text-muted-foreground';
+    case "high": return "text-red-600";
+    case "medium": return "text-yellow-600";
+    case "low": return "text-green-600";
+    default: return "text-muted-foreground";
     }
   };
 
@@ -332,7 +332,7 @@ export const RealTimeRouteOptimizer: React.FC = () => {
                       <Clock className="h-4 w-4 text-blue-600" />
                     </div>
                     <div className="text-xl font-bold text-blue-600">
-                      {opt.savings.time > 0 ? '+' : ''}{opt.savings.time}h
+                      {opt.savings.time > 0 ? "+" : ""}{opt.savings.time}h
                     </div>
                     <div className="text-xs text-muted-foreground">Tempo</div>
                   </div>

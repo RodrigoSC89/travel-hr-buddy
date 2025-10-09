@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { 
   Home, 
   BarChart3, 
@@ -23,7 +23,7 @@ import {
   Crown,
   Sparkles,
   TrendingUp
-} from 'lucide-react';
+} from "lucide-react";
 
 interface FloatingAction {
   icon: React.ElementType;
@@ -53,8 +53,7 @@ const FloatingMenu = () => {
       delay: 0,
       ariaLabel: "Abrir Assistente de IA",
       action: () => {
-        console.log('🧠 IA Assistant clicked');
-        navigate('/intelligence');
+        navigate("/intelligence");
         toast({
           title: "🧠 IA Assistant",
           description: "Abrindo assistente de inteligência artificial"
@@ -68,8 +67,7 @@ const FloatingMenu = () => {
       delay: 100,
       ariaLabel: "Abrir Chat Premium",
       action: () => {
-        console.log('💬 Chat Premium clicked');
-        navigate('/communication');
+        navigate("/communication");
         toast({
           title: "💬 Chat Premium",
           description: "Abrindo sistema de comunicação"
@@ -83,8 +81,7 @@ const FloatingMenu = () => {
       delay: 200,
       ariaLabel: "Abrir Analytics",
       action: () => {
-        console.log('📊 Analytics clicked');
-        navigate('/analytics');
+        navigate("/analytics");
         toast({
           title: "📊 Analytics",
           description: "Abrindo painel de análises"
@@ -98,8 +95,7 @@ const FloatingMenu = () => {
       delay: 300,
       ariaLabel: "Abrir Relatórios Globais",
       action: () => {
-        console.log('🌍 Global Sync clicked');
-        navigate('/reports');
+        navigate("/reports");
         toast({
           title: "🌍 Global Sync",
           description: "Abrindo relatórios e sincronização global"
@@ -110,11 +106,11 @@ const FloatingMenu = () => {
 
   return (
     <div className="fixed bottom-8 right-80 z-40 hidden md:block">
-      <div className={`flex flex-col gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+      <div className={`flex flex-col gap-4 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
         {actions.map((action, index) => (
           <div
             key={index}
-            className={`transform transition-all duration-500 ${isVisible ? 'translate-x-0' : 'translate-x-16'}`}
+            className={`transform transition-all duration-500 ${isVisible ? "translate-x-0" : "translate-x-16"}`}
             style={{ transitionDelay: `${action.delay}ms` }}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(-1)}
@@ -123,7 +119,7 @@ const FloatingMenu = () => {
               {/* Tooltip */}
               <div className={`absolute right-16 top-1/2 transform -translate-y-1/2 
                 bg-gray-900 text-azure-50 px-3 py-2 rounded-lg text-sm whitespace-nowrap
-                transition-all duration-300 ${hoveredIndex === index ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                transition-all duration-300 ${hoveredIndex === index ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
                 {action.label}
                 <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 
                   w-2 h-2 bg-gray-900 rotate-45" />
@@ -157,7 +153,6 @@ const FloatingMenu = () => {
         <div className="relative group">
           <Button
             onClick={() => {
-              console.log('🚀 Central Hub clicked');
               toast({
                 title: "🚀 Central Hub",
                 description: "Acesso rápido às principais funcionalidades do sistema"
@@ -181,7 +176,7 @@ const FloatingMenu = () => {
           </Button>
           
           {/* Orbiting particles */}
-          <div className="absolute inset-0 animate-spin" style={{ animationDuration: '10s' }}>
+          <div className="absolute inset-0 animate-spin" style={{ animationDuration: "10s" }}>
             <div className="absolute -top-2 left-1/2 w-1 h-1 bg-azure-100 rounded-full animate-pulse" />
             <div className="absolute top-1/2 -right-2 w-1 h-1 bg-azure-100 rounded-full animate-pulse" />
             <div className="absolute -bottom-2 left-1/2 w-1 h-1 bg-azure-100 rounded-full animate-pulse" />

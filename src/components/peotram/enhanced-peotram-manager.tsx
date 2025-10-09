@@ -1,36 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { EnhancedPeotramDashboard } from './enhanced-peotram-dashboard';
-import { PeotramAuditWizard } from './peotram-audit-wizard';
-import { PeotramReportsGenerator } from './peotram-reports-generator';
-import { PeotramNonConformities } from './peotram-non-conformities';
-import { PeotramTemplateManager } from './peotram-template-manager';
-import { PeotramAnalyticsPanel } from './peotram-analytics-panel';
-import { PeotramComplianceChecker } from './peotram-compliance-checker';
-import { PeotramPerformanceIndicators } from './peotram-performance-indicators';
-import { PeotramRiskAssessment } from './peotram-risk-assessment';
-import { PeotramTrainingManagement } from './peotram-training-management';
-import { PeotramRealtimeMonitoring } from './peotram-realtime-monitoring';
-import { PeotramWorkflowManager } from './peotram-workflow-manager';
-import { PeotramIntegrationHub } from './peotram-integration-hub';
-import { PeotramAdvancedReporting } from './peotram-advanced-reporting';
-import { PeotramEmergencyResponse } from './peotram-emergency-response';
-import { PeotramEquipmentManager } from './peotram-equipment-manager';
-import { PeotramIncidentManager } from './peotram-incident-manager';
-import { PeotramCommunicationCenter } from './peotram-communication-center';
-import { PeotramDocumentManager } from './peotram-document-manager';
-import { PeotramComplianceTracker } from './peotram-compliance-tracker';
-import { PeotramPerformanceKPI } from './peotram-performance-kpi';
-import { PeotramEnvironmentalMonitor } from './peotram-environmental-monitor';
-import { PeotramOCRProcessor } from './peotram-ocr-processor';
-import { PeotramChecklistVersionManager } from './peotram-checklist-version-manager';
-import { PeotramAdvancedAnalytics } from './peotram-advanced-analytics';
-import { PeotramPredictiveAnalytics } from './peotram-predictive-analytics';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useOrganizationPermissions } from '@/hooks/use-organization-permissions';
+import React, { useState, useEffect } from "react";
+import { EnhancedPeotramDashboard } from "./enhanced-peotram-dashboard";
+import { PeotramAuditWizard } from "./peotram-audit-wizard";
+import { PeotramReportsGenerator } from "./peotram-reports-generator";
+import { PeotramNonConformities } from "./peotram-non-conformities";
+import { PeotramTemplateManager } from "./peotram-template-manager";
+import { PeotramAnalyticsPanel } from "./peotram-analytics-panel";
+import { PeotramComplianceChecker } from "./peotram-compliance-checker";
+import { PeotramPerformanceIndicators } from "./peotram-performance-indicators";
+import { PeotramRiskAssessment } from "./peotram-risk-assessment";
+import { PeotramTrainingManagement } from "./peotram-training-management";
+import { PeotramRealtimeMonitoring } from "./peotram-realtime-monitoring";
+import { PeotramWorkflowManager } from "./peotram-workflow-manager";
+import { PeotramIntegrationHub } from "./peotram-integration-hub";
+import { PeotramAdvancedReporting } from "./peotram-advanced-reporting";
+import { PeotramEmergencyResponse } from "./peotram-emergency-response";
+import { PeotramEquipmentManager } from "./peotram-equipment-manager";
+import { PeotramIncidentManager } from "./peotram-incident-manager";
+import { PeotramCommunicationCenter } from "./peotram-communication-center";
+import { PeotramDocumentManager } from "./peotram-document-manager";
+import { PeotramComplianceTracker } from "./peotram-compliance-tracker";
+import { PeotramPerformanceKPI } from "./peotram-performance-kpi";
+import { PeotramEnvironmentalMonitor } from "./peotram-environmental-monitor";
+import { PeotramOCRProcessor } from "./peotram-ocr-processor";
+import { PeotramChecklistVersionManager } from "./peotram-checklist-version-manager";
+import { PeotramAdvancedAnalytics } from "./peotram-advanced-analytics";
+import { PeotramPredictiveAnalytics } from "./peotram-predictive-analytics";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useOrganizationPermissions } from "@/hooks/use-organization-permissions";
 import { 
   BarChart3, 
   FileCheck, 
@@ -55,15 +55,15 @@ import {
   Zap,
   Activity,
   Leaf
-} from 'lucide-react';
+} from "lucide-react";
 
 interface PeotramAudit {
   id: string;
   auditPeriod: string;
-  auditType: 'vessel' | 'shore';
+  auditType: "vessel" | "shore";
   vesselName?: string;
   location?: string;
-  status: 'draft' | 'in-progress' | 'completed' | 'approved';
+  status: "draft" | "in-progress" | "completed" | "approved";
   complianceScore: number;
   auditorName: string;
   completedAt?: string;
@@ -76,12 +76,12 @@ interface NonConformity {
   audit_id: string;
   element_number: string;
   element_name: string;
-  non_conformity_type: 'critical' | 'grave' | 'moderate' | 'light';
+  non_conformity_type: "critical" | "grave" | "moderate" | "light";
   description: string;
   corrective_action: string;
   responsible_person: string;
   target_date: string;
-  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  status: "open" | "in_progress" | "resolved" | "closed";
   severity_score: number;
   audit_date: string;
   vessel_name?: string;
@@ -94,14 +94,14 @@ interface PeotramTemplate {
   version: string;
   template_data: any;
   is_active: boolean;
-  checklist_type: 'vessel' | 'shore';
+  checklist_type: "vessel" | "shore";
   created_at: string;
 }
 
 export const EnhancedPeotramManager: React.FC = () => {
   const { hasFeature } = useOrganizationPermissions();
-  const [activeView, setActiveView] = useState('dashboard');
-  const [managementSubView, setManagementSubView] = useState('non-conformities');
+  const [activeView, setActiveView] = useState("dashboard");
+  const [managementSubView, setManagementSubView] = useState("non-conformities");
   const [isNewAuditOpen, setIsNewAuditOpen] = useState(false);
   const [selectedAudit, setSelectedAudit] = useState<PeotramAudit | null>(null);
   const [audits, setAudits] = useState<PeotramAudit[]>([]);
@@ -121,7 +121,6 @@ export const EnhancedPeotramManager: React.FC = () => {
       setNonConformities(getDemoNonConformities());
       setTemplates(getDemoTemplates());
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
     } finally {
       setIsLoading(false);
     }
@@ -129,105 +128,103 @@ export const EnhancedPeotramManager: React.FC = () => {
 
   const getDemoAudits = (): PeotramAudit[] => [
     {
-      id: 'AUDIT_001',
-      auditPeriod: '2024-Q4',
-      auditType: 'vessel',
-      vesselName: 'MV Atlantic Explorer',
-      status: 'completed',
+      id: "AUDIT_001",
+      auditPeriod: "2024-Q4",
+      auditType: "vessel",
+      vesselName: "MV Atlantic Explorer",
+      status: "completed",
       complianceScore: 87.5,
-      auditorName: 'João Silva',
-      completedAt: '2024-12-15',
+      auditorName: "João Silva",
+      completedAt: "2024-12-15",
       nonConformitiesCount: 3,
-      createdAt: '2024-12-01'
+      createdAt: "2024-12-01"
     },
     {
-      id: 'AUDIT_002',
-      auditPeriod: '2024-Q4',
-      auditType: 'shore',
-      location: 'Terminal Santos - SP',
-      status: 'in-progress',
+      id: "AUDIT_002",
+      auditPeriod: "2024-Q4",
+      auditType: "shore",
+      location: "Terminal Santos - SP",
+      status: "in-progress",
       complianceScore: 0,
-      auditorName: 'Maria Santos',
+      auditorName: "Maria Santos",
       nonConformitiesCount: 0,
-      createdAt: '2024-12-10'
+      createdAt: "2024-12-10"
     },
     {
-      id: 'AUDIT_003',
-      auditPeriod: '2024-Q3',
-      auditType: 'vessel',
-      vesselName: 'OSV Petrobras XXI',
-      status: 'completed',
+      id: "AUDIT_003",
+      auditPeriod: "2024-Q3",
+      auditType: "vessel",
+      vesselName: "OSV Petrobras XXI",
+      status: "completed",
       complianceScore: 92.3,
-      auditorName: 'Carlos Eduardo',
-      completedAt: '2024-09-28',
+      auditorName: "Carlos Eduardo",
+      completedAt: "2024-09-28",
       nonConformitiesCount: 1,
-      createdAt: '2024-09-15'
+      createdAt: "2024-09-15"
     }
   ];
 
   const getDemoNonConformities = (): NonConformity[] => [
     {
-      id: 'NC_001',
-      audit_id: 'AUDIT_001',
-      element_number: 'ELEMENTO_01',
-      element_name: 'Liderança, Gerenciamento e Responsabilidade',
-      non_conformity_type: 'moderate',
-      description: 'Política de segurança necessita atualização conforme normas vigentes',
-      corrective_action: 'Atualizar política conforme normas vigentes e treinar equipe',
-      responsible_person: 'Gestor de Segurança',
-      target_date: '2024-12-30',
-      status: 'in_progress',
+      id: "NC_001",
+      audit_id: "AUDIT_001",
+      element_number: "ELEMENTO_01",
+      element_name: "Liderança, Gerenciamento e Responsabilidade",
+      non_conformity_type: "moderate",
+      description: "Política de segurança necessita atualização conforme normas vigentes",
+      corrective_action: "Atualizar política conforme normas vigentes e treinar equipe",
+      responsible_person: "Gestor de Segurança",
+      target_date: "2024-12-30",
+      status: "in_progress",
       severity_score: 2,
-      audit_date: '2024-12-15',
-      vessel_name: 'MV Atlantic Explorer'
+      audit_date: "2024-12-15",
+      vessel_name: "MV Atlantic Explorer"
     },
     {
-      id: 'NC_002',
-      audit_id: 'AUDIT_001',
-      element_number: 'ELEMENTO_02',
-      element_name: 'Conformidade Legal',
-      non_conformity_type: 'light',
-      description: 'Documentação de NR-34 incompleta para alguns tripulantes',
-      corrective_action: 'Completar documentação faltante e implementar checklist de verificação',
-      responsible_person: 'Departamento de RH',
-      target_date: '2025-01-15',
-      status: 'open',
+      id: "NC_002",
+      audit_id: "AUDIT_001",
+      element_number: "ELEMENTO_02",
+      element_name: "Conformidade Legal",
+      non_conformity_type: "light",
+      description: "Documentação de NR-34 incompleta para alguns tripulantes",
+      corrective_action: "Completar documentação faltante e implementar checklist de verificação",
+      responsible_person: "Departamento de RH",
+      target_date: "2025-01-15",
+      status: "open",
       severity_score: 1,
-      audit_date: '2024-12-15',
-      vessel_name: 'MV Atlantic Explorer'
+      audit_date: "2024-12-15",
+      vessel_name: "MV Atlantic Explorer"
     }
   ];
 
   const getDemoTemplates = (): PeotramTemplate[] => [
     {
-      id: 'TPL_001',
+      id: "TPL_001",
       year: 2024,
-      version: '2.1',
+      version: "2.1",
       template_data: { elements: [] },
       is_active: true,
-      checklist_type: 'vessel',
-      created_at: '2024-01-01'
+      checklist_type: "vessel",
+      created_at: "2024-01-01"
     },
     {
-      id: 'TPL_002',
+      id: "TPL_002",
       year: 2024,
-      version: '2.1',
+      version: "2.1",
       template_data: { elements: [] },
       is_active: true,
-      checklist_type: 'shore',
-      created_at: '2024-01-01'
+      checklist_type: "shore",
+      created_at: "2024-01-01"
     }
   ];
 
   const handleSaveAudit = async (auditData: any) => {
-    console.log('Salvando auditoria:', auditData);
     // Implementar salvamento na API Supabase
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay
     await loadData(); // Recarregar dados
   };
 
   const handleCompleteAudit = async (auditData: any) => {
-    console.log('Finalizando auditoria:', auditData);
     setIsNewAuditOpen(false);
     setSelectedAudit(null);
     // Implementar finalização na API
@@ -235,34 +232,32 @@ export const EnhancedPeotramManager: React.FC = () => {
   };
 
   const handleUpdateNonConformity = async (id: string, updates: any) => {
-    console.log('Atualizando não conformidade:', id, updates);
     // Implementar atualização na API
     await loadData();
   };
 
   const handleUpdateTemplate = async (template: any) => {
-    console.log('Atualizando template:', template);
     // Implementar atualização na API
     await loadData();
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-success/20 text-success border-success/30';
-      case 'in-progress': return 'bg-info/20 text-info border-info/30';
-      case 'draft': return 'bg-warning/20 text-warning border-warning/30';
-      case 'approved': return 'bg-primary/20 text-primary border-primary/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "completed": return "bg-success/20 text-success border-success/30";
+    case "in-progress": return "bg-info/20 text-info border-info/30";
+    case "draft": return "bg-warning/20 text-warning border-warning/30";
+    case "approved": return "bg-primary/20 text-primary border-primary/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed': return 'Concluída';
-      case 'in-progress': return 'Em Andamento';
-      case 'draft': return 'Rascunho';
-      case 'approved': return 'Aprovada';
-      default: return status;
+    case "completed": return "Concluída";
+    case "in-progress": return "Em Andamento";
+    case "draft": return "Rascunho";
+    case "approved": return "Aprovada";
+    default: return status;
     }
   };
 
@@ -351,58 +346,58 @@ export const EnhancedPeotramManager: React.FC = () => {
         </TabsList>
 
         {/* Tabs secundárias para Gestão */}
-        {activeView === 'management' && (
+        {activeView === "management" && (
           <div className="bg-muted/30 rounded-lg p-1">
             <div className="grid w-full grid-cols-6 gap-1 mb-4">
               <Button
-                variant={managementSubView === 'emergency' ? 'default' : 'ghost'}
+                variant={managementSubView === "emergency" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('emergency')}
+                onClick={() => setManagementSubView("emergency")}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
                 Emergências
               </Button>
               <Button
-                variant={managementSubView === 'equipment' ? 'default' : 'ghost'}
+                variant={managementSubView === "equipment" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('equipment')}
+                onClick={() => setManagementSubView("equipment")}
                 className="flex items-center gap-2"
               >
                 <Settings className="w-4 h-4" />
                 Equipamentos
               </Button>
               <Button
-                variant={managementSubView === 'incidents' ? 'default' : 'ghost'}
+                variant={managementSubView === "incidents" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('incidents')}
+                onClick={() => setManagementSubView("incidents")}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
                 Incidentes
               </Button>
               <Button
-                variant={managementSubView === 'communication' ? 'default' : 'ghost'}
+                variant={managementSubView === "communication" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('communication')}
+                onClick={() => setManagementSubView("communication")}
                 className="flex items-center gap-2"
               >
                 <Activity className="w-4 h-4" />
                 Comunicação
               </Button>
               <Button
-                variant={managementSubView === 'workflows' ? 'default' : 'ghost'}
+                variant={managementSubView === "workflows" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('workflows')}
+                onClick={() => setManagementSubView("workflows")}
                 className="flex items-center gap-2"
               >
                 <Zap className="w-4 h-4" />
                 Workflows
               </Button>
               <Button
-                variant={managementSubView === 'integrations' ? 'default' : 'ghost'}
+                variant={managementSubView === "integrations" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('integrations')}
+                onClick={() => setManagementSubView("integrations")}
                 className="flex items-center gap-2"
               >
                 <Leaf className="w-4 h-4" />
@@ -411,81 +406,81 @@ export const EnhancedPeotramManager: React.FC = () => {
             </div>
             <div className="grid w-full grid-cols-7 gap-1">
               <Button
-                variant={managementSubView === 'non-conformities' ? 'default' : 'ghost'}
+                variant={managementSubView === "non-conformities" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('non-conformities')}
+                onClick={() => setManagementSubView("non-conformities")}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
                 Não Conformidades
               </Button>
               <Button
-                variant={managementSubView === 'reports' ? 'default' : 'ghost'}
+                variant={managementSubView === "reports" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('reports')}
+                onClick={() => setManagementSubView("reports")}
                 className="flex items-center gap-2"
               >
                 <TrendingUp className="w-4 h-4" />
                 Relatórios
               </Button>
               <Button
-                variant={managementSubView === 'templates' ? 'default' : 'ghost'}
+                variant={managementSubView === "templates" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('templates')}
+                onClick={() => setManagementSubView("templates")}
                 className="flex items-center gap-2"
               >
                 <Settings className="w-4 h-4" />
                 Templates
               </Button>
               <Button
-                variant={managementSubView === 'analytics' ? 'default' : 'ghost'}
+                variant={managementSubView === "analytics" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('analytics')}
+                onClick={() => setManagementSubView("analytics")}
                 className="flex items-center gap-2"
               >
                 <BarChart3 className="w-4 h-4" />
                 Analytics
               </Button>
               <Button
-                variant={managementSubView === 'compliance' ? 'default' : 'ghost'}
+                variant={managementSubView === "compliance" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('compliance')}
+                onClick={() => setManagementSubView("compliance")}
                 className="flex items-center gap-2"
               >
                 <Shield className="w-4 h-4" />
                 Conformidade
               </Button>
               <Button
-                variant={managementSubView === 'risk-assessment' ? 'default' : 'ghost'}
+                variant={managementSubView === "risk-assessment" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('risk-assessment')}
+                onClick={() => setManagementSubView("risk-assessment")}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
                 Riscos
               </Button>
               <Button
-                variant={managementSubView === 'training' ? 'default' : 'ghost'}
+                variant={managementSubView === "training" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('training')}
+                onClick={() => setManagementSubView("training")}
                 className="flex items-center gap-2"
               >
                 <Users className="w-4 h-4" />
                 Treinamentos
               </Button>
               <Button
-                variant={managementSubView === 'workflows' ? 'default' : 'ghost'}
+                variant={managementSubView === "workflows" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('workflows')}
+                onClick={() => setManagementSubView("workflows")}
                 className="flex items-center gap-2"
               >
                 <Zap className="w-4 h-4" />
                 Workflows
               </Button>
               <Button
-                variant={managementSubView === 'integrations' ? 'default' : 'ghost'}
+                variant={managementSubView === "integrations" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView('integrations')}
+                onClick={() => setManagementSubView("integrations")}
                 className="flex items-center gap-2"
               >
                 <Leaf className="w-4 h-4" />
@@ -529,7 +524,7 @@ export const EnhancedPeotramManager: React.FC = () => {
                     </Badge>
                   </div>
                   <CardDescription className="flex items-center gap-2">
-                    {audit.auditType === 'vessel' ? (
+                    {audit.auditType === "vessel" ? (
                       <>
                         <Ship className="w-4 h-4" />
                         {audit.vesselName}
@@ -546,7 +541,7 @@ export const EnhancedPeotramManager: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Score de Conformidade</span>
                     <span className="text-lg font-bold text-foreground">
-                      {audit.status === 'completed' ? `${audit.complianceScore}%` : '-'}
+                      {audit.status === "completed" ? `${audit.complianceScore}%` : "-"}
                     </span>
                   </div>
                   
@@ -647,30 +642,30 @@ export const EnhancedPeotramManager: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="management">
-          {managementSubView === 'non-conformities' && (
+          {managementSubView === "non-conformities" && (
             <PeotramNonConformities 
               nonConformities={nonConformities}
               onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
             />
           )}
-          {managementSubView === 'reports' && <PeotramReportsGenerator />}
-          {managementSubView === 'templates' && (
+          {managementSubView === "reports" && <PeotramReportsGenerator />}
+          {managementSubView === "templates" && (
             <PeotramTemplateManager 
               templates={templates}
               onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
             />
           )}
-          {managementSubView === 'analytics' && (
+          {managementSubView === "analytics" && (
             <div className="space-y-6">
               <PeotramAdvancedAnalytics />
               <PeotramPredictiveAnalytics />
             </div>
           )}
-          {managementSubView === 'compliance' && <PeotramComplianceChecker />}
-          {managementSubView === 'risk-assessment' && <PeotramRiskAssessment />}
-          {managementSubView === 'training' && <PeotramTrainingManagement />}
-          {managementSubView === 'workflows' && <PeotramWorkflowManager />}
-          {managementSubView === 'integrations' && <PeotramIntegrationHub />}
+          {managementSubView === "compliance" && <PeotramComplianceChecker />}
+          {managementSubView === "risk-assessment" && <PeotramRiskAssessment />}
+          {managementSubView === "training" && <PeotramTrainingManagement />}
+          {managementSubView === "workflows" && <PeotramWorkflowManager />}
+          {managementSubView === "integrations" && <PeotramIntegrationHub />}
         </TabsContent>
 
         {/* Manter as antigas abas para compatibilidade */}

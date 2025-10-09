@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Brain, 
   TrendingUp, 
@@ -13,17 +13,17 @@ import {
   Clock,
   DollarSign,
   Activity
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface SmartInsight {
   id: string;
-  type: 'recommendation' | 'warning' | 'opportunity' | 'prediction';
+  type: "recommendation" | "warning" | "opportunity" | "prediction";
   title: string;
   description: string;
-  impact: 'high' | 'medium' | 'low';
+  impact: "high" | "medium" | "low";
   confidence: number;
-  category: 'efficiency' | 'cost' | 'user_experience' | 'security' | 'growth';
+  category: "efficiency" | "cost" | "user_experience" | "security" | "growth";
   actionable: boolean;
   estimatedValue?: string;
   timeFrame?: string;
@@ -35,7 +35,7 @@ interface PredictiveMetric {
   name: string;
   currentValue: number;
   predictedValue: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   confidence: number;
   timeFrame: string;
   unit: string;
@@ -57,13 +57,13 @@ export const SmartInsights: React.FC = () => {
       setIsGenerating(true);
       
       // Call the new smart insights edge function
-      const { data, error } = await supabase.functions.invoke('smart-insights-generator', {
+      const { data, error } = await supabase.functions.invoke("smart-insights-generator", {
         body: {
-          userId: 'demo-user', // Replace with actual user ID from auth
-          context: 'optimization',
+          userId: "demo-user", // Replace with actual user ID from auth
+          context: "optimization",
           userBehavior: {
             lastLogin: new Date().toISOString(),
-            activeModule: 'optimization'
+            activeModule: "optimization"
           }
         }
       });
@@ -73,7 +73,7 @@ export const SmartInsights: React.FC = () => {
       if (data.success && data.insights) {
         setInsights(data.insights.map((insight: any) => ({
           id: insight.id || Math.random().toString(),
-          type: insight.priority === 'high' ? 'warning' : 'recommendation',
+          type: insight.priority === "high" ? "warning" : "recommendation",
           title: insight.title,
           description: insight.description,
           impact: insight.priority,
@@ -81,12 +81,11 @@ export const SmartInsights: React.FC = () => {
           category: insight.category,
           actionable: insight.actionable,
           estimatedValue: insight.impact_value,
-          timeFrame: '1-2 semanas',
+          timeFrame: "1-2 semanas",
           relatedModule: insight.related_module
         })));
       }
     } catch (error) {
-      console.error('Error generating insights:', error);
       // Fallback to mock data
       generateMockInsights();
     } finally {
@@ -97,68 +96,68 @@ export const SmartInsights: React.FC = () => {
   const generateMockInsights = () => {
     const mockInsights: SmartInsight[] = [
       {
-        id: 'efficiency_1',
-        type: 'recommendation',
-        title: 'Automatizar Relatórios de Certificação',
-        description: 'Detectamos que 78% dos relatórios são gerados manualmente. A automação pode economizar 12 horas/semana.',
-        impact: 'high',
+        id: "efficiency_1",
+        type: "recommendation",
+        title: "Automatizar Relatórios de Certificação",
+        description: "Detectamos que 78% dos relatórios são gerados manualmente. A automação pode economizar 12 horas/semana.",
+        impact: "high",
         confidence: 92,
-        category: 'efficiency',
+        category: "efficiency",
         actionable: true,
-        estimatedValue: '12 horas/semana',
-        timeFrame: '2 semanas',
-        relatedModule: 'RH Marítimo'
+        estimatedValue: "12 horas/semana",
+        timeFrame: "2 semanas",
+        relatedModule: "RH Marítimo"
       },
       {
-        id: 'cost_1',
-        type: 'opportunity',
-        title: 'Otimização de Rotas Marítimas',
-        description: 'IA identificou rotas 15% mais eficientes que podem reduzir custos de combustível.',
-        impact: 'high',
+        id: "cost_1",
+        type: "opportunity",
+        title: "Otimização de Rotas Marítimas",
+        description: "IA identificou rotas 15% mais eficientes que podem reduzir custos de combustível.",
+        impact: "high",
         confidence: 87,
-        category: 'cost',
+        category: "cost",
         actionable: true,
-        estimatedValue: 'R$ 45.000/mês',
-        timeFrame: '1 mês',
-        relatedModule: 'Logística Marítima'
+        estimatedValue: "R$ 45.000/mês",
+        timeFrame: "1 mês",
+        relatedModule: "Logística Marítima"
       },
       {
-        id: 'security_1',
-        type: 'warning',
-        title: 'Certificações Próximas ao Vencimento',
-        description: '23 certificações vencem nos próximos 30 dias. Recomendamos ação imediata.',
-        impact: 'high',
+        id: "security_1",
+        type: "warning",
+        title: "Certificações Próximas ao Vencimento",
+        description: "23 certificações vencem nos próximos 30 dias. Recomendamos ação imediata.",
+        impact: "high",
         confidence: 100,
-        category: 'security',
+        category: "security",
         actionable: true,
-        timeFrame: 'Imediato',
-        relatedModule: 'RH Marítimo'
+        timeFrame: "Imediato",
+        relatedModule: "RH Marítimo"
       },
       {
-        id: 'ux_1',
-        type: 'recommendation',
-        title: 'Simplificar Fluxo de Reservas',
-        description: 'Usuários abandonam 34% das reservas na etapa 3. Sugerimos redesign do processo.',
-        impact: 'medium',
+        id: "ux_1",
+        type: "recommendation",
+        title: "Simplificar Fluxo de Reservas",
+        description: "Usuários abandonam 34% das reservas na etapa 3. Sugerimos redesign do processo.",
+        impact: "medium",
         confidence: 85,
-        category: 'user_experience',
+        category: "user_experience",
         actionable: true,
-        estimatedValue: '34% mais conversões',
-        timeFrame: '3 semanas',
-        relatedModule: 'Reservas'
+        estimatedValue: "34% mais conversões",
+        timeFrame: "3 semanas",
+        relatedModule: "Reservas"
       },
       {
-        id: 'growth_1',
-        type: 'prediction',
-        title: 'Crescimento de Demanda Previsto',
-        description: 'IA prevê aumento de 28% na demanda por serviços marítimos no próximo trimestre.',
-        impact: 'medium',
+        id: "growth_1",
+        type: "prediction",
+        title: "Crescimento de Demanda Previsto",
+        description: "IA prevê aumento de 28% na demanda por serviços marítimos no próximo trimestre.",
+        impact: "medium",
         confidence: 79,
-        category: 'growth',
+        category: "growth",
         actionable: true,
-        estimatedValue: '28% crescimento',
-        timeFrame: 'Q1 2025',
-        relatedModule: 'Dashboard'
+        estimatedValue: "28% crescimento",
+        timeFrame: "Q1 2025",
+        relatedModule: "Dashboard"
       }
     ];
 
@@ -168,10 +167,10 @@ export const SmartInsights: React.FC = () => {
   const generatePredictions = async () => {
     try {
       // Call performance monitor edge function
-      const { data, error } = await supabase.functions.invoke('performance-monitor', {
+      const { data, error } = await supabase.functions.invoke("performance-monitor", {
         body: {
-          userId: 'demo-user',
-          category: 'all'
+          userId: "demo-user",
+          category: "all"
         }
       });
 
@@ -184,16 +183,15 @@ export const SmartInsights: React.FC = () => {
           name: `Previsão ${metric.name}`,
           currentValue: metric.value,
           predictedValue: metric.target || metric.value * 1.1,
-          trend: metric.value < (metric.target || metric.value * 1.1) ? 'up' : 'down',
+          trend: metric.value < (metric.target || metric.value * 1.1) ? "up" : "down",
           confidence: 85 + Math.floor(Math.random() * 10),
-          timeFrame: '30 dias',
+          timeFrame: "30 dias",
           unit: metric.unit
         })) || [];
 
         setPredictions(predictiveData);
       }
     } catch (error) {
-      console.error('Error generating predictions:', error);
       generateMockPredictions();
     }
   };
@@ -201,44 +199,44 @@ export const SmartInsights: React.FC = () => {
   const generateMockPredictions = () => {
     const mockPredictions: PredictiveMetric[] = [
       {
-        id: 'vessels_utilization',
-        name: 'Utilização de Embarcações',
+        id: "vessels_utilization",
+        name: "Utilização de Embarcações",
         currentValue: 78,
         predictedValue: 85,
-        trend: 'up',
+        trend: "up",
         confidence: 88,
-        timeFrame: '30 dias',
-        unit: '%'
+        timeFrame: "30 dias",
+        unit: "%"
       },
       {
-        id: 'operational_costs',
-        name: 'Custos Operacionais',
+        id: "operational_costs",
+        name: "Custos Operacionais",
         currentValue: 245000,
         predictedValue: 235000,
-        trend: 'down',
+        trend: "down",
         confidence: 82,
-        timeFrame: '60 dias',
-        unit: 'R$'
+        timeFrame: "60 dias",
+        unit: "R$"
       },
       {
-        id: 'crew_satisfaction',
-        name: 'Satisfação da Tripulação',
+        id: "crew_satisfaction",
+        name: "Satisfação da Tripulação",
         currentValue: 4.2,
         predictedValue: 4.5,
-        trend: 'up',
+        trend: "up",
         confidence: 75,
-        timeFrame: '90 dias',
-        unit: '/5'
+        timeFrame: "90 dias",
+        unit: "/5"
       },
       {
-        id: 'maintenance_efficiency',
-        name: 'Eficiência de Manutenção',
+        id: "maintenance_efficiency",
+        name: "Eficiência de Manutenção",
         currentValue: 92,
         predictedValue: 96,
-        trend: 'up',
+        trend: "up",
         confidence: 91,
-        timeFrame: '45 dias',
-        unit: '%'
+        timeFrame: "45 dias",
+        unit: "%"
       }
     ];
 
@@ -250,15 +248,15 @@ export const SmartInsights: React.FC = () => {
 
     try {
       // Store optimization action in database
-      const { error } = await supabase.from('optimization_actions').insert({
-        user_id: 'demo-user', // Replace with actual user ID
+      const { error } = await supabase.from("optimization_actions").insert({
+        user_id: "demo-user", // Replace with actual user ID
         title: insight.title,
         description: insight.description,
-        category: 'ui',
+        category: "ui",
         impact: insight.impact,
-        effort: 'easy',
-        estimated_improvement: insight.estimatedValue || 'Melhoria significativa',
-        status: 'completed'
+        effort: "easy",
+        estimated_improvement: insight.estimatedValue || "Melhoria significativa",
+        status: "completed"
       });
 
       if (error) throw error;
@@ -268,7 +266,6 @@ export const SmartInsights: React.FC = () => {
         description: `${insight.title} foi aplicado com sucesso!`,
       });
     } catch (error) {
-      console.error('Error implementing insight:', error);
       toast({
         title: "Insight Implementado",
         description: `${insight.title} foi aplicado com sucesso!`,
@@ -280,57 +277,57 @@ export const SmartInsights: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'recommendation':
-        return <Lightbulb className="h-4 w-4 text-warning" />;
-      case 'warning':
-        return <AlertCircle className="h-4 w-4 text-danger" />;
-      case 'opportunity':
-        return <Target className="h-4 w-4 text-success" />;
-      case 'prediction':
-        return <TrendingUp className="h-4 w-4 text-info" />;
-      default:
-        return <Brain className="h-4 w-4" />;
+    case "recommendation":
+      return <Lightbulb className="h-4 w-4 text-warning" />;
+    case "warning":
+      return <AlertCircle className="h-4 w-4 text-danger" />;
+    case "opportunity":
+      return <Target className="h-4 w-4 text-success" />;
+    case "prediction":
+      return <TrendingUp className="h-4 w-4 text-info" />;
+    default:
+      return <Brain className="h-4 w-4" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'efficiency':
-        return <Activity className="h-4 w-4" />;
-      case 'cost':
-        return <DollarSign className="h-4 w-4" />;
-      case 'user_experience':
-        return <Users className="h-4 w-4" />;
-      case 'security':
-        return <AlertCircle className="h-4 w-4" />;
-      case 'growth':
-        return <TrendingUp className="h-4 w-4" />;
-      default:
-        return <Brain className="h-4 w-4" />;
+    case "efficiency":
+      return <Activity className="h-4 w-4" />;
+    case "cost":
+      return <DollarSign className="h-4 w-4" />;
+    case "user_experience":
+      return <Users className="h-4 w-4" />;
+    case "security":
+      return <AlertCircle className="h-4 w-4" />;
+    case "growth":
+      return <TrendingUp className="h-4 w-4" />;
+    default:
+      return <Brain className="h-4 w-4" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'high':
-        return 'bg-danger text-danger-foreground';
-      case 'medium':
-        return 'bg-warning text-warning-foreground';
-      case 'low':
-        return 'bg-info text-info-foreground';
-      default:
-        return 'bg-muted text-muted-foreground';
+    case "high":
+      return "bg-danger text-danger-foreground";
+    case "medium":
+      return "bg-warning text-warning-foreground";
+    case "low":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
-        return <TrendingUp className="h-4 w-4 text-success" />;
-      case 'down':
-        return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
-      default:
-        return <div className="h-4 w-4 rounded-full bg-muted" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-success" />;
+    case "down":
+      return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
+    default:
+      return <div className="h-4 w-4 rounded-full bg-muted" />;
     }
   };
 
@@ -409,7 +406,7 @@ export const SmartInsights: React.FC = () => {
                         disabled={isGenerating}
                         className="hover-glow"
                       >
-                        {isGenerating ? 'Implementando...' : 'Implementar'}
+                        {isGenerating ? "Implementando..." : "Implementar"}
                       </Button>
                     )}
                   </div>
@@ -441,7 +438,7 @@ export const SmartInsights: React.FC = () => {
                   <div className="flex justify-between text-sm">
                     <span>Atual:</span>
                     <span className="font-medium">
-                      {prediction.unit === 'R$' 
+                      {prediction.unit === "R$" 
                         ? `R$ ${prediction.currentValue.toLocaleString()}`
                         : `${prediction.currentValue}${prediction.unit}`
                       }
@@ -450,7 +447,7 @@ export const SmartInsights: React.FC = () => {
                   <div className="flex justify-between text-sm">
                     <span>Previsto:</span>
                     <span className="font-medium">
-                      {prediction.unit === 'R$' 
+                      {prediction.unit === "R$" 
                         ? `R$ ${prediction.predictedValue.toLocaleString()}`
                         : `${prediction.predictedValue}${prediction.unit}`
                       }

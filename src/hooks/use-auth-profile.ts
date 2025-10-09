@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface UserProfile {
   id: string;
@@ -11,11 +11,11 @@ interface UserProfile {
   department: string | null;
   position: string | null;
   phone: string | null;
-  role: 'admin' | 'hr_manager' | 'department_manager' | 'employee';
+  role: "admin" | "hr_manager" | "department_manager" | "employee";
   preferences: {
-    theme: 'light' | 'dark' | 'system';
+    theme: "light" | "dark" | "system";
     notifications: boolean;
-    language: 'pt' | 'en' | 'es';
+    language: "pt" | "en" | "es";
   };
 }
 
@@ -36,13 +36,12 @@ export const useAuthProfile = () => {
 
       try {
         const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
           .single();
 
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error fetching profile:', error);
+        if (error && error.code !== "PGRST116") {
           throw error;
         }
 
@@ -50,28 +49,27 @@ export const useAuthProfile = () => {
           // Create default profile
           const defaultProfile = {
             id: user.id,
-            email: user.email || '',
-            full_name: user.email?.split('@')[0] || 'Usuário',
+            email: user.email || "",
+            full_name: user.email?.split("@")[0] || "Usuário",
             avatar_url: null,
             department: null,
             position: null,
             phone: null,
-            role: 'employee' as const,
+            role: "employee" as const,
             preferences: {
-              theme: 'system' as const,
+              theme: "system" as const,
               notifications: true,
-              language: 'pt' as const,
+              language: "pt" as const,
             }
           };
 
           const { data: newProfile, error: createError } = await supabase
-            .from('profiles')
+            .from("profiles")
             .insert(defaultProfile)
             .select()
             .single();
 
           if (createError) {
-            console.error('Error creating profile:', createError);
             setProfile(defaultProfile);
           } else {
             // Map the new profile to our UserProfile interface
@@ -83,11 +81,11 @@ export const useAuthProfile = () => {
               department: newProfile.department,
               position: newProfile.position,
               phone: newProfile.phone,
-              role: 'employee',
+              role: "employee",
               preferences: {
-                theme: 'system',
+                theme: "system",
                 notifications: true,
-                language: 'pt',
+                language: "pt",
               }
             };
             setProfile(mappedNewProfile);
@@ -102,31 +100,30 @@ export const useAuthProfile = () => {
             department: data.department,
             position: data.position,
             phone: data.phone,
-            role: 'employee', // Default role
+            role: "employee", // Default role
             preferences: {
-              theme: 'system',
+              theme: "system",
               notifications: true,
-              language: 'pt',
+              language: "pt",
             }
           };
           setProfile(mappedProfile);
         }
       } catch (error) {
-        console.error('Error in fetchProfile:', error);
         // Fallback profile
         setProfile({
           id: user.id,
-          email: user.email || '',
-          full_name: user.email?.split('@')[0] || 'Usuário',
+          email: user.email || "",
+          full_name: user.email?.split("@")[0] || "Usuário",
           avatar_url: null,
           department: null,
           position: null,
           phone: null,
-          role: 'employee',
+          role: "employee",
           preferences: {
-            theme: 'system',
+            theme: "system",
             notifications: true,
-            language: 'pt',
+            language: "pt",
           }
         });
       } finally {
@@ -143,14 +140,13 @@ export const useAuthProfile = () => {
     setIsUpdating(true);
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update(updates)
-        .eq('id', profile.id)
+        .eq("id", profile.id)
         .select()
         .single();
 
       if (error) {
-        console.error('Error updating profile:', error);
         toast({
           title: "Erro",
           description: "Não foi possível atualizar o perfil",
@@ -178,7 +174,6 @@ export const useAuthProfile = () => {
       });
       return true;
     } catch (error) {
-      console.error('Error in updateProfile:', error);
       toast({
         title: "Erro",
         description: "Erro inesperado ao atualizar perfil",
@@ -195,16 +190,15 @@ export const useAuthProfile = () => {
 
     setIsUpdating(true);
     try {
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.split(".").pop();
       const fileName = `${profile.id}-${Math.random()}.${fileExt}`;
       const filePath = `avatars/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('avatars')
+        .from("avatars")
         .upload(filePath, file);
 
       if (uploadError) {
-        console.error('Error uploading avatar:', uploadError);
         toast({
           title: "Erro",
           description: "Não foi possível fazer upload da imagem",
@@ -214,7 +208,7 @@ export const useAuthProfile = () => {
       }
 
       const { data: publicUrl } = supabase.storage
-        .from('avatars')
+        .from("avatars")
         .getPublicUrl(filePath);
 
       const success = await updateProfile({ avatar_url: publicUrl.publicUrl });
@@ -227,7 +221,6 @@ export const useAuthProfile = () => {
       
       return success;
     } catch (error) {
-      console.error('Error in uploadAvatar:', error);
       toast({
         title: "Erro",
         description: "Erro inesperado ao fazer upload do avatar",

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Ship, 
   Plus, 
@@ -19,9 +19,9 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface Vessel {
   id: string;
@@ -54,15 +54,15 @@ interface VesselFormData {
 }
 
 const initialFormData: VesselFormData = {
-  name: '',
-  vessel_type: '',
-  imo_number: '',
-  flag_state: '',
+  name: "",
+  vessel_type: "",
+  imo_number: "",
+  flag_state: "",
   gross_tonnage: 0,
   built_year: new Date().getFullYear(),
-  classification_society: '',
-  status: 'active',
-  current_location: '',
+  classification_society: "",
+  status: "active",
+  current_location: "",
   crew_capacity: 0
 };
 
@@ -72,7 +72,7 @@ export function VesselManagement() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingVessel, setEditingVessel] = useState<Vessel | null>(null);
   const [formData, setFormData] = useState<VesselFormData>(initialFormData);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchVessels();
@@ -82,15 +82,14 @@ export function VesselManagement() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('vessels')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("vessels")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setVessels(data || []);
     } catch (error) {
-      console.error('Error fetching vessels:', error);
-      toast.error('Erro ao carregar navios');
+      toast.error("Erro ao carregar navios");
     } finally {
       setLoading(false);
     }
@@ -107,19 +106,19 @@ export function VesselManagement() {
 
       if (editingVessel) {
         const { error } = await supabase
-          .from('vessels')
+          .from("vessels")
           .update(vesselData)
-          .eq('id', editingVessel.id);
+          .eq("id", editingVessel.id);
 
         if (error) throw error;
-        toast.success('Navio atualizado com sucesso');
+        toast.success("Navio atualizado com sucesso");
       } else {
         const { error } = await supabase
-          .from('vessels')
+          .from("vessels")
           .insert([vesselData]);
 
         if (error) throw error;
-        toast.success('Navio cadastrado com sucesso');
+        toast.success("Navio cadastrado com sucesso");
       }
 
       setDialogOpen(false);
@@ -127,26 +126,24 @@ export function VesselManagement() {
       setFormData(initialFormData);
       fetchVessels();
     } catch (error) {
-      console.error('Error saving vessel:', error);
-      toast.error('Erro ao salvar navio');
+      toast.error("Erro ao salvar navio");
     }
   };
 
   const handleDeleteVessel = async (vesselId: string) => {
-    if (!confirm('Tem certeza que deseja excluir este navio?')) return;
+    if (!confirm("Tem certeza que deseja excluir este navio?")) return;
 
     try {
       const { error } = await supabase
-        .from('vessels')
+        .from("vessels")
         .delete()
-        .eq('id', vesselId);
+        .eq("id", vesselId);
 
       if (error) throw error;
-      toast.success('Navio excluído com sucesso');
+      toast.success("Navio excluído com sucesso");
       fetchVessels();
     } catch (error) {
-      console.error('Error deleting vessel:', error);
-      toast.error('Erro ao excluir navio');
+      toast.error("Erro ao excluir navio");
     }
   };
 
@@ -155,13 +152,13 @@ export function VesselManagement() {
     setFormData({
       name: vessel.name,
       vessel_type: vessel.vessel_type,
-      imo_number: vessel.imo_number || '',
+      imo_number: vessel.imo_number || "",
       flag_state: vessel.flag_state,
       gross_tonnage: vessel.gross_tonnage || 0,
       built_year: vessel.built_year || new Date().getFullYear(),
-      classification_society: vessel.classification_society || '',
+      classification_society: vessel.classification_society || "",
       status: vessel.status,
-      current_location: vessel.current_location || '',
+      current_location: vessel.current_location || "",
       crew_capacity: vessel.crew_capacity || 0
     });
     setDialogOpen(true);
@@ -169,20 +166,20 @@ export function VesselManagement() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'maintenance': return 'bg-yellow-100 text-yellow-800';
-      case 'inactive': return 'bg-secondary text-secondary-foreground';
-      case 'dry_dock': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-secondary text-secondary-foreground';
+    case "active": return "bg-green-100 text-green-800";
+    case "maintenance": return "bg-yellow-100 text-yellow-800";
+    case "inactive": return "bg-secondary text-secondary-foreground";
+    case "dry_dock": return "bg-blue-100 text-blue-800";
+    default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active': return <CheckCircle className="w-4 h-4" />;
-      case 'maintenance': return <AlertTriangle className="w-4 h-4" />;
-      case 'inactive': return <Clock className="w-4 h-4" />;
-      default: return <Ship className="w-4 h-4" />;
+    case "active": return <CheckCircle className="w-4 h-4" />;
+    case "maintenance": return <AlertTriangle className="w-4 h-4" />;
+    case "inactive": return <Clock className="w-4 h-4" />;
+    default: return <Ship className="w-4 h-4" />;
     }
   };
 
@@ -212,7 +209,7 @@ export function VesselManagement() {
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>
-                {editingVessel ? 'Editar Navio' : 'Novo Navio'}
+                {editingVessel ? "Editar Navio" : "Novo Navio"}
               </DialogTitle>
               <DialogDescription>
                 Preencha as informações do navio
@@ -332,7 +329,7 @@ export function VesselManagement() {
                 Cancelar
               </Button>
               <Button onClick={handleSaveVessel}>
-                {editingVessel ? 'Atualizar' : 'Cadastrar'}
+                {editingVessel ? "Atualizar" : "Cadastrar"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -386,10 +383,10 @@ export function VesselManagement() {
                     <Badge className={getStatusColor(vessel.status)}>
                       {getStatusIcon(vessel.status)}
                       <span className="ml-1">
-                        {vessel.status === 'active' && 'Ativo'}
-                        {vessel.status === 'maintenance' && 'Manutenção'}
-                        {vessel.status === 'inactive' && 'Inativo'}
-                        {vessel.status === 'dry_dock' && 'Dique Seco'}
+                        {vessel.status === "active" && "Ativo"}
+                        {vessel.status === "maintenance" && "Manutenção"}
+                        {vessel.status === "inactive" && "Inativo"}
+                        {vessel.status === "dry_dock" && "Dique Seco"}
                       </span>
                     </Badge>
                     <Badge variant="outline">{vessel.vessel_type}</Badge>
@@ -441,7 +438,7 @@ export function VesselManagement() {
           <Ship className="w-12 h-12 mx-auto text-muted-foreground" />
           <h3 className="mt-4 text-lg font-semibold">Nenhum navio encontrado</h3>
           <p className="text-muted-foreground">
-            {searchTerm ? 'Nenhum navio corresponde à sua busca.' : 'Comece cadastrando o primeiro navio.'}
+            {searchTerm ? "Nenhum navio corresponde à sua busca." : "Comece cadastrando o primeiro navio."}
           </p>
         </div>
       )}

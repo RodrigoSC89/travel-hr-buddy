@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Brain, 
   TrendingUp, 
@@ -15,7 +15,7 @@ import {
   Clock,
   CheckCircle,
   XCircle
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MaintenancePrediction {
   id: string;
@@ -24,7 +24,7 @@ interface MaintenancePrediction {
   vesselName: string;
   probability: number;
   timeframe: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
   recommendation: string;
   estimatedCost: number;
   lastMaintenance: Date;
@@ -36,14 +36,14 @@ interface PerformanceMetric {
   metric: string;
   current: number;
   target: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   unit: string;
 }
 
 export const PredictiveMaintenanceSystem = () => {
   const [predictions, setPredictions] = useState<MaintenancePrediction[]>([]);
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
-  const [selectedTimeframe, setSelectedTimeframe] = useState<'7d' | '30d' | '90d'>('30d');
+  const [selectedTimeframe, setSelectedTimeframe] = useState<"7d" | "30d" | "90d">("30d");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,70 +54,70 @@ export const PredictiveMaintenanceSystem = () => {
     // Mock predictive maintenance data
     const mockPredictions: MaintenancePrediction[] = [
       {
-        id: '1',
-        component: 'Motor Principal - Sistema de Resfriamento',
-        vesselId: '1',
-        vesselName: 'MV Atlantic Explorer',
+        id: "1",
+        component: "Motor Principal - Sistema de Resfriamento",
+        vesselId: "1",
+        vesselName: "MV Atlantic Explorer",
         probability: 85,
-        timeframe: '7-14 dias',
-        priority: 'high',
-        recommendation: 'Verificar bombas de água e termostatos',
+        timeframe: "7-14 dias",
+        priority: "high",
+        recommendation: "Verificar bombas de água e termostatos",
         estimatedCost: 15000,
-        lastMaintenance: new Date('2024-10-15'),
-        nextScheduled: new Date('2024-12-20'),
-        riskFactors: ['Temperatura elevada', 'Horas de operação', 'Idade do componente']
+        lastMaintenance: new Date("2024-10-15"),
+        nextScheduled: new Date("2024-12-20"),
+        riskFactors: ["Temperatura elevada", "Horas de operação", "Idade do componente"]
       },
       {
-        id: '2',
-        component: 'Eixo Principal - Rolamentos',
-        vesselId: '1',
-        vesselName: 'MV Atlantic Explorer',
+        id: "2",
+        component: "Eixo Principal - Rolamentos",
+        vesselId: "1",
+        vesselName: "MV Atlantic Explorer",
         probability: 72,
-        timeframe: '14-30 dias',
-        priority: 'medium',
-        recommendation: 'Inspeção de vibração e lubrificação',
+        timeframe: "14-30 dias",
+        priority: "medium",
+        recommendation: "Inspeção de vibração e lubrificação",
         estimatedCost: 25000,
-        lastMaintenance: new Date('2024-09-01'),
-        nextScheduled: new Date('2025-01-15'),
-        riskFactors: ['Vibração anormal', 'Análise de óleo']
+        lastMaintenance: new Date("2024-09-01"),
+        nextScheduled: new Date("2025-01-15"),
+        riskFactors: ["Vibração anormal", "Análise de óleo"]
       },
       {
-        id: '3',
-        component: 'Sistema Elétrico - Gerador Auxiliar',
-        vesselId: '2',
-        vesselName: 'MV Pacific Navigator',
+        id: "3",
+        component: "Sistema Elétrico - Gerador Auxiliar",
+        vesselId: "2",
+        vesselName: "MV Pacific Navigator",
         probability: 65,
-        timeframe: '30-60 dias',
-        priority: 'medium',
-        recommendation: 'Teste de carga e verificação de conexões',
+        timeframe: "30-60 dias",
+        priority: "medium",
+        recommendation: "Teste de carga e verificação de conexões",
         estimatedCost: 8000,
-        lastMaintenance: new Date('2024-11-01'),
-        nextScheduled: new Date('2025-02-01'),
-        riskFactors: ['Flutuação de tensão', 'Tempo de operação']
+        lastMaintenance: new Date("2024-11-01"),
+        nextScheduled: new Date("2025-02-01"),
+        riskFactors: ["Flutuação de tensão", "Tempo de operação"]
       },
       {
-        id: '4',
-        component: 'Sistema Hidráulico - Bombas',
-        vesselId: '2',
-        vesselName: 'MV Pacific Navigator',
+        id: "4",
+        component: "Sistema Hidráulico - Bombas",
+        vesselId: "2",
+        vesselName: "MV Pacific Navigator",
         probability: 45,
-        timeframe: '60-90 dias',
-        priority: 'low',
-        recommendation: 'Monitoramento contínuo de pressão',
+        timeframe: "60-90 dias",
+        priority: "low",
+        recommendation: "Monitoramento contínuo de pressão",
         estimatedCost: 5000,
-        lastMaintenance: new Date('2024-08-15'),
-        nextScheduled: new Date('2025-03-01'),
-        riskFactors: ['Perda de pressão gradual']
+        lastMaintenance: new Date("2024-08-15"),
+        nextScheduled: new Date("2025-03-01"),
+        riskFactors: ["Perda de pressão gradual"]
       }
     ];
 
     const mockMetrics: PerformanceMetric[] = [
-      { metric: 'Eficiência Energética', current: 87, target: 90, trend: 'up', unit: '%' },
-      { metric: 'Disponibilidade', current: 94, target: 95, trend: 'stable', unit: '%' },
-      { metric: 'MTBF', current: 720, target: 800, trend: 'up', unit: 'h' },
-      { metric: 'Custos de Manutenção', current: 125000, target: 100000, trend: 'down', unit: 'R$' },
-      { metric: 'Consumo de Combustível', current: 18.5, target: 17.0, trend: 'down', unit: 'L/h' },
-      { metric: 'Emissões CO2', current: 45, target: 40, trend: 'down', unit: 'kg/h' }
+      { metric: "Eficiência Energética", current: 87, target: 90, trend: "up", unit: "%" },
+      { metric: "Disponibilidade", current: 94, target: 95, trend: "stable", unit: "%" },
+      { metric: "MTBF", current: 720, target: 800, trend: "up", unit: "h" },
+      { metric: "Custos de Manutenção", current: 125000, target: 100000, trend: "down", unit: "R$" },
+      { metric: "Consumo de Combustível", current: 18.5, target: 17.0, trend: "down", unit: "L/h" },
+      { metric: "Emissões CO2", current: 45, target: 40, trend: "down", unit: "kg/h" }
     ];
 
     setPredictions(mockPredictions);
@@ -127,31 +127,31 @@ export const PredictiveMaintenanceSystem = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-secondary text-secondary-foreground border-border';
+    case "critical": return "bg-red-100 text-red-800 border-red-200";
+    case "high": return "bg-orange-100 text-orange-800 border-orange-200";
+    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    case "low": return "bg-green-100 text-green-800 border-green-200";
+    default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getProbabilityColor = (probability: number) => {
-    if (probability >= 80) return 'text-red-600';
-    if (probability >= 60) return 'text-yellow-600';
-    return 'text-green-600';
+    if (probability >= 80) return "text-red-600";
+    if (probability >= 60) return "text-yellow-600";
+    return "text-green-600";
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'down': return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
-      case 'stable': return <BarChart3 className="h-4 w-4 text-blue-500" />;
-      default: return <BarChart3 className="h-4 w-4 text-muted-foreground" />;
+    case "up": return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "down": return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
+    case "stable": return <BarChart3 className="h-4 w-4 text-blue-500" />;
+    default: return <BarChart3 className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getMetricStatus = (current: number, target: number, metric: string) => {
-    const isGood = metric.includes('Custos') || metric.includes('Consumo') || metric.includes('Emissões')
+    const isGood = metric.includes("Custos") || metric.includes("Consumo") || metric.includes("Emissões")
       ? current <= target
       : current >= target;
     return isGood;
@@ -187,14 +187,14 @@ export const PredictiveMaintenanceSystem = () => {
           </p>
         </div>
         <div className="flex space-x-2">
-          {(['7d', '30d', '90d'] as const).map((timeframe) => (
+          {(["7d", "30d", "90d"] as const).map((timeframe) => (
             <Button
               key={timeframe}
-              variant={selectedTimeframe === timeframe ? 'default' : 'outline'}
+              variant={selectedTimeframe === timeframe ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedTimeframe(timeframe)}
             >
-              {timeframe === '7d' ? '7 Dias' : timeframe === '30d' ? '30 Dias' : '90 Dias'}
+              {timeframe === "7d" ? "7 Dias" : timeframe === "30d" ? "30 Dias" : "90 Dias"}
             </Button>
           ))}
         </div>
@@ -209,7 +209,7 @@ export const PredictiveMaintenanceSystem = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
-              {predictions.filter(p => p.priority === 'critical' || p.priority === 'high').length}
+              {predictions.filter(p => p.priority === "critical" || p.priority === "high").length}
             </div>
             <p className="text-xs text-muted-foreground">
               Requerem atenção imediata
@@ -277,7 +277,7 @@ export const PredictiveMaintenanceSystem = () => {
                         {prediction.component}
                       </CardTitle>
                       <CardDescription>
-                        {prediction.vesselName} • Última manutenção: {prediction.lastMaintenance.toLocaleDateString('pt-BR')}
+                        {prediction.vesselName} • Última manutenção: {prediction.lastMaintenance.toLocaleDateString("pt-BR")}
                       </CardDescription>
                     </div>
                     <div className="text-right">
@@ -371,7 +371,7 @@ export const PredictiveMaintenanceSystem = () => {
                       </div>
                       <Progress 
                         value={
-                          metric.metric.includes('Custos') || metric.metric.includes('Consumo') || metric.metric.includes('Emissões')
+                          metric.metric.includes("Custos") || metric.metric.includes("Consumo") || metric.metric.includes("Emissões")
                             ? Math.max(0, 100 - (metric.current / metric.target) * 100)
                             : (metric.current / metric.target) * 100
                         } 

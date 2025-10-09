@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Thermometer, 
   Droplets, 
@@ -26,19 +26,19 @@ import {
   Download,
   Settings,
   Bell
-} from 'lucide-react';
+} from "lucide-react";
 
 interface EnvironmentalSensor {
   id: string;
   name: string;
-  type: 'temperature' | 'humidity' | 'pressure' | 'wind' | 'water_quality' | 'air_quality' | 'noise' | 'radiation';
+  type: "temperature" | "humidity" | "pressure" | "wind" | "water_quality" | "air_quality" | "noise" | "radiation";
   location: string;
   currentValue: number;
   unit: string;
   minThreshold: number;
   maxThreshold: number;
-  status: 'normal' | 'warning' | 'critical' | 'offline';
-  trend: 'up' | 'down' | 'stable';
+  status: "normal" | "warning" | "critical" | "offline";
+  trend: "up" | "down" | "stable";
   lastReading: string;
   calibrationDate: string;
 }
@@ -46,8 +46,8 @@ interface EnvironmentalSensor {
 interface EnvironmentalAlert {
   id: string;
   sensorId: string;
-  type: 'threshold' | 'offline' | 'calibration' | 'maintenance';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "threshold" | "offline" | "calibration" | "maintenance";
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
   timestamp: string;
   acknowledged: boolean;
@@ -56,94 +56,94 @@ interface EnvironmentalAlert {
 export const PeotramEnvironmentalMonitor: React.FC = () => {
   const [sensors, setSensors] = useState<EnvironmentalSensor[]>(getDemoSensors());
   const [alerts, setAlerts] = useState<EnvironmentalAlert[]>(getDemoAlerts());
-  const [selectedLocation, setSelectedLocation] = useState('all');
-  const [selectedType, setSelectedType] = useState('all');
+  const [selectedLocation, setSelectedLocation] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
 
   function getDemoSensors(): EnvironmentalSensor[] {
     return [
       {
-        id: 'TEMP001',
-        name: 'Temperatura do Ar - Deck Principal',
-        type: 'temperature',
-        location: 'Deck Principal',
+        id: "TEMP001",
+        name: "Temperatura do Ar - Deck Principal",
+        type: "temperature",
+        location: "Deck Principal",
         currentValue: 28.5,
-        unit: '°C',
+        unit: "°C",
         minThreshold: 15,
         maxThreshold: 35,
-        status: 'normal',
-        trend: 'up',
-        lastReading: '2024-01-22T10:30:00Z',
-        calibrationDate: '2024-01-15'
+        status: "normal",
+        trend: "up",
+        lastReading: "2024-01-22T10:30:00Z",
+        calibrationDate: "2024-01-15"
       },
       {
-        id: 'HUM001',
-        name: 'Umidade Relativa - Praça de Máquinas',
-        type: 'humidity',
-        location: 'Praça de Máquinas',
+        id: "HUM001",
+        name: "Umidade Relativa - Praça de Máquinas",
+        type: "humidity",
+        location: "Praça de Máquinas",
         currentValue: 85.2,
-        unit: '%',
+        unit: "%",
         minThreshold: 40,
         maxThreshold: 80,
-        status: 'warning',
-        trend: 'up',
-        lastReading: '2024-01-22T10:29:00Z',
-        calibrationDate: '2024-01-10'
+        status: "warning",
+        trend: "up",
+        lastReading: "2024-01-22T10:29:00Z",
+        calibrationDate: "2024-01-10"
       },
       {
-        id: 'WIND001',
-        name: 'Velocidade do Vento',
-        type: 'wind',
-        location: 'Ponte de Comando',
+        id: "WIND001",
+        name: "Velocidade do Vento",
+        type: "wind",
+        location: "Ponte de Comando",
         currentValue: 15.8,
-        unit: 'km/h',
+        unit: "km/h",
         minThreshold: 0,
         maxThreshold: 50,
-        status: 'normal',
-        trend: 'stable',
-        lastReading: '2024-01-22T10:28:00Z',
-        calibrationDate: '2024-01-08'
+        status: "normal",
+        trend: "stable",
+        lastReading: "2024-01-22T10:28:00Z",
+        calibrationDate: "2024-01-08"
       },
       {
-        id: 'WATER001',
-        name: 'Qualidade da Água - Descarga',
-        type: 'water_quality',
-        location: 'Sistema de Descarga',
+        id: "WATER001",
+        name: "Qualidade da Água - Descarga",
+        type: "water_quality",
+        location: "Sistema de Descarga",
         currentValue: 6.8,
-        unit: 'pH',
+        unit: "pH",
         minThreshold: 6.0,
         maxThreshold: 8.5,
-        status: 'normal',
-        trend: 'stable',
-        lastReading: '2024-01-22T10:25:00Z',
-        calibrationDate: '2024-01-12'
+        status: "normal",
+        trend: "stable",
+        lastReading: "2024-01-22T10:25:00Z",
+        calibrationDate: "2024-01-12"
       },
       {
-        id: 'NOISE001',
-        name: 'Nível de Ruído - Acomodações',
-        type: 'noise',
-        location: 'Acomodações',
+        id: "NOISE001",
+        name: "Nível de Ruído - Acomodações",
+        type: "noise",
+        location: "Acomodações",
         currentValue: 75.3,
-        unit: 'dB',
+        unit: "dB",
         minThreshold: 0,
         maxThreshold: 70,
-        status: 'critical',
-        trend: 'up',
-        lastReading: '2024-01-22T10:27:00Z',
-        calibrationDate: '2024-01-05'
+        status: "critical",
+        trend: "up",
+        lastReading: "2024-01-22T10:27:00Z",
+        calibrationDate: "2024-01-05"
       },
       {
-        id: 'AIR001',
-        name: 'Qualidade do Ar - Convés',
-        type: 'air_quality',
-        location: 'Convés Superior',
+        id: "AIR001",
+        name: "Qualidade do Ar - Convés",
+        type: "air_quality",
+        location: "Convés Superior",
         currentValue: 45,
-        unit: 'AQI',
+        unit: "AQI",
         minThreshold: 0,
         maxThreshold: 100,
-        status: 'normal',
-        trend: 'down',
-        lastReading: '2024-01-22T10:26:00Z',
-        calibrationDate: '2024-01-18'
+        status: "normal",
+        trend: "down",
+        lastReading: "2024-01-22T10:26:00Z",
+        calibrationDate: "2024-01-18"
       }
     ];
   }
@@ -151,30 +151,30 @@ export const PeotramEnvironmentalMonitor: React.FC = () => {
   function getDemoAlerts(): EnvironmentalAlert[] {
     return [
       {
-        id: 'ALERT001',
-        sensorId: 'HUM001',
-        type: 'threshold',
-        severity: 'medium',
-        message: 'Umidade acima do limite recomendado na Praça de Máquinas',
-        timestamp: '2024-01-22T10:29:00Z',
+        id: "ALERT001",
+        sensorId: "HUM001",
+        type: "threshold",
+        severity: "medium",
+        message: "Umidade acima do limite recomendado na Praça de Máquinas",
+        timestamp: "2024-01-22T10:29:00Z",
         acknowledged: false
       },
       {
-        id: 'ALERT002',
-        sensorId: 'NOISE001',
-        type: 'threshold',
-        severity: 'high',
-        message: 'Nível de ruído crítico nas acomodações',
-        timestamp: '2024-01-22T10:27:00Z',
+        id: "ALERT002",
+        sensorId: "NOISE001",
+        type: "threshold",
+        severity: "high",
+        message: "Nível de ruído crítico nas acomodações",
+        timestamp: "2024-01-22T10:27:00Z",
         acknowledged: false
       },
       {
-        id: 'ALERT003',
-        sensorId: 'TEMP001',
-        type: 'calibration',
-        severity: 'low',
-        message: 'Calibração do sensor de temperatura próxima do vencimento',
-        timestamp: '2024-01-22T09:15:00Z',
+        id: "ALERT003",
+        sensorId: "TEMP001",
+        type: "calibration",
+        severity: "low",
+        message: "Calibração do sensor de temperatura próxima do vencimento",
+        timestamp: "2024-01-22T09:15:00Z",
         acknowledged: true
       }
     ];
@@ -182,67 +182,67 @@ export const PeotramEnvironmentalMonitor: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'normal': return 'bg-success/20 text-success border-success/30';
-      case 'warning': return 'bg-warning/20 text-warning border-warning/30';
-      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'offline': return 'bg-muted/20 text-muted-foreground border-muted/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "normal": return "bg-success/20 text-success border-success/30";
+    case "warning": return "bg-warning/20 text-warning border-warning/30";
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "offline": return "bg-muted/20 text-muted-foreground border-muted/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'high': return 'bg-destructive/10 text-destructive border-destructive/20';
-      case 'medium': return 'bg-warning/20 text-warning border-warning/30';
-      case 'low': return 'bg-info/20 text-info border-info/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high": return "bg-destructive/10 text-destructive border-destructive/20";
+    case "medium": return "bg-warning/20 text-warning border-warning/30";
+    case "low": return "bg-info/20 text-info border-info/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'temperature': return <Thermometer className="w-5 h-5" />;
-      case 'humidity': return <Droplets className="w-5 h-5" />;
-      case 'pressure': return <BarChart3 className="w-5 h-5" />;
-      case 'wind': return <Wind className="w-5 h-5" />;
-      case 'water_quality': return <Waves className="w-5 h-5" />;
-      case 'air_quality': return <Cloud className="w-5 h-5" />;
-      case 'noise': return <Activity className="w-5 h-5" />;
-      case 'radiation': return <Zap className="w-5 h-5" />;
-      default: return <Activity className="w-5 h-5" />;
+    case "temperature": return <Thermometer className="w-5 h-5" />;
+    case "humidity": return <Droplets className="w-5 h-5" />;
+    case "pressure": return <BarChart3 className="w-5 h-5" />;
+    case "wind": return <Wind className="w-5 h-5" />;
+    case "water_quality": return <Waves className="w-5 h-5" />;
+    case "air_quality": return <Cloud className="w-5 h-5" />;
+    case "noise": return <Activity className="w-5 h-5" />;
+    case "radiation": return <Zap className="w-5 h-5" />;
+    default: return <Activity className="w-5 h-5" />;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="w-4 h-4 text-destructive" />;
-      case 'down': return <TrendingDown className="w-4 h-4 text-success" />;
-      case 'stable': return <Activity className="w-4 h-4 text-muted-foreground" />;
-      default: return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "up": return <TrendingUp className="w-4 h-4 text-destructive" />;
+    case "down": return <TrendingDown className="w-4 h-4 text-success" />;
+    case "stable": return <Activity className="w-4 h-4 text-muted-foreground" />;
+    default: return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'normal': return <CheckCircle className="w-4 h-4 text-success" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-warning" />;
-      case 'critical': return <AlertTriangle className="w-4 h-4 text-destructive" />;
-      case 'offline': return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
-      default: return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
+    case "normal": return <CheckCircle className="w-4 h-4 text-success" />;
+    case "warning": return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "critical": return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    case "offline": return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
+    default: return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const filteredSensors = sensors.filter(sensor => {
-    const matchesLocation = selectedLocation === 'all' || sensor.location === selectedLocation;
-    const matchesType = selectedType === 'all' || sensor.type === selectedType;
+    const matchesLocation = selectedLocation === "all" || sensor.location === selectedLocation;
+    const matchesType = selectedType === "all" || sensor.type === selectedType;
     return matchesLocation && matchesType;
   });
 
   const activeAlerts = alerts.filter(alert => !alert.acknowledged);
-  const criticalSensors = sensors.filter(sensor => sensor.status === 'critical').length;
-  const warningSensors = sensors.filter(sensor => sensor.status === 'warning').length;
-  const offlineSensors = sensors.filter(sensor => sensor.status === 'offline').length;
+  const criticalSensors = sensors.filter(sensor => sensor.status === "critical").length;
+  const warningSensors = sensors.filter(sensor => sensor.status === "warning").length;
+  const offlineSensors = sensors.filter(sensor => sensor.status === "offline").length;
 
   return (
     <div className="space-y-6">
@@ -296,7 +296,7 @@ export const PeotramEnvironmentalMonitor: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Sensores Normais</p>
                 <p className="text-2xl font-bold text-success">
-                  {sensors.filter(s => s.status === 'normal').length}
+                  {sensors.filter(s => s.status === "normal").length}
                 </p>
               </div>
             </div>
@@ -460,17 +460,17 @@ export const PeotramEnvironmentalMonitor: React.FC = () => {
           <div className="space-y-4">
             {alerts.map((alert) => (
               <Card key={alert.id} className={`border-l-4 ${
-                alert.severity === 'critical' ? 'border-l-destructive' :
-                alert.severity === 'high' ? 'border-l-destructive' :
-                alert.severity === 'medium' ? 'border-l-warning' :
-                'border-l-info'
+                alert.severity === "critical" ? "border-l-destructive" :
+                  alert.severity === "high" ? "border-l-destructive" :
+                    alert.severity === "medium" ? "border-l-warning" :
+                      "border-l-info"
               }`}>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <AlertTriangle className={`w-5 h-5 ${
-                        alert.severity === 'critical' || alert.severity === 'high' ? 'text-destructive' :
-                        alert.severity === 'medium' ? 'text-warning' : 'text-info'
+                        alert.severity === "critical" || alert.severity === "high" ? "text-destructive" :
+                          alert.severity === "medium" ? "text-warning" : "text-info"
                       }`} />
                       <div>
                         <p className="font-medium">{alert.message}</p>
@@ -484,10 +484,10 @@ export const PeotramEnvironmentalMonitor: React.FC = () => {
                         {alert.severity}
                       </Badge>
                       <Badge variant="outline" className={
-                        alert.acknowledged ? 'bg-success/20 text-success border-success/30' : 
-                        'bg-warning/20 text-warning border-warning/30'
+                        alert.acknowledged ? "bg-success/20 text-success border-success/30" : 
+                          "bg-warning/20 text-warning border-warning/30"
                       }>
-                        {alert.acknowledged ? 'Reconhecido' : 'Pendente'}
+                        {alert.acknowledged ? "Reconhecido" : "Pendente"}
                       </Badge>
                       <div className="text-xs text-muted-foreground">
                         {new Date(alert.timestamp).toLocaleString()}

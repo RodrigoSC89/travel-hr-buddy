@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useOrganization } from '@/contexts/OrganizationContext';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+import React, { useState, useEffect, useCallback } from "react";
+import { useOrganization } from "@/contexts/OrganizationContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Building2 } from 'lucide-react';
+} from "@/components/ui/select";
+import { Building2 } from "lucide-react";
 
 interface Organization {
   id: string;
@@ -27,13 +27,13 @@ export const OrganizationSelector: React.FC = () => {
     try {
       setIsLoading(true);
       const { data, error } = await supabase
-        .from('organization_users')
+        .from("organization_users")
         .select(`
           role,
           organization:organizations(id, name)
         `)
-        .eq('user_id', user?.id)
-        .eq('status', 'active');
+        .eq("user_id", user?.id)
+        .eq("status", "active");
 
       if (error) throw error;
 
@@ -45,7 +45,6 @@ export const OrganizationSelector: React.FC = () => {
 
       setOrganizations(orgs);
     } catch (error) {
-      console.error('Erro ao carregar organizações:', error);
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +60,6 @@ export const OrganizationSelector: React.FC = () => {
     try {
       await switchOrganization(orgId);
     } catch (error) {
-      console.error('Erro ao trocar organização:', error);
     }
   };
 
@@ -73,7 +71,7 @@ export const OrganizationSelector: React.FC = () => {
     <div className="flex items-center space-x-2">
       <Building2 className="h-4 w-4 text-foreground/70" />
       <Select
-        value={currentOrganization?.id || ''}
+        value={currentOrganization?.id || ""}
         onValueChange={handleOrganizationChange}
         disabled={isLoading}
       >

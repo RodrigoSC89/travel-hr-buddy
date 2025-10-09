@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -23,7 +23,7 @@ import {
   Target,
   Award,
   Briefcase
-} from 'lucide-react';
+} from "lucide-react";
 
 interface TravelMetrics {
   totalTrips: number;
@@ -48,18 +48,18 @@ interface TravelMetrics {
     percentage: number;
   }>;
   aiRecommendations: Array<{
-    type: 'cost_saving' | 'route_optimization' | 'booking_timing';
+    type: "cost_saving" | "route_optimization" | "booking_timing";
     title: string;
     description: string;
     potential_savings: number;
-    priority: 'high' | 'medium' | 'low';
+    priority: "high" | "medium" | "low";
   }>;
 }
 
 export const TravelAnalyticsDashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<TravelMetrics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
     loadAnalytics();
@@ -76,48 +76,48 @@ export const TravelAnalyticsDashboard: React.FC = () => {
         avgTripCost: 5060,
         savedAmount: 185000,
         topDestinations: [
-          { city: 'São Paulo', country: 'Brasil', trips: 45, cost: 225000 },
-          { city: 'Rio de Janeiro', country: 'Brasil', trips: 38, cost: 190000 },
-          { city: 'Salvador', country: 'Brasil', trips: 22, cost: 110000 },
-          { city: 'Recife', country: 'Brasil', trips: 18, cost: 90000 },
-          { city: 'Miami', country: 'EUA', trips: 15, cost: 180000 }
+          { city: "São Paulo", country: "Brasil", trips: 45, cost: 225000 },
+          { city: "Rio de Janeiro", country: "Brasil", trips: 38, cost: 190000 },
+          { city: "Salvador", country: "Brasil", trips: 22, cost: 110000 },
+          { city: "Recife", country: "Brasil", trips: 18, cost: 90000 },
+          { city: "Miami", country: "EUA", trips: 15, cost: 180000 }
         ],
         monthlyTrends: [
-          { month: 'Jan', trips: 18, cost: 90000 },
-          { month: 'Fev', trips: 22, cost: 110000 },
-          { month: 'Mar', trips: 25, cost: 125000 },
-          { month: 'Abr', trips: 20, cost: 100000 },
-          { month: 'Mai', trips: 28, cost: 140000 },
-          { month: 'Jun', trips: 32, cost: 160000 }
+          { month: "Jan", trips: 18, cost: 90000 },
+          { month: "Fev", trips: 22, cost: 110000 },
+          { month: "Mar", trips: 25, cost: 125000 },
+          { month: "Abr", trips: 20, cost: 100000 },
+          { month: "Mai", trips: 28, cost: 140000 },
+          { month: "Jun", trips: 32, cost: 160000 }
         ],
         departmentBreakdown: [
-          { department: 'Operações', trips: 85, cost: 425000, percentage: 34 },
-          { department: 'Comercial', trips: 62, cost: 310000, percentage: 25 },
-          { department: 'Engenharia', trips: 48, cost: 240000, percentage: 19 },
-          { department: 'RH', trips: 32, cost: 160000, percentage: 13 },
-          { department: 'Financeiro', trips: 20, cost: 115000, percentage: 9 }
+          { department: "Operações", trips: 85, cost: 425000, percentage: 34 },
+          { department: "Comercial", trips: 62, cost: 310000, percentage: 25 },
+          { department: "Engenharia", trips: 48, cost: 240000, percentage: 19 },
+          { department: "RH", trips: 32, cost: 160000, percentage: 13 },
+          { department: "Financeiro", trips: 20, cost: 115000, percentage: 9 }
         ],
         aiRecommendations: [
           {
-            type: 'cost_saving',
-            title: 'Reserva Antecipada',
-            description: 'Reserve voos com 3-4 semanas de antecedência para economizar até 25%',
+            type: "cost_saving",
+            title: "Reserva Antecipada",
+            description: "Reserve voos com 3-4 semanas de antecedência para economizar até 25%",
             potential_savings: 45000,
-            priority: 'high'
+            priority: "high"
           },
           {
-            type: 'route_optimization',
-            title: 'Rota Alternativa',
-            description: 'Voos diretos para São Paulo podem ser 15% mais econômicos que conexões',
+            type: "route_optimization",
+            title: "Rota Alternativa",
+            description: "Voos diretos para São Paulo podem ser 15% mais econômicos que conexões",
             potential_savings: 28000,
-            priority: 'medium'
+            priority: "medium"
           },
           {
-            type: 'booking_timing',
-            title: 'Horários Flexíveis',
-            description: 'Voos de terça e quarta-feira são até 20% mais baratos',
+            type: "booking_timing",
+            title: "Horários Flexíveis",
+            description: "Voos de terça e quarta-feira são até 20% mais baratos",
             potential_savings: 35000,
-            priority: 'high'
+            priority: "high"
           }
         ]
       };
@@ -147,17 +147,17 @@ export const TravelAnalyticsDashboard: React.FC = () => {
   if (!metrics) return null;
 
   const formatCurrency = (value: number) => 
-    new Intl.NumberFormat('pt-BR', { 
-      style: 'currency', 
-      currency: 'BRL' 
+    new Intl.NumberFormat("pt-BR", { 
+      style: "currency", 
+      currency: "BRL" 
     }).format(value);
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800 border-red-300';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-      case 'low': return 'bg-green-100 text-green-800 border-green-300';
-      default: return 'bg-secondary text-secondary-foreground border-border';
+    case "high": return "bg-red-100 text-red-800 border-red-300";
+    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-300";
+    case "low": return "bg-green-100 text-green-800 border-green-300";
+    default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
 

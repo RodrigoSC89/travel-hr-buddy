@@ -1,16 +1,16 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import { Header } from '@/components/layout/header';
-import { NotificationSystem } from '@/components/ui/notification-system';
-import { useSystemActions } from '@/hooks/use-system-actions';
-import { Toaster } from '@/components/ui/sonner';
-import { ThemeProvider } from '@/components/layout/theme-provider';
-import { ErrorBoundary } from '@/components/layout/error-boundary';
-import { useAuth } from '@/contexts/AuthContext';
-import { Badge } from '@/components/ui/badge';
-import { Activity, Shield, Zap } from 'lucide-react';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import { Header } from "@/components/layout/header";
+import { NotificationSystem } from "@/components/ui/notification-system";
+import { useSystemActions } from "@/hooks/use-system-actions";
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/layout/theme-provider";
+import { ErrorBoundary } from "@/components/layout/error-boundary";
+import { useAuth } from "@/contexts/AuthContext";
+import { Badge } from "@/components/ui/badge";
+import { Activity, Shield, Zap } from "lucide-react";
 
 export const EnterpriseLayout: React.FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
@@ -56,12 +56,12 @@ export const EnterpriseLayout: React.FC = () => {
                     </div>
                   </div>
                   
-                   <div className="flex items-center gap-4">
-                     <div className="text-xs text-foreground/80">
-                       Usuário: {user?.email?.split('@')[0] || 'Anonimo'} | Sessão Ativa
-                     </div>
-                     <NotificationSystem />
-                   </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-xs text-foreground/80">
+                       Usuário: {user?.email?.split("@")[0] || "Anonimo"} | Sessão Ativa
+                    </div>
+                    <NotificationSystem />
+                  </div>
                 </div>
               </div>
               

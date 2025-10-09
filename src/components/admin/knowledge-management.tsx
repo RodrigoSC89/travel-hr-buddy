@@ -1,24 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Plus, Search, Edit, Trash2, Save, Eye, 
   BookOpen, Video, FileText, Users, Settings,
   Upload, Download, Tag, Filter, BarChart3
-} from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -27,17 +27,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 
 interface KnowledgeItem {
   id: string;
   title: string;
   content: string;
-  type: 'tutorial' | 'faq' | 'guide' | 'video';
+  type: "tutorial" | "faq" | "guide" | "video";
   module: string;
   tags: string[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  status: 'draft' | 'published' | 'archived';
+  difficulty: "beginner" | "intermediate" | "advanced";
+  status: "draft" | "published" | "archived";
   author_id?: string;
   created_at: Date;
   updated_at: Date;
@@ -59,9 +59,9 @@ interface Analytics {
 export const KnowledgeManagement: React.FC = () => {
   const { toast } = useToast();
   const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedModule, setSelectedModule] = useState('all');
-  const [selectedType, setSelectedType] = useState('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedModule, setSelectedModule] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<KnowledgeItem | null>(null);
   const [analytics, setAnalytics] = useState<Analytics>({
@@ -73,29 +73,29 @@ export const KnowledgeManagement: React.FC = () => {
   });
 
   const modules = [
-    { id: 'all', name: 'Todos os Módulos' },
-    { id: 'maritime', name: 'Sistema Marítimo' },
-    { id: 'hr', name: 'Recursos Humanos' },
-    { id: 'travel', name: 'Viagens' },
-    { id: 'reservations', name: 'Reservas' },
-    { id: 'price-alerts', name: 'Alertas de Preço' },
-    { id: 'reports', name: 'Relatórios' }
+    { id: "all", name: "Todos os Módulos" },
+    { id: "maritime", name: "Sistema Marítimo" },
+    { id: "hr", name: "Recursos Humanos" },
+    { id: "travel", name: "Viagens" },
+    { id: "reservations", name: "Reservas" },
+    { id: "price-alerts", name: "Alertas de Preço" },
+    { id: "reports", name: "Relatórios" }
   ];
 
   const contentTypes = [
-    { id: 'all', name: 'Todos os Tipos' },
-    { id: 'tutorial', name: 'Tutorial' },
-    { id: 'faq', name: 'FAQ' },
-    { id: 'guide', name: 'Guia' },
-    { id: 'video', name: 'Vídeo' }
+    { id: "all", name: "Todos os Tipos" },
+    { id: "tutorial", name: "Tutorial" },
+    { id: "faq", name: "FAQ" },
+    { id: "guide", name: "Guia" },
+    { id: "video", name: "Vídeo" }
   ];
 
   const loadKnowledgeItems = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from('knowledge_base')
-        .select('*')
-        .order('updated_at', { ascending: false });
+        .from("knowledge_base")
+        .select("*")
+        .order("updated_at", { ascending: false });
 
       if (error) throw error;
 
@@ -103,11 +103,11 @@ export const KnowledgeManagement: React.FC = () => {
         id: item.id,
         title: item.title,
         content: item.content,
-        type: item.type as 'tutorial' | 'faq' | 'guide' | 'video',
+        type: item.type as "tutorial" | "faq" | "guide" | "video",
         module: item.module,
         tags: Array.isArray(item.tags) ? item.tags : [],
-        difficulty: item.difficulty as 'beginner' | 'intermediate' | 'advanced',
-        status: item.status as 'draft' | 'published' | 'archived',
+        difficulty: item.difficulty as "beginner" | "intermediate" | "advanced",
+        status: item.status as "draft" | "published" | "archived",
         author_id: item.author_id,
         created_at: new Date(item.created_at),
         updated_at: new Date(item.updated_at),
@@ -115,14 +115,14 @@ export const KnowledgeManagement: React.FC = () => {
         rating: item.rating || 0,
         helpful_votes: item.helpful_votes || 0,
         steps: Array.isArray(item.steps) ? item.steps : [],
-        metadata: typeof item.metadata === 'object' ? item.metadata : {}
+        metadata: typeof item.metadata === "object" ? item.metadata : {}
       })) || [];
 
       setKnowledgeItems(formattedData);
       
       // Calcular analytics
       const totalItems = formattedData.length;
-      const publishedItems = formattedData.filter(item => item.status === 'published').length;
+      const publishedItems = formattedData.filter(item => item.status === "published").length;
       const totalViews = formattedData.reduce((sum, item) => sum + item.views, 0);
       
       const moduleCount = formattedData.reduce((acc, item) => {
@@ -147,7 +147,6 @@ export const KnowledgeManagement: React.FC = () => {
       });
 
     } catch (error) {
-      console.error('Error loading knowledge items:', error);
       toast({
         title: "Erro ao carregar",
         description: "Não foi possível carregar os itens da base de conhecimento",
@@ -165,22 +164,22 @@ export const KnowledgeManagement: React.FC = () => {
                          item.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     
-    const matchesModule = selectedModule === 'all' || item.module === selectedModule;
-    const matchesType = selectedType === 'all' || item.type === selectedType;
+    const matchesModule = selectedModule === "all" || item.module === selectedModule;
+    const matchesType = selectedType === "all" || item.type === selectedType;
     
     return matchesSearch && matchesModule && matchesType;
   });
 
   const handleCreateNew = () => {
     setEditingItem({
-      id: '',
-      title: '',
-      content: '',
-      type: 'tutorial',
-      module: 'maritime',
+      id: "",
+      title: "",
+      content: "",
+      type: "tutorial",
+      module: "maritime",
       tags: [],
-      difficulty: 'beginner',
-      status: 'draft',
+      difficulty: "beginner",
+      status: "draft",
       author_id: null,
       created_at: new Date(),
       updated_at: new Date(),
@@ -205,7 +204,7 @@ export const KnowledgeManagement: React.FC = () => {
       if (editingItem.id) {
         // Atualizar item existente
         const { error } = await supabase
-          .from('knowledge_base')
+          .from("knowledge_base")
           .update({
             title: editingItem.title,
             content: editingItem.content,
@@ -218,7 +217,7 @@ export const KnowledgeManagement: React.FC = () => {
             metadata: editingItem.metadata || {},
             updated_at: new Date().toISOString()
           })
-          .eq('id', editingItem.id);
+          .eq("id", editingItem.id);
 
         if (error) throw error;
 
@@ -229,7 +228,7 @@ export const KnowledgeManagement: React.FC = () => {
       } else {
         // Criar novo item
         const { error } = await supabase
-          .from('knowledge_base')
+          .from("knowledge_base")
           .insert({
             title: editingItem.title,
             content: editingItem.content,
@@ -256,7 +255,6 @@ export const KnowledgeManagement: React.FC = () => {
       loadKnowledgeItems(); // Recarregar dados
       
     } catch (error) {
-      console.error('Error saving item:', error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar o item",
@@ -266,12 +264,12 @@ export const KnowledgeManagement: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm('Tem certeza que deseja excluir este item?')) {
+    if (confirm("Tem certeza que deseja excluir este item?")) {
       try {
         const { error } = await supabase
-          .from('knowledge_base')
+          .from("knowledge_base")
           .delete()
-          .eq('id', id);
+          .eq("id", id);
 
         if (error) throw error;
 
@@ -282,7 +280,6 @@ export const KnowledgeManagement: React.FC = () => {
 
         loadKnowledgeItems(); // Recarregar dados
       } catch (error) {
-        console.error('Error deleting item:', error);
         toast({
           title: "Erro",
           description: "Não foi possível excluir o item",
@@ -294,11 +291,11 @@ export const KnowledgeManagement: React.FC = () => {
 
   const handleExport = () => {
     const dataStr = JSON.stringify(knowledgeItems, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'knowledge-base.json';
+    link.download = "knowledge-base.json";
     link.click();
     
     toast({
@@ -313,29 +310,29 @@ export const KnowledgeManagement: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'tutorial': return <BookOpen className="w-4 h-4" />;
-      case 'video': return <Video className="w-4 h-4" />;
-      case 'faq': return <FileText className="w-4 h-4" />;
-      case 'guide': return <Users className="w-4 h-4" />;
-      default: return <BookOpen className="w-4 h-4" />;
+    case "tutorial": return <BookOpen className="w-4 h-4" />;
+    case "video": return <Video className="w-4 h-4" />;
+    case "faq": return <FileText className="w-4 h-4" />;
+    case "guide": return <Users className="w-4 h-4" />;
+    default: return <BookOpen className="w-4 h-4" />;
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-success';
-      case 'intermediate': return 'bg-warning';
-      case 'advanced': return 'bg-status-error';
-      default: return 'bg-muted';
+    case "beginner": return "bg-success";
+    case "intermediate": return "bg-warning";
+    case "advanced": return "bg-status-error";
+    default: return "bg-muted";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'published': return 'bg-success';
-      case 'draft': return 'bg-warning';
-      case 'archived': return 'bg-muted';
-      default: return 'bg-muted';
+    case "published": return "bg-success";
+    case "draft": return "bg-warning";
+    case "archived": return "bg-muted";
+    default: return "bg-muted";
     }
   };
 
@@ -439,7 +436,7 @@ export const KnowledgeManagement: React.FC = () => {
                           <span>📁 {getModuleName(item.module)}</span>
                           <span>👁️ {item.views} visualizações</span>
                           <span>⭐ {item.rating.toFixed(1)}</span>
-                          <span>📅 {item.updated_at.toLocaleDateString('pt-BR')}</span>
+                          <span>📅 {item.updated_at.toLocaleDateString("pt-BR")}</span>
                         </div>
                         
                         <div className="flex flex-wrap gap-1">
@@ -622,7 +619,7 @@ export const KnowledgeManagement: React.FC = () => {
           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                {editingItem?.id ? 'Editar Conteúdo' : 'Novo Conteúdo'}
+                {editingItem?.id ? "Editar Conteúdo" : "Novo Conteúdo"}
               </DialogTitle>
               <DialogDescription>
                 Preencha as informações do conteúdo da base de conhecimento
@@ -671,7 +668,7 @@ export const KnowledgeManagement: React.FC = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {modules.filter(m => m.id !== 'all').map((module) => (
+                        {modules.filter(m => m.id !== "all").map((module) => (
                           <SelectItem key={module.id} value={module.id}>
                             {module.name}
                           </SelectItem>
@@ -718,10 +715,10 @@ export const KnowledgeManagement: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Tags (separadas por vírgula)</label>
                   <Input
-                    value={editingItem.tags.join(', ')}
+                    value={editingItem.tags.join(", ")}
                     onChange={(e) => setEditingItem({ 
                       ...editingItem, 
-                      tags: e.target.value.split(',').map(tag => tag.trim()).filter(Boolean)
+                      tags: e.target.value.split(",").map(tag => tag.trim()).filter(Boolean)
                     })}
                     placeholder="tag1, tag2, tag3"
                   />

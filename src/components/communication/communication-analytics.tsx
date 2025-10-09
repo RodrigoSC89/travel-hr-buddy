@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   BarChart,
   Bar,
@@ -20,7 +20,7 @@ import {
   ResponsiveContainer,
   Area,
   AreaChart
-} from 'recharts';
+} from "recharts";
 import {
   TrendingUp,
   TrendingDown,
@@ -35,7 +35,7 @@ import {
   Calendar,
   Filter,
   Eye
-} from 'lucide-react';
+} from "lucide-react";
 
 interface CommunicationAnalyticsProps {
   stats: any;
@@ -78,18 +78,18 @@ interface AnalyticsData {
 }
 
 const COLORS = {
-  primary: '#3b82f6',
-  success: '#10b981',
-  warning: '#f59e0b',
-  destructive: '#ef4444',
-  muted: '#6b7280'
+  primary: "#3b82f6",
+  success: "#10b981",
+  warning: "#f59e0b",
+  destructive: "#ef4444",
+  muted: "#6b7280"
 };
 
 export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ stats }) => {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedPeriod, setSelectedPeriod] = useState('30d');
-  const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [selectedPeriod, setSelectedPeriod] = useState("30d");
+  const [selectedDepartment, setSelectedDepartment] = useState("all");
 
   useEffect(() => {
     loadAnalyticsData();
@@ -102,55 +102,54 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
       // Mock analytics data - replace with real data fetching
       const mockData: AnalyticsData = {
         dailyActivity: [
-          { date: '2024-01-15', messages: 45, channels: 8, users: 23 },
-          { date: '2024-01-16', messages: 52, channels: 9, users: 28 },
-          { date: '2024-01-17', messages: 38, channels: 7, users: 19 },
-          { date: '2024-01-18', messages: 61, channels: 10, users: 32 },
-          { date: '2024-01-19', messages: 47, channels: 8, users: 25 },
-          { date: '2024-01-20', messages: 55, channels: 9, users: 29 },
-          { date: '2024-01-21', messages: 43, channels: 8, users: 22 }
+          { date: "2024-01-15", messages: 45, channels: 8, users: 23 },
+          { date: "2024-01-16", messages: 52, channels: 9, users: 28 },
+          { date: "2024-01-17", messages: 38, channels: 7, users: 19 },
+          { date: "2024-01-18", messages: 61, channels: 10, users: 32 },
+          { date: "2024-01-19", messages: 47, channels: 8, users: 25 },
+          { date: "2024-01-20", messages: 55, channels: 9, users: 29 },
+          { date: "2024-01-21", messages: 43, channels: 8, users: 22 }
         ],
         messageTypes: [
-          { type: 'Mensagens Diretas', count: 156, percentage: 42 },
-          { type: 'Canais de Grupo', count: 134, percentage: 36 },
-          { type: 'Transmissões', count: 48, percentage: 13 },
-          { type: 'Emergência', count: 18, percentage: 5 },
-          { type: 'Sistema/IA', count: 15, percentage: 4 }
+          { type: "Mensagens Diretas", count: 156, percentage: 42 },
+          { type: "Canais de Grupo", count: 134, percentage: 36 },
+          { type: "Transmissões", count: 48, percentage: 13 },
+          { type: "Emergência", count: 18, percentage: 5 },
+          { type: "Sistema/IA", count: 15, percentage: 4 }
         ],
         responseTimeData: [
-          { period: 'Seg', avgResponseTime: 2.3, targetTime: 4 },
-          { period: 'Ter', avgResponseTime: 1.8, targetTime: 4 },
-          { period: 'Qua', avgResponseTime: 3.1, targetTime: 4 },
-          { period: 'Qui', avgResponseTime: 2.7, targetTime: 4 },
-          { period: 'Sex', avgResponseTime: 2.1, targetTime: 4 },
-          { period: 'Sáb', avgResponseTime: 4.2, targetTime: 4 },
-          { period: 'Dom', avgResponseTime: 5.1, targetTime: 4 }
+          { period: "Seg", avgResponseTime: 2.3, targetTime: 4 },
+          { period: "Ter", avgResponseTime: 1.8, targetTime: 4 },
+          { period: "Qua", avgResponseTime: 3.1, targetTime: 4 },
+          { period: "Qui", avgResponseTime: 2.7, targetTime: 4 },
+          { period: "Sex", avgResponseTime: 2.1, targetTime: 4 },
+          { period: "Sáb", avgResponseTime: 4.2, targetTime: 4 },
+          { period: "Dom", avgResponseTime: 5.1, targetTime: 4 }
         ],
         userEngagement: [
-          { department: 'RH', activeUsers: 12, totalUsers: 15, engagementRate: 80 },
-          { department: 'Operações', activeUsers: 28, totalUsers: 34, engagementRate: 82 },
-          { department: 'Engenharia', activeUsers: 18, totalUsers: 25, engagementRate: 72 },
-          { department: 'Deck', activeUsers: 22, totalUsers: 30, engagementRate: 73 },
-          { department: 'Administração', activeUsers: 8, totalUsers: 12, engagementRate: 67 }
+          { department: "RH", activeUsers: 12, totalUsers: 15, engagementRate: 80 },
+          { department: "Operações", activeUsers: 28, totalUsers: 34, engagementRate: 82 },
+          { department: "Engenharia", activeUsers: 18, totalUsers: 25, engagementRate: 72 },
+          { department: "Deck", activeUsers: 22, totalUsers: 30, engagementRate: 73 },
+          { department: "Administração", activeUsers: 8, totalUsers: 12, engagementRate: 67 }
         ],
         priorityDistribution: [
-          { priority: 'Baixa', count: 89, color: COLORS.muted },
-          { priority: 'Normal', count: 156, color: COLORS.primary },
-          { priority: 'Alta', count: 45, color: COLORS.warning },
-          { priority: 'Crítica', count: 12, color: COLORS.destructive }
+          { priority: "Baixa", count: 89, color: COLORS.muted },
+          { priority: "Normal", count: 156, color: COLORS.primary },
+          { priority: "Alta", count: 45, color: COLORS.warning },
+          { priority: "Crítica", count: 12, color: COLORS.destructive }
         ],
         communicationTrends: [
-          { month: 'Set', internal: 234, external: 45, emergency: 3 },
-          { month: 'Out', internal: 267, external: 52, emergency: 7 },
-          { month: 'Nov', internal: 298, external: 48, emergency: 2 },
-          { month: 'Dez', internal: 312, external: 61, emergency: 8 },
-          { month: 'Jan', internal: 345, external: 58, emergency: 5 }
+          { month: "Set", internal: 234, external: 45, emergency: 3 },
+          { month: "Out", internal: 267, external: 52, emergency: 7 },
+          { month: "Nov", internal: 298, external: 48, emergency: 2 },
+          { month: "Dez", internal: 312, external: 61, emergency: 8 },
+          { month: "Jan", internal: 345, external: 58, emergency: 5 }
         ]
       };
 
       setAnalyticsData(mockData);
     } catch (error) {
-      console.error('Error loading analytics data:', error);
     } finally {
       setLoading(false);
     }
@@ -175,13 +174,13 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
     };
     
     const blob = new Blob([JSON.stringify(reportData, null, 2)], {
-      type: 'application/json'
+      type: "application/json"
     });
     
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `communication-analytics-${selectedPeriod}-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `communication-analytics-${selectedPeriod}-${new Date().toISOString().split("T")[0]}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -259,7 +258,7 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                   ) : (
                     <TrendingDown className="h-3 w-3 text-destructive" />
                   )}
-                  <span className={`text-xs ${messageTrend.isPositive ? 'text-success' : 'text-destructive'}`}>
+                  <span className={`text-xs ${messageTrend.isPositive ? "text-success" : "text-destructive"}`}>
                     {messageTrend.value.toFixed(1)}%
                   </span>
                 </div>
@@ -281,7 +280,7 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                   ) : (
                     <TrendingDown className="h-3 w-3 text-destructive" />
                   )}
-                  <span className={`text-xs ${userTrend.isPositive ? 'text-success' : 'text-destructive'}`}>
+                  <span className={`text-xs ${userTrend.isPositive ? "text-success" : "text-destructive"}`}>
                     {userTrend.value.toFixed(1)}%
                   </span>
                 </div>
@@ -344,11 +343,11 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                 <ResponsiveContainer width="100%" height={300}>
                   <AreaChart data={analyticsData.dailyActivity}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" tickFormatter={(date) => new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} />
+                    <XAxis dataKey="date" tickFormatter={(date) => new Date(date).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })} />
                     <YAxis />
                     <Tooltip 
-                      labelFormatter={(date) => new Date(date).toLocaleDateString('pt-BR')}
-                      formatter={(value, name) => [value, name === 'messages' ? 'Mensagens' : name === 'users' ? 'Usuários' : 'Canais']}
+                      labelFormatter={(date) => new Date(date).toLocaleDateString("pt-BR")}
+                      formatter={(value, name) => [value, name === "messages" ? "Mensagens" : name === "users" ? "Usuários" : "Canais"]}
                     />
                     <Area type="monotone" dataKey="messages" stackId="1" stroke={COLORS.primary} fill={COLORS.primary} fillOpacity={0.6} />
                     <Area type="monotone" dataKey="users" stackId="2" stroke={COLORS.success} fill={COLORS.success} fillOpacity={0.6} />
@@ -378,7 +377,7 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                         <Cell key={`cell-${index}`} fill={Object.values(COLORS)[index % Object.values(COLORS).length]} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value) => [value, 'Mensagens']} />
+                    <Tooltip formatter={(value) => [value, "Mensagens"]} />
                   </PieChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -419,7 +418,7 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" />
                     <YAxis dataKey="department" type="category" width={80} />
-                    <Tooltip formatter={(value, name) => [value + '%', 'Taxa de Engajamento']} />
+                    <Tooltip formatter={(value, name) => [value + "%", "Taxa de Engajamento"]} />
                     <Bar dataKey="engagementRate" fill={COLORS.success} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -462,9 +461,9 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{dept.department}</span>
                       <Badge variant={
-                        dept.engagementRate >= 80 ? 'default' :
-                        dept.engagementRate >= 70 ? 'secondary' :
-                        'outline'
+                        dept.engagementRate >= 80 ? "default" :
+                          dept.engagementRate >= 70 ? "secondary" :
+                            "outline"
                       }>
                         {dept.engagementRate}%
                       </Badge>
@@ -496,8 +495,8 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                 <LineChart data={analyticsData.responseTimeData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="period" />
-                  <YAxis label={{ value: 'Horas', angle: -90, position: 'insideLeft' }} />
-                  <Tooltip formatter={(value, name) => [value + 'h', name === 'avgResponseTime' ? 'Tempo Médio' : 'Meta']} />
+                  <YAxis label={{ value: "Horas", angle: -90, position: "insideLeft" }} />
+                  <Tooltip formatter={(value, name) => [value + "h", name === "avgResponseTime" ? "Tempo Médio" : "Meta"]} />
                   <Legend />
                   <Line type="monotone" dataKey="avgResponseTime" stroke={COLORS.primary} strokeWidth={2} name="Tempo Médio" />
                   <Line type="monotone" dataKey="targetTime" stroke={COLORS.destructive} strokeDasharray="5 5" strokeWidth={2} name="Meta" />

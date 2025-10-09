@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Shield, 
   AlertTriangle,
@@ -17,12 +17,12 @@ import {
   MapPin,
   Clock,
   XCircle
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SecurityThreat {
   id: string;
-  type: 'intrusion' | 'anomaly' | 'suspicious' | 'malware' | 'ddos';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "intrusion" | "anomaly" | "suspicious" | "malware" | "ddos";
+  severity: "low" | "medium" | "high" | "critical";
   title: string;
   description: string;
   detectedAt: string;
@@ -31,7 +31,7 @@ interface SecurityThreat {
     location?: string;
     user?: string;
   };
-  status: 'active' | 'investigating' | 'resolved' | 'false_positive';
+  status: "active" | "investigating" | "resolved" | "false_positive";
   confidence: number;
   affectedSystems: string[];
   aiAnalysis: string;
@@ -40,137 +40,137 @@ interface SecurityThreat {
 interface SecurityMetric {
   name: string;
   value: number;
-  trend: 'up' | 'down' | 'stable';
-  status: 'good' | 'warning' | 'critical';
+  trend: "up" | "down" | "stable";
+  status: "good" | "warning" | "critical";
 }
 
 export const AIThreatDetection: React.FC = () => {
   const [threats, setThreats] = useState<SecurityThreat[]>([
     {
-      id: '1',
-      type: 'suspicious',
-      severity: 'high',
-      title: 'Tentativa de Acesso Não Autorizado',
-      description: 'Múltiplas tentativas de login falhadas do mesmo IP em curto período',
-      detectedAt: '2025-05-12T14:35:22',
+      id: "1",
+      type: "suspicious",
+      severity: "high",
+      title: "Tentativa de Acesso Não Autorizado",
+      description: "Múltiplas tentativas de login falhadas do mesmo IP em curto período",
+      detectedAt: "2025-05-12T14:35:22",
       source: {
-        ip: '203.45.78.91',
-        location: 'Localização Desconhecida',
-        user: 'admin_test'
+        ip: "203.45.78.91",
+        location: "Localização Desconhecida",
+        user: "admin_test"
       },
-      status: 'investigating',
+      status: "investigating",
       confidence: 94,
-      affectedSystems: ['Sistema de Autenticação', 'API Gateway'],
-      aiAnalysis: 'Padrão de ataque de força bruta detectado. IP sem histórico legítimo de acesso. Recomenda-se bloqueio imediato.'
+      affectedSystems: ["Sistema de Autenticação", "API Gateway"],
+      aiAnalysis: "Padrão de ataque de força bruta detectado. IP sem histórico legítimo de acesso. Recomenda-se bloqueio imediato."
     },
     {
-      id: '2',
-      type: 'anomaly',
-      severity: 'medium',
-      title: 'Comportamento Anômalo de Usuário',
-      description: 'Padrão de acesso incomum detectado - horário e localização atípicos',
-      detectedAt: '2025-05-12T13:12:45',
+      id: "2",
+      type: "anomaly",
+      severity: "medium",
+      title: "Comportamento Anômalo de Usuário",
+      description: "Padrão de acesso incomum detectado - horário e localização atípicos",
+      detectedAt: "2025-05-12T13:12:45",
       source: {
-        ip: '192.168.1.45',
-        location: 'São Paulo, BR',
-        user: 'joao.silva@company.com'
+        ip: "192.168.1.45",
+        location: "São Paulo, BR",
+        user: "joao.silva@company.com"
       },
-      status: 'active',
+      status: "active",
       confidence: 76,
-      affectedSystems: ['Dashboard Executivo', 'Dados de Tripulação'],
-      aiAnalysis: 'Usuário acessando de localização diferente do padrão. Horário de acesso fora do expediente normal. Pode ser legítimo, mas requer verificação.'
+      affectedSystems: ["Dashboard Executivo", "Dados de Tripulação"],
+      aiAnalysis: "Usuário acessando de localização diferente do padrão. Horário de acesso fora do expediente normal. Pode ser legítimo, mas requer verificação."
     },
     {
-      id: '3',
-      type: 'intrusion',
-      severity: 'critical',
-      title: 'Tentativa de SQL Injection',
-      description: 'Detectada tentativa de injeção SQL no endpoint de relatórios',
-      detectedAt: '2025-05-12T12:05:18',
+      id: "3",
+      type: "intrusion",
+      severity: "critical",
+      title: "Tentativa de SQL Injection",
+      description: "Detectada tentativa de injeção SQL no endpoint de relatórios",
+      detectedAt: "2025-05-12T12:05:18",
       source: {
-        ip: '45.123.67.89',
-        location: 'Desconhecido'
+        ip: "45.123.67.89",
+        location: "Desconhecido"
       },
-      status: 'resolved',
+      status: "resolved",
       confidence: 98,
-      affectedSystems: ['API de Relatórios', 'Banco de Dados'],
-      aiAnalysis: 'Tentativa clara de exploração de vulnerabilidade. Padrão de ataque automatizado detectado. IP bloqueado automaticamente.'
+      affectedSystems: ["API de Relatórios", "Banco de Dados"],
+      aiAnalysis: "Tentativa clara de exploração de vulnerabilidade. Padrão de ataque automatizado detectado. IP bloqueado automaticamente."
     },
     {
-      id: '4',
-      type: 'ddos',
-      severity: 'high',
-      title: 'Tráfego Anormal Detectado',
-      description: 'Volume de requisições 300% acima da média em 5 minutos',
-      detectedAt: '2025-05-12T11:23:56',
+      id: "4",
+      type: "ddos",
+      severity: "high",
+      title: "Tráfego Anormal Detectado",
+      description: "Volume de requisições 300% acima da média em 5 minutos",
+      detectedAt: "2025-05-12T11:23:56",
       source: {
-        ip: 'Múltiplos IPs',
-        location: 'Diversos países'
+        ip: "Múltiplos IPs",
+        location: "Diversos países"
       },
-      status: 'investigating',
+      status: "investigating",
       confidence: 88,
-      affectedSystems: ['API Gateway', 'Load Balancer'],
-      aiAnalysis: 'Possível ataque DDoS em andamento. Tráfego originado de botnet identificada. Sistema de mitigação ativado.'
+      affectedSystems: ["API Gateway", "Load Balancer"],
+      aiAnalysis: "Possível ataque DDoS em andamento. Tráfego originado de botnet identificada. Sistema de mitigação ativado."
     },
     {
-      id: '5',
-      type: 'anomaly',
-      severity: 'low',
-      title: 'Acesso a Dados Sensíveis',
-      description: 'Download em massa de documentos de tripulação',
-      detectedAt: '2025-05-12T10:47:33',
+      id: "5",
+      type: "anomaly",
+      severity: "low",
+      title: "Acesso a Dados Sensíveis",
+      description: "Download em massa de documentos de tripulação",
+      detectedAt: "2025-05-12T10:47:33",
       source: {
-        ip: '10.0.2.15',
-        location: 'Rede Interna',
-        user: 'maria.santos@company.com'
+        ip: "10.0.2.15",
+        location: "Rede Interna",
+        user: "maria.santos@company.com"
       },
-      status: 'false_positive',
+      status: "false_positive",
       confidence: 65,
-      affectedSystems: ['Sistema de Documentos'],
-      aiAnalysis: 'Padrão suspeito de download, mas usuário possui permissões adequadas. Ação dentro do escopo de trabalho normal após verificação.'
+      affectedSystems: ["Sistema de Documentos"],
+      aiAnalysis: "Padrão suspeito de download, mas usuário possui permissões adequadas. Ação dentro do escopo de trabalho normal após verificação."
     }
   ]);
 
   const [metrics] = useState<SecurityMetric[]>([
-    { name: 'Tentativas de Intrusão', value: 23, trend: 'down', status: 'good' },
-    { name: 'Anomalias Detectadas', value: 45, trend: 'up', status: 'warning' },
-    { name: 'Taxa de Falsos Positivos', value: 8, trend: 'down', status: 'good' },
-    { name: 'Tempo Médio de Resposta', value: 3.2, trend: 'down', status: 'good' }
+    { name: "Tentativas de Intrusão", value: 23, trend: "down", status: "good" },
+    { name: "Anomalias Detectadas", value: 45, trend: "up", status: "warning" },
+    { name: "Taxa de Falsos Positivos", value: 8, trend: "down", status: "good" },
+    { name: "Tempo Médio de Resposta", value: 3.2, trend: "down", status: "good" }
   ]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'destructive';
-      case 'high': return 'default';
-      case 'medium': return 'secondary';
-      case 'low': return 'outline';
-      default: return 'outline';
+    case "critical": return "destructive";
+    case "high": return "default";
+    case "medium": return "secondary";
+    case "low": return "outline";
+    default: return "outline";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'text-red-600';
-      case 'investigating': return 'text-yellow-600';
-      case 'resolved': return 'text-green-600';
-      case 'false_positive': return 'text-muted-foreground';
-      default: return 'text-muted-foreground';
+    case "active": return "text-red-600";
+    case "investigating": return "text-yellow-600";
+    case "resolved": return "text-green-600";
+    case "false_positive": return "text-muted-foreground";
+    default: return "text-muted-foreground";
     }
   };
 
   const getThreatIcon = (type: string) => {
     switch (type) {
-      case 'intrusion': return <Shield className="h-5 w-5 text-red-600" />;
-      case 'anomaly': return <Eye className="h-5 w-5 text-yellow-600" />;
-      case 'suspicious': return <AlertTriangle className="h-5 w-5 text-orange-600" />;
-      case 'malware': return <XCircle className="h-5 w-5 text-red-600" />;
-      case 'ddos': return <Zap className="h-5 w-5 text-purple-600" />;
-      default: return <AlertTriangle className="h-5 w-5" />;
+    case "intrusion": return <Shield className="h-5 w-5 text-red-600" />;
+    case "anomaly": return <Eye className="h-5 w-5 text-yellow-600" />;
+    case "suspicious": return <AlertTriangle className="h-5 w-5 text-orange-600" />;
+    case "malware": return <XCircle className="h-5 w-5 text-red-600" />;
+    case "ddos": return <Zap className="h-5 w-5 text-purple-600" />;
+    default: return <AlertTriangle className="h-5 w-5" />;
     }
   };
 
-  const activeThreats = threats.filter(t => t.status === 'active' || t.status === 'investigating').length;
-  const criticalThreats = threats.filter(t => t.severity === 'critical').length;
+  const activeThreats = threats.filter(t => t.status === "active" || t.status === "investigating").length;
+  const criticalThreats = threats.filter(t => t.severity === "critical").length;
   const avgConfidence = Math.round(
     threats.reduce((sum, t) => sum + t.confidence, 0) / threats.length
   );
@@ -253,10 +253,10 @@ export const AIThreatDetection: React.FC = () => {
             <TabsContent value="threats" className="space-y-4 mt-4">
               {threats.map((threat) => (
                 <Card key={threat.id} className={`border-l-4 ${
-                  threat.severity === 'critical' ? 'border-l-red-600' :
-                  threat.severity === 'high' ? 'border-l-orange-600' :
-                  threat.severity === 'medium' ? 'border-l-yellow-600' :
-                  'border-l-blue-600'
+                  threat.severity === "critical" ? "border-l-red-600" :
+                    threat.severity === "high" ? "border-l-orange-600" :
+                      threat.severity === "medium" ? "border-l-yellow-600" :
+                        "border-l-blue-600"
                 }`}>
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -277,10 +277,10 @@ export const AIThreatDetection: React.FC = () => {
                         </div>
                       </div>
                       <div className={`text-sm font-medium ${getStatusColor(threat.status)}`}>
-                        {threat.status === 'active' && <AlertTriangle className="h-4 w-4 inline mr-1" />}
-                        {threat.status === 'investigating' && <Eye className="h-4 w-4 inline mr-1" />}
-                        {threat.status === 'resolved' && <CheckCircle className="h-4 w-4 inline mr-1" />}
-                        {threat.status.replace('_', ' ').toUpperCase()}
+                        {threat.status === "active" && <AlertTriangle className="h-4 w-4 inline mr-1" />}
+                        {threat.status === "investigating" && <Eye className="h-4 w-4 inline mr-1" />}
+                        {threat.status === "resolved" && <CheckCircle className="h-4 w-4 inline mr-1" />}
+                        {threat.status.replace("_", " ").toUpperCase()}
                       </div>
                     </div>
                   </CardHeader>
@@ -318,7 +318,7 @@ export const AIThreatDetection: React.FC = () => {
                           Detectado
                         </div>
                         <div className="text-sm">
-                          {new Date(threat.detectedAt).toLocaleTimeString('pt-BR')}
+                          {new Date(threat.detectedAt).toLocaleTimeString("pt-BR")}
                         </div>
                       </div>
                     </div>
@@ -352,7 +352,7 @@ export const AIThreatDetection: React.FC = () => {
 
                     {/* Actions */}
                     <div className="flex gap-2">
-                      {threat.status === 'active' && (
+                      {threat.status === "active" && (
                         <>
                           <Button size="sm" variant="destructive" className="flex-1">
                             <Lock className="h-4 w-4 mr-2" />
@@ -363,7 +363,7 @@ export const AIThreatDetection: React.FC = () => {
                           </Button>
                         </>
                       )}
-                      {threat.status === 'investigating' && (
+                      {threat.status === "investigating" && (
                         <>
                           <Button size="sm" className="flex-1">
                             <CheckCircle className="h-4 w-4 mr-2" />
@@ -392,25 +392,25 @@ export const AIThreatDetection: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-end justify-between mb-2">
-                        <div className="text-3xl font-bold">{metric.value}{metric.name.includes('Taxa') ? '%' : ''}</div>
+                        <div className="text-3xl font-bold">{metric.value}{metric.name.includes("Taxa") ? "%" : ""}</div>
                         <div className={`flex items-center gap-1 text-sm ${
-                          metric.trend === 'down' ? 'text-green-600' : 
-                          metric.trend === 'up' ? 'text-red-600' : 
-                          'text-muted-foreground'
+                          metric.trend === "down" ? "text-green-600" : 
+                            metric.trend === "up" ? "text-red-600" : 
+                              "text-muted-foreground"
                         }`}>
-                          {metric.trend === 'up' ? '↗' : metric.trend === 'down' ? '↘' : '→'}
-                          <span>{metric.trend === 'up' ? '+' : metric.trend === 'down' ? '-' : ''}
-                          {Math.abs(Math.random() * 15).toFixed(1)}%</span>
+                          {metric.trend === "up" ? "↗" : metric.trend === "down" ? "↘" : "→"}
+                          <span>{metric.trend === "up" ? "+" : metric.trend === "down" ? "-" : ""}
+                            {Math.abs(Math.random() * 15).toFixed(1)}%</span>
                         </div>
                       </div>
                       <Progress value={metric.value} className="h-2" />
                       <div className="mt-2 text-xs text-muted-foreground">
                         Status: <span className={
-                          metric.status === 'good' ? 'text-green-600' :
-                          metric.status === 'warning' ? 'text-yellow-600' :
-                          'text-red-600'
+                          metric.status === "good" ? "text-green-600" :
+                            metric.status === "warning" ? "text-yellow-600" :
+                              "text-red-600"
                         }>
-                          {metric.status === 'good' ? 'Bom' : metric.status === 'warning' ? 'Atenção' : 'Crítico'}
+                          {metric.status === "good" ? "Bom" : metric.status === "warning" ? "Atenção" : "Crítico"}
                         </span>
                       </div>
                     </CardContent>
@@ -442,12 +442,12 @@ export const AIThreatDetection: React.FC = () => {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {[
-                      { name: 'Firewall Inteligente', status: 'active' },
-                      { name: 'WAF - Web Application Firewall', status: 'active' },
-                      { name: 'Proteção DDoS', status: 'active' },
-                      { name: 'Detecção de Anomalias IA', status: 'active' },
-                      { name: 'Análise Comportamental', status: 'active' },
-                      { name: 'Threat Intelligence Feed', status: 'active' }
+                      { name: "Firewall Inteligente", status: "active" },
+                      { name: "WAF - Web Application Firewall", status: "active" },
+                      { name: "Proteção DDoS", status: "active" },
+                      { name: "Detecção de Anomalias IA", status: "active" },
+                      { name: "Análise Comportamental", status: "active" },
+                      { name: "Threat Intelligence Feed", status: "active" }
                     ].map((layer, idx) => (
                       <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                         <div className="flex items-center gap-2">
@@ -469,12 +469,12 @@ export const AIThreatDetection: React.FC = () => {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {[
-                      'Bloqueio automático de IPs suspeitos',
-                      'Rate limiting adaptativo',
-                      'Isolamento de sessões comprometidas',
-                      'Notificação em tempo real',
-                      'Backup automático antes de ações',
-                      'Log detalhado de todas atividades'
+                      "Bloqueio automático de IPs suspeitos",
+                      "Rate limiting adaptativo",
+                      "Isolamento de sessões comprometidas",
+                      "Notificação em tempo real",
+                      "Backup automático antes de ações",
+                      "Log detalhado de todas atividades"
                     ].map((action, idx) => (
                       <div key={idx} className="flex items-start gap-2 p-2 bg-blue-50 dark:bg-blue-950 rounded-lg">
                         <CheckCircle className="h-4 w-4 mt-0.5 text-blue-600" />

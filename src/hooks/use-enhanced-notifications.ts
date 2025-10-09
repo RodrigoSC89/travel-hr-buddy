@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 export interface Notification {
   id: string;
   title: string;
   message: string;
-  type: 'info' | 'success' | 'warning' | 'error';
+  type: "info" | "success" | "warning" | "error";
   read: boolean;
   action?: {
     label: string;
@@ -34,11 +34,11 @@ export const useEnhancedNotifications = () => {
 
       // Verificar certificados expirando
       const { data: certificates } = await supabase
-        .from('employee_certificates')
-        .select('*')
-        .eq('employee_id', user.email)
-        .gte('expiry_date', new Date().toISOString())
-        .lte('expiry_date', new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString());
+        .from("employee_certificates")
+        .select("*")
+        .eq("employee_id", user.email)
+        .gte("expiry_date", new Date().toISOString())
+        .lte("expiry_date", new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString());
 
       certificates?.forEach(cert => {
         const daysUntilExpiry = Math.ceil(
@@ -47,13 +47,13 @@ export const useEnhancedNotifications = () => {
         
         mockNotifications.push({
           id: `cert-${cert.id}`,
-          title: 'Certificado Expirando',
+          title: "Certificado Expirando",
           message: `Seu certificado "${cert.certificate_name}" expira em ${daysUntilExpiry} dias`,
-          type: daysUntilExpiry <= 7 ? 'error' : 'warning',
+          type: daysUntilExpiry <= 7 ? "error" : "warning",
           read: false,
           action: {
-            label: 'Ver Certificado',
-            href: '/hr'
+            label: "Ver Certificado",
+            href: "/hr"
           },
           created_at: new Date().toISOString()
         });
@@ -61,42 +61,42 @@ export const useEnhancedNotifications = () => {
 
       // Verificar alertas de preços
       const { data: priceAlerts } = await supabase
-        .from('price_alerts')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('is_active', true);
+        .from("price_alerts")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("is_active", true);
 
       if (priceAlerts && priceAlerts.length > 0) {
         mockNotifications.push({
-          id: 'price-alerts-active',
-          title: 'Alertas de Preços Ativos',
+          id: "price-alerts-active",
+          title: "Alertas de Preços Ativos",
           message: `Você tem ${priceAlerts.length} alertas de preços monitorando produtos`,
-          type: 'info',
+          type: "info",
           read: false,
           action: {
-            label: 'Ver Alertas',
-            href: '/price-alerts'
+            label: "Ver Alertas",
+            href: "/price-alerts"
           },
           created_at: new Date().toISOString()
         });
       }
 
       // Adicionar notificações de boas-vindas para novos usuários
-      const userCreated = new Date(user.created_at || '');
+      const userCreated = new Date(user.created_at || "");
       const daysSinceCreated = Math.ceil(
         (new Date().getTime() - userCreated.getTime()) / (1000 * 60 * 60 * 24)
       );
 
       if (daysSinceCreated <= 7) {
         mockNotifications.push({
-          id: 'welcome',
-          title: 'Bem-vindo ao Sistema!',
-          message: 'Explore todas as funcionalidades disponíveis. Precisa de ajuda? Consulte nossa documentação.',
-          type: 'success',
+          id: "welcome",
+          title: "Bem-vindo ao Sistema!",
+          message: "Explore todas as funcionalidades disponíveis. Precisa de ajuda? Consulte nossa documentação.",
+          type: "success",
           read: false,
           action: {
-            label: 'Explorar',
-            href: '/'
+            label: "Explorar",
+            href: "/"
           },
           created_at: new Date().toISOString()
         });
@@ -105,7 +105,6 @@ export const useEnhancedNotifications = () => {
       setNotifications(mockNotifications);
       setUnreadCount(mockNotifications.filter(n => !n.read).length);
     } catch (error) {
-      console.error('Error fetching notifications:', error);
     } finally {
       setIsLoading(false);
     }

@@ -2,13 +2,13 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 serve(async (req) => {
   // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
@@ -33,7 +33,7 @@ serve(async (req) => {
       // Create WebSocket connection to OpenAI
       const openaiWs = new WebSocket("wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17", [
         "realtime",
-        `openai-insecure-api-key.${Deno.env.get('OPENAI_API_KEY')}`
+        `openai-insecure-api-key.${Deno.env.get("OPENAI_API_KEY")}`
       ]);
 
       openaiWs.onopen = () => {
@@ -178,53 +178,53 @@ serve(async (req) => {
             const args = JSON.parse(data.arguments);
             
             switch (data.name) {
-              case "navigate_system":
-                functionResult = {
-                  success: true,
-                  message: `Navegando para o módulo: ${args.module}`,
-                  action: "navigation",
-                  module: args.module
-                } as any;
-                break;
+            case "navigate_system":
+              functionResult = {
+                success: true,
+                message: `Navegando para o módulo: ${args.module}`,
+                action: "navigation",
+                module: args.module
+              } as any;
+              break;
                 
-              case "search_flights":
-                functionResult = {
-                  success: true,
-                  message: `Buscando voos de ${args.origin} para ${args.destination} em ${args.date}`,
-                  action: "flight_search",
-                  data: args
-                } as any;
-                break;
+            case "search_flights":
+              functionResult = {
+                success: true,
+                message: `Buscando voos de ${args.origin} para ${args.destination} em ${args.date}`,
+                action: "flight_search",
+                data: args
+              } as any;
+              break;
                 
-              case "get_system_status":
-                functionResult = {
-                  success: true,
-                  message: "Sistema operacional. Todos os módulos funcionando normalmente.",
-                  action: "system_status",
-                  status: "operational",
-                  modules: ["RH", "Viagens", "Alertas", "Relatórios"]
-                } as any;
-                break;
+            case "get_system_status":
+              functionResult = {
+                success: true,
+                message: "Sistema operacional. Todos os módulos funcionando normalmente.",
+                action: "system_status",
+                status: "operational",
+                modules: ["RH", "Viagens", "Alertas", "Relatórios"]
+              } as any;
+              break;
                 
-              case "check_certificates":
-                functionResult = {
-                  success: true,
-                  message: `Verificando certificados que vencem nos próximos ${args.days_ahead || 30} dias`,
-                  action: "certificate_check",
-                  data: args
-                } as any;
-                break;
+            case "check_certificates":
+              functionResult = {
+                success: true,
+                message: `Verificando certificados que vencem nos próximos ${args.days_ahead || 30} dias`,
+                action: "certificate_check",
+                data: args
+              } as any;
+              break;
                 
-              default:
-                functionResult = {
-                  success: false,
-                  message: `Função ${data.name} não reconhecida`
-                };
+            default:
+              functionResult = {
+                success: false,
+                message: `Função ${data.name} não reconhecida`
+              };
             }
           } catch (error) {
             functionResult = {
               success: false,
-              message: `Erro ao processar função: ${error instanceof Error ? error.message : 'Unknown error'}`
+              message: `Erro ao processar função: ${error instanceof Error ? error.message : "Unknown error"}`
             };
           }
           
@@ -257,7 +257,7 @@ serve(async (req) => {
       console.error("Error handling message:", error);
       socket.send(JSON.stringify({ 
         type: "error", 
-        error: error instanceof Error ? error.message : 'Unknown error occurred'
+        error: error instanceof Error ? error.message : "Unknown error occurred"
       }));
     }
   };

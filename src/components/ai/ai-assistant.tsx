@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
+import React, { useState, useRef, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 import { 
   Bot, 
   User, 
@@ -15,10 +15,10 @@ import {
   FileText,
   Settings,
   Sparkles
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Extend the global Window interface to include webkitSpeechRecognition
 declare global {
@@ -29,7 +29,7 @@ declare global {
 
 interface Message {
   id: string;
-  type: 'user' | 'assistant' | 'system';
+  type: "user" | "assistant" | "system";
   content: string;
   timestamp: Date;
   metadata?: {
@@ -49,12 +49,12 @@ interface AIAssistantProps {
 }
 
 export const AIAssistant: React.FC<AIAssistantProps> = ({
-  context = 'general',
-  module = 'dashboard',
+  context = "general",
+  module = "dashboard",
   onAction
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState<any>(null);
@@ -64,11 +64,11 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
   useEffect(() => {
     // Initialize speech recognition
-    if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
+    if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
       const recognition = new (window as any).webkitSpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
-      recognition.lang = 'pt-BR';
+      recognition.lang = "pt-BR";
 
       recognition.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
@@ -94,16 +94,16 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
     // Add welcome message
     setMessages([{
-      id: '1',
-      type: 'assistant',
+      id: "1",
+      type: "assistant",
       content: `Olá! Sou seu assistente inteligente para o módulo ${module}. Como posso ajudá-lo hoje?`,
       timestamp: new Date(),
       metadata: {
         suggestions: [
-          'Gerar relatório de desempenho',
-          'Analisar métricas do sistema',
-          'Sugerir otimizações',
-          'Verificar notificações'
+          "Gerar relatório de desempenho",
+          "Analisar métricas do sistema",
+          "Sugerir otimizações",
+          "Verificar notificações"
         ]
       }
     }]);
@@ -114,7 +114,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
   }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const toggleListening = () => {
@@ -141,18 +141,18 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      type: 'user',
+      type: "user",
       content: input.trim(),
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setInput('');
+    setInput("");
     setIsLoading(true);
 
     try {
       // Call the AI chat edge function
-      const { data, error } = await supabase.functions.invoke('ai-chat', {
+      const { data, error } = await supabase.functions.invoke("ai-chat", {
         body: {
           message: userMessage.content,
           context,
@@ -166,7 +166,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        type: 'assistant',
+        type: "assistant",
         content: data.response,
         timestamp: new Date(),
         metadata: data.metadata
@@ -184,11 +184,10 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       }
 
     } catch (error) {
-      console.error('AI Assistant error:', error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        type: 'system',
-        content: 'Desculpe, ocorreu um erro ao processar sua mensagem. Tente novamente.',
+        type: "system",
+        content: "Desculpe, ocorreu um erro ao processar sua mensagem. Tente novamente.",
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -219,31 +218,31 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
   };
 
   const renderMessage = (message: Message) => {
-    const isUser = message.type === 'user';
-    const isSystem = message.type === 'system';
+    const isUser = message.type === "user";
+    const isSystem = message.type === "system";
 
     return (
-      <div key={message.id} className={`flex gap-3 mb-4 ${isUser ? 'flex-row-reverse' : ''}`}>
+      <div key={message.id} className={`flex gap-3 mb-4 ${isUser ? "flex-row-reverse" : ""}`}>
         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-          isUser ? 'bg-primary text-primary-foreground' : 
-          isSystem ? 'bg-muted text-muted-foreground' : 'bg-accent text-accent-foreground'
+          isUser ? "bg-primary text-primary-foreground" : 
+            isSystem ? "bg-muted text-muted-foreground" : "bg-accent text-accent-foreground"
         }`}>
           {isUser ? <User className="w-4 h-4" /> : 
-           isSystem ? <Settings className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+            isSystem ? <Settings className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
         </div>
         
-        <div className={`flex-1 ${isUser ? 'text-right' : ''}`}>
+        <div className={`flex-1 ${isUser ? "text-right" : ""}`}>
           <div className={`inline-block p-3 rounded-lg max-w-[80%] ${
-            isUser ? 'bg-primary text-primary-foreground' : 
-            isSystem ? 'bg-muted text-muted-foreground' : 'bg-accent text-accent-foreground'
+            isUser ? "bg-primary text-primary-foreground" : 
+              isSystem ? "bg-muted text-muted-foreground" : "bg-accent text-accent-foreground"
           }`}>
             <p className="text-sm">{message.content}</p>
           </div>
           
           <p className="text-xs text-muted-foreground mt-1">
-            {message.timestamp.toLocaleTimeString('pt-BR', { 
-              hour: '2-digit', 
-              minute: '2-digit' 
+            {message.timestamp.toLocaleTimeString("pt-BR", { 
+              hour: "2-digit", 
+              minute: "2-digit" 
             })}
           </p>
 
@@ -325,7 +324,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Digite sua mensagem ou use o microfone..."
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
             className="flex-1"
           />
           
@@ -333,7 +332,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
             variant="outline"
             size="icon"
             onClick={toggleListening}
-            className={isListening ? 'bg-status-error text-status-error-foreground' : ''}
+            className={isListening ? "bg-status-error text-status-error-foreground" : ""}
           >
             {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </Button>

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { 
   Heart, 
   Share2, 
@@ -20,10 +20,10 @@ import {
   ExternalLink,
   Copy,
   Check
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface SharedAlert {
   id: string;
@@ -44,7 +44,7 @@ interface SharedAlert {
     store_name: string;
     category: string;
   };
-  user_vote?: 'upvote' | 'downvote';
+  user_vote?: "upvote" | "downvote";
 }
 
 interface ShareAlertForm {
@@ -60,9 +60,9 @@ export const SharedAlerts = () => {
   const [userAlerts, setUserAlerts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [shareForm, setShareForm] = useState<ShareAlertForm>({
-    alert_id: '',
-    title: '',
-    description: '',
+    alert_id: "",
+    title: "",
+    description: "",
   });
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
@@ -77,7 +77,7 @@ export const SharedAlerts = () => {
   const loadSharedAlerts = async () => {
     try {
       const { data, error } = await supabase
-        .from('shared_alerts')
+        .from("shared_alerts")
         .select(`
           *,
           alert:price_alerts (
@@ -90,11 +90,10 @@ export const SharedAlerts = () => {
             category
           )
         `)
-        .order('upvotes', { ascending: false })
+        .order("upvotes", { ascending: false })
         .limit(20);
 
       if (error) {
-        console.error('Error loading shared alerts:', error);
         return;
       }
 
@@ -102,10 +101,10 @@ export const SharedAlerts = () => {
         // Carregar votos do usuário
         const alertIds = data.map(alert => alert.id);
         const { data: votes } = await supabase
-          .from('alert_votes')
-          .select('shared_alert_id, vote_type')
-          .eq('user_id', user.id)
-          .in('shared_alert_id', alertIds);
+          .from("alert_votes")
+          .select("shared_alert_id, vote_type")
+          .eq("user_id", user.id)
+          .in("shared_alert_id", alertIds);
 
         const votesMap = votes?.reduce((acc, vote) => {
           acc[vote.shared_alert_id] = vote.vote_type;
@@ -114,7 +113,7 @@ export const SharedAlerts = () => {
 
         const alertsWithVotes = data.map(alert => ({
           ...alert,
-          user_vote: votesMap[alert.id] as 'upvote' | 'downvote' | undefined,
+          user_vote: votesMap[alert.id] as "upvote" | "downvote" | undefined,
         }));
 
         setSharedAlerts(alertsWithVotes);
@@ -122,7 +121,6 @@ export const SharedAlerts = () => {
         setSharedAlerts(data || []);
       }
     } catch (error) {
-      console.error('Error loading shared alerts:', error);
     } finally {
       setLoading(false);
     }
@@ -131,23 +129,21 @@ export const SharedAlerts = () => {
   const loadUserAlerts = async () => {
     try {
       const { data, error } = await supabase
-        .from('price_alerts')
-        .select('id, product_name, current_price, target_price')
-        .eq('user_id', user?.id)
-        .eq('is_active', true);
+        .from("price_alerts")
+        .select("id, product_name, current_price, target_price")
+        .eq("user_id", user?.id)
+        .eq("is_active", true);
 
       if (error) {
-        console.error('Error loading user alerts:', error);
         return;
       }
 
       setUserAlerts(data || []);
     } catch (error) {
-      console.error('Error loading user alerts:', error);
     }
   };
 
-  const handleVote = async (sharedAlertId: string, voteType: 'upvote' | 'downvote') => {
+  const handleVote = async (sharedAlertId: string, voteType: "upvote" | "downvote") => {
     if (!user) {
       toast({
         title: "Login necessário",
@@ -164,21 +160,21 @@ export const SharedAlerts = () => {
       // Se está votando no mesmo tipo, remove o voto
       if (currentVote === voteType) {
         const { error } = await supabase
-          .from('alert_votes')
+          .from("alert_votes")
           .delete()
-          .eq('shared_alert_id', sharedAlertId)
-          .eq('user_id', user.id);
+          .eq("shared_alert_id", sharedAlertId)
+          .eq("user_id", user.id);
 
         if (error) throw error;
 
         // Atualizar contadores
-        const updateField = voteType === 'upvote' ? 'upvotes' : 'downvotes';
+        const updateField = voteType === "upvote" ? "upvotes" : "downvotes";
         const newCount = Math.max(0, (currentAlert?.[updateField] || 0) - 1);
         
         await supabase
-          .from('shared_alerts')
+          .from("shared_alerts")
           .update({ [updateField]: newCount })
-          .eq('id', sharedAlertId);
+          .eq("id", sharedAlertId);
 
         // Atualizar estado local
         setSharedAlerts(prev => prev.map(alert => 
@@ -189,7 +185,7 @@ export const SharedAlerts = () => {
       } else {
         // Inserir ou atualizar voto
         const { error } = await supabase
-          .from('alert_votes')
+          .from("alert_votes")
           .upsert({
             shared_alert_id: sharedAlertId,
             user_id: user.id,
@@ -202,34 +198,34 @@ export const SharedAlerts = () => {
         let upvoteDelta = 0;
         let downvoteDelta = 0;
 
-        if (voteType === 'upvote') {
+        if (voteType === "upvote") {
           upvoteDelta = 1;
-          if (currentVote === 'downvote') downvoteDelta = -1;
+          if (currentVote === "downvote") downvoteDelta = -1;
         } else {
           downvoteDelta = 1;
-          if (currentVote === 'upvote') upvoteDelta = -1;
+          if (currentVote === "upvote") upvoteDelta = -1;
         }
 
         const newUpvotes = Math.max(0, (currentAlert?.upvotes || 0) + upvoteDelta);
         const newDownvotes = Math.max(0, (currentAlert?.downvotes || 0) + downvoteDelta);
 
         await supabase
-          .from('shared_alerts')
+          .from("shared_alerts")
           .update({ 
             upvotes: newUpvotes,
             downvotes: newDownvotes
           })
-          .eq('id', sharedAlertId);
+          .eq("id", sharedAlertId);
 
         // Atualizar estado local
         setSharedAlerts(prev => prev.map(alert => 
           alert.id === sharedAlertId 
             ? { 
-                ...alert, 
-                upvotes: newUpvotes,
-                downvotes: newDownvotes,
-                user_vote: voteType 
-              }
+              ...alert, 
+              upvotes: newUpvotes,
+              downvotes: newDownvotes,
+              user_vote: voteType 
+            }
             : alert
         ));
       }
@@ -239,7 +235,6 @@ export const SharedAlerts = () => {
         description: "Seu voto foi registrado com sucesso!",
       });
     } catch (error) {
-      console.error('Error voting:', error);
       toast({
         title: "Erro",
         description: "Erro ao registrar seu voto. Tente novamente.",
@@ -260,7 +255,7 @@ export const SharedAlerts = () => {
 
     try {
       const { error } = await supabase
-        .from('shared_alerts')
+        .from("shared_alerts")
         .insert({
           alert_id: shareForm.alert_id,
           shared_by: user.id,
@@ -275,11 +270,10 @@ export const SharedAlerts = () => {
         description: "Alerta compartilhado com a comunidade!",
       });
 
-      setShareForm({ alert_id: '', title: '', description: '' });
+      setShareForm({ alert_id: "", title: "", description: "" });
       setIsShareDialogOpen(false);
       loadSharedAlerts();
     } catch (error) {
-      console.error('Error sharing alert:', error);
       toast({
         title: "Erro",
         description: "Erro ao compartilhar alerta. Tente novamente.",
@@ -482,7 +476,7 @@ export const SharedAlerts = () => {
 
 interface SharedAlertCardProps {
   alert: SharedAlert;
-  onVote: (alertId: string, voteType: 'upvote' | 'downvote') => void;
+  onVote: (alertId: string, voteType: "upvote" | "downvote") => void;
   onCopyUrl: (url: string, productName: string) => void;
   copiedUrl: string | null;
 }
@@ -544,7 +538,7 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
             <div>
               <span className="text-muted-foreground">Preço Atual:</span>
               <p className="font-bold">
-                R$ {alert.alert.current_price?.toFixed(2) || 'N/A'}
+                R$ {alert.alert.current_price?.toFixed(2) || "N/A"}
               </p>
             </div>
             
@@ -571,9 +565,9 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
             {user && (
               <>
                 <Button
-                  variant={alert.user_vote === 'upvote' ? 'default' : 'outline'}
+                  variant={alert.user_vote === "upvote" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => onVote(alert.id, 'upvote')}
+                  onClick={() => onVote(alert.id, "upvote")}
                   className="flex items-center gap-1"
                 >
                   <ThumbsUp className="h-4 w-4" />
@@ -581,9 +575,9 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
                 </Button>
                 
                 <Button
-                  variant={alert.user_vote === 'downvote' ? 'destructive' : 'outline'}
+                  variant={alert.user_vote === "downvote" ? "destructive" : "outline"}
                   size="sm"
-                  onClick={() => onVote(alert.id, 'downvote')}
+                  onClick={() => onVote(alert.id, "downvote")}
                   className="flex items-center gap-1"
                 >
                   <ThumbsDown className="h-4 w-4" />

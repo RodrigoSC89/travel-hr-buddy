@@ -6,9 +6,9 @@
  * Mantém apenas os essenciais para debugging em produção
  */
 
-const fs = require('fs');
-const path = require('path');
-const glob = require('glob');
+const fs = require("fs");
+const path = require("path");
+const glob = require("glob");
 
 // Padrões a serem removidos
 const consolePatterns = [
@@ -33,10 +33,10 @@ function shouldKeepConsole(line) {
 
 function cleanFile(filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(filePath, "utf8");
     let cleanedContent = content;
     
-    const lines = content.split('\n');
+    const lines = content.split("\n");
     const cleanedLines = lines.filter(line => {
       const trimmedLine = line.trim();
       
@@ -49,10 +49,10 @@ function cleanFile(filePath) {
       return !consolePatterns.some(pattern => pattern.test(trimmedLine));
     });
     
-    cleanedContent = cleanedLines.join('\n');
+    cleanedContent = cleanedLines.join("\n");
     
     if (cleanedContent !== content) {
-      fs.writeFileSync(filePath, cleanedContent, 'utf8');
+      fs.writeFileSync(filePath, cleanedContent, "utf8");
       console.log(`✅ Cleaned: ${filePath}`);
       return true;
     }
@@ -65,11 +65,11 @@ function cleanFile(filePath) {
 }
 
 function main() {
-  console.log('🧹 LIMPEZA DE CONSOLE.LOGS PARA PRODUÇÃO');
-  console.log('==========================================');
+  console.log("🧹 LIMPEZA DE CONSOLE.LOGS PARA PRODUÇÃO");
+  console.log("==========================================");
   
   // Arquivos TypeScript e JavaScript em src/
-  const files = glob.sync('src/**/*.{ts,tsx,js,jsx}');
+  const files = glob.sync("src/**/*.{ts,tsx,js,jsx}");
   
   let cleanedCount = 0;
   
@@ -79,10 +79,10 @@ function main() {
     }
   });
   
-  console.log('\n📊 RESULTADOS:');
+  console.log("\n📊 RESULTADOS:");
   console.log(`- Arquivos processados: ${files.length}`);
   console.log(`- Arquivos limpos: ${cleanedCount}`);
-  console.log('\n✅ Limpeza concluída! Sistema pronto para produção.');
+  console.log("\n✅ Limpeza concluída! Sistema pronto para produção.");
 }
 
 if (require.main === module) {

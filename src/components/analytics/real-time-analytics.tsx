@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   BarChart, 
   Bar, 
@@ -20,7 +20,7 @@ import {
   Cell,
   AreaChart,
   Area
-} from 'recharts';
+} from "recharts";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -37,14 +37,14 @@ import {
   RefreshCw,
   Download,
   Share2
-} from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface MetricCard {
   title: string;
   value: string;
   change: string;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   icon: React.ReactNode;
   description: string;
 }
@@ -60,58 +60,58 @@ interface ChartData {
 const RealTimeAnalytics = () => {
   const [isLive, setIsLive] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
-  const [selectedTimeRange, setSelectedTimeRange] = useState('24h');
+  const [selectedTimeRange, setSelectedTimeRange] = useState("24h");
 
   // Mock real-time data
   const [metrics, setMetrics] = useState<MetricCard[]>([
     {
-      title: 'Usuários Ativos',
-      value: '2,847',
-      change: '+12.5%',
-      trend: 'up',
+      title: "Usuários Ativos",
+      value: "2,847",
+      change: "+12.5%",
+      trend: "up",
       icon: <Users className="w-4 h-4" />,
-      description: 'Usuários online agora'
+      description: "Usuários online agora"
     },
     {
-      title: 'Receita Mensal',
-      value: 'R$ 84.392',
-      change: '+8.2%',
-      trend: 'up',
+      title: "Receita Mensal",
+      value: "R$ 84.392",
+      change: "+8.2%",
+      trend: "up",
       icon: <DollarSign className="w-4 h-4" />,
-      description: 'Receita do mês atual'
+      description: "Receita do mês atual"
     },
     {
-      title: 'Transações',
-      value: '1,429',
-      change: '-2.1%',
-      trend: 'down',
+      title: "Transações",
+      value: "1,429",
+      change: "-2.1%",
+      trend: "down",
       icon: <Package className="w-4 h-4" />,
-      description: 'Transações hoje'
+      description: "Transações hoje"
     },
     {
-      title: 'Performance',
-      value: '98.5%',
-      change: '+0.3%',
-      trend: 'up',
+      title: "Performance",
+      value: "98.5%",
+      change: "+0.3%",
+      trend: "up",
       icon: <Activity className="w-4 h-4" />,
-      description: 'Uptime do sistema'
+      description: "Uptime do sistema"
     }
   ]);
 
   const [chartData] = useState<ChartData[]>([
-    { name: 'Jan', value: 400, users: 400, revenue: 2400, growth: 24 },
-    { name: 'Fev', value: 300, users: 300, revenue: 1398, growth: 13 },
-    { name: 'Mar', value: 600, users: 600, revenue: 9800, growth: 98 },
-    { name: 'Abr', value: 800, users: 800, revenue: 3908, growth: 39 },
-    { name: 'Mai', value: 1000, users: 1000, revenue: 4800, growth: 48 },
-    { name: 'Jun', value: 1200, users: 1200, revenue: 3800, growth: 38 },
+    { name: "Jan", value: 400, users: 400, revenue: 2400, growth: 24 },
+    { name: "Fev", value: 300, users: 300, revenue: 1398, growth: 13 },
+    { name: "Mar", value: 600, users: 600, revenue: 9800, growth: 98 },
+    { name: "Abr", value: 800, users: 800, revenue: 3908, growth: 39 },
+    { name: "Mai", value: 1000, users: 1000, revenue: 4800, growth: 48 },
+    { name: "Jun", value: 1200, users: 1200, revenue: 3800, growth: 38 },
   ]);
 
   const [performanceData] = useState([
-    { name: 'CPU', value: 65, color: '#8884d8' },
-    { name: 'Memória', value: 78, color: '#82ca9d' },
-    { name: 'Disco', value: 45, color: '#ffc658' },
-    { name: 'Rede', value: 32, color: '#ff7300' }
+    { name: "CPU", value: 65, color: "#8884d8" },
+    { name: "Memória", value: 78, color: "#82ca9d" },
+    { name: "Disco", value: 45, color: "#ffc658" },
+    { name: "Rede", value: 32, color: "#ff7300" }
   ]);
 
   // Simulate real-time updates
@@ -134,22 +134,22 @@ const RealTimeAnalytics = () => {
 
   const generateRandomValue = (title: string): string => {
     switch (title) {
-      case 'Usuários Ativos':
-        return (2800 + Math.floor(Math.random() * 100)).toLocaleString();
-      case 'Receita Mensal':
-        return `R$ ${(84000 + Math.floor(Math.random() * 2000)).toLocaleString()}`;
-      case 'Transações':
-        return (1400 + Math.floor(Math.random() * 100)).toLocaleString();
-      case 'Performance':
-        return `${(98 + Math.random() * 2).toFixed(1)}%`;
-      default:
-        return '0';
+    case "Usuários Ativos":
+      return (2800 + Math.floor(Math.random() * 100)).toLocaleString();
+    case "Receita Mensal":
+      return `R$ ${(84000 + Math.floor(Math.random() * 2000)).toLocaleString()}`;
+    case "Transações":
+      return (1400 + Math.floor(Math.random() * 100)).toLocaleString();
+    case "Performance":
+      return `${(98 + Math.random() * 2).toFixed(1)}%`;
+    default:
+      return "0";
     }
   };
 
   const generateRandomChange = (): string => {
     const change = (Math.random() * 20 - 10).toFixed(1);
-    return `${Number(change) > 0 ? '+' : ''}${change}%`;
+    return `${Number(change) > 0 ? "+" : ""}${change}%`;
   };
 
   const exportData = () => {
@@ -168,12 +168,12 @@ const RealTimeAnalytics = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'down':
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
-      default:
-        return <Activity className="w-4 h-4 text-blue-500" />;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case "down":
+      return <TrendingDown className="w-4 h-4 text-red-500" />;
+    default:
+      return <Activity className="w-4 h-4 text-blue-500" />;
     }
   };
 
@@ -190,9 +190,9 @@ const RealTimeAnalytics = () => {
         
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${isLive ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+            <div className={`w-2 h-2 rounded-full ${isLive ? "bg-green-500 animate-pulse" : "bg-gray-400"}`} />
             <span className="text-sm font-medium">
-              {isLive ? 'AO VIVO' : 'PAUSADO'}
+              {isLive ? "AO VIVO" : "PAUSADO"}
             </span>
           </div>
           
@@ -207,8 +207,8 @@ const RealTimeAnalytics = () => {
             onClick={() => setIsLive(!isLive)}
             className="gap-2"
           >
-            <RefreshCw className={`w-4 h-4 ${isLive ? 'animate-spin' : ''}`} />
-            {isLive ? 'Pausar' : 'Retomar'}
+            <RefreshCw className={`w-4 h-4 ${isLive ? "animate-spin" : ""}`} />
+            {isLive ? "Pausar" : "Retomar"}
           </Button>
         </div>
       </div>
@@ -254,7 +254,7 @@ const RealTimeAnalytics = () => {
               <div className="text-2xl font-bold">{metric.value}</div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 {getTrendIcon(metric.trend)}
-                <span className={metric.trend === 'up' ? 'text-green-600' : 'text-red-600'}>
+                <span className={metric.trend === "up" ? "text-green-600" : "text-red-600"}>
                   {metric.change}
                 </span>
                 <span>vs. período anterior</span>
@@ -408,7 +408,7 @@ const RealTimeAnalytics = () => {
                   <div className="text-2xl font-bold mb-2">{item.value}%</div>
                   <Progress value={item.value} className="h-2" />
                   <p className="text-xs text-muted-foreground mt-2">
-                    {item.value > 70 ? 'Alto uso' : item.value > 40 ? 'Uso normal' : 'Baixo uso'}
+                    {item.value > 70 ? "Alto uso" : item.value > 40 ? "Uso normal" : "Baixo uso"}
                   </p>
                 </CardContent>
               </Card>

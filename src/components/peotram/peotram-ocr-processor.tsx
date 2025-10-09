@@ -1,11 +1,11 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useRef, useCallback } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Upload,
   FileText,
@@ -22,9 +22,9 @@ import {
   Zap,
   Languages,
   FileUp
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { getOCRService, OCRResult, OCRProgress } from '@/services/ocr-service';
+} from "lucide-react";
+import { toast } from "sonner";
+import { getOCRService, OCRResult, OCRProgress } from "@/services/ocr-service";
 
 interface ProcessedDocument {
   id: string;
@@ -42,7 +42,7 @@ export const PeotramOCRProcessor: React.FC = () => {
   const [currentProgress, setCurrentProgress] = useState(0);
   const [selectedDoc, setSelectedDoc] = useState<ProcessedDocument | null>(null);
   const [batchMode, setBatchMode] = useState(false);
-  const [language, setLanguage] = useState<'por+eng' | 'eng' | 'por'>('por+eng');
+  const [language, setLanguage] = useState<"por+eng" | "eng" | "por">("por+eng");
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const ocrService = getOCRService();
@@ -115,15 +115,14 @@ export const PeotramOCRProcessor: React.FC = () => {
         setSelectedDoc(processedDocs[0]);
       }
     } catch (error) {
-      console.error('Error processing documents:', error);
-      toast.error('Erro ao processar documentos', {
-        description: error instanceof Error ? error.message : 'Erro desconhecido',
+      toast.error("Erro ao processar documentos", {
+        description: error instanceof Error ? error.message : "Erro desconhecido",
       });
     } finally {
       setIsProcessing(false);
       setCurrentProgress(0);
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     }
   }, [language, batchMode, ocrService]);
@@ -145,10 +144,10 @@ export const PeotramOCRProcessor: React.FC = () => {
     };
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
-      type: 'application/json' 
+      type: "application/json" 
     });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `ocr-result-${selectedDoc.fileName}.json`;
     a.click();
@@ -157,10 +156,10 @@ export const PeotramOCRProcessor: React.FC = () => {
 
   const formatConfidence = (confidence: number) => {
     const percent = Math.round(confidence);
-    if (percent >= 90) return { color: 'text-green-600', label: 'Excelente' };
-    if (percent >= 75) return { color: 'text-blue-600', label: 'Bom' };
-    if (percent >= 60) return { color: 'text-yellow-600', label: 'Regular' };
-    return { color: 'text-red-600', label: 'Baixo' };
+    if (percent >= 90) return { color: "text-green-600", label: "Excelente" };
+    if (percent >= 75) return { color: "text-blue-600", label: "Bom" };
+    if (percent >= 60) return { color: "text-yellow-600", label: "Regular" };
+    return { color: "text-red-600", label: "Baixo" };
   };
 
   return (
@@ -260,7 +259,7 @@ export const PeotramOCRProcessor: React.FC = () => {
               ) : (
                 <>
                   <Upload className="h-4 w-4 mr-2" />
-                  {batchMode ? 'Upload Múltiplo' : 'Upload Documento'}
+                  {batchMode ? "Upload Múltiplo" : "Upload Documento"}
                 </>
               )}
             </Button>
@@ -298,7 +297,7 @@ export const PeotramOCRProcessor: React.FC = () => {
                     <div
                       key={doc.id}
                       className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                        selectedDoc?.id === doc.id ? 'bg-primary/5 border-primary' : 'hover:bg-muted/50'
+                        selectedDoc?.id === doc.id ? "bg-primary/5 border-primary" : "hover:bg-muted/50"
                       }`}
                       onClick={() => setSelectedDoc(doc)}
                     >
@@ -308,7 +307,7 @@ export const PeotramOCRProcessor: React.FC = () => {
                           <div>
                             <p className="font-medium">{doc.fileName}</p>
                             <p className="text-sm text-muted-foreground">
-                              {doc.processedAt.toLocaleString('pt-BR')}
+                              {doc.processedAt.toLocaleString("pt-BR")}
                             </p>
                           </div>
                         </div>
@@ -371,7 +370,7 @@ export const PeotramOCRProcessor: React.FC = () => {
                         <CardContent className="space-y-3">
                           <div className="flex items-center justify-between p-2 bg-muted rounded">
                             <span className="text-sm">Confiança:</span>
-                            <Badge variant={selectedDoc.ocrResult.confidence >= 90 ? 'default' : 'secondary'}>
+                            <Badge variant={selectedDoc.ocrResult.confidence >= 90 ? "default" : "secondary"}>
                               {Math.round(selectedDoc.ocrResult.confidence)}%
                             </Badge>
                           </div>

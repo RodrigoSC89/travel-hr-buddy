@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Shield, 
   AlertTriangle, 
@@ -35,22 +35,22 @@ import {
   Target,
   Zap,
   BookOpen
-} from 'lucide-react';
+} from "lucide-react";
 
 interface TravelPolicy {
   id: string;
   name: string;
   description: string;
-  category: 'accommodation' | 'transport' | 'meals' | 'general' | 'approval';
+  category: "accommodation" | "transport" | "meals" | "general" | "approval";
   rules: Array<{
     id: string;
     title: string;
     description: string;
-    type: 'limit' | 'requirement' | 'approval' | 'restriction';
+    type: "limit" | "requirement" | "approval" | "restriction";
     value?: number;
     currency?: string;
     condition?: string;
-    severity: 'low' | 'medium' | 'high' | 'critical';
+    severity: "low" | "medium" | "high" | "critical";
     isActive: boolean;
   }>;
   applicableRoles: string[];
@@ -66,13 +66,13 @@ interface PolicyViolation {
   ruleId: string;
   expenseId?: string;
   tripId?: string;
-  violationType: 'exceed_limit' | 'missing_approval' | 'invalid_category' | 'policy_breach';
+  violationType: "exceed_limit" | "missing_approval" | "invalid_category" | "policy_breach";
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   amount?: number;
   limit?: number;
   detectedAt: Date;
-  status: 'pending' | 'resolved' | 'ignored' | 'escalated';
+  status: "pending" | "resolved" | "ignored" | "escalated";
   resolvedBy?: string;
   resolvedAt?: Date;
   resolution?: string;
@@ -82,7 +82,7 @@ export const TravelPolicySystem: React.FC = () => {
   const { toast } = useToast();
   const [policies, setPolicies] = useState<TravelPolicy[]>([]);
   const [violations, setViolations] = useState<PolicyViolation[]>([]);
-  const [activeTab, setActiveTab] = useState('policies');
+  const [activeTab, setActiveTab] = useState("policies");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPolicy, setSelectedPolicy] = useState<TravelPolicy | null>(null);
   const [isEditingPolicy, setIsEditingPolicy] = useState(false);
@@ -90,168 +90,168 @@ export const TravelPolicySystem: React.FC = () => {
   // Mock data
   const mockPolicies: TravelPolicy[] = [
     {
-      id: 'policy-001',
-      name: 'Política de Hospedagem Corporativa',
-      description: 'Diretrizes para hospedagem em viagens de negócios',
-      category: 'accommodation',
+      id: "policy-001",
+      name: "Política de Hospedagem Corporativa",
+      description: "Diretrizes para hospedagem em viagens de negócios",
+      category: "accommodation",
       rules: [
         {
-          id: 'rule-001',
-          title: 'Limite de Diária - Hotel',
-          description: 'Valor máximo por diária de hotel em território nacional',
-          type: 'limit',
+          id: "rule-001",
+          title: "Limite de Diária - Hotel",
+          description: "Valor máximo por diária de hotel em território nacional",
+          type: "limit",
           value: 400,
-          currency: 'BRL',
-          condition: 'per_night',
-          severity: 'high',
+          currency: "BRL",
+          condition: "per_night",
+          severity: "high",
           isActive: true
         },
         {
-          id: 'rule-002',
-          title: 'Reserva Antecipada Obrigatória',
-          description: 'Hospedagem deve ser reservada com pelo menos 7 dias de antecedência',
-          type: 'requirement',
-          condition: '7_days_advance',
-          severity: 'medium',
+          id: "rule-002",
+          title: "Reserva Antecipada Obrigatória",
+          description: "Hospedagem deve ser reservada com pelo menos 7 dias de antecedência",
+          type: "requirement",
+          condition: "7_days_advance",
+          severity: "medium",
           isActive: true
         },
         {
-          id: 'rule-003',
-          title: 'Aprovação para Hotéis Luxo',
-          description: 'Hotéis acima de 4 estrelas requerem aprovação da diretoria',
-          type: 'approval',
-          condition: 'luxury_hotels',
-          severity: 'high',
+          id: "rule-003",
+          title: "Aprovação para Hotéis Luxo",
+          description: "Hotéis acima de 4 estrelas requerem aprovação da diretoria",
+          type: "approval",
+          condition: "luxury_hotels",
+          severity: "high",
           isActive: true
         }
       ],
-      applicableRoles: ['employee', 'manager', 'director'],
-      effectiveDate: new Date('2024-01-01'),
-      lastUpdated: new Date('2024-02-15'),
+      applicableRoles: ["employee", "manager", "director"],
+      effectiveDate: new Date("2024-01-01"),
+      lastUpdated: new Date("2024-02-15"),
       isActive: true,
-      createdBy: 'Sistema de RH'
+      createdBy: "Sistema de RH"
     },
     {
-      id: 'policy-002',
-      name: 'Política de Transporte e Deslocamento',
-      description: 'Normas para transporte aéreo, terrestre e urbano',
-      category: 'transport',
+      id: "policy-002",
+      name: "Política de Transporte e Deslocamento",
+      description: "Normas para transporte aéreo, terrestre e urbano",
+      category: "transport",
       rules: [
         {
-          id: 'rule-004',
-          title: 'Classe Executiva - Voos Internacionais',
-          description: 'Voos internacionais acima de 8 horas podem ser em classe executiva',
-          type: 'requirement',
-          condition: 'international_long_haul',
-          severity: 'medium',
+          id: "rule-004",
+          title: "Classe Executiva - Voos Internacionais",
+          description: "Voos internacionais acima de 8 horas podem ser em classe executiva",
+          type: "requirement",
+          condition: "international_long_haul",
+          severity: "medium",
           isActive: true
         },
         {
-          id: 'rule-005',
-          title: 'Limite Taxi/Uber por Viagem',
-          description: 'Valor máximo para transporte urbano por viagem',
-          type: 'limit',
+          id: "rule-005",
+          title: "Limite Taxi/Uber por Viagem",
+          description: "Valor máximo para transporte urbano por viagem",
+          type: "limit",
           value: 200,
-          currency: 'BRL',
-          condition: 'per_trip',
-          severity: 'medium',
+          currency: "BRL",
+          condition: "per_trip",
+          severity: "medium",
           isActive: true
         },
         {
-          id: 'rule-006',
-          title: 'Aprovação Voos Primeira Classe',
-          description: 'Voos em primeira classe requerem aprovação CEO',
-          type: 'approval',
-          condition: 'first_class',
-          severity: 'critical',
+          id: "rule-006",
+          title: "Aprovação Voos Primeira Classe",
+          description: "Voos em primeira classe requerem aprovação CEO",
+          type: "approval",
+          condition: "first_class",
+          severity: "critical",
           isActive: true
         }
       ],
-      applicableRoles: ['employee', 'manager', 'director', 'c_level'],
-      effectiveDate: new Date('2024-01-15'),
-      lastUpdated: new Date('2024-03-01'),
+      applicableRoles: ["employee", "manager", "director", "c_level"],
+      effectiveDate: new Date("2024-01-15"),
+      lastUpdated: new Date("2024-03-01"),
       isActive: true,
-      createdBy: 'Diretor de Operações'
+      createdBy: "Diretor de Operações"
     },
     {
-      id: 'policy-003',
-      name: 'Política de Alimentação e Refeições',
-      description: 'Diretrizes para despesas com alimentação durante viagens',
-      category: 'meals',
+      id: "policy-003",
+      name: "Política de Alimentação e Refeições",
+      description: "Diretrizes para despesas com alimentação durante viagens",
+      category: "meals",
       rules: [
         {
-          id: 'rule-007',
-          title: 'Limite Diário - Alimentação',
-          description: 'Valor máximo por dia para alimentação (café, almoço, jantar)',
-          type: 'limit',
+          id: "rule-007",
+          title: "Limite Diário - Alimentação",
+          description: "Valor máximo por dia para alimentação (café, almoço, jantar)",
+          type: "limit",
           value: 150,
-          currency: 'BRL',
-          condition: 'per_day',
-          severity: 'medium',
+          currency: "BRL",
+          condition: "per_day",
+          severity: "medium",
           isActive: true
         },
         {
-          id: 'rule-008',
-          title: 'Refeições de Negócios',
-          description: 'Refeições com clientes/parceiros podem exceder limite padrão',
-          type: 'requirement',
-          condition: 'business_meals',
-          severity: 'low',
+          id: "rule-008",
+          title: "Refeições de Negócios",
+          description: "Refeições com clientes/parceiros podem exceder limite padrão",
+          type: "requirement",
+          condition: "business_meals",
+          severity: "low",
           isActive: true
         }
       ],
-      applicableRoles: ['employee', 'manager'],
-      effectiveDate: new Date('2024-02-01'),
-      lastUpdated: new Date('2024-02-01'),
+      applicableRoles: ["employee", "manager"],
+      effectiveDate: new Date("2024-02-01"),
+      lastUpdated: new Date("2024-02-01"),
       isActive: true,
-      createdBy: 'Gerente Financeiro'
+      createdBy: "Gerente Financeiro"
     }
   ];
 
   const mockViolations: PolicyViolation[] = [
     {
-      id: 'violation-001',
-      policyId: 'policy-001',
-      ruleId: 'rule-001',
-      expenseId: 'exp-001',
-      tripId: 'trip-001',
-      violationType: 'exceed_limit',
-      description: 'Diária de hotel excedeu o limite permitido em R$ 150,00',
-      severity: 'high',
+      id: "violation-001",
+      policyId: "policy-001",
+      ruleId: "rule-001",
+      expenseId: "exp-001",
+      tripId: "trip-001",
+      violationType: "exceed_limit",
+      description: "Diária de hotel excedeu o limite permitido em R$ 150,00",
+      severity: "high",
       amount: 550,
       limit: 400,
-      detectedAt: new Date('2024-03-16'),
-      status: 'pending'
+      detectedAt: new Date("2024-03-16"),
+      status: "pending"
     },
     {
-      id: 'violation-002',
-      policyId: 'policy-002',
-      ruleId: 'rule-006',
-      expenseId: 'exp-002',
-      tripId: 'trip-002',
-      violationType: 'missing_approval',
-      description: 'Voo em primeira classe sem aprovação prévia do CEO',
-      severity: 'critical',
+      id: "violation-002",
+      policyId: "policy-002",
+      ruleId: "rule-006",
+      expenseId: "exp-002",
+      tripId: "trip-002",
+      violationType: "missing_approval",
+      description: "Voo em primeira classe sem aprovação prévia do CEO",
+      severity: "critical",
       amount: 8500,
-      detectedAt: new Date('2024-03-15'),
-      status: 'escalated'
+      detectedAt: new Date("2024-03-15"),
+      status: "escalated"
     },
     {
-      id: 'violation-003',
-      policyId: 'policy-003',
-      ruleId: 'rule-007',
-      expenseId: 'exp-003',
-      tripId: 'trip-001',
-      violationType: 'exceed_limit',
-      description: 'Despesas com alimentação excederam limite diário',
-      severity: 'medium',
+      id: "violation-003",
+      policyId: "policy-003",
+      ruleId: "rule-007",
+      expenseId: "exp-003",
+      tripId: "trip-001",
+      violationType: "exceed_limit",
+      description: "Despesas com alimentação excederam limite diário",
+      severity: "medium",
       amount: 220,
       limit: 150,
-      detectedAt: new Date('2024-03-17'),
-      status: 'resolved',
-      resolvedBy: 'Supervisor',
-      resolvedAt: new Date('2024-03-18'),
-      resolution: 'Aprovado como refeição de negócios'
+      detectedAt: new Date("2024-03-17"),
+      status: "resolved",
+      resolvedBy: "Supervisor",
+      resolvedAt: new Date("2024-03-18"),
+      resolution: "Aprovado como refeição de negócios"
     }
   ];
 
@@ -266,7 +266,6 @@ export const TravelPolicySystem: React.FC = () => {
       setPolicies(mockPolicies);
       setViolations(mockViolations);
     } catch (error) {
-      console.error('Error loading policies:', error);
       toast({
         title: "Erro",
         description: "Erro ao carregar políticas",
@@ -279,42 +278,42 @@ export const TravelPolicySystem: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'accommodation': return <Building className="h-4 w-4" />;
-      case 'transport': return <Plane className="h-4 w-4" />;
-      case 'meals': return <Utensils className="h-4 w-4" />;
-      case 'general': return <FileText className="h-4 w-4" />;
-      case 'approval': return <Shield className="h-4 w-4" />;
-      default: return <Settings className="h-4 w-4" />;
+    case "accommodation": return <Building className="h-4 w-4" />;
+    case "transport": return <Plane className="h-4 w-4" />;
+    case "meals": return <Utensils className="h-4 w-4" />;
+    case "general": return <FileText className="h-4 w-4" />;
+    case "approval": return <Shield className="h-4 w-4" />;
+    default: return <Settings className="h-4 w-4" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-300';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-300';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-      case 'low': return 'bg-green-100 text-green-800 border-green-300';
-      default: return 'bg-secondary text-secondary-foreground border-border';
+    case "critical": return "bg-red-100 text-red-800 border-red-300";
+    case "high": return "bg-orange-100 text-orange-800 border-orange-300";
+    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-300";
+    case "low": return "bg-green-100 text-green-800 border-green-300";
+    default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getViolationStatusColor = (status: string) => {
     switch (status) {
-      case 'resolved': return 'bg-green-100 text-green-800 border-green-300';
-      case 'escalated': return 'bg-red-100 text-red-800 border-red-300';
-      case 'ignored': return 'bg-secondary text-secondary-foreground border-border';
-      default: return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+    case "resolved": return "bg-green-100 text-green-800 border-green-300";
+    case "escalated": return "bg-red-100 text-red-800 border-red-300";
+    case "ignored": return "bg-secondary text-secondary-foreground border-border";
+    default: return "bg-yellow-100 text-yellow-800 border-yellow-300";
     }
   };
 
   const formatCurrency = (value: number) => 
-    new Intl.NumberFormat('pt-BR', { 
-      style: 'currency', 
-      currency: 'BRL' 
+    new Intl.NumberFormat("pt-BR", { 
+      style: "currency", 
+      currency: "BRL" 
     }).format(value);
 
-  const activeViolations = violations.filter(v => v.status === 'pending' || v.status === 'escalated');
-  const criticalViolations = violations.filter(v => v.severity === 'critical' && v.status !== 'resolved');
+  const activeViolations = violations.filter(v => v.status === "pending" || v.status === "escalated");
+  const criticalViolations = violations.filter(v => v.severity === "critical" && v.status !== "resolved");
   const activePolicies = policies.filter(p => p.isActive);
 
   if (isLoading) {
@@ -459,9 +458,9 @@ export const TravelPolicySystem: React.FC = () => {
                           <h4 className="font-semibold text-lg">{policy.name}</h4>
                           <p className="text-sm text-muted-foreground">{policy.description}</p>
                         </div>
-                        <Badge className={policy.isActive ? 'bg-green-100 text-green-800' : 'bg-secondary text-secondary-foreground'}>
+                        <Badge className={policy.isActive ? "bg-green-100 text-green-800" : "bg-secondary text-secondary-foreground"}>
                           {policy.isActive ? <Unlock className="h-3 w-3 mr-1" /> : <Lock className="h-3 w-3 mr-1" />}
-                          {policy.isActive ? 'Ativa' : 'Inativa'}
+                          {policy.isActive ? "Ativa" : "Inativa"}
                         </Badge>
                       </div>
 
@@ -476,7 +475,7 @@ export const TravelPolicySystem: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span>Atualizada: {policy.lastUpdated.toLocaleDateString('pt-BR')}</span>
+                          <span>Atualizada: {policy.lastUpdated.toLocaleDateString("pt-BR")}</span>
                         </div>
                       </div>
 
@@ -540,8 +539,8 @@ export const TravelPolicySystem: React.FC = () => {
                                         <Badge className={getSeverityColor(rule.severity)}>
                                           {rule.severity}
                                         </Badge>
-                                        <Badge className={rule.isActive ? 'bg-green-100 text-green-800' : 'bg-secondary text-secondary-foreground'}>
-                                          {rule.isActive ? 'Ativa' : 'Inativa'}
+                                        <Badge className={rule.isActive ? "bg-green-100 text-green-800" : "bg-secondary text-secondary-foreground"}>
+                                          {rule.isActive ? "Ativa" : "Inativa"}
                                         </Badge>
                                       </div>
                                     </div>
@@ -569,7 +568,7 @@ export const TravelPolicySystem: React.FC = () => {
                               </div>
                               <div>
                                 <Label>Data de Vigência</Label>
-                                <p className="text-sm mt-1">{policy.effectiveDate.toLocaleDateString('pt-BR')}</p>
+                                <p className="text-sm mt-1">{policy.effectiveDate.toLocaleDateString("pt-BR")}</p>
                               </div>
                             </div>
                           </div>
@@ -612,20 +611,20 @@ export const TravelPolicySystem: React.FC = () => {
                     <div className="flex-1 space-y-3">
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
-                          violation.severity === 'critical' ? 'bg-red-100' :
-                          violation.severity === 'high' ? 'bg-orange-100' :
-                          violation.severity === 'medium' ? 'bg-yellow-100' : 'bg-green-100'
+                          violation.severity === "critical" ? "bg-red-100" :
+                            violation.severity === "high" ? "bg-orange-100" :
+                              violation.severity === "medium" ? "bg-yellow-100" : "bg-green-100"
                         }`}>
                           <AlertTriangle className={`h-4 w-4 ${
-                            violation.severity === 'critical' ? 'text-red-600' :
-                            violation.severity === 'high' ? 'text-orange-600' :
-                            violation.severity === 'medium' ? 'text-yellow-600' : 'text-green-600'
+                            violation.severity === "critical" ? "text-red-600" :
+                              violation.severity === "high" ? "text-orange-600" :
+                                violation.severity === "medium" ? "text-yellow-600" : "text-green-600"
                           }`} />
                         </div>
                         <div>
                           <h4 className="font-semibold">{violation.description}</h4>
                           <p className="text-sm text-muted-foreground">
-                            Detectada em {violation.detectedAt.toLocaleDateString('pt-BR')}
+                            Detectada em {violation.detectedAt.toLocaleDateString("pt-BR")}
                           </p>
                         </div>
                         <Badge className={getSeverityColor(violation.severity)}>
@@ -665,14 +664,14 @@ export const TravelPolicySystem: React.FC = () => {
                             <strong>Resolução:</strong> {violation.resolution}
                           </p>
                           <p className="text-xs text-green-600 mt-1">
-                            Resolvido por {violation.resolvedBy} em {violation.resolvedAt?.toLocaleDateString('pt-BR')}
+                            Resolvido por {violation.resolvedBy} em {violation.resolvedAt?.toLocaleDateString("pt-BR")}
                           </p>
                         </div>
                       )}
                     </div>
 
                     <div className="flex gap-2 ml-4">
-                      {violation.status === 'pending' && (
+                      {violation.status === "pending" && (
                         <>
                           <Button size="sm" className="bg-green-600 hover:bg-green-700">
                             <CheckCircle className="h-4 w-4" />
@@ -708,14 +707,14 @@ export const TravelPolicySystem: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <h4 className="font-semibold">Taxa de Conformidade por Categoria</h4>
-                  {['accommodation', 'transport', 'meals', 'general'].map((category) => {
+                  {["accommodation", "transport", "meals", "general"].map((category) => {
                     const categoryPolicies = policies.filter(p => p.category === category);
                     const categoryViolations = violations.filter(v => {
                       const policy = policies.find(p => p.id === v.policyId);
                       return policy?.category === category;
                     });
                     const compliance = categoryViolations.length > 0 ? 
-                      ((categoryViolations.length - categoryViolations.filter(v => v.status === 'pending' || v.status === 'escalated').length) / categoryViolations.length) * 100 : 100;
+                      ((categoryViolations.length - categoryViolations.filter(v => v.status === "pending" || v.status === "escalated").length) / categoryViolations.length) * 100 : 100;
                     
                     return (
                       <div key={category} className="space-y-2">
@@ -728,7 +727,7 @@ export const TravelPolicySystem: React.FC = () => {
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div 
-                            className={`h-2 rounded-full ${compliance >= 90 ? 'bg-green-500' : compliance >= 70 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                            className={`h-2 rounded-full ${compliance >= 90 ? "bg-green-500" : compliance >= 70 ? "bg-yellow-500" : "bg-red-500"}`}
                             style={{ width: `${compliance}%` }}
                           />
                         </div>
