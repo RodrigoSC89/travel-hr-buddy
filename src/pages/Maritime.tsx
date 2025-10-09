@@ -208,12 +208,26 @@ export default function Maritime() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid grid-cols-4 w-fit">
-          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-          <TabsTrigger value="fleet">Frota</TabsTrigger>
-          <TabsTrigger value="compliance">Conformidade</TabsTrigger>
-          <TabsTrigger value="operations">Operações</TabsTrigger>
-        </TabsList>
+        <div className="w-full overflow-x-auto pb-2">
+          <TabsList className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 w-fit min-w-fit">
+            <TabsTrigger value="overview">
+              <span className="hidden sm:inline">Visão Geral</span>
+              <span className="sm:hidden">Visão</span>
+            </TabsTrigger>
+            <TabsTrigger value="fleet">
+              <span className="hidden sm:inline">Frota</span>
+              <span className="sm:hidden">Frota</span>
+            </TabsTrigger>
+            <TabsTrigger value="compliance">
+              <span className="hidden sm:inline">Conformidade</span>
+              <span className="sm:hidden">Conf.</span>
+            </TabsTrigger>
+            <TabsTrigger value="operations">
+              <span className="hidden sm:inline">Operações</span>
+              <span className="sm:hidden">Oper.</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

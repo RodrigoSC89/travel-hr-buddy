@@ -75,28 +75,35 @@ const AdvancedDocumentsPage = () => {
 
         {/* Main Tabs */}
         <Tabs defaultValue="scanner" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="scanner" className="gap-2">
-              <Scan className="h-4 w-4" />
-              Scanner IA
-            </TabsTrigger>
-            <TabsTrigger value="management" className="gap-2">
-              <FileText className="h-4 w-4" />
-              Gestão
-            </TabsTrigger>
-            <TabsTrigger value="intelligent" className="gap-2">
-              <Brain className="h-4 w-4" />
-              Análise IA
-            </TabsTrigger>
-            <TabsTrigger value="validator" className="gap-2">
-              <FileCheck className="h-4 w-4" />
-              Validação
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="gap-2">
-              <BarChart3 className="h-4 w-4" />
-              Analytics
-            </TabsTrigger>
-          </TabsList>
+          <div className="w-full overflow-x-auto pb-2">
+            <TabsList className="grid w-full grid-cols-3 sm:grid-cols-3 md:grid-cols-5 min-w-fit">
+              <TabsTrigger value="scanner" className="gap-2">
+                <Scan className="h-4 w-4" />
+                <span className="hidden sm:inline">Scanner IA</span>
+                <span className="sm:hidden">Scanner</span>
+              </TabsTrigger>
+              <TabsTrigger value="management" className="gap-2">
+                <FileText className="h-4 w-4" />
+                <span className="hidden sm:inline">Gestão</span>
+                <span className="sm:hidden">Gestão</span>
+              </TabsTrigger>
+              <TabsTrigger value="intelligent" className="gap-2">
+                <Brain className="h-4 w-4" />
+                <span className="hidden sm:inline">Análise IA</span>
+                <span className="sm:hidden">IA</span>
+              </TabsTrigger>
+              <TabsTrigger value="validator" className="gap-2">
+                <FileCheck className="h-4 w-4" />
+                <span className="hidden sm:inline">Validação</span>
+                <span className="sm:hidden">Valid.</span>
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="gap-2">
+                <BarChart3 className="h-4 w-4" />
+                <span className="hidden sm:inline">Analytics</span>
+                <span className="sm:hidden">Analytics</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* Scanner Tab */}
           <TabsContent value="scanner" className="space-y-4">

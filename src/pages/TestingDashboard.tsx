@@ -17,13 +17,30 @@ const TestingDashboard = () => {
       </div>
 
       <Tabs defaultValue="homologation" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="homologation">Homologação Final</TabsTrigger>
-          <TabsTrigger value="health">Saúde do Sistema</TabsTrigger>
-          <TabsTrigger value="config">Configuração</TabsTrigger>
-          <TabsTrigger value="performance">Performance</TabsTrigger>
-          <TabsTrigger value="mobile">Mobile & PWA</TabsTrigger>
-        </TabsList>
+        <div className="w-full overflow-x-auto pb-2">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 min-w-fit">
+            <TabsTrigger value="homologation">
+              <span className="hidden sm:inline">Homologação Final</span>
+              <span className="sm:hidden">Homolog.</span>
+            </TabsTrigger>
+            <TabsTrigger value="health">
+              <span className="hidden sm:inline">Saúde do Sistema</span>
+              <span className="sm:hidden">Saúde</span>
+            </TabsTrigger>
+            <TabsTrigger value="config">
+              <span className="hidden sm:inline">Configuração</span>
+              <span className="sm:hidden">Config</span>
+            </TabsTrigger>
+            <TabsTrigger value="performance">
+              <span className="hidden sm:inline">Performance</span>
+              <span className="sm:hidden">Perf.</span>
+            </TabsTrigger>
+            <TabsTrigger value="mobile">
+              <span className="hidden sm:inline">Mobile & PWA</span>
+              <span className="sm:hidden">Mobile</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="homologation" className="space-y-6">
           <FinalHomologationReport />

@@ -302,9 +302,9 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
 
   return (
     <div className="fixed inset-0 z-[10060] bg-black/50 backdrop-blur-sm">
-      <div className="fixed right-6 top-20 w-96 max-h-[calc(100vh-8rem)] bg-background border-2 border-primary/20 rounded-xl shadow-2xl flex flex-col">
+      <div className="fixed right-0 sm:right-6 top-0 sm:top-20 w-full sm:w-96 h-full sm:h-auto sm:max-h-[calc(100vh-8rem)] bg-background border-l sm:border-2 border-primary/20 sm:rounded-xl shadow-2xl flex flex-col">
         {/* Header */}
-        <div className="p-6 border-b border-border/50 bg-gradient-to-r from-primary/5 to-secondary/5">
+        <div className="p-4 sm:p-6 border-b border-border/50 bg-gradient-to-r from-primary/5 to-secondary/5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -316,8 +316,8 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
                 )}
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-foreground">Notificações</h2>
-                <p className="text-sm text-muted-foreground">
+                <h2 className="text-lg sm:text-xl font-semibold text-foreground">Notificações</h2>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   {unreadCount} não lidas {urgentCount > 0 && `• ${urgentCount} urgentes`}
                 </p>
               </div>

@@ -28,12 +28,26 @@ const BusinessContinuityPlan = () => {
           </div>
           
           <Tabs defaultValue="risks" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="risks">Gestão de Riscos</TabsTrigger>
-              <TabsTrigger value="backup">Backup & Recuperação</TabsTrigger>
-              <TabsTrigger value="compliance">Compliance & Auditoria</TabsTrigger>
-              <TabsTrigger value="testing">Testes & Monitoramento</TabsTrigger>
-            </TabsList>
+            <div className="w-full overflow-x-auto pb-2">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-2 md:grid-cols-4 min-w-fit">
+                <TabsTrigger value="risks">
+                  <span className="hidden sm:inline">Gestão de Riscos</span>
+                  <span className="sm:hidden">Riscos</span>
+                </TabsTrigger>
+                <TabsTrigger value="backup">
+                  <span className="hidden sm:inline">Backup & Recuperação</span>
+                  <span className="sm:hidden">Backup</span>
+                </TabsTrigger>
+                <TabsTrigger value="compliance">
+                  <span className="hidden sm:inline">Compliance & Auditoria</span>
+                  <span className="sm:hidden">Compliance</span>
+                </TabsTrigger>
+                <TabsTrigger value="testing">
+                  <span className="hidden sm:inline">Testes & Monitoramento</span>
+                  <span className="sm:hidden">Testes</span>
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
             <TabsContent value="risks">
               <RiskManagementDashboard />

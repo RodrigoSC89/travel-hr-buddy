@@ -49,24 +49,30 @@ const SystemValidation: React.FC = () => {
 
       {/* Validation Tabs */}
       <Tabs defaultValue="production" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="production" className="gap-2">
-            <Shield className="w-4 h-4" />
-            Produção
-          </TabsTrigger>
-          <TabsTrigger value="accessibility" className="gap-2">
-            <Eye className="w-4 h-4" />
-            Acessibilidade
-          </TabsTrigger>
-          <TabsTrigger value="report" className="gap-2">
-            <FileText className="w-4 h-4" />
-            Relatório
-          </TabsTrigger>
-          <TabsTrigger value="summary" className="gap-2">
-            <Target className="w-4 h-4" />
-            Resumo
-          </TabsTrigger>
-        </TabsList>
+        <div className="w-full overflow-x-auto pb-2">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-2 md:grid-cols-4 min-w-fit">
+            <TabsTrigger value="production" className="gap-2">
+              <Shield className="w-4 h-4" />
+              <span className="hidden sm:inline">Produção</span>
+              <span className="sm:hidden">Prod.</span>
+            </TabsTrigger>
+            <TabsTrigger value="accessibility" className="gap-2">
+              <Eye className="w-4 h-4" />
+              <span className="hidden sm:inline">Acessibilidade</span>
+              <span className="sm:hidden">A11y</span>
+            </TabsTrigger>
+            <TabsTrigger value="report" className="gap-2">
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Relatório</span>
+              <span className="sm:hidden">Relat.</span>
+            </TabsTrigger>
+            <TabsTrigger value="summary" className="gap-2">
+              <Target className="w-4 h-4" />
+              <span className="hidden sm:inline">Resumo</span>
+              <span className="sm:hidden">Resumo</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="production">
           <ProductionReadinessValidator />
