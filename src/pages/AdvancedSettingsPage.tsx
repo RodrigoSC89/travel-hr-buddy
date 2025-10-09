@@ -196,23 +196,30 @@ export default function AdvancedSettingsPage() {
         </Card>
 
         <Tabs defaultValue="notifications" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="notifications" className="flex items-center gap-2">
-              <Bell className="w-4 h-4" />
-              Notificações
-            </TabsTrigger>
-            <TabsTrigger value="security" className="flex items-center gap-2">
-              <Shield className="w-4 h-4" />
-              Segurança
-            </TabsTrigger>
-            <TabsTrigger value="appearance" className="flex items-center gap-2">
-              <Palette className="w-4 h-4" />
-              Aparência
-            </TabsTrigger>
-            <TabsTrigger value="performance" className="flex items-center gap-2">
-              <Monitor className="w-4 h-4" />
-              Performance
-            </TabsTrigger>
+          <div className="w-full overflow-x-auto pb-2">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-2 md:grid-cols-4 min-w-fit">
+              <TabsTrigger value="notifications" className="flex items-center gap-2">
+                <Bell className="w-4 h-4" />
+                <span className="hidden sm:inline">Notificações</span>
+                <span className="sm:hidden">Notif.</span>
+              </TabsTrigger>
+              <TabsTrigger value="security" className="flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                <span className="hidden sm:inline">Segurança</span>
+                <span className="sm:hidden">Segur.</span>
+              </TabsTrigger>
+              <TabsTrigger value="appearance" className="flex items-center gap-2">
+                <Palette className="w-4 h-4" />
+                <span className="hidden sm:inline">Aparência</span>
+                <span className="sm:hidden">Apar.</span>
+              </TabsTrigger>
+              <TabsTrigger value="performance" className="flex items-center gap-2">
+                <Monitor className="w-4 h-4" />
+                <span className="hidden sm:inline">Performance</span>
+                <span className="sm:hidden">Perf.</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
           </TabsList>
 
           <TabsContent value="notifications" className="space-y-6 mt-6">

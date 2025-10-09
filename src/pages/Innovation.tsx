@@ -111,13 +111,30 @@ const Innovation = () => {
 
       {/* Innovation Modules */}
       <Tabs defaultValue="ai" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="ai">Inteligência Artificial</TabsTrigger>
-          <TabsTrigger value="emerging">Tecnologias Emergentes</TabsTrigger>
-          <TabsTrigger value="optimization">Otimização</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics Avançado</TabsTrigger>
-          <TabsTrigger value="automation">Automação</TabsTrigger>
-        </TabsList>
+        <div className="w-full overflow-x-auto pb-2">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 min-w-fit">
+            <TabsTrigger value="ai">
+              <span className="hidden sm:inline">Inteligência Artificial</span>
+              <span className="sm:hidden">IA</span>
+            </TabsTrigger>
+            <TabsTrigger value="emerging">
+              <span className="hidden sm:inline">Tecnologias Emergentes</span>
+              <span className="sm:hidden">Emergentes</span>
+            </TabsTrigger>
+            <TabsTrigger value="optimization">
+              <span className="hidden sm:inline">Otimização</span>
+              <span className="sm:hidden">Otimização</span>
+            </TabsTrigger>
+            <TabsTrigger value="analytics">
+              <span className="hidden sm:inline">Analytics Avançado</span>
+              <span className="sm:hidden">Analytics</span>
+            </TabsTrigger>
+            <TabsTrigger value="automation">
+              <span className="hidden sm:inline">Automação</span>
+              <span className="sm:hidden">Automação</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="ai" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

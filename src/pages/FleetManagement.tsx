@@ -225,44 +225,55 @@ const MaritimeFleetManagement = () => {
 
         {/* Main Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-9 mb-8">
-            <TabsTrigger value="overview" className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" />
-              Painel Geral
-            </TabsTrigger>
-            <TabsTrigger value="vessels" className="flex items-center gap-2">
-              <Ship className="h-4 w-4" />
-              Frota Ativa
-            </TabsTrigger>
-            <TabsTrigger value="maintenance" className="flex items-center gap-2">
-              <Wrench className="h-4 w-4" />
-              Manutenção
-            </TabsTrigger>
-            <TabsTrigger value="documents" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Documentação
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <Activity className="h-4 w-4" />
-              Analytics
-            </TabsTrigger>
-            <TabsTrigger value="tracking" className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
-              Rastreamento
-            </TabsTrigger>
-            <TabsTrigger value="alerts" className="flex items-center gap-2">
-              <Bell className="h-4 w-4" />
-              Alertas IA
-            </TabsTrigger>
-            <TabsTrigger value="compliance" className="flex items-center gap-2">
-              <Shield className="h-4 w-4" />
-              Conformidade
-            </TabsTrigger>
-            <TabsTrigger value="notifications" className="flex items-center gap-2">
-              <Bell className="h-4 w-4" />
-              Notificações
-            </TabsTrigger>
-          </TabsList>
+          <div className="w-full overflow-x-auto pb-2">
+            <TabsList className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-9 mb-8 min-w-fit">
+              <TabsTrigger value="overview" className="flex items-center gap-2">
+                <BarChart3 className="h-4 w-4" />
+                <span className="hidden sm:inline">Painel Geral</span>
+                <span className="sm:hidden">Painel</span>
+              </TabsTrigger>
+              <TabsTrigger value="vessels" className="flex items-center gap-2">
+                <Ship className="h-4 w-4" />
+                <span className="hidden sm:inline">Frota Ativa</span>
+                <span className="sm:hidden">Frota</span>
+              </TabsTrigger>
+              <TabsTrigger value="maintenance" className="flex items-center gap-2">
+                <Wrench className="h-4 w-4" />
+                <span className="hidden sm:inline">Manutenção</span>
+                <span className="sm:hidden">Manutenção</span>
+              </TabsTrigger>
+              <TabsTrigger value="documents" className="flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                <span className="hidden sm:inline">Documentação</span>
+                <span className="sm:hidden">Docs</span>
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="flex items-center gap-2">
+                <Activity className="h-4 w-4" />
+                <span className="hidden sm:inline">Analytics</span>
+                <span className="sm:hidden">Analytics</span>
+              </TabsTrigger>
+              <TabsTrigger value="tracking" className="flex items-center gap-2">
+                <MapPin className="h-4 w-4" />
+                <span className="hidden sm:inline">Rastreamento</span>
+                <span className="sm:hidden">GPS</span>
+              </TabsTrigger>
+              <TabsTrigger value="alerts" className="flex items-center gap-2">
+                <Bell className="h-4 w-4" />
+                <span className="hidden sm:inline">Alertas IA</span>
+                <span className="sm:hidden">Alertas</span>
+              </TabsTrigger>
+              <TabsTrigger value="compliance" className="flex items-center gap-2">
+                <Shield className="h-4 w-4" />
+                <span className="hidden sm:inline">Conformidade</span>
+                <span className="sm:hidden">Conf.</span>
+              </TabsTrigger>
+              <TabsTrigger value="notifications" className="flex items-center gap-2">
+                <Bell className="h-4 w-4" />
+                <span className="hidden sm:inline">Notificações</span>
+                <span className="sm:hidden">Notif.</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="overview" className="space-y-6">
             <FleetOverviewDashboard stats={fleetStats} onRefresh={loadFleetStats} />

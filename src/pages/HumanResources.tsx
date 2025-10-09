@@ -129,24 +129,30 @@ const HumanResources = () => {
           {/* Enhanced Tabs */}
           <Tabs defaultValue="dashboard" className="space-y-6">
             <div className="flex justify-center">
-              <TabsList className="grid grid-cols-4 w-full max-w-3xl h-14 bg-card/50 backdrop-blur-sm border border-border/50">
-                <TabsTrigger value="dashboard" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  <BarChart3 className="h-5 w-5" />
-                  <span className="hidden md:inline">Dashboard</span>
-                </TabsTrigger>
-                <TabsTrigger value="certificates" className="flex items-center gap-2 data-[state=active]:bg-warning data-[state=active]:text-warning-foreground">
-                  <Award className="h-5 w-5" />
-                  <span className="hidden md:inline">Certificados</span>
-                </TabsTrigger>
-                <TabsTrigger value="alerts" className="flex items-center gap-2 data-[state=active]:bg-destructive data-[state=active]:text-destructive-foreground">
-                  <AlertTriangle className="h-5 w-5" />
-                  <span className="hidden md:inline">Alertas</span>
-                </TabsTrigger>
-                <TabsTrigger value="employees" className="flex items-center gap-2 data-[state=active]:bg-success data-[state=active]:text-success-foreground">
-                  <UserCheck className="h-5 w-5" />
-                  <span className="hidden md:inline">Funcionários</span>
-                </TabsTrigger>
-              </TabsList>
+              <div className="w-full overflow-x-auto pb-2">
+                <TabsList className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 w-full max-w-3xl h-14 bg-card/50 backdrop-blur-sm border border-border/50 min-w-fit">
+                  <TabsTrigger value="dashboard" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                    <BarChart3 className="h-5 w-5" />
+                    <span className="hidden sm:inline">Dashboard</span>
+                    <span className="sm:hidden">Dashboard</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="certificates" className="flex items-center gap-2 data-[state=active]:bg-warning data-[state=active]:text-warning-foreground">
+                    <Award className="h-5 w-5" />
+                    <span className="hidden sm:inline">Certificados</span>
+                    <span className="sm:hidden">Certif.</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="alerts" className="flex items-center gap-2 data-[state=active]:bg-destructive data-[state=active]:text-destructive-foreground">
+                    <AlertTriangle className="h-5 w-5" />
+                    <span className="hidden sm:inline">Alertas</span>
+                    <span className="sm:hidden">Alertas</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="employees" className="flex items-center gap-2 data-[state=active]:bg-success data-[state=active]:text-success-foreground">
+                    <UserCheck className="h-5 w-5" />
+                    <span className="hidden sm:inline">Funcionários</span>
+                    <span className="sm:hidden">Funcion.</span>
+                  </TabsTrigger>
+                </TabsList>
+              </div>
             </div>
 
             <TabsContent value="dashboard" className="space-y-6">

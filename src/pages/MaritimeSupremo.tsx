@@ -33,28 +33,35 @@ const MaritimeSupremo: React.FC = () => {
       />
 
       <Tabs defaultValue="maritimegpt" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="maritimegpt" className="flex items-center gap-2">
-            <Brain className="h-4 w-4" />
-            MaritimeGPT 3.0
-          </TabsTrigger>
-          <TabsTrigger value="routes" className="flex items-center gap-2">
-            <Navigation className="h-4 w-4" />
-            Route Optimizer
-          </TabsTrigger>
-          <TabsTrigger value="crew" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Crew Intelligence
-          </TabsTrigger>
-          <TabsTrigger value="maintenance" className="flex items-center gap-2">
-            <Wrench className="h-4 w-4" />
-            Maintenance AI
-          </TabsTrigger>
-          <TabsTrigger value="security" className="flex items-center gap-2">
-            <Shield className="h-4 w-4" />
-            Security Shield
-          </TabsTrigger>
-        </TabsList>
+        <div className="w-full overflow-x-auto pb-2">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 min-w-fit">
+            <TabsTrigger value="maritimegpt" className="flex items-center gap-2">
+              <Brain className="h-4 w-4" />
+              <span className="hidden sm:inline">MaritimeGPT 3.0</span>
+              <span className="sm:hidden">GPT 3.0</span>
+            </TabsTrigger>
+            <TabsTrigger value="routes" className="flex items-center gap-2">
+              <Navigation className="h-4 w-4" />
+              <span className="hidden sm:inline">Route Optimizer</span>
+              <span className="sm:hidden">Routes</span>
+            </TabsTrigger>
+            <TabsTrigger value="crew" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              <span className="hidden sm:inline">Crew Intelligence</span>
+              <span className="sm:hidden">Crew</span>
+            </TabsTrigger>
+            <TabsTrigger value="maintenance" className="flex items-center gap-2">
+              <Wrench className="h-4 w-4" />
+              <span className="hidden sm:inline">Maintenance AI</span>
+              <span className="sm:hidden">Maint.</span>
+            </TabsTrigger>
+            <TabsTrigger value="security" className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              <span className="hidden sm:inline">Security Shield</span>
+              <span className="sm:hidden">Security</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="maritimegpt" className="mt-6">
           <MaritimeGPT3 />
