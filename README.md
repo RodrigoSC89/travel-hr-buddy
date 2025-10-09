@@ -33,6 +33,8 @@ cp .env.example .env
 npm run dev
 ```
 
+After starting the dev server, visit `http://localhost:8080/health` to verify your environment configuration.
+
 ### 📦 Common Scripts
 
 ```json
@@ -48,6 +50,24 @@ npm run dev
   "clean:logs": "node scripts/clean-console-logs.cjs"
 }
 ```
+
+---
+
+## 🏥 System Health & Diagnostics
+
+### Health Check Page
+
+Visit `/health` to verify your system configuration:
+- **Local**: `http://localhost:8080/health`
+- **Production**: `https://your-deployment.vercel.app/health`
+
+The health check page shows:
+- ✅ System status (running/issues)
+- 🔑 Required environment variables status
+- 🎁 Optional environment variables status
+- 📝 Configuration instructions
+
+See [HEALTH_CHECK_GUIDE.md](./HEALTH_CHECK_GUIDE.md) for detailed documentation.
 
 ---
 
