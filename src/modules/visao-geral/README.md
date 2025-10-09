@@ -1,13 +1,29 @@
-# Visão Geral Module
+# 📘 Visao Geral
 
-Module: Visão Geral – Overview and executive dashboard
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Overview UI components
-- `pages/` - Overview pages
-- `hooks/` - Custom hooks for overview
-- `services/` - Overview services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/visao-geral/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

@@ -1,13 +1,29 @@
-# PEO-DP Module
+# 📘 Peo Dp
 
-Module: PEO-DP – HR and personnel management
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - PEO-DP UI components
-- `pages/` - PEO-DP pages
-- `hooks/` - Custom hooks for HR
-- `services/` - HR services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/peo-dp/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

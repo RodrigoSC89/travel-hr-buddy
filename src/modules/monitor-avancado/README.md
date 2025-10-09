@@ -1,13 +1,29 @@
-# Monitor Avançado Module
+# 📘 Monitor Avancado
 
-Module: Monitor Avançado – Advanced monitoring system
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Advanced monitor UI components
-- `pages/` - Advanced monitoring pages
-- `hooks/` - Custom hooks for monitoring
-- `services/` - Monitoring services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/monitor-avancado/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

@@ -1,13 +1,29 @@
-# Analytics Tempo Real Module
+# 📘 Analytics Tempo Real
 
-Module: Analytics Tempo Real – Real-time analytics dashboard
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Real-time analytics UI components
-- `pages/` - Real-time dashboard pages
-- `hooks/` - Custom hooks for real-time data
-- `services/` - Real-time analytics services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/analytics-tempo-real/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

@@ -1,13 +1,29 @@
-# Documentos IA Module
+# 📘 Documentos Ia
 
-Module: Documentos IA – AI-powered document processing
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - AI document UI components
-- `pages/` - AI document pages
-- `hooks/` - Custom hooks for AI processing
-- `services/` - AI document services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/documentos-ia/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

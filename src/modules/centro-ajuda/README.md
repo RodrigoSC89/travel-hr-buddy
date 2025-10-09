@@ -1,13 +1,29 @@
-# Centro de Ajuda Module
+# 📘 Centro Ajuda
 
-Module: Centro de Ajuda – Help center and support
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Help center UI components
-- `pages/` - Help pages
-- `hooks/` - Custom hooks for help features
-- `services/` - Help services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/centro-ajuda/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

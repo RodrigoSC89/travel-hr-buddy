@@ -1,13 +1,29 @@
-# Colaboração Module
+# 📘 Colaboracao
 
-Module: Colaboração – Team collaboration tools
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Collaboration UI components
-- `pages/` - Collaboration pages
-- `hooks/` - Custom hooks for collaboration
-- `services/` - Collaboration services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/colaboracao/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

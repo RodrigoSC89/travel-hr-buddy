@@ -1,13 +1,29 @@
-# Hub de Integrações Module
+# 📘 Hub Integracoes
 
-Module: Hub de Integrações – Integration hub and API connectors
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Integration hub UI components
-- `pages/` - Integration pages
-- `hooks/` - Custom hooks for integrations
-- `services/` - Integration services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/hub-integracoes/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

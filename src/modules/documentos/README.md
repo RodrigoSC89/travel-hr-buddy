@@ -1,13 +1,29 @@
-# Documentos Module
+# 📘 Documentos
 
-Module: Documentos – Document management system
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Document UI components
-- `pages/` - Document pages
-- `hooks/` - Custom hooks for document management
-- `services/` - Document services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/documentos/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

@@ -1,13 +1,29 @@
-# Sistema Marítimo Module
+# 📘 Sistema Maritimo
 
-Module: Sistema Marítimo – Fleet and vessel management system
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Maritime system UI components
-- `pages/` - Maritime system pages
-- `hooks/` - Custom hooks for maritime operations
-- `services/` - Maritime data services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/sistema-maritimo/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

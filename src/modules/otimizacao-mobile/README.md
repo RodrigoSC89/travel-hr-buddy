@@ -1,13 +1,29 @@
-# Otimização Mobile Module
+# 📘 Otimizacao Mobile
 
-Module: Otimização Mobile – Mobile optimization features
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Mobile optimization UI components
-- `pages/` - Mobile pages
-- `hooks/` - Custom hooks for mobile features
-- `services/` - Mobile services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/otimizacao-mobile/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

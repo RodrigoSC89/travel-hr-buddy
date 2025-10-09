@@ -1,13 +1,29 @@
-# Alertas de Preços Module
+# 📘 Alertas Precos
 
-Module: Alertas de Preços – Price monitoring and alerts
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Price alerts UI components
-- `pages/` - Price alerts pages
-- `hooks/` - Custom hooks for price monitoring
-- `services/` - Price data services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/alertas-precos/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

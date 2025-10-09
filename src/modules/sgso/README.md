@@ -1,13 +1,29 @@
-# SGSO Module
+# 📘 Sgso
 
-Module: SGSO – Health and safety management system
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - SGSO UI components
-- `pages/` - SGSO pages
-- `hooks/` - Custom hooks for safety
-- `services/` - Safety services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/sgso/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

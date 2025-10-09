@@ -1,13 +1,29 @@
-# Centro de Notificações Module
+# 📘 Centro Notificacoes
 
-Module: Centro de Notificações – Notification center
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Notification UI components
-- `pages/` - Notification pages
-- `hooks/` - Custom hooks for notifications
-- `services/` - Notification services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/centro-notificacoes/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

@@ -1,13 +1,29 @@
-# Analytics Avançado Module
+# 📘 Analytics Avancado
 
-Module: Analytics Avançado – Advanced analytics and reporting
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Advanced analytics UI components
-- `pages/` - Analytics pages
-- `hooks/` - Custom hooks for analytics
-- `services/` - Analytics services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/analytics-avancado/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

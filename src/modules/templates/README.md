@@ -1,13 +1,29 @@
-# Templates Module
+# 📘 Templates
 
-Module: Templates – Template management system
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Template UI components
-- `pages/` - Template pages
-- `hooks/` - Custom hooks for templates
-- `services/` - Template services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/templates/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

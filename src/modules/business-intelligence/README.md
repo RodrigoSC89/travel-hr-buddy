@@ -1,13 +1,29 @@
-# Business Intelligence Module
+# 📘 Business Intelligence
 
-Module: Business Intelligence – BI and data insights
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - BI UI components
-- `pages/` - BI dashboard pages
-- `hooks/` - Custom hooks for BI
-- `services/` - BI services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/business-intelligence/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

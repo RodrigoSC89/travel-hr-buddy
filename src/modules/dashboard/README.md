@@ -1,13 +1,29 @@
-# Dashboard Module
+# 📘 Dashboard
 
-Module: Dashboard – Main control panel and overview system
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Dashboard UI components
-- `pages/` - Dashboard pages
-- `hooks/` - Custom hooks for dashboard
-- `services/` - Dashboard data services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/dashboard/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

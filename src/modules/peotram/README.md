@@ -1,13 +1,29 @@
-# PEOTRAM Module
+# 📘 Peotram
 
-Module: PEOTRAM – Operational excellence and procedures
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - PEOTRAM UI components
-- `pages/` - PEOTRAM pages
-- `hooks/` - Custom hooks for PEOTRAM
-- `services/` - PEOTRAM services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/peotram/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)

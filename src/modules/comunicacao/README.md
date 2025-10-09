@@ -1,13 +1,29 @@
-# Comunicação Module
+# 📘 Comunicacao
 
-Module: Comunicação – Communication and messaging center
+## 🔍 Purpose
+Describe the purpose of this module here.
 
-## Structure
-- `components/` - Communication UI components
-- `pages/` - Communication pages
-- `hooks/` - Custom hooks for messaging
-- `services/` - Communication services
-- `types/` - TypeScript types
-- `utils/` - Utility functions
+## 📁 Folder Structure
+```
+src/modules/comunicacao/
+├── components/
+├── pages/
+├── hooks/
+└── services/
+```
 
-Status: ✅ Structure initialized
+## 🧩 Key Components
+- `ComponentName.tsx` – Description
+
+## 🔗 Integrations
+- (List external services if any)
+
+## ✅ Status
+- [ ] Not started  
+- [ ] In progress  
+- [x] Functional  
+- [ ] Requires testing  
+- [ ] Needs refactor
+
+## 🚧 TODOs
+- (List next steps or improvements)
