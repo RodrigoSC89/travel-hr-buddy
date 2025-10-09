@@ -214,7 +214,7 @@ const RealTimeWorkspace: React.FC = () => {
         channelRef.current.unsubscribe();
       }
     };
-  }, [user, myStatus]);
+  }, [user, myStatus, toast]);
 
   // Carregar dados iniciais
   const loadInitialData = () => {

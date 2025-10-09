@@ -129,7 +129,7 @@ export const IntelligentChecklistManager: React.FC = () => {
 
   useEffect(() => {
     setChecklists(mockChecklists);
-  }, []);
+  }, [mockChecklists]);
 
   const getStatusColor = (status: string) => {
     switch (status) {

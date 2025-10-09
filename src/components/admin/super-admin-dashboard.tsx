@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -67,11 +67,7 @@ export const SuperAdminDashboard: React.FC = () => {
     billing_email: ''
   });
 
-  useEffect(() => {
-    loadOrganizations();
-  }, []);
-
-  const loadOrganizations = async () => {
+  const loadOrganizations = useCallback(async () => {
     try {
       setIsLoading(true);
       
@@ -105,7 +101,11 @@ export const SuperAdminDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    loadOrganizations();
+  }, [loadOrganizations]);
 
   const createOrganization = async () => {
     try {

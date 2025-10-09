@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { Checklist, ChecklistTemplate, ChecklistItem } from '@/components/maritime-checklists/checklist-types';
@@ -10,7 +10,7 @@ export const useMaritimeChecklists = (userId: string) => {
   const [error, setError] = useState<string | null>(null);
 
   // Fetch checklists from Supabase
-  const fetchChecklists = async () => {
+  const fetchChecklists = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -84,7 +84,7 @@ export const useMaritimeChecklists = (userId: string) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
   // Fetch templates (for now, use mock data)
   const fetchTemplates = async () => {
@@ -280,7 +280,7 @@ export const useMaritimeChecklists = (userId: string) => {
       fetchChecklists();
       fetchTemplates();
     }
-  }, [userId]);
+  }, [userId, fetchChecklists]);
 
   return {
     checklists,

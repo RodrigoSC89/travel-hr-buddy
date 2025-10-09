@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -106,11 +106,7 @@ export const AutomatedReportsManager: React.FC = () => {
     filters: {}
   });
 
-  useEffect(() => {
-    loadReports();
-  }, []);
-
-  const loadReports = async () => {
+  const loadReports = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('automated_reports')
@@ -129,7 +125,11 @@ export const AutomatedReportsManager: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    loadReports();
+  }, [loadReports]);
 
   const createReport = async () => {
     try {

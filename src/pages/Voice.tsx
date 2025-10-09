@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -46,26 +46,7 @@ export default function Voice() {
   const { toast } = useToast();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Request microphone permission on component mount
-  useEffect(() => {
-    requestMicrophonePermission();
-  }, []);
-
-  // Handle ESC key to close modals
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setShowAdvancedSettings(false);
-        setIsListening(false);
-        setIsSpeaking(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, []);
-
-  const requestMicrophonePermission = async () => {
+  const requestMicrophonePermission = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setAudioPermission('granted');
@@ -86,7 +67,26 @@ export default function Voice() {
         duration: 4000
       });
     }
-  };
+  }, [toast]);
+
+  // Request microphone permission on component mount
+  useEffect(() => {
+    requestMicrophonePermission();
+  }, [requestMicrophonePermission]);
+
+  // Handle ESC key to close modals
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowAdvancedSettings(false);
+        setIsListening(false);
+        setIsSpeaking(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
 
   const handleVoiceToggle = () => {
     if (audioPermission !== 'granted') {
