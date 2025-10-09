@@ -1,5 +1,7 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import { ModuleHeader } from '@/components/ui/module-header';
 import { MaritimeGPT3 } from '@/components/intelligence/maritime-gpt-3';
 import { NeuralRouteOptimizer } from '@/components/maritime/neural-route-optimizer';
 import { CrewIntelligenceSystem } from '@/components/crew/crew-intelligence-system';
@@ -11,21 +13,24 @@ import {
   Users,
   Sparkles,
   Wrench,
-  Shield
+  Shield,
+  Zap
 } from 'lucide-react';
 
 const MaritimeSupremo: React.FC = () => {
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
-          <Sparkles className="h-10 w-10 text-primary" />
-          NAUTILUS ONE SUPREMO
-        </h1>
-        <p className="text-xl text-muted-foreground">
-          Sistema Marítimo Mundial Definitivo - Superinteligência e Otimização Avançada
-        </p>
-      </div>
+    <ModulePageWrapper gradient="purple">
+      <ModuleHeader
+        icon={Sparkles}
+        title="NAUTILUS ONE SUPREMO"
+        description="Sistema Marítimo Mundial Definitivo - Superinteligência e Otimização Avançada"
+        gradient="purple"
+        badges={[
+          { icon: Brain, label: 'MaritimeGPT 3.0' },
+          { icon: Zap, label: 'IA Avançada' },
+          { icon: Shield, label: 'Segurança Quântica' }
+        ]}
+      />
 
       <Tabs defaultValue="maritimegpt" className="w-full">
         <TabsList className="grid w-full grid-cols-5">
@@ -71,7 +76,7 @@ const MaritimeSupremo: React.FC = () => {
           <QuantumSecurityShield />
         </TabsContent>
       </Tabs>
-    </div>
+    </ModulePageWrapper>
   );
 };
 
