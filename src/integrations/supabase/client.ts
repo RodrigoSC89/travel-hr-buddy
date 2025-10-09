@@ -2,8 +2,21 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = "https://vnbptmixvwropvanyhdb.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
+// Support multiple environment variable naming conventions
+// Priority: VITE_ prefix (for Vite), NEXT_PUBLIC_ prefix (for Next.js compatibility), then plain names
+const getEnvVar = (name: string): string => {
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    return import.meta.env[`VITE_${name}`] || 
+           import.meta.env[`NEXT_PUBLIC_${name}`] || 
+           import.meta.env[name] || '';
+  }
+  return '';
+};
+
+const SUPABASE_URL = getEnvVar('SUPABASE_URL') || "https://vnbptmixvwropvanyhdb.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = getEnvVar('SUPABASE_ANON_KEY') || 
+                                  getEnvVar('SUPABASE_PUBLISHABLE_KEY') ||
+                                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
