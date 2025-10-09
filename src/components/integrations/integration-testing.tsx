@@ -20,6 +20,7 @@ import {
   Download,
   Copy
 } from 'lucide-react';
+import APITestPanel from '@/components/testing/api-test-panel';
 
 interface TestResult {
   id: string;
@@ -160,13 +161,19 @@ export const IntegrationTesting: React.FC = () => {
         </CardHeader>
       </Card>
 
-      <Tabs defaultValue="single-test" className="space-y-6">
-        <TabsList className="grid grid-cols-4 w-full max-w-2xl">
+      <Tabs defaultValue="api-tests" className="space-y-6">
+        <TabsList className="grid grid-cols-5 w-full max-w-3xl">
+          <TabsTrigger value="api-tests">APIs Externas</TabsTrigger>
           <TabsTrigger value="single-test">Teste Único</TabsTrigger>
           <TabsTrigger value="load-test">Teste de Carga</TabsTrigger>
           <TabsTrigger value="results">Resultados</TabsTrigger>
           <TabsTrigger value="monitoring">Monitoramento</TabsTrigger>
         </TabsList>
+
+        {/* API Tests Tab */}
+        <TabsContent value="api-tests">
+          <APITestPanel />
+        </TabsContent>
 
         {/* Teste Único */}
         <TabsContent value="single-test" className="space-y-6">
