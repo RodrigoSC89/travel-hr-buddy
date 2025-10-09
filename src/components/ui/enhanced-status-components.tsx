@@ -1,68 +1,21 @@
+/**
+ * @deprecated This file contains multiple deprecated components. 
+ * Import individual components from their new locations:
+ * - StatusBadge, StatusIndicator from '@/components/ui/StatusBadge'
+ * - LoadingState from '@/components/ui/Loading'
+ * - EmptyState from '@/components/ui/EmptyState'
+ * This file is kept for backward compatibility only.
+ */
+
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { getStatusColor, getStatusDot, getPriorityColor, getVesselStatusColor } from '@/lib/status-utils';
 
-// Enhanced Status Badge with semantic colors
-interface StatusBadgeProps {
-  status: string;
-  type?: 'default' | 'priority' | 'vessel';
-  className?: string;
-}
-
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ 
-  status, 
-  type = 'default', 
-  className 
-}) => {
-  const getColorClass = () => {
-    switch (type) {
-      case 'priority':
-        return getPriorityColor(status);
-      case 'vessel':
-        return getVesselStatusColor(status);
-      default:
-        return getStatusColor(status);
-    }
-  };
-
-  return (
-    <Badge 
-      className={cn(getColorClass(), className)}
-      variant="secondary"
-    >
-      {status}
-    </Badge>
-  );
-};
-
-// Enhanced Status Indicator with dot
-interface StatusIndicatorProps {
-  status: string;
-  label?: string;
-  showDot?: boolean;
-  className?: string;
-}
-
-export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
-  status,
-  label,
-  showDot = true,
-  className
-}) => {
-  return (
-    <div className={cn("flex items-center gap-2", className)}>
-      {showDot && (
-        <div className={cn("w-2 h-2 rounded-full", getStatusDot(status))} />
-      )}
-      <span className="text-sm font-medium">
-        {label || status}
-      </span>
-    </div>
-  );
-};
+// Re-export from new unified components
+export { StatusBadge, StatusIndicator, type StatusBadgeProps, type StatusIndicatorProps } from './StatusBadge';
+export { Loading as LoadingState, type LoadingProps as LoadingStateProps } from './Loading';
+export { EmptyState, type EmptyStateProps } from './EmptyState';
 
 // Enhanced Action Button with proper accessibility
 interface ActionButtonProps {
