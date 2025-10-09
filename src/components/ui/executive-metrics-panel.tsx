@@ -112,7 +112,7 @@ const ExecutiveMetricsPanel = () => {
       case 'good': return 'text-blue-700 bg-blue-100 border-blue-200';
       case 'warning': return 'text-orange-700 bg-orange-100 border-orange-200';
       case 'critical': return 'text-red-700 bg-red-100 border-red-200';
-      default: return 'text-gray-700 bg-gray-100 border-gray-200';
+      default: return 'text-secondary-foreground bg-secondary border-border';
     }
   };
 

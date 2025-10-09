@@ -275,34 +275,34 @@ export const AuditPlanner: React.FC = () => {
                               {getTypeLabel(audit.type)}
                             </Badge>
                           </div>
-                          <p className="text-sm text-gray-600 mb-3">
+                          <p className="text-sm text-muted-foreground mb-3">
                             <Target className="h-3 w-3 inline mr-1" />
                             {audit.scope}
                           </p>
                           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Data Agendada</p>
+                              <p className="text-xs text-muted-foreground font-medium">Data Agendada</p>
                               <p className="text-sm font-bold text-gray-900">
                                 <Calendar className="h-3 w-3 inline mr-1" />
                                 {new Date(audit.scheduled_date).toLocaleDateString('pt-BR')}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Auditor</p>
+                              <p className="text-xs text-muted-foreground font-medium">Auditor</p>
                               <p className="text-sm font-bold text-gray-900">
                                 <Users className="h-3 w-3 inline mr-1" />
                                 {audit.auditor}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Práticas Cobertas</p>
+                              <p className="text-xs text-muted-foreground font-medium">Práticas Cobertas</p>
                               <p className="text-sm font-bold text-gray-900">
                                 {audit.practices_covered.length} de 17
                               </p>
                             </div>
                             {audit.findings_count !== undefined && (
                               <div>
-                                <p className="text-xs text-gray-600 font-medium">Achados</p>
+                                <p className="text-xs text-muted-foreground font-medium">Achados</p>
                                 <p className="text-sm font-bold text-gray-900">
                                   <FileText className="h-3 w-3 inline mr-1" />
                                   {audit.findings_count} ({audit.non_conformities || 0} NC)

@@ -294,7 +294,7 @@ export const TravelPolicySystem: React.FC = () => {
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-300';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
       case 'low': return 'bg-green-100 text-green-800 border-green-300';
-      default: return 'bg-gray-100 text-gray-800 border-gray-300';
+      default: return 'bg-secondary text-secondary-foreground border-border';
     }
   };
 
@@ -302,7 +302,7 @@ export const TravelPolicySystem: React.FC = () => {
     switch (status) {
       case 'resolved': return 'bg-green-100 text-green-800 border-green-300';
       case 'escalated': return 'bg-red-100 text-red-800 border-red-300';
-      case 'ignored': return 'bg-gray-100 text-gray-800 border-gray-300';
+      case 'ignored': return 'bg-secondary text-secondary-foreground border-border';
       default: return 'bg-yellow-100 text-yellow-800 border-yellow-300';
     }
   };
@@ -459,7 +459,7 @@ export const TravelPolicySystem: React.FC = () => {
                           <h4 className="font-semibold text-lg">{policy.name}</h4>
                           <p className="text-sm text-muted-foreground">{policy.description}</p>
                         </div>
-                        <Badge className={policy.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
+                        <Badge className={policy.isActive ? 'bg-green-100 text-green-800' : 'bg-secondary text-secondary-foreground'}>
                           {policy.isActive ? <Unlock className="h-3 w-3 mr-1" /> : <Lock className="h-3 w-3 mr-1" />}
                           {policy.isActive ? 'Ativa' : 'Inativa'}
                         </Badge>
@@ -498,7 +498,7 @@ export const TravelPolicySystem: React.FC = () => {
                                 )}
                                 {rule.isActive ? 
                                   <CheckCircle className="h-4 w-4 text-green-600" /> : 
-                                  <Clock className="h-4 w-4 text-gray-600" />
+                                  <Clock className="h-4 w-4 text-muted-foreground" />
                                 }
                               </div>
                             </div>
@@ -540,7 +540,7 @@ export const TravelPolicySystem: React.FC = () => {
                                         <Badge className={getSeverityColor(rule.severity)}>
                                           {rule.severity}
                                         </Badge>
-                                        <Badge className={rule.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
+                                        <Badge className={rule.isActive ? 'bg-green-100 text-green-800' : 'bg-secondary text-secondary-foreground'}>
                                           {rule.isActive ? 'Ativa' : 'Inativa'}
                                         </Badge>
                                       </div>

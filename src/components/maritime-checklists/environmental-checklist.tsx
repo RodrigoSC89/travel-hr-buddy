@@ -272,7 +272,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'Água': return 'text-blue-600 bg-blue-50';
-      case 'Emissões': return 'text-gray-600 bg-gray-50';
+      case 'Emissões': return 'text-muted-foreground bg-gray-50';
       case 'Resíduos': return 'text-orange-600 bg-orange-50';
       case 'Vazamentos': return 'text-red-600 bg-red-50';
       case 'Ruído': return 'text-purple-600 bg-purple-50';

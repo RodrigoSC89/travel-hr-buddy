@@ -59,7 +59,7 @@ const VESSEL_TYPES = [
   { value: 'PSV', label: 'PSV - Platform Supply Vessel', color: 'bg-blue-100 text-blue-800' },
   { value: 'OSRV', label: 'OSRV - Oil Spill Response Vessel', color: 'bg-green-100 text-green-800' },
   { value: 'AHTS', label: 'AHTS - Anchor Handling Tug Supply', color: 'bg-purple-100 text-purple-800' },
-  { value: 'ALL', label: 'Todos os Tipos', color: 'bg-gray-100 text-gray-800' },
+  { value: 'ALL', label: 'Todos os Tipos', color: 'bg-secondary text-secondary-foreground' },
 ];
 
 export const PeotramChecklistVersionManager: React.FC = () => {

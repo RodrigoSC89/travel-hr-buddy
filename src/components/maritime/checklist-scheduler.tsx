@@ -56,12 +56,12 @@ export const ChecklistScheduler = () => {
       case 'monthly': return 'bg-blue-100 text-blue-800';
       case 'quarterly': return 'bg-purple-100 text-purple-800';
       case 'annually': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-secondary text-secondary-foreground';
     }
   };
 
   const getStatusColor = (isActive: boolean) => {
-    return isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+    return isActive ? 'bg-green-100 text-green-800' : 'bg-secondary text-secondary-foreground';
   };
 
   const handleCreateSchedule = () => {

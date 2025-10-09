@@ -147,7 +147,7 @@ export const DocumentationLogsTab: React.FC = () => {
       case 'system_action': return <Shield className="w-4 h-4 text-purple-600" />;
       case 'integration': return <Settings className="w-4 h-4 text-orange-600" />;
       case 'system_update': return <CheckCircle className="w-4 h-4 text-emerald-600" />;
-      default: return <Eye className="w-4 h-4 text-gray-600" />;
+      default: return <Eye className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

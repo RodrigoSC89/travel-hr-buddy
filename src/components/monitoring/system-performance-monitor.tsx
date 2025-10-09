@@ -100,7 +100,7 @@ const SystemPerformanceMonitor = () => {
       case 'offline':
         return <AlertTriangle className="w-4 h-4 text-red-600" />;
       default:
-        return <Activity className="w-4 h-4 text-gray-600" />;
+        return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -116,7 +116,7 @@ const SystemPerformanceMonitor = () => {
       case 'offline':
         return 'text-red-600 bg-red-100';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-muted-foreground bg-gray-100';
     }
   };
 
@@ -124,7 +124,7 @@ const SystemPerformanceMonitor = () => {
     switch (trend) {
       case 'up': return <TrendingUp className="w-4 h-4 text-red-600" />;
       case 'down': return <TrendingDown className="w-4 h-4 text-green-600" />;
-      default: return <Activity className="w-4 h-4 text-gray-600" />;
+      default: return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

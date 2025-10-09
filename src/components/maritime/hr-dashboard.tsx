@@ -261,10 +261,10 @@ export const MaritimeHRDashboard: React.FC = () => {
     switch (status) {
       case 'onboard': return 'text-blue-600 bg-blue-100';
       case 'on_leave': return 'text-green-600 bg-green-100';
-      case 'available': return 'text-gray-600 bg-gray-100';
+      case 'available': return 'text-muted-foreground bg-gray-100';
       case 'training': return 'text-purple-600 bg-purple-100';
       case 'medical_leave': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      default: return 'text-muted-foreground bg-gray-100';
     }
   };
 
@@ -284,7 +284,7 @@ export const MaritimeHRDashboard: React.FC = () => {
       case 'valid': return 'text-green-600 bg-green-100';
       case 'expiring': return 'text-yellow-600 bg-yellow-100';
       case 'expired': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      default: return 'text-muted-foreground bg-gray-100';
     }
   };
 

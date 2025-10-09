@@ -169,7 +169,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
   const getTrendIcon = (trend: number) => {
     if (trend > 0) return <TrendingUp className="w-4 h-4 text-green-600" />;
     if (trend < 0) return <TrendingDown className="w-4 h-4 text-red-600" />;
-    return <Activity className="w-4 h-4 text-gray-600" />;
+    return <Activity className="w-4 h-4 text-muted-foreground" />;
   };
 
   const getImpactColor = (impact: PerformanceInsight['impact']) => {

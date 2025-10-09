@@ -219,7 +219,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
       case 'non-compliant':
         return 'text-red-600';
       default:
-        return 'text-gray-600';
+        return 'text-muted-foreground';
     }
   };
 
@@ -230,7 +230,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
       case 'non-compliant':
         return <AlertCircle className="h-4 w-4 text-red-600" />;
       default:
-        return <FileText className="h-4 w-4 text-gray-600" />;
+        return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -520,7 +520,7 @@ const RequirementForm: React.FC<{
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="not-applicable" id="not-applicable" />
-              <Label htmlFor="not-applicable" className="text-gray-600">Não Aplicável</Label>
+              <Label htmlFor="not-applicable" className="text-muted-foreground">Não Aplicável</Label>
             </div>
           </RadioGroup>
         </div>

@@ -153,8 +153,8 @@ export const AIThreatDetection: React.FC = () => {
       case 'active': return 'text-red-600';
       case 'investigating': return 'text-yellow-600';
       case 'resolved': return 'text-green-600';
-      case 'false_positive': return 'text-gray-600';
-      default: return 'text-gray-600';
+      case 'false_positive': return 'text-muted-foreground';
+      default: return 'text-muted-foreground';
     }
   };
 
@@ -396,7 +396,7 @@ export const AIThreatDetection: React.FC = () => {
                         <div className={`flex items-center gap-1 text-sm ${
                           metric.trend === 'down' ? 'text-green-600' : 
                           metric.trend === 'up' ? 'text-red-600' : 
-                          'text-gray-600'
+                          'text-muted-foreground'
                         }`}>
                           {metric.trend === 'up' ? '↗' : metric.trend === 'down' ? '↘' : '→'}
                           <span>{metric.trend === 'up' ? '+' : metric.trend === 'down' ? '-' : ''}

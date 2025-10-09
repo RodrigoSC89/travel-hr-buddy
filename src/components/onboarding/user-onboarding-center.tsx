@@ -168,7 +168,7 @@ const UserOnboardingCenter: React.FC = () => {
       case 'pending':
         return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-muted-foreground bg-gray-50 border-gray-200';
     }
   };
 
@@ -475,7 +475,7 @@ const UserOnboardingCenter: React.FC = () => {
                     ].map((item) => (
                       <div key={item.step} className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                          item.completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'
+                          item.completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-muted-foreground'
                         }`}>
                           {item.completed ? <CheckCircle className="w-4 h-4" /> : item.step}
                         </div>

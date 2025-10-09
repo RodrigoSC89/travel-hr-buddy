@@ -314,26 +314,26 @@ export const EmergencyResponse: React.FC = () => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-3">
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Último Simulado</p>
+                              <p className="text-xs text-muted-foreground font-medium">Último Simulado</p>
                               <p className="text-sm font-bold text-gray-900">
                                 {new Date(plan.last_drill).toLocaleDateString('pt-BR')}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Próximo Simulado</p>
+                              <p className="text-xs text-muted-foreground font-medium">Próximo Simulado</p>
                               <p className="text-sm font-bold text-gray-900">
                                 {new Date(plan.next_drill).toLocaleDateString('pt-BR')}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Responsável</p>
+                              <p className="text-xs text-muted-foreground font-medium">Responsável</p>
                               <p className="text-sm font-bold text-gray-900">
                                 <Users className="h-3 w-3 inline mr-1" />
                                 {plan.responsible}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Contatos</p>
+                              <p className="text-xs text-muted-foreground font-medium">Contatos</p>
                               <p className="text-sm font-bold text-gray-900">
                                 <Phone className="h-3 w-3 inline mr-1" />
                                 {plan.contacts} pessoas

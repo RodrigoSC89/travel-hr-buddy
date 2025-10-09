@@ -154,7 +154,7 @@ export const SystemMonitoringDashboard: React.FC = () => {
                     <p className="text-2xl font-bold">{metric.value}</p>
                     <p className={`text-sm flex items-center gap-1 ${
                       metric.trend === 'up' ? 'text-green-600' : 
-                      metric.trend === 'down' ? 'text-red-600' : 'text-gray-600'
+                      metric.trend === 'down' ? 'text-red-600' : 'text-muted-foreground'
                     }`}>
                       {metric.change} vs mês anterior
                     </p>

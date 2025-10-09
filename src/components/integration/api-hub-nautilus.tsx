@@ -228,9 +228,9 @@ export const APIHubNautilus: React.FC = () => {
   const getIntegrationStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'text-green-600';
-      case 'inactive': return 'text-gray-600';
+      case 'inactive': return 'text-muted-foreground';
       case 'error': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-muted-foreground';
     }
   };
 

@@ -389,7 +389,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       case 'Viagens': return 'bg-green-100 text-green-800';
       case 'RH': return 'bg-orange-100 text-orange-800';
       case 'Admin': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-secondary text-secondary-foreground';
     }
   };
 

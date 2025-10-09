@@ -216,7 +216,7 @@ export const CrewManagement2: React.FC = () => {
       case 'fit': return 'text-green-600';
       case 'restricted': return 'text-yellow-600';
       case 'pending': return 'text-orange-600';
-      default: return 'text-gray-600';
+      default: return 'text-muted-foreground';
     }
   };
 

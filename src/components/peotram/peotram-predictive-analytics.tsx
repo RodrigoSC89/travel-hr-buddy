@@ -145,7 +145,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
   const getTrendIcon = (trend: 'improving' | 'declining' | 'stable') => {
     if (trend === 'improving') return <TrendingUp className="h-4 w-4 text-green-600" />;
     if (trend === 'declining') return <Activity className="h-4 w-4 text-red-600" />;
-    return <Activity className="h-4 w-4 text-gray-600" />;
+    return <Activity className="h-4 w-4 text-muted-foreground" />;
   };
 
   const getTypeIcon = (type: PredictiveInsight['type']) => {
@@ -295,7 +295,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
                     <p className={`text-lg font-bold ${
                       forecast.predictedScore > forecast.currentScore ? 'text-green-600' :
                       forecast.predictedScore < forecast.currentScore ? 'text-red-600' :
-                      'text-gray-600'
+                      'text-muted-foreground'
                     }`}>
                       {forecast.predictedScore}%
                     </p>

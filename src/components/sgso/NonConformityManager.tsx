@@ -286,36 +286,36 @@ export const NonConformityManager: React.FC = () => {
                               {statusConfig.label}
                             </Badge>
                           </div>
-                          <p className="text-sm text-gray-600 mb-3">
+                          <p className="text-sm text-muted-foreground mb-3">
                             <strong>{nc.number}</strong> - {nc.practice_name}
                           </p>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Data Identificação</p>
+                              <p className="text-xs text-muted-foreground font-medium">Data Identificação</p>
                               <p className="text-sm font-bold text-gray-900">
                                 {new Date(nc.identified_date).toLocaleDateString('pt-BR')}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Prazo</p>
+                              <p className="text-xs text-muted-foreground font-medium">Prazo</p>
                               <p className="text-sm font-bold text-gray-900">
                                 {new Date(nc.due_date).toLocaleDateString('pt-BR')}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-600 font-medium">Responsável</p>
+                              <p className="text-xs text-muted-foreground font-medium">Responsável</p>
                               <p className="text-sm font-bold text-gray-900">{nc.responsible}</p>
                             </div>
                           </div>
                           {nc.corrective_action && (
                             <div className="mb-3 p-3 bg-gray-50 rounded-lg">
-                              <p className="text-xs text-gray-600 font-medium mb-1">Ação Corretiva:</p>
+                              <p className="text-xs text-muted-foreground font-medium mb-1">Ação Corretiva:</p>
                               <p className="text-sm text-gray-900">{nc.corrective_action}</p>
                             </div>
                           )}
                           <div>
                             <div className="flex justify-between text-xs mb-1">
-                              <span className="text-gray-600 font-medium">Progresso do Tratamento</span>
+                              <span className="text-muted-foreground font-medium">Progresso do Tratamento</span>
                               <span className="text-gray-900 font-bold">{nc.completion_percentage}%</span>
                             </div>
                             <Progress value={nc.completion_percentage} className="h-2" />

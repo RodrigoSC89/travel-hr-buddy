@@ -167,11 +167,11 @@ export const GamificationSystem: React.FC = () => {
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case 'common': return 'text-gray-600 border-gray-200 bg-gray-50';
+      case 'common': return 'text-muted-foreground border-gray-200 bg-gray-50';
       case 'rare': return 'text-blue-600 border-blue-200 bg-blue-50';
       case 'epic': return 'text-purple-600 border-purple-200 bg-purple-50';
       case 'legendary': return 'text-yellow-600 border-yellow-200 bg-yellow-50';
-      default: return 'text-gray-600 border-gray-200 bg-gray-50';
+      default: return 'text-muted-foreground border-gray-200 bg-gray-50';
     }
   };
 
