@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { IntelligentChecklistManager } from '@/components/checklists/intelligent-checklist-manager';
 import ModuleActionButton from '@/components/ui/module-action-button';
-import { BackToDashboard } from '@/components/ui/back-to-dashboard';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import { ModuleHeader } from '@/components/ui/module-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -37,63 +38,20 @@ const ChecklistsInteligentes = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-success/10 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 bg-dots opacity-20" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-success/10 to-transparent rounded-full blur-3xl" />
-      
-      <div className="relative z-10 container mx-auto p-6 space-y-8">
-        <BackToDashboard />
-        
-        {/* Enhanced Hero Section */}
-        <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary-glow p-8 text-primary-foreground 
-          transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          
-          {/* Animated Background Pattern */}
-          <div className="absolute inset-0 bg-mesh opacity-20" />
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-success/15 to-transparent rounded-full blur-2xl animate-pulse" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
-          
-          <div className="relative z-10">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-4 rounded-2xl bg-primary/20 backdrop-blur-sm animate-pulse-glow">
-                <ClipboardCheck className="w-10 h-10" />
-              </div>
-              <div>
-                <h1 className="text-4xl font-bold font-display mb-2 text-shimmer drop-shadow-lg">
-                  Checklists Inteligentes
-                </h1>
-                <p className="text-xl opacity-95 drop-shadow-md font-semibold">
-                  Sistema avançado para operações marítimas
-                  <Crown className="inline-block w-6 h-6 ml-2 text-warning animate-bounce" />
-                </p>
-              </div>
-            </div>
-            
-            <p className="text-lg opacity-95 mb-8 max-w-3xl drop-shadow-md font-medium">
-              Plataforma revolucionária de checklists com IA preditiva, automação completa 
-              e experiência extraordinária para operadores de bordo (DP, Máquinas, Náutica).
-            </p>
-            
-            <div className="flex flex-wrap gap-4">
-              <div className="flex items-center gap-2 bg-success/90 text-success-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-success shadow-lg border border-success/30">
-                <Brain className="h-5 w-5 animate-pulse" />
-                <span className="font-semibold">IA Preditiva</span>
-              </div>
-              <div className="flex items-center gap-2 bg-info/90 text-info-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-info shadow-lg border border-info/30">
-                <Shield className="h-5 w-5 animate-pulse" />
-                <span className="font-semibold">Segurança Total</span>
-              </div>
-              <div className="flex items-center gap-2 bg-warning/90 text-warning-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-warning shadow-lg border border-warning/30">
-                <Zap className="h-5 w-5 animate-pulse" />
-                <span className="font-semibold">Automação Completa</span>
-              </div>
-            </div>
-          </div>
-        </div>
+    <ModulePageWrapper gradient="green">
+      <ModuleHeader
+        icon={ClipboardCheck}
+        title="Checklists Inteligentes"
+        description="Sistema avançado para operações marítimas"
+        gradient="blue"
+        badges={[
+          { icon: Brain, label: 'IA Preditiva' },
+          { icon: Shield, label: 'Segurança Total' },
+          { icon: Zap, label: 'Automação Completa' }
+        ]}
+      />
 
-        {/* Quick Stats */}
+      {/* Quick Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {quickStats.map((stat, index) => (
             <Card key={index} className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
@@ -142,7 +100,6 @@ const ChecklistsInteligentes = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
 
       {/* Module Action Button */}
       <ModuleActionButton
@@ -195,7 +152,7 @@ const ChecklistsInteligentes = () => {
           }
         ]}
       />
-    </div>
+    </ModulePageWrapper>
   );
 };
 

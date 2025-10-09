@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { PeotramAuditManager } from '@/components/peotram/peotram-audit-manager';
 import ModuleActionButton from '@/components/ui/module-action-button';
-import { BackToDashboard } from '@/components/ui/back-to-dashboard';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import { ModuleHeader } from '@/components/ui/module-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useMaritimeActions } from '@/hooks/useMaritimeActions';
@@ -34,65 +35,21 @@ const PEOTRAM = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-warning/5 to-info/10 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 bg-dots opacity-20" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-warning/10 to-transparent rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-info/10 to-transparent rounded-full blur-3xl" />
-      
-      <div className="relative z-10 container mx-auto p-6">
-        <BackToDashboard />
-        
-        {/* Enhanced Hero Section */}
-        <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-warning via-warning/90 to-warning-glow p-8 text-warning-foreground mb-8
-          transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          
-          {/* Animated Background Pattern */}
-          <div className="absolute inset-0 bg-mesh opacity-20" />
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-info/15 to-transparent rounded-full blur-2xl animate-pulse" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-primary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
-          
-          <div className="relative z-10">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-4 rounded-2xl bg-warning/20 backdrop-blur-sm animate-pulse-glow">
-                <FileCheck className="w-10 h-10" />
-              </div>
-              <div>
-                <h1 className="text-4xl font-bold font-display mb-2 text-shimmer drop-shadow-lg">
-                  PEOTRAM - Auditoria Petrobras
-                </h1>
-                <p className="text-xl opacity-95 drop-shadow-md font-semibold">
-                  Sistema de auditoria anual inteligente
-                  <Crown className="inline-block w-6 h-6 ml-2 text-primary animate-bounce" />
-                </p>
-              </div>
-            </div>
-            
-            <p className="text-lg opacity-95 mb-8 max-w-3xl drop-shadow-md font-medium">
-              Plataforma revolucionária para auditorias PEOTRAM com IA preditiva, automação completa 
-              e conformidade total com os padrões da Petrobras.
-            </p>
-            
-            <div className="flex flex-wrap gap-4">
-              <div className="flex items-center gap-2 bg-primary/90 text-primary-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-primary shadow-lg border border-primary/30">
-                <Brain className="h-5 w-5 animate-pulse" />
-                <span className="font-semibold">IA Preditiva</span>
-              </div>
-              <div className="flex items-center gap-2 bg-success/90 text-success-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-success shadow-lg border border-success/30">
-                <Shield className="h-5 w-5 animate-pulse" />
-                <span className="font-semibold">Conformidade Petrobras</span>
-              </div>
-              <div className="flex items-center gap-2 bg-info/90 text-info-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-info shadow-lg border border-info/30">
-                <Globe className="h-5 w-5 animate-pulse" />
-                <span className="font-semibold">Padrão Internacional</span>
-              </div>
-            </div>
-          </div>
-        </div>
+    <ModulePageWrapper gradient="orange">
+      <ModuleHeader
+        icon={FileCheck}
+        title="PEOTRAM - Auditoria Petrobras"
+        description="Sistema de auditoria anual inteligente"
+        gradient="yellow"
+        badges={[
+          { icon: Brain, label: 'IA Preditiva' },
+          { icon: Shield, label: 'Conformidade Petrobras' },
+          { icon: Globe, label: 'Padrão Internacional' }
+        ]}
+      />
 
-        {/* PEOTRAM Manager */}
-        <PeotramAuditManager />
-      </div>
+      {/* PEOTRAM Manager */}
+      <PeotramAuditManager />
 
       {/* Module Action Button */}
       <ModuleActionButton
@@ -145,7 +102,7 @@ const PEOTRAM = () => {
           }
         ]}
       />
-    </div>
+    </ModulePageWrapper>
   );
 };
 
