@@ -122,7 +122,7 @@ export const SystemHealthDashboard = () => {
       case 'medium': return 'bg-yellow-100 text-yellow-700';
       case 'high': return 'bg-orange-100 text-orange-700';
       case 'critical': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
+      default: return 'bg-secondary text-secondary-foreground';
     }
   };
 

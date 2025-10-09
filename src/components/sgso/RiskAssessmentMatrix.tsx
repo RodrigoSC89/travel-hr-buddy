@@ -156,7 +156,7 @@ export const RiskAssessmentMatrix: React.FC = () => {
               {/* Matrix Grid */}
               <div className="grid grid-cols-6 gap-1 bg-gray-200 p-2 rounded-lg">
                 {/* Top-left corner cell */}
-                <div className="bg-gray-100 p-4 flex items-center justify-center font-bold text-sm text-gray-700 rounded">
+                <div className="bg-secondary p-4 flex items-center justify-center font-bold text-sm text-secondary-foreground rounded">
                   Probabilidade<br />↓ / Impacto →
                 </div>
                 

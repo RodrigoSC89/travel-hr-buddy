@@ -391,7 +391,7 @@ export const IncidentReporting: React.FC = () => {
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 space-y-2">
                         <div className="flex items-center gap-3">
-                          <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-300 font-bold">
+                          <Badge variant="outline" className="bg-secondary text-secondary-foreground border-border font-bold">
                             {incident.number}
                           </Badge>
                           <h3 className="font-bold text-lg text-gray-900">{incident.title}</h3>
@@ -463,7 +463,7 @@ export const IncidentReporting: React.FC = () => {
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 space-y-2">
                           <div className="flex items-center gap-3">
-                            <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-300 font-bold">
+                            <Badge variant="outline" className="bg-secondary text-secondary-foreground border-border font-bold">
                               {incident.number}
                             </Badge>
                             <h3 className="font-bold text-lg text-gray-900">{incident.title}</h3>
