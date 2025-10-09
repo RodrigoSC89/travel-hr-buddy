@@ -10,6 +10,25 @@ The application uses environment variables to securely store API keys for variou
 
 ## Environment Variables Structure
 
+### Error Tracking & Monitoring
+
+#### Sentry (Error Tracking)
+**Frontend:**
+- `VITE_SENTRY_DSN` - Sentry Data Source Name for error tracking
+
+**Build/Deploy:**
+- `SENTRY_ORG` - Your Sentry organization name
+- `SENTRY_PROJECT` - Your Sentry project name
+- `SENTRY_AUTH_TOKEN` - Authentication token for uploading source maps
+
+**Where to get:** https://sentry.io/
+
+**Features:**
+- Real-time error tracking in production
+- Session replay for debugging
+- Performance monitoring
+- Error context and stack traces
+
 ### Maps & Weather APIs
 
 #### Mapbox (Interactive Maps)
@@ -148,6 +167,7 @@ To configure environment variables for Supabase Edge Functions:
 - `VITE_SUPABASE_ANON_KEY`
 
 ### ⭐ Recommended (Core features)
+- `VITE_SENTRY_DSN` - For production error tracking and monitoring
 - `VITE_MAPBOX_TOKEN` - For map functionality
 - `VITE_OPENWEATHER_API_KEY` - For weather features
 - `OPENWEATHER_API_KEY` - For Supabase weather functions
@@ -165,6 +185,13 @@ To configure environment variables for Supabase Edge Functions:
 - `VESSEL_FINDER_API_KEY` - Fleet monitoring
 
 ## Affected Features by API Key
+
+### SENTRY_DSN
+- Real-time error tracking in production
+- Automatic error reporting and alerting
+- Session replay for debugging user issues
+- Performance monitoring and metrics
+- Stack traces with source maps
 
 ### MAPBOX_* Keys
 - Interactive vessel tracking maps
