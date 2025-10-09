@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
-import { Trophy } from 'lucide-react';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { Trophy, Star, Award, Target } from 'lucide-react';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import { ModuleHeader } from '@/components/ui/module-header';
+import { DashboardSkeleton } from '@/components/ui/loading-skeleton';
 
 // Lazy loading do sistema de gamificação
 const GamificationSystem = React.lazy(() => 
@@ -11,30 +13,23 @@ const GamificationSystem = React.lazy(() =>
 
 const Gamification: React.FC = () => {
   return (
-    <div className="p-6 space-y-6">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="p-3 rounded-lg bg-primary/10">
-              <Trophy className="h-8 w-8 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">Sistema de Gamificação</h1>
-              <p className="text-muted-foreground">
-                Conquistas, rankings e recompensas para aumentar o engajamento
-              </p>
-            </div>
-          </div>
-          
-      <Suspense fallback={
-        <div className="flex items-center justify-center p-12">
-          <div className="text-center">
-            <LoadingSpinner size="lg" />
-            <p className="mt-4 text-muted-foreground">Carregando sistema de gamificação...</p>
-          </div>
-        </div>
-      }>
+    <ModulePageWrapper gradient="orange">
+      <ModuleHeader
+        icon={Trophy}
+        title="Sistema de Gamificação"
+        description="Conquistas, rankings e recompensas para aumentar o engajamento da equipe"
+        gradient="orange"
+        badges={[
+          { icon: Star, label: '247 Usuários Ativos' },
+          { icon: Award, label: '8 Conquistas' },
+          { icon: Target, label: 'Engajamento' }
+        ]}
+      />
+      
+      <Suspense fallback={<DashboardSkeleton />}>
         <GamificationSystem />
       </Suspense>
-    </div>
+    </ModulePageWrapper>
   );
 };
 

@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
-import { Shield } from 'lucide-react';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { Shield, Lock, CheckCircle, FileCheck } from 'lucide-react';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import { ModuleHeader } from '@/components/ui/module-header';
+import { DashboardSkeleton } from '@/components/ui/loading-skeleton';
 
 // Lazy loading do sistema blockchain
 const BlockchainDocuments = React.lazy(() => 
@@ -11,30 +13,23 @@ const BlockchainDocuments = React.lazy(() =>
 
 const Blockchain: React.FC = () => {
   return (
-    <div className="p-6 space-y-6">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="p-3 rounded-lg bg-primary/10">
-              <Shield className="h-8 w-8 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">Blockchain Documents</h1>
-              <p className="text-muted-foreground">
-                Certificação e validação segura de documentos
-              </p>
-            </div>
-          </div>
-          
-      <Suspense fallback={
-        <div className="flex items-center justify-center p-12">
-          <div className="text-center">
-            <LoadingSpinner size="lg" />
-            <p className="mt-4 text-muted-foreground">Carregando sistema blockchain...</p>
-          </div>
-        </div>
-      }>
+    <ModulePageWrapper gradient="green">
+      <ModuleHeader
+        icon={Shield}
+        title="Blockchain Documents"
+        description="Certificação e validação segura de documentos com tecnologia blockchain"
+        gradient="green"
+        badges={[
+          { icon: Lock, label: 'Segurança Máxima' },
+          { icon: CheckCircle, label: 'Validação Distribuída' },
+          { icon: FileCheck, label: 'Certificação' }
+        ]}
+      />
+      
+      <Suspense fallback={<DashboardSkeleton />}>
         <BlockchainDocuments />
       </Suspense>
-    </div>
+    </ModulePageWrapper>
   );
 };
 
