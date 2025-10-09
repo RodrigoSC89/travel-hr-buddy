@@ -20,6 +20,7 @@ import {
   Ship,
   AlertCircle,
   Clock,
+  Shield,
 } from "lucide-react";
 import { testMapboxConnection } from "@/services/mapbox";
 import { testOpenAIConnection } from "@/services/openai";
@@ -28,6 +29,7 @@ import { testSkyscannerConnection } from "@/services/skyscanner";
 import { testBookingConnection } from "@/services/booking";
 import { testWindyConnection } from "@/services/windy";
 import { testMarineTrafficConnection } from "@/services/marinetraffic";
+import { testSessionCheck } from "@/services/supabase-session";
 
 interface APITest {
   id: string;
@@ -46,6 +48,14 @@ interface APITest {
 
 const APITester = () => {
   const [tests, setTests] = useState<APITest[]>([
+    {
+      id: "session",
+      name: "Supabase Session",
+      description: "Check active session authentication",
+      icon: Shield,
+      testFn: testSessionCheck,
+      status: "idle",
+    },
     {
       id: "mapbox",
       name: "Mapbox",
