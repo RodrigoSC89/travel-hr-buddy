@@ -1,11 +1,12 @@
 import React from 'react';
 import { AdvancedDocumentCenter } from '@/components/documents/advanced-document-center';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 
 const DocumentsPage = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <ModulePageWrapper gradient="purple">
       <AdvancedDocumentCenter />
-    </div>
+    </ModulePageWrapper>
   );
 };
 

@@ -1,11 +1,12 @@
 import React from 'react';
 import SystemPerformanceMonitor from '@/components/monitoring/system-performance-monitor';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 
 const SystemMonitor = () => {
   return (
-    <div className="container mx-auto p-6">
+    <ModulePageWrapper gradient="blue">
       <SystemPerformanceMonitor />
-    </div>
+    </ModulePageWrapper>
   );
 };
 
