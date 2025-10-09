@@ -23,23 +23,28 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 2000, // Increased to 2MB to accommodate large Travel chunk
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs'],
-          charts: ['recharts'],
-          supabase: ['@supabase/supabase-js'],
+        manualChunks: (id) => {
+          // Vendor chunks for core libraries
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+              return 'vendor';
+            }
+            if (id.includes('@radix-ui/react-dialog') || 
+                id.includes('@radix-ui/react-dropdown-menu') || 
+                id.includes('@radix-ui/react-tabs')) {
+              return 'ui';
+            }
+            if (id.includes('recharts')) {
+              return 'charts';
+            }
+            if (id.includes('@supabase/supabase-js')) {
+              return 'supabase';
+            }
+          }
           // SGSO module chunking for better performance
-          sgso: [
-            './src/components/sgso/SgsoDashboard',
-            './src/components/sgso/AnpPracticesManager',
-            './src/components/sgso/RiskAssessmentMatrix',
-            './src/components/sgso/IncidentReporting',
-            './src/components/sgso/TrainingCompliance',
-            './src/components/sgso/AuditPlanner',
-            './src/components/sgso/NonConformityManager',
-            './src/components/sgso/ComplianceMetrics',
-            './src/components/sgso/EmergencyResponse'
-          ]
+          if (id.includes('src/components/sgso/')) {
+            return 'sgso';
+          }
         }
       }
     },
