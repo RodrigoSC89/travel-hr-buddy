@@ -1,23 +1,28 @@
 import React from 'react';
 import { AdminPanel } from '@/components/auth/admin-panel';
-import { ThemeProvider } from '@/components/layout/theme-provider';
-import { Header } from '@/components/layout/header';
-import { BackToDashboard } from '@/components/ui/back-to-dashboard';
 import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import { ModuleHeader } from '@/components/ui/module-header';
+import { Shield, Users, Settings, Lock } from 'lucide-react';
 
 const Admin = () => {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-      <MultiTenantWrapper>
-        <div className="min-h-screen bg-background">
-          <Header />
-          <main className="container mx-auto p-6 space-y-6">
-            <BackToDashboard />
-            <AdminPanel />
-          </main>
-        </div>
-      </MultiTenantWrapper>
-    </ThemeProvider>
+    <MultiTenantWrapper>
+      <ModulePageWrapper gradient="red">
+        <ModuleHeader
+          icon={Shield}
+          title="Painel Administrativo"
+          description="Gerenciamento completo de usuários, permissões e configurações do sistema"
+          gradient="red"
+          badges={[
+            { icon: Users, label: 'Gestão de Usuários' },
+            { icon: Lock, label: 'Segurança' },
+            { icon: Settings, label: 'Configurações' }
+          ]}
+        />
+        <AdminPanel />
+      </ModulePageWrapper>
+    </MultiTenantWrapper>
   );
 };
 
