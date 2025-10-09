@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -164,11 +166,12 @@ const FloatingActionButton = ({ icon: Icon, label, onClick, color = "primary", d
   return (
     <Button
       onClick={onClick}
+      aria-label={label}
       className={`group relative overflow-hidden bg-gradient-to-r from-primary to-primary-glow text-azure-50 
         transition-all duration-500 transform hover:scale-110 hover:shadow-2xl hover:-rotate-2
         ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
         rounded-2xl p-6 h-auto flex-col gap-3 min-w-[140px] hover:from-primary-glow hover:to-primary
-        shadow-lg hover:shadow-primary/25`}
+        shadow-lg hover:shadow-primary/25 focus:outline-none focus:ring-4 focus:ring-primary/30`}
     >
       {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-azure-100/20 to-transparent 
@@ -221,6 +224,8 @@ export const EnhancedDashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('30d');
   const [isLoaded, setIsLoaded] = useState(false);
   const { profile } = useProfile();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     setIsLoaded(true);
@@ -266,10 +271,42 @@ export const EnhancedDashboard = () => {
   ];
 
   const quickActions = [
-    { icon: BarChart3, label: "Relatórios IA", action: () => window.open('/reports', '_blank') },
-    { icon: Brain, label: "Analytics", action: () => window.open('/analytics', '_blank') },
-    { icon: Users, label: "RH Maritime", action: () => window.open('/hr', '_blank') },
-    { icon: Rocket, label: "Inovação", action: () => window.open('/intelligence', '_blank') }
+    { 
+      icon: BarChart3, 
+      label: "Relatórios IA", 
+      action: () => {
+        console.log('📊 Relatórios IA clicked');
+        navigate('/reports');
+        toast({ title: "📊 Relatórios IA", description: "Abrindo sistema de relatórios inteligentes" });
+      }
+    },
+    { 
+      icon: Brain, 
+      label: "Analytics", 
+      action: () => {
+        console.log('🧠 Analytics clicked');
+        navigate('/analytics');
+        toast({ title: "🧠 Analytics", description: "Abrindo painel de análises" });
+      }
+    },
+    { 
+      icon: Users, 
+      label: "RH Maritime", 
+      action: () => {
+        console.log('👥 RH Maritime clicked');
+        navigate('/hr');
+        toast({ title: "👥 RH Maritime", description: "Abrindo recursos humanos marítimos" });
+      }
+    },
+    { 
+      icon: Rocket, 
+      label: "Inovação", 
+      action: () => {
+        console.log('🚀 Inovação clicked');
+        navigate('/intelligence');
+        toast({ title: "🚀 Inovação", description: "Abrindo centro de inteligência e inovação" });
+      }
+    }
   ];
 
   const recentActivities = [

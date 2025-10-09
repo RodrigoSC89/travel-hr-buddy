@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { 
@@ -29,11 +31,14 @@ interface FloatingAction {
   color: string;
   delay: number;
   action: () => void;
+  ariaLabel: string;
 }
 
 const FloatingMenu = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(-1);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 1000);
@@ -46,33 +51,65 @@ const FloatingMenu = () => {
       label: "IA Assistant", 
       color: "from-purple-500 to-indigo-600",
       delay: 0,
-      action: () => window.open('/intelligence', '_blank')
+      ariaLabel: "Abrir Assistente de IA",
+      action: () => {
+        console.log('🧠 IA Assistant clicked');
+        navigate('/intelligence');
+        toast({
+          title: "🧠 IA Assistant",
+          description: "Abrindo assistente de inteligência artificial"
+        });
+      }
     },
     { 
       icon: MessageSquare, 
       label: "Chat Premium", 
       color: "from-blue-500 to-cyan-600",
       delay: 100,
-      action: () => window.open('/communication', '_blank')
+      ariaLabel: "Abrir Chat Premium",
+      action: () => {
+        console.log('💬 Chat Premium clicked');
+        navigate('/communication');
+        toast({
+          title: "💬 Chat Premium",
+          description: "Abrindo sistema de comunicação"
+        });
+      }
     },
     { 
       icon: BarChart3, 
       label: "Analytics", 
       color: "from-emerald-500 to-teal-600",
       delay: 200,
-      action: () => window.open('/analytics', '_blank')
+      ariaLabel: "Abrir Analytics",
+      action: () => {
+        console.log('📊 Analytics clicked');
+        navigate('/analytics');
+        toast({
+          title: "📊 Analytics",
+          description: "Abrindo painel de análises"
+        });
+      }
     },
     { 
       icon: Globe, 
       label: "Global Sync", 
       color: "from-orange-500 to-red-600",
       delay: 300,
-      action: () => window.open('/reports', '_blank')
+      ariaLabel: "Abrir Relatórios Globais",
+      action: () => {
+        console.log('🌍 Global Sync clicked');
+        navigate('/reports');
+        toast({
+          title: "🌍 Global Sync",
+          description: "Abrindo relatórios e sincronização global"
+        });
+      }
     }
   ];
 
   return (
-    <div className="fixed bottom-8 right-80 z-35 hidden md:block">
+    <div className="fixed bottom-8 right-80 z-40 hidden md:block">
       <div className={`flex flex-col gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         {actions.map((action, index) => (
           <div
@@ -94,10 +131,12 @@ const FloatingMenu = () => {
 
               <Button
                 onClick={action.action}
+                aria-label={action.ariaLabel}
                 className={`w-14 h-14 rounded-full bg-gradient-to-r ${action.color} text-azure-50 
                   shadow-2xl hover:shadow-3xl transition-all duration-300 transform 
                   hover:scale-110 hover:-rotate-6 group relative overflow-hidden
-                  border-2 border-azure-100/20 hover:border-azure-100/40`}
+                  border-2 border-azure-100/20 hover:border-azure-100/40
+                  focus:outline-none focus:ring-4 focus:ring-primary/30`}
               >
                 {/* Animated background */}
                 <div className="absolute inset-0 bg-gradient-to-r from-azure-100/20 to-transparent 
@@ -117,10 +156,19 @@ const FloatingMenu = () => {
         {/* Central Floating Hub */}
         <div className="relative group">
           <Button
+            onClick={() => {
+              console.log('🚀 Central Hub clicked');
+              toast({
+                title: "🚀 Central Hub",
+                description: "Acesso rápido às principais funcionalidades do sistema"
+              });
+            }}
+            aria-label="Central Hub - Acesso rápido"
             className="w-16 h-16 rounded-full bg-gradient-to-r from-primary via-primary-glow to-primary 
               text-azure-50 shadow-2xl hover:shadow-3xl transition-all duration-500 transform 
               hover:scale-125 hover:rotate-12 group relative overflow-hidden
-              border-4 border-azure-100/30 hover:border-azure-100/50 animate-pulse-glow"
+              border-4 border-azure-100/30 hover:border-azure-100/50 animate-pulse-glow
+              focus:outline-none focus:ring-4 focus:ring-primary/30"
           >
             {/* Multiple animated backgrounds */}
             <div className="absolute inset-0 bg-gradient-to-r from-azure-100/10 via-azure-100/20 to-azure-100/10 
@@ -164,7 +212,7 @@ const StatusWidget = () => {
   }, []);
 
   return (
-    <Card className="fixed top-8 right-8 z-40 w-64 bg-gradient-to-br from-card/90 to-primary/10 
+    <Card className="fixed top-8 right-8 z-50 w-64 bg-gradient-to-br from-card/90 to-primary/10 
       backdrop-blur-xl border border-azure-200/30 shadow-2xl">
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-4">
