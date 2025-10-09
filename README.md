@@ -47,9 +47,26 @@ After starting the dev server, visit `http://localhost:8080/health` to verify yo
   "lint:fix": "eslint . --fix",
   "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
   "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-  "clean:logs": "node scripts/clean-console-logs.cjs"
+  "clean:logs": "node scripts/clean-console-logs.cjs",
+  "validate:api-keys": "node scripts/validate-api-keys.js"
 }
 ```
+
+### 🔑 API Keys Validation
+
+After configuring your API keys, verify they work correctly:
+
+```bash
+npm run validate:api-keys
+```
+
+This will:
+- ✅ Test each configured API key against its service
+- ✅ Report validity, expiration, and authorization status
+- ✅ Show response times and connectivity
+- ✅ Provide recommendations for any issues
+
+See [scripts/README_API_VALIDATION.md](./scripts/README_API_VALIDATION.md) for details.
 
 ---
 
@@ -130,7 +147,11 @@ src/
 
 ## 🔐 Environment Variables
 
-Set all required keys in `.env` using `.env.example` as a reference. Example keys:
+Set all required keys in `.env` using `.env.example` as a reference.
+
+> **💡 Tip:** Run `npm run validate:api-keys` after configuring to verify all keys are working!
+
+Example keys:
 
 ### Core Services
 

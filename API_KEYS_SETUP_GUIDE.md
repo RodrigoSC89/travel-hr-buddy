@@ -2,6 +2,8 @@
 
 This guide explains how to configure API keys for the Nautilus One Travel HR Buddy application.
 
+> **💡 Pro Tip:** After configuring your API keys, run `npm run validate:api-keys` to verify they're working correctly!
+
 ## Overview
 
 The application uses environment variables to securely store API keys for various external services. These are split between:
@@ -196,17 +198,65 @@ To configure environment variables for Supabase Edge Functions:
 - Fleet management dashboards
 - Vessel performance tracking
 
+## API Keys Validation
+
+You can validate all your configured API keys at any time using the validation script:
+
+```bash
+npm run validate:api-keys
+```
+
+This command will:
+- ✅ Test each configured API key against its respective service
+- ✅ Report which keys are valid, invalid, expired, or not configured
+- ✅ Provide response times for each API
+- ✅ Give recommendations for fixing any issues
+- ✅ Generate a comprehensive validation report
+
+**Example output:**
+```
+🔍 API KEYS VALIDATION REPORT - NAUTILUS ONE
+
+Testing: OpenAI API...
+  ✅ Valid API key - 50 models available (234ms)
+
+Testing: Mapbox API...
+  ✅ Valid access token - Geocoding API working (156ms)
+
+Testing: Supabase...
+  ✅ Valid Supabase configuration - Instance accessible (89ms)
+
+Success Rate: 100% (3/3 tested)
+✅ All configured APIs are working correctly!
+```
+
+**When to run validation:**
+- After adding new API keys to your `.env` file
+- Before deploying to production
+- When debugging integration issues
+- During regular maintenance checks
+- After rotating API keys
+
 ## Troubleshooting
 
+### API Keys Validation Failures?
+1. Run `npm run validate:api-keys` to diagnose the issue
+2. Check the error message and recommendation provided
+3. Verify the key hasn't expired on the provider's dashboard
+4. Ensure the key has the necessary permissions/scopes
+5. Check if you've exceeded API rate limits
+
 ### Maps not loading?
-1. Check `VITE_MAPBOX_TOKEN` is set correctly
-2. Verify token is valid on Mapbox dashboard
-3. Check browser console for API errors
+1. Run `npm run validate:api-keys` to test Mapbox integration
+2. Check `VITE_MAPBOX_TOKEN` is set correctly
+3. Verify token is valid on Mapbox dashboard
+4. Check browser console for API errors
 
 ### Weather data not available?
-1. Verify `OPENWEATHER_API_KEY` is set in Supabase Dashboard
-2. Check Supabase Edge Function logs
-3. Ensure API key has necessary permissions
+1. Run `npm run validate:api-keys` to test OpenWeather integration
+2. Verify `OPENWEATHER_API_KEY` is set in Supabase Dashboard
+3. Check Supabase Edge Function logs
+4. Ensure API key has necessary permissions
 
 ### Environment variables not taking effect?
 1. Restart development server after changing `.env`
