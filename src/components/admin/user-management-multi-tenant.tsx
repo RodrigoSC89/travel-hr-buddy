@@ -16,9 +16,6 @@ import {
   UserPlus, 
   Mail, 
   Shield, 
-  Settings,
-  MoreHorizontal,
-  Edit,
   Trash2
 } from "lucide-react";
 
@@ -70,7 +67,7 @@ export const UserManagementMultiTenant: React.FC = () => {
     if (!inviteEmail || !inviteRole) return;
 
     try {
-      await inviteUser(inviteEmail, inviteRole as any);
+      await inviteUser(inviteEmail, inviteRole);
       setInviteEmail("");
       setInviteRole("member");
       setShowInviteDialog(false);
@@ -90,7 +87,7 @@ export const UserManagementMultiTenant: React.FC = () => {
 
   const handleUpdateRole = async (userId: string, newRole: string) => {
     try {
-      await updateUserRole(userId, newRole as any);
+      await updateUserRole(userId, newRole);
       loadUsers();
       toast({
         title: "Função Atualizada",

@@ -3,10 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,8 +14,6 @@ import {
   TrendingUp,
   DollarSign,
   Plus,
-  Edit,
-  Trash2,
   Eye,
   Settings,
   Activity,
@@ -50,10 +46,8 @@ interface Organization {
 
 export const SuperAdminDashboard: React.FC = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
   const { toast } = useToast();
 
   // Formulário para nova organização
@@ -85,7 +79,7 @@ export const SuperAdminDashboard: React.FC = () => {
       // Processar dados das organizações
       const processedOrgs = orgs?.map(org => ({
         ...org,
-        user_count: org.organization_users?.filter((u: any) => u.status === "active").length || 0,
+        user_count: org.organization_users?.filter((u: { status: string }) => u.status === "active").length || 0,
         vessel_count: org.vessels?.length || 0,
         branding: org.organization_branding?.[0] || null
       })) || [];
@@ -124,7 +118,7 @@ export const SuperAdminDashboard: React.FC = () => {
         return;
       }
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("organizations")
         .insert([newOrgForm])
         .select()
