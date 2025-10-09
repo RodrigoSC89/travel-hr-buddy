@@ -123,6 +123,8 @@ const getStatusConfig = (status: string) => {
 
 export const TrainingCompliance: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [isLoading, setIsLoading] = useState(false);
+  const { handleViewDetails, showInfo, handleCreate } = useMaritimeActions();
 
   const validCount = SAMPLE_TRAININGS.filter(t => t.status === 'valid').length;
   const expiringCount = SAMPLE_TRAININGS.filter(t => t.status === 'expiring_soon').length;

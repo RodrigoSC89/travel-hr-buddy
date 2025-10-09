@@ -129,6 +129,8 @@ const getTypeLabel = (type: string) => {
 
 export const AuditPlanner: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>('all');
+  const [isLoading, setIsLoading] = useState(false);
+  const { handleViewDetails, showInfo, handleCreate, handleGenerateReport } = useMaritimeActions();
 
   const plannedCount = SAMPLE_AUDITS.filter(a => a.status === 'planned').length;
   const inProgressCount = SAMPLE_AUDITS.filter(a => a.status === 'in_progress').length;

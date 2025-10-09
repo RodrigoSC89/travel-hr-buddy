@@ -151,7 +151,7 @@ const SystemPerformanceMonitor = () => {
         timeRange: selectedTimeRange,
         systemMetrics,
         services,
-        performanceHistory,
+        performanceData,
         alerts: systemMetrics.filter(m => m.status !== 'healthy').length,
         overallStatus: overallStatus
       };
