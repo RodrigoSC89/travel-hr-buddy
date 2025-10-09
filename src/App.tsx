@@ -38,6 +38,7 @@ const PredictiveAnalytics = React.lazy(() => import('./pages/PredictiveAnalytics
 const Admin = React.lazy(() => import('./pages/Admin'));
 const APITester = React.lazy(() => import('./pages/admin/api-tester'));
 const HealthMonitorDemo = React.lazy(() => import('./pages/HealthMonitorDemo'));
+const TestingDashboard = React.lazy(() => import('./pages/TestingDashboard'));
 
 // Create QueryClient
 const queryClient = new QueryClient();
@@ -135,6 +136,7 @@ function App() {
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/admin/api-tester" element={<APITester />} />
                     <Route path="/health-monitor" element={<HealthMonitorDemo />} />
+                    <Route path="/testing" element={<TestingDashboard />} />
                   </Routes>
                 </React.Suspense>
               </main>

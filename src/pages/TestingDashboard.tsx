@@ -5,6 +5,7 @@ import { TestEnvironmentConfig } from '@/components/testing/test-environment-con
 import { PerformanceMonitor } from '@/components/performance/performance-monitor';
 import { PWAStatus } from '@/components/mobile/pwa-status';
 import { FinalHomologationReport } from '@/components/testing/final-homologation-report';
+import { ExternalAPITestCenter } from '@/components/integration/external-api-test-center';
 
 const TestingDashboard = () => {
   return (
@@ -18,10 +19,14 @@ const TestingDashboard = () => {
 
       <Tabs defaultValue="homologation" className="w-full">
         <div className="w-full overflow-x-auto pb-2">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 min-w-fit">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6 min-w-fit">
             <TabsTrigger value="homologation">
               <span className="hidden sm:inline">Homologação Final</span>
               <span className="sm:hidden">Homolog.</span>
+            </TabsTrigger>
+            <TabsTrigger value="apis">
+              <span className="hidden sm:inline">APIs Externas</span>
+              <span className="sm:hidden">APIs</span>
             </TabsTrigger>
             <TabsTrigger value="health">
               <span className="hidden sm:inline">Saúde do Sistema</span>
@@ -44,6 +49,10 @@ const TestingDashboard = () => {
 
         <TabsContent value="homologation" className="space-y-6">
           <FinalHomologationReport />
+        </TabsContent>
+
+        <TabsContent value="apis" className="space-y-6">
+          <ExternalAPITestCenter />
         </TabsContent>
 
         <TabsContent value="health" className="space-y-6">
