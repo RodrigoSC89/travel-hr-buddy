@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
     minify: 'esbuild',
     target: 'es2020', // Atualizado para suportar big integers
+    chunkSizeWarningLimit: 2000, // Increased to 2MB to accommodate large Travel chunk
     rollupOptions: {
       output: {
         manualChunks: {
