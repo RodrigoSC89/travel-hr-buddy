@@ -93,7 +93,10 @@ export const OrganizationBrandingPreview: React.FC = () => {
           <div className="space-y-2">
             <span className="text-sm font-medium">Módulos Habilitados</span>
             <div className="flex flex-wrap gap-1">
-              {(currentBranding.enabled_modules as string[] || []).map((module) => (
+              {(Array.isArray(currentBranding.enabled_modules) 
+                ? currentBranding.enabled_modules 
+                : []
+              ).map((module) => (
                 <Badge key={module} variant="secondary" className="text-xs">
                   {module}
                 </Badge>

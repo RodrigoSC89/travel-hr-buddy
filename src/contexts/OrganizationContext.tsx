@@ -126,7 +126,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
             timezone: 'America/Sao_Paulo',
             custom_fields: {},
             business_rules: {},
-            enabled_modules: { peotram: true, fleet_management: true, analytics: true, hr: true },
+            enabled_modules: ['fleet', 'crew', 'certificates', 'analytics', 'travel', 'documents'],
             module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
           };
           
@@ -150,7 +150,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
           timezone: 'America/Sao_Paulo',
           custom_fields: {},
           business_rules: {},
-          enabled_modules: { peotram: true, fleet_management: true, analytics: true, hr: true },
+          enabled_modules: ['fleet', 'crew', 'certificates', 'analytics', 'travel', 'documents'],
           module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
         };
         
