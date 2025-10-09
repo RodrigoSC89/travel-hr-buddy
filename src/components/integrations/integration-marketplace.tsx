@@ -202,20 +202,20 @@ export const IntegrationMarketplace: React.FC = () => {
 
   const sortedIntegrations = [...filteredIntegrations].sort((a, b) => {
     switch (selectedFilter) {
-      case "popular":
-        return b.downloads - a.downloads;
-      case "newest":
-        return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
-      case "rating":
-        return b.rating - a.rating;
-      case "free":
-        return a.price === "free" ? -1 : 1;
-      case "premium":
-        return a.price === "premium" ? -1 : 1;
-      case "verified":
-        return a.isVerified ? -1 : 1;
-      default:
-        return 0;
+    case "popular":
+      return b.downloads - a.downloads;
+    case "newest":
+      return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
+    case "rating":
+      return b.rating - a.rating;
+    case "free":
+      return a.price === "free" ? -1 : 1;
+    case "premium":
+      return a.price === "premium" ? -1 : 1;
+    case "verified":
+      return a.isVerified ? -1 : 1;
+    default:
+      return 0;
     }
   });
 
@@ -247,12 +247,12 @@ export const IntegrationMarketplace: React.FC = () => {
 
   const getSupportColor = (level: IntegrationListing["supportLevel"]) => {
     switch (level) {
-      case "enterprise":
-        return "bg-primary/20 text-primary border-primary/30";
-      case "developer":
-        return "bg-accent/20 text-accent border-accent/30";
-      case "community":
-        return "bg-muted text-muted-foreground border-border";
+    case "enterprise":
+      return "bg-primary/20 text-primary border-primary/30";
+    case "developer":
+      return "bg-accent/20 text-accent border-accent/30";
+    case "community":
+      return "bg-muted text-muted-foreground border-border";
     }
   };
 

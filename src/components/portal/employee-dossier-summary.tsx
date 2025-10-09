@@ -147,31 +147,31 @@ export const EmployeeDossierSummary: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "valid":
-      case "active":
-        return "bg-green-100 text-green-800";
-      case "expiring_soon":
-      case "expiring":
-        return "bg-yellow-100 text-yellow-800";
-      case "expired":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "valid":
+    case "active":
+      return "bg-green-100 text-green-800";
+    case "expiring_soon":
+    case "expiring":
+      return "bg-yellow-100 text-yellow-800";
+    case "expired":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "valid":
-      case "active":
-        return <CheckCircle className="h-4 w-4" />;
-      case "expiring_soon":
-      case "expiring":
-        return <Clock className="h-4 w-4" />;
-      case "expired":
-        return <AlertTriangle className="h-4 w-4" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "valid":
+    case "active":
+      return <CheckCircle className="h-4 w-4" />;
+    case "expiring_soon":
+    case "expiring":
+      return <Clock className="h-4 w-4" />;
+    case "expired":
+      return <AlertTriangle className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 

@@ -114,10 +114,10 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                       className={`
                         relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 min-w-fit
                         ${
-                          isActive
-                            ? "bg-primary text-primary-foreground shadow-lg transform scale-105"
-                            : "text-foreground/80 hover:text-foreground hover:bg-accent/50 hover:scale-102"
-                        }
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-lg transform scale-105"
+                      : "text-foreground/80 hover:text-foreground hover:bg-accent/50 hover:scale-102"
+                    }
                       `}
                     >
                       <IconComponent className={`w-5 h-5 ${isActive ? "animate-pulse" : ""}`} />

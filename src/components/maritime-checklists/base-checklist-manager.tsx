@@ -149,50 +149,50 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "bg-green-500";
-      case "in_progress":
-        return "bg-blue-500";
-      case "pending_review":
-        return "bg-yellow-500";
-      case "draft":
-        return "bg-gray-500";
-      case "rejected":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
+    case "completed":
+      return "bg-green-500";
+    case "in_progress":
+      return "bg-blue-500";
+    case "pending_review":
+      return "bg-yellow-500";
+    case "draft":
+      return "bg-gray-500";
+    case "rejected":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-red-500";
-      case "high":
-        return "bg-orange-500";
-      case "medium":
-        return "bg-yellow-500";
-      case "low":
-        return "bg-green-500";
-      default:
-        return "bg-gray-500";
+    case "critical":
+      return "bg-red-500";
+    case "high":
+      return "bg-orange-500";
+    case "medium":
+      return "bg-yellow-500";
+    case "low":
+      return "bg-green-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case "dp":
-        return "Dynamic Positioning";
-      case "machine_routine":
-        return "Rotina de Máquinas";
-      case "nautical_routine":
-        return "Rotina Náutica";
-      case "safety":
-        return "Segurança";
-      case "environmental":
-        return "Ambiental";
-      case "custom":
-        return "Personalizado";
+    case "dp":
+      return "Dynamic Positioning";
+    case "machine_routine":
+      return "Rotina de Máquinas";
+    case "nautical_routine":
+      return "Rotina Náutica";
+    case "safety":
+      return "Segurança";
+    case "environmental":
+      return "Ambiental";
+    case "custom":
+      return "Personalizado";
     }
   };
 

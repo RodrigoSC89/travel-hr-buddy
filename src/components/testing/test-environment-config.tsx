@@ -84,26 +84,26 @@ export const TestEnvironmentConfig: React.FC = () => {
 
   const getEnvironmentBadge = (env: string) => {
     switch (env) {
-      case "development":
-        return (
-          <Badge variant="outline" className="bg-blue-100 text-blue-800">
+    case "development":
+      return (
+        <Badge variant="outline" className="bg-blue-100 text-blue-800">
             Desenvolvimento
-          </Badge>
-        );
-      case "staging":
-        return (
-          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+        </Badge>
+      );
+    case "staging":
+      return (
+        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
             Homologação
-          </Badge>
-        );
-      case "production":
-        return (
-          <Badge variant="destructive" className="bg-red-100 text-red-800">
+        </Badge>
+      );
+    case "production":
+      return (
+        <Badge variant="destructive" className="bg-red-100 text-red-800">
             Produção
-          </Badge>
-        );
-      default:
-        return <Badge variant="outline">Desconhecido</Badge>;
+        </Badge>
+      );
+    default:
+      return <Badge variant="outline">Desconhecido</Badge>;
     }
   };
 

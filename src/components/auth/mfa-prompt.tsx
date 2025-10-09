@@ -172,7 +172,7 @@ export const useMFA = () => {
   const [showMFAPrompt, setShowMFAPrompt] = useState(false);
   const [mfaResolver, setMfaResolver] = useState<{
     resolve: (success: boolean) => void;
-  } | null>(null);
+      } | null>(null);
 
   const requireMFA = (): Promise<boolean> => {
     return new Promise(resolve => {

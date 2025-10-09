@@ -123,70 +123,70 @@ export const TenantUserManagement: React.FC = () => {
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case "owner":
-        return "bg-purple-100 text-purple-800";
-      case "admin":
-        return "bg-red-100 text-red-800";
-      case "manager":
-        return "bg-blue-100 text-blue-800";
-      case "member":
-        return "bg-secondary text-secondary-foreground";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "owner":
+      return "bg-purple-100 text-purple-800";
+    case "admin":
+      return "bg-red-100 text-red-800";
+    case "manager":
+      return "bg-blue-100 text-blue-800";
+    case "member":
+      return "bg-secondary text-secondary-foreground";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "suspended":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "active":
+      return "bg-green-100 text-green-800";
+    case "pending":
+      return "bg-yellow-100 text-yellow-800";
+    case "suspended":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "active":
-        return <CheckCircle className="h-4 w-4" />;
-      case "pending":
-        return <Clock className="h-4 w-4" />;
-      case "suspended":
-        return <XCircle className="h-4 w-4" />;
-      default:
-        return null;
+    case "active":
+      return <CheckCircle className="h-4 w-4" />;
+    case "pending":
+      return <Clock className="h-4 w-4" />;
+    case "suspended":
+      return <XCircle className="h-4 w-4" />;
+    default:
+      return null;
     }
   };
 
   const getRoleLabel = (role: string) => {
     switch (role) {
-      case "owner":
-        return "Proprietário";
-      case "admin":
-        return "Administrador";
-      case "manager":
-        return "Gerente";
-      case "member":
-        return "Membro";
-      default:
-        return role;
+    case "owner":
+      return "Proprietário";
+    case "admin":
+      return "Administrador";
+    case "manager":
+      return "Gerente";
+    case "member":
+      return "Membro";
+    default:
+      return role;
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "active":
-        return "Ativo";
-      case "pending":
-        return "Pendente";
-      case "suspended":
-        return "Suspenso";
-      default:
-        return status;
+    case "active":
+      return "Ativo";
+    case "pending":
+      return "Pendente";
+    case "suspended":
+      return "Suspenso";
+    default:
+      return status;
     }
   };
 

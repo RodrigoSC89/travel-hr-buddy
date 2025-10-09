@@ -182,14 +182,14 @@ export const IntegrationAutomation: React.FC = () => {
 
   const getPriorityColor = (priority: AutomationRule["priority"]) => {
     switch (priority) {
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "high":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "medium":
-        return "bg-primary/20 text-primary border-primary/30";
-      case "low":
-        return "bg-muted text-muted-foreground border-border";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "medium":
+      return "bg-primary/20 text-primary border-primary/30";
+    case "low":
+      return "bg-muted text-muted-foreground border-border";
     }
   };
 

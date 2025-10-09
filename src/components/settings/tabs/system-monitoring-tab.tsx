@@ -98,14 +98,14 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
 
   const getStatusColor = (color: string) => {
     switch (color) {
-      case "red":
-        return "text-red-600 bg-red-100";
-      case "yellow":
-        return "text-yellow-600 bg-yellow-100";
-      case "green":
-        return "text-green-600 bg-green-100";
-      default:
-        return "text-muted-foreground bg-secondary";
+    case "red":
+      return "text-red-600 bg-red-100";
+    case "yellow":
+      return "text-yellow-600 bg-yellow-100";
+    case "green":
+      return "text-green-600 bg-green-100";
+    default:
+      return "text-muted-foreground bg-secondary";
     }
   };
 

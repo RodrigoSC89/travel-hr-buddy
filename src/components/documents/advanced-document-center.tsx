@@ -266,48 +266,48 @@ export const AdvancedDocumentCenter: React.FC = () => {
 
   const getFileTypeIcon = (type: string) => {
     switch (type) {
-      case "pdf":
-        return "📄";
-      case "docx":
-        return "📝";
-      case "xlsx":
-        return "📊";
-      case "pptx":
-        return "📊";
-      case "image":
-        return "🖼️";
-      default:
-        return "📁";
+    case "pdf":
+      return "📄";
+    case "docx":
+      return "📝";
+    case "xlsx":
+      return "📊";
+    case "pptx":
+      return "📊";
+    case "image":
+      return "🖼️";
+    default:
+      return "📁";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "approved":
-        return "text-green-600 bg-green-100";
-      case "review":
-        return "text-yellow-600 bg-yellow-100";
-      case "draft":
-        return "text-blue-600 bg-blue-100";
-      case "archived":
-        return "text-muted-foreground bg-gray-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "approved":
+      return "text-green-600 bg-green-100";
+    case "review":
+      return "text-yellow-600 bg-yellow-100";
+    case "draft":
+      return "text-blue-600 bg-blue-100";
+    case "archived":
+      return "text-muted-foreground bg-gray-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "approved":
-        return <CheckCircle className="h-4 w-4" />;
-      case "review":
-        return <Clock className="h-4 w-4" />;
-      case "draft":
-        return <Edit className="h-4 w-4" />;
-      case "archived":
-        return <Archive className="h-4 w-4" />;
-      default:
-        return <FileText className="h-4 w-4" />;
+    case "approved":
+      return <CheckCircle className="h-4 w-4" />;
+    case "review":
+      return <Clock className="h-4 w-4" />;
+    case "draft":
+      return <Edit className="h-4 w-4" />;
+    case "archived":
+      return <Archive className="h-4 w-4" />;
+    default:
+      return <FileText className="h-4 w-4" />;
     }
   };
 

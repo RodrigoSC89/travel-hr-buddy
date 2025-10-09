@@ -214,59 +214,59 @@ export const PeotramPerformanceIndicators: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "excellent":
-        return "hsl(var(--success))";
-      case "good":
-        return "hsl(var(--info))";
-      case "warning":
-        return "hsl(var(--warning))";
-      case "critical":
-        return "hsl(var(--destructive))";
-      default:
-        return "hsl(var(--muted))";
+    case "excellent":
+      return "hsl(var(--success))";
+    case "good":
+      return "hsl(var(--info))";
+    case "warning":
+      return "hsl(var(--warning))";
+    case "critical":
+      return "hsl(var(--destructive))";
+    default:
+      return "hsl(var(--muted))";
     }
   };
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-      case "excellent":
-        return "bg-success/20 text-success border-success/30";
-      case "good":
-        return "bg-info/20 text-info border-info/30";
-      case "warning":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "excellent":
+      return "bg-success/20 text-success border-success/30";
+    case "good":
+      return "bg-info/20 text-info border-info/30";
+    case "warning":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4 text-success" />;
-      case "down":
-        return <TrendingDown className="w-4 h-4 text-destructive" />;
-      default:
-        return <BarChart3 className="w-4 h-4 text-muted-foreground" />;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-success" />;
+    case "down":
+      return <TrendingDown className="w-4 h-4 text-destructive" />;
+    default:
+      return <BarChart3 className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "safety":
-        return Shield;
-      case "availability":
-        return Ship;
-      case "innovation":
-        return Zap;
-      case "certification":
-        return Award;
-      case "supplier":
-        return Users;
-      default:
-        return BarChart3;
+    case "safety":
+      return Shield;
+    case "availability":
+      return Ship;
+    case "innovation":
+      return Zap;
+    case "certification":
+      return Award;
+    case "supplier":
+      return Users;
+    default:
+      return BarChart3;
     }
   };
 

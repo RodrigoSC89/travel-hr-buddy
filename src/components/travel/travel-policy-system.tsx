@@ -291,46 +291,46 @@ export const TravelPolicySystem: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "accommodation":
-        return <Building className="h-4 w-4" />;
-      case "transport":
-        return <Plane className="h-4 w-4" />;
-      case "meals":
-        return <Utensils className="h-4 w-4" />;
-      case "general":
-        return <FileText className="h-4 w-4" />;
-      case "approval":
-        return <Shield className="h-4 w-4" />;
-      default:
-        return <Settings className="h-4 w-4" />;
+    case "accommodation":
+      return <Building className="h-4 w-4" />;
+    case "transport":
+      return <Plane className="h-4 w-4" />;
+    case "meals":
+      return <Utensils className="h-4 w-4" />;
+    case "general":
+      return <FileText className="h-4 w-4" />;
+    case "approval":
+      return <Shield className="h-4 w-4" />;
+    default:
+      return <Settings className="h-4 w-4" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-red-100 text-red-800 border-red-300";
-      case "high":
-        return "bg-orange-100 text-orange-800 border-orange-300";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
-      case "low":
-        return "bg-green-100 text-green-800 border-green-300";
-      default:
-        return "bg-secondary text-secondary-foreground border-border";
+    case "critical":
+      return "bg-red-100 text-red-800 border-red-300";
+    case "high":
+      return "bg-orange-100 text-orange-800 border-orange-300";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 border-yellow-300";
+    case "low":
+      return "bg-green-100 text-green-800 border-green-300";
+    default:
+      return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getViolationStatusColor = (status: string) => {
     switch (status) {
-      case "resolved":
-        return "bg-green-100 text-green-800 border-green-300";
-      case "escalated":
-        return "bg-red-100 text-red-800 border-red-300";
-      case "ignored":
-        return "bg-secondary text-secondary-foreground border-border";
-      default:
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
+    case "resolved":
+      return "bg-green-100 text-green-800 border-green-300";
+    case "escalated":
+      return "bg-red-100 text-red-800 border-red-300";
+    case "ignored":
+      return "bg-secondary text-secondary-foreground border-border";
+    default:
+      return "bg-yellow-100 text-yellow-800 border-yellow-300";
     }
   };
 
@@ -429,8 +429,8 @@ export const TravelPolicySystem: React.FC = () => {
                 <p className="text-3xl font-bold text-success">
                   {violations.length > 0
                     ? Math.round(
-                        ((violations.length - activeViolations.length) / violations.length) * 100
-                      )
+                      ((violations.length - activeViolations.length) / violations.length) * 100
+                    )
                     : 100}
                   %
                 </p>

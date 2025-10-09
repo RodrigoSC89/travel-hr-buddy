@@ -188,29 +188,29 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "low":
-        return "text-green-600 bg-green-100";
-      case "medium":
-        return "text-yellow-600 bg-yellow-100";
-      case "high":
-        return "text-orange-600 bg-orange-100";
-      case "critical":
-        return "text-red-600 bg-red-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "low":
+      return "text-green-600 bg-green-100";
+    case "medium":
+      return "text-yellow-600 bg-yellow-100";
+    case "high":
+      return "text-orange-600 bg-orange-100";
+    case "critical":
+      return "text-red-600 bg-red-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-      case "low":
-        return "text-green-600";
-      case "medium":
-        return "text-yellow-600";
-      case "high":
-        return "text-red-600";
-      default:
-        return "text-muted-foreground";
+    case "low":
+      return "text-green-600";
+    case "medium":
+      return "text-yellow-600";
+    case "high":
+      return "text-red-600";
+    default:
+      return "text-muted-foreground";
     }
   };
 

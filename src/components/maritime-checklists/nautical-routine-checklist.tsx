@@ -148,11 +148,11 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
       items: prev.items.map(item =>
         item.id === itemId
           ? {
-              ...item,
-              [field]: value,
-              status: field === "value" && value !== undefined ? "completed" : item.status,
-              timestamp: field === "value" ? new Date().toISOString() : item.timestamp,
-            }
+            ...item,
+            [field]: value,
+            status: field === "value" && value !== undefined ? "completed" : item.status,
+            timestamp: field === "value" ? new Date().toISOString() : item.timestamp,
+          }
           : item
       ),
     }));
@@ -191,58 +191,58 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
 
   const renderItemInput = (item: ChecklistItem) => {
     switch (item.type) {
-      case "boolean":
-        return (
-          <Checkbox
-            checked={item.value === true}
-            onCheckedChange={checked => handleItemChange(item.id, "value", checked)}
-            className="mr-2"
-          />
-        );
+    case "boolean":
+      return (
+        <Checkbox
+          checked={item.value === true}
+          onCheckedChange={checked => handleItemChange(item.id, "value", checked)}
+          className="mr-2"
+        />
+      );
 
-      case "number":
-        return (
-          <div className="flex items-center gap-2">
-            <Input
-              type="number"
-              value={item.value || ""}
-              onChange={e => handleItemChange(item.id, "value", parseFloat(e.target.value))}
-              placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
-              className="w-32"
-            />
-            {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
-          </div>
-        );
-
-      case "text":
-        return (
+    case "number":
+      return (
+        <div className="flex items-center gap-2">
           <Input
+            type="number"
             value={item.value || ""}
-            onChange={e => handleItemChange(item.id, "value", e.target.value)}
-            placeholder="Digite sua resposta..."
-            className="w-full"
+            onChange={e => handleItemChange(item.id, "value", parseFloat(e.target.value))}
+            placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
+            className="w-32"
           />
-        );
+          {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
+        </div>
+      );
 
-      default:
-        return null;
+    case "text":
+      return (
+        <Input
+          value={item.value || ""}
+          onChange={e => handleItemChange(item.id, "value", e.target.value)}
+          placeholder="Digite sua resposta..."
+          className="w-full"
+        />
+      );
+
+    default:
+      return null;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "Navegação":
-        return <Compass className="w-4 h-4" />;
-      case "Comunicação":
-        return <Navigation className="w-4 h-4" />;
-      case "Fundeio":
-        return <Anchor className="w-4 h-4" />;
-      case "Segurança":
-        return <Ship className="w-4 h-4" />;
-      case "Condições":
-        return <Target className="w-4 h-4" />;
-      default:
-        return <Ship className="w-4 h-4" />;
+    case "Navegação":
+      return <Compass className="w-4 h-4" />;
+    case "Comunicação":
+      return <Navigation className="w-4 h-4" />;
+    case "Fundeio":
+      return <Anchor className="w-4 h-4" />;
+    case "Segurança":
+      return <Ship className="w-4 h-4" />;
+    case "Condições":
+      return <Target className="w-4 h-4" />;
+    default:
+      return <Ship className="w-4 h-4" />;
     }
   };
 

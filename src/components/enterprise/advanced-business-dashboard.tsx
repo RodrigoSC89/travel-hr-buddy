@@ -278,58 +278,58 @@ export const AdvancedBusinessDashboard: React.FC = () => {
 
   const formatValue = (value: number, format: string, unit: string) => {
     switch (format) {
-      case "currency":
-        return new Intl.NumberFormat("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        }).format(value);
-      case "percentage":
-        return `${value.toFixed(1)}${unit}`;
-      case "decimal":
-        return `${value.toFixed(1)}${unit}`;
-      default:
-        return `${value.toLocaleString("pt-BR")} ${unit}`;
+    case "currency":
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    case "percentage":
+      return `${value.toFixed(1)}${unit}`;
+    case "decimal":
+      return `${value.toFixed(1)}${unit}`;
+    default:
+      return `${value.toLocaleString("pt-BR")} ${unit}`;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <ArrowUp className="h-3 w-3 text-green-500" />;
-      case "down":
-        return <ArrowDown className="h-3 w-3 text-red-500" />;
-      default:
-        return <Minus className="h-3 w-3 text-muted-foreground" />;
+    case "up":
+      return <ArrowUp className="h-3 w-3 text-green-500" />;
+    case "down":
+      return <ArrowDown className="h-3 w-3 text-red-500" />;
+    default:
+      return <Minus className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high":
-        return "border-red-200 bg-red-50";
-      case "medium":
-        return "border-yellow-200 bg-yellow-50";
-      case "low":
-        return "border-blue-200 bg-blue-50";
-      default:
-        return "border-gray-200 bg-gray-50";
+    case "high":
+      return "border-red-200 bg-red-50";
+    case "medium":
+      return "border-yellow-200 bg-yellow-50";
+    case "low":
+      return "border-blue-200 bg-blue-50";
+    default:
+      return "border-gray-200 bg-gray-50";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "opportunity":
-        return <Target className="h-4 w-4 text-green-500" />;
-      case "risk":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case "optimization":
-        return <Zap className="h-4 w-4 text-blue-500" />;
-      case "compliance":
-        return <CheckCircle className="h-4 w-4 text-purple-500" />;
-      default:
-        return <Briefcase className="h-4 w-4 text-muted-foreground" />;
+    case "opportunity":
+      return <Target className="h-4 w-4 text-green-500" />;
+    case "risk":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "optimization":
+      return <Zap className="h-4 w-4 text-blue-500" />;
+    case "compliance":
+      return <CheckCircle className="h-4 w-4 text-purple-500" />;
+    default:
+      return <Briefcase className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

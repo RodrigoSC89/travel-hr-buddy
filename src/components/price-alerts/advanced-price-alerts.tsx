@@ -391,12 +391,12 @@ export const AdvancedPriceAlerts: React.FC = () => {
 
   const getTrendIcon = (trend?: string) => {
     switch (trend) {
-      case "falling":
-        return <TrendingDown className="w-4 h-4 text-success" />;
-      case "rising":
-        return <TrendingUp className="w-4 h-4 text-destructive" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "falling":
+      return <TrendingDown className="w-4 h-4 text-success" />;
+    case "rising":
+      return <TrendingUp className="w-4 h-4 text-destructive" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -411,16 +411,16 @@ export const AdvancedPriceAlerts: React.FC = () => {
 
   const sortedAlerts = [...filteredAlerts].sort((a, b) => {
     switch (sortBy) {
-      case "price_desc":
-        return (b.current_price || 0) - (a.current_price || 0);
-      case "price_asc":
-        return (a.current_price || 0) - (b.current_price || 0);
-      case "target_desc":
-        return b.target_price - a.target_price;
-      case "target_asc":
-        return a.target_price - b.target_price;
-      default:
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    case "price_desc":
+      return (b.current_price || 0) - (a.current_price || 0);
+    case "price_asc":
+      return (a.current_price || 0) - (b.current_price || 0);
+    case "target_desc":
+      return b.target_price - a.target_price;
+    case "target_asc":
+      return a.target_price - b.target_price;
+    default:
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     }
   });
 

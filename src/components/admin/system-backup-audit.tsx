@@ -119,16 +119,16 @@ const SystemBackupAudit = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "Sucesso":
-        return (
-          <Badge variant="default" className="bg-green-100 text-green-800">
+    case "Sucesso":
+      return (
+        <Badge variant="default" className="bg-green-100 text-green-800">
             Sucesso
-          </Badge>
-        );
-      case "Falha":
-        return <Badge variant="destructive">Falha</Badge>;
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
+        </Badge>
+      );
+    case "Falha":
+      return <Badge variant="destructive">Falha</Badge>;
+    default:
+      return <Badge variant="secondary">{status}</Badge>;
     }
   };
 

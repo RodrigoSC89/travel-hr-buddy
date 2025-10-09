@@ -53,7 +53,7 @@ const SmartTooltipSystem: React.FC = () => {
   const tooltipDatabase: TooltipData[] = [
     {
       id: "nautical-copilot",
-      element: '[data-tour="copilot"]',
+      element: "[data-tour=\"copilot\"]",
       title: "Nautilus Copilot IA",
       description:
         "Seu assistente marítimo inteligente. Faça perguntas sobre operações, solicite relatórios ou execute comandos por voz.",
@@ -63,7 +63,7 @@ const SmartTooltipSystem: React.FC = () => {
     },
     {
       id: "fleet-status",
-      element: '[data-tour="fleet"]',
+      element: "[data-tour=\"fleet\"]",
       title: "Status da Frota",
       description:
         "Monitore em tempo real todas as embarcações, suas posições, status operacional e próximas manutenções.",
@@ -73,7 +73,7 @@ const SmartTooltipSystem: React.FC = () => {
     },
     {
       id: "integration-hub",
-      element: '[data-tour="integrations"]',
+      element: "[data-tour=\"integrations\"]",
       title: "Hub de Integrações",
       description:
         "Conecte-se com APIs marítimas, dados meteorológicos e sistemas governamentais para automação completa.",
@@ -83,7 +83,7 @@ const SmartTooltipSystem: React.FC = () => {
     },
     {
       id: "custom-theme",
-      element: '[data-tour="theme"]',
+      element: "[data-tour=\"theme\"]",
       title: "Personalização Náutica",
       description:
         "Customize cores, temas e terminologia para adequar o sistema à identidade da sua empresa marítima.",
@@ -93,7 +93,7 @@ const SmartTooltipSystem: React.FC = () => {
     },
     {
       id: "quick-actions",
-      element: '[data-tour="actions"]',
+      element: "[data-tour=\"actions\"]",
       title: "Ações Rápidas",
       description:
         "Acesse rapidamente as funções mais utilizadas: relatórios, alertas, comunicação e monitoramento.",
@@ -243,31 +243,31 @@ const SmartTooltipSystem: React.FC = () => {
 
   const getAssistantIcon = (type: ContextualAssistant["type"]) => {
     switch (type) {
-      case "tip":
-        return <Lightbulb className="w-5 h-5 text-blue-500" />;
-      case "warning":
-        return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
-      case "success":
-        return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case "info":
-        return <Info className="w-5 h-5 text-blue-500" />;
-      default:
-        return <HelpCircle className="w-5 h-5 text-muted-foreground" />;
+    case "tip":
+      return <Lightbulb className="w-5 h-5 text-blue-500" />;
+    case "warning":
+      return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
+    case "success":
+      return <CheckCircle className="w-5 h-5 text-green-500" />;
+    case "info":
+      return <Info className="w-5 h-5 text-blue-500" />;
+    default:
+      return <HelpCircle className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: TooltipData["category"]) => {
     switch (category) {
-      case "navigation":
-        return <Compass className="w-4 h-4" />;
-      case "feature":
-        return <Star className="w-4 h-4" />;
-      case "optimization":
-        return <TrendingUp className="w-4 h-4" />;
-      case "help":
-        return <HelpCircle className="w-4 h-4" />;
-      default:
-        return <Navigation className="w-4 h-4" />;
+    case "navigation":
+      return <Compass className="w-4 h-4" />;
+    case "feature":
+      return <Star className="w-4 h-4" />;
+    case "optimization":
+      return <TrendingUp className="w-4 h-4" />;
+    case "help":
+      return <HelpCircle className="w-4 h-4" />;
+    default:
+      return <Navigation className="w-4 h-4" />;
     }
   };
 

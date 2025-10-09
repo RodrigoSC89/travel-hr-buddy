@@ -138,31 +138,31 @@ const TemplateManager = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "report":
-        return <FileText className="w-4 h-4" />;
-      case "document":
-        return <FileText className="w-4 h-4" />;
-      case "email":
-        return <FileText className="w-4 h-4" />;
-      case "certificate":
-        return <FileText className="w-4 h-4" />;
-      default:
-        return <FileText className="w-4 h-4" />;
+    case "report":
+      return <FileText className="w-4 h-4" />;
+    case "document":
+      return <FileText className="w-4 h-4" />;
+    case "email":
+      return <FileText className="w-4 h-4" />;
+    case "certificate":
+      return <FileText className="w-4 h-4" />;
+    default:
+      return <FileText className="w-4 h-4" />;
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "report":
-        return "text-blue-600 bg-blue-100";
-      case "document":
-        return "text-green-600 bg-green-100";
-      case "email":
-        return "text-purple-600 bg-purple-100";
-      case "certificate":
-        return "text-orange-600 bg-orange-100";
-      default:
-        return "text-muted-foreground bg-secondary";
+    case "report":
+      return "text-blue-600 bg-blue-100";
+    case "document":
+      return "text-green-600 bg-green-100";
+    case "email":
+      return "text-purple-600 bg-purple-100";
+    case "certificate":
+      return "text-orange-600 bg-orange-100";
+    default:
+      return "text-muted-foreground bg-secondary";
     }
   };
 

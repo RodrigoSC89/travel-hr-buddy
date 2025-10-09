@@ -120,27 +120,27 @@ export const BillingManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "paid":
-        return "bg-green-100 text-green-800";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "overdue":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "paid":
+      return "bg-green-100 text-green-800";
+    case "pending":
+      return "bg-yellow-100 text-yellow-800";
+    case "overdue":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "paid":
-        return "Pago";
-      case "pending":
-        return "Pendente";
-      case "overdue":
-        return "Vencido";
-      default:
-        return status;
+    case "paid":
+      return "Pago";
+    case "pending":
+      return "Pendente";
+    case "overdue":
+      return "Vencido";
+    default:
+      return status;
     }
   };
 

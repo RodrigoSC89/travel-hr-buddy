@@ -230,12 +230,12 @@ export const AdvancedMetricsDashboard: React.FC = () => {
 
   const getImpactColor = (impact: PerformanceInsight["impact"]) => {
     switch (impact) {
-      case "high":
-        return "destructive";
-      case "medium":
-        return "default";
-      case "low":
-        return "secondary";
+    case "high":
+      return "destructive";
+    case "medium":
+      return "default";
+    case "low":
+      return "secondary";
     }
   };
 

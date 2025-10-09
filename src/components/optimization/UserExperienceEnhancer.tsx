@@ -262,55 +262,55 @@ export const UserExperienceEnhancer: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "excellent":
-        return "text-success";
-      case "good":
-        return "text-info";
-      case "needs_improvement":
-        return "text-warning";
-      case "critical":
-        return "text-danger";
-      default:
-        return "text-muted-foreground";
+    case "excellent":
+      return "text-success";
+    case "good":
+      return "text-info";
+    case "needs_improvement":
+      return "text-warning";
+    case "critical":
+      return "text-danger";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-success" />;
-      case "down":
-        return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
-      default:
-        return <div className="h-4 w-4 rounded-full bg-muted" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-success" />;
+    case "down":
+      return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
+    default:
+      return <div className="h-4 w-4 rounded-full bg-muted" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "navigation":
-        return <Mouse className="h-4 w-4" />;
-      case "performance":
-        return <Clock className="h-4 w-4" />;
-      case "accessibility":
-        return <Eye className="h-4 w-4" />;
-      case "mobile":
-        return <Smartphone className="h-4 w-4" />;
-      default:
-        return <Monitor className="h-4 w-4" />;
+    case "navigation":
+      return <Mouse className="h-4 w-4" />;
+    case "performance":
+      return <Clock className="h-4 w-4" />;
+    case "accessibility":
+      return <Eye className="h-4 w-4" />;
+    case "mobile":
+      return <Smartphone className="h-4 w-4" />;
+    default:
+      return <Monitor className="h-4 w-4" />;
     }
   };
 
   const getFrustrationColor = (level: string) => {
     switch (level) {
-      case "low":
-        return "text-success";
-      case "medium":
-        return "text-warning";
-      case "high":
-        return "text-danger";
-      default:
-        return "text-muted-foreground";
+    case "low":
+      return "text-success";
+    case "medium":
+      return "text-warning";
+    case "high":
+      return "text-danger";
+    default:
+      return "text-muted-foreground";
     }
   };
 

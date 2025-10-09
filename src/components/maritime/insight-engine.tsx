@@ -97,33 +97,33 @@ export const InsightEngine: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "maintenance":
-        return <Zap className="h-4 w-4" />;
-      case "performance":
-        return <Activity className="h-4 w-4" />;
-      case "compliance":
-        return <Shield className="h-4 w-4" />;
-      case "safety":
-        return <AlertTriangle className="h-4 w-4" />;
-      case "efficiency":
-        return <TrendingUp className="h-4 w-4" />;
-      default:
-        return <Brain className="h-4 w-4" />;
+    case "maintenance":
+      return <Zap className="h-4 w-4" />;
+    case "performance":
+      return <Activity className="h-4 w-4" />;
+    case "compliance":
+      return <Shield className="h-4 w-4" />;
+    case "safety":
+      return <AlertTriangle className="h-4 w-4" />;
+    case "efficiency":
+      return <TrendingUp className="h-4 w-4" />;
+    default:
+      return <Brain className="h-4 w-4" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "critical":
-        return "destructive";
-      case "high":
-        return "default";
-      case "medium":
-        return "secondary";
-      case "low":
-        return "outline";
-      default:
-        return "outline";
+    case "critical":
+      return "destructive";
+    case "high":
+      return "default";
+    case "medium":
+      return "secondary";
+    case "low":
+      return "outline";
+    default:
+      return "outline";
     }
   };
 

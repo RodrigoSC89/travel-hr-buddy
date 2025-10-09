@@ -58,20 +58,20 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "available":
-        return (
-          <Badge variant="default" className="bg-success text-success-foreground">
+    case "available":
+      return (
+        <Badge variant="default" className="bg-success text-success-foreground">
             Disponível
-          </Badge>
-        );
-      case "embarked":
-        return <Badge variant="secondary">Embarcado</Badge>;
-      case "leave":
-        return <Badge variant="outline">Folga</Badge>;
-      case "training":
-        return <Badge variant="secondary">Treinamento</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+        </Badge>
+      );
+    case "embarked":
+      return <Badge variant="secondary">Embarcado</Badge>;
+    case "leave":
+      return <Badge variant="outline">Folga</Badge>;
+    case "training":
+      return <Badge variant="secondary">Treinamento</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 

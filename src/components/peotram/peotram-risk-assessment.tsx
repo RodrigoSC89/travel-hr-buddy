@@ -107,46 +107,46 @@ export const PeotramRiskAssessment: React.FC = () => {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case "baixo":
-        return "bg-success/20 text-success border-success/30";
-      case "medio":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "alto":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "critico":
-        return "bg-destructive/30 text-destructive border-destructive/40";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "baixo":
+      return "bg-success/20 text-success border-success/30";
+    case "medio":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "alto":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "critico":
+      return "bg-destructive/30 text-destructive border-destructive/40";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getRiskLabel = (level: string) => {
     switch (level) {
-      case "baixo":
-        return "Baixo";
-      case "medio":
-        return "Médio";
-      case "alto":
-        return "Alto";
-      case "critico":
-        return "Crítico";
-      default:
-        return level;
+    case "baixo":
+      return "Baixo";
+    case "medio":
+      return "Médio";
+    case "alto":
+      return "Alto";
+    case "critico":
+      return "Crítico";
+    default:
+      return level;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "fechado":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "mitigado":
-        return <CheckCircle className="w-4 h-4 text-info" />;
-      case "em_andamento":
-        return <Clock className="w-4 h-4 text-warning" />;
-      case "aberto":
-        return <AlertCircle className="w-4 h-4 text-destructive" />;
-      default:
-        return <XCircle className="w-4 h-4 text-muted-foreground" />;
+    case "fechado":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "mitigado":
+      return <CheckCircle className="w-4 h-4 text-info" />;
+    case "em_andamento":
+      return <Clock className="w-4 h-4 text-warning" />;
+    case "aberto":
+      return <AlertCircle className="w-4 h-4 text-destructive" />;
+    default:
+      return <XCircle className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

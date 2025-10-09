@@ -166,59 +166,59 @@ export const PeotramTrainingManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "concluido":
-        return "bg-success/20 text-success border-success/30";
-      case "em_progresso":
-        return "bg-info/20 text-info border-info/30";
-      case "disponivel":
-        return "bg-primary/20 text-primary border-primary/30";
-      case "bloqueado":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "concluido":
+      return "bg-success/20 text-success border-success/30";
+    case "em_progresso":
+      return "bg-info/20 text-info border-info/30";
+    case "disponivel":
+      return "bg-primary/20 text-primary border-primary/30";
+    case "bloqueado":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "concluido":
-        return "Concluído";
-      case "em_progresso":
-        return "Em Progresso";
-      case "disponivel":
-        return "Disponível";
-      case "bloqueado":
-        return "Bloqueado";
-      default:
-        return status;
+    case "concluido":
+      return "Concluído";
+    case "em_progresso":
+      return "Em Progresso";
+    case "disponivel":
+      return "Disponível";
+    case "bloqueado":
+      return "Bloqueado";
+    default:
+      return status;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "video":
-        return <Video className="w-4 h-4" />;
-      case "documento":
-        return <FileText className="w-4 h-4" />;
-      case "presencial":
-        return <Users className="w-4 h-4" />;
-      case "simulacao":
-        return <Target className="w-4 h-4" />;
-      default:
-        return <BookOpen className="w-4 h-4" />;
+    case "video":
+      return <Video className="w-4 h-4" />;
+    case "documento":
+      return <FileText className="w-4 h-4" />;
+    case "presencial":
+      return <Users className="w-4 h-4" />;
+    case "simulacao":
+      return <Target className="w-4 h-4" />;
+    default:
+      return <BookOpen className="w-4 h-4" />;
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "basico":
-        return "bg-success/20 text-success";
-      case "intermediario":
-        return "bg-warning/20 text-warning";
-      case "avancado":
-        return "bg-destructive/20 text-destructive";
-      default:
-        return "bg-muted/20 text-muted-foreground";
+    case "basico":
+      return "bg-success/20 text-success";
+    case "intermediario":
+      return "bg-warning/20 text-warning";
+    case "avancado":
+      return "bg-destructive/20 text-destructive";
+    default:
+      return "bg-muted/20 text-muted-foreground";
     }
   };
 

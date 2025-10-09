@@ -73,16 +73,16 @@ export const TenantSetupWizard: React.FC = () => {
 
   const validateStep = (step: number): boolean => {
     switch (step) {
-      case 1:
-        return !!(formData.name && formData.subdomain && formData.industry);
-      case 2:
-        return !!formData.plan_id;
-      case 3:
-        return !!(formData.primary_currency && formData.timezone && formData.language);
-      case 4:
-        return !!(formData.admin_name && formData.admin_email);
-      default:
-        return false;
+    case 1:
+      return !!(formData.name && formData.subdomain && formData.industry);
+    case 2:
+      return !!formData.plan_id;
+    case 3:
+      return !!(formData.primary_currency && formData.timezone && formData.language);
+    case 4:
+      return !!(formData.admin_name && formData.admin_email);
+    default:
+      return false;
     }
   };
 

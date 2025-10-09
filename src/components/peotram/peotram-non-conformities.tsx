@@ -101,31 +101,31 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case "critical":
-        return "Crítica";
-      case "grave":
-        return "Grave";
-      case "moderate":
-        return "Moderada";
-      case "light":
-        return "Leve";
-      default:
-        return type;
+    case "critical":
+      return "Crítica";
+    case "grave":
+      return "Grave";
+    case "moderate":
+      return "Moderada";
+    case "light":
+      return "Leve";
+    default:
+      return type;
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "open":
-        return "Aberta";
-      case "in_progress":
-        return "Em Andamento";
-      case "resolved":
-        return "Resolvida";
-      case "closed":
-        return "Fechada";
-      default:
-        return status;
+    case "open":
+      return "Aberta";
+    case "in_progress":
+      return "Em Andamento";
+    case "resolved":
+      return "Resolvida";
+    case "closed":
+      return "Fechada";
+    default:
+      return status;
     }
   };
 

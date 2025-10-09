@@ -98,7 +98,7 @@ export const WebhookBuilder: React.FC = () => {
       url: "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX",
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      payload: '{"text": "Nova integração ativada: {{integration_name}}"}',
+      payload: "{\"text\": \"Nova integração ativada: {{integration_name}}\"}",
       authentication: { type: "none", value: "" },
       triggers: ["integration_connected", "integration_error"],
       isActive: true,
@@ -110,7 +110,7 @@ export const WebhookBuilder: React.FC = () => {
       url: "https://outlook.office.com/webhook/XXXXXXXX",
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      payload: '{"title": "Sistema Nautilus", "text": "{{event_description}}"}',
+      payload: "{\"title\": \"Sistema Nautilus\", \"text\": \"{{event_description}}\"}",
       authentication: { type: "bearer", value: "xxxxx" },
       triggers: ["high_error_rate", "system_health_critical"],
       isActive: false,
@@ -305,23 +305,23 @@ export const WebhookBuilder: React.FC = () => {
 
   const getStatusColor = (status: WebhookEvent["status"]) => {
     switch (status) {
-      case "success":
-        return "text-success";
-      case "failed":
-        return "text-destructive";
-      case "retrying":
-        return "text-warning";
+    case "success":
+      return "text-success";
+    case "failed":
+      return "text-destructive";
+    case "retrying":
+      return "text-warning";
     }
   };
 
   const getStatusIcon = (status: WebhookEvent["status"]) => {
     switch (status) {
-      case "success":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "failed":
-        return <AlertTriangle className="w-4 h-4 text-destructive" />;
-      case "retrying":
-        return <RefreshCw className="w-4 h-4 text-warning animate-spin" />;
+    case "success":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "failed":
+      return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    case "retrying":
+      return <RefreshCw className="w-4 h-4 text-warning animate-spin" />;
     }
   };
 

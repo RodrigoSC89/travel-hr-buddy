@@ -177,53 +177,53 @@ export const QuantumSecurityShield: React.FC = () => {
 
   const getSeverityColor = (severity: ThreatDetection["severity"]) => {
     switch (severity) {
-      case "critical":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-      case "high":
-        return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-      case "low":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "critical":
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "high":
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "low":
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
     }
   };
 
   const getStatusColor = (status: ThreatDetection["status"]) => {
     switch (status) {
-      case "blocked":
-        return "text-green-600 dark:text-green-400";
-      case "detected":
-        return "text-yellow-600 dark:text-yellow-400";
-      case "investigating":
-        return "text-orange-600 dark:text-orange-400";
-      case "resolved":
-        return "text-blue-600 dark:text-blue-400";
+    case "blocked":
+      return "text-green-600 dark:text-green-400";
+    case "detected":
+      return "text-yellow-600 dark:text-yellow-400";
+    case "investigating":
+      return "text-orange-600 dark:text-orange-400";
+    case "resolved":
+      return "text-blue-600 dark:text-blue-400";
     }
   };
 
   const getMetricStatusColor = (status: SecurityMetric["status"]) => {
     switch (status) {
-      case "excellent":
-        return "text-green-600 dark:text-green-400";
-      case "good":
-        return "text-blue-600 dark:text-blue-400";
-      case "warning":
-        return "text-yellow-600 dark:text-yellow-400";
-      case "critical":
-        return "text-red-600 dark:text-red-400";
+    case "excellent":
+      return "text-green-600 dark:text-green-400";
+    case "good":
+      return "text-blue-600 dark:text-blue-400";
+    case "warning":
+      return "text-yellow-600 dark:text-yellow-400";
+    case "critical":
+      return "text-red-600 dark:text-red-400";
     }
   };
 
   const getCategoryIcon = (category: BlockchainAudit["category"]) => {
     switch (category) {
-      case "access":
-        return <Eye className="h-4 w-4" />;
-      case "modification":
-        return <FileCheck className="h-4 w-4" />;
-      case "approval":
-        return <CheckCircle className="h-4 w-4" />;
-      case "security":
-        return <Shield className="h-4 w-4" />;
+    case "access":
+      return <Eye className="h-4 w-4" />;
+    case "modification":
+      return <FileCheck className="h-4 w-4" />;
+    case "approval":
+      return <CheckCircle className="h-4 w-4" />;
+    case "security":
+      return <Shield className="h-4 w-4" />;
     }
   };
 

@@ -322,42 +322,42 @@ export const KnowledgeManagement: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "tutorial":
-        return <BookOpen className="w-4 h-4" />;
-      case "video":
-        return <Video className="w-4 h-4" />;
-      case "faq":
-        return <FileText className="w-4 h-4" />;
-      case "guide":
-        return <Users className="w-4 h-4" />;
-      default:
-        return <BookOpen className="w-4 h-4" />;
+    case "tutorial":
+      return <BookOpen className="w-4 h-4" />;
+    case "video":
+      return <Video className="w-4 h-4" />;
+    case "faq":
+      return <FileText className="w-4 h-4" />;
+    case "guide":
+      return <Users className="w-4 h-4" />;
+    default:
+      return <BookOpen className="w-4 h-4" />;
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "beginner":
-        return "bg-success";
-      case "intermediate":
-        return "bg-warning";
-      case "advanced":
-        return "bg-status-error";
-      default:
-        return "bg-muted";
+    case "beginner":
+      return "bg-success";
+    case "intermediate":
+      return "bg-warning";
+    case "advanced":
+      return "bg-status-error";
+    default:
+      return "bg-muted";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "published":
-        return "bg-success";
-      case "draft":
-        return "bg-warning";
-      case "archived":
-        return "bg-muted";
-      default:
-        return "bg-muted";
+    case "published":
+      return "bg-success";
+    case "draft":
+      return "bg-warning";
+    case "archived":
+      return "bg-muted";
+    default:
+      return "bg-muted";
     }
   };
 

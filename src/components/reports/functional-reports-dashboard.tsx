@@ -115,23 +115,23 @@ export const FunctionalReportsDashboard: React.FC = () => {
 
   const getStatusIcon = (status: Report["status"]) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case "generating":
-        return <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />;
-      case "failed":
-        return <AlertCircle className="h-4 w-4 text-red-600" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case "generating":
+      return <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />;
+    case "failed":
+      return <AlertCircle className="h-4 w-4 text-red-600" />;
     }
   };
 
   const getStatusText = (status: Report["status"]) => {
     switch (status) {
-      case "completed":
-        return "Concluído";
-      case "generating":
-        return "Gerando...";
-      case "failed":
-        return "Falhou";
+    case "completed":
+      return "Concluído";
+    case "generating":
+      return "Gerando...";
+    case "failed":
+      return "Falhou";
     }
   };
 

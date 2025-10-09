@@ -328,8 +328,8 @@ export const PriceHistoryChart = () => {
               )}
               {currentAlert.current_price &&
                 currentAlert.current_price <= currentAlert.target_price && (
-                  <p className="text-green-600">🎯 Preço atual está dentro da sua meta!</p>
-                )}
+                <p className="text-green-600">🎯 Preço atual está dentro da sua meta!</p>
+              )}
               {priceChange && !priceChange.isPositive && (
                 <p className="text-blue-600">
                   📉 Tendência de queda de {Math.abs(priceChange.percentage).toFixed(1)}% no período

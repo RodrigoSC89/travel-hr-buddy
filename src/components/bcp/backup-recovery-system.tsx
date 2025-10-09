@@ -104,37 +104,37 @@ export const BackupRecoverySystem: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "healthy":
-      case "success":
-      case "active":
-      case "synced":
-        return "text-green-500";
-      case "syncing":
-      case "warning":
-        return "text-yellow-500";
-      case "error":
-      case "failed":
-        return "text-red-500";
-      default:
-        return "text-muted-foreground";
+    case "healthy":
+    case "success":
+    case "active":
+    case "synced":
+      return "text-green-500";
+    case "syncing":
+    case "warning":
+      return "text-yellow-500";
+    case "error":
+    case "failed":
+      return "text-red-500";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "healthy":
-      case "success":
-      case "active":
-      case "synced":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-      case "syncing":
-      case "warning":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-      case "error":
-      case "failed":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "healthy":
+    case "success":
+    case "active":
+    case "synced":
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "syncing":
+    case "warning":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "error":
+    case "failed":
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    default:
+      return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 

@@ -254,31 +254,31 @@ export const EnhancedPeotramManager: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "bg-success/20 text-success border-success/30";
-      case "in-progress":
-        return "bg-info/20 text-info border-info/30";
-      case "draft":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "approved":
-        return "bg-primary/20 text-primary border-primary/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "completed":
+      return "bg-success/20 text-success border-success/30";
+    case "in-progress":
+      return "bg-info/20 text-info border-info/30";
+    case "draft":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "approved":
+      return "bg-primary/20 text-primary border-primary/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "completed":
-        return "Concluída";
-      case "in-progress":
-        return "Em Andamento";
-      case "draft":
-        return "Rascunho";
-      case "approved":
-        return "Aprovada";
-      default:
-        return status;
+    case "completed":
+      return "Concluída";
+    case "in-progress":
+      return "Em Andamento";
+    case "draft":
+      return "Rascunho";
+    case "approved":
+      return "Aprovada";
+    default:
+      return status;
     }
   };
 

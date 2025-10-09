@@ -28,54 +28,54 @@ export const useBreadcrumbs = () => {
 
       let label = "";
       switch (segment) {
-        case "travel":
-          label = "Viagens";
-          break;
-        case "maritime":
-          label = "Sistema Marítimo";
-          break;
-        case "hr":
-        case "human-resources":
-          label = "Recursos Humanos";
-          break;
-        case "price-alerts":
-          label = "Alertas de Preços";
-          break;
-        case "communication":
-          label = "Comunicação";
-          break;
-        case "settings":
-          label = "Configurações";
-          break;
-        case "analytics":
-          label = "Analytics";
-          break;
-        case "reports":
-          label = "Relatórios";
-          break;
-        case "admin":
-          label = "Administração";
-          break;
-        case "auth":
-          label = "Autenticação";
-          break;
-        case "innovation":
-          label = "Inovação";
-          break;
-        case "strategic":
-          label = "Estratégico";
-          break;
-        case "optimization":
-          label = "Otimização";
-          break;
-        case "intelligence":
-          label = "Inteligência";
-          break;
-        case "voice":
-          label = "Interface de Voz";
-          break;
-        default:
-          label = segment.charAt(0).toUpperCase() + segment.slice(1);
+      case "travel":
+        label = "Viagens";
+        break;
+      case "maritime":
+        label = "Sistema Marítimo";
+        break;
+      case "hr":
+      case "human-resources":
+        label = "Recursos Humanos";
+        break;
+      case "price-alerts":
+        label = "Alertas de Preços";
+        break;
+      case "communication":
+        label = "Comunicação";
+        break;
+      case "settings":
+        label = "Configurações";
+        break;
+      case "analytics":
+        label = "Analytics";
+        break;
+      case "reports":
+        label = "Relatórios";
+        break;
+      case "admin":
+        label = "Administração";
+        break;
+      case "auth":
+        label = "Autenticação";
+        break;
+      case "innovation":
+        label = "Inovação";
+        break;
+      case "strategic":
+        label = "Estratégico";
+        break;
+      case "optimization":
+        label = "Otimização";
+        break;
+      case "intelligence":
+        label = "Inteligência";
+        break;
+      case "voice":
+        label = "Interface de Voz";
+        break;
+      default:
+        label = segment.charAt(0).toUpperCase() + segment.slice(1);
       }
 
       items.push({

@@ -167,27 +167,27 @@ export const GamificationSystem: React.FC = () => {
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case "common":
-        return "text-muted-foreground border-gray-200 bg-gray-50";
-      case "rare":
-        return "text-blue-600 border-blue-200 bg-blue-50";
-      case "epic":
-        return "text-purple-600 border-purple-200 bg-purple-50";
-      case "legendary":
-        return "text-yellow-600 border-yellow-200 bg-yellow-50";
-      default:
-        return "text-muted-foreground border-gray-200 bg-gray-50";
+    case "common":
+      return "text-muted-foreground border-gray-200 bg-gray-50";
+    case "rare":
+      return "text-blue-600 border-blue-200 bg-blue-50";
+    case "epic":
+      return "text-purple-600 border-purple-200 bg-purple-50";
+    case "legendary":
+      return "text-yellow-600 border-yellow-200 bg-yellow-50";
+    default:
+      return "text-muted-foreground border-gray-200 bg-gray-50";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case "down":
-        return <TrendingUp className="h-4 w-4 text-red-500 transform rotate-180" />;
-      default:
-        return <div className="h-4 w-4" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "down":
+      return <TrendingUp className="h-4 w-4 text-red-500 transform rotate-180" />;
+    default:
+      return <div className="h-4 w-4" />;
     }
   };
 
@@ -299,16 +299,16 @@ export const GamificationSystem: React.FC = () => {
                           </div>
                         ) : achievement.progress !== undefined &&
                           achievement.maxProgress !== undefined ? (
-                          <div className="text-right">
-                            <div className="text-xs text-muted-foreground">
-                              {achievement.progress}/{achievement.maxProgress}
+                            <div className="text-right">
+                              <div className="text-xs text-muted-foreground">
+                                {achievement.progress}/{achievement.maxProgress}
+                              </div>
+                              <Progress
+                                value={(achievement.progress / achievement.maxProgress) * 100}
+                                className="w-20 h-2 mt-1"
+                              />
                             </div>
-                            <Progress
-                              value={(achievement.progress / achievement.maxProgress) * 100}
-                              className="w-20 h-2 mt-1"
-                            />
-                          </div>
-                        ) : null}
+                          ) : null}
                       </div>
                       {achievement.earnedDate && (
                         <div className="text-xs text-muted-foreground mt-2">

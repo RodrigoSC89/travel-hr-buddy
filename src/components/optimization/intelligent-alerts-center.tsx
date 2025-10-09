@@ -257,46 +257,46 @@ export const IntelligentAlertsCenter = () => {
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case "critical":
-        return AlertTriangle;
-      case "warning":
-        return AlertTriangle;
-      case "success":
-        return TrendingUp;
-      case "info":
-        return Activity;
-      default:
-        return Bell;
+    case "critical":
+      return AlertTriangle;
+    case "warning":
+      return AlertTriangle;
+    case "success":
+      return TrendingUp;
+    case "info":
+      return Activity;
+    default:
+      return Bell;
     }
   };
 
   const getAlertColor = (type: string) => {
     switch (type) {
-      case "critical":
-        return "border-destructive bg-destructive/5 text-destructive";
-      case "warning":
-        return "border-warning bg-warning/5 text-warning";
-      case "success":
-        return "border-success bg-success/5 text-success";
-      case "info":
-        return "border-info bg-info/5 text-info";
-      default:
-        return "border-muted bg-muted/5 text-muted-foreground";
+    case "critical":
+      return "border-destructive bg-destructive/5 text-destructive";
+    case "warning":
+      return "border-warning bg-warning/5 text-warning";
+    case "success":
+      return "border-success bg-success/5 text-success";
+    case "info":
+      return "border-info bg-info/5 text-info";
+    default:
+      return "border-muted bg-muted/5 text-muted-foreground";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "performance":
-        return Zap;
-      case "security":
-        return Shield;
-      case "efficiency":
-        return Target;
-      case "user_experience":
-        return Activity;
-      default:
-        return Bell;
+    case "performance":
+      return Zap;
+    case "security":
+      return Shield;
+    case "efficiency":
+      return Target;
+    case "user_experience":
+      return Activity;
+    default:
+      return Bell;
     }
   };
 

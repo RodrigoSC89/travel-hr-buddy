@@ -178,31 +178,31 @@ const ExecutiveDashboard = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "excellent":
-        return "text-success-foreground bg-success/20 border-success/30";
-      case "good":
-        return "text-info-foreground bg-info/20 border-info/30";
-      case "warning":
-        return "text-warning-foreground bg-warning/20 border-warning/30";
-      case "critical":
-        return "text-destructive-foreground bg-destructive/20 border-destructive/30";
-      default:
-        return "text-muted-foreground bg-muted/20 border-muted/30";
+    case "excellent":
+      return "text-success-foreground bg-success/20 border-success/30";
+    case "good":
+      return "text-info-foreground bg-info/20 border-info/30";
+    case "warning":
+      return "text-warning-foreground bg-warning/20 border-warning/30";
+    case "critical":
+      return "text-destructive-foreground bg-destructive/20 border-destructive/30";
+    default:
+      return "text-muted-foreground bg-muted/20 border-muted/30";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "excellent":
-        return <Award className="h-4 w-4 text-success" />;
-      case "good":
-        return <CheckCircle className="h-4 w-4 text-info" />;
-      case "warning":
-        return <AlertTriangle className="h-4 w-4 text-warning" />;
-      case "critical":
-        return <AlertTriangle className="h-4 w-4 text-destructive" />;
-      default:
-        return <BarChart3 className="h-4 w-4" />;
+    case "excellent":
+      return <Award className="h-4 w-4 text-success" />;
+    case "good":
+      return <CheckCircle className="h-4 w-4 text-info" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-warning" />;
+    case "critical":
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    default:
+      return <BarChart3 className="h-4 w-4" />;
     }
   };
 

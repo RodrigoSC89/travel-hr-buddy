@@ -153,27 +153,27 @@ export const AnalyticsDashboard = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-success" />;
-      case "down":
-        return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
-      default:
-        return <div className="h-4 w-4 rounded-full bg-muted" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-success" />;
+    case "down":
+      return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
+    default:
+      return <div className="h-4 w-4 rounded-full bg-muted" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "operational":
-        return <Ship className="h-4 w-4 text-primary" />;
-      case "financial":
-        return <DollarSign className="h-4 w-4 text-success" />;
-      case "hr":
-        return <Users className="h-4 w-4 text-info" />;
-      case "safety":
-        return <AlertTriangle className="h-4 w-4 text-warning" />;
-      default:
-        return <BarChart3 className="h-4 w-4" />;
+    case "operational":
+      return <Ship className="h-4 w-4 text-primary" />;
+    case "financial":
+      return <DollarSign className="h-4 w-4 text-success" />;
+    case "hr":
+      return <Users className="h-4 w-4 text-info" />;
+    case "safety":
+      return <AlertTriangle className="h-4 w-4 text-warning" />;
+    default:
+      return <BarChart3 className="h-4 w-4" />;
     }
   };
 

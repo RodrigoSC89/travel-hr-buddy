@@ -169,29 +169,29 @@ const AIAssistant: React.FC = () => {
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case "prediction":
-        return <TrendingUp className="h-4 w-4" />;
-      case "recommendation":
-        return <Lightbulb className="h-4 w-4" />;
-      case "alert":
-        return <AlertCircle className="h-4 w-4" />;
-      case "optimization":
-        return <Zap className="h-4 w-4" />;
-      default:
-        return <Brain className="h-4 w-4" />;
+    case "prediction":
+      return <TrendingUp className="h-4 w-4" />;
+    case "recommendation":
+      return <Lightbulb className="h-4 w-4" />;
+    case "alert":
+      return <AlertCircle className="h-4 w-4" />;
+    case "optimization":
+      return <Zap className="h-4 w-4" />;
+    default:
+      return <Brain className="h-4 w-4" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "text-red-600 bg-red-100";
-      case "medium":
-        return "text-yellow-600 bg-yellow-100";
-      case "low":
-        return "text-green-600 bg-green-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "high":
+      return "text-red-600 bg-red-100";
+    case "medium":
+      return "text-yellow-600 bg-yellow-100";
+    case "low":
+      return "text-green-600 bg-green-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 

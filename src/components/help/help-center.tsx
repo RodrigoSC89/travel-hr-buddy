@@ -151,7 +151,7 @@ const HelpCenter = () => {
     {
       question: "Posso exportar relatórios?",
       answer:
-        'Sim! Todos os relatórios podem ser exportados em PDF, Excel ou CSV usando o botão "Exportar".',
+        "Sim! Todos os relatórios podem ser exportados em PDF, Excel ou CSV usando o botão \"Exportar\".",
     },
   ];
 
@@ -171,27 +171,27 @@ const HelpCenter = () => {
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case "beginner":
-        return "text-green-600 bg-green-100";
-      case "intermediate":
-        return "text-yellow-600 bg-yellow-100";
-      case "advanced":
-        return "text-red-600 bg-red-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "beginner":
+      return "text-green-600 bg-green-100";
+    case "intermediate":
+      return "text-yellow-600 bg-yellow-100";
+    case "advanced":
+      return "text-red-600 bg-red-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getLevelText = (level: string) => {
     switch (level) {
-      case "beginner":
-        return "Iniciante";
-      case "intermediate":
-        return "Intermediário";
-      case "advanced":
-        return "Avançado";
-      default:
-        return level;
+    case "beginner":
+      return "Iniciante";
+    case "intermediate":
+      return "Intermediário";
+    case "advanced":
+      return "Avançado";
+    default:
+      return level;
     }
   };
 

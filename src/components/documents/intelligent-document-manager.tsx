@@ -149,40 +149,40 @@ const IntelligentDocumentManager = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "processing":
-        return <Zap className="w-4 h-4 text-blue-500 animate-pulse" />;
-      case "error":
-        return <FileX className="w-4 h-4 text-red-500" />;
-      default:
-        return <AlertCircle className="w-4 h-4 text-yellow-500" />;
+    case "completed":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "processing":
+      return <Zap className="w-4 h-4 text-blue-500 animate-pulse" />;
+    case "error":
+      return <FileX className="w-4 h-4 text-red-500" />;
+    default:
+      return <AlertCircle className="w-4 h-4 text-yellow-500" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "bg-green-100 text-green-800";
-      case "processing":
-        return "bg-blue-100 text-blue-800";
-      case "error":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-yellow-100 text-yellow-800";
+    case "completed":
+      return "bg-green-100 text-green-800";
+    case "processing":
+      return "bg-blue-100 text-blue-800";
+    case "error":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-yellow-100 text-yellow-800";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type.toLowerCase()) {
-      case "pdf":
-        return <FileText className="w-8 h-8 text-red-500" />;
-      case "excel":
-        return <FileText className="w-8 h-8 text-green-500" />;
-      case "word":
-        return <FileText className="w-8 h-8 text-blue-500" />;
-      default:
-        return <FileText className="w-8 h-8 text-muted-foreground" />;
+    case "pdf":
+      return <FileText className="w-8 h-8 text-red-500" />;
+    case "excel":
+      return <FileText className="w-8 h-8 text-green-500" />;
+    case "word":
+      return <FileText className="w-8 h-8 text-blue-500" />;
+    default:
+      return <FileText className="w-8 h-8 text-muted-foreground" />;
     }
   };
 
@@ -254,12 +254,12 @@ const IntelligentDocumentManager = () => {
         prev.map(doc =>
           doc.id === id
             ? {
-                ...doc,
-                status: "completed",
-                aiSummary:
+              ...doc,
+              status: "completed",
+              aiSummary:
                   "Análise IA concluída. Documento contém informações importantes sobre...",
-                confidence: Math.floor(Math.random() * 20) + 80,
-              }
+              confidence: Math.floor(Math.random() * 20) + 80,
+            }
             : doc
         )
       );

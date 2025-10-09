@@ -325,38 +325,38 @@ const RealTimeWorkspace: React.FC = () => {
   // Obter cor do status
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "online":
-        return "bg-green-500";
-      case "busy":
-        return "bg-red-500";
-      case "away":
-        return "bg-yellow-500";
-      default:
-        return "bg-gray-400";
+    case "online":
+      return "bg-green-500";
+    case "busy":
+      return "bg-red-500";
+    case "away":
+      return "bg-yellow-500";
+    default:
+      return "bg-gray-400";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "online":
-        return <Circle className="h-3 w-3 fill-current" />;
-      case "busy":
-        return <AlertTriangle className="h-3 w-3" />;
-      case "away":
-        return <Clock className="h-3 w-3" />;
-      default:
-        return <Circle className="h-3 w-3" />;
+    case "online":
+      return <Circle className="h-3 w-3 fill-current" />;
+    case "busy":
+      return <AlertTriangle className="h-3 w-3" />;
+    case "away":
+      return <Clock className="h-3 w-3" />;
+    default:
+      return <Circle className="h-3 w-3" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "text-red-600 bg-red-50 border-red-200";
-      case "medium":
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
-      default:
-        return "text-blue-600 bg-blue-50 border-blue-200";
+    case "high":
+      return "text-red-600 bg-red-50 border-red-200";
+    case "medium":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    default:
+      return "text-blue-600 bg-blue-50 border-blue-200";
     }
   };
 

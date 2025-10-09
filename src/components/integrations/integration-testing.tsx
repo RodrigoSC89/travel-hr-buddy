@@ -125,23 +125,23 @@ export const IntegrationTesting: React.FC = () => {
 
   const getStatusIcon = (status: TestResult["status"]) => {
     switch (status) {
-      case "success":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "error":
-        return <XCircle className="w-4 h-4 text-destructive" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "success":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "error":
+      return <XCircle className="w-4 h-4 text-destructive" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
     }
   };
 
   const getStatusColor = (status: TestResult["status"]) => {
     switch (status) {
-      case "success":
-        return "bg-success/20 text-success border-success/30";
-      case "error":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "warning":
-        return "bg-warning/20 text-warning border-warning/30";
+    case "success":
+      return "bg-success/20 text-success border-success/30";
+    case "error":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "warning":
+      return "bg-warning/20 text-warning border-warning/30";
     }
   };
 

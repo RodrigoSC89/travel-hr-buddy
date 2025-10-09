@@ -214,36 +214,36 @@ export const PredictiveTravelDashboard: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "rising":
-        return <TrendingUp className="h-4 w-4 text-red-500" />;
-      case "falling":
-        return <TrendingDown className="h-4 w-4 text-green-500" />;
-      default:
-        return <Minus className="h-4 w-4 text-yellow-500" />;
+    case "rising":
+      return <TrendingUp className="h-4 w-4 text-red-500" />;
+    case "falling":
+      return <TrendingDown className="h-4 w-4 text-green-500" />;
+    default:
+      return <Minus className="h-4 w-4 text-yellow-500" />;
     }
   };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-      case "rising":
-        return "text-red-600";
-      case "falling":
-        return "text-green-600";
-      default:
-        return "text-yellow-600";
+    case "rising":
+      return "text-red-600";
+    case "falling":
+      return "text-green-600";
+    default:
+      return "text-yellow-600";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return "bg-red-100 text-red-800 border-red-200";
-      case "high":
-        return "bg-orange-100 text-orange-800 border-orange-200";
-      case "medium":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      default:
-        return "bg-secondary text-secondary-foreground border-border";
+    case "urgent":
+      return "bg-red-100 text-red-800 border-red-200";
+    case "high":
+      return "bg-orange-100 text-orange-800 border-orange-200";
+    case "medium":
+      return "bg-blue-100 text-blue-800 border-blue-200";
+    default:
+      return "bg-secondary text-secondary-foreground border-border";
     }
   };
 

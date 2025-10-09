@@ -259,23 +259,23 @@ const AdvancedBusinessIntelligence = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case "down":
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
-      default:
-        return <div className="w-4 h-4 bg-gray-400 rounded-full" />;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case "down":
+      return <TrendingDown className="w-4 h-4 text-red-500" />;
+    default:
+      return <div className="w-4 h-4 bg-gray-400 rounded-full" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high":
-        return "bg-red-100 text-red-800 border-red-200";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      default:
-        return "bg-green-100 text-green-800 border-green-200";
+    case "high":
+      return "bg-red-100 text-red-800 border-red-200";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    default:
+      return "bg-green-100 text-green-800 border-green-200";
     }
   };
 

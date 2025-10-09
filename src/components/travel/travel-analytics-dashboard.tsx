@@ -154,14 +154,14 @@ export const TravelAnalyticsDashboard: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "bg-red-100 text-red-800 border-red-300";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
-      case "low":
-        return "bg-green-100 text-green-800 border-green-300";
-      default:
-        return "bg-secondary text-secondary-foreground border-border";
+    case "high":
+      return "bg-red-100 text-red-800 border-red-300";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 border-yellow-300";
+    case "low":
+      return "bg-green-100 text-green-800 border-green-300";
+    default:
+      return "bg-secondary text-secondary-foreground border-border";
     }
   };
 

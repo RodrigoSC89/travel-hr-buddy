@@ -209,14 +209,14 @@ export const MobileOptimizationCenter: React.FC = () => {
 
   const getDeviceIcon = (device: string) => {
     switch (device) {
-      case "mobile":
-        return <Smartphone className="h-4 w-4" />;
-      case "tablet":
-        return <Tablet className="h-4 w-4" />;
-      case "desktop":
-        return <Monitor className="h-4 w-4" />;
-      default:
-        return <Monitor className="h-4 w-4" />;
+    case "mobile":
+      return <Smartphone className="h-4 w-4" />;
+    case "tablet":
+      return <Tablet className="h-4 w-4" />;
+    case "desktop":
+      return <Monitor className="h-4 w-4" />;
+    default:
+      return <Monitor className="h-4 w-4" />;
     }
   };
 
@@ -542,9 +542,9 @@ export const MobileOptimizationCenter: React.FC = () => {
                   value={
                     performance.length > 0
                       ? Math.min(
-                          (1800 / performance[performance.length - 1].firstContentfulPaint) * 100,
-                          100
-                        )
+                        (1800 / performance[performance.length - 1].firstContentfulPaint) * 100,
+                        100
+                      )
                       : 0
                   }
                   className="mt-2"
@@ -569,9 +569,9 @@ export const MobileOptimizationCenter: React.FC = () => {
                   value={
                     performance.length > 0
                       ? Math.min(
-                          (2500 / performance[performance.length - 1].largestContentfulPaint) * 100,
-                          100
-                        )
+                        (2500 / performance[performance.length - 1].largestContentfulPaint) * 100,
+                        100
+                      )
                       : 0
                   }
                   className="mt-2"
@@ -595,9 +595,9 @@ export const MobileOptimizationCenter: React.FC = () => {
                   value={
                     performance.length > 0
                       ? Math.min(
-                          (0.1 / performance[performance.length - 1].cumulativeLayoutShift) * 100,
-                          100
-                        )
+                        (0.1 / performance[performance.length - 1].cumulativeLayoutShift) * 100,
+                        100
+                      )
                       : 0
                   }
                   className="mt-2"

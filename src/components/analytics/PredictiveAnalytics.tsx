@@ -143,23 +143,23 @@ const PredictiveAnalytics: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4 text-green-600" />;
-      case "down":
-        return <TrendingDown className="w-4 h-4 text-red-600" />;
-      default:
-        return <Target className="w-4 h-4 text-yellow-600" />;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-green-600" />;
+    case "down":
+      return <TrendingDown className="w-4 h-4 text-red-600" />;
+    default:
+      return <Target className="w-4 h-4 text-yellow-600" />;
     }
   };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-      case "up":
-        return "text-green-600";
-      case "down":
-        return "text-red-600";
-      default:
-        return "text-yellow-600";
+    case "up":
+      return "text-green-600";
+    case "down":
+      return "text-red-600";
+    default:
+      return "text-yellow-600";
     }
   };
 

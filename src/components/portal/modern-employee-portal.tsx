@@ -414,14 +414,14 @@ export const ModernEmployeePortal: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "destructive";
-      case "medium":
-        return "default";
-      case "low":
-        return "secondary";
-      default:
-        return "outline";
+    case "high":
+      return "destructive";
+    case "medium":
+      return "default";
+    case "low":
+      return "secondary";
+    default:
+      return "outline";
     }
   };
 

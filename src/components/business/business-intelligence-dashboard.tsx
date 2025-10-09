@@ -202,38 +202,38 @@ export const BusinessIntelligenceDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "healthy":
-        return "text-green-600";
-      case "warning":
-        return "text-yellow-600";
-      case "critical":
-        return "text-red-600";
-      default:
-        return "text-muted-foreground";
+    case "healthy":
+      return "text-green-600";
+    case "warning":
+      return "text-yellow-600";
+    case "critical":
+      return "text-red-600";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "healthy":
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case "warning":
-        return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
-      case "critical":
-        return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      default:
-        return <Clock className="h-4 w-4 text-muted-foreground" />;
+    case "healthy":
+      return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
+    case "critical":
+      return <AlertTriangle className="h-4 w-4 text-red-600" />;
+    default:
+      return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-green-600" />;
-      case "down":
-        return <TrendingDown className="h-4 w-4 text-red-600" />;
-      default:
-        return <div className="h-4 w-4" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-green-600" />;
+    case "down":
+      return <TrendingDown className="h-4 w-4 text-red-600" />;
+    default:
+      return <div className="h-4 w-4" />;
     }
   };
 

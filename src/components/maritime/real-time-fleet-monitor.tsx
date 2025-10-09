@@ -84,9 +84,9 @@ export const RealTimeFleetMonitor = () => {
           location:
             vessel.current_location && typeof vessel.current_location === "object"
               ? {
-                  lat: (vessel.current_location as any).lat || -23.5505,
-                  lon: (vessel.current_location as any).lon || -46.6333,
-                }
+                lat: (vessel.current_location as any).lat || -23.5505,
+                lon: (vessel.current_location as any).lon || -46.6333,
+              }
               : { lat: -23.5505, lon: -46.6333 },
           speed: Math.random() * 20 + 5, // Mock speed 5-25 knots
           heading: Math.random() * 360, // Mock heading 0-360 degrees
@@ -149,16 +149,16 @@ export const RealTimeFleetMonitor = () => {
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case "operational":
-        return "bg-green-100 text-green-800";
-      case "maintenance":
-        return "bg-yellow-100 text-yellow-800";
-      case "emergency":
-        return "bg-red-100 text-red-800";
-      case "docked":
-        return "bg-blue-100 text-blue-800";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "operational":
+      return "bg-green-100 text-green-800";
+    case "maintenance":
+      return "bg-yellow-100 text-yellow-800";
+    case "emergency":
+      return "bg-red-100 text-red-800";
+    case "docked":
+      return "bg-blue-100 text-blue-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 

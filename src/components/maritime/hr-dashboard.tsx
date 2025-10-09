@@ -271,48 +271,48 @@ export const MaritimeHRDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "onboard":
-        return "text-blue-600 bg-blue-100";
-      case "on_leave":
-        return "text-green-600 bg-green-100";
-      case "available":
-        return "text-muted-foreground bg-gray-100";
-      case "training":
-        return "text-purple-600 bg-purple-100";
-      case "medical_leave":
-        return "text-red-600 bg-red-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "onboard":
+      return "text-blue-600 bg-blue-100";
+    case "on_leave":
+      return "text-green-600 bg-green-100";
+    case "available":
+      return "text-muted-foreground bg-gray-100";
+    case "training":
+      return "text-purple-600 bg-purple-100";
+    case "medical_leave":
+      return "text-red-600 bg-red-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "onboard":
-        return "A Bordo";
-      case "on_leave":
-        return "De Folga";
-      case "available":
-        return "Disponível";
-      case "training":
-        return "Treinamento";
-      case "medical_leave":
-        return "Licença Médica";
-      default:
-        return "Desconhecido";
+    case "onboard":
+      return "A Bordo";
+    case "on_leave":
+      return "De Folga";
+    case "available":
+      return "Disponível";
+    case "training":
+      return "Treinamento";
+    case "medical_leave":
+      return "Licença Médica";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getCertificationStatusColor = (status: string) => {
     switch (status) {
-      case "valid":
-        return "text-green-600 bg-green-100";
-      case "expiring":
-        return "text-yellow-600 bg-yellow-100";
-      case "expired":
-        return "text-red-600 bg-red-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "valid":
+      return "text-green-600 bg-green-100";
+    case "expiring":
+      return "text-yellow-600 bg-yellow-100";
+    case "expired":
+      return "text-red-600 bg-red-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 

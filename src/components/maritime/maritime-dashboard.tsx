@@ -68,44 +68,44 @@ export const MaritimeDashboard: React.FC = () => {
     }
 
     switch (activeModule) {
-      case "vessels":
-        return (
-          <Suspense
-            fallback={
-              <div className="flex items-center justify-center p-8">
-                <LoadingSpinner size="lg" />
-              </div>
-            }
-          >
-            <VesselManagement />
-          </Suspense>
-        );
-      case "crew":
-        return (
-          <Suspense
-            fallback={
-              <div className="flex items-center justify-center p-8">
-                <LoadingSpinner size="lg" />
-              </div>
-            }
-          >
-            <CrewRotationPlanner />
-          </Suspense>
-        );
-      case "certifications":
-        return (
-          <Suspense
-            fallback={
-              <div className="flex items-center justify-center p-8">
-                <LoadingSpinner size="lg" />
-              </div>
-            }
-          >
-            <CertificationManager />
-          </Suspense>
-        );
-      default:
-        return <OverviewDashboard onNavigate={handleModuleChange} />;
+    case "vessels":
+      return (
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center p-8">
+              <LoadingSpinner size="lg" />
+            </div>
+          }
+        >
+          <VesselManagement />
+        </Suspense>
+      );
+    case "crew":
+      return (
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center p-8">
+              <LoadingSpinner size="lg" />
+            </div>
+          }
+        >
+          <CrewRotationPlanner />
+        </Suspense>
+      );
+    case "certifications":
+      return (
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center p-8">
+              <LoadingSpinner size="lg" />
+            </div>
+          }
+        >
+          <CertificationManager />
+        </Suspense>
+      );
+    default:
+      return <OverviewDashboard onNavigate={handleModuleChange} />;
     }
   };
 

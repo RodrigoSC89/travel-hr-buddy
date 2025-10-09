@@ -176,17 +176,17 @@ export const RealTimeNotificationCenter: React.FC = () => {
     try {
       // Aqui você pode implementar diferentes tipos de ações
       switch (notification.action_type) {
-        case "navigate":
-          navigate(notification.action_data.url);
-          break;
-        case "download":
-          window.open(notification.action_data.downloadUrl, "_blank");
-          break;
-        case "external_link":
-          window.open(notification.action_data.url, "_blank");
-          break;
-        default:
-          console.log("Action executed:", notification.action_type, notification.action_data);
+      case "navigate":
+        navigate(notification.action_data.url);
+        break;
+      case "download":
+        window.open(notification.action_data.downloadUrl, "_blank");
+        break;
+      case "external_link":
+        window.open(notification.action_data.url, "_blank");
+        break;
+      default:
+        console.log("Action executed:", notification.action_type, notification.action_data);
       }
 
       // Marcar como lida após executar ação
@@ -260,12 +260,12 @@ export const RealTimeNotificationCenter: React.FC = () => {
       if (!matchesSearch) return false;
 
       switch (filter) {
-        case "unread":
-          return !isRead;
-        case "priority":
-          return n.priority === "high" || n.priority === "urgent";
-        default:
-          return true;
+      case "unread":
+        return !isRead;
+      case "priority":
+        return n.priority === "high" || n.priority === "urgent";
+      default:
+        return true;
       }
     });
 
@@ -274,43 +274,43 @@ export const RealTimeNotificationCenter: React.FC = () => {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "success":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "warning":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case "error":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      default:
-        return <Info className="h-4 w-4 text-blue-500" />;
+    case "success":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "error":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    default:
+      return <Info className="h-4 w-4 text-blue-500" />;
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return (
-          <Badge variant="destructive" className="text-xs">
+    case "urgent":
+      return (
+        <Badge variant="destructive" className="text-xs">
             Urgente
-          </Badge>
-        );
-      case "high":
-        return (
-          <Badge variant="secondary" className="bg-orange-500 text-azure-50 text-xs">
+        </Badge>
+      );
+    case "high":
+      return (
+        <Badge variant="secondary" className="bg-orange-500 text-azure-50 text-xs">
             Alto
-          </Badge>
-        );
-      case "medium":
-        return (
-          <Badge variant="outline" className="text-xs">
+        </Badge>
+      );
+    case "medium":
+      return (
+        <Badge variant="outline" className="text-xs">
             Médio
-          </Badge>
-        );
-      default:
-        return (
-          <Badge variant="secondary" className="text-xs">
+        </Badge>
+      );
+    default:
+      return (
+        <Badge variant="secondary" className="text-xs">
             Baixo
-          </Badge>
-        );
+        </Badge>
+      );
     }
   };
 

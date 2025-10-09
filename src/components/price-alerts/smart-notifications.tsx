@@ -216,25 +216,25 @@ export const SmartNotifications: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "delivered":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "failed":
-        return <AlertTriangle className="w-4 h-4 text-destructive" />;
-      default:
-        return <Clock className="w-4 h-4 text-warning" />;
+    case "delivered":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "failed":
+      return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    default:
+      return <Clock className="w-4 h-4 text-warning" />;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "email":
-        return <Mail className="w-4 h-4 text-primary" />;
-      case "push":
-        return <Smartphone className="w-4 h-4 text-primary" />;
-      case "sms":
-        return <MessageSquare className="w-4 h-4 text-primary" />;
-      default:
-        return <Bell className="w-4 h-4 text-primary" />;
+    case "email":
+      return <Mail className="w-4 h-4 text-primary" />;
+    case "push":
+      return <Smartphone className="w-4 h-4 text-primary" />;
+    case "sms":
+      return <MessageSquare className="w-4 h-4 text-primary" />;
+    default:
+      return <Bell className="w-4 h-4 text-primary" />;
     }
   };
 
@@ -351,9 +351,9 @@ export const SmartNotifications: React.FC = () => {
                     setSettings(prev =>
                       prev
                         ? {
-                            ...prev,
-                            categories: { ...prev.categories, target_reached: checked },
-                          }
+                          ...prev,
+                          categories: { ...prev.categories, target_reached: checked },
+                        }
                         : null
                     )
                   }
@@ -371,9 +371,9 @@ export const SmartNotifications: React.FC = () => {
                     setSettings(prev =>
                       prev
                         ? {
-                            ...prev,
-                            categories: { ...prev.categories, price_drops: checked },
-                          }
+                          ...prev,
+                          categories: { ...prev.categories, price_drops: checked },
+                        }
                         : null
                     )
                   }
@@ -391,9 +391,9 @@ export const SmartNotifications: React.FC = () => {
                     setSettings(prev =>
                       prev
                         ? {
-                            ...prev,
-                            categories: { ...prev.categories, trend_alerts: checked },
-                          }
+                          ...prev,
+                          categories: { ...prev.categories, trend_alerts: checked },
+                        }
                         : null
                     )
                   }
@@ -411,9 +411,9 @@ export const SmartNotifications: React.FC = () => {
                     setSettings(prev =>
                       prev
                         ? {
-                            ...prev,
-                            categories: { ...prev.categories, ai_recommendations: checked },
-                          }
+                          ...prev,
+                          categories: { ...prev.categories, ai_recommendations: checked },
+                        }
                         : null
                     )
                   }
@@ -461,9 +461,9 @@ export const SmartNotifications: React.FC = () => {
                       setSettings(prev =>
                         prev
                           ? {
-                              ...prev,
-                              quiet_hours: { ...prev.quiet_hours, enabled: checked },
-                            }
+                            ...prev,
+                            quiet_hours: { ...prev.quiet_hours, enabled: checked },
+                          }
                           : null
                       )
                     }
@@ -481,9 +481,9 @@ export const SmartNotifications: React.FC = () => {
                           setSettings(prev =>
                             prev
                               ? {
-                                  ...prev,
-                                  quiet_hours: { ...prev.quiet_hours, start: e.target.value },
-                                }
+                                ...prev,
+                                quiet_hours: { ...prev.quiet_hours, start: e.target.value },
+                              }
                               : null
                           )
                         }
@@ -499,9 +499,9 @@ export const SmartNotifications: React.FC = () => {
                           setSettings(prev =>
                             prev
                               ? {
-                                  ...prev,
-                                  quiet_hours: { ...prev.quiet_hours, end: e.target.value },
-                                }
+                                ...prev,
+                                quiet_hours: { ...prev.quiet_hours, end: e.target.value },
+                              }
                               : null
                           )
                         }
@@ -534,12 +534,12 @@ export const SmartNotifications: React.FC = () => {
                     setSettings(prev =>
                       prev
                         ? {
-                            ...prev,
-                            thresholds: {
-                              ...prev.thresholds,
-                              min_discount_percentage: parseInt(e.target.value) || 0,
-                            },
-                          }
+                          ...prev,
+                          thresholds: {
+                            ...prev.thresholds,
+                            min_discount_percentage: parseInt(e.target.value) || 0,
+                          },
+                        }
                         : null
                     )
                   }
@@ -560,12 +560,12 @@ export const SmartNotifications: React.FC = () => {
                     setSettings(prev =>
                       prev
                         ? {
-                            ...prev,
-                            thresholds: {
-                              ...prev.thresholds,
-                              min_savings_amount: parseInt(e.target.value) || 0,
-                            },
-                          }
+                          ...prev,
+                          thresholds: {
+                            ...prev.thresholds,
+                            min_savings_amount: parseInt(e.target.value) || 0,
+                          },
+                        }
                         : null
                     )
                   }

@@ -192,10 +192,10 @@ export const TaskManagement: React.FC = () => {
       tasks.map(task =>
         task.id === taskId
           ? {
-              ...task,
-              status: newStatus,
-              completed_at: newStatus === "completed" ? new Date().toISOString() : undefined,
-            }
+            ...task,
+            status: newStatus,
+            completed_at: newStatus === "completed" ? new Date().toISOString() : undefined,
+          }
           : task
       )
     );
@@ -208,72 +208,72 @@ export const TaskManagement: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "bg-red-500 text-azure-50";
-      case "medium":
-        return "bg-yellow-500 text-azure-50";
-      case "low":
-        return "bg-green-500 text-azure-50";
-      default:
-        return "bg-gray-500 text-azure-50";
+    case "high":
+      return "bg-red-500 text-azure-50";
+    case "medium":
+      return "bg-yellow-500 text-azure-50";
+    case "low":
+      return "bg-green-500 text-azure-50";
+    default:
+      return "bg-gray-500 text-azure-50";
     }
   };
 
   const getPriorityText = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "Alta";
-      case "medium":
-        return "Média";
-      case "low":
-        return "Baixa";
-      default:
-        return "Normal";
+    case "high":
+      return "Alta";
+    case "medium":
+      return "Média";
+    case "low":
+      return "Baixa";
+    default:
+      return "Normal";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pending":
-        return "bg-gray-500 text-azure-50";
-      case "in_progress":
-        return "bg-blue-500 text-azure-50";
-      case "completed":
-        return "bg-green-500 text-azure-50";
-      case "cancelled":
-        return "bg-red-500 text-azure-50";
-      default:
-        return "bg-gray-500 text-azure-50";
+    case "pending":
+      return "bg-gray-500 text-azure-50";
+    case "in_progress":
+      return "bg-blue-500 text-azure-50";
+    case "completed":
+      return "bg-green-500 text-azure-50";
+    case "cancelled":
+      return "bg-red-500 text-azure-50";
+    default:
+      return "bg-gray-500 text-azure-50";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "pending":
-        return "Pendente";
-      case "in_progress":
-        return "Em Andamento";
-      case "completed":
-        return "Concluída";
-      case "cancelled":
-        return "Cancelada";
-      default:
-        return "Desconhecido";
+    case "pending":
+      return "Pendente";
+    case "in_progress":
+      return "Em Andamento";
+    case "completed":
+      return "Concluída";
+    case "cancelled":
+      return "Cancelada";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "pending":
-        return <Clock className="h-4 w-4" />;
-      case "in_progress":
-        return <Settings className="h-4 w-4" />;
-      case "completed":
-        return <CheckCircle2 className="h-4 w-4" />;
-      case "cancelled":
-        return <AlertTriangle className="h-4 w-4" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "pending":
+      return <Clock className="h-4 w-4" />;
+    case "in_progress":
+      return <Settings className="h-4 w-4" />;
+    case "completed":
+      return <CheckCircle2 className="h-4 w-4" />;
+    case "cancelled":
+      return <AlertTriangle className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 

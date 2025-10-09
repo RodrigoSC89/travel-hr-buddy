@@ -351,31 +351,31 @@ export const HRDashboard = () => {
 
   const getStatusColor = (status: Employee["status"]) => {
     switch (status) {
-      case "active":
-        return "bg-success text-azure-50";
-      case "vacation":
-        return "bg-warning text-azure-900";
-      case "travel":
-        return "bg-info text-azure-50";
-      case "inactive":
-        return "bg-muted text-muted-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "active":
+      return "bg-success text-azure-50";
+    case "vacation":
+      return "bg-warning text-azure-900";
+    case "travel":
+      return "bg-info text-azure-50";
+    case "inactive":
+      return "bg-muted text-muted-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusLabel = (status: Employee["status"]) => {
     switch (status) {
-      case "active":
-        return "Ativo";
-      case "vacation":
-        return "Férias";
-      case "travel":
-        return "Viagem";
-      case "inactive":
-        return "Inativo";
-      default:
-        return "N/A";
+    case "active":
+      return "Ativo";
+    case "vacation":
+      return "Férias";
+    case "travel":
+      return "Viagem";
+    case "inactive":
+      return "Inativo";
+    default:
+      return "N/A";
     }
   };
 

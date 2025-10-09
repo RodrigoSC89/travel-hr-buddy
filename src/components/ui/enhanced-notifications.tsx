@@ -234,52 +234,52 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "success":
-        return <CheckCircle className="w-5 h-5 text-success" />;
-      case "warning":
-        return <AlertTriangle className="w-5 h-5 text-warning" />;
-      case "error":
-        return <AlertTriangle className="w-5 h-5 text-destructive" />;
-      case "info":
-        return <Info className="w-5 h-5 text-info" />;
-      default:
-        return <Bell className="w-5 h-5 text-muted-foreground" />;
+    case "success":
+      return <CheckCircle className="w-5 h-5 text-success" />;
+    case "warning":
+      return <AlertTriangle className="w-5 h-5 text-warning" />;
+    case "error":
+      return <AlertTriangle className="w-5 h-5 text-destructive" />;
+    case "info":
+      return <Info className="w-5 h-5 text-info" />;
+    default:
+      return <Bell className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string): React.ComponentType<{ className?: string }> => {
     switch (category.toLowerCase()) {
-      case "certificações":
-        return Users;
-      case "performance":
-        return TrendingUp;
-      case "auditorias":
-        return FileText;
-      case "sistema":
-        return Settings;
-      case "frota":
-        return Ship;
-      case "segurança":
-        return Shield;
-      case "financeiro":
-        return DollarSign;
-      default:
-        return Bell;
+    case "certificações":
+      return Users;
+    case "performance":
+      return TrendingUp;
+    case "auditorias":
+      return FileText;
+    case "sistema":
+      return Settings;
+    case "frota":
+      return Ship;
+    case "segurança":
+      return Shield;
+    case "financeiro":
+      return DollarSign;
+    default:
+      return Bell;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return "bg-red-500 text-white";
-      case "high":
-        return "bg-orange-500 text-white";
-      case "medium":
-        return "bg-blue-500 text-white";
-      case "low":
-        return "bg-gray-500 text-white";
-      default:
-        return "bg-gray-500 text-white";
+    case "urgent":
+      return "bg-red-500 text-white";
+    case "high":
+      return "bg-orange-500 text-white";
+    case "medium":
+      return "bg-blue-500 text-white";
+    case "low":
+      return "bg-gray-500 text-white";
+    default:
+      return "bg-gray-500 text-white";
     }
   };
 
@@ -305,12 +305,12 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
 
   const filteredNotifications = notifications.filter(notification => {
     switch (filter) {
-      case "unread":
-        return !notification.read;
-      case "urgent":
-        return notification.priority === "urgent" || notification.priority === "high";
-      default:
-        return true;
+    case "unread":
+      return !notification.read;
+    case "urgent":
+      return notification.priority === "urgent" || notification.priority === "high";
+    default:
+      return true;
     }
   });
 

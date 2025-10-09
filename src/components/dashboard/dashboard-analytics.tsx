@@ -265,31 +265,31 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
 
   const getInsightIcon = (type: AIInsight["type"]) => {
     switch (type) {
-      case "prediction":
-        return <TrendingUp className="h-4 w-4" />;
-      case "recommendation":
-        return <Target className="h-4 w-4" />;
-      case "optimization":
-        return <Zap className="h-4 w-4" />;
-      case "alert":
-        return <AlertTriangle className="h-4 w-4" />;
-      default:
-        return <Brain className="h-4 w-4" />;
+    case "prediction":
+      return <TrendingUp className="h-4 w-4" />;
+    case "recommendation":
+      return <Target className="h-4 w-4" />;
+    case "optimization":
+      return <Zap className="h-4 w-4" />;
+    case "alert":
+      return <AlertTriangle className="h-4 w-4" />;
+    default:
+      return <Brain className="h-4 w-4" />;
     }
   };
 
   const getInsightColor = (type: AIInsight["type"]) => {
     switch (type) {
-      case "prediction":
-        return "text-info";
-      case "recommendation":
-        return "text-success";
-      case "optimization":
-        return "text-warning";
-      case "alert":
-        return "text-destructive";
-      default:
-        return "text-primary";
+    case "prediction":
+      return "text-info";
+    case "recommendation":
+      return "text-success";
+    case "optimization":
+      return "text-warning";
+    case "alert":
+      return "text-destructive";
+    default:
+      return "text-primary";
     }
   };
 

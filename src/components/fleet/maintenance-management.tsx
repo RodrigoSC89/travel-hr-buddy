@@ -224,65 +224,65 @@ const MaintenanceManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "scheduled":
-        return "bg-info text-info-foreground";
-      case "in_progress":
-        return "bg-warning text-warning-foreground";
-      case "completed":
-        return "bg-success text-success-foreground";
-      case "overdue":
-        return "bg-destructive text-destructive-foreground";
-      case "cancelled":
-        return "bg-muted text-muted-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "scheduled":
+      return "bg-info text-info-foreground";
+    case "in_progress":
+      return "bg-warning text-warning-foreground";
+    case "completed":
+      return "bg-success text-success-foreground";
+    case "overdue":
+      return "bg-destructive text-destructive-foreground";
+    case "cancelled":
+      return "bg-muted text-muted-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "scheduled":
-        return "Agendada";
-      case "in_progress":
-        return "Em Andamento";
-      case "completed":
-        return "Concluída";
-      case "overdue":
-        return "Atrasada";
-      case "cancelled":
-        return "Cancelada";
-      default:
-        return "Desconhecido";
+    case "scheduled":
+      return "Agendada";
+    case "in_progress":
+      return "Em Andamento";
+    case "completed":
+      return "Concluída";
+    case "overdue":
+      return "Atrasada";
+    case "cancelled":
+      return "Cancelada";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "low":
-        return "text-success";
-      case "medium":
-        return "text-warning";
-      case "high":
-        return "text-orange-500";
-      case "critical":
-        return "text-destructive";
-      default:
-        return "text-muted-foreground";
+    case "low":
+      return "text-success";
+    case "medium":
+      return "text-warning";
+    case "high":
+      return "text-orange-500";
+    case "critical":
+      return "text-destructive";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getMaintenanceTypeIcon = (type: string) => {
     switch (type) {
-      case "preventive":
-        return <Shield className="h-4 w-4 text-success" />;
-      case "corrective":
-        return <Wrench className="h-4 w-4 text-warning" />;
-      case "emergency":
-        return <AlertTriangle className="h-4 w-4 text-destructive" />;
-      case "inspection":
-        return <CheckCircle className="h-4 w-4 text-info" />;
-      default:
-        return <Settings className="h-4 w-4 text-muted-foreground" />;
+    case "preventive":
+      return <Shield className="h-4 w-4 text-success" />;
+    case "corrective":
+      return <Wrench className="h-4 w-4 text-warning" />;
+    case "emergency":
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    case "inspection":
+      return <CheckCircle className="h-4 w-4 text-info" />;
+    default:
+      return <Settings className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

@@ -201,16 +201,16 @@ const VesselTrackingMap = () => {
 
   const getVesselMarkerStyle = (status: string) => {
     switch (status) {
-      case "active":
-        return "background-color: #10b981;";
-      case "anchored":
-        return "background-color: #f59e0b;";
-      case "maintenance":
-        return "background-color: #ef4444;";
-      case "emergency":
-        return "background-color: #dc2626; animation: pulse 1s infinite;";
-      default:
-        return "background-color: #6b7280;";
+    case "active":
+      return "background-color: #10b981;";
+    case "anchored":
+      return "background-color: #f59e0b;";
+    case "maintenance":
+      return "background-color: #ef4444;";
+    case "emergency":
+      return "background-color: #dc2626; animation: pulse 1s infinite;";
+    default:
+      return "background-color: #6b7280;";
     }
   };
 

@@ -303,46 +303,46 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
   const getChannelIcon = (type: string) => {
     switch (type) {
-      case "department":
-        return Building;
-      case "broadcast":
-        return Megaphone;
-      case "emergency":
-        return AlertTriangle;
-      case "group":
-        return Users;
-      default:
-        return Hash;
+    case "department":
+      return Building;
+    case "broadcast":
+      return Megaphone;
+    case "emergency":
+      return AlertTriangle;
+    case "group":
+      return Users;
+    default:
+      return Hash;
     }
   };
 
   const getChannelTypeLabel = (type: string) => {
     switch (type) {
-      case "department":
-        return "Departamento";
-      case "broadcast":
-        return "Transmissão";
-      case "emergency":
-        return "Emergência";
-      case "group":
-        return "Grupo";
-      default:
-        return "Canal";
+    case "department":
+      return "Departamento";
+    case "broadcast":
+      return "Transmissão";
+    case "emergency":
+      return "Emergência";
+    case "group":
+      return "Grupo";
+    default:
+      return "Canal";
     }
   };
 
   const getChannelTypeColor = (type: string) => {
     switch (type) {
-      case "emergency":
-        return "bg-destructive text-destructive-foreground";
-      case "department":
-        return "bg-info text-info-foreground";
-      case "broadcast":
-        return "bg-warning text-warning-foreground";
-      case "group":
-        return "bg-success text-success-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "emergency":
+      return "bg-destructive text-destructive-foreground";
+    case "department":
+      return "bg-info text-info-foreground";
+    case "broadcast":
+      return "bg-warning text-warning-foreground";
+    case "group":
+      return "bg-success text-success-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 

@@ -536,13 +536,13 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       items: prev.items.map(item =>
         item.id === itemId
           ? {
-              ...item,
-              value,
-              timestamp: new Date().toISOString(),
-              inspector: checklist.inspector.name,
-              status:
+            ...item,
+            value,
+            timestamp: new Date().toISOString(),
+            inspector: checklist.inspector.name,
+            status:
                 value !== undefined && value !== null && value !== "" ? "completed" : "pending",
-            }
+          }
           : item
       ),
       updatedAt: new Date().toISOString(),

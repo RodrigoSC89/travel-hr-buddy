@@ -163,27 +163,27 @@ export const MobileSpecifications = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "core":
-        return "bg-danger text-danger-foreground";
-      case "important":
-        return "bg-warning text-warning-foreground";
-      case "nice-to-have":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "core":
+      return "bg-danger text-danger-foreground";
+    case "important":
+      return "bg-warning text-warning-foreground";
+    case "nice-to-have":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-      case "high":
-        return "bg-danger text-danger-foreground";
-      case "medium":
-        return "bg-warning text-warning-foreground";
-      case "low":
-        return "bg-success text-success-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "high":
+      return "bg-danger text-danger-foreground";
+    case "medium":
+      return "bg-warning text-warning-foreground";
+    case "low":
+      return "bg-success text-success-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 

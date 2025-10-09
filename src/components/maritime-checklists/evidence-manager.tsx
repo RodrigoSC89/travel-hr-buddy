@@ -208,14 +208,14 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
 
   const getEvidenceIcon = (type: string) => {
     switch (type) {
-      case "photo":
-        return <Camera className="w-4 h-4" />;
-      case "audio":
-        return <Mic className="w-4 h-4" />;
-      case "document":
-        return <File className="w-4 h-4" />;
-      default:
-        return <File className="w-4 h-4" />;
+    case "photo":
+      return <Camera className="w-4 h-4" />;
+    case "audio":
+      return <Mic className="w-4 h-4" />;
+    case "document":
+      return <File className="w-4 h-4" />;
+    default:
+      return <File className="w-4 h-4" />;
     }
   };
 

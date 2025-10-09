@@ -145,10 +145,10 @@ export const EnhancedReservationsDashboard: React.FC = () => {
         ai_suggestions:
           conflicts.length > 0
             ? [
-                "Conflito de data detectado",
-                "Considere reagendar uma das reservas",
-                "Verifique horários de check-in/check-out",
-              ]
+              "Conflito de data detectado",
+              "Considere reagendar uma das reservas",
+              "Verifique horários de check-in/check-out",
+            ]
             : [],
       };
     });

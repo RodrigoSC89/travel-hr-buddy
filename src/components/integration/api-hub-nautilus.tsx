@@ -207,44 +207,44 @@ export const APIHubNautilus: React.FC = () => {
 
   const getMethodColor = (method: string) => {
     switch (method) {
-      case "GET":
-        return "bg-green-600";
-      case "POST":
-        return "bg-blue-600";
-      case "PUT":
-        return "bg-yellow-600";
-      case "DELETE":
-        return "bg-red-600";
-      case "PATCH":
-        return "bg-purple-600";
-      default:
-        return "bg-gray-600";
+    case "GET":
+      return "bg-green-600";
+    case "POST":
+      return "bg-blue-600";
+    case "PUT":
+      return "bg-yellow-600";
+    case "DELETE":
+      return "bg-red-600";
+    case "PATCH":
+      return "bg-purple-600";
+    default:
+      return "bg-gray-600";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "default";
-      case "beta":
-        return "secondary";
-      case "deprecated":
-        return "destructive";
-      default:
-        return "outline";
+    case "active":
+      return "default";
+    case "beta":
+      return "secondary";
+    case "deprecated":
+      return "destructive";
+    default:
+      return "outline";
     }
   };
 
   const getIntegrationStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "text-green-600";
-      case "inactive":
-        return "text-muted-foreground";
-      case "error":
-        return "text-red-600";
-      default:
-        return "text-muted-foreground";
+    case "active":
+      return "text-green-600";
+    case "inactive":
+      return "text-muted-foreground";
+    case "error":
+      return "text-red-600";
+    default:
+      return "text-muted-foreground";
     }
   };
 

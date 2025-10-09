@@ -127,23 +127,23 @@ export const IntegrationMonitoring: React.FC = () => {
 
   const getStatusColor = (status: MetricData["status"]) => {
     switch (status) {
-      case "good":
-        return "text-success";
-      case "warning":
-        return "text-warning";
-      case "critical":
-        return "text-destructive";
+    case "good":
+      return "text-success";
+    case "warning":
+      return "text-warning";
+    case "critical":
+      return "text-destructive";
     }
   };
 
   const getTrendIcon = (trend: MetricData["trend"]) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4 text-success" />;
-      case "down":
-        return <TrendingDown className="w-4 h-4 text-destructive" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-success" />;
+    case "down":
+      return <TrendingDown className="w-4 h-4 text-destructive" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

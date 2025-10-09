@@ -16,27 +16,27 @@ export const NotificationCenter: React.FC = () => {
   const getNotificationIcon = (type: Notification["type"]) => {
     const iconClass = "h-4 w-4";
     switch (type) {
-      case "success":
-        return <Check className={`${iconClass} text-success`} />;
-      case "warning":
-        return <Bell className={`${iconClass} text-warning`} />;
-      case "error":
-        return <Bell className={`${iconClass} text-danger`} />;
-      default:
-        return <Bell className={`${iconClass} text-info`} />;
+    case "success":
+      return <Check className={`${iconClass} text-success`} />;
+    case "warning":
+      return <Bell className={`${iconClass} text-warning`} />;
+    case "error":
+      return <Bell className={`${iconClass} text-danger`} />;
+    default:
+      return <Bell className={`${iconClass} text-info`} />;
     }
   };
 
   const getNotificationBadgeVariant = (type: Notification["type"]) => {
     switch (type) {
-      case "success":
-        return "default";
-      case "warning":
-        return "secondary";
-      case "error":
-        return "destructive";
-      default:
-        return "outline";
+    case "success":
+      return "default";
+    case "warning":
+      return "secondary";
+    case "error":
+      return "destructive";
+    default:
+      return "outline";
     }
   };
 

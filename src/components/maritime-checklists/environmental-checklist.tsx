@@ -177,11 +177,11 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
       items: prev.items.map(item =>
         item.id === itemId
           ? {
-              ...item,
-              [field]: value,
-              status: field === "value" && value !== undefined ? "completed" : item.status,
-              timestamp: field === "value" ? new Date().toISOString() : item.timestamp,
-            }
+            ...item,
+            [field]: value,
+            status: field === "value" && value !== undefined ? "completed" : item.status,
+            timestamp: field === "value" ? new Date().toISOString() : item.timestamp,
+          }
           : item
       ),
     }));
@@ -220,87 +220,87 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
 
   const renderItemInput = (item: ChecklistItem) => {
     switch (item.type) {
-      case "boolean":
-        return (
-          <Checkbox
-            checked={item.value === true}
-            onCheckedChange={checked => handleItemChange(item.id, "value", checked)}
-            className="mr-2"
-          />
-        );
+    case "boolean":
+      return (
+        <Checkbox
+          checked={item.value === true}
+          onCheckedChange={checked => handleItemChange(item.id, "value", checked)}
+          className="mr-2"
+        />
+      );
 
-      case "number":
-        return (
-          <div className="flex items-center gap-2">
-            <Input
-              type="number"
-              value={item.value || ""}
-              onChange={e => handleItemChange(item.id, "value", parseFloat(e.target.value))}
-              placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
-              className="w-32"
-            />
-            {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
-          </div>
-        );
-
-      case "text":
-        return (
+    case "number":
+      return (
+        <div className="flex items-center gap-2">
           <Input
+            type="number"
             value={item.value || ""}
-            onChange={e => handleItemChange(item.id, "value", e.target.value)}
-            placeholder="Digite sua observação..."
-            className="w-full"
+            onChange={e => handleItemChange(item.id, "value", parseFloat(e.target.value))}
+            placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
+            className="w-32"
           />
-        );
+          {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
+        </div>
+      );
 
-      default:
-        return null;
+    case "text":
+      return (
+        <Input
+          value={item.value || ""}
+          onChange={e => handleItemChange(item.id, "value", e.target.value)}
+          placeholder="Digite sua observação..."
+          className="w-full"
+        />
+      );
+
+    default:
+      return null;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "Água":
-        return <Droplets className="w-4 h-4" />;
-      case "Emissões":
-        return <Wind className="w-4 h-4" />;
-      case "Resíduos":
-        return <Trash2 className="w-4 h-4" />;
-      case "Vazamentos":
-        return <Droplets className="w-4 h-4" />;
-      case "Ruído":
-        return <Waves className="w-4 h-4" />;
-      case "Biodiversidade":
-        return <TreePine className="w-4 h-4" />;
-      case "Contenção":
-        return <Ship className="w-4 h-4" />;
-      case "Observações":
-        return <Leaf className="w-4 h-4" />;
-      default:
-        return <Leaf className="w-4 h-4" />;
+    case "Água":
+      return <Droplets className="w-4 h-4" />;
+    case "Emissões":
+      return <Wind className="w-4 h-4" />;
+    case "Resíduos":
+      return <Trash2 className="w-4 h-4" />;
+    case "Vazamentos":
+      return <Droplets className="w-4 h-4" />;
+    case "Ruído":
+      return <Waves className="w-4 h-4" />;
+    case "Biodiversidade":
+      return <TreePine className="w-4 h-4" />;
+    case "Contenção":
+      return <Ship className="w-4 h-4" />;
+    case "Observações":
+      return <Leaf className="w-4 h-4" />;
+    default:
+      return <Leaf className="w-4 h-4" />;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "Água":
-        return "text-blue-600 bg-blue-50";
-      case "Emissões":
-        return "text-muted-foreground bg-gray-50";
-      case "Resíduos":
-        return "text-orange-600 bg-orange-50";
-      case "Vazamentos":
-        return "text-red-600 bg-red-50";
-      case "Ruído":
-        return "text-purple-600 bg-purple-50";
-      case "Biodiversidade":
-        return "text-green-600 bg-green-50";
-      case "Contenção":
-        return "text-indigo-600 bg-indigo-50";
-      case "Observações":
-        return "text-emerald-600 bg-emerald-50";
-      default:
-        return "text-green-600 bg-green-50";
+    case "Água":
+      return "text-blue-600 bg-blue-50";
+    case "Emissões":
+      return "text-muted-foreground bg-gray-50";
+    case "Resíduos":
+      return "text-orange-600 bg-orange-50";
+    case "Vazamentos":
+      return "text-red-600 bg-red-50";
+    case "Ruído":
+      return "text-purple-600 bg-purple-50";
+    case "Biodiversidade":
+      return "text-green-600 bg-green-50";
+    case "Contenção":
+      return "text-indigo-600 bg-indigo-50";
+    case "Observações":
+      return "text-emerald-600 bg-emerald-50";
+    default:
+      return "text-green-600 bg-green-50";
     }
   };
 

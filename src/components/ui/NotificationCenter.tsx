@@ -315,31 +315,31 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case "high":
-        return <TrendingUp className="h-5 w-5 text-orange-500" />;
-      case "medium":
-        return <Activity className="h-5 w-5 text-yellow-500" />;
-      case "low":
-        return <TrendingDown className="h-5 w-5 text-blue-500" />;
-      default:
-        return <Bell className="h-5 w-5 text-gray-500" />;
+    case "critical":
+      return <AlertTriangle className="h-5 w-5 text-red-500" />;
+    case "high":
+      return <TrendingUp className="h-5 w-5 text-orange-500" />;
+    case "medium":
+      return <Activity className="h-5 w-5 text-yellow-500" />;
+    case "low":
+      return <TrendingDown className="h-5 w-5 text-blue-500" />;
+    default:
+      return <Bell className="h-5 w-5 text-gray-500" />;
     }
   };
 
   const getPriorityBadgeColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-red-500 text-white";
-      case "high":
-        return "bg-orange-500 text-white";
-      case "medium":
-        return "bg-yellow-500 text-black";
-      case "low":
-        return "bg-blue-500 text-white";
-      default:
-        return "bg-gray-500 text-white";
+    case "critical":
+      return "bg-red-500 text-white";
+    case "high":
+      return "bg-orange-500 text-white";
+    case "medium":
+      return "bg-yellow-500 text-black";
+    case "low":
+      return "bg-blue-500 text-white";
+    default:
+      return "bg-gray-500 text-white";
     }
   };
 

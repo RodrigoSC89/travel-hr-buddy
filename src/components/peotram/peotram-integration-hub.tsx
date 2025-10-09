@@ -119,69 +119,69 @@ export const PeotramIntegrationHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "connected":
-        return "bg-success/20 text-success border-success/30";
-      case "error":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "configuring":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "disconnected":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "connected":
+      return "bg-success/20 text-success border-success/30";
+    case "error":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "configuring":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "disconnected":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "connected":
-        return <Check className="w-4 h-4 text-success" />;
-      case "error":
-        return <X className="w-4 h-4 text-destructive" />;
-      case "configuring":
-        return <Settings className="w-4 h-4 text-warning" />;
-      case "disconnected":
-        return <X className="w-4 h-4 text-muted-foreground" />;
-      default:
-        return <X className="w-4 h-4 text-muted-foreground" />;
+    case "connected":
+      return <Check className="w-4 h-4 text-success" />;
+    case "error":
+      return <X className="w-4 h-4 text-destructive" />;
+    case "configuring":
+      return <Settings className="w-4 h-4 text-warning" />;
+    case "disconnected":
+      return <X className="w-4 h-4 text-muted-foreground" />;
+    default:
+      return <X className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "database":
-        return <Database className="w-5 h-5" />;
-      case "communication":
-        return <Mail className="w-5 h-5" />;
-      case "reporting":
-        return <FileText className="w-5 h-5" />;
-      case "storage":
-        return <Cloud className="w-5 h-5" />;
-      case "mobile":
-        return <Smartphone className="w-5 h-5" />;
-      case "external-api":
-        return <Globe className="w-5 h-5" />;
-      default:
-        return <Plug className="w-5 h-5" />;
+    case "database":
+      return <Database className="w-5 h-5" />;
+    case "communication":
+      return <Mail className="w-5 h-5" />;
+    case "reporting":
+      return <FileText className="w-5 h-5" />;
+    case "storage":
+      return <Cloud className="w-5 h-5" />;
+    case "mobile":
+      return <Smartphone className="w-5 h-5" />;
+    case "external-api":
+      return <Globe className="w-5 h-5" />;
+    default:
+      return <Plug className="w-5 h-5" />;
     }
   };
 
   const getCategoryName = (category: string) => {
     switch (category) {
-      case "database":
-        return "Banco de Dados";
-      case "communication":
-        return "Comunicação";
-      case "reporting":
-        return "Relatórios";
-      case "storage":
-        return "Armazenamento";
-      case "mobile":
-        return "Mobile";
-      case "external-api":
-        return "API Externa";
-      default:
-        return category;
+    case "database":
+      return "Banco de Dados";
+    case "communication":
+      return "Comunicação";
+    case "reporting":
+      return "Relatórios";
+    case "storage":
+      return "Armazenamento";
+    case "mobile":
+      return "Mobile";
+    case "external-api":
+      return "API Externa";
+    default:
+      return category;
     }
   };
 

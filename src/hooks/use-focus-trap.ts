@@ -27,7 +27,7 @@ export const useFocusTrap = (isActive: boolean) => {
         "textarea:not([disabled])",
         "input:not([disabled])",
         "select:not([disabled])",
-        '[tabindex]:not([tabindex="-1"])',
+        "[tabindex]:not([tabindex=\"-1\"])",
       ].join(", ");
 
       return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors));

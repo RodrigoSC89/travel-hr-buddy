@@ -195,25 +195,25 @@ const UnifiedDashboard = () => {
 
   const getStatusIcon = (type: string) => {
     switch (type) {
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-orange-500" />;
-      case "success":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      default:
-        return <Bell className="w-4 h-4 text-blue-500" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-orange-500" />;
+    case "success":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    default:
+      return <Bell className="w-4 h-4 text-blue-500" />;
     }
   };
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case "certificate":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "report":
-        return <BarChart3 className="w-4 h-4 text-info" />;
-      case "travel":
-        return <Calendar className="w-4 h-4 text-primary" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "certificate":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "report":
+      return <BarChart3 className="w-4 h-4 text-info" />;
+    case "travel":
+      return <Calendar className="w-4 h-4 text-primary" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

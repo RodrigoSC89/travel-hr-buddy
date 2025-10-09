@@ -179,48 +179,48 @@ export const ComplianceAuditCenter: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "compliant":
-      case "completed":
-        return "text-green-500";
-      case "warning":
-      case "in_progress":
-        return "text-yellow-500";
-      case "non_compliant":
-      case "failed":
-        return "text-red-500";
-      default:
-        return "text-muted-foreground";
+    case "compliant":
+    case "completed":
+      return "text-green-500";
+    case "warning":
+    case "in_progress":
+      return "text-yellow-500";
+    case "non_compliant":
+    case "failed":
+      return "text-red-500";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "compliant":
-      case "completed":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-      case "warning":
-      case "in_progress":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-      case "non_compliant":
-      case "failed":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "compliant":
+    case "completed":
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "warning":
+    case "in_progress":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "non_compliant":
+    case "failed":
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    default:
+      return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getComplianceIcon = (standard: string) => {
     switch (standard) {
-      case "LGPD":
-        return Building;
-      case "GDPR":
-        return Globe;
-      case "ISO 27001":
-        return Shield;
-      case "IMO/ISM Code":
-        return Anchor;
-      default:
-        return FileText;
+    case "LGPD":
+      return Building;
+    case "GDPR":
+      return Globe;
+    case "ISO 27001":
+      return Shield;
+    case "IMO/ISM Code":
+      return Anchor;
+    default:
+      return FileText;
     }
   };
 

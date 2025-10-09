@@ -135,12 +135,12 @@ export const SystemHealthMonitor: React.FC = () => {
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case "error":
-        return <AlertTriangle className="w-4 h-4 text-red-500" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      default:
-        return <CheckCircle className="w-4 h-4 text-blue-500" />;
+    case "error":
+      return <AlertTriangle className="w-4 h-4 text-red-500" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+    default:
+      return <CheckCircle className="w-4 h-4 text-blue-500" />;
     }
   };
 

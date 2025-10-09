@@ -137,46 +137,46 @@ export const SecurityCompliance = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-      case "compliant":
-        return "bg-success text-success-foreground";
-      case "pending":
-      case "in-progress":
-        return "bg-warning text-warning-foreground";
-      case "disabled":
-      case "non-compliant":
-        return "bg-danger text-danger-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "active":
+    case "compliant":
+      return "bg-success text-success-foreground";
+    case "pending":
+    case "in-progress":
+      return "bg-warning text-warning-foreground";
+    case "disabled":
+    case "non-compliant":
+      return "bg-danger text-danger-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "bg-danger text-danger-foreground";
-      case "medium":
-        return "bg-warning text-warning-foreground";
-      case "low":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "high":
+      return "bg-danger text-danger-foreground";
+    case "medium":
+      return "bg-warning text-warning-foreground";
+    case "low":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "active":
-      case "compliant":
-        return <CheckCircle className="h-4 w-4 text-success" />;
-      case "pending":
-      case "in-progress":
-        return <Clock className="h-4 w-4 text-warning" />;
-      case "disabled":
-      case "non-compliant":
-        return <AlertTriangle className="h-4 w-4 text-danger" />;
-      default:
-        return <Shield className="h-4 w-4" />;
+    case "active":
+    case "compliant":
+      return <CheckCircle className="h-4 w-4 text-success" />;
+    case "pending":
+    case "in-progress":
+      return <Clock className="h-4 w-4 text-warning" />;
+    case "disabled":
+    case "non-compliant":
+      return <AlertTriangle className="h-4 w-4 text-danger" />;
+    default:
+      return <Shield className="h-4 w-4" />;
     }
   };
 

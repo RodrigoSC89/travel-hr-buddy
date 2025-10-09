@@ -70,10 +70,10 @@ export const ArrowNavigationExample: React.FC = () => {
                           w-full text-left px-4 py-3 rounded-md transition-colors
                           flex items-center gap-3
                           ${
-                            focusedIndex === index
-                              ? "bg-primary text-primary-foreground ring-2 ring-primary/50"
-                              : "hover:bg-accent hover:text-accent-foreground"
-                          }
+                      focusedIndex === index
+                        ? "bg-primary text-primary-foreground ring-2 ring-primary/50"
+                        : "hover:bg-accent hover:text-accent-foreground"
+                      }
                           focus:outline-none
                         `}
                         role="menuitem"

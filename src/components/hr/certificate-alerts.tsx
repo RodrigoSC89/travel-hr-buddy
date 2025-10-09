@@ -80,12 +80,12 @@ export const CertificateAlerts: React.FC = () => {
 
   const getAlertIcon = (status: string) => {
     switch (status) {
-      case "expired":
-        return <AlertTriangle className="h-5 w-5 text-destructive" />;
-      case "expiring_soon":
-        return <Clock className="h-5 w-5 text-warning" />;
-      default:
-        return <FileText className="h-5 w-5 text-muted-foreground" />;
+    case "expired":
+      return <AlertTriangle className="h-5 w-5 text-destructive" />;
+    case "expiring_soon":
+      return <Clock className="h-5 w-5 text-warning" />;
+    default:
+      return <FileText className="h-5 w-5 text-muted-foreground" />;
     }
   };
 

@@ -194,27 +194,27 @@ const VesselManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "bg-green-500 text-azure-50";
-      case "maintenance":
-        return "bg-yellow-500 text-azure-900";
-      case "inactive":
-        return "bg-red-500 text-azure-50";
-      default:
-        return "bg-gray-500 text-azure-50";
+    case "active":
+      return "bg-green-500 text-azure-50";
+    case "maintenance":
+      return "bg-yellow-500 text-azure-900";
+    case "inactive":
+      return "bg-red-500 text-azure-50";
+    default:
+      return "bg-gray-500 text-azure-50";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "active":
-        return "Ativa";
-      case "maintenance":
-        return "Manutenção";
-      case "inactive":
-        return "Inativa";
-      default:
-        return "Desconhecido";
+    case "active":
+      return "Ativa";
+    case "maintenance":
+      return "Manutenção";
+    case "inactive":
+      return "Inativa";
+    default:
+      return "Desconhecido";
     }
   };
 

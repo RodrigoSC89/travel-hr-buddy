@@ -149,29 +149,29 @@ export const PeotramAdvancedReporting: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "bg-success/20 text-success border-success/30";
-      case "paused":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "draft":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "active":
+      return "bg-success/20 text-success border-success/30";
+    case "paused":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "draft":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "compliance-trend":
-        return <TrendingUp className="w-4 h-4" />;
-      case "performance-analysis":
-        return <BarChart3 className="w-4 h-4" />;
-      case "risk-assessment":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "operational-summary":
-        return <Target className="w-4 h-4" />;
-      default:
-        return <FileText className="w-4 h-4" />;
+    case "compliance-trend":
+      return <TrendingUp className="w-4 h-4" />;
+    case "performance-analysis":
+      return <BarChart3 className="w-4 h-4" />;
+    case "risk-assessment":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "operational-summary":
+      return <Target className="w-4 h-4" />;
+    default:
+      return <FileText className="w-4 h-4" />;
     }
   };
 

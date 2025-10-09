@@ -353,29 +353,29 @@ export const FlightSearch = () => {
 
   const getClassLabel = (flightClass: string) => {
     switch (flightClass) {
-      case "economy":
-        return "Econômica";
-      case "business":
-        return "Executiva";
-      case "first":
-        return "Primeira Classe";
-      default:
-        return flightClass;
+    case "economy":
+      return "Econômica";
+    case "business":
+      return "Executiva";
+    case "first":
+      return "Primeira Classe";
+    default:
+      return flightClass;
     }
   };
 
   const getAmenityIcon = (amenity: string) => {
     switch (amenity) {
-      case "wifi":
-        return <Wifi size={16} />;
-      case "snack":
-        return <Coffee size={16} />;
-      case "entertainment":
-        return <Star size={16} />;
-      case "luggage":
-        return <Luggage size={16} />;
-      default:
-        return null;
+    case "wifi":
+      return <Wifi size={16} />;
+    case "snack":
+      return <Coffee size={16} />;
+    case "entertainment":
+      return <Star size={16} />;
+    case "luggage":
+      return <Luggage size={16} />;
+    default:
+      return null;
     }
   };
 
@@ -390,17 +390,17 @@ export const FlightSearch = () => {
 
     // URLs específicas por companhia aérea
     switch (airline.toUpperCase()) {
-      case "LA":
-      case "LATAM":
-        return `https://www.latam.com/pt_br/apps/personas?fecha1_dia=${departureDate}&from=${originCode}&to=${destinationCode}&auAvailability=1&ida_vuelta=ida&vuelos_origen=${originCode}&vuelos_destino=${destinationCode}&flex=1&pax=1`;
-      case "G3":
-      case "GOL":
-        return `https://www.voegol.com.br/pt/passagens-aereas?origem=${originCode}&destino=${destinationCode}&ida=${departureDate}&volta=&adultos=${searchParams.passengers}&criancas=0&bebes=0&classeServico=ECONOMIC`;
-      case "AD":
-      case "AZUL":
-        return `https://www.voeazul.com.br/reservas/selecionar-voos?origem=${originCode}&destino=${destinationCode}&dataida=${departureDate}&volta=&adultos=${searchParams.passengers}&criancas=0&bebes=0&promocional=false`;
-      default:
-        return `https://www.kayak.com.br/flights/${originCode}-${destinationCode}/${departureDate}/${searchParams.passengers}adults?sort=bestflight_a&fs=airlines=${airline};stops=0`;
+    case "LA":
+    case "LATAM":
+      return `https://www.latam.com/pt_br/apps/personas?fecha1_dia=${departureDate}&from=${originCode}&to=${destinationCode}&auAvailability=1&ida_vuelta=ida&vuelos_origen=${originCode}&vuelos_destino=${destinationCode}&flex=1&pax=1`;
+    case "G3":
+    case "GOL":
+      return `https://www.voegol.com.br/pt/passagens-aereas?origem=${originCode}&destino=${destinationCode}&ida=${departureDate}&volta=&adultos=${searchParams.passengers}&criancas=0&bebes=0&classeServico=ECONOMIC`;
+    case "AD":
+    case "AZUL":
+      return `https://www.voeazul.com.br/reservas/selecionar-voos?origem=${originCode}&destino=${destinationCode}&dataida=${departureDate}&volta=&adultos=${searchParams.passengers}&criancas=0&bebes=0&promocional=false`;
+    default:
+      return `https://www.kayak.com.br/flights/${originCode}-${destinationCode}/${departureDate}/${searchParams.passengers}adults?sort=bestflight_a&fs=airlines=${airline};stops=0`;
     }
   };
 

@@ -191,23 +191,23 @@ export const DocumentProcessor: React.FC = () => {
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
-      case "positive":
-        return "text-green-600";
-      case "negative":
-        return "text-red-600";
-      default:
-        return "text-yellow-600";
+    case "positive":
+      return "text-green-600";
+    case "negative":
+      return "text-red-600";
+    default:
+      return "text-yellow-600";
     }
   };
 
   const getSentimentIcon = (sentiment: string) => {
     switch (sentiment) {
-      case "positive":
-        return <CheckCircle className="w-4 h-4" />;
-      case "negative":
-        return <AlertCircle className="w-4 h-4" />;
-      default:
-        return <AlertCircle className="w-4 h-4" />;
+    case "positive":
+      return <CheckCircle className="w-4 h-4" />;
+    case "negative":
+      return <AlertCircle className="w-4 h-4" />;
+    default:
+      return <AlertCircle className="w-4 h-4" />;
     }
   };
 

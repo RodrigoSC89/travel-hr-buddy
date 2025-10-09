@@ -173,44 +173,44 @@ const SystemPerformanceMonitor = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "online":
-      case "healthy":
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case "warning":
-      case "degraded":
-        return <AlertTriangle className="w-4 h-4 text-orange-600" />;
-      case "critical":
-      case "offline":
-        return <AlertTriangle className="w-4 h-4 text-red-600" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "online":
+    case "healthy":
+      return <CheckCircle className="w-4 h-4 text-green-600" />;
+    case "warning":
+    case "degraded":
+      return <AlertTriangle className="w-4 h-4 text-orange-600" />;
+    case "critical":
+    case "offline":
+      return <AlertTriangle className="w-4 h-4 text-red-600" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "online":
-      case "healthy":
-        return "text-green-600 bg-green-100";
-      case "warning":
-      case "degraded":
-        return "text-orange-600 bg-orange-100";
-      case "critical":
-      case "offline":
-        return "text-red-600 bg-red-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "online":
+    case "healthy":
+      return "text-green-600 bg-green-100";
+    case "warning":
+    case "degraded":
+      return "text-orange-600 bg-orange-100";
+    case "critical":
+    case "offline":
+      return "text-red-600 bg-red-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4 text-red-600" />;
-      case "down":
-        return <TrendingDown className="w-4 h-4 text-green-600" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-red-600" />;
+    case "down":
+      return <TrendingDown className="w-4 h-4 text-green-600" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

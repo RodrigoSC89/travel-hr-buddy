@@ -118,38 +118,38 @@ export const AIIntegrationAssistant: React.FC = () => {
 
   const getPriorityColor = (priority: AISuggestion["priority"]) => {
     switch (priority) {
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "high":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "medium":
-        return "bg-primary/20 text-primary border-primary/30";
-      case "low":
-        return "bg-muted text-muted-foreground border-border";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "medium":
+      return "bg-primary/20 text-primary border-primary/30";
+    case "low":
+      return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getTypeIcon = (type: AISuggestion["type"]) => {
     switch (type) {
-      case "optimization":
-        return <TrendingUp className="w-4 h-4" />;
-      case "security":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "new-integration":
-        return <Zap className="w-4 h-4" />;
-      case "error-fix":
-        return <Target className="w-4 h-4" />;
+    case "optimization":
+      return <TrendingUp className="w-4 h-4" />;
+    case "security":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "new-integration":
+      return <Zap className="w-4 h-4" />;
+    case "error-fix":
+      return <Target className="w-4 h-4" />;
     }
   };
 
   const getStatusColor = (status: DiagnosticResult["status"]) => {
     switch (status) {
-      case "healthy":
-        return "text-success";
-      case "warning":
-        return "text-warning";
-      case "critical":
-        return "text-destructive";
+    case "healthy":
+      return "text-success";
+    case "warning":
+      return "text-warning";
+    case "critical":
+      return "text-destructive";
     }
   };
 

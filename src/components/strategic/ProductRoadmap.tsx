@@ -261,27 +261,27 @@ const ProductRoadmap: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "in-progress":
-        return <Clock className="w-4 h-4 text-blue-500" />;
-      case "planned":
-        return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
-      default:
-        return <Clock className="w-4 h-4 text-muted-foreground" />;
+    case "completed":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "in-progress":
+      return <Clock className="w-4 h-4 text-blue-500" />;
+    case "planned":
+      return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
+    default:
+      return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "text-green-600 bg-green-50 border-green-200";
-      case "in-progress":
-        return "text-blue-600 bg-blue-50 border-blue-200";
-      case "planned":
-        return "text-muted-foreground bg-gray-50 border-gray-200";
-      default:
-        return "text-muted-foreground bg-gray-50 border-gray-200";
+    case "completed":
+      return "text-green-600 bg-green-50 border-green-200";
+    case "in-progress":
+      return "text-blue-600 bg-blue-50 border-blue-200";
+    case "planned":
+      return "text-muted-foreground bg-gray-50 border-gray-200";
+    default:
+      return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 

@@ -176,10 +176,10 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       elements: selectedTemplate.elements.map(elem =>
         elem.id === elementId
           ? {
-              ...elem,
-              requirements: [...elem.requirements, newRequirement],
-              totalWeight: elem.totalWeight + newRequirement.weight,
-            }
+            ...elem,
+            requirements: [...elem.requirements, newRequirement],
+            totalWeight: elem.totalWeight + newRequirement.weight,
+          }
           : elem
       ),
       updatedAt: new Date(),
@@ -198,15 +198,15 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       elements: selectedTemplate.elements.map(elem =>
         elem.id === elementId
           ? {
-              ...elem,
-              requirements: elem.requirements.map(req =>
-                req.id === reqId ? { ...req, ...updates } : req
-              ),
-              totalWeight: elem.requirements.reduce(
-                (sum, req) => sum + (req.id === reqId ? updates.weight || req.weight : req.weight),
-                0
-              ),
-            }
+            ...elem,
+            requirements: elem.requirements.map(req =>
+              req.id === reqId ? { ...req, ...updates } : req
+            ),
+            totalWeight: elem.requirements.reduce(
+              (sum, req) => sum + (req.id === reqId ? updates.weight || req.weight : req.weight),
+              0
+            ),
+          }
           : elem
       ),
       updatedAt: new Date(),
@@ -221,12 +221,12 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       elements: selectedTemplate.elements.map(elem =>
         elem.id === elementId
           ? {
-              ...elem,
-              requirements: elem.requirements.filter(req => req.id !== reqId),
-              totalWeight: elem.requirements
-                .filter(req => req.id !== reqId)
-                .reduce((sum, req) => sum + req.weight, 0),
-            }
+            ...elem,
+            requirements: elem.requirements.filter(req => req.id !== reqId),
+            totalWeight: elem.requirements
+              .filter(req => req.id !== reqId)
+              .reduce((sum, req) => sum + req.weight, 0),
+          }
           : elem
       ),
       updatedAt: new Date(),
@@ -246,25 +246,25 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     if (!selectedTemplate) return;
 
     switch (format) {
-      case "json": {
-        const blob = new Blob([JSON.stringify(selectedTemplate, null, 2)], {
-          type: "application/json",
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `peotram-template-${selectedTemplate.version}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        toast.success("Template exportado como JSON!");
-        break;
-      }
-      case "excel":
-        toast.info("Exportação Excel em desenvolvimento");
-        break;
-      case "pdf":
-        toast.info("Exportação PDF em desenvolvimento");
-        break;
+    case "json": {
+      const blob = new Blob([JSON.stringify(selectedTemplate, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `peotram-template-${selectedTemplate.version}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("Template exportado como JSON!");
+      break;
+    }
+    case "excel":
+      toast.info("Exportação Excel em desenvolvimento");
+      break;
+    case "pdf":
+      toast.info("Exportação PDF em desenvolvimento");
+      break;
     }
   };
 

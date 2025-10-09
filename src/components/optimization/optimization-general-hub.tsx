@@ -248,61 +248,61 @@ export const OptimizationGeneralHub = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "excellent":
-        return CheckCircle;
-      case "good":
-        return TrendingUp;
-      case "warning":
-        return AlertTriangle;
-      case "critical":
-        return AlertTriangle;
-      default:
-        return Info;
+    case "excellent":
+      return CheckCircle;
+    case "good":
+      return TrendingUp;
+    case "warning":
+      return AlertTriangle;
+    case "critical":
+      return AlertTriangle;
+    default:
+      return Info;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "excellent":
-        return "text-success";
-      case "good":
-        return "text-primary";
-      case "warning":
-        return "text-warning";
-      case "critical":
-        return "text-destructive";
-      default:
-        return "text-muted-foreground";
+    case "excellent":
+      return "text-success";
+    case "good":
+      return "text-primary";
+    case "warning":
+      return "text-warning";
+    case "critical":
+      return "text-destructive";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "database":
-        return Database;
-      case "frontend":
-        return Globe;
-      case "backend":
-        return Server;
-      case "security":
-        return Shield;
-      case "infrastructure":
-        return HardDrive;
-      default:
-        return Settings;
+    case "database":
+      return Database;
+    case "frontend":
+      return Globe;
+    case "backend":
+      return Server;
+    case "security":
+      return Shield;
+    case "infrastructure":
+      return HardDrive;
+    default:
+      return Settings;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      case "medium":
-        return "bg-warning/10 text-warning border-warning/20";
-      case "low":
-        return "bg-success/10 text-success border-success/20";
-      default:
-        return "bg-muted text-muted-foreground border-muted";
+    case "high":
+      return "bg-destructive/10 text-destructive border-destructive/20";
+    case "medium":
+      return "bg-warning/10 text-warning border-warning/20";
+    case "low":
+      return "bg-success/10 text-success border-success/20";
+    default:
+      return "bg-muted text-muted-foreground border-muted";
     }
   };
 

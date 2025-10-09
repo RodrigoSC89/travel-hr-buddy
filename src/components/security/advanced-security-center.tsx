@@ -190,54 +190,54 @@ export const AdvancedSecurityCenter: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-red-500";
-      case "high":
-        return "bg-orange-500";
-      case "medium":
-        return "bg-yellow-500";
-      case "low":
-        return "bg-blue-500";
-      default:
-        return "bg-gray-500";
+    case "critical":
+      return "bg-red-500";
+    case "high":
+      return "bg-orange-500";
+    case "medium":
+      return "bg-yellow-500";
+    case "low":
+      return "bg-blue-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case "critical":
-      case "high":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case "medium":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case "low":
-        return <CheckCircle className="h-4 w-4 text-blue-500" />;
-      default:
-        return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+    case "critical":
+    case "high":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "medium":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "low":
+      return <CheckCircle className="h-4 w-4 text-blue-500" />;
+    default:
+      return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "good":
-        return "text-green-600";
-      case "warning":
-        return "text-yellow-600";
-      case "critical":
-        return "text-red-600";
-      default:
-        return "text-muted-foreground";
+    case "good":
+      return "text-green-600";
+    case "warning":
+      return "text-yellow-600";
+    case "critical":
+      return "text-red-600";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-3 w-3 text-green-600" />;
-      case "down":
-        return <TrendingUp className="h-3 w-3 text-red-600 rotate-180" />;
-      default:
-        return <div className="h-3 w-3" />;
+    case "up":
+      return <TrendingUp className="h-3 w-3 text-green-600" />;
+    case "down":
+      return <TrendingUp className="h-3 w-3 text-red-600 rotate-180" />;
+    default:
+      return <div className="h-3 w-3" />;
     }
   };
 

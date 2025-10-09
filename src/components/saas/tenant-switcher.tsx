@@ -18,29 +18,29 @@ export const TenantSwitcher: React.FC = () => {
 
   const getPlanBadgeVariant = (planType: string) => {
     switch (planType) {
-      case "enterprise":
-        return "default";
-      case "professional":
-        return "secondary";
-      case "starter":
-        return "outline";
-      case "trial":
-        return "destructive";
-      default:
-        return "outline";
+    case "enterprise":
+      return "default";
+    case "professional":
+      return "secondary";
+    case "starter":
+      return "outline";
+    case "trial":
+      return "destructive";
+    default:
+      return "outline";
     }
   };
 
   const getPlanIcon = (planType: string) => {
     switch (planType) {
-      case "enterprise":
-        return Crown;
-      case "professional":
-        return Zap;
-      case "starter":
-        return Users;
-      default:
-        return Building2;
+    case "enterprise":
+      return Crown;
+    case "professional":
+      return Zap;
+    case "starter":
+      return Users;
+    default:
+      return Building2;
     }
   };
 

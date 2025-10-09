@@ -199,27 +199,27 @@ export const TravelCommunication = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "online":
-        return "bg-green-500";
-      case "away":
-        return "bg-yellow-500";
-      case "busy":
-        return "bg-red-500";
-      default:
-        return "bg-gray-400";
+    case "online":
+      return "bg-green-500";
+    case "away":
+      return "bg-yellow-500";
+    case "busy":
+      return "bg-red-500";
+    default:
+      return "bg-gray-400";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "online":
-        return "Online";
-      case "away":
-        return "Ausente";
-      case "busy":
-        return "Ocupado";
-      default:
-        return "Offline";
+    case "online":
+      return "Online";
+    case "away":
+      return "Ausente";
+    case "busy":
+      return "Ocupado";
+    default:
+      return "Offline";
     }
   };
 

@@ -107,35 +107,35 @@ export const VesselTracking = () => {
 
   const getStatusColor = (status: VesselPosition["status"]) => {
     switch (status) {
-      case "sailing":
-        return "bg-blue-500";
-      case "anchored":
-        return "bg-yellow-500";
-      case "docked":
-        return "bg-green-500";
-      case "maintenance":
-        return "bg-orange-500";
-      case "emergency":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
+    case "sailing":
+      return "bg-blue-500";
+    case "anchored":
+      return "bg-yellow-500";
+    case "docked":
+      return "bg-green-500";
+    case "maintenance":
+      return "bg-orange-500";
+    case "emergency":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusText = (status: VesselPosition["status"]) => {
     switch (status) {
-      case "sailing":
-        return "Navegando";
-      case "anchored":
-        return "Ancorado";
-      case "docked":
-        return "Atracado";
-      case "maintenance":
-        return "Manutenção";
-      case "emergency":
-        return "Emergência";
-      default:
-        return "Desconhecido";
+    case "sailing":
+      return "Navegando";
+    case "anchored":
+      return "Ancorado";
+    case "docked":
+      return "Atracado";
+    case "maintenance":
+      return "Manutenção";
+    case "emergency":
+      return "Emergência";
+    default:
+      return "Desconhecido";
     }
   };
 

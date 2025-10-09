@@ -213,94 +213,94 @@ export const EnhancedMobileSupport: React.FC = () => {
   const requestPermission = async (permission: keyof MobileSettings) => {
     try {
       switch (permission) {
-        case "notifications":
-          if ("Notification" in window) {
-            const result = await Notification.requestPermission();
-            const granted = result === "granted";
-            saveMobileSettings({ notifications: granted });
-            toast({
-              title: granted ? "Notificações ativadas" : "Notificações negadas",
-              description: granted
-                ? "Você receberá notificações importantes"
-                : "Ative nas configurações do navegador",
-            });
-          }
-          break;
+      case "notifications":
+        if ("Notification" in window) {
+          const result = await Notification.requestPermission();
+          const granted = result === "granted";
+          saveMobileSettings({ notifications: granted });
+          toast({
+            title: granted ? "Notificações ativadas" : "Notificações negadas",
+            description: granted
+              ? "Você receberá notificações importantes"
+              : "Ative nas configurações do navegador",
+          });
+        }
+        break;
 
-        case "location":
-          if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-              () => {
-                saveMobileSettings({ location: true });
-                toast({
-                  title: "Localização ativada",
-                  description: "O app pode acessar sua localização",
-                });
-              },
-              () => {
-                saveMobileSettings({ location: false });
-                toast({
-                  title: "Localização negada",
-                  description: "Ative nas configurações do navegador",
-                  variant: "destructive",
-                });
-              }
-            );
-          }
-          break;
-
-        case "camera":
-          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            try {
-              const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-              stream.getTracks().forEach(track => track.stop());
-              saveMobileSettings({ camera: true });
+      case "location":
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            () => {
+              saveMobileSettings({ location: true });
               toast({
-                title: "Câmera ativada",
-                description: "O app pode acessar a câmera",
+                title: "Localização ativada",
+                description: "O app pode acessar sua localização",
               });
-            } catch (error) {
-              saveMobileSettings({ camera: false });
+            },
+            () => {
+              saveMobileSettings({ location: false });
               toast({
-                title: "Câmera negada",
+                title: "Localização negada",
                 description: "Ative nas configurações do navegador",
                 variant: "destructive",
               });
             }
-          }
-          break;
+          );
+        }
+        break;
 
-        case "microphone":
-          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            try {
-              const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-              stream.getTracks().forEach(track => track.stop());
-              saveMobileSettings({ microphone: true });
-              toast({
-                title: "Microfone ativado",
-                description: "O app pode acessar o microfone",
-              });
-            } catch (error) {
-              saveMobileSettings({ microphone: false });
-              toast({
-                title: "Microfone negado",
-                description: "Ative nas configurações do navegador",
-                variant: "destructive",
-              });
-            }
-          }
-          break;
-
-        case "vibration":
-          if ("vibrate" in navigator) {
-            navigator.vibrate(200);
-            saveMobileSettings({ vibration: true });
+      case "camera":
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            stream.getTracks().forEach(track => track.stop());
+            saveMobileSettings({ camera: true });
             toast({
-              title: "Vibração ativada",
-              description: "O app pode usar vibração",
+              title: "Câmera ativada",
+              description: "O app pode acessar a câmera",
+            });
+          } catch (error) {
+            saveMobileSettings({ camera: false });
+            toast({
+              title: "Câmera negada",
+              description: "Ative nas configurações do navegador",
+              variant: "destructive",
             });
           }
-          break;
+        }
+        break;
+
+      case "microphone":
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(track => track.stop());
+            saveMobileSettings({ microphone: true });
+            toast({
+              title: "Microfone ativado",
+              description: "O app pode acessar o microfone",
+            });
+          } catch (error) {
+            saveMobileSettings({ microphone: false });
+            toast({
+              title: "Microfone negado",
+              description: "Ative nas configurações do navegador",
+              variant: "destructive",
+            });
+          }
+        }
+        break;
+
+      case "vibration":
+        if ("vibrate" in navigator) {
+          navigator.vibrate(200);
+          saveMobileSettings({ vibration: true });
+          toast({
+            title: "Vibração ativada",
+            description: "O app pode usar vibração",
+          });
+        }
+        break;
       }
     } catch (error) {
       console.error(`Erro ao solicitar permissão ${permission}:`, error);
@@ -332,14 +332,14 @@ export const EnhancedMobileSupport: React.FC = () => {
 
   const getConnectionIcon = (connection?: string) => {
     switch (connection) {
-      case "4g":
-        return <Signal className="h-4 w-4 text-green-500" />;
-      case "3g":
-        return <Signal className="h-4 w-4 text-yellow-500" />;
-      case "2g":
-        return <Signal className="h-4 w-4 text-red-500" />;
-      default:
-        return <Wifi className="h-4 w-4" />;
+    case "4g":
+      return <Signal className="h-4 w-4 text-green-500" />;
+    case "3g":
+      return <Signal className="h-4 w-4 text-yellow-500" />;
+    case "2g":
+      return <Signal className="h-4 w-4 text-red-500" />;
+    default:
+      return <Wifi className="h-4 w-4" />;
     }
   };
 

@@ -276,51 +276,51 @@ export const TravelDocumentManager = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "valid":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "expiring":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case "expired":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case "pending":
-        return <Clock className="h-4 w-4 text-blue-500" />;
-      default:
-        return <FileText className="h-4 w-4" />;
+    case "valid":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "expiring":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "expired":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "pending":
+      return <Clock className="h-4 w-4 text-blue-500" />;
+    default:
+      return <FileText className="h-4 w-4" />;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "passport":
-        return <FileText className="h-5 w-5" />;
-      case "visa":
-        return <FileText className="h-5 w-5" />;
-      case "ticket":
-        return <Plane className="h-5 w-5" />;
-      case "hotel":
-        return <Hotel className="h-5 w-5" />;
-      case "insurance":
-        return <Lock className="h-5 w-5" />;
-      case "receipt":
-        return <CreditCard className="h-5 w-5" />;
-      default:
-        return <File className="h-5 w-5" />;
+    case "passport":
+      return <FileText className="h-5 w-5" />;
+    case "visa":
+      return <FileText className="h-5 w-5" />;
+    case "ticket":
+      return <Plane className="h-5 w-5" />;
+    case "hotel":
+      return <Hotel className="h-5 w-5" />;
+    case "insurance":
+      return <Lock className="h-5 w-5" />;
+    case "receipt":
+      return <CreditCard className="h-5 w-5" />;
+    default:
+      return <File className="h-5 w-5" />;
     }
   };
 
   const getFileIcon = (fileType: string) => {
     switch (fileType.toLowerCase()) {
-      case "pdf":
-        return <FileText className="h-8 w-8 text-red-500" />;
-      case "jpg":
-      case "jpeg":
-      case "png":
-        return <FileImage className="h-8 w-8 text-blue-500" />;
-      case "mp4":
-      case "avi":
-        return <FileVideo className="h-8 w-8 text-purple-500" />;
-      default:
-        return <File className="h-8 w-8 text-muted-foreground" />;
+    case "pdf":
+      return <FileText className="h-8 w-8 text-red-500" />;
+    case "jpg":
+    case "jpeg":
+    case "png":
+      return <FileImage className="h-8 w-8 text-blue-500" />;
+    case "mp4":
+    case "avi":
+      return <FileVideo className="h-8 w-8 text-purple-500" />;
+    default:
+      return <File className="h-8 w-8 text-muted-foreground" />;
     }
   };
 

@@ -39,7 +39,7 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
         messages: [
           {
             role: "user",
-            content: 'Say "API test successful" if you can read this.',
+            content: "Say \"API test successful\" if you can read this.",
           },
         ],
         max_tokens: 20,

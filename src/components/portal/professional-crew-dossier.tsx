@@ -417,34 +417,34 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return "bg-red-100 text-red-800 border-red-200";
-      case "high":
-        return "bg-orange-100 text-orange-800 border-orange-200";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "low":
-        return "bg-green-100 text-green-800 border-green-200";
-      default:
-        return "bg-secondary text-secondary-foreground border-border";
+    case "urgent":
+      return "bg-red-100 text-red-800 border-red-200";
+    case "high":
+      return "bg-orange-100 text-orange-800 border-orange-200";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    case "low":
+      return "bg-green-100 text-green-800 border-green-200";
+    default:
+      return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "valid":
-      case "active":
-      case "verified":
-        return "bg-green-100 text-green-800";
-      case "expiring_soon":
-      case "expiring":
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "expired":
-      case "rejected":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "valid":
+    case "active":
+    case "verified":
+      return "bg-green-100 text-green-800";
+    case "expiring_soon":
+    case "expiring":
+    case "pending":
+      return "bg-yellow-100 text-yellow-800";
+    case "expired":
+    case "rejected":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
@@ -755,8 +755,8 @@ export const ProfessionalCrewDossier: React.FC = () => {
                           {format(new Date(embark.embark_date), "dd/MM/yyyy", { locale: ptBR })} -
                           {embark.disembark_date
                             ? format(new Date(embark.disembark_date), "dd/MM/yyyy", {
-                                locale: ptBR,
-                              })
+                              locale: ptBR,
+                            })
                             : "Em curso"}
                         </p>
                       </div>
@@ -866,8 +866,8 @@ export const ProfessionalCrewDossier: React.FC = () => {
                             <p className="text-sm">
                               {embark.disembark_date
                                 ? format(new Date(embark.disembark_date), "dd/MM/yyyy", {
-                                    locale: ptBR,
-                                  })
+                                  locale: ptBR,
+                                })
                                 : "Em curso"}
                             </p>
                           </div>

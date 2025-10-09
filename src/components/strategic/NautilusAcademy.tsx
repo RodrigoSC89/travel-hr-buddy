@@ -146,42 +146,42 @@ export const NautilusAcademy: React.FC = () => {
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case "beginner":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-      case "intermediate":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-      case "advanced":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "beginner":
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "intermediate":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "advanced":
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    default:
+      return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getLevelText = (level: string) => {
     switch (level) {
-      case "beginner":
-        return "Iniciante";
-      case "intermediate":
-        return "Intermediário";
-      case "advanced":
-        return "Avançado";
-      default:
-        return level;
+    case "beginner":
+      return "Iniciante";
+    case "intermediate":
+      return "Intermediário";
+    case "advanced":
+      return "Avançado";
+    default:
+      return level;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "video":
-        return Video;
-      case "text":
-        return FileText;
-      case "interactive":
-        return Monitor;
-      case "live":
-        return Headphones;
-      default:
-        return BookOpen;
+    case "video":
+      return Video;
+    case "text":
+      return FileText;
+    case "interactive":
+      return Monitor;
+    case "live":
+      return Headphones;
+    default:
+      return BookOpen;
     }
   };
 

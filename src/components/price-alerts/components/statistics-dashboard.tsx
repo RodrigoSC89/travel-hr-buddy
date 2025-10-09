@@ -109,9 +109,9 @@ export const StatisticsDashboard = () => {
           average_discount,
           best_deal: best_deal
             ? {
-                product_name: best_deal.product_name,
-                discount_percentage: best_deal.discount_percentage || 0,
-              }
+              product_name: best_deal.product_name,
+              discount_percentage: best_deal.discount_percentage || 0,
+            }
             : null,
           categories,
         });

@@ -317,48 +317,48 @@ export const PeotramDocumentManager: React.FC = () => {
 
   const getFileIcon = (type: Document["type"], format: string) => {
     switch (type) {
-      case "photo":
-        return Image;
-      case "video":
-        return Video;
-      case "audio":
-        return Mic;
-      case "procedure":
-      case "report":
-      case "certificate":
-        return FileText;
-      default:
-        return Paperclip;
+    case "photo":
+      return Image;
+    case "video":
+      return Video;
+    case "audio":
+      return Mic;
+    case "procedure":
+    case "report":
+    case "certificate":
+      return FileText;
+    default:
+      return Paperclip;
     }
   };
 
   const getStatusColor = (status: Document["status"]) => {
     switch (status) {
-      case "approved":
-        return "bg-success/20 text-success border-success/30";
-      case "pending":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "rejected":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "archived":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "approved":
+      return "bg-success/20 text-success border-success/30";
+    case "pending":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "rejected":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "archived":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusIcon = (status: Document["status"]) => {
     switch (status) {
-      case "approved":
-        return CheckCircle;
-      case "pending":
-        return Clock;
-      case "rejected":
-        return AlertTriangle;
-      case "archived":
-        return Archive;
-      default:
-        return Clock;
+    case "approved":
+      return CheckCircle;
+    case "pending":
+      return Clock;
+    case "rejected":
+      return AlertTriangle;
+    case "archived":
+      return Archive;
+    default:
+      return Clock;
     }
   };
 

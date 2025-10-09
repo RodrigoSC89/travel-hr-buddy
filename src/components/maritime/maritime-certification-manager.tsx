@@ -183,44 +183,44 @@ export const MaritimeCertificationManager = () => {
 
   const getStatusColor = (status: MaritimeCertificate["status"]) => {
     switch (status) {
-      case "valid":
-        return "bg-green-500";
-      case "expiring":
-        return "bg-yellow-500";
-      case "expired":
-        return "bg-red-500";
-      case "pending_renewal":
-        return "bg-orange-500";
-      default:
-        return "bg-gray-500";
+    case "valid":
+      return "bg-green-500";
+    case "expiring":
+      return "bg-yellow-500";
+    case "expired":
+      return "bg-red-500";
+    case "pending_renewal":
+      return "bg-orange-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusText = (status: MaritimeCertificate["status"]) => {
     switch (status) {
-      case "valid":
-        return "Válida";
-      case "expiring":
-        return "Vencendo";
-      case "expired":
-        return "Vencida";
-      case "pending_renewal":
-        return "Renovação Pendente";
-      default:
-        return "Desconhecido";
+    case "valid":
+      return "Válida";
+    case "expiring":
+      return "Vencendo";
+    case "expired":
+      return "Vencida";
+    case "pending_renewal":
+      return "Renovação Pendente";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getAlertColor = (alertType: CertificationAlert["alert_type"]) => {
     switch (alertType) {
-      case "expiring_soon":
-        return "bg-yellow-100 border-yellow-500 text-yellow-800";
-      case "expired":
-        return "bg-red-100 border-red-500 text-red-800";
-      case "renewal_required":
-        return "bg-orange-100 border-orange-500 text-orange-800";
-      default:
-        return "bg-secondary border-muted text-secondary-foreground";
+    case "expiring_soon":
+      return "bg-yellow-100 border-yellow-500 text-yellow-800";
+    case "expired":
+      return "bg-red-100 border-red-500 text-red-800";
+    case "renewal_required":
+      return "bg-orange-100 border-orange-500 text-orange-800";
+    default:
+      return "bg-secondary border-muted text-secondary-foreground";
     }
   };
 

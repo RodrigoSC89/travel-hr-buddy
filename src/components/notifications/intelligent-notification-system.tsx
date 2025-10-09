@@ -141,44 +141,44 @@ const IntelligentNotificationSystem = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "warning":
-        return AlertTriangle;
-      case "success":
-        return CheckCircle;
-      case "error":
-        return AlertTriangle;
-      case "ai_insight":
-        return Brain;
-      default:
-        return Info;
+    case "warning":
+      return AlertTriangle;
+    case "success":
+      return CheckCircle;
+    case "error":
+      return AlertTriangle;
+    case "ai_insight":
+      return Brain;
+    default:
+      return Info;
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "warning":
-        return "text-orange-600";
-      case "error":
-        return "text-red-600";
-      case "success":
-        return "text-green-600";
-      case "ai_insight":
-        return "text-purple-600";
-      default:
-        return "text-blue-600";
+    case "warning":
+      return "text-orange-600";
+    case "error":
+      return "text-red-600";
+    case "success":
+      return "text-green-600";
+    case "ai_insight":
+      return "text-purple-600";
+    default:
+      return "text-blue-600";
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return <Badge variant="destructive">Urgente</Badge>;
-      case "high":
-        return <Badge variant="default">Alta</Badge>;
-      case "medium":
-        return <Badge variant="secondary">Média</Badge>;
-      default:
-        return <Badge variant="outline">Baixa</Badge>;
+    case "urgent":
+      return <Badge variant="destructive">Urgente</Badge>;
+    case "high":
+      return <Badge variant="default">Alta</Badge>;
+    case "medium":
+      return <Badge variant="secondary">Média</Badge>;
+    default:
+      return <Badge variant="outline">Baixa</Badge>;
     }
   };
 

@@ -27,27 +27,27 @@ const VoiceAnalytics: React.FC<VoiceAnalyticsProps> = ({
 
   const getQualityColor = (quality: string) => {
     switch (quality) {
-      case "excellent":
-        return "text-emerald-500";
-      case "good":
-        return "text-yellow-500";
-      case "poor":
-        return "text-red-500";
-      default:
-        return "text-muted-foreground";
+    case "excellent":
+      return "text-emerald-500";
+    case "good":
+      return "text-yellow-500";
+    case "poor":
+      return "text-red-500";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getQualityProgress = (quality: string) => {
     switch (quality) {
-      case "excellent":
-        return 95;
-      case "good":
-        return 70;
-      case "poor":
-        return 30;
-      default:
-        return 0;
+    case "excellent":
+      return 95;
+    case "good":
+      return 70;
+    case "poor":
+      return 30;
+    default:
+      return 0;
     }
   };
 

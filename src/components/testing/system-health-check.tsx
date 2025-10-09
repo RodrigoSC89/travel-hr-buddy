@@ -209,35 +209,35 @@ export const SystemHealthCheck: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "passing":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "failing":
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      case "warning":
-        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
-      default:
-        return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
+    case "passing":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "failing":
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    case "warning":
+      return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+    default:
+      return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "passing":
-        return (
-          <Badge variant="default" className="bg-green-500">
+    case "passing":
+      return (
+        <Badge variant="default" className="bg-green-500">
             Passou
-          </Badge>
-        );
-      case "failing":
-        return <Badge variant="destructive">Falhou</Badge>;
-      case "warning":
-        return (
-          <Badge variant="secondary" className="bg-yellow-500">
+        </Badge>
+      );
+    case "failing":
+      return <Badge variant="destructive">Falhou</Badge>;
+    case "warning":
+      return (
+        <Badge variant="secondary" className="bg-yellow-500">
             Aviso
-          </Badge>
-        );
-      default:
-        return <Badge variant="outline">Pendente</Badge>;
+        </Badge>
+      );
+    default:
+      return <Badge variant="outline">Pendente</Badge>;
     }
   };
 

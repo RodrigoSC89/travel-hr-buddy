@@ -132,10 +132,10 @@ export const SmartWorkflow = () => {
       prev.map(workflow =>
         workflow.id === id
           ? {
-              ...workflow,
-              status:
+            ...workflow,
+            status:
                 workflow.status === "running" ? "paused" : ("running" as "running" | "paused"),
-            }
+          }
           : workflow
       )
     );
@@ -148,40 +148,40 @@ export const SmartWorkflow = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "running":
-        return "bg-success";
-      case "paused":
-        return "bg-warning";
-      case "error":
-        return "bg-destructive";
-      default:
-        return "bg-muted";
+    case "running":
+      return "bg-success";
+    case "paused":
+      return "bg-warning";
+    case "error":
+      return "bg-destructive";
+    default:
+      return "bg-muted";
     }
   };
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-      case "simple":
-        return "bg-green-100 text-green-700";
-      case "medium":
-        return "bg-yellow-100 text-yellow-700";
-      case "complex":
-        return "bg-red-100 text-red-700";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "simple":
+      return "bg-green-100 text-green-700";
+    case "medium":
+      return "bg-yellow-100 text-yellow-700";
+    case "complex":
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "Financeiro":
-        return <Database className="h-4 w-4" />;
-      case "RH":
-        return <Users className="h-4 w-4" />;
-      case "Analytics":
-        return <TrendingUp className="h-4 w-4" />;
-      default:
-        return <Workflow className="h-4 w-4" />;
+    case "Financeiro":
+      return <Database className="h-4 w-4" />;
+    case "RH":
+      return <Users className="h-4 w-4" />;
+    case "Analytics":
+      return <TrendingUp className="h-4 w-4" />;
+    default:
+      return <Workflow className="h-4 w-4" />;
     }
   };
 

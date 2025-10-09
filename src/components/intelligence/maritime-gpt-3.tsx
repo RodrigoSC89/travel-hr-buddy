@@ -344,9 +344,9 @@ Sistema ativo para tradução especializada em 50+ idiomas.
 
 **Idiomas Principais:**
 ${languages
-  .slice(0, 10)
-  .map(lang => `${lang.flag} ${lang.name}`)
-  .join("\n")}
+    .slice(0, 10)
+    .map(lang => `${lang.flag} ${lang.name}`)
+    .join("\n")}
 
 **Especialidades:**
 - Documentação técnica marítima

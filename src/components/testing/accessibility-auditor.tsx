@@ -120,23 +120,23 @@ export const AccessibilityAuditor: React.FC = () => {
 
   const getIssueIcon = (type: AccessibilityIssue["type"]) => {
     switch (type) {
-      case "error":
-        return <AlertTriangle className="w-4 h-4 text-danger" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-warning" />;
-      case "success":
-        return <CheckCircle className="w-4 h-4 text-success" />;
+    case "error":
+      return <AlertTriangle className="w-4 h-4 text-danger" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "success":
+      return <CheckCircle className="w-4 h-4 text-success" />;
     }
   };
 
   const getIssueColor = (type: AccessibilityIssue["type"]) => {
     switch (type) {
-      case "error":
-        return "border-danger bg-danger/5";
-      case "warning":
-        return "border-warning bg-warning/5";
-      case "success":
-        return "border-success bg-success/5";
+    case "error":
+      return "border-danger bg-danger/5";
+    case "warning":
+      return "border-warning bg-warning/5";
+    case "success":
+      return "border-success bg-success/5";
     }
   };
 

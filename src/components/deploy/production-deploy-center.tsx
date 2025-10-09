@@ -119,30 +119,30 @@ const ProductionDeployCenter: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "healthy":
-      case "online":
-        return "text-green-600 bg-green-50 border-green-200";
-      case "warning":
-      case "degraded":
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
-      case "critical":
-      case "offline":
-        return "text-red-600 bg-red-50 border-red-200";
-      default:
-        return "text-muted-foreground bg-gray-50 border-gray-200";
+    case "healthy":
+    case "online":
+      return "text-green-600 bg-green-50 border-green-200";
+    case "warning":
+    case "degraded":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    case "critical":
+    case "offline":
+      return "text-red-600 bg-red-50 border-red-200";
+    default:
+      return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "healthy":
-      case "online":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "warning":
-      case "degraded":
-        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "healthy":
+    case "online":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "warning":
+    case "degraded":
+      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

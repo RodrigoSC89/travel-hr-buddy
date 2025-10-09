@@ -223,23 +223,23 @@ export const AIPricePredictor: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "rising":
-        return <TrendingUp className="w-4 h-4 text-destructive" />;
-      case "falling":
-        return <TrendingDown className="w-4 h-4 text-success" />;
-      default:
-        return <BarChart3 className="w-4 h-4 text-muted-foreground" />;
+    case "rising":
+      return <TrendingUp className="w-4 h-4 text-destructive" />;
+    case "falling":
+      return <TrendingDown className="w-4 h-4 text-success" />;
+    default:
+      return <BarChart3 className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-      case "rising":
-        return "text-destructive bg-destructive/10 border-destructive/20";
-      case "falling":
-        return "text-success bg-success/10 border-success/20";
-      default:
-        return "text-muted-foreground bg-muted/10 border-muted/20";
+    case "rising":
+      return "text-destructive bg-destructive/10 border-destructive/20";
+    case "falling":
+      return "text-success bg-success/10 border-success/20";
+    default:
+      return "text-muted-foreground bg-muted/10 border-muted/20";
     }
   };
 

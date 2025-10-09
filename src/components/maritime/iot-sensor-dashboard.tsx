@@ -163,26 +163,26 @@ export const IoTSensorDashboard = () => {
           let newStatus = sensor.status;
 
           switch (sensor.sensorType) {
-            case "engine_temperature":
-              newValue = Math.max(60, Math.min(100, sensor.value + (Math.random() - 0.5) * 4));
-              newStatus = newValue > 85 ? "warning" : newValue > 95 ? "critical" : "normal";
-              break;
-            case "vibration":
-              newValue = Math.max(0, Math.min(10, sensor.value + (Math.random() - 0.5) * 1));
-              newStatus = newValue > 5 ? "warning" : newValue > 8 ? "critical" : "normal";
-              break;
-            case "fuel_level":
-              newValue = Math.max(0, sensor.value - Math.random() * 0.5);
-              newStatus = newValue < 20 ? "warning" : newValue < 10 ? "critical" : "normal";
-              break;
-            case "oil_pressure":
-              newValue = Math.max(1, Math.min(5, sensor.value + (Math.random() - 0.5) * 0.3));
-              newStatus = newValue < 2.5 ? "warning" : newValue < 1.5 ? "critical" : "normal";
-              break;
-            case "battery_voltage":
-              newValue = Math.max(10, Math.min(14, sensor.value + (Math.random() - 0.5) * 0.2));
-              newStatus = newValue < 12 ? "warning" : newValue < 11.5 ? "critical" : "normal";
-              break;
+          case "engine_temperature":
+            newValue = Math.max(60, Math.min(100, sensor.value + (Math.random() - 0.5) * 4));
+            newStatus = newValue > 85 ? "warning" : newValue > 95 ? "critical" : "normal";
+            break;
+          case "vibration":
+            newValue = Math.max(0, Math.min(10, sensor.value + (Math.random() - 0.5) * 1));
+            newStatus = newValue > 5 ? "warning" : newValue > 8 ? "critical" : "normal";
+            break;
+          case "fuel_level":
+            newValue = Math.max(0, sensor.value - Math.random() * 0.5);
+            newStatus = newValue < 20 ? "warning" : newValue < 10 ? "critical" : "normal";
+            break;
+          case "oil_pressure":
+            newValue = Math.max(1, Math.min(5, sensor.value + (Math.random() - 0.5) * 0.3));
+            newStatus = newValue < 2.5 ? "warning" : newValue < 1.5 ? "critical" : "normal";
+            break;
+          case "battery_voltage":
+            newValue = Math.max(10, Math.min(14, sensor.value + (Math.random() - 0.5) * 0.2));
+            newStatus = newValue < 12 ? "warning" : newValue < 11.5 ? "critical" : "normal";
+            break;
           }
 
           return {
@@ -218,57 +218,57 @@ export const IoTSensorDashboard = () => {
 
   const getSensorIcon = (type: string) => {
     switch (type) {
-      case "engine_temperature":
-        return <Thermometer className="h-5 w-5" />;
-      case "vibration":
-        return <Activity className="h-5 w-5" />;
-      case "fuel_level":
-        return <Fuel className="h-5 w-5" />;
-      case "oil_pressure":
-        return <Gauge className="h-5 w-5" />;
-      case "battery_voltage":
-        return <Battery className="h-5 w-5" />;
-      default:
-        return <Settings className="h-5 w-5" />;
+    case "engine_temperature":
+      return <Thermometer className="h-5 w-5" />;
+    case "vibration":
+      return <Activity className="h-5 w-5" />;
+    case "fuel_level":
+      return <Fuel className="h-5 w-5" />;
+    case "oil_pressure":
+      return <Gauge className="h-5 w-5" />;
+    case "battery_voltage":
+      return <Battery className="h-5 w-5" />;
+    default:
+      return <Settings className="h-5 w-5" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "normal":
-        return "bg-green-100 text-green-800";
-      case "warning":
-        return "bg-yellow-100 text-yellow-800";
-      case "critical":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "normal":
+      return "bg-green-100 text-green-800";
+    case "warning":
+      return "bg-yellow-100 text-yellow-800";
+    case "critical":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getConnectionColor = (status: string) => {
     switch (status) {
-      case "online":
-        return "text-green-500";
-      case "unstable":
-        return "text-yellow-500";
-      case "offline":
-        return "text-red-500";
-      default:
-        return "text-muted-foreground";
+    case "online":
+      return "text-green-500";
+    case "unstable":
+      return "text-yellow-500";
+    case "offline":
+      return "text-red-500";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getSensorValueColor = (sensor: SensorReading) => {
     switch (sensor.status) {
-      case "critical":
-        return "text-red-600";
-      case "warning":
-        return "text-yellow-600";
-      case "normal":
-        return "text-green-600";
-      default:
-        return "text-muted-foreground";
+    case "critical":
+      return "text-red-600";
+    case "warning":
+      return "text-yellow-600";
+    case "normal":
+      return "text-green-600";
+    default:
+      return "text-muted-foreground";
     }
   };
 

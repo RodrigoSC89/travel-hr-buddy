@@ -113,31 +113,31 @@ export const APIStatus: React.FC = () => {
 
   const getStatusIcon = (status: APIService["status"]) => {
     switch (status) {
-      case "connected":
-        return <CheckCircle className="h-5 w-5 text-success" />;
-      case "disconnected":
-        return <XCircle className="h-5 w-5 text-destructive" />;
-      case "testing":
-        return <Loader2 className="h-5 w-5 text-primary animate-spin" />;
-      case "unknown":
-        return <Activity className="h-5 w-5 text-muted-foreground" />;
+    case "connected":
+      return <CheckCircle className="h-5 w-5 text-success" />;
+    case "disconnected":
+      return <XCircle className="h-5 w-5 text-destructive" />;
+    case "testing":
+      return <Loader2 className="h-5 w-5 text-primary animate-spin" />;
+    case "unknown":
+      return <Activity className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: APIService["status"]) => {
     switch (status) {
-      case "connected":
-        return <Badge className="bg-success/20 text-success border-success/30">✅ Conectado</Badge>;
-      case "disconnected":
-        return (
-          <Badge className="bg-destructive/20 text-destructive border-destructive/30">
+    case "connected":
+      return <Badge className="bg-success/20 text-success border-success/30">✅ Conectado</Badge>;
+    case "disconnected":
+      return (
+        <Badge className="bg-destructive/20 text-destructive border-destructive/30">
             ❌ Falhou
-          </Badge>
-        );
-      case "testing":
-        return <Badge className="bg-primary/20 text-primary border-primary/30">⏳ Testando</Badge>;
-      case "unknown":
-        return <Badge variant="outline">Não Testado</Badge>;
+        </Badge>
+      );
+    case "testing":
+      return <Badge className="bg-primary/20 text-primary border-primary/30">⏳ Testando</Badge>;
+    case "unknown":
+      return <Badge variant="outline">Não Testado</Badge>;
     }
   };
 

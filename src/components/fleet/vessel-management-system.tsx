@@ -288,44 +288,44 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "bg-success text-success-foreground";
-      case "maintenance":
-        return "bg-warning text-warning-foreground";
-      case "inactive":
-        return "bg-destructive text-destructive-foreground";
-      case "docked":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "active":
+      return "bg-success text-success-foreground";
+    case "maintenance":
+      return "bg-warning text-warning-foreground";
+    case "inactive":
+      return "bg-destructive text-destructive-foreground";
+    case "docked":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "active":
-        return "Operacional";
-      case "maintenance":
-        return "Manutenção";
-      case "inactive":
-        return "Inativa";
-      case "docked":
-        return "Atracada";
-      default:
-        return "Desconhecido";
+    case "active":
+      return "Operacional";
+    case "maintenance":
+      return "Manutenção";
+    case "inactive":
+      return "Inativa";
+    case "docked":
+      return "Atracada";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getVesselTypeIcon = (type: string) => {
     switch (type.toLowerCase()) {
-      case "container ship":
-        return <Ship className="h-5 w-5 text-primary" />;
-      case "bulk carrier":
-        return <Anchor className="h-5 w-5 text-azure-600" />;
-      case "tanker":
-        return <Fuel className="h-5 w-5 text-warning" />;
-      default:
-        return <Navigation className="h-5 w-5 text-muted-foreground" />;
+    case "container ship":
+      return <Ship className="h-5 w-5 text-primary" />;
+    case "bulk carrier":
+      return <Anchor className="h-5 w-5 text-azure-600" />;
+    case "tanker":
+      return <Fuel className="h-5 w-5 text-warning" />;
+    default:
+      return <Navigation className="h-5 w-5 text-muted-foreground" />;
     }
   };
 

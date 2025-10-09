@@ -66,25 +66,25 @@ export class APIHealthMonitor {
     const now = Date.now();
 
     switch (breaker.state) {
-      case "closed":
-        return true;
+    case "closed":
+      return true;
 
-      case "open":
-        // Check if we should transition to half-open
-        if (now >= breaker.nextRetryTime) {
-          breaker.state = "half-open";
-          logger.log(`Circuit breaker for ${apiName} transitioned to half-open`);
-          return true;
-        }
-        logger.warn(`Circuit breaker for ${apiName} is open, blocking request`);
-        return false;
-
-      case "half-open":
-        // Allow one request to test if service recovered
+    case "open":
+      // Check if we should transition to half-open
+      if (now >= breaker.nextRetryTime) {
+        breaker.state = "half-open";
+        logger.log(`Circuit breaker for ${apiName} transitioned to half-open`);
         return true;
+      }
+      logger.warn(`Circuit breaker for ${apiName} is open, blocking request`);
+      return false;
 
-      default:
-        return true;
+    case "half-open":
+      // Allow one request to test if service recovered
+      return true;
+
+    default:
+      return true;
     }
   }
 

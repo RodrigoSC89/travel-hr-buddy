@@ -174,67 +174,67 @@ export const PeotramComplianceTracker: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "compliant":
-      case "valid":
-        return "bg-success/20 text-success border-success/30";
-      case "pending":
-      case "expiring":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "non-compliant":
-      case "expired":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "suspended":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "compliant":
+    case "valid":
+      return "bg-success/20 text-success border-success/30";
+    case "pending":
+    case "expiring":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "non-compliant":
+    case "expired":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "suspended":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "high":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "medium":
-        return "bg-info/20 text-info border-info/30";
-      case "low":
-        return "bg-success/20 text-success border-success/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "medium":
+      return "bg-info/20 text-info border-info/30";
+    case "low":
+      return "bg-success/20 text-success border-success/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "safety":
-        return <Shield className="w-4 h-4" />;
-      case "environmental":
-        return <TrendingUp className="w-4 h-4" />;
-      case "quality":
-        return <Award className="w-4 h-4" />;
-      case "security":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "operational":
-        return <BarChart3 className="w-4 h-4" />;
-      default:
-        return <FileCheck className="w-4 h-4" />;
+    case "safety":
+      return <Shield className="w-4 h-4" />;
+    case "environmental":
+      return <TrendingUp className="w-4 h-4" />;
+    case "quality":
+      return <Award className="w-4 h-4" />;
+    case "security":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "operational":
+      return <BarChart3 className="w-4 h-4" />;
+    default:
+      return <FileCheck className="w-4 h-4" />;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "compliant":
-      case "valid":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "pending":
-      case "expiring":
-        return <Clock className="w-4 h-4 text-warning" />;
-      case "non-compliant":
-      case "expired":
-        return <AlertCircle className="w-4 h-4 text-destructive" />;
-      default:
-        return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
+    case "compliant":
+    case "valid":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "pending":
+    case "expiring":
+      return <Clock className="w-4 h-4 text-warning" />;
+    case "non-compliant":
+    case "expired":
+      return <AlertCircle className="w-4 h-4 text-destructive" />;
+    default:
+      return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

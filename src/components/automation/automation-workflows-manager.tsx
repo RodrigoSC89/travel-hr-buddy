@@ -265,14 +265,14 @@ export const AutomationWorkflowsManager: React.FC = () => {
     const { trigger_type, trigger_config } = workflow;
 
     switch (trigger_type) {
-      case "schedule":
-        return `Agendado: ${trigger_config.cron}`;
-      case "event":
-        return `Evento: ${trigger_config.event_type}`;
-      case "condition":
-        return `Condição: ${trigger_config.condition}`;
-      default:
-        return "Não configurado";
+    case "schedule":
+      return `Agendado: ${trigger_config.cron}`;
+    case "event":
+      return `Evento: ${trigger_config.event_type}`;
+    case "condition":
+      return `Condição: ${trigger_config.condition}`;
+    default:
+      return "Não configurado";
     }
   };
 
@@ -285,24 +285,24 @@ export const AutomationWorkflowsManager: React.FC = () => {
 
   const getExecutionStatusBadge = (status: string) => {
     switch (status) {
-      case "completed":
-        return (
-          <Badge variant="default" className="bg-green-100 text-green-800">
+    case "completed":
+      return (
+        <Badge variant="default" className="bg-green-100 text-green-800">
             Sucesso
-          </Badge>
-        );
-      case "failed":
-        return <Badge variant="destructive">Falha</Badge>;
-      case "running":
-        return (
-          <Badge variant="default" className="bg-blue-100 text-blue-800">
+        </Badge>
+      );
+    case "failed":
+      return <Badge variant="destructive">Falha</Badge>;
+    case "running":
+      return (
+        <Badge variant="default" className="bg-blue-100 text-blue-800">
             Executando
-          </Badge>
-        );
-      case "pending":
-        return <Badge variant="outline">Pendente</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+        </Badge>
+      );
+    case "pending":
+      return <Badge variant="outline">Pendente</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 

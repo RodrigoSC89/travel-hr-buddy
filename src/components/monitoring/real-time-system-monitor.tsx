@@ -124,27 +124,27 @@ export const RealTimeSystemMonitor: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "good":
-        return "text-green-500";
-      case "warning":
-        return "text-yellow-500";
-      case "critical":
-        return "text-red-500";
-      default:
-        return "text-muted-foreground";
+    case "good":
+      return "text-green-500";
+    case "warning":
+      return "text-yellow-500";
+    case "critical":
+      return "text-red-500";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getAlertColor = (type: string) => {
     switch (type) {
-      case "critical":
-        return "border-red-200 bg-red-50 dark:bg-red-900/20";
-      case "warning":
-        return "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20";
-      case "info":
-        return "border-blue-200 bg-blue-50 dark:bg-blue-900/20";
-      default:
-        return "border-gray-200 bg-gray-50 dark:bg-gray-900/20";
+    case "critical":
+      return "border-red-200 bg-red-50 dark:bg-red-900/20";
+    case "warning":
+      return "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20";
+    case "info":
+      return "border-blue-200 bg-blue-50 dark:bg-blue-900/20";
+    default:
+      return "border-gray-200 bg-gray-50 dark:bg-gray-900/20";
     }
   };
 

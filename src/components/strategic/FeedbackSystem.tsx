@@ -127,70 +127,70 @@ export const FeedbackSystem = () => {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "feature":
-        return "bg-primary text-primary-foreground";
-      case "bug":
-        return "bg-danger text-danger-foreground";
-      case "improvement":
-        return "bg-warning text-warning-foreground";
-      case "general":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "feature":
+      return "bg-primary text-primary-foreground";
+    case "bug":
+      return "bg-danger text-danger-foreground";
+    case "improvement":
+      return "bg-warning text-warning-foreground";
+    case "general":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "bg-success text-success-foreground";
-      case "planned":
-        return "bg-primary text-primary-foreground";
-      case "in-review":
-        return "bg-warning text-warning-foreground";
-      case "pending":
-        return "bg-muted text-muted-foreground";
-      case "rejected":
-        return "bg-danger text-danger-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "completed":
+      return "bg-success text-success-foreground";
+    case "planned":
+      return "bg-primary text-primary-foreground";
+    case "in-review":
+      return "bg-warning text-warning-foreground";
+    case "pending":
+      return "bg-muted text-muted-foreground";
+    case "rejected":
+      return "bg-danger text-danger-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "bg-danger text-danger-foreground";
-      case "medium":
-        return "bg-warning text-warning-foreground";
-      case "low":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "high":
+      return "bg-danger text-danger-foreground";
+    case "medium":
+      return "bg-warning text-warning-foreground";
+    case "low":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="h-4 w-4" />;
-      case "planned":
-        return <Flag className="h-4 w-4" />;
-      case "in-review":
-        return <Clock className="h-4 w-4" />;
-      default:
-        return <MessageSquare className="h-4 w-4" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4" />;
+    case "planned":
+      return <Flag className="h-4 w-4" />;
+    case "in-review":
+      return <Clock className="h-4 w-4" />;
+    default:
+      return <MessageSquare className="h-4 w-4" />;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-success" />;
-      case "down":
-        return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
-      default:
-        return <TrendingUp className="h-4 w-4 text-muted-foreground" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-success" />;
+    case "down":
+      return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
+    default:
+      return <TrendingUp className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

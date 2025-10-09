@@ -170,51 +170,51 @@ export const PeotramIncidentManager: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "high":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      case "medium":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "low":
-        return "bg-info/20 text-info border-info/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high":
+      return "bg-destructive/10 text-destructive border-destructive/20";
+    case "medium":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "low":
+      return "bg-info/20 text-info border-info/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "resolved":
-      case "closed":
-        return "bg-success/20 text-success border-success/30";
-      case "action-required":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "investigating":
-        return "bg-info/20 text-info border-info/30";
-      case "reported":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "resolved":
+    case "closed":
+      return "bg-success/20 text-success border-success/30";
+    case "action-required":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "investigating":
+      return "bg-info/20 text-info border-info/30";
+    case "reported":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "safety":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "environmental":
-        return <Activity className="w-4 h-4" />;
-      case "operational":
-        return <Clock className="w-4 h-4" />;
-      case "security":
-        return <Eye className="w-4 h-4" />;
-      case "technical":
-        return <FileText className="w-4 h-4" />;
-      case "human-error":
-        return <Users className="w-4 h-4" />;
-      default:
-        return <AlertTriangle className="w-4 h-4" />;
+    case "safety":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "environmental":
+      return <Activity className="w-4 h-4" />;
+    case "operational":
+      return <Clock className="w-4 h-4" />;
+    case "security":
+      return <Eye className="w-4 h-4" />;
+    case "technical":
+      return <FileText className="w-4 h-4" />;
+    case "human-error":
+      return <Users className="w-4 h-4" />;
+    default:
+      return <AlertTriangle className="w-4 h-4" />;
     }
   };
 

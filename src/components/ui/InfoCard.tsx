@@ -36,16 +36,16 @@ export const InfoCard: React.FC<InfoCardProps> = ({
 }) => {
   const getVariantClasses = () => {
     switch (variant) {
-      case "success":
-        return "border-success/50 bg-success/5";
-      case "warning":
-        return "border-warning/50 bg-warning/5";
-      case "error":
-        return "border-destructive/50 bg-destructive/5";
-      case "info":
-        return "border-blue-500/50 bg-blue-500/5";
-      default:
-        return "border-border bg-card";
+    case "success":
+      return "border-success/50 bg-success/5";
+    case "warning":
+      return "border-warning/50 bg-warning/5";
+    case "error":
+      return "border-destructive/50 bg-destructive/5";
+    case "info":
+      return "border-blue-500/50 bg-blue-500/5";
+    default:
+      return "border-border bg-card";
     }
   };
 

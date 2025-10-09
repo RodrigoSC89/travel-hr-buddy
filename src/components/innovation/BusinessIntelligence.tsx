@@ -256,42 +256,42 @@ export const BusinessIntelligence = () => {
 
   const getReportIcon = (type: string) => {
     switch (type) {
-      case "financial":
-        return <DollarSign className="h-4 w-4 text-success" />;
-      case "operational":
-        return <Ship className="h-4 w-4 text-primary" />;
-      case "compliance":
-        return <AlertCircle className="h-4 w-4 text-warning" />;
-      case "performance":
-        return <Target className="h-4 w-4 text-info" />;
-      default:
-        return <BarChart3 className="h-4 w-4" />;
+    case "financial":
+      return <DollarSign className="h-4 w-4 text-success" />;
+    case "operational":
+      return <Ship className="h-4 w-4 text-primary" />;
+    case "compliance":
+      return <AlertCircle className="h-4 w-4 text-warning" />;
+    case "performance":
+      return <Target className="h-4 w-4 text-info" />;
+    default:
+      return <BarChart3 className="h-4 w-4" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "ready":
-        return "bg-success text-success-foreground";
-      case "generating":
-        return "bg-warning text-warning-foreground";
-      case "scheduled":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "ready":
+      return "bg-success text-success-foreground";
+    case "generating":
+      return "bg-warning text-warning-foreground";
+    case "scheduled":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getPerformanceColor = (performance: string) => {
     switch (performance) {
-      case "above":
-        return "text-success";
-      case "below":
-        return "text-danger";
-      case "equal":
-        return "text-warning";
-      default:
-        return "text-muted-foreground";
+    case "above":
+      return "text-success";
+    case "below":
+      return "text-danger";
+    case "equal":
+      return "text-warning";
+    default:
+      return "text-muted-foreground";
     }
   };
 

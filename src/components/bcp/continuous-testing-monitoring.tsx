@@ -125,57 +125,57 @@ export const ContinuousTestingMonitoring: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "passed":
-        return "text-green-500";
-      case "warning":
-        return "text-yellow-500";
-      case "failed":
-        return "text-red-500";
-      default:
-        return "text-muted-foreground";
+    case "passed":
+      return "text-green-500";
+    case "warning":
+      return "text-yellow-500";
+    case "failed":
+      return "text-red-500";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "passed":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-      case "warning":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-      case "failed":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "passed":
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "warning":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "failed":
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    default:
+      return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getAlertColor = (type: string) => {
     switch (type) {
-      case "critical":
-        return "border-red-200 bg-red-50 dark:bg-red-900/20";
-      case "warning":
-        return "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20";
-      case "info":
-        return "border-blue-200 bg-blue-50 dark:bg-blue-900/20";
-      default:
-        return "border-gray-200 bg-gray-50 dark:bg-gray-900/20";
+    case "critical":
+      return "border-red-200 bg-red-50 dark:bg-red-900/20";
+    case "warning":
+      return "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20";
+    case "info":
+      return "border-blue-200 bg-blue-50 dark:bg-blue-900/20";
+    default:
+      return "border-gray-200 bg-gray-50 dark:bg-gray-900/20";
     }
   };
 
   const getTestIcon = (type: string) => {
     switch (type) {
-      case "backup_integrity":
-        return TestTube;
-      case "disaster_recovery":
-        return RefreshCw;
-      case "data_recovery":
-        return Activity;
-      case "security_audit":
-        return Shield;
-      case "performance":
-        return BarChart;
-      default:
-        return CheckCircle;
+    case "backup_integrity":
+      return TestTube;
+    case "disaster_recovery":
+      return RefreshCw;
+    case "data_recovery":
+      return Activity;
+    case "security_audit":
+      return Shield;
+    case "performance":
+      return BarChart;
+    default:
+      return CheckCircle;
     }
   };
 

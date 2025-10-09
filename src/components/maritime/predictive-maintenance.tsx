@@ -158,31 +158,31 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "destructive";
-      case "high":
-        return "default";
-      case "medium":
-        return "secondary";
-      case "low":
-        return "outline";
-      default:
-        return "outline";
+    case "critical":
+      return "destructive";
+    case "high":
+      return "default";
+    case "medium":
+      return "secondary";
+    case "low":
+      return "outline";
+    default:
+      return "outline";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "text-green-600";
-      case "inprogress":
-        return "text-blue-600";
-      case "scheduled":
-        return "text-yellow-600";
-      case "overdue":
-        return "text-red-600";
-      default:
-        return "text-muted-foreground";
+    case "completed":
+      return "text-green-600";
+    case "inprogress":
+      return "text-blue-600";
+    case "scheduled":
+      return "text-yellow-600";
+    case "overdue":
+      return "text-red-600";
+    default:
+      return "text-muted-foreground";
     }
   };
 
@@ -194,16 +194,16 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "predictive":
-        return <Zap className="h-5 w-5 text-purple-600" />;
-      case "preventive":
-        return <CheckCircle className="h-5 w-5 text-blue-600" />;
-      case "corrective":
-        return <Settings className="h-5 w-5 text-orange-600" />;
-      case "emergency":
-        return <AlertTriangle className="h-5 w-5 text-red-600" />;
-      default:
-        return <Wrench className="h-5 w-5" />;
+    case "predictive":
+      return <Zap className="h-5 w-5 text-purple-600" />;
+    case "preventive":
+      return <CheckCircle className="h-5 w-5 text-blue-600" />;
+    case "corrective":
+      return <Settings className="h-5 w-5 text-orange-600" />;
+    case "emergency":
+      return <AlertTriangle className="h-5 w-5 text-red-600" />;
+    default:
+      return <Wrench className="h-5 w-5" />;
     }
   };
 

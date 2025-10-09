@@ -39,63 +39,63 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
   const [showPDFGenerator, setShowPDFGenerator] = React.useState(false);
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "confirmed":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
-      case "cancelled":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-      case "completed":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "confirmed":
+      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+    case "pending":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+    case "cancelled":
+      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+    case "completed":
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "confirmed":
-        return "Confirmada";
-      case "pending":
-        return "Pendente";
-      case "cancelled":
-        return "Cancelada";
-      case "completed":
-        return "Concluída";
-      default:
-        return "Desconhecida";
+    case "confirmed":
+      return "Confirmada";
+    case "pending":
+      return "Pendente";
+    case "cancelled":
+      return "Cancelada";
+    case "completed":
+      return "Concluída";
+    default:
+      return "Desconhecida";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "hotel":
-        return <Building className="h-4 w-4" />;
-      case "flight":
-        return <Plane className="h-4 w-4" />;
-      case "transport":
-        return <Car className="h-4 w-4" />;
-      case "embarkation":
-        return <Ship className="h-4 w-4" />;
-      default:
-        return <FileText className="h-4 w-4" />;
+    case "hotel":
+      return <Building className="h-4 w-4" />;
+    case "flight":
+      return <Plane className="h-4 w-4" />;
+    case "transport":
+      return <Car className="h-4 w-4" />;
+    case "embarkation":
+      return <Ship className="h-4 w-4" />;
+    default:
+      return <FileText className="h-4 w-4" />;
     }
   };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case "hotel":
-        return "Hotel";
-      case "flight":
-        return "Voo";
-      case "transport":
-        return "Transporte";
-      case "embarkation":
-        return "Embarque";
-      case "other":
-        return "Outro";
-      default:
-        return type;
+    case "hotel":
+      return "Hotel";
+    case "flight":
+      return "Voo";
+    case "transport":
+      return "Transporte";
+    case "embarkation":
+      return "Embarque";
+    case "other":
+      return "Outro";
+    default:
+      return type;
     }
   };
 

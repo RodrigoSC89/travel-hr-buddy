@@ -233,25 +233,25 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
 
   const getScoreColor = (score: string) => {
     switch (score) {
-      case "compliant":
-        return "text-green-600";
-      case "partial":
-        return "text-yellow-600";
-      case "non-compliant":
-        return "text-red-600";
-      default:
-        return "text-muted-foreground";
+    case "compliant":
+      return "text-green-600";
+    case "partial":
+      return "text-yellow-600";
+    case "non-compliant":
+      return "text-red-600";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getScoreIcon = (score: string) => {
     switch (score) {
-      case "compliant":
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case "non-compliant":
-        return <AlertCircle className="h-4 w-4 text-red-600" />;
-      default:
-        return <FileText className="h-4 w-4 text-muted-foreground" />;
+    case "compliant":
+      return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case "non-compliant":
+      return <AlertCircle className="h-4 w-4 text-red-600" />;
+    default:
+      return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

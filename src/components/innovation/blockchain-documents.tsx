@@ -127,33 +127,33 @@ export const BlockchainDocuments: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "verified":
-        return "text-green-600 bg-green-100";
-      case "pending":
-        return "text-yellow-600 bg-yellow-100";
-      case "invalid":
-        return "text-red-600 bg-red-100";
-      case "expired":
-        return "text-muted-foreground bg-gray-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "verified":
+      return "text-green-600 bg-green-100";
+    case "pending":
+      return "text-yellow-600 bg-yellow-100";
+    case "invalid":
+      return "text-red-600 bg-red-100";
+    case "expired":
+      return "text-muted-foreground bg-gray-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "certificate":
-        return <Award className="h-5 w-5" />;
-      case "contract":
-        return <FileText className="h-5 w-5" />;
-      case "license":
-        return <Key className="h-5 w-5" />;
-      case "audit":
-        return <Eye className="h-5 w-5" />;
-      case "permit":
-        return <Shield className="h-5 w-5" />;
-      default:
-        return <FileText className="h-5 w-5" />;
+    case "certificate":
+      return <Award className="h-5 w-5" />;
+    case "contract":
+      return <FileText className="h-5 w-5" />;
+    case "license":
+      return <Key className="h-5 w-5" />;
+    case "audit":
+      return <Eye className="h-5 w-5" />;
+    case "permit":
+      return <Shield className="h-5 w-5" />;
+    default:
+      return <FileText className="h-5 w-5" />;
     }
   };
 

@@ -234,18 +234,18 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case "hotel":
-        return "Hotel / Hospedagem";
-      case "flight":
-        return "Voo";
-      case "transport":
-        return "Transporte Terrestre";
-      case "embarkation":
-        return "Embarque";
-      case "other":
-        return "Outro";
-      default:
-        return type;
+    case "hotel":
+      return "Hotel / Hospedagem";
+    case "flight":
+      return "Voo";
+    case "transport":
+      return "Transporte Terrestre";
+    case "embarkation":
+      return "Embarque";
+    case "other":
+      return "Outro";
+    default:
+      return type;
     }
   };
 

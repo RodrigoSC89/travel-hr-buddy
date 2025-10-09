@@ -107,31 +107,31 @@ export const PatternRecognition: React.FC = () => {
 
   const getPatternIcon = (type: string) => {
     switch (type) {
-      case "fuel_consumption":
-        return <Gauge className="h-5 w-5" />;
-      case "maintenance_cycle":
-        return <Activity className="h-5 w-5" />;
-      case "route_efficiency":
-        return <Waves className="h-5 w-5" />;
-      case "crew_performance":
-        return <TrendingUp className="h-5 w-5" />;
-      default:
-        return <Network className="h-5 w-5" />;
+    case "fuel_consumption":
+      return <Gauge className="h-5 w-5" />;
+    case "maintenance_cycle":
+      return <Activity className="h-5 w-5" />;
+    case "route_efficiency":
+      return <Waves className="h-5 w-5" />;
+    case "crew_performance":
+      return <TrendingUp className="h-5 w-5" />;
+    default:
+      return <Network className="h-5 w-5" />;
     }
   };
 
   const getPatternTypeLabel = (type: string) => {
     switch (type) {
-      case "fuel_consumption":
-        return "Consumo";
-      case "maintenance_cycle":
-        return "Manutenção";
-      case "route_efficiency":
-        return "Rotas";
-      case "crew_performance":
-        return "Tripulação";
-      default:
-        return type;
+    case "fuel_consumption":
+      return "Consumo";
+    case "maintenance_cycle":
+      return "Manutenção";
+    case "route_efficiency":
+      return "Rotas";
+    case "crew_performance":
+      return "Tripulação";
+    default:
+      return type;
     }
   };
 

@@ -230,29 +230,29 @@ const SmartWorkflowAutomation = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "active":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "inactive":
-        return <Pause className="w-4 h-4 text-muted-foreground" />;
-      case "draft":
-        return <Edit className="w-4 h-4 text-blue-500" />;
-      default:
-        return <AlertCircle className="w-4 h-4 text-yellow-500" />;
+    case "active":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "inactive":
+      return <Pause className="w-4 h-4 text-muted-foreground" />;
+    case "draft":
+      return <Edit className="w-4 h-4 text-blue-500" />;
+    default:
+      return <AlertCircle className="w-4 h-4 text-yellow-500" />;
     }
   };
 
   const getExecutionStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "running":
-        return <Activity className="w-4 h-4 text-blue-500 animate-pulse" />;
-      case "failed":
-        return <XCircle className="w-4 h-4 text-red-500" />;
-      case "cancelled":
-        return <Pause className="w-4 h-4 text-muted-foreground" />;
-      default:
-        return <Clock className="w-4 h-4 text-yellow-500" />;
+    case "completed":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "running":
+      return <Activity className="w-4 h-4 text-blue-500 animate-pulse" />;
+    case "failed":
+      return <XCircle className="w-4 h-4 text-red-500" />;
+    case "cancelled":
+      return <Pause className="w-4 h-4 text-muted-foreground" />;
+    default:
+      return <Clock className="w-4 h-4 text-yellow-500" />;
     }
   };
 
@@ -261,9 +261,9 @@ const SmartWorkflowAutomation = () => {
       prev.map(workflow =>
         workflow.id === id
           ? {
-              ...workflow,
-              status: workflow.status === "active" ? "inactive" : "active",
-            }
+            ...workflow,
+            status: workflow.status === "active" ? "inactive" : "active",
+          }
           : workflow
       )
     );
@@ -351,20 +351,20 @@ const SmartWorkflowAutomation = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
-      case "documentos":
-        return <FileText className="w-4 h-4" />;
-      case "rh":
-        return <Users className="w-4 h-4" />;
-      case "monitoramento":
-        return <BarChart3 className="w-4 h-4" />;
-      case "financeiro":
-        return <Target className="w-4 h-4" />;
-      case "ti":
-        return <Database className="w-4 h-4" />;
-      case "vendas":
-        return <Zap className="w-4 h-4" />;
-      default:
-        return <Workflow className="w-4 h-4" />;
+    case "documentos":
+      return <FileText className="w-4 h-4" />;
+    case "rh":
+      return <Users className="w-4 h-4" />;
+    case "monitoramento":
+      return <BarChart3 className="w-4 h-4" />;
+    case "financeiro":
+      return <Target className="w-4 h-4" />;
+    case "ti":
+      return <Database className="w-4 h-4" />;
+    case "vendas":
+      return <Zap className="w-4 h-4" />;
+    default:
+      return <Workflow className="w-4 h-4" />;
     }
   };
 

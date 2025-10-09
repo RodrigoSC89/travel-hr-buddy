@@ -148,50 +148,50 @@ export const PeotramEquipmentManager: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "operational":
-        return "bg-success/20 text-success border-success/30";
-      case "maintenance":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "failure":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "offline":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "operational":
+      return "bg-success/20 text-success border-success/30";
+    case "maintenance":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "failure":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "offline":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getCriticalityColor = (criticality: string) => {
     switch (criticality) {
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "high":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "medium":
-        return "bg-info/20 text-info border-info/30";
-      case "low":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "medium":
+      return "bg-info/20 text-info border-info/30";
+    case "low":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "navigation":
-        return <MapPin className="w-4 h-4" />;
-      case "propulsion":
-        return <Fuel className="w-4 h-4" />;
-      case "electrical":
-        return <Zap className="w-4 h-4" />;
-      case "fire-safety":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "communication":
-        return <Activity className="w-4 h-4" />;
-      case "safety":
-        return <CheckCircle className="w-4 h-4" />;
-      default:
-        return <Settings className="w-4 h-4" />;
+    case "navigation":
+      return <MapPin className="w-4 h-4" />;
+    case "propulsion":
+      return <Fuel className="w-4 h-4" />;
+    case "electrical":
+      return <Zap className="w-4 h-4" />;
+    case "fire-safety":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "communication":
+      return <Activity className="w-4 h-4" />;
+    case "safety":
+      return <CheckCircle className="w-4 h-4" />;
+    default:
+      return <Settings className="w-4 h-4" />;
     }
   };
 

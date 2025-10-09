@@ -312,44 +312,44 @@ export const AdvancedFleetAnalytics = () => {
 
   const getStatusColor = (status: VesselPerformance["status"]) => {
     switch (status) {
-      case "excellent":
-        return "bg-success";
-      case "good":
-        return "bg-info";
-      case "average":
-        return "bg-warning";
-      case "poor":
-        return "bg-status-error";
-      default:
-        return "bg-muted";
+    case "excellent":
+      return "bg-success";
+    case "good":
+      return "bg-info";
+    case "average":
+      return "bg-warning";
+    case "poor":
+      return "bg-status-error";
+    default:
+      return "bg-muted";
     }
   };
 
   const getStatusText = (status: VesselPerformance["status"]) => {
     switch (status) {
-      case "excellent":
-        return "Excelente";
-      case "good":
-        return "Bom";
-      case "average":
-        return "Médio";
-      case "poor":
-        return "Ruim";
-      default:
-        return "Desconhecido";
+    case "excellent":
+      return "Excelente";
+    case "good":
+      return "Bom";
+    case "average":
+      return "Médio";
+    case "poor":
+      return "Ruim";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getImpactColor = (impact: PredictiveInsight["impact"]) => {
     switch (impact) {
-      case "high":
-        return "text-red-600 bg-red-100";
-      case "medium":
-        return "text-yellow-600 bg-yellow-100";
-      case "low":
-        return "text-green-600 bg-green-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "high":
+      return "text-red-600 bg-red-100";
+    case "medium":
+      return "text-yellow-600 bg-yellow-100";
+    case "low":
+      return "text-green-600 bg-green-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 

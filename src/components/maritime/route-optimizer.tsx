@@ -151,27 +151,27 @@ export const RealTimeRouteOptimizer: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "default";
-      case "pending":
-        return "secondary";
-      case "applied":
-        return "outline";
-      default:
-        return "outline";
+    case "active":
+      return "default";
+    case "pending":
+      return "secondary";
+    case "applied":
+      return "outline";
+    default:
+      return "outline";
     }
   };
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case "high":
-        return "text-red-600";
-      case "medium":
-        return "text-yellow-600";
-      case "low":
-        return "text-green-600";
-      default:
-        return "text-muted-foreground";
+    case "high":
+      return "text-red-600";
+    case "medium":
+      return "text-yellow-600";
+    case "low":
+      return "text-green-600";
+    default:
+      return "text-muted-foreground";
     }
   };
 

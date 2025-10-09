@@ -27,12 +27,12 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
 }) => {
   const getColorClass = () => {
     switch (type) {
-      case "priority":
-        return getPriorityColor(status);
-      case "vessel":
-        return getVesselStatusColor(status);
-      default:
-        return getStatusColor(status);
+    case "priority":
+      return getPriorityColor(status);
+    case "vessel":
+      return getVesselStatusColor(status);
+    default:
+      return getStatusColor(status);
     }
   };
 
@@ -64,12 +64,12 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
 }) => {
   const getDotColor = () => {
     switch (type) {
-      case "priority":
-        return getPriorityColor(status);
-      case "vessel":
-        return getVesselStatusColor(status);
-      default:
-        return getStatusDot(status);
+    case "priority":
+      return getPriorityColor(status);
+    case "vessel":
+      return getVesselStatusColor(status);
+    default:
+      return getStatusDot(status);
     }
   };
 

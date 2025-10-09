@@ -82,7 +82,7 @@ const EnhancedAIChatbot: React.FC = () => {
           id: "welcome",
           type: "ai",
           content:
-            '🌊 Olá! Sou o Assistente IA do Nautilus One, seu companheiro inteligente para operações marítimas. Como posso ajudá-lo hoje? \n\n💡 **Dicas rápidas:**\n• Use comandos de voz clicando no 🎙️\n• Envie imagens para análise\n• Digite "/" para ver comandos especiais\n• Pressione Tab para navegar rapidamente',
+            "🌊 Olá! Sou o Assistente IA do Nautilus One, seu companheiro inteligente para operações marítimas. Como posso ajudá-lo hoje? \n\n💡 **Dicas rápidas:**\n• Use comandos de voz clicando no 🎙️\n• Envie imagens para análise\n• Digite \"/\" para ver comandos especiais\n• Pressione Tab para navegar rapidamente",
           timestamp: new Date(),
           category: "general",
           confidence: 100,
@@ -100,14 +100,14 @@ const EnhancedAIChatbot: React.FC = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey) {
         switch (e.key) {
-          case "k":
-            e.preventDefault();
-            inputRef.current?.focus();
-            break;
-          case "Enter":
-            e.preventDefault();
-            handleSendMessage();
-            break;
+        case "k":
+          e.preventDefault();
+          inputRef.current?.focus();
+          break;
+        case "Enter":
+          e.preventDefault();
+          handleSendMessage();
+          break;
         }
       }
       if (e.key === "Escape") {

@@ -168,42 +168,42 @@ const AdvancedSystemMonitor: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "critical":
-        return <AlertTriangle className="w-4 h-4 text-destructive" />;
-      case "warning":
-        return <Clock className="w-4 h-4 text-warning" />;
-      default:
-        return <CheckCircle className="w-4 h-4 text-success" />;
+    case "critical":
+      return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    case "warning":
+      return <Clock className="w-4 h-4 text-warning" />;
+    default:
+      return <CheckCircle className="w-4 h-4 text-success" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "critical":
-        return "border-destructive bg-destructive/10";
-      case "warning":
-        return "border-warning bg-warning/10";
-      default:
-        return "border-success bg-success/10";
+    case "critical":
+      return "border-destructive bg-destructive/10";
+    case "warning":
+      return "border-warning bg-warning/10";
+    default:
+      return "border-success bg-success/10";
     }
   };
 
   const getMetricIcon = (id: string) => {
     switch (id) {
-      case "cpu":
-        return <Cpu className="w-5 h-5" />;
-      case "memory":
-        return <HardDrive className="w-5 h-5" />;
-      case "database":
-        return <Database className="w-5 h-5" />;
-      case "response_time":
-        return <Zap className="w-5 h-5" />;
-      case "error_rate":
-        return <AlertTriangle className="w-5 h-5" />;
-      case "active_users":
-        return <Users className="w-5 h-5" />;
-      default:
-        return <Activity className="w-5 h-5" />;
+    case "cpu":
+      return <Cpu className="w-5 h-5" />;
+    case "memory":
+      return <HardDrive className="w-5 h-5" />;
+    case "database":
+      return <Database className="w-5 h-5" />;
+    case "response_time":
+      return <Zap className="w-5 h-5" />;
+    case "error_rate":
+      return <AlertTriangle className="w-5 h-5" />;
+    case "active_users":
+      return <Users className="w-5 h-5" />;
+    default:
+      return <Activity className="w-5 h-5" />;
     }
   };
 

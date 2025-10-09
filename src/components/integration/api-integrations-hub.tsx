@@ -134,25 +134,25 @@ export const APIIntegrationsHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "connected":
-        return "bg-green-500";
-      case "disconnected":
-        return "bg-gray-500";
-      case "error":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
+    case "connected":
+      return "bg-green-500";
+    case "disconnected":
+      return "bg-gray-500";
+    case "error":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "connected":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "error":
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      default:
-        return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
+    case "connected":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "error":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    default:
+      return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

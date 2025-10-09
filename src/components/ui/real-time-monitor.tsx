@@ -189,21 +189,21 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
               const variation = (Math.random() - 0.5) * 2; // -1 a +1
 
               switch (sensor.type) {
-                case "temperature":
-                  newValue = Math.max(70, Math.min(100, sensor.value + variation));
-                  break;
-                case "fuel":
-                  newValue = Math.max(0, Math.min(100, sensor.value + variation * 0.1));
-                  break;
-                case "speed":
-                  newValue = Math.max(0, Math.min(20, sensor.value + variation * 0.5));
-                  break;
-                case "power":
-                  newValue = Math.max(0, Math.min(2000, sensor.value + variation * 50));
-                  break;
-                case "heading":
-                  newValue = (sensor.value + variation * 2 + 360) % 360;
-                  break;
+              case "temperature":
+                newValue = Math.max(70, Math.min(100, sensor.value + variation));
+                break;
+              case "fuel":
+                newValue = Math.max(0, Math.min(100, sensor.value + variation * 0.1));
+                break;
+              case "speed":
+                newValue = Math.max(0, Math.min(20, sensor.value + variation * 0.5));
+                break;
+              case "power":
+                newValue = Math.max(0, Math.min(2000, sensor.value + variation * 50));
+                break;
+              case "heading":
+                newValue = (sensor.value + variation * 2 + 360) % 360;
+                break;
               }
 
               // Determinar novo status baseado no valor

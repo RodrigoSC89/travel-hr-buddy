@@ -258,71 +258,71 @@ export const WorkflowAutomationHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "text-green-600 bg-green-100";
-      case "in_progress":
-        return "text-blue-600 bg-blue-100";
-      case "pending":
-        return "text-yellow-600 bg-yellow-100";
-      case "failed":
-        return "text-red-600 bg-red-100";
-      case "active":
-        return "text-green-600 bg-green-100";
-      case "paused":
-        return "text-orange-600 bg-orange-100";
-      case "draft":
-        return "text-muted-foreground bg-gray-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "completed":
+      return "text-green-600 bg-green-100";
+    case "in_progress":
+      return "text-blue-600 bg-blue-100";
+    case "pending":
+      return "text-yellow-600 bg-yellow-100";
+    case "failed":
+      return "text-red-600 bg-red-100";
+    case "active":
+      return "text-green-600 bg-green-100";
+    case "paused":
+      return "text-orange-600 bg-orange-100";
+    case "draft":
+      return "text-muted-foreground bg-gray-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="h-4 w-4" />;
-      case "in_progress":
-        return <RefreshCw className="h-4 w-4 animate-spin" />;
-      case "pending":
-        return <Clock className="h-4 w-4" />;
-      case "failed":
-        return <AlertTriangle className="h-4 w-4" />;
-      case "active":
-        return <Play className="h-4 w-4" />;
-      case "paused":
-        return <Pause className="h-4 w-4" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4" />;
+    case "in_progress":
+      return <RefreshCw className="h-4 w-4 animate-spin" />;
+    case "pending":
+      return <Clock className="h-4 w-4" />;
+    case "failed":
+      return <AlertTriangle className="h-4 w-4" />;
+    case "active":
+      return <Play className="h-4 w-4" />;
+    case "paused":
+      return <Pause className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return "text-red-600 bg-red-100";
-      case "high":
-        return "text-orange-600 bg-orange-100";
-      case "medium":
-        return "text-yellow-600 bg-yellow-100";
-      case "low":
-        return "text-green-600 bg-green-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "urgent":
+      return "text-red-600 bg-red-100";
+    case "high":
+      return "text-orange-600 bg-orange-100";
+    case "medium":
+      return "text-yellow-600 bg-yellow-100";
+    case "low":
+      return "text-green-600 bg-green-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "hr":
-        return <Users className="h-4 w-4" />;
-      case "finance":
-        return <TrendingUp className="h-4 w-4" />;
-      case "operations":
-        return <Settings className="h-4 w-4" />;
-      case "marketing":
-        return <Target className="h-4 w-4" />;
-      default:
-        return <Workflow className="h-4 w-4" />;
+    case "hr":
+      return <Users className="h-4 w-4" />;
+    case "finance":
+      return <TrendingUp className="h-4 w-4" />;
+    case "operations":
+      return <Settings className="h-4 w-4" />;
+    case "marketing":
+      return <Target className="h-4 w-4" />;
+    default:
+      return <Workflow className="h-4 w-4" />;
     }
   };
 

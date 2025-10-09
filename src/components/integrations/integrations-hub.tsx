@@ -91,44 +91,44 @@ export const IntegrationsHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "connected":
-        return "text-green-600 bg-green-100";
-      case "disconnected":
-        return "text-muted-foreground bg-muted";
-      case "error":
-        return "text-destructive bg-destructive/10";
-      default:
-        return "text-muted-foreground bg-muted";
+    case "connected":
+      return "text-green-600 bg-green-100";
+    case "disconnected":
+      return "text-muted-foreground bg-muted";
+    case "error":
+      return "text-destructive bg-destructive/10";
+    default:
+      return "text-muted-foreground bg-muted";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "connected":
-        return "Conectado";
-      case "disconnected":
-        return "Desconectado";
-      case "error":
-        return "Erro";
-      default:
-        return "Desconhecido";
+    case "connected":
+      return "Conectado";
+    case "disconnected":
+      return "Desconectado";
+    case "error":
+      return "Erro";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getCategoryLabel = (category: string) => {
     switch (category) {
-      case "data":
-        return "Dados";
-      case "communication":
-        return "Comunicação";
-      case "payment":
-        return "Pagamentos";
-      case "analytics":
-        return "Analytics";
-      case "automation":
-        return "Automação";
-      default:
-        return "Outros";
+    case "data":
+      return "Dados";
+    case "communication":
+      return "Comunicação";
+    case "payment":
+      return "Pagamentos";
+    case "analytics":
+      return "Analytics";
+    case "automation":
+      return "Automação";
+    default:
+      return "Outros";
     }
   };
 

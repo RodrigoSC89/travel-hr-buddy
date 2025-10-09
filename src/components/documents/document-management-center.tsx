@@ -230,73 +230,73 @@ export const DocumentManagementCenter = () => {
 
   const getTypeIcon = (type: Document["type"]) => {
     switch (type) {
-      case "contract":
-        return Building;
-      case "certificate":
-        return Award;
-      case "manual":
-        return FileText;
-      case "procedure":
-        return AlertTriangle;
-      case "report":
-        return Calendar;
-      case "legal":
-        return Building;
-      case "safety":
-        return AlertTriangle;
-      default:
-        return FileText;
+    case "contract":
+      return Building;
+    case "certificate":
+      return Award;
+    case "manual":
+      return FileText;
+    case "procedure":
+      return AlertTriangle;
+    case "report":
+      return Calendar;
+    case "legal":
+      return Building;
+    case "safety":
+      return AlertTriangle;
+    default:
+      return FileText;
     }
   };
 
   const getTypeText = (type: Document["type"]) => {
     switch (type) {
-      case "contract":
-        return "Contrato";
-      case "certificate":
-        return "Certificado";
-      case "manual":
-        return "Manual";
-      case "procedure":
-        return "Procedimento";
-      case "report":
-        return "Relatório";
-      case "legal":
-        return "Legal";
-      case "safety":
-        return "Segurança";
-      default:
-        return "Documento";
+    case "contract":
+      return "Contrato";
+    case "certificate":
+      return "Certificado";
+    case "manual":
+      return "Manual";
+    case "procedure":
+      return "Procedimento";
+    case "report":
+      return "Relatório";
+    case "legal":
+      return "Legal";
+    case "safety":
+      return "Segurança";
+    default:
+      return "Documento";
     }
   };
 
   const getStatusColor = (status: Document["status"]) => {
     switch (status) {
-      case "active":
-        return "bg-green-500";
-      case "archived":
-        return "bg-gray-500";
-      case "under_review":
-        return "bg-yellow-500";
-      case "expired":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
+    case "active":
+      return "bg-green-500";
+    case "archived":
+      return "bg-gray-500";
+    case "under_review":
+      return "bg-yellow-500";
+    case "expired":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusText = (status: Document["status"]) => {
     switch (status) {
-      case "active":
-        return "Ativo";
-      case "archived":
-        return "Arquivado";
-      case "under_review":
-        return "Em Revisão";
-      case "expired":
-        return "Expirado";
-      default:
-        return "Desconhecido";
+    case "active":
+      return "Ativo";
+    case "archived":
+      return "Arquivado";
+    case "under_review":
+      return "Em Revisão";
+    case "expired":
+      return "Expirado";
+    default:
+      return "Desconhecido";
     }
   };
 

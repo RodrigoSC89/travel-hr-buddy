@@ -227,40 +227,40 @@ export const IntegrationTemplates: React.FC = () => {
 
   const getDifficultyColor = (difficulty: IntegrationTemplate["difficulty"]) => {
     switch (difficulty) {
-      case "easy":
-        return "bg-success/20 text-success border-success/30";
-      case "medium":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "advanced":
-        return "bg-destructive/20 text-destructive border-destructive/30";
+    case "easy":
+      return "bg-success/20 text-success border-success/30";
+    case "medium":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "advanced":
+      return "bg-destructive/20 text-destructive border-destructive/30";
     }
   };
 
   const getDifficultyText = (difficulty: IntegrationTemplate["difficulty"]) => {
     switch (difficulty) {
-      case "easy":
-        return "Fácil";
-      case "medium":
-        return "Médio";
-      case "advanced":
-        return "Avançado";
+    case "easy":
+      return "Fácil";
+    case "medium":
+      return "Médio";
+    case "advanced":
+      return "Avançado";
     }
   };
 
   const getCategoryIcon = (category: IntegrationTemplate["category"]) => {
     switch (category) {
-      case "productivity":
-        return <Calendar className="w-4 h-4" />;
-      case "communication":
-        return <MessageSquare className="w-4 h-4" />;
-      case "analytics":
-        return <BarChart3 className="w-4 h-4" />;
-      case "payment":
-        return <CreditCard className="w-4 h-4" />;
-      case "hr":
-        return <Users className="w-4 h-4" />;
-      case "automation":
-        return <Zap className="w-4 h-4" />;
+    case "productivity":
+      return <Calendar className="w-4 h-4" />;
+    case "communication":
+      return <MessageSquare className="w-4 h-4" />;
+    case "analytics":
+      return <BarChart3 className="w-4 h-4" />;
+    case "payment":
+      return <CreditCard className="w-4 h-4" />;
+    case "hr":
+      return <Users className="w-4 h-4" />;
+    case "automation":
+      return <Zap className="w-4 h-4" />;
     }
   };
 

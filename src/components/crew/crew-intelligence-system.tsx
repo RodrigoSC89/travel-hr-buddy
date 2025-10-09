@@ -239,23 +239,23 @@ export const CrewIntelligenceSystem: React.FC = () => {
 
   const getAlertBadgeColor = (alert: CrewMember["alertLevel"]) => {
     switch (alert) {
-      case "green":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-      case "yellow":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-      case "red":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "green":
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "yellow":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "red":
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
     }
   };
 
   const getPriorityColor = (priority: TrainingModule["priority"]) => {
     switch (priority) {
-      case "low":
-        return "text-muted-foreground";
-      case "medium":
-        return "text-yellow-600";
-      case "high":
-        return "text-red-600";
+    case "low":
+      return "text-muted-foreground";
+    case "medium":
+      return "text-yellow-600";
+    case "high":
+      return "text-red-600";
     }
   };
 

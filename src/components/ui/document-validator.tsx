@@ -194,12 +194,12 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
 
   const getIssueIcon = (type: ValidationIssue["type"]) => {
     switch (type) {
-      case "error":
-        return <FileX className="h-4 w-4 text-red-500" />;
-      case "warning":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case "info":
-        return <CheckCircle className="h-4 w-4 text-blue-500" />;
+    case "error":
+      return <FileX className="h-4 w-4 text-red-500" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "info":
+      return <CheckCircle className="h-4 w-4 text-blue-500" />;
     }
   };
 

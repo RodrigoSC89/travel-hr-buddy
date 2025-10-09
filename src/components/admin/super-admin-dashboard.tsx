@@ -196,29 +196,29 @@ export const SuperAdminDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "active":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "trial":
-        return <Clock className="w-4 h-4 text-blue-500" />;
-      case "suspended":
-        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      case "expired":
-        return <Ban className="w-4 h-4 text-red-500" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "active":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "trial":
+      return <Clock className="w-4 h-4 text-blue-500" />;
+    case "suspended":
+      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+    case "expired":
+      return <Ban className="w-4 h-4 text-red-500" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getPlanBadgeColor = (plan: string) => {
     switch (plan) {
-      case "free":
-        return "secondary";
-      case "professional":
-        return "default";
-      case "enterprise":
-        return "destructive";
-      default:
-        return "secondary";
+    case "free":
+      return "secondary";
+    case "professional":
+      return "default";
+    case "enterprise":
+      return "destructive";
+    default:
+      return "secondary";
     }
   };
 

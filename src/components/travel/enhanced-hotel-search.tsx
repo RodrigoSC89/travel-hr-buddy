@@ -482,27 +482,27 @@ export const EnhancedHotelSearch: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "confirmed":
-        return "bg-green-100 text-green-800";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "cancelled":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "confirmed":
+      return "bg-green-100 text-green-800";
+    case "pending":
+      return "bg-yellow-100 text-yellow-800";
+    case "cancelled":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "confirmed":
-        return <CheckCircle className="h-4 w-4" />;
-      case "pending":
-        return <Clock className="h-4 w-4" />;
-      case "cancelled":
-        return <AlertTriangle className="h-4 w-4" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "confirmed":
+      return <CheckCircle className="h-4 w-4" />;
+    case "pending":
+      return <Clock className="h-4 w-4" />;
+    case "cancelled":
+      return <AlertTriangle className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 
@@ -530,14 +530,14 @@ export const EnhancedHotelSearch: React.FC = () => {
 
   const sortedHotels = [...filteredHotels].sort((a, b) => {
     switch (sortBy) {
-      case "price":
-        return a.price - b.price;
-      case "rating":
-        return b.rating - a.rating;
-      case "name":
-        return a.name.localeCompare(b.name);
-      default:
-        return 0;
+    case "price":
+      return a.price - b.price;
+    case "rating":
+      return b.rating - a.rating;
+    case "name":
+      return a.name.localeCompare(b.name);
+    default:
+      return 0;
     }
   });
 

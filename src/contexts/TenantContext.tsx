@@ -544,16 +544,16 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (!currentTenant || !tenantUsage) return false;
 
     switch (type) {
-      case "users":
-        return tenantUsage.active_users < currentTenant.max_users;
-      case "vessels":
-        return tenantUsage.vessels_managed < currentTenant.max_vessels;
-      case "storage":
-        return tenantUsage.storage_used_gb < currentTenant.max_storage_gb;
-      case "api_calls":
-        return tenantUsage.api_calls_made < currentTenant.max_api_calls_per_month;
-      default:
-        return false;
+    case "users":
+      return tenantUsage.active_users < currentTenant.max_users;
+    case "vessels":
+      return tenantUsage.vessels_managed < currentTenant.max_vessels;
+    case "storage":
+      return tenantUsage.storage_used_gb < currentTenant.max_storage_gb;
+    case "api_calls":
+      return tenantUsage.api_calls_made < currentTenant.max_api_calls_per_month;
+    default:
+      return false;
     }
   };
 

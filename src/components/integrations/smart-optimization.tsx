@@ -175,49 +175,49 @@ export const SmartOptimization: React.FC = () => {
 
   const getImpactColor = (impact: OptimizationSuggestion["impact"]) => {
     switch (impact) {
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "high":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "medium":
-        return "bg-primary/20 text-primary border-primary/30";
-      case "low":
-        return "bg-muted text-muted-foreground border-border";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "medium":
+      return "bg-primary/20 text-primary border-primary/30";
+    case "low":
+      return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getEffortColor = (effort: OptimizationSuggestion["effort"]) => {
     switch (effort) {
-      case "easy":
-        return "bg-success/20 text-success border-success/30";
-      case "medium":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "complex":
-        return "bg-destructive/20 text-destructive border-destructive/30";
+    case "easy":
+      return "bg-success/20 text-success border-success/30";
+    case "medium":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "complex":
+      return "bg-destructive/20 text-destructive border-destructive/30";
     }
   };
 
   const getTypeIcon = (type: OptimizationSuggestion["type"]) => {
     switch (type) {
-      case "performance":
-        return <Gauge className="w-4 h-4" />;
-      case "security":
-        return <Shield className="w-4 h-4" />;
-      case "cost":
-        return <BarChart3 className="w-4 h-4" />;
-      case "reliability":
-        return <CheckCircle className="w-4 h-4" />;
+    case "performance":
+      return <Gauge className="w-4 h-4" />;
+    case "security":
+      return <Shield className="w-4 h-4" />;
+    case "cost":
+      return <BarChart3 className="w-4 h-4" />;
+    case "reliability":
+      return <CheckCircle className="w-4 h-4" />;
     }
   };
 
   const getStatusColor = (status: AutoOptimization["status"]) => {
     switch (status) {
-      case "active":
-        return "bg-success/20 text-success border-success/30";
-      case "paused":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "disabled":
-        return "bg-muted text-muted-foreground border-border";
+    case "active":
+      return "bg-success/20 text-success border-success/30";
+    case "paused":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "disabled":
+      return "bg-muted text-muted-foreground border-border";
     }
   };
 
@@ -441,9 +441,9 @@ export const SmartOptimization: React.FC = () => {
                         {auto.nextRun === "Pausado"
                           ? "Pausado"
                           : new Date(auto.nextRun).toLocaleTimeString("pt-BR", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                       </p>
                     </div>
                   </div>

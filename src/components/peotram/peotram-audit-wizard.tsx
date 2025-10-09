@@ -328,12 +328,12 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               className={`
               flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors
               ${
-                isActive
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : isCompleted
-                    ? "border-success bg-success text-success-foreground"
-                    : "border-muted bg-background text-muted-foreground"
-              }
+          isActive
+            ? "border-primary bg-primary text-primary-foreground"
+            : isCompleted
+              ? "border-success bg-success text-success-foreground"
+              : "border-muted bg-background text-muted-foreground"
+          }
             `}
             >
               <StepIcon className="w-5 h-5" />

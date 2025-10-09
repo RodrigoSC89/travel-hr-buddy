@@ -288,12 +288,12 @@ export const AdvancedAIAssistant = () => {
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case "warning":
-        return <AlertCircle className="w-4 h-4 text-yellow-500" />;
-      case "opportunity":
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      default:
-        return <Lightbulb className="w-4 h-4 text-blue-500" />;
+    case "warning":
+      return <AlertCircle className="w-4 h-4 text-yellow-500" />;
+    case "opportunity":
+      return <TrendingUp className="w-4 h-4 text-green-500" />;
+    default:
+      return <Lightbulb className="w-4 h-4 text-blue-500" />;
     }
   };
 

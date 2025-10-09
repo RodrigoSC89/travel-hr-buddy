@@ -90,16 +90,16 @@ export const CrewScheduleVisualizer: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "bg-success text-azure-50";
-      case "upcoming":
-        return "bg-info text-azure-50";
-      case "completed":
-        return "bg-muted text-muted-foreground";
-      case "cancelled":
-        return "bg-destructive text-azure-50";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "active":
+      return "bg-success text-azure-50";
+    case "upcoming":
+      return "bg-info text-azure-50";
+    case "completed":
+      return "bg-muted text-muted-foreground";
+    case "cancelled":
+      return "bg-destructive text-azure-50";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 

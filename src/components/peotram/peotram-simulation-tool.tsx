@@ -353,16 +353,16 @@ export const PeotramSimulationTool: React.FC = () => {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case "low":
-        return "bg-success/20 text-success border-success/30";
-      case "medium":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "high":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "critical":
-        return "bg-destructive/30 text-destructive border-destructive/40";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "low":
+      return "bg-success/20 text-success border-success/30";
+    case "medium":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "high":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "critical":
+      return "bg-destructive/30 text-destructive border-destructive/40";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 

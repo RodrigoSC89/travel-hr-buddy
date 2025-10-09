@@ -241,19 +241,19 @@ export const NotificationCenter = () => {
 
     // Filter by tab
     switch (activeTab) {
-      case "unread":
-        filtered = filtered.filter(n => !n.is_read);
-        break;
-      case "important":
-        filtered = filtered.filter(n => n.is_important);
-        break;
-      case "action":
-        filtered = filtered.filter(n => n.action_required);
-        break;
-      case "archived":
-        // Mock archived filter
-        filtered = [];
-        break;
+    case "unread":
+      filtered = filtered.filter(n => !n.is_read);
+      break;
+    case "important":
+      filtered = filtered.filter(n => n.is_important);
+      break;
+    case "action":
+      filtered = filtered.filter(n => n.action_required);
+      break;
+    case "archived":
+      // Mock archived filter
+      filtered = [];
+      break;
     }
 
     // Filter by type
@@ -330,16 +330,16 @@ export const NotificationCenter = () => {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "error":
-        return AlertTriangle;
-      case "warning":
-        return AlertTriangle;
-      case "success":
-        return CheckCircle2;
-      case "urgent":
-        return Zap;
-      default:
-        return Info;
+    case "error":
+      return AlertTriangle;
+    case "warning":
+      return AlertTriangle;
+    case "success":
+      return CheckCircle2;
+    case "urgent":
+      return Zap;
+    default:
+      return Info;
     }
   };
 
@@ -347,29 +347,29 @@ export const NotificationCenter = () => {
     if (priority === "critical") return "border-l-destructive bg-destructive/5";
 
     switch (type) {
-      case "error":
-        return "border-l-destructive bg-destructive/5";
-      case "warning":
-        return "border-l-warning bg-warning/5";
-      case "success":
-        return "border-l-success bg-success/5";
-      case "urgent":
-        return "border-l-warning bg-warning/5";
-      default:
-        return "border-l-info bg-info/5";
+    case "error":
+      return "border-l-destructive bg-destructive/5";
+    case "warning":
+      return "border-l-warning bg-warning/5";
+    case "success":
+      return "border-l-success bg-success/5";
+    case "urgent":
+      return "border-l-warning bg-warning/5";
+    default:
+      return "border-l-info bg-info/5";
     }
   };
 
   const getSourceIcon = (source: string) => {
     switch (source) {
-      case "user":
-        return User;
-      case "ai":
-        return Zap;
-      case "external":
-        return Globe;
-      default:
-        return Shield;
+    case "user":
+      return User;
+    case "ai":
+      return Zap;
+    case "external":
+      return Globe;
+    default:
+      return Shield;
     }
   };
 

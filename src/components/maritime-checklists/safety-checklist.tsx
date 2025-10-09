@@ -169,11 +169,11 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
       items: prev.items.map(item =>
         item.id === itemId
           ? {
-              ...item,
-              [field]: value,
-              status: field === "value" && value !== undefined ? "completed" : item.status,
-              timestamp: field === "value" ? new Date().toISOString() : item.timestamp,
-            }
+            ...item,
+            [field]: value,
+            status: field === "value" && value !== undefined ? "completed" : item.status,
+            timestamp: field === "value" ? new Date().toISOString() : item.timestamp,
+          }
           : item
       ),
     }));
@@ -212,95 +212,95 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
 
   const renderItemInput = (item: ChecklistItem) => {
     switch (item.type) {
-      case "boolean":
-        return (
-          <Checkbox
-            checked={item.value === true}
-            onCheckedChange={checked => handleItemChange(item.id, "value", checked)}
-            className="mr-2"
-          />
-        );
+    case "boolean":
+      return (
+        <Checkbox
+          checked={item.value === true}
+          onCheckedChange={checked => handleItemChange(item.id, "value", checked)}
+          className="mr-2"
+        />
+      );
 
-      case "number":
-        return (
-          <div className="flex items-center gap-2">
-            <Input
-              type="number"
-              value={item.value || ""}
-              onChange={e => handleItemChange(item.id, "value", parseFloat(e.target.value))}
-              placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
-              className="w-32"
-            />
-            {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
-          </div>
-        );
-
-      case "text":
-        return (
+    case "number":
+      return (
+        <div className="flex items-center gap-2">
           <Input
+            type="number"
             value={item.value || ""}
-            onChange={e => handleItemChange(item.id, "value", e.target.value)}
-            placeholder="Digite sua observação..."
-            className="w-full"
+            onChange={e => handleItemChange(item.id, "value", parseFloat(e.target.value))}
+            placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
+            className="w-32"
           />
-        );
+          {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
+        </div>
+      );
 
-      default:
-        return null;
+    case "text":
+      return (
+        <Input
+          value={item.value || ""}
+          onChange={e => handleItemChange(item.id, "value", e.target.value)}
+          placeholder="Digite sua observação..."
+          className="w-full"
+        />
+      );
+
+    default:
+      return null;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "Combate a Incêndio":
-        return <Flame className="w-4 h-4" />;
-      case "Abandono":
-        return <LifeBuoy className="w-4 h-4" />;
-      case "Alarmes":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "EPI":
-        return <Shield className="w-4 h-4" />;
-      case "Resgate":
-        return <LifeBuoy className="w-4 h-4" />;
-      case "Escape":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "Ventilação":
-        return <Ship className="w-4 h-4" />;
-      case "Materiais Perigosos":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "Controle":
-        return <Target className="w-4 h-4" />;
-      case "Observações":
-        return <User className="w-4 h-4" />;
-      default:
-        return <Shield className="w-4 h-4" />;
+    case "Combate a Incêndio":
+      return <Flame className="w-4 h-4" />;
+    case "Abandono":
+      return <LifeBuoy className="w-4 h-4" />;
+    case "Alarmes":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "EPI":
+      return <Shield className="w-4 h-4" />;
+    case "Resgate":
+      return <LifeBuoy className="w-4 h-4" />;
+    case "Escape":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "Ventilação":
+      return <Ship className="w-4 h-4" />;
+    case "Materiais Perigosos":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "Controle":
+      return <Target className="w-4 h-4" />;
+    case "Observações":
+      return <User className="w-4 h-4" />;
+    default:
+      return <Shield className="w-4 h-4" />;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "Combate a Incêndio":
-        return "text-red-600 bg-red-50";
-      case "Abandono":
-        return "text-orange-600 bg-orange-50";
-      case "Alarmes":
-        return "text-yellow-600 bg-yellow-50";
-      case "EPI":
-        return "text-blue-600 bg-blue-50";
-      case "Resgate":
-        return "text-purple-600 bg-purple-50";
-      case "Escape":
-        return "text-green-600 bg-green-50";
-      case "Ventilação":
-        return "text-cyan-600 bg-cyan-50";
-      case "Materiais Perigosos":
-        return "text-red-600 bg-red-50";
-      case "Controle":
-        return "text-muted-foreground bg-gray-50";
-      case "Observações":
-        return "text-indigo-600 bg-indigo-50";
-      default:
-        return "text-muted-foreground bg-gray-50";
+    case "Combate a Incêndio":
+      return "text-red-600 bg-red-50";
+    case "Abandono":
+      return "text-orange-600 bg-orange-50";
+    case "Alarmes":
+      return "text-yellow-600 bg-yellow-50";
+    case "EPI":
+      return "text-blue-600 bg-blue-50";
+    case "Resgate":
+      return "text-purple-600 bg-purple-50";
+    case "Escape":
+      return "text-green-600 bg-green-50";
+    case "Ventilação":
+      return "text-cyan-600 bg-cyan-50";
+    case "Materiais Perigosos":
+      return "text-red-600 bg-red-50";
+    case "Controle":
+      return "text-muted-foreground bg-gray-50";
+    case "Observações":
+      return "text-indigo-600 bg-indigo-50";
+    default:
+      return "text-muted-foreground bg-gray-50";
     }
   };
 

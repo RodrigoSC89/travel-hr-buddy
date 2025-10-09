@@ -151,47 +151,47 @@ export const PeotramWorkflowManager: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "bg-success/20 text-success border-success/30";
-      case "active":
-      case "in-progress":
-        return "bg-info/20 text-info border-info/30";
-      case "paused":
-      case "blocked":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "draft":
-      case "pending":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "completed":
+      return "bg-success/20 text-success border-success/30";
+    case "active":
+    case "in-progress":
+      return "bg-info/20 text-info border-info/30";
+    case "paused":
+    case "blocked":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "draft":
+    case "pending":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "high":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "medium":
-        return "bg-info/20 text-info border-info/30";
-      case "low":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "medium":
+      return "bg-info/20 text-info border-info/30";
+    case "low":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStepStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "in-progress":
-        return <Clock className="w-4 h-4 text-info" />;
-      case "blocked":
-        return <AlertCircle className="w-4 h-4 text-destructive" />;
-      default:
-        return <Clock className="w-4 h-4 text-muted-foreground" />;
+    case "completed":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "in-progress":
+      return <Clock className="w-4 h-4 text-info" />;
+    case "blocked":
+      return <AlertCircle className="w-4 h-4 text-destructive" />;
+    default:
+      return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

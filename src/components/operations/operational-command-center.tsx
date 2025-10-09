@@ -232,27 +232,27 @@ export const OperationalCommandCenter: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "text-red-600 bg-red-50 border-red-200";
-      case "high":
-        return "text-orange-600 bg-orange-50 border-orange-200";
-      case "medium":
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
-      case "low":
-        return "text-blue-600 bg-blue-50 border-blue-200";
-      default:
-        return "text-muted-foreground bg-gray-50 border-gray-200";
+    case "critical":
+      return "text-red-600 bg-red-50 border-red-200";
+    case "high":
+      return "text-orange-600 bg-orange-50 border-orange-200";
+    case "medium":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    case "low":
+      return "text-blue-600 bg-blue-50 border-blue-200";
+    default:
+      return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "increasing":
-        return <TrendingUp className="h-4 w-4 text-green-600" />;
-      case "decreasing":
-        return <TrendingUp className="h-4 w-4 text-red-600 rotate-180" />;
-      default:
-        return <Activity className="h-4 w-4 text-blue-600" />;
+    case "increasing":
+      return <TrendingUp className="h-4 w-4 text-green-600" />;
+    case "decreasing":
+      return <TrendingUp className="h-4 w-4 text-red-600 rotate-180" />;
+    default:
+      return <Activity className="h-4 w-4 text-blue-600" />;
     }
   };
 

@@ -48,30 +48,30 @@ const DashboardKPIWidget: React.FC<{
     if (typeof value === "string") return value;
 
     switch (unit) {
-      case "%":
-        return `${value.toFixed(1)}%`;
-      case "BRL":
-        return new Intl.NumberFormat("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }).format(value);
-      case "days":
-        return `${value} dias`;
-      case "hours":
-        return `${value}h`;
-      default:
-        return value.toLocaleString("pt-BR");
+    case "%":
+      return `${value.toFixed(1)}%`;
+    case "BRL":
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(value);
+    case "days":
+      return `${value} dias`;
+    case "hours":
+      return `${value}h`;
+    default:
+      return value.toLocaleString("pt-BR");
     }
   };
 
   const getTrendIcon = () => {
     switch (kpi.trend) {
-      case "up":
-        return <TrendingUp className="h-3 w-3 text-success" />;
-      case "down":
-        return <TrendingUp className="h-3 w-3 text-destructive rotate-180" />;
-      default:
-        return <Activity className="h-3 w-3 text-muted-foreground" />;
+    case "up":
+      return <TrendingUp className="h-3 w-3 text-success" />;
+    case "down":
+      return <TrendingUp className="h-3 w-3 text-destructive rotate-180" />;
+    default:
+      return <Activity className="h-3 w-3 text-muted-foreground" />;
     }
   };
 

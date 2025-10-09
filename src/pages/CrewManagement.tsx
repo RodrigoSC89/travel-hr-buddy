@@ -160,31 +160,31 @@ export default function CrewManagement() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "bg-green-500";
-      case "shore_leave":
-        return "bg-yellow-500";
-      case "medical_leave":
-        return "bg-orange-500";
-      case "inactive":
-        return "bg-gray-500";
-      default:
-        return "bg-gray-500";
+    case "active":
+      return "bg-green-500";
+    case "shore_leave":
+      return "bg-yellow-500";
+    case "medical_leave":
+      return "bg-orange-500";
+    case "inactive":
+      return "bg-gray-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "active":
-        return "Ativo";
-      case "shore_leave":
-        return "Licença Terra";
-      case "medical_leave":
-        return "Licença Médica";
-      case "inactive":
-        return "Inativo";
-      default:
-        return status;
+    case "active":
+      return "Ativo";
+    case "shore_leave":
+      return "Licença Terra";
+    case "medical_leave":
+      return "Licença Médica";
+    case "inactive":
+      return "Inativo";
+    default:
+      return status;
     }
   };
 

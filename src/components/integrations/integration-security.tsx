@@ -107,25 +107,25 @@ export const IntegrationSecurity: React.FC = () => {
 
   const getLevelColor = (level: SecurityPolicy["level"]) => {
     switch (level) {
-      case "low":
-        return "bg-success/10 text-success border-success/20";
-      case "medium":
-        return "bg-warning/10 text-warning border-warning/20";
-      case "high":
-        return "bg-primary/10 text-primary border-primary/20";
-      case "critical":
-        return "bg-destructive/10 text-destructive border-destructive/20";
+    case "low":
+      return "bg-success/10 text-success border-success/20";
+    case "medium":
+      return "bg-warning/10 text-warning border-warning/20";
+    case "high":
+      return "bg-primary/10 text-primary border-primary/20";
+    case "critical":
+      return "bg-destructive/10 text-destructive border-destructive/20";
     }
   };
 
   const getStatusColor = (status: AccessLog["status"]) => {
     switch (status) {
-      case "success":
-        return "bg-success/10 text-success border-success/20";
-      case "failed":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      case "blocked":
-        return "bg-warning/10 text-warning border-warning/20";
+    case "success":
+      return "bg-success/10 text-success border-success/20";
+    case "failed":
+      return "bg-destructive/10 text-destructive border-destructive/20";
+    case "blocked":
+      return "bg-warning/10 text-warning border-warning/20";
     }
   };
 

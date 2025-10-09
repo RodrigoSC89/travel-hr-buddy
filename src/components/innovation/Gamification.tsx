@@ -199,42 +199,42 @@ export const Gamification = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "productivity":
-        return <Zap className="w-4 h-4" />;
-      case "collaboration":
-        return <Users className="w-4 h-4" />;
-      case "innovation":
-        return <Sparkles className="w-4 h-4" />;
-      case "leadership":
-        return <Crown className="w-4 h-4" />;
-      default:
-        return <Star className="w-4 h-4" />;
+    case "productivity":
+      return <Zap className="w-4 h-4" />;
+    case "collaboration":
+      return <Users className="w-4 h-4" />;
+    case "innovation":
+      return <Sparkles className="w-4 h-4" />;
+    case "leadership":
+      return <Crown className="w-4 h-4" />;
+    default:
+      return <Star className="w-4 h-4" />;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "productivity":
-        return "bg-blue-100 text-blue-700 border-blue-200";
-      case "collaboration":
-        return "bg-green-100 text-green-700 border-green-200";
-      case "innovation":
-        return "bg-purple-100 text-purple-700 border-purple-200";
-      case "leadership":
-        return "bg-orange-100 text-orange-700 border-orange-200";
-      default:
-        return "bg-secondary text-secondary-foreground border-border";
+    case "productivity":
+      return "bg-blue-100 text-blue-700 border-blue-200";
+    case "collaboration":
+      return "bg-green-100 text-green-700 border-green-200";
+    case "innovation":
+      return "bg-purple-100 text-purple-700 border-purple-200";
+    case "leadership":
+      return "bg-orange-100 text-orange-700 border-orange-200";
+    default:
+      return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case "down":
-        return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
-      default:
-        return <TrendingUp className="w-4 h-4 text-muted-foreground rotate-90" />;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case "down":
+      return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
+    default:
+      return <TrendingUp className="w-4 h-4 text-muted-foreground rotate-90" />;
     }
   };
 

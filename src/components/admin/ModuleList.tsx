@@ -257,27 +257,27 @@ export const ModuleList: React.FC = () => {
 
   const getStatusIcon = (status: Module["status"]) => {
     switch (status) {
-      case "functional":
-        return <CheckCircle className="h-4 w-4 text-success" />;
-      case "pending":
-        return <AlertCircle className="h-4 w-4 text-warning" />;
-      case "disabled":
-        return <XCircle className="h-4 w-4 text-destructive" />;
+    case "functional":
+      return <CheckCircle className="h-4 w-4 text-success" />;
+    case "pending":
+      return <AlertCircle className="h-4 w-4 text-warning" />;
+    case "disabled":
+      return <XCircle className="h-4 w-4 text-destructive" />;
     }
   };
 
   const getStatusBadge = (status: Module["status"]) => {
     switch (status) {
-      case "functional":
-        return <Badge className="bg-success/20 text-success border-success/30">Funcional</Badge>;
-      case "pending":
-        return <Badge className="bg-warning/20 text-warning border-warning/30">Pendente</Badge>;
-      case "disabled":
-        return (
-          <Badge className="bg-destructive/20 text-destructive border-destructive/30">
+    case "functional":
+      return <Badge className="bg-success/20 text-success border-success/30">Funcional</Badge>;
+    case "pending":
+      return <Badge className="bg-warning/20 text-warning border-warning/30">Pendente</Badge>;
+    case "disabled":
+      return (
+        <Badge className="bg-destructive/20 text-destructive border-destructive/30">
             Desabilitado
-          </Badge>
-        );
+        </Badge>
+      );
     }
   };
 

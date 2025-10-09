@@ -158,61 +158,61 @@ export const CrewRotationPlanner: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "planned":
-        return "bg-blue-500";
-      case "confirmed":
-        return "bg-green-500";
-      case "in_progress":
-        return "bg-yellow-500";
-      case "completed":
-        return "bg-green-600";
-      case "delayed":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
+    case "planned":
+      return "bg-blue-500";
+    case "confirmed":
+      return "bg-green-500";
+    case "in_progress":
+      return "bg-yellow-500";
+    case "completed":
+      return "bg-green-600";
+    case "delayed":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "planned":
-        return "Planejado";
-      case "confirmed":
-        return "Confirmado";
-      case "in_progress":
-        return "Em Andamento";
-      case "completed":
-        return "Concluído";
-      case "delayed":
-        return "Atrasado";
-      default:
-        return "Desconhecido";
+    case "planned":
+      return "Planejado";
+    case "confirmed":
+      return "Confirmado";
+    case "in_progress":
+      return "Em Andamento";
+    case "completed":
+      return "Concluído";
+    case "delayed":
+      return "Atrasado";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getRotationTypeIcon = (type: string) => {
     switch (type) {
-      case "sign_on":
-        return <UserCheck className="h-4 w-4 text-green-500" />;
-      case "sign_off":
-        return <UserX className="h-4 w-4 text-red-500" />;
-      case "transfer":
-        return <Users className="h-4 w-4 text-blue-500" />;
-      default:
-        return <Users className="h-4 w-4" />;
+    case "sign_on":
+      return <UserCheck className="h-4 w-4 text-green-500" />;
+    case "sign_off":
+      return <UserX className="h-4 w-4 text-red-500" />;
+    case "transfer":
+      return <Users className="h-4 w-4 text-blue-500" />;
+    default:
+      return <Users className="h-4 w-4" />;
     }
   };
 
   const getRotationTypeLabel = (type: string) => {
     switch (type) {
-      case "sign_on":
-        return "Embarque";
-      case "sign_off":
-        return "Desembarque";
-      case "transfer":
-        return "Transferência";
-      default:
-        return "Não Definido";
+    case "sign_on":
+      return "Embarque";
+    case "sign_off":
+      return "Desembarque";
+    case "transfer":
+      return "Transferência";
+    default:
+      return "Não Definido";
     }
   };
 

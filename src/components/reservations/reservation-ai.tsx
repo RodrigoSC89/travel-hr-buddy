@@ -149,31 +149,31 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-      case "high":
-        return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
-      case "low":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "critical":
+      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+    case "high":
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+    case "low":
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "conflict":
-        return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case "reminder":
-        return <Clock className="h-5 w-5 text-blue-500" />;
-      case "cost_saving":
-        return <TrendingUp className="h-5 w-5 text-green-500" />;
-      case "optimization":
-        return <Lightbulb className="h-5 w-5 text-yellow-500" />;
-      default:
-        return <Bot className="h-5 w-5" />;
+    case "conflict":
+      return <AlertTriangle className="h-5 w-5 text-red-500" />;
+    case "reminder":
+      return <Clock className="h-5 w-5 text-blue-500" />;
+    case "cost_saving":
+      return <TrendingUp className="h-5 w-5 text-green-500" />;
+    case "optimization":
+      return <Lightbulb className="h-5 w-5 text-yellow-500" />;
+    default:
+      return <Bot className="h-5 w-5" />;
     }
   };
 

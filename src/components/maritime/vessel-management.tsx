@@ -178,29 +178,29 @@ export function VesselManagement() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800";
-      case "maintenance":
-        return "bg-yellow-100 text-yellow-800";
-      case "inactive":
-        return "bg-secondary text-secondary-foreground";
-      case "dry_dock":
-        return "bg-blue-100 text-blue-800";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "active":
+      return "bg-green-100 text-green-800";
+    case "maintenance":
+      return "bg-yellow-100 text-yellow-800";
+    case "inactive":
+      return "bg-secondary text-secondary-foreground";
+    case "dry_dock":
+      return "bg-blue-100 text-blue-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "active":
-        return <CheckCircle className="w-4 h-4" />;
-      case "maintenance":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "inactive":
-        return <Clock className="w-4 h-4" />;
-      default:
-        return <Ship className="w-4 h-4" />;
+    case "active":
+      return <CheckCircle className="w-4 h-4" />;
+    case "maintenance":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "inactive":
+      return <Clock className="w-4 h-4" />;
+    default:
+      return <Ship className="w-4 h-4" />;
     }
   };
 

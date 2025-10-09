@@ -152,31 +152,31 @@ export const EnhancedPeotramDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "hsl(var(--success))";
-      case "in-progress":
-        return "hsl(var(--info))";
-      case "pending":
-        return "hsl(var(--warning))";
-      case "overdue":
-        return "hsl(var(--destructive))";
-      default:
-        return "hsl(var(--muted))";
+    case "completed":
+      return "hsl(var(--success))";
+    case "in-progress":
+      return "hsl(var(--info))";
+    case "pending":
+      return "hsl(var(--warning))";
+    case "overdue":
+      return "hsl(var(--destructive))";
+    default:
+      return "hsl(var(--muted))";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return CheckCircle;
-      case "in-progress":
-        return Clock;
-      case "pending":
-        return Target;
-      case "overdue":
-        return AlertTriangle;
-      default:
-        return Clock;
+    case "completed":
+      return CheckCircle;
+    case "in-progress":
+      return Clock;
+    case "pending":
+      return Target;
+    case "overdue":
+      return AlertTriangle;
+    default:
+      return Clock;
     }
   };
 

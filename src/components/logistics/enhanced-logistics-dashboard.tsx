@@ -113,44 +113,44 @@ const EnhancedLogisticsDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "delivered":
-        return "success";
-      case "in_transit":
-        return "info";
-      case "delayed":
-        return "destructive";
-      case "pending":
-        return "warning";
-      default:
-        return "secondary";
+    case "delivered":
+      return "success";
+    case "in_transit":
+      return "info";
+    case "delayed":
+      return "destructive";
+    case "pending":
+      return "warning";
+    default:
+      return "secondary";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "destructive";
-      case "high":
-        return "warning";
-      case "medium":
-        return "info";
-      case "low":
-        return "success";
-      default:
-        return "secondary";
+    case "critical":
+      return "destructive";
+    case "high":
+      return "warning";
+    case "medium":
+      return "info";
+    case "low":
+      return "success";
+    default:
+      return "secondary";
     }
   };
 
   const getTransportIcon = (type: string) => {
     switch (type) {
-      case "maritime":
-        return Ship;
-      case "air":
-        return Plane;
-      case "ground":
-        return Truck;
-      default:
-        return Package;
+    case "maritime":
+      return Ship;
+    case "air":
+      return Plane;
+    case "ground":
+      return Truck;
+    default:
+      return Package;
     }
   };
 

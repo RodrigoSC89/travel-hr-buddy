@@ -150,27 +150,27 @@ export const UserManagementMultiTenant: React.FC = () => {
 
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {
-      case "owner":
-        return "default";
-      case "admin":
-        return "secondary";
-      case "manager":
-        return "outline";
-      default:
-        return "secondary";
+    case "owner":
+      return "default";
+    case "admin":
+      return "secondary";
+    case "manager":
+      return "outline";
+    default:
+      return "secondary";
     }
   };
 
   const getRoleLabel = (role: string) => {
     switch (role) {
-      case "owner":
-        return "Proprietário";
-      case "admin":
-        return "Administrador";
-      case "manager":
-        return "Gerente";
-      default:
-        return "Membro";
+    case "owner":
+      return "Proprietário";
+    case "admin":
+      return "Administrador";
+    case "manager":
+      return "Gerente";
+    default:
+      return "Membro";
     }
   };
 

@@ -52,71 +52,71 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
     if (!selectedChecklist) return null;
 
     switch (selectedChecklist.type) {
-      case "dp":
-        return (
-          <DPChecklist
-            checklist={selectedChecklist}
-            onSave={handleSaveChecklist}
-            onSubmit={handleSubmitChecklist}
-            onBack={handleBackToManager}
-          />
-        );
+    case "dp":
+      return (
+        <DPChecklist
+          checklist={selectedChecklist}
+          onSave={handleSaveChecklist}
+          onSubmit={handleSubmitChecklist}
+          onBack={handleBackToManager}
+        />
+      );
 
-      case "machine_routine":
-        return (
-          <MachineRoutineChecklist
-            checklist={selectedChecklist}
-            onSave={handleSaveChecklist}
-            onSubmit={handleSubmitChecklist}
-            onBack={handleBackToManager}
-          />
-        );
+    case "machine_routine":
+      return (
+        <MachineRoutineChecklist
+          checklist={selectedChecklist}
+          onSave={handleSaveChecklist}
+          onSubmit={handleSubmitChecklist}
+          onBack={handleBackToManager}
+        />
+      );
 
-      case "nautical_routine":
-        return (
-          <NauticalRoutineChecklist
-            checklist={selectedChecklist}
-            onSave={handleSaveChecklist}
-            onSubmit={handleSubmitChecklist}
-            onBack={handleBackToManager}
-          />
-        );
+    case "nautical_routine":
+      return (
+        <NauticalRoutineChecklist
+          checklist={selectedChecklist}
+          onSave={handleSaveChecklist}
+          onSubmit={handleSubmitChecklist}
+          onBack={handleBackToManager}
+        />
+      );
 
-      case "safety":
-        return (
-          <SafetyChecklist
-            checklist={selectedChecklist}
-            onSave={handleSaveChecklist}
-            onSubmit={handleSubmitChecklist}
-            onBack={handleBackToManager}
-          />
-        );
+    case "safety":
+      return (
+        <SafetyChecklist
+          checklist={selectedChecklist}
+          onSave={handleSaveChecklist}
+          onSubmit={handleSubmitChecklist}
+          onBack={handleBackToManager}
+        />
+      );
 
-      case "environmental":
-        return (
-          <EnvironmentalChecklist
-            checklist={selectedChecklist}
-            onSave={handleSaveChecklist}
-            onSubmit={handleSubmitChecklist}
-            onBack={handleBackToManager}
-          />
-        );
+    case "environmental":
+      return (
+        <EnvironmentalChecklist
+          checklist={selectedChecklist}
+          onSave={handleSaveChecklist}
+          onSubmit={handleSubmitChecklist}
+          onBack={handleBackToManager}
+        />
+      );
 
-      default:
-        return (
-          <div className="text-center p-8">
-            <h3 className="text-lg font-semibold mb-2">Tipo de Checklist Não Implementado</h3>
-            <p className="text-muted-foreground mb-4">
+    default:
+      return (
+        <div className="text-center p-8">
+          <h3 className="text-lg font-semibold mb-2">Tipo de Checklist Não Implementado</h3>
+          <p className="text-muted-foreground mb-4">
               O tipo "{selectedChecklist.type}" ainda não foi implementado.
-            </p>
-            <button
-              onClick={handleBackToManager}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md"
-            >
+          </p>
+          <button
+            onClick={handleBackToManager}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-md"
+          >
               Voltar
-            </button>
-          </div>
-        );
+          </button>
+        </div>
+      );
     }
   };
 

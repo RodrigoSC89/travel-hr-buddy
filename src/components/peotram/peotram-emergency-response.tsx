@@ -149,48 +149,48 @@ export const PeotramEmergencyResponse: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "high":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      case "medium":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "low":
-        return "bg-info/20 text-info border-info/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high":
+      return "bg-destructive/10 text-destructive border-destructive/20";
+    case "medium":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "low":
+      return "bg-info/20 text-info border-info/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "resolved":
-        return "bg-success/20 text-success border-success/30";
-      case "contained":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "active":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "resolved":
+      return "bg-success/20 text-success border-success/30";
+    case "contained":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "active":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "fire":
-        return <Flame className="w-4 h-4" />;
-      case "medical":
-        return <Heart className="w-4 h-4" />;
-      case "collision":
-        return <Zap className="w-4 h-4" />;
-      case "pollution":
-        return <Waves className="w-4 h-4" />;
-      case "security":
-        return <Shield className="w-4 h-4" />;
-      case "weather":
-        return <Activity className="w-4 h-4" />;
-      default:
-        return <AlertTriangle className="w-4 h-4" />;
+    case "fire":
+      return <Flame className="w-4 h-4" />;
+    case "medical":
+      return <Heart className="w-4 h-4" />;
+    case "collision":
+      return <Zap className="w-4 h-4" />;
+    case "pollution":
+      return <Waves className="w-4 h-4" />;
+    case "security":
+      return <Shield className="w-4 h-4" />;
+    case "weather":
+      return <Activity className="w-4 h-4" />;
+    default:
+      return <AlertTriangle className="w-4 h-4" />;
     }
   };
 

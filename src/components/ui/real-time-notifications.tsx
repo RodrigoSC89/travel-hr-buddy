@@ -102,27 +102,27 @@ export const NotificationCenter: React.FC = () => {
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "warning":
-        return AlertTriangle;
-      case "success":
-        return CheckCircle;
-      case "error":
-        return AlertTriangle;
-      default:
-        return Info;
+    case "warning":
+      return AlertTriangle;
+    case "success":
+      return CheckCircle;
+    case "error":
+      return AlertTriangle;
+    default:
+      return Info;
     }
   };
 
   const getIconColor = (type: string) => {
     switch (type) {
-      case "warning":
-        return "text-yellow-500";
-      case "success":
-        return "text-green-500";
-      case "error":
-        return "text-red-500";
-      default:
-        return "text-blue-500";
+    case "warning":
+      return "text-yellow-500";
+    case "success":
+      return "text-green-500";
+    case "error":
+      return "text-red-500";
+    default:
+      return "text-blue-500";
     }
   };
 

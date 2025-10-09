@@ -83,23 +83,23 @@ export const HealthStatusDashboard: React.FC = () => {
 
   const getStatusIcon = (status: "healthy" | "degraded" | "down") => {
     switch (status) {
-      case "healthy":
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case "degraded":
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case "down":
-        return <AlertCircle className="h-5 w-5 text-red-500" />;
+    case "healthy":
+      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+    case "degraded":
+      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    case "down":
+      return <AlertCircle className="h-5 w-5 text-red-500" />;
     }
   };
 
   const getStatusColor = (status: "healthy" | "degraded" | "down") => {
     switch (status) {
-      case "healthy":
-        return "bg-green-500";
-      case "degraded":
-        return "bg-yellow-500";
-      case "down":
-        return "bg-red-500";
+    case "healthy":
+      return "bg-green-500";
+    case "degraded":
+      return "bg-yellow-500";
+    case "down":
+      return "bg-red-500";
     }
   };
 
@@ -228,20 +228,20 @@ export const HealthStatusDashboard: React.FC = () => {
               const successRate =
                 status.successCount + status.errorCount > 0
                   ? Math.round(
-                      (status.successCount / (status.successCount + status.errorCount)) * 100
-                    )
+                    (status.successCount / (status.successCount + status.errorCount)) * 100
+                  )
                   : 100;
 
               const getServiceIcon = (serviceName: string) => {
                 switch (serviceName.toLowerCase()) {
-                  case "openai":
-                    return <Cloud className="h-5 w-5" />;
-                  case "supabase":
-                    return <Database className="h-5 w-5" />;
-                  case "realtime":
-                    return <Activity className="h-5 w-5" />;
-                  default:
-                    return <Server className="h-5 w-5" />;
+                case "openai":
+                  return <Cloud className="h-5 w-5" />;
+                case "supabase":
+                  return <Database className="h-5 w-5" />;
+                case "realtime":
+                  return <Activity className="h-5 w-5" />;
+                default:
+                  return <Server className="h-5 w-5" />;
                 }
               };
 

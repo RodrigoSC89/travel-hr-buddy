@@ -120,14 +120,14 @@ export const CopilotAI = () => {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high":
-        return "bg-danger text-danger-foreground";
-      case "medium":
-        return "bg-warning text-warning-foreground";
-      case "low":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "high":
+      return "bg-danger text-danger-foreground";
+    case "medium":
+      return "bg-warning text-warning-foreground";
+    case "low":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 

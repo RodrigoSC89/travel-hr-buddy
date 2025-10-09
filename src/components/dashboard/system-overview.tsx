@@ -50,31 +50,31 @@ const SystemOverview = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "operational":
-      case "optimal":
-      case "stable":
-      case "secure":
-        return "text-success-foreground bg-success/20 border-success/30";
-      case "warning":
-        return "text-warning-foreground bg-warning/20 border-warning/30";
-      case "critical":
-        return "text-destructive-foreground bg-destructive/20 border-destructive/30";
-      default:
-        return "text-muted-foreground bg-muted/20 border-muted/30";
+    case "operational":
+    case "optimal":
+    case "stable":
+    case "secure":
+      return "text-success-foreground bg-success/20 border-success/30";
+    case "warning":
+      return "text-warning-foreground bg-warning/20 border-warning/30";
+    case "critical":
+      return "text-destructive-foreground bg-destructive/20 border-destructive/30";
+    default:
+      return "text-muted-foreground bg-muted/20 border-muted/30";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "operational":
-      case "optimal":
-      case "stable":
-      case "secure":
-        return <CheckCircle className="w-4 h-4" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4" />;
-      default:
-        return <Clock className="w-4 h-4" />;
+    case "operational":
+    case "optimal":
+    case "stable":
+    case "secure":
+      return <CheckCircle className="w-4 h-4" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4" />;
+    default:
+      return <Clock className="w-4 h-4" />;
     }
   };
 

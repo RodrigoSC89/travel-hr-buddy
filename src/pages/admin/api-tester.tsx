@@ -121,15 +121,15 @@ const APITester = () => {
         prev.map(t =>
           t.id === testId
             ? {
-                ...t,
-                status: result.success ? "success" : "error",
-                result: {
-                  message: result.message,
-                  responseTime: result.responseTime,
-                  data: result.data,
-                  error: result.error,
-                },
-              }
+              ...t,
+              status: result.success ? "success" : "error",
+              result: {
+                message: result.message,
+                responseTime: result.responseTime,
+                data: result.data,
+                error: result.error,
+              },
+            }
             : t
         )
       );
@@ -138,13 +138,13 @@ const APITester = () => {
         prev.map(t =>
           t.id === testId
             ? {
-                ...t,
-                status: "error",
-                result: {
-                  message: "Test execution failed",
-                  error: error instanceof Error ? error.message : "Unknown error",
-                },
-              }
+              ...t,
+              status: "error",
+              result: {
+                message: "Test execution failed",
+                error: error instanceof Error ? error.message : "Unknown error",
+              },
+            }
             : t
         )
       );
@@ -161,43 +161,43 @@ const APITester = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "loading":
-        return <Loader2 className="h-5 w-5 animate-spin text-blue-600" />;
-      case "success":
-        return <CheckCircle className="h-5 w-5 text-green-600" />;
-      case "error":
-        return <XCircle className="h-5 w-5 text-red-600" />;
-      default:
-        return <AlertCircle className="h-5 w-5 text-gray-400" />;
+    case "loading":
+      return <Loader2 className="h-5 w-5 animate-spin text-blue-600" />;
+    case "success":
+      return <CheckCircle className="h-5 w-5 text-green-600" />;
+    case "error":
+      return <XCircle className="h-5 w-5 text-red-600" />;
+    default:
+      return <AlertCircle className="h-5 w-5 text-gray-400" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "loading":
-        return (
-          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
+    case "loading":
+      return (
+        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
             Testing...
-          </Badge>
-        );
-      case "success":
-        return (
-          <Badge variant="default" className="bg-green-600 text-white">
+        </Badge>
+      );
+    case "success":
+      return (
+        <Badge variant="default" className="bg-green-600 text-white">
             ✅ Success
-          </Badge>
-        );
-      case "error":
-        return (
-          <Badge variant="destructive" className="bg-red-600 text-white">
+        </Badge>
+      );
+    case "error":
+      return (
+        <Badge variant="destructive" className="bg-red-600 text-white">
             ❌ Failed
-          </Badge>
-        );
-      default:
-        return (
-          <Badge variant="outline" className="bg-gray-50 text-gray-600">
+        </Badge>
+      );
+    default:
+      return (
+        <Badge variant="outline" className="bg-gray-50 text-gray-600">
             Not Tested
-          </Badge>
-        );
+        </Badge>
+      );
     }
   };
 
@@ -253,11 +253,11 @@ const APITester = () => {
                 <div className="text-2xl font-bold">
                   {tests.filter(t => t.result?.responseTime).length > 0
                     ? Math.round(
-                        tests
-                          .filter(t => t.result?.responseTime)
-                          .reduce((acc, t) => acc + (t.result?.responseTime || 0), 0) /
+                      tests
+                        .filter(t => t.result?.responseTime)
+                        .reduce((acc, t) => acc + (t.result?.responseTime || 0), 0) /
                           tests.filter(t => t.result?.responseTime).length
-                      )
+                    )
                     : 0}
                   ms
                 </div>

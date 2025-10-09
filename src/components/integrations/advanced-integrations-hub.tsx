@@ -284,31 +284,31 @@ export const AdvancedIntegrationsHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "connected":
-        return "bg-success/10 text-success border-success/20";
-      case "disconnected":
-        return "bg-muted text-muted-foreground border-border";
-      case "error":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      case "configuring":
-        return "bg-warning/10 text-warning border-warning/20";
-      default:
-        return "bg-muted text-muted-foreground border-border";
+    case "connected":
+      return "bg-success/10 text-success border-success/20";
+    case "disconnected":
+      return "bg-muted text-muted-foreground border-border";
+    case "error":
+      return "bg-destructive/10 text-destructive border-destructive/20";
+    case "configuring":
+      return "bg-warning/10 text-warning border-warning/20";
+    default:
+      return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "connected":
-        return <CheckCircle className="w-4 h-4" />;
-      case "disconnected":
-        return <Gauge className="w-4 h-4" />;
-      case "error":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "configuring":
-        return <Settings className="w-4 h-4 animate-spin" />;
-      default:
-        return <Gauge className="w-4 h-4" />;
+    case "connected":
+      return <CheckCircle className="w-4 h-4" />;
+    case "disconnected":
+      return <Gauge className="w-4 h-4" />;
+    case "error":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "configuring":
+      return <Settings className="w-4 h-4 animate-spin" />;
+    default:
+      return <Gauge className="w-4 h-4" />;
     }
   };
 
@@ -317,10 +317,10 @@ export const AdvancedIntegrationsHub: React.FC = () => {
       prev.map(integration =>
         integration.id === id
           ? {
-              ...integration,
-              isEnabled: !integration.isEnabled,
-              status: !integration.isEnabled ? "connected" : "disconnected",
-            }
+            ...integration,
+            isEnabled: !integration.isEnabled,
+            status: !integration.isEnabled ? "connected" : "disconnected",
+          }
           : integration
       )
     );
@@ -587,31 +587,31 @@ const IntegrationCard: React.FC<{
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "connected":
-        return "bg-success/10 text-success border-success/20";
-      case "disconnected":
-        return "bg-muted text-muted-foreground border-border";
-      case "error":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      case "configuring":
-        return "bg-warning/10 text-warning border-warning/20";
-      default:
-        return "bg-muted text-muted-foreground border-border";
+    case "connected":
+      return "bg-success/10 text-success border-success/20";
+    case "disconnected":
+      return "bg-muted text-muted-foreground border-border";
+    case "error":
+      return "bg-destructive/10 text-destructive border-destructive/20";
+    case "configuring":
+      return "bg-warning/10 text-warning border-warning/20";
+    default:
+      return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "connected":
-        return <CheckCircle className="w-4 h-4" />;
-      case "disconnected":
-        return <Gauge className="w-4 h-4" />;
-      case "error":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "configuring":
-        return <Settings className="w-4 h-4 animate-spin" />;
-      default:
-        return <Gauge className="w-4 h-4" />;
+    case "connected":
+      return <CheckCircle className="w-4 h-4" />;
+    case "disconnected":
+      return <Gauge className="w-4 h-4" />;
+    case "error":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "configuring":
+      return <Settings className="w-4 h-4 animate-spin" />;
+    default:
+      return <Gauge className="w-4 h-4" />;
     }
   };
 
@@ -863,16 +863,16 @@ const LogsViewer: React.FC<{
 }> = ({ logs, integrations }) => {
   const getLogTypeColor = (type: LogEntry["type"]) => {
     switch (type) {
-      case "success":
-        return "text-success bg-success/10 border-success/20";
-      case "error":
-        return "text-destructive bg-destructive/10 border-destructive/20";
-      case "warning":
-        return "text-warning bg-warning/10 border-warning/20";
-      case "info":
-        return "text-info bg-info/10 border-info/20";
-      default:
-        return "text-muted-foreground bg-muted border-border";
+    case "success":
+      return "text-success bg-success/10 border-success/20";
+    case "error":
+      return "text-destructive bg-destructive/10 border-destructive/20";
+    case "warning":
+      return "text-warning bg-warning/10 border-warning/20";
+    case "info":
+      return "text-info bg-info/10 border-info/20";
+    default:
+      return "text-muted-foreground bg-muted border-border";
     }
   };
 
@@ -928,27 +928,27 @@ const AIInsightsPanel: React.FC<{
 }> = ({ insights }) => {
   const getInsightColor = (type: AIInsight["type"]) => {
     switch (type) {
-      case "suggestion":
-        return "border-primary/20 bg-primary/5";
-      case "warning":
-        return "border-warning/20 bg-warning/5";
-      case "optimization":
-        return "border-success/20 bg-success/5";
-      default:
-        return "border-border bg-background";
+    case "suggestion":
+      return "border-primary/20 bg-primary/5";
+    case "warning":
+      return "border-warning/20 bg-warning/5";
+    case "optimization":
+      return "border-success/20 bg-success/5";
+    default:
+      return "border-border bg-background";
     }
   };
 
   const getInsightIcon = (type: AIInsight["type"]) => {
     switch (type) {
-      case "suggestion":
-        return <Brain className="w-5 h-5 text-primary" />;
-      case "warning":
-        return <AlertTriangle className="w-5 h-5 text-warning" />;
-      case "optimization":
-        return <TrendingUp className="w-5 h-5 text-success" />;
-      default:
-        return <Brain className="w-5 h-5 text-muted-foreground" />;
+    case "suggestion":
+      return <Brain className="w-5 h-5 text-primary" />;
+    case "warning":
+      return <AlertTriangle className="w-5 h-5 text-warning" />;
+    case "optimization":
+      return <TrendingUp className="w-5 h-5 text-success" />;
+    default:
+      return <Brain className="w-5 h-5 text-muted-foreground" />;
     }
   };
 

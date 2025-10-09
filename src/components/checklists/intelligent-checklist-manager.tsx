@@ -146,27 +146,27 @@ export const IntelligentChecklistManager: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "concluido":
-        return "bg-green-500";
-      case "em_andamento":
-        return "bg-blue-500";
-      case "auditado":
-        return "bg-purple-500";
-      default:
-        return "bg-gray-500";
+    case "concluido":
+      return "bg-green-500";
+    case "em_andamento":
+      return "bg-blue-500";
+    case "auditado":
+      return "bg-purple-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getCriticalityColor = (criticality: string) => {
     switch (criticality) {
-      case "critica":
-        return "text-red-600 bg-red-50";
-      case "alta":
-        return "text-orange-600 bg-orange-50";
-      case "media":
-        return "text-yellow-600 bg-yellow-50";
-      default:
-        return "text-green-600 bg-green-50";
+    case "critica":
+      return "text-red-600 bg-red-50";
+    case "alta":
+      return "text-orange-600 bg-orange-50";
+    case "media":
+      return "text-yellow-600 bg-yellow-50";
+    default:
+      return "text-green-600 bg-green-50";
     }
   };
 

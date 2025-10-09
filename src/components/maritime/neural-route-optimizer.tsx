@@ -165,38 +165,38 @@ export const NeuralRouteOptimizer: React.FC = () => {
 
   const getRecommendationColor = (rec: RouteOptimization["recommendation"]) => {
     switch (rec) {
-      case "optimal":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-      case "good":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
-      case "acceptable":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-      case "avoid":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "optimal":
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "good":
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+    case "acceptable":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "avoid":
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
     }
   };
 
   const getTrafficColor = (level: RouteOptimization["trafficLevel"]) => {
     switch (level) {
-      case "low":
-        return "text-green-600 dark:text-green-400";
-      case "medium":
-        return "text-yellow-600 dark:text-yellow-400";
-      case "high":
-        return "text-red-600 dark:text-red-400";
+    case "low":
+      return "text-green-600 dark:text-green-400";
+    case "medium":
+      return "text-yellow-600 dark:text-yellow-400";
+    case "high":
+      return "text-red-600 dark:text-red-400";
     }
   };
 
   const getSeverityColor = (severity: WeatherForecast["severity"]) => {
     switch (severity) {
-      case "calm":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-      case "moderate":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
-      case "rough":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-      case "severe":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "calm":
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "moderate":
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+    case "rough":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "severe":
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
     }
   };
 

@@ -163,40 +163,40 @@ const UserOnboardingCenter: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "text-green-600 bg-green-50 border-green-200";
-      case "invited":
-        return "text-blue-600 bg-blue-50 border-blue-200";
-      case "pending":
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
-      default:
-        return "text-muted-foreground bg-gray-50 border-gray-200";
+    case "active":
+      return "text-green-600 bg-green-50 border-green-200";
+    case "invited":
+      return "text-blue-600 bg-blue-50 border-blue-200";
+    case "pending":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    default:
+      return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "active":
-        return "Ativo";
-      case "invited":
-        return "Convidado";
-      case "pending":
-        return "Pendente";
-      default:
-        return "Desconhecido";
+    case "active":
+      return "Ativo";
+    case "invited":
+      return "Convidado";
+    case "pending":
+      return "Pendente";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "video":
-        return <Video className="w-4 h-4" />;
-      case "document":
-        return <FileText className="w-4 h-4" />;
-      case "interactive":
-        return <Target className="w-4 h-4" />;
-      default:
-        return <BookOpen className="w-4 h-4" />;
+    case "video":
+      return <Video className="w-4 h-4" />;
+    case "document":
+      return <FileText className="w-4 h-4" />;
+    case "interactive":
+      return <Target className="w-4 h-4" />;
+    default:
+      return <BookOpen className="w-4 h-4" />;
     }
   };
 

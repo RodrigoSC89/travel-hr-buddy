@@ -152,56 +152,56 @@ export const UserFeedbackSystem: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "bug":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case "suggestion":
-        return <Lightbulb className="h-4 w-4 text-blue-500" />;
-      case "improvement":
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case "question":
-        return <MessageSquare className="h-4 w-4 text-purple-500" />;
-      default:
-        return <MessageSquare className="h-4 w-4 text-muted-foreground" />;
+    case "bug":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "suggestion":
+      return <Lightbulb className="h-4 w-4 text-blue-500" />;
+    case "improvement":
+      return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "question":
+      return <MessageSquare className="h-4 w-4 text-purple-500" />;
+    default:
+      return <MessageSquare className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "open":
-        return <Badge variant="outline">Aberto</Badge>;
-      case "in_progress":
-        return (
-          <Badge variant="secondary" className="bg-blue-500 text-azure-50">
+    case "open":
+      return <Badge variant="outline">Aberto</Badge>;
+    case "in_progress":
+      return (
+        <Badge variant="secondary" className="bg-blue-500 text-azure-50">
             Em Análise
-          </Badge>
-        );
-      case "resolved":
-        return (
-          <Badge variant="default" className="bg-green-500 text-azure-50">
+        </Badge>
+      );
+    case "resolved":
+      return (
+        <Badge variant="default" className="bg-green-500 text-azure-50">
             Resolvido
-          </Badge>
-        );
-      case "closed":
-        return <Badge variant="secondary">Fechado</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+        </Badge>
+      );
+    case "closed":
+      return <Badge variant="secondary">Fechado</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return <Badge variant="destructive">Urgente</Badge>;
-      case "high":
-        return (
-          <Badge variant="secondary" className="bg-orange-500 text-azure-50">
+    case "urgent":
+      return <Badge variant="destructive">Urgente</Badge>;
+    case "high":
+      return (
+        <Badge variant="secondary" className="bg-orange-500 text-azure-50">
             Alto
-          </Badge>
-        );
-      case "medium":
-        return <Badge variant="outline">Médio</Badge>;
-      default:
-        return <Badge variant="secondary">Baixo</Badge>;
+        </Badge>
+      );
+    case "medium":
+      return <Badge variant="outline">Médio</Badge>;
+    default:
+      return <Badge variant="secondary">Baixo</Badge>;
     }
   };
 

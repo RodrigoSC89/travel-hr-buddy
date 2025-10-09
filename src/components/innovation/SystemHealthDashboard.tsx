@@ -121,72 +121,72 @@ export const SystemHealthDashboard = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "healthy":
-        return "text-success";
-      case "warning":
-        return "text-warning";
-      case "critical":
-        return "text-destructive";
-      default:
-        return "text-muted-foreground";
+    case "healthy":
+      return "text-success";
+    case "warning":
+      return "text-warning";
+    case "critical":
+      return "text-destructive";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-      case "healthy":
-        return "bg-success/10 text-success border-success/20";
-      case "warning":
-        return "bg-warning/10 text-warning border-warning/20";
-      case "critical":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      default:
-        return "bg-muted/10 text-muted-foreground border-muted/20";
+    case "healthy":
+      return "bg-success/10 text-success border-success/20";
+    case "warning":
+      return "bg-warning/10 text-warning border-warning/20";
+    case "critical":
+      return "bg-destructive/10 text-destructive border-destructive/20";
+    default:
+      return "bg-muted/10 text-muted-foreground border-muted/20";
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "low":
-        return "bg-blue-100 text-blue-700";
-      case "medium":
-        return "bg-yellow-100 text-yellow-700";
-      case "high":
-        return "bg-orange-100 text-orange-700";
-      case "critical":
-        return "bg-red-100 text-red-700";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "low":
+      return "bg-blue-100 text-blue-700";
+    case "medium":
+      return "bg-yellow-100 text-yellow-700";
+    case "high":
+      return "bg-orange-100 text-orange-700";
+    case "critical":
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-3 w-3 text-green-500" />;
-      case "down":
-        return <TrendingDown className="h-3 w-3 text-red-500" />;
-      default:
-        return <Activity className="h-3 w-3 text-muted-foreground" />;
+    case "up":
+      return <TrendingUp className="h-3 w-3 text-green-500" />;
+    case "down":
+      return <TrendingDown className="h-3 w-3 text-red-500" />;
+    default:
+      return <Activity className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
   const getMetricIcon = (name: string) => {
     switch (name.toLowerCase()) {
-      case "cpu usage":
-        return <Cpu className="h-4 w-4" />;
-      case "memory usage":
-        return <MemoryStick className="h-4 w-4" />;
-      case "disk usage":
-        return <HardDrive className="h-4 w-4" />;
-      case "network i/o":
-        return <Network className="h-4 w-4" />;
-      case "active sessions":
-        return <Activity className="h-4 w-4" />;
-      case "response time":
-        return <Clock className="h-4 w-4" />;
-      default:
-        return <Server className="h-4 w-4" />;
+    case "cpu usage":
+      return <Cpu className="h-4 w-4" />;
+    case "memory usage":
+      return <MemoryStick className="h-4 w-4" />;
+    case "disk usage":
+      return <HardDrive className="h-4 w-4" />;
+    case "network i/o":
+      return <Network className="h-4 w-4" />;
+    case "active sessions":
+      return <Activity className="h-4 w-4" />;
+    case "response time":
+      return <Clock className="h-4 w-4" />;
+    default:
+      return <Server className="h-4 w-4" />;
     }
   };
 

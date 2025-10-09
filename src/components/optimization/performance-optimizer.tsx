@@ -131,38 +131,38 @@ const PerformanceOptimizer = () => {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high":
-        return "text-red-600 bg-red-50 border-red-200";
-      case "medium":
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
-      case "low":
-        return "text-green-600 bg-green-50 border-green-200";
-      default:
-        return "text-muted-foreground bg-gray-50 border-gray-200";
+    case "high":
+      return "text-red-600 bg-red-50 border-red-200";
+    case "medium":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    case "low":
+      return "text-green-600 bg-green-50 border-green-200";
+    default:
+      return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "active":
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case "recommended":
-        return <AlertTriangle className="w-4 h-4 text-orange-600" />;
-      default:
-        return <Clock className="w-4 h-4 text-muted-foreground" />;
+    case "active":
+      return <CheckCircle className="w-4 h-4 text-green-600" />;
+    case "recommended":
+      return <AlertTriangle className="w-4 h-4 text-orange-600" />;
+    default:
+      return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "database":
-        return <Database className="w-4 h-4" />;
-      case "network":
-        return <Wifi className="w-4 h-4" />;
-      case "system":
-        return <Cpu className="w-4 h-4" />;
-      default:
-        return <Settings className="w-4 h-4" />;
+    case "database":
+      return <Database className="w-4 h-4" />;
+    case "network":
+      return <Wifi className="w-4 h-4" />;
+    case "system":
+      return <Cpu className="w-4 h-4" />;
+    default:
+      return <Settings className="w-4 h-4" />;
     }
   };
 

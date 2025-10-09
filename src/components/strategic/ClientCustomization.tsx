@@ -201,14 +201,14 @@ export const ClientCustomization = () => {
 
   const getPlanColor = (plan: string) => {
     switch (plan) {
-      case "enterprise":
-        return "bg-primary text-primary-foreground";
-      case "premium":
-        return "bg-warning text-warning-foreground";
-      case "basic":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "enterprise":
+      return "bg-primary text-primary-foreground";
+    case "premium":
+      return "bg-warning text-warning-foreground";
+    case "basic":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 

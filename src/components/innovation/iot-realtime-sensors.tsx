@@ -142,42 +142,42 @@ const IoTRealtimeSensors: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "normal":
-        return "text-green-500";
-      case "warning":
-        return "text-orange-500";
-      case "critical":
-        return "text-red-500";
-      case "offline":
-        return "text-muted-foreground";
-      default:
-        return "text-muted-foreground";
+    case "normal":
+      return "text-green-500";
+    case "warning":
+      return "text-orange-500";
+    case "critical":
+      return "text-red-500";
+    case "offline":
+      return "text-muted-foreground";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "normal":
-        return <Badge className="bg-green-100 text-green-700">Normal</Badge>;
-      case "warning":
-        return <Badge className="bg-orange-100 text-orange-700">Atenção</Badge>;
-      case "critical":
-        return <Badge variant="destructive">Crítico</Badge>;
-      case "offline":
-        return <Badge variant="outline">Offline</Badge>;
-      default:
-        return <Badge variant="outline">Desconhecido</Badge>;
+    case "normal":
+      return <Badge className="bg-green-100 text-green-700">Normal</Badge>;
+    case "warning":
+      return <Badge className="bg-orange-100 text-orange-700">Atenção</Badge>;
+    case "critical":
+      return <Badge variant="destructive">Crítico</Badge>;
+    case "offline":
+      return <Badge variant="outline">Offline</Badge>;
+    default:
+      return <Badge variant="outline">Desconhecido</Badge>;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-3 w-3 text-green-500" />;
-      case "down":
-        return <TrendingDown className="h-3 w-3 text-red-500" />;
-      default:
-        return null;
+    case "up":
+      return <TrendingUp className="h-3 w-3 text-green-500" />;
+    case "down":
+      return <TrendingDown className="h-3 w-3 text-red-500" />;
+    default:
+      return null;
     }
   };
 

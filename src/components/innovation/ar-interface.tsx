@@ -211,46 +211,46 @@ export const ARInterface: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "text-green-600 bg-green-100";
-      case "normal":
-        return "text-blue-600 bg-blue-100";
-      case "warning":
-        return "text-yellow-600 bg-yellow-100";
-      case "maintenance":
-        return "text-red-600 bg-red-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "active":
+      return "text-green-600 bg-green-100";
+    case "normal":
+      return "text-blue-600 bg-blue-100";
+    case "warning":
+      return "text-yellow-600 bg-yellow-100";
+    case "maintenance":
+      return "text-red-600 bg-red-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getObjectIcon = (type: string) => {
     switch (type) {
-      case "equipment":
-        return <Zap className="h-5 w-5" />;
-      case "safety":
-        return <AlertTriangle className="h-5 w-5" />;
-      case "navigation":
-        return <Navigation className="h-5 w-5" />;
-      case "maintenance":
-        return <Wrench className="h-5 w-5" />;
-      case "info":
-        return <Info className="h-5 w-5" />;
-      default:
-        return <Info className="h-5 w-5" />;
+    case "equipment":
+      return <Zap className="h-5 w-5" />;
+    case "safety":
+      return <AlertTriangle className="h-5 w-5" />;
+    case "navigation":
+      return <Navigation className="h-5 w-5" />;
+    case "maintenance":
+      return <Wrench className="h-5 w-5" />;
+    case "info":
+      return <Info className="h-5 w-5" />;
+    default:
+      return <Info className="h-5 w-5" />;
     }
   };
 
   const getDeviceIcon = (device: string) => {
     switch (device) {
-      case "phone":
-        return <Smartphone className="h-4 w-4" />;
-      case "tablet":
-        return <Tablet className="h-4 w-4" />;
-      case "hololens":
-        return <Monitor className="h-4 w-4" />;
-      default:
-        return <Smartphone className="h-4 w-4" />;
+    case "phone":
+      return <Smartphone className="h-4 w-4" />;
+    case "tablet":
+      return <Tablet className="h-4 w-4" />;
+    case "hololens":
+      return <Monitor className="h-4 w-4" />;
+    default:
+      return <Smartphone className="h-4 w-4" />;
     }
   };
 

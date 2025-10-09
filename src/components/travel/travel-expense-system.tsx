@@ -252,48 +252,48 @@ export const TravelExpenseSystem: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "transport":
-        return <Plane className="h-4 w-4" />;
-      case "accommodation":
-        return <Building className="h-4 w-4" />;
-      case "meals":
-        return <Utensils className="h-4 w-4" />;
-      case "fuel":
-        return <Fuel className="h-4 w-4" />;
-      case "other":
-        return <ShoppingBag className="h-4 w-4" />;
-      default:
-        return <Receipt className="h-4 w-4" />;
+    case "transport":
+      return <Plane className="h-4 w-4" />;
+    case "accommodation":
+      return <Building className="h-4 w-4" />;
+    case "meals":
+      return <Utensils className="h-4 w-4" />;
+    case "fuel":
+      return <Fuel className="h-4 w-4" />;
+    case "other":
+      return <ShoppingBag className="h-4 w-4" />;
+    default:
+      return <Receipt className="h-4 w-4" />;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "approved":
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case "rejected":
-        return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      case "submitted":
-        return <Clock className="h-4 w-4 text-blue-600" />;
-      case "paid":
-        return <CreditCard className="h-4 w-4 text-purple-600" />;
-      default:
-        return <FileText className="h-4 w-4 text-muted-foreground" />;
+    case "approved":
+      return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case "rejected":
+      return <AlertTriangle className="h-4 w-4 text-red-600" />;
+    case "submitted":
+      return <Clock className="h-4 w-4 text-blue-600" />;
+    case "paid":
+      return <CreditCard className="h-4 w-4 text-purple-600" />;
+    default:
+      return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "approved":
-        return "bg-green-100 text-green-800 border-green-300";
-      case "rejected":
-        return "bg-red-100 text-red-800 border-red-300";
-      case "submitted":
-        return "bg-blue-100 text-blue-800 border-blue-300";
-      case "paid":
-        return "bg-purple-100 text-purple-800 border-purple-300";
-      default:
-        return "bg-secondary text-secondary-foreground border-border";
+    case "approved":
+      return "bg-green-100 text-green-800 border-green-300";
+    case "rejected":
+      return "bg-red-100 text-red-800 border-red-300";
+    case "submitted":
+      return "bg-blue-100 text-blue-800 border-blue-300";
+    case "paid":
+      return "bg-purple-100 text-purple-800 border-purple-300";
+    default:
+      return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
@@ -390,9 +390,9 @@ export const TravelExpenseSystem: React.FC = () => {
                 <p className="text-3xl font-bold text-info">
                   {expenses.length > 0
                     ? Math.round(
-                        (expenses.filter(e => e.status === "approved").length / expenses.length) *
+                      (expenses.filter(e => e.status === "approved").length / expenses.length) *
                           100
-                      )
+                    )
                     : 0}
                   %
                 </p>

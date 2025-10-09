@@ -129,14 +129,14 @@ export const OfflineSyncManager: React.FC = () => {
   // Simular ação de sincronização
   const simulateSyncAction = async (item: SyncItem) => {
     switch (item.action) {
-      case "create_note":
-      case "update_profile":
-      case "save_preference":
-        // Simular salvamento no banco
-        console.log("Syncing action:", item.action, item.data);
-        break;
-      default:
-        console.log("Unknown sync action:", item.action);
+    case "create_note":
+    case "update_profile":
+    case "save_preference":
+      // Simular salvamento no banco
+      console.log("Syncing action:", item.action, item.data);
+      break;
+    default:
+      console.log("Unknown sync action:", item.action);
     }
   };
 
@@ -211,27 +211,27 @@ export const OfflineSyncManager: React.FC = () => {
 
   const getActionIcon = (action: string) => {
     switch (action) {
-      case "create_note":
-        return <Upload className="h-4 w-4 text-blue-500" />;
-      case "update_profile":
-        return <RefreshCw className="h-4 w-4 text-green-500" />;
-      case "save_preference":
-        return <Database className="h-4 w-4 text-purple-500" />;
-      default:
-        return <Info className="h-4 w-4 text-muted-foreground" />;
+    case "create_note":
+      return <Upload className="h-4 w-4 text-blue-500" />;
+    case "update_profile":
+      return <RefreshCw className="h-4 w-4 text-green-500" />;
+    case "save_preference":
+      return <Database className="h-4 w-4 text-purple-500" />;
+    default:
+      return <Info className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getActionDescription = (action: string) => {
     switch (action) {
-      case "create_note":
-        return "Criar nova nota";
-      case "update_profile":
-        return "Atualizar perfil";
-      case "save_preference":
-        return "Salvar preferência";
-      default:
-        return action;
+    case "create_note":
+      return "Criar nova nota";
+    case "update_profile":
+      return "Atualizar perfil";
+    case "save_preference":
+      return "Salvar preferência";
+    default:
+      return action;
     }
   };
 

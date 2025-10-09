@@ -35,28 +35,28 @@ export const Loading: React.FC<LoadingProps> = ({
 }) => {
   const renderIcon = () => {
     switch (variant) {
-      case "maritime":
-        return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
-      case "offshore":
-        return (
-          <div className="relative">
-            <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
-            <Waves
-              className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse"
-              size={iconSizes[size] / 2}
-            />
-          </div>
-        );
-      case "spinner":
-        return (
-          <div
-            className={cn("animate-spin rounded-full border-b-2 border-primary", sizeClasses[size])}
-            role="status"
-            aria-label="Carregando"
+    case "maritime":
+      return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
+    case "offshore":
+      return (
+        <div className="relative">
+          <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
+          <Waves
+            className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse"
+            size={iconSizes[size] / 2}
           />
-        );
-      default:
-        return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />;
+        </div>
+      );
+    case "spinner":
+      return (
+        <div
+          className={cn("animate-spin rounded-full border-b-2 border-primary", sizeClasses[size])}
+          role="status"
+          aria-label="Carregando"
+        />
+      );
+    default:
+      return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />;
     }
   };
 

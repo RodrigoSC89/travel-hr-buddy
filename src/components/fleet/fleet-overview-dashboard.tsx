@@ -119,31 +119,31 @@ const FleetOverviewDashboard: React.FC<FleetOverviewProps> = ({ stats, onRefresh
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case "arrival":
-        return <MapPin className="h-4 w-4 text-success" />;
-      case "departure":
-        return <Ship className="h-4 w-4 text-info" />;
-      case "maintenance":
-        return <Clock className="h-4 w-4 text-warning" />;
-      case "alert":
-        return <AlertTriangle className="h-4 w-4 text-destructive" />;
-      default:
-        return <Activity className="h-4 w-4" />;
+    case "arrival":
+      return <MapPin className="h-4 w-4 text-success" />;
+    case "departure":
+      return <Ship className="h-4 w-4 text-info" />;
+    case "maintenance":
+      return <Clock className="h-4 w-4 text-warning" />;
+    case "alert":
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    default:
+      return <Activity className="h-4 w-4" />;
     }
   };
 
   const getActivityStatus = (status: string) => {
     switch (status) {
-      case "success":
-        return "bg-success/10 border-success/20";
-      case "info":
-        return "bg-info/10 border-info/20";
-      case "warning":
-        return "bg-warning/10 border-warning/20";
-      case "error":
-        return "bg-destructive/10 border-destructive/20";
-      default:
-        return "bg-muted/10 border-muted/20";
+    case "success":
+      return "bg-success/10 border-success/20";
+    case "info":
+      return "bg-info/10 border-info/20";
+    case "warning":
+      return "bg-warning/10 border-warning/20";
+    case "error":
+      return "bg-destructive/10 border-destructive/20";
+    default:
+      return "bg-muted/10 border-muted/20";
     }
   };
 

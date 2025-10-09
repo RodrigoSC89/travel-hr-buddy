@@ -124,21 +124,21 @@ export const PublicAPI = () => {
       id: "1",
       event: "vessel.status_changed",
       description: "Disparado quando o status de uma embarcação muda",
-      payload: '{"vessel_id": "string", "old_status": "string", "new_status": "string"}',
+      payload: "{\"vessel_id\": \"string\", \"old_status\": \"string\", \"new_status\": \"string\"}",
       frequency: "Tempo real",
     },
     {
       id: "2",
       event: "voyage.completed",
       description: "Disparado quando uma viagem é concluída",
-      payload: '{"voyage_id": "string", "vessel_id": "string", "duration": "number"}',
+      payload: "{\"voyage_id\": \"string\", \"vessel_id\": \"string\", \"duration\": \"number\"}",
       frequency: "Tempo real",
     },
     {
       id: "3",
       event: "alert.triggered",
       description: "Disparado quando um alerta é acionado",
-      payload: '{"alert_id": "string", "type": "string", "priority": "string"}',
+      payload: "{\"alert_id\": \"string\", \"type\": \"string\", \"priority\": \"string\"}",
       frequency: "Tempo real",
     },
     {
@@ -146,7 +146,7 @@ export const PublicAPI = () => {
       event: "certificate.expiring",
       description: "Disparado quando uma certificação está próxima do vencimento",
       payload:
-        '{"certificate_id": "string", "employee_id": "string", "days_until_expiry": "number"}',
+        "{\"certificate_id\": \"string\", \"employee_id\": \"string\", \"days_until_expiry\": \"number\"}",
       frequency: "Diário",
     },
   ];
@@ -211,29 +211,29 @@ export const PublicAPI = () => {
 
   const getMethodColor = (method: string) => {
     switch (method) {
-      case "GET":
-        return "bg-success text-success-foreground";
-      case "POST":
-        return "bg-info text-info-foreground";
-      case "PUT":
-        return "bg-warning text-warning-foreground";
-      case "DELETE":
-        return "bg-danger text-danger-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "GET":
+      return "bg-success text-success-foreground";
+    case "POST":
+      return "bg-info text-info-foreground";
+    case "PUT":
+      return "bg-warning text-warning-foreground";
+    case "DELETE":
+      return "bg-danger text-danger-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "stable":
-        return "bg-success text-success-foreground";
-      case "beta":
-        return "bg-warning text-warning-foreground";
-      case "deprecated":
-        return "bg-danger text-danger-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "stable":
+      return "bg-success text-success-foreground";
+    case "beta":
+      return "bg-warning text-warning-foreground";
+    case "deprecated":
+      return "bg-danger text-danger-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 

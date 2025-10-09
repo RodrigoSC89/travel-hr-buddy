@@ -172,48 +172,48 @@ export const TravelNotifications = () => {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "flight":
-        return <Plane className="h-5 w-5" />;
-      case "hotel":
-        return <Hotel className="h-5 w-5" />;
-      case "car":
-        return <Car className="h-5 w-5" />;
-      case "alert":
-        return <AlertTriangle className="h-5 w-5" />;
-      case "reminder":
-        return <Clock className="h-5 w-5" />;
-      default:
-        return <Bell className="h-5 w-5" />;
+    case "flight":
+      return <Plane className="h-5 w-5" />;
+    case "hotel":
+      return <Hotel className="h-5 w-5" />;
+    case "car":
+      return <Car className="h-5 w-5" />;
+    case "alert":
+      return <AlertTriangle className="h-5 w-5" />;
+    case "reminder":
+      return <Clock className="h-5 w-5" />;
+    default:
+      return <Bell className="h-5 w-5" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return "destructive";
-      case "high":
-        return "default";
-      case "medium":
-        return "secondary";
-      case "low":
-        return "outline";
-      default:
-        return "secondary";
+    case "urgent":
+      return "destructive";
+    case "high":
+      return "default";
+    case "medium":
+      return "secondary";
+    case "low":
+      return "outline";
+    default:
+      return "secondary";
     }
   };
 
   const getPriorityText = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return "Urgente";
-      case "high":
-        return "Alta";
-      case "medium":
-        return "Média";
-      case "low":
-        return "Baixa";
-      default:
-        return "Média";
+    case "urgent":
+      return "Urgente";
+    case "high":
+      return "Alta";
+    case "medium":
+      return "Média";
+    case "low":
+      return "Baixa";
+    default:
+      return "Média";
     }
   };
 

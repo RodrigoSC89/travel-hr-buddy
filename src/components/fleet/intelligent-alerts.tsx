@@ -255,12 +255,12 @@ const IntelligentAlerts: React.FC = () => {
       prev.map(alert =>
         alert.id === alertId
           ? {
-              ...alert,
-              is_acknowledged: true,
-              acknowledged_by: "Usuário Atual",
-              acknowledged_at: new Date().toISOString(),
-              status: "acknowledged",
-            }
+            ...alert,
+            is_acknowledged: true,
+            acknowledged_by: "Usuário Atual",
+            acknowledged_at: new Date().toISOString(),
+            status: "acknowledged",
+          }
           : alert
       )
     );
@@ -276,10 +276,10 @@ const IntelligentAlerts: React.FC = () => {
       prev.map(alert =>
         alert.id === alertId
           ? {
-              ...alert,
-              status: "resolved",
-              resolution_notes: notes,
-            }
+            ...alert,
+            status: "resolved",
+            resolution_notes: notes,
+          }
           : alert
       )
     );
@@ -295,52 +295,52 @@ const IntelligentAlerts: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "info":
-        return "bg-info text-info-foreground";
-      case "warning":
-        return "bg-warning text-warning-foreground";
-      case "critical":
-        return "bg-destructive text-destructive-foreground";
-      case "emergency":
-        return "bg-red-600 text-white animate-pulse";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "info":
+      return "bg-info text-info-foreground";
+    case "warning":
+      return "bg-warning text-warning-foreground";
+    case "critical":
+      return "bg-destructive text-destructive-foreground";
+    case "emergency":
+      return "bg-red-600 text-white animate-pulse";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getSeverityText = (severity: string) => {
     switch (severity) {
-      case "info":
-        return "Informativo";
-      case "warning":
-        return "Atenção";
-      case "critical":
-        return "Crítico";
-      case "emergency":
-        return "Emergência";
-      default:
-        return "Desconhecido";
+    case "info":
+      return "Informativo";
+    case "warning":
+      return "Atenção";
+    case "critical":
+      return "Crítico";
+    case "emergency":
+      return "Emergência";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "safety":
-        return <Shield className="h-4 w-4" />;
-      case "maintenance":
-        return <Wrench className="h-4 w-4" />;
-      case "operational":
-        return <Activity className="h-4 w-4" />;
-      case "weather":
-        return <Thermometer className="h-4 w-4" />;
-      case "fuel":
-        return <Fuel className="h-4 w-4" />;
-      case "crew":
-        return <Users className="h-4 w-4" />;
-      case "cargo":
-        return <FileText className="h-4 w-4" />;
-      default:
-        return <Bell className="h-4 w-4" />;
+    case "safety":
+      return <Shield className="h-4 w-4" />;
+    case "maintenance":
+      return <Wrench className="h-4 w-4" />;
+    case "operational":
+      return <Activity className="h-4 w-4" />;
+    case "weather":
+      return <Thermometer className="h-4 w-4" />;
+    case "fuel":
+      return <Fuel className="h-4 w-4" />;
+    case "crew":
+      return <Users className="h-4 w-4" />;
+    case "cargo":
+      return <FileText className="h-4 w-4" />;
+    default:
+      return <Bell className="h-4 w-4" />;
     }
   };
 

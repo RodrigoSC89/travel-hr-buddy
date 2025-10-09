@@ -122,46 +122,46 @@ const SystemMonitoringDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "operational":
-        return "success";
-      case "warning":
-        return "warning";
-      case "error":
-        return "destructive";
-      case "maintenance":
-        return "info";
-      default:
-        return "secondary";
+    case "operational":
+      return "success";
+    case "warning":
+      return "warning";
+    case "error":
+      return "destructive";
+    case "maintenance":
+      return "info";
+    default:
+      return "secondary";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "operational":
-        return CheckCircle;
-      case "warning":
-        return AlertTriangle;
-      case "error":
-        return AlertTriangle;
-      case "maintenance":
-        return Clock;
-      default:
-        return Activity;
+    case "operational":
+      return CheckCircle;
+    case "warning":
+      return AlertTriangle;
+    case "error":
+      return AlertTriangle;
+    case "maintenance":
+      return Clock;
+    default:
+      return Activity;
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "operational":
-        return "Operacional";
-      case "warning":
-        return "Atenção";
-      case "error":
-        return "Erro";
-      case "maintenance":
-        return "Manutenção";
-      default:
-        return "Desconhecido";
+    case "operational":
+      return "Operacional";
+    case "warning":
+      return "Atenção";
+    case "error":
+      return "Erro";
+    case "maintenance":
+      return "Manutenção";
+    default:
+      return "Desconhecido";
     }
   };
 

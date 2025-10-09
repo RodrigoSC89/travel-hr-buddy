@@ -184,23 +184,23 @@ export const OrganizationHealthCheck: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      default:
-        return <AlertTriangle className="w-4 h-4 text-blue-500" />;
+    case "completed":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+    default:
+      return <AlertTriangle className="w-4 h-4 text-blue-500" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "text-green-600 bg-green-50 border-green-200";
-      case "warning":
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
-      default:
-        return "text-blue-600 bg-blue-50 border-blue-200";
+    case "completed":
+      return "text-green-600 bg-green-50 border-green-200";
+    case "warning":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    default:
+      return "text-blue-600 bg-blue-50 border-blue-200";
     }
   };
 

@@ -287,86 +287,86 @@ export const MaritimeCommunicationCenter = () => {
 
   const getMessageTypeColor = (type: MaritimeCommunication["message_type"]) => {
     switch (type) {
-      case "emergency":
-        return "bg-status-error";
-      case "weather_alert":
-        return "bg-warning";
-      case "navigation":
-        return "bg-info";
-      case "maintenance":
-        return "bg-warning";
-      case "port_authority":
-        return "bg-primary";
-      case "general":
-        return "bg-success";
-      default:
-        return "bg-muted";
+    case "emergency":
+      return "bg-status-error";
+    case "weather_alert":
+      return "bg-warning";
+    case "navigation":
+      return "bg-info";
+    case "maintenance":
+      return "bg-warning";
+    case "port_authority":
+      return "bg-primary";
+    case "general":
+      return "bg-success";
+    default:
+      return "bg-muted";
     }
   };
 
   const getMessageTypeText = (type: MaritimeCommunication["message_type"]) => {
     switch (type) {
-      case "emergency":
-        return "Emergência";
-      case "weather_alert":
-        return "Alerta Meteorológico";
-      case "navigation":
-        return "Navegação";
-      case "maintenance":
-        return "Manutenção";
-      case "port_authority":
-        return "Autoridade Portuária";
-      case "general":
-        return "Geral";
-      default:
-        return "Desconhecido";
+    case "emergency":
+      return "Emergência";
+    case "weather_alert":
+      return "Alerta Meteorológico";
+    case "navigation":
+      return "Navegação";
+    case "maintenance":
+      return "Manutenção";
+    case "port_authority":
+      return "Autoridade Portuária";
+    case "general":
+      return "Geral";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getPriorityColor = (priority: MaritimeCommunication["priority"]) => {
     switch (priority) {
-      case "critical":
-        return "text-red-600 bg-red-100";
-      case "high":
-        return "text-orange-600 bg-orange-100";
-      case "normal":
-        return "text-blue-600 bg-blue-100";
-      case "low":
-        return "text-green-600 bg-green-100";
-      default:
-        return "text-muted-foreground bg-gray-100";
+    case "critical":
+      return "text-red-600 bg-red-100";
+    case "high":
+      return "text-orange-600 bg-orange-100";
+    case "normal":
+      return "text-blue-600 bg-blue-100";
+    case "low":
+      return "text-green-600 bg-green-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getStatusIcon = (status: MaritimeCommunication["status"]) => {
     switch (status) {
-      case "sent":
-        return Clock;
-      case "delivered":
-        return CheckCircle;
-      case "acknowledged":
-        return Radio;
-      case "resolved":
-        return CheckCircle;
-      default:
-        return MessageSquare;
+    case "sent":
+      return Clock;
+    case "delivered":
+      return CheckCircle;
+    case "acknowledged":
+      return Radio;
+    case "resolved":
+      return CheckCircle;
+    default:
+      return MessageSquare;
     }
   };
 
   const getChannelIcon = (type: CommunicationChannel["type"]) => {
     switch (type) {
-      case "vhf":
-        return Radio;
-      case "satellite":
-        return Satellite;
-      case "email":
-        return Mail;
-      case "emergency":
-        return AlertTriangle;
-      case "internal":
-        return MessageSquare;
-      default:
-        return Radio;
+    case "vhf":
+      return Radio;
+    case "satellite":
+      return Satellite;
+    case "email":
+      return Mail;
+    case "emergency":
+      return AlertTriangle;
+    case "internal":
+      return MessageSquare;
+    default:
+      return Radio;
     }
   };
 

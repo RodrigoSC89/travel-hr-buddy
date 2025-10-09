@@ -53,25 +53,25 @@ const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
 
   const getMessageIcon = (type: string) => {
     switch (type) {
-      case "user":
-        return <User className="h-3 w-3" />;
-      case "assistant":
-        return <Bot className="h-3 w-3" />;
-      default:
-        return <MessageSquare className="h-3 w-3" />;
+    case "user":
+      return <User className="h-3 w-3" />;
+    case "assistant":
+      return <Bot className="h-3 w-3" />;
+    default:
+      return <MessageSquare className="h-3 w-3" />;
     }
   };
 
   const getMessageStyle = (type: string) => {
     switch (type) {
-      case "user":
-        return "bg-primary text-primary-foreground ml-8";
-      case "assistant":
-        return "bg-muted text-foreground mr-8";
-      case "system":
-        return "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 mx-4 border border-yellow-200 dark:border-yellow-800";
-      default:
-        return "bg-muted text-foreground";
+    case "user":
+      return "bg-primary text-primary-foreground ml-8";
+    case "assistant":
+      return "bg-muted text-foreground mr-8";
+    case "system":
+      return "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 mx-4 border border-yellow-200 dark:border-yellow-800";
+    default:
+      return "bg-muted text-foreground";
     }
   };
 

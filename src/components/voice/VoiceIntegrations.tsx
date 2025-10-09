@@ -80,27 +80,27 @@ const integrations: VoiceIntegration[] = [
 const VoiceIntegrations: React.FC<VoiceIntegrationsProps> = ({ isOpen, onClose, onNavigate }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "bg-emerald-500";
-      case "inactive":
-        return "bg-muted";
-      case "error":
-        return "bg-red-500";
-      default:
-        return "bg-muted";
+    case "active":
+      return "bg-emerald-500";
+    case "inactive":
+      return "bg-muted";
+    case "error":
+      return "bg-red-500";
+    default:
+      return "bg-muted";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "active":
-        return "Ativo";
-      case "inactive":
-        return "Inativo";
-      case "error":
-        return "Erro";
-      default:
-        return "Desconhecido";
+    case "active":
+      return "Ativo";
+    case "inactive":
+      return "Inativo";
+    case "error":
+      return "Erro";
+    default:
+      return "Desconhecido";
     }
   };
 

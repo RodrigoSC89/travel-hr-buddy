@@ -155,40 +155,40 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
 
   const getImpactColor = (impact: Prediction["impact"]) => {
     switch (impact) {
-      case "high":
-        return "bg-destructive text-destructive-foreground";
-      case "medium":
-        return "bg-warning text-warning-foreground";
-      case "low":
-        return "bg-success text-success-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "high":
+      return "bg-destructive text-destructive-foreground";
+    case "medium":
+      return "bg-warning text-warning-foreground";
+    case "low":
+      return "bg-success text-success-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getTrendIcon = (trend: Prediction["trend"]) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-success" />;
-      case "down":
-        return <TrendingDown className="h-4 w-4 text-destructive" />;
-      case "stable":
-        return <Activity className="h-4 w-4 text-muted-foreground" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-success" />;
+    case "down":
+      return <TrendingDown className="h-4 w-4 text-destructive" />;
+    case "stable":
+      return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getTypeIcon = (type: Prediction["type"]) => {
     switch (type) {
-      case "maintenance":
-        return <Wrench className="h-4 w-4" />;
-      case "fuel":
-        return <Fuel className="h-4 w-4" />;
-      case "market":
-        return <DollarSign className="h-4 w-4" />;
-      case "safety":
-        return <AlertTriangle className="h-4 w-4" />;
-      case "crew":
-        return <Users className="h-4 w-4" />;
+    case "maintenance":
+      return <Wrench className="h-4 w-4" />;
+    case "fuel":
+      return <Fuel className="h-4 w-4" />;
+    case "market":
+      return <DollarSign className="h-4 w-4" />;
+    case "safety":
+      return <AlertTriangle className="h-4 w-4" />;
+    case "crew":
+      return <Users className="h-4 w-4" />;
     }
   };
 

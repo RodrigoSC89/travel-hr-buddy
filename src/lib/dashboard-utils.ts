@@ -18,24 +18,24 @@ export const formatMetricValue = (value: number | string, unit: string): string 
   if (typeof value === "string") return value;
 
   switch (unit) {
-    case "%":
-      return `${value.toFixed(1)}%`;
-    case "BRL":
-      return new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(value);
-    case "USD":
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(value);
-    case "K":
-      return `${(value / 1000).toFixed(1)}K`;
-    case "M":
-      return `${(value / 1000000).toFixed(1)}M`;
-    default:
-      return value.toLocaleString("pt-BR");
+  case "%":
+    return `${value.toFixed(1)}%`;
+  case "BRL":
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(value);
+  case "USD":
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(value);
+  case "K":
+    return `${(value / 1000).toFixed(1)}K`;
+  case "M":
+    return `${(value / 1000000).toFixed(1)}M`;
+  default:
+    return value.toLocaleString("pt-BR");
   }
 };
 

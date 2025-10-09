@@ -28,14 +28,14 @@ export const useOrganizationPermissions = () => {
     if (!currentOrganization) return false;
 
     switch (type) {
-      case "users":
-        return currentOrganization.max_users > 0;
-      case "vessels":
-        return currentOrganization.max_vessels > 0;
-      case "storage":
-        return currentOrganization.max_storage_gb > 0;
-      default:
-        return false;
+    case "users":
+      return currentOrganization.max_users > 0;
+    case "vessels":
+      return currentOrganization.max_vessels > 0;
+    case "storage":
+      return currentOrganization.max_storage_gb > 0;
+    default:
+      return false;
     }
   };
 

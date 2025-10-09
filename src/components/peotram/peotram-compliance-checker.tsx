@@ -180,51 +180,51 @@ export const PeotramComplianceChecker: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "compliant":
-        return <CheckCircle className="w-5 h-5 text-success" />;
-      case "partial":
-        return <AlertTriangle className="w-5 h-5 text-warning" />;
-      case "non-compliant":
-        return <XCircle className="w-5 h-5 text-destructive" />;
-      default:
-        return <Minus className="w-5 h-5 text-muted-foreground" />;
+    case "compliant":
+      return <CheckCircle className="w-5 h-5 text-success" />;
+    case "partial":
+      return <AlertTriangle className="w-5 h-5 text-warning" />;
+    case "non-compliant":
+      return <XCircle className="w-5 h-5 text-destructive" />;
+    default:
+      return <Minus className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "compliant":
-        return "bg-success/20 text-success border-success/30";
-      case "partial":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "non-compliant":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "compliant":
+      return "bg-success/20 text-success border-success/30";
+    case "partial":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "non-compliant":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "improving":
-        return <TrendingUp className="w-4 h-4 text-success" />;
-      case "declining":
-        return <TrendingDown className="w-4 h-4 text-destructive" />;
-      default:
-        return <Minus className="w-4 h-4 text-muted-foreground" />;
+    case "improving":
+      return <TrendingUp className="w-4 h-4 text-success" />;
+    case "declining":
+      return <TrendingDown className="w-4 h-4 text-destructive" />;
+    default:
+      return <Minus className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCriticalityColor = (criticality: string) => {
     switch (criticality) {
-      case "critical":
-        return "text-destructive";
-      case "high":
-        return "text-warning";
-      case "medium":
-        return "text-info";
-      default:
-        return "text-muted-foreground";
+    case "critical":
+      return "text-destructive";
+    case "high":
+      return "text-warning";
+    case "medium":
+      return "text-info";
+    default:
+      return "text-muted-foreground";
     }
   };
 

@@ -81,34 +81,34 @@ export const FloatingActionButton: React.FC = () => {
 
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
-        case "Escape":
-          e.preventDefault();
-          setIsOpen(false);
-          setFocusedIndex(-1);
-          mainButtonRef.current?.focus();
-          break;
+      case "Escape":
+        e.preventDefault();
+        setIsOpen(false);
+        setFocusedIndex(-1);
+        mainButtonRef.current?.focus();
+        break;
 
-        case "ArrowDown":
-        case "ArrowUp":
-          e.preventDefault();
-          {
-            const direction = e.key === "ArrowDown" ? 1 : -1;
-            setFocusedIndex(prev => {
-              const newIndex = prev + direction;
-              if (newIndex < 0) return actions.length - 1;
-              if (newIndex >= actions.length) return 0;
-              return newIndex;
-            });
-          }
-          break;
+      case "ArrowDown":
+      case "ArrowUp":
+        e.preventDefault();
+        {
+          const direction = e.key === "ArrowDown" ? 1 : -1;
+          setFocusedIndex(prev => {
+            const newIndex = prev + direction;
+            if (newIndex < 0) return actions.length - 1;
+            if (newIndex >= actions.length) return 0;
+            return newIndex;
+          });
+        }
+        break;
 
-        case "Enter":
-        case " ":
-          e.preventDefault();
-          if (focusedIndex >= 0 && focusedIndex < actions.length) {
-            handleActionClick(actions[focusedIndex]);
-          }
-          break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        if (focusedIndex >= 0 && focusedIndex < actions.length) {
+          handleActionClick(actions[focusedIndex]);
+        }
+        break;
       }
     };
 

@@ -197,48 +197,48 @@ export const PeotramCommunicationCenter: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "high":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "normal":
-        return "bg-info/20 text-info border-info/30";
-      case "low":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "urgent":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "normal":
+      return "bg-info/20 text-info border-info/30";
+    case "low":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "available":
-        return "bg-success/20 text-success border-success/30";
-      case "busy":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "offline":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      case "emergency":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "available":
+      return "bg-success/20 text-success border-success/30";
+    case "busy":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "offline":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "emergency":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "radio":
-        return <Radio className="w-4 h-4" />;
-      case "email":
-        return <Mail className="w-4 h-4" />;
-      case "sms":
-        return <MessageSquare className="w-4 h-4" />;
-      case "announcement":
-        return <Megaphone className="w-4 h-4" />;
-      case "emergency":
-        return <AlertTriangle className="w-4 h-4" />;
-      default:
-        return <MessageSquare className="w-4 h-4" />;
+    case "radio":
+      return <Radio className="w-4 h-4" />;
+    case "email":
+      return <Mail className="w-4 h-4" />;
+    case "sms":
+      return <MessageSquare className="w-4 h-4" />;
+    case "announcement":
+      return <Megaphone className="w-4 h-4" />;
+    case "emergency":
+      return <AlertTriangle className="w-4 h-4" />;
+    default:
+      return <MessageSquare className="w-4 h-4" />;
     }
   };
 

@@ -107,27 +107,27 @@ const PredictiveAnalytics: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "destructive";
-      case "medium":
-        return "warning";
-      case "low":
-        return "default";
-      default:
-        return "default";
+    case "high":
+      return "destructive";
+    case "medium":
+      return "warning";
+    case "low":
+      return "default";
+    default:
+      return "default";
     }
   };
 
   const getPredictionIcon = (prediction: string) => {
     switch (prediction) {
-      case "improving":
-        return <TrendingUp className="h-4 w-4 text-success" />;
-      case "declining":
-        return <TrendingDown className="h-4 w-4 text-destructive" />;
-      case "stable":
-        return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
-      default:
-        return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+    case "improving":
+      return <TrendingUp className="h-4 w-4 text-success" />;
+    case "declining":
+      return <TrendingDown className="h-4 w-4 text-destructive" />;
+    case "stable":
+      return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+    default:
+      return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

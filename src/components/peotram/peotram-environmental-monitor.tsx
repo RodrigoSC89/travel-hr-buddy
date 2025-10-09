@@ -196,82 +196,82 @@ export const PeotramEnvironmentalMonitor: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "normal":
-        return "bg-success/20 text-success border-success/30";
-      case "warning":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "offline":
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "normal":
+      return "bg-success/20 text-success border-success/30";
+    case "warning":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "offline":
+      return "bg-muted/20 text-muted-foreground border-muted/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "high":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      case "medium":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "low":
-        return "bg-info/20 text-info border-info/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high":
+      return "bg-destructive/10 text-destructive border-destructive/20";
+    case "medium":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "low":
+      return "bg-info/20 text-info border-info/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "temperature":
-        return <Thermometer className="w-5 h-5" />;
-      case "humidity":
-        return <Droplets className="w-5 h-5" />;
-      case "pressure":
-        return <BarChart3 className="w-5 h-5" />;
-      case "wind":
-        return <Wind className="w-5 h-5" />;
-      case "water_quality":
-        return <Waves className="w-5 h-5" />;
-      case "air_quality":
-        return <Cloud className="w-5 h-5" />;
-      case "noise":
-        return <Activity className="w-5 h-5" />;
-      case "radiation":
-        return <Zap className="w-5 h-5" />;
-      default:
-        return <Activity className="w-5 h-5" />;
+    case "temperature":
+      return <Thermometer className="w-5 h-5" />;
+    case "humidity":
+      return <Droplets className="w-5 h-5" />;
+    case "pressure":
+      return <BarChart3 className="w-5 h-5" />;
+    case "wind":
+      return <Wind className="w-5 h-5" />;
+    case "water_quality":
+      return <Waves className="w-5 h-5" />;
+    case "air_quality":
+      return <Cloud className="w-5 h-5" />;
+    case "noise":
+      return <Activity className="w-5 h-5" />;
+    case "radiation":
+      return <Zap className="w-5 h-5" />;
+    default:
+      return <Activity className="w-5 h-5" />;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4 text-destructive" />;
-      case "down":
-        return <TrendingDown className="w-4 h-4 text-success" />;
-      case "stable":
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-destructive" />;
+    case "down":
+      return <TrendingDown className="w-4 h-4 text-success" />;
+    case "stable":
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "normal":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-warning" />;
-      case "critical":
-        return <AlertTriangle className="w-4 h-4 text-destructive" />;
-      case "offline":
-        return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
-      default:
-        return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
+    case "normal":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "critical":
+      return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    case "offline":
+      return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
+    default:
+      return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
     }
   };
 

@@ -258,33 +258,33 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "hotel":
-        return <Building className="h-4 w-4" />;
-      case "flight":
-        return <Plane className="h-4 w-4" />;
-      case "transport":
-        return <Car className="h-4 w-4" />;
-      case "embarkation":
-        return <Ship className="h-4 w-4" />;
-      default:
-        return <FileText className="h-4 w-4" />;
+    case "hotel":
+      return <Building className="h-4 w-4" />;
+    case "flight":
+      return <Plane className="h-4 w-4" />;
+    case "transport":
+      return <Car className="h-4 w-4" />;
+    case "embarkation":
+      return <Ship className="h-4 w-4" />;
+    default:
+      return <FileText className="h-4 w-4" />;
     }
   };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case "hotel":
-        return "Hotel";
-      case "flight":
-        return "Voo";
-      case "transport":
-        return "Transporte";
-      case "embarkation":
-        return "Embarque";
-      case "other":
-        return "Outro";
-      default:
-        return type;
+    case "hotel":
+      return "Hotel";
+    case "flight":
+      return "Voo";
+    case "transport":
+      return "Transporte";
+    case "embarkation":
+      return "Embarque";
+    case "other":
+      return "Outro";
+    default:
+      return type;
     }
   };
 

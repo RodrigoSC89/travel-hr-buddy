@@ -142,12 +142,12 @@ const VesselPerformanceMonitor = () => {
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case "critical":
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      case "warning":
-        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
-      default:
-        return <CheckCircle className="h-4 w-4 text-blue-500" />;
+    case "critical":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    case "warning":
+      return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+    default:
+      return <CheckCircle className="h-4 w-4 text-blue-500" />;
     }
   };
 

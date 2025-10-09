@@ -142,50 +142,50 @@ export const PeotramPerformanceKPI: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "excellent":
-        return "bg-success/20 text-success border-success/30";
-      case "good":
-        return "bg-info/20 text-info border-info/30";
-      case "warning":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "excellent":
+      return "bg-success/20 text-success border-success/30";
+    case "good":
+      return "bg-info/20 text-info border-info/30";
+    case "warning":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "safety":
-        return "bg-destructive/20 text-destructive";
-      case "operational":
-        return "bg-primary/20 text-primary";
-      case "financial":
-        return "bg-success/20 text-success";
-      case "environmental":
-        return "bg-info/20 text-info";
-      case "quality":
-        return "bg-warning/20 text-warning";
-      default:
-        return "bg-muted/20 text-muted-foreground";
+    case "safety":
+      return "bg-destructive/20 text-destructive";
+    case "operational":
+      return "bg-primary/20 text-primary";
+    case "financial":
+      return "bg-success/20 text-success";
+    case "environmental":
+      return "bg-info/20 text-info";
+    case "quality":
+      return "bg-warning/20 text-warning";
+    default:
+      return "bg-muted/20 text-muted-foreground";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "safety":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "operational":
-        return <Activity className="w-4 h-4" />;
-      case "financial":
-        return <DollarSign className="w-4 h-4" />;
-      case "environmental":
-        return <TrendingUp className="w-4 h-4" />;
-      case "quality":
-        return <Award className="w-4 h-4" />;
-      default:
-        return <BarChart3 className="w-4 h-4" />;
+    case "safety":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "operational":
+      return <Activity className="w-4 h-4" />;
+    case "financial":
+      return <DollarSign className="w-4 h-4" />;
+    case "environmental":
+      return <TrendingUp className="w-4 h-4" />;
+    case "quality":
+      return <Award className="w-4 h-4" />;
+    default:
+      return <BarChart3 className="w-4 h-4" />;
     }
   };
 

@@ -136,16 +136,16 @@ const RealTimeAnalytics = () => {
 
   const generateRandomValue = (title: string): string => {
     switch (title) {
-      case "Usuários Ativos":
-        return (2800 + Math.floor(Math.random() * 100)).toLocaleString();
-      case "Receita Mensal":
-        return `R$ ${(84000 + Math.floor(Math.random() * 2000)).toLocaleString()}`;
-      case "Transações":
-        return (1400 + Math.floor(Math.random() * 100)).toLocaleString();
-      case "Performance":
-        return `${(98 + Math.random() * 2).toFixed(1)}%`;
-      default:
-        return "0";
+    case "Usuários Ativos":
+      return (2800 + Math.floor(Math.random() * 100)).toLocaleString();
+    case "Receita Mensal":
+      return `R$ ${(84000 + Math.floor(Math.random() * 2000)).toLocaleString()}`;
+    case "Transações":
+      return (1400 + Math.floor(Math.random() * 100)).toLocaleString();
+    case "Performance":
+      return `${(98 + Math.random() * 2).toFixed(1)}%`;
+    default:
+      return "0";
     }
   };
 
@@ -170,12 +170,12 @@ const RealTimeAnalytics = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case "down":
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
-      default:
-        return <Activity className="w-4 h-4 text-blue-500" />;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case "down":
+      return <TrendingDown className="w-4 h-4 text-red-500" />;
+    default:
+      return <Activity className="w-4 h-4 text-blue-500" />;
     }
   };
 

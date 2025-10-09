@@ -133,16 +133,16 @@ export const PredictiveMaintenanceSystem = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-red-100 text-red-800 border-red-200";
-      case "high":
-        return "bg-orange-100 text-orange-800 border-orange-200";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "low":
-        return "bg-green-100 text-green-800 border-green-200";
-      default:
-        return "bg-secondary text-secondary-foreground border-border";
+    case "critical":
+      return "bg-red-100 text-red-800 border-red-200";
+    case "high":
+      return "bg-orange-100 text-orange-800 border-orange-200";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    case "low":
+      return "bg-green-100 text-green-800 border-green-200";
+    default:
+      return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
@@ -154,14 +154,14 @@ export const PredictiveMaintenanceSystem = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case "down":
-        return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
-      case "stable":
-        return <BarChart3 className="h-4 w-4 text-blue-500" />;
-      default:
-        return <BarChart3 className="h-4 w-4 text-muted-foreground" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "down":
+      return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
+    case "stable":
+      return <BarChart3 className="h-4 w-4 text-blue-500" />;
+    default:
+      return <BarChart3 className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

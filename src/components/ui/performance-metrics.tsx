@@ -132,16 +132,16 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
           let newValue = metric.value;
 
           switch (metric.id) {
-            case "efficiency":
-            case "fuel_efficiency":
-            case "uptime":
-            case "power_efficiency":
-            case "compliance":
-              newValue = Math.max(0, Math.min(100, metric.value + variation * 0.5));
-              break;
-            case "incidents":
-              newValue = Math.max(0, metric.value + (Math.random() > 0.8 ? 1 : 0));
-              break;
+          case "efficiency":
+          case "fuel_efficiency":
+          case "uptime":
+          case "power_efficiency":
+          case "compliance":
+            newValue = Math.max(0, Math.min(100, metric.value + variation * 0.5));
+            break;
+          case "incidents":
+            newValue = Math.max(0, metric.value + (Math.random() > 0.8 ? 1 : 0));
+            break;
           }
 
           // Determinar status baseado no valor e target

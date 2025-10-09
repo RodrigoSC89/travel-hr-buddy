@@ -204,46 +204,46 @@ const RealTimeTracking: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "sailing":
-        return "bg-success text-success-foreground";
-      case "docked":
-        return "bg-info text-info-foreground";
-      case "anchored":
-        return "bg-warning text-warning-foreground";
-      case "emergency":
-        return "bg-destructive text-destructive-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "sailing":
+      return "bg-success text-success-foreground";
+    case "docked":
+      return "bg-info text-info-foreground";
+    case "anchored":
+      return "bg-warning text-warning-foreground";
+    case "emergency":
+      return "bg-destructive text-destructive-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "sailing":
-        return "Navegando";
-      case "docked":
-        return "Atracada";
-      case "anchored":
-        return "Fundeada";
-      case "emergency":
-        return "Emergência";
-      default:
-        return "Desconhecido";
+    case "sailing":
+      return "Navegando";
+    case "docked":
+      return "Atracada";
+    case "anchored":
+      return "Fundeada";
+    case "emergency":
+      return "Emergência";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "sailing":
-        return <Ship className="h-4 w-4" />;
-      case "docked":
-        return <Anchor className="h-4 w-4" />;
-      case "anchored":
-        return <Navigation className="h-4 w-4" />;
-      case "emergency":
-        return <AlertTriangle className="h-4 w-4" />;
-      default:
-        return <MapPin className="h-4 w-4" />;
+    case "sailing":
+      return <Ship className="h-4 w-4" />;
+    case "docked":
+      return <Anchor className="h-4 w-4" />;
+    case "anchored":
+      return <Navigation className="h-4 w-4" />;
+    case "emergency":
+      return <AlertTriangle className="h-4 w-4" />;
+    default:
+      return <MapPin className="h-4 w-4" />;
     }
   };
 

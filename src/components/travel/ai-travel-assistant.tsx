@@ -270,42 +270,42 @@ export const AITravelAssistant: React.FC<TravelAssistantProps> = ({ className })
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "rising":
-        return <TrendingUp className="h-4 w-4 text-red-500" />;
-      case "falling":
-        return <TrendingUp className="h-4 w-4 text-green-500 rotate-180" />;
-      default:
-        return <BarChart3 className="h-4 w-4 text-yellow-500" />;
+    case "rising":
+      return <TrendingUp className="h-4 w-4 text-red-500" />;
+    case "falling":
+      return <TrendingUp className="h-4 w-4 text-green-500 rotate-180" />;
+    default:
+      return <BarChart3 className="h-4 w-4 text-yellow-500" />;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "valid":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "expiring":
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      case "expired":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "valid":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "expiring":
+      return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "expired":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 
   const getDocumentIcon = (type: string) => {
     switch (type) {
-      case "passport":
-        return "🛂";
-      case "visa":
-        return "📋";
-      case "ticket":
-        return "✈️";
-      case "hotel":
-        return "🏨";
-      case "insurance":
-        return "🛡️";
-      default:
-        return "📄";
+    case "passport":
+      return "🛂";
+    case "visa":
+      return "📋";
+    case "ticket":
+      return "✈️";
+    case "hotel":
+      return "🏨";
+    case "insurance":
+      return "🛡️";
+    default:
+      return "📄";
     }
   };
 

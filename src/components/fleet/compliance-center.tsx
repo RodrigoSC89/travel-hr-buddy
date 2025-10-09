@@ -171,80 +171,80 @@ const ComplianceCenter: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "valid":
-        return "bg-success text-success-foreground";
-      case "expiring":
-        return "bg-warning text-warning-foreground";
-      case "expired":
-        return "bg-destructive text-destructive-foreground";
-      case "suspended":
-        return "bg-orange-500 text-white";
-      case "pending":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "valid":
+      return "bg-success text-success-foreground";
+    case "expiring":
+      return "bg-warning text-warning-foreground";
+    case "expired":
+      return "bg-destructive text-destructive-foreground";
+    case "suspended":
+      return "bg-orange-500 text-white";
+    case "pending":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "valid":
-        return "Válido";
-      case "expiring":
-        return "Vencendo";
-      case "expired":
-        return "Vencido";
-      case "suspended":
-        return "Suspenso";
-      case "pending":
-        return "Pendente";
-      default:
-        return "Desconhecido";
+    case "valid":
+      return "Válido";
+    case "expiring":
+      return "Vencendo";
+    case "expired":
+      return "Vencido";
+    case "suspended":
+      return "Suspenso";
+    case "pending":
+      return "Pendente";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case "low":
-        return "text-success";
-      case "medium":
-        return "text-warning";
-      case "high":
-        return "text-orange-500";
-      case "critical":
-        return "text-destructive";
-      default:
-        return "text-muted-foreground";
+    case "low":
+      return "text-success";
+    case "medium":
+      return "text-warning";
+    case "high":
+      return "text-orange-500";
+    case "critical":
+      return "text-destructive";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "vessel":
-        return <Ship className="h-4 w-4" />;
-      case "crew":
-        return <Users className="h-4 w-4" />;
-      case "company":
-        return <Briefcase className="h-4 w-4" />;
-      default:
-        return <FileText className="h-4 w-4" />;
+    case "vessel":
+      return <Ship className="h-4 w-4" />;
+    case "crew":
+      return <Users className="h-4 w-4" />;
+    case "company":
+      return <Briefcase className="h-4 w-4" />;
+    default:
+      return <FileText className="h-4 w-4" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
-      case "safety":
-        return <Shield className="h-4 w-4 text-primary" />;
-      case "stcw":
-        return <Award className="h-4 w-4 text-success" />;
-      case "environmental":
-        return <Globe className="h-4 w-4 text-azure-600" />;
-      case "medical":
-        return <BookOpen className="h-4 w-4 text-info" />;
-      case "ism":
-        return <CheckCircle className="h-4 w-4 text-warning" />;
-      default:
-        return <FileText className="h-4 w-4 text-muted-foreground" />;
+    case "safety":
+      return <Shield className="h-4 w-4 text-primary" />;
+    case "stcw":
+      return <Award className="h-4 w-4 text-success" />;
+    case "environmental":
+      return <Globe className="h-4 w-4 text-azure-600" />;
+    case "medical":
+      return <BookOpen className="h-4 w-4 text-info" />;
+    case "ism":
+      return <CheckCircle className="h-4 w-4 text-warning" />;
+    default:
+      return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -276,8 +276,8 @@ const ComplianceCenter: React.FC = () => {
     avgCompliance:
       certificates.length > 0
         ? Math.round(
-            certificates.reduce((sum, c) => sum + c.compliance_score, 0) / certificates.length
-          )
+          certificates.reduce((sum, c) => sum + c.compliance_score, 0) / certificates.length
+        )
         : 0,
     totalRenewalCost: certificates.reduce((sum, c) => sum + (c.renewal_cost || 0), 0),
     criticalRisk: certificates.filter(c => c.risk_level === "critical").length,
@@ -601,9 +601,9 @@ const ComplianceCenter: React.FC = () => {
                           <p className="text-sm font-medium">
                             {cert.renewal_cost
                               ? new Intl.NumberFormat("pt-BR", {
-                                  style: "currency",
-                                  currency: "BRL",
-                                }).format(cert.renewal_cost)
+                                style: "currency",
+                                currency: "BRL",
+                              }).format(cert.renewal_cost)
                               : "N/A"}
                           </p>
                         </div>
@@ -706,8 +706,8 @@ const ComplianceCenter: React.FC = () => {
                                   <p className="text-sm mt-1">
                                     {selectedCertificate.next_inspection
                                       ? new Date(
-                                          selectedCertificate.next_inspection
-                                        ).toLocaleDateString("pt-BR")
+                                        selectedCertificate.next_inspection
+                                      ).toLocaleDateString("pt-BR")
                                       : "N/A"}
                                   </p>
                                 </div>

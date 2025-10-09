@@ -136,29 +136,29 @@ export const IoTDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "online":
-        return <CheckCircle className="h-4 w-4 text-success" />;
-      case "warning":
-        return <AlertTriangle className="h-4 w-4 text-warning" />;
-      case "offline":
-        return <WifiOff className="h-4 w-4 text-destructive" />;
-      default:
-        return <Activity className="h-4 w-4 text-muted-foreground" />;
+    case "online":
+      return <CheckCircle className="h-4 w-4 text-success" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-warning" />;
+    case "offline":
+      return <WifiOff className="h-4 w-4 text-destructive" />;
+    default:
+      return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getSensorIcon = (type: string) => {
     switch (type) {
-      case "temperature":
-        return <Thermometer className="h-4 w-4" />;
-      case "pressure":
-        return <Gauge className="h-4 w-4" />;
-      case "humidity":
-        return <Droplets className="h-4 w-4" />;
-      case "wind":
-        return <Wind className="h-4 w-4" />;
-      default:
-        return <Activity className="h-4 w-4" />;
+    case "temperature":
+      return <Thermometer className="h-4 w-4" />;
+    case "pressure":
+      return <Gauge className="h-4 w-4" />;
+    case "humidity":
+      return <Droplets className="h-4 w-4" />;
+    case "wind":
+      return <Wind className="h-4 w-4" />;
+    default:
+      return <Activity className="h-4 w-4" />;
     }
   };
 

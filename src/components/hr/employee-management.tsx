@@ -219,31 +219,31 @@ export const EmployeeManagement = () => {
 
   const getStatusColor = (status: Employee["status"]) => {
     switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "vacation":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "travel":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "inactive":
-        return "bg-secondary text-secondary-foreground border-border";
-      default:
-        return "bg-secondary text-secondary-foreground border-border";
+    case "active":
+      return "bg-green-100 text-green-800 border-green-200";
+    case "vacation":
+      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    case "travel":
+      return "bg-blue-100 text-blue-800 border-blue-200";
+    case "inactive":
+      return "bg-secondary text-secondary-foreground border-border";
+    default:
+      return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getStatusLabel = (status: Employee["status"]) => {
     switch (status) {
-      case "active":
-        return "Ativo";
-      case "vacation":
-        return "Férias";
-      case "travel":
-        return "Viagem";
-      case "inactive":
-        return "Inativo";
-      default:
-        return "N/A";
+    case "active":
+      return "Ativo";
+    case "vacation":
+      return "Férias";
+    case "travel":
+      return "Viagem";
+    case "inactive":
+      return "Inativo";
+    default:
+      return "N/A";
     }
   };
 

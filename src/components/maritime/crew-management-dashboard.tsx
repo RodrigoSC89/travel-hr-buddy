@@ -131,31 +131,31 @@ export const CrewManagementDashboard = () => {
 
   const getStatusColor = (status: CrewMember["status"]) => {
     switch (status) {
-      case "available":
-        return "bg-green-500";
-      case "assigned":
-        return "bg-blue-500";
-      case "on_leave":
-        return "bg-yellow-500";
-      case "training":
-        return "bg-purple-500";
-      default:
-        return "bg-gray-500";
+    case "available":
+      return "bg-green-500";
+    case "assigned":
+      return "bg-blue-500";
+    case "on_leave":
+      return "bg-yellow-500";
+    case "training":
+      return "bg-purple-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusText = (status: CrewMember["status"]) => {
     switch (status) {
-      case "available":
-        return "Disponível";
-      case "assigned":
-        return "Designado";
-      case "on_leave":
-        return "De Licença";
-      case "training":
-        return "Treinamento";
-      default:
-        return "Desconhecido";
+    case "available":
+      return "Disponível";
+    case "assigned":
+      return "Designado";
+    case "on_leave":
+      return "De Licença";
+    case "training":
+      return "Treinamento";
+    default:
+      return "Desconhecido";
     }
   };
 

@@ -181,9 +181,9 @@ export const ChatInterface = () => {
             })),
             last_message: lastMessage
               ? {
-                  ...lastMessage,
-                  sender: lastMessage.profiles,
-                }
+                ...lastMessage,
+                sender: lastMessage.profiles,
+              }
               : undefined,
             unread_count: count || 0,
           };

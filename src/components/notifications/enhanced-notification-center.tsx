@@ -142,40 +142,40 @@ export const EnhancedNotificationCenter: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "error":
-        return <AlertTriangle className="w-4 h-4 text-destructive" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-warning" />;
-      case "success":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      default:
-        return <Bell className="w-4 h-4 text-info" />;
+    case "error":
+      return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "success":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    default:
+      return <Bell className="w-4 h-4 text-info" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return "bg-destructive text-destructive-foreground";
-      case "high":
-        return "bg-warning text-warning-foreground";
-      case "medium":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "urgent":
+      return "bg-destructive text-destructive-foreground";
+    case "high":
+      return "bg-warning text-warning-foreground";
+    case "medium":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const filteredNotifications = notifications.filter(notif => {
     switch (filter) {
-      case "unread":
-        return !notif.is_read;
-      case "high":
-        return notif.priority === "high";
-      case "urgent":
-        return notif.priority === "urgent";
-      default:
-        return true;
+    case "unread":
+      return !notif.is_read;
+    case "high":
+      return notif.priority === "high";
+    case "urgent":
+      return notif.priority === "urgent";
+    default:
+      return true;
     }
   });
 

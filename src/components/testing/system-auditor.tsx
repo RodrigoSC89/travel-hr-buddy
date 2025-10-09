@@ -389,34 +389,34 @@ const SystemAuditor: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "success":
-      case "passed":
-      case "completed":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      case "error":
-      case "failed":
-        return <XCircle className="w-4 h-4 text-red-500" />;
-      case "running":
-        return <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "success":
+    case "passed":
+    case "completed":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+    case "error":
+    case "failed":
+      return <XCircle className="w-4 h-4 text-red-500" />;
+    case "running":
+      return <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-red-100 text-red-800 border-red-200";
-      case "high":
-        return "bg-orange-100 text-orange-800 border-orange-200";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "low":
-        return "bg-green-100 text-green-800 border-green-200";
-      default:
-        return "bg-secondary text-secondary-foreground border-border";
+    case "critical":
+      return "bg-red-100 text-red-800 border-red-200";
+    case "high":
+      return "bg-orange-100 text-orange-800 border-orange-200";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    case "low":
+      return "bg-green-100 text-green-800 border-green-200";
+    default:
+      return "bg-secondary text-secondary-foreground border-border";
     }
   };
 

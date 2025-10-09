@@ -64,33 +64,33 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
   const generatePDFContent = () => {
     const getStatusLabel = (status: string) => {
       switch (status) {
-        case "confirmed":
-          return "Confirmada";
-        case "pending":
-          return "Pendente";
-        case "cancelled":
-          return "Cancelada";
-        case "completed":
-          return "Concluída";
-        default:
-          return "Desconhecida";
+      case "confirmed":
+        return "Confirmada";
+      case "pending":
+        return "Pendente";
+      case "cancelled":
+        return "Cancelada";
+      case "completed":
+        return "Concluída";
+      default:
+        return "Desconhecida";
       }
     };
 
     const getTypeLabel = (type: string) => {
       switch (type) {
-        case "hotel":
-          return "Hotel / Hospedagem";
-        case "flight":
-          return "Voo";
-        case "transport":
-          return "Transporte";
-        case "embarkation":
-          return "Embarque";
-        case "other":
-          return "Outro";
-        default:
-          return type;
+      case "hotel":
+        return "Hotel / Hospedagem";
+      case "flight":
+        return "Voo";
+      case "transport":
+        return "Transporte";
+      case "embarkation":
+        return "Embarque";
+      case "other":
+        return "Outro";
+      default:
+        return type;
       }
     };
 
@@ -316,65 +316,65 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
         <div class="info-section">
             <h3>📍 Localização</h3>
             ${
-              reservation.location
-                ? `
+  reservation.location
+    ? `
             <div class="info-row">
                 <span class="info-label">Local:</span>
                 <span class="info-value">${reservation.location}</span>
             </div>
             `
-                : ""
-            }
+    : ""
+}
             ${
-              reservation.address
-                ? `
+  reservation.address
+    ? `
             <div class="info-row">
                 <span class="info-label">Endereço:</span>
                 <span class="info-value">${reservation.address}</span>
             </div>
             `
-                : ""
-            }
+    : ""
+}
             ${
-              reservation.contact_info
-                ? `
+  reservation.contact_info
+    ? `
             <div class="info-row">
                 <span class="info-label">Contato:</span>
                 <span class="info-value">${reservation.contact_info}</span>
             </div>
             `
-                : ""
-            }
+    : ""
+}
         </div>
         
         ${
-          reservation.confirmation_number || reservation.room_type || reservation.total_amount
-            ? `
+  reservation.confirmation_number || reservation.room_type || reservation.total_amount
+    ? `
         <div class="info-section">
             <h3>🏷️ Detalhes da Reserva</h3>
             ${
-              reservation.confirmation_number
-                ? `
+  reservation.confirmation_number
+    ? `
             <div class="info-row">
                 <span class="info-label">Confirmação:</span>
                 <span class="info-value confirmation-code">${reservation.confirmation_number}</span>
             </div>
             `
-                : ""
-            }
+    : ""
+}
             ${
-              reservation.room_type
-                ? `
+  reservation.room_type
+    ? `
             <div class="info-row">
                 <span class="info-label">Tipo/Serviço:</span>
                 <span class="info-value">${reservation.room_type}</span>
             </div>
             `
-                : ""
-            }
+    : ""
+}
             ${
-              reservation.total_amount
-                ? `
+  reservation.total_amount
+    ? `
             <div class="info-row">
                 <span class="info-label">Valor Total:</span>
                 <span class="info-value amount-highlight">
@@ -382,12 +382,12 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
                 </span>
             </div>
             `
-                : ""
-            }
+    : ""
+}
         </div>
         `
-            : ""
-        }
+    : ""
+}
         
         <div class="info-section">
             <h3>👤 Informações do Responsável</h3>
@@ -400,43 +400,43 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
                 <span class="info-value">${new Date(reservation.created_at).toLocaleDateString("pt-BR")}</span>
             </div>
             ${
-              reservation.updated_at !== reservation.created_at
-                ? `
+  reservation.updated_at !== reservation.created_at
+    ? `
             <div class="info-row">
                 <span class="info-label">Atualizado:</span>
                 <span class="info-value">${new Date(reservation.updated_at).toLocaleDateString("pt-BR")}</span>
             </div>
             `
-                : ""
-            }
+    : ""
+}
         </div>
     </div>
     
     ${
-      reservation.description
-        ? `
+  reservation.description
+    ? `
     <div class="description">
         <h3 style="margin-bottom: 10px; color: #2563eb;">📝 Observações:</h3>
         <p>${reservation.description}</p>
     </div>
     `
-        : ""
-    }
+    : ""
+}
     
     ${
-      reservation.notes
-        ? `
+  reservation.notes
+    ? `
     <div class="description">
         <h3 style="margin-bottom: 10px; color: #2563eb;">📋 Notas Internas:</h3>
         <p>${reservation.notes}</p>
     </div>
     `
-        : ""
-    }
+    : ""
+}
     
     ${
-      reservation.supplier_url
-        ? `
+  reservation.supplier_url
+    ? `
     <div style="text-align: center; margin: 20px 0;">
         <p><strong>Link do Fornecedor:</strong></p>
         <a href="${reservation.supplier_url}" target="_blank" style="color: #2563eb; text-decoration: none;">
@@ -444,8 +444,8 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
         </a>
     </div>
     `
-        : ""
-    }
+    : ""
+}
     
     <div class="qr-placeholder">
         QR Code
@@ -483,16 +483,16 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "confirmed":
-        return "Confirmada";
-      case "pending":
-        return "Pendente";
-      case "cancelled":
-        return "Cancelada";
-      case "completed":
-        return "Concluída";
-      default:
-        return "Desconhecida";
+    case "confirmed":
+      return "Confirmada";
+    case "pending":
+      return "Pendente";
+    case "cancelled":
+      return "Cancelada";
+    case "completed":
+      return "Concluída";
+    default:
+      return "Desconhecida";
     }
   };
 

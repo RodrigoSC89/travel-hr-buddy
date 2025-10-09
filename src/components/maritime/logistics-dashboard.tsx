@@ -245,35 +245,35 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "at_sea":
-        return "text-primary bg-primary/10";
-      case "in_port":
-        return "text-green-600 bg-green-100";
-      case "anchored":
-        return "text-yellow-600 bg-yellow-100";
-      case "maintenance":
-        return "text-orange-600 bg-orange-100";
-      case "emergency":
-        return "text-destructive bg-destructive/10";
-      default:
-        return "text-muted-foreground bg-muted";
+    case "at_sea":
+      return "text-primary bg-primary/10";
+    case "in_port":
+      return "text-green-600 bg-green-100";
+    case "anchored":
+      return "text-yellow-600 bg-yellow-100";
+    case "maintenance":
+      return "text-orange-600 bg-orange-100";
+    case "emergency":
+      return "text-destructive bg-destructive/10";
+    default:
+      return "text-muted-foreground bg-muted";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "at_sea":
-        return "Em Navegação";
-      case "in_port":
-        return "No Porto";
-      case "anchored":
-        return "Fundeado";
-      case "maintenance":
-        return "Manutenção";
-      case "emergency":
-        return "Emergência";
-      default:
-        return "Desconhecido";
+    case "at_sea":
+      return "Em Navegação";
+    case "in_port":
+      return "No Porto";
+    case "anchored":
+      return "Fundeado";
+    case "maintenance":
+      return "Manutenção";
+    case "emergency":
+      return "Emergência";
+    default:
+      return "Desconhecido";
     }
   };
 

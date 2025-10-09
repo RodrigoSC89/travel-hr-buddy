@@ -145,48 +145,48 @@ export const AIThreatDetection: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "destructive";
-      case "high":
-        return "default";
-      case "medium":
-        return "secondary";
-      case "low":
-        return "outline";
-      default:
-        return "outline";
+    case "critical":
+      return "destructive";
+    case "high":
+      return "default";
+    case "medium":
+      return "secondary";
+    case "low":
+      return "outline";
+    default:
+      return "outline";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "text-red-600";
-      case "investigating":
-        return "text-yellow-600";
-      case "resolved":
-        return "text-green-600";
-      case "false_positive":
-        return "text-muted-foreground";
-      default:
-        return "text-muted-foreground";
+    case "active":
+      return "text-red-600";
+    case "investigating":
+      return "text-yellow-600";
+    case "resolved":
+      return "text-green-600";
+    case "false_positive":
+      return "text-muted-foreground";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getThreatIcon = (type: string) => {
     switch (type) {
-      case "intrusion":
-        return <Shield className="h-5 w-5 text-red-600" />;
-      case "anomaly":
-        return <Eye className="h-5 w-5 text-yellow-600" />;
-      case "suspicious":
-        return <AlertTriangle className="h-5 w-5 text-orange-600" />;
-      case "malware":
-        return <XCircle className="h-5 w-5 text-red-600" />;
-      case "ddos":
-        return <Zap className="h-5 w-5 text-purple-600" />;
-      default:
-        return <AlertTriangle className="h-5 w-5" />;
+    case "intrusion":
+      return <Shield className="h-5 w-5 text-red-600" />;
+    case "anomaly":
+      return <Eye className="h-5 w-5 text-yellow-600" />;
+    case "suspicious":
+      return <AlertTriangle className="h-5 w-5 text-orange-600" />;
+    case "malware":
+      return <XCircle className="h-5 w-5 text-red-600" />;
+    case "ddos":
+      return <Zap className="h-5 w-5 text-purple-600" />;
+    default:
+      return <AlertTriangle className="h-5 w-5" />;
     }
   };
 

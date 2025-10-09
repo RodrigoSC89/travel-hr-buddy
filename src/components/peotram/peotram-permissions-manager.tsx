@@ -250,27 +250,27 @@ export const PeotramPermissionsManager: React.FC = () => {
 
   const getPermissionLevelColor = (level: string) => {
     switch (level) {
-      case "admin":
-        return "destructive";
-      case "write":
-        return "default";
-      case "read":
-        return "secondary";
-      default:
-        return "outline";
+    case "admin":
+      return "destructive";
+    case "write":
+      return "default";
+    case "read":
+      return "secondary";
+    default:
+      return "outline";
     }
   };
 
   const getPermissionLevelText = (level: string) => {
     switch (level) {
-      case "admin":
-        return "Administrador";
-      case "write":
-        return "Escrita";
-      case "read":
-        return "Leitura";
-      default:
-        return "Nenhuma";
+    case "admin":
+      return "Administrador";
+    case "write":
+      return "Escrita";
+    case "read":
+      return "Leitura";
+    default:
+      return "Nenhuma";
     }
   };
 

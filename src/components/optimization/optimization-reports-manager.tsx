@@ -162,12 +162,12 @@ export const OptimizationReportsManager = () => {
         prev.map(report =>
           report.id === newReport.id
             ? {
-                ...report,
-                status: "ready" as const,
-                insights: Math.floor(Math.random() * 20) + 10,
-                improvements: Math.floor(Math.random() * 15) + 5,
-                performanceGain: Math.floor(Math.random() * 30) + 10,
-              }
+              ...report,
+              status: "ready" as const,
+              insights: Math.floor(Math.random() * 20) + 10,
+              improvements: Math.floor(Math.random() * 15) + 5,
+              performanceGain: Math.floor(Math.random() * 30) + 10,
+            }
             : report
         )
       );
@@ -196,40 +196,40 @@ export const OptimizationReportsManager = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "success":
-        return CheckCircle;
-      case "partial":
-        return AlertTriangle;
-      case "failed":
-        return AlertTriangle;
-      default:
-        return Activity;
+    case "success":
+      return CheckCircle;
+    case "partial":
+      return AlertTriangle;
+    case "failed":
+      return AlertTriangle;
+    default:
+      return Activity;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "success":
-        return "text-success";
-      case "partial":
-        return "text-warning";
-      case "failed":
-        return "text-destructive";
-      default:
-        return "text-muted-foreground";
+    case "success":
+      return "text-success";
+    case "partial":
+      return "text-warning";
+    case "failed":
+      return "text-destructive";
+    default:
+      return "text-muted-foreground";
     }
   };
 
   const getReportTypeColor = (type: string) => {
     switch (type) {
-      case "weekly":
-        return "bg-primary/10 text-primary border-primary/20";
-      case "monthly":
-        return "bg-info/10 text-info border-info/20";
-      case "quarterly":
-        return "bg-success/10 text-success border-success/20";
-      default:
-        return "bg-muted text-muted-foreground border-muted";
+    case "weekly":
+      return "bg-primary/10 text-primary border-primary/20";
+    case "monthly":
+      return "bg-info/10 text-info border-info/20";
+    case "quarterly":
+      return "bg-success/10 text-success border-success/20";
+    default:
+      return "bg-muted text-muted-foreground border-muted";
     }
   };
 

@@ -186,20 +186,20 @@ export const ResponsiveHotelSearch: React.FC = () => {
 
   const getAmenityIcon = (amenity: string) => {
     switch (amenity.toLowerCase()) {
-      case "wifi":
-        return <Wifi className="h-4 w-4" />;
-      case "piscina":
-        return <span className="text-blue-500">🏊</span>;
-      case "spa":
-        return <span className="text-purple-500">💆</span>;
-      case "restaurante":
-        return <Utensils className="h-4 w-4" />;
-      case "academia":
-        return <span className="text-green-500">🏋️</span>;
-      case "estacionamento":
-        return <Car className="h-4 w-4" />;
-      default:
-        return <Plus className="h-4 w-4" />;
+    case "wifi":
+      return <Wifi className="h-4 w-4" />;
+    case "piscina":
+      return <span className="text-blue-500">🏊</span>;
+    case "spa":
+      return <span className="text-purple-500">💆</span>;
+    case "restaurante":
+      return <Utensils className="h-4 w-4" />;
+    case "academia":
+      return <span className="text-green-500">🏋️</span>;
+    case "estacionamento":
+      return <Car className="h-4 w-4" />;
+    default:
+      return <Plus className="h-4 w-4" />;
     }
   };
 

@@ -205,19 +205,19 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
 
     // Filter by tab
     switch (activeInboxTab) {
-      case "unread":
-        filtered = filtered.filter(m => m.status !== "read");
-        break;
-      case "urgent":
-        filtered = filtered.filter(m => m.is_urgent);
-        break;
-      case "starred":
-        // Mock starred filter
-        filtered = filtered.filter(m => m.priority === "high" || m.priority === "critical");
-        break;
-      case "archived":
-        filtered = filtered.filter(m => m.status === "archived");
-        break;
+    case "unread":
+      filtered = filtered.filter(m => m.status !== "read");
+      break;
+    case "urgent":
+      filtered = filtered.filter(m => m.is_urgent);
+      break;
+    case "starred":
+      // Mock starred filter
+      filtered = filtered.filter(m => m.priority === "high" || m.priority === "critical");
+      break;
+    case "archived":
+      filtered = filtered.filter(m => m.status === "archived");
+      break;
     }
 
     // Filter by search term
@@ -279,33 +279,33 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-destructive text-destructive-foreground";
-      case "high":
-        return "bg-warning text-warning-foreground";
-      case "normal":
-        return "bg-primary text-primary-foreground";
-      case "low":
-        return "bg-muted text-muted-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "critical":
+      return "bg-destructive text-destructive-foreground";
+    case "high":
+      return "bg-warning text-warning-foreground";
+    case "normal":
+      return "bg-primary text-primary-foreground";
+    case "low":
+      return "bg-muted text-muted-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "hr":
-        return User;
-      case "operations":
-        return Building;
-      case "emergency":
-        return AlertTriangle;
-      case "system":
-        return Shield;
-      case "ai_notification":
-        return MessageSquare;
-      default:
-        return MessageSquare;
+    case "hr":
+      return User;
+    case "operations":
+      return Building;
+    case "emergency":
+      return AlertTriangle;
+    case "system":
+      return Shield;
+    case "ai_notification":
+      return MessageSquare;
+    default:
+      return MessageSquare;
     }
   };
 

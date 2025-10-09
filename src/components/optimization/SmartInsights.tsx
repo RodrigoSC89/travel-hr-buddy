@@ -287,57 +287,57 @@ export const SmartInsights: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "recommendation":
-        return <Lightbulb className="h-4 w-4 text-warning" />;
-      case "warning":
-        return <AlertCircle className="h-4 w-4 text-danger" />;
-      case "opportunity":
-        return <Target className="h-4 w-4 text-success" />;
-      case "prediction":
-        return <TrendingUp className="h-4 w-4 text-info" />;
-      default:
-        return <Brain className="h-4 w-4" />;
+    case "recommendation":
+      return <Lightbulb className="h-4 w-4 text-warning" />;
+    case "warning":
+      return <AlertCircle className="h-4 w-4 text-danger" />;
+    case "opportunity":
+      return <Target className="h-4 w-4 text-success" />;
+    case "prediction":
+      return <TrendingUp className="h-4 w-4 text-info" />;
+    default:
+      return <Brain className="h-4 w-4" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "efficiency":
-        return <Activity className="h-4 w-4" />;
-      case "cost":
-        return <DollarSign className="h-4 w-4" />;
-      case "user_experience":
-        return <Users className="h-4 w-4" />;
-      case "security":
-        return <AlertCircle className="h-4 w-4" />;
-      case "growth":
-        return <TrendingUp className="h-4 w-4" />;
-      default:
-        return <Brain className="h-4 w-4" />;
+    case "efficiency":
+      return <Activity className="h-4 w-4" />;
+    case "cost":
+      return <DollarSign className="h-4 w-4" />;
+    case "user_experience":
+      return <Users className="h-4 w-4" />;
+    case "security":
+      return <AlertCircle className="h-4 w-4" />;
+    case "growth":
+      return <TrendingUp className="h-4 w-4" />;
+    default:
+      return <Brain className="h-4 w-4" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high":
-        return "bg-danger text-danger-foreground";
-      case "medium":
-        return "bg-warning text-warning-foreground";
-      case "low":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "high":
+      return "bg-danger text-danger-foreground";
+    case "medium":
+      return "bg-warning text-warning-foreground";
+    case "low":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-success" />;
-      case "down":
-        return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
-      default:
-        return <div className="h-4 w-4 rounded-full bg-muted" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-success" />;
+    case "down":
+      return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
+    default:
+      return <div className="h-4 w-4 rounded-full bg-muted" />;
     }
   };
 

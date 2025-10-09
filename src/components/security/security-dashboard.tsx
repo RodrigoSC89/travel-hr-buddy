@@ -162,27 +162,27 @@ export const SecurityDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "passed":
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-yellow-600" />;
-      case "failed":
-        return <AlertTriangle className="w-4 h-4 text-red-600" />;
-      default:
-        return <Info className="w-4 h-4 text-blue-600" />;
+    case "passed":
+      return <CheckCircle className="w-4 h-4 text-green-600" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-yellow-600" />;
+    case "failed":
+      return <AlertTriangle className="w-4 h-4 text-red-600" />;
+    default:
+      return <Info className="w-4 h-4 text-blue-600" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "passed":
-        return "text-green-600 bg-green-50 border-green-200";
-      case "warning":
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
-      case "failed":
-        return "text-red-600 bg-red-50 border-red-200";
-      default:
-        return "text-blue-600 bg-blue-50 border-blue-200";
+    case "passed":
+      return "text-green-600 bg-green-50 border-green-200";
+    case "warning":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    case "failed":
+      return "text-red-600 bg-red-50 border-red-200";
+    default:
+      return "text-blue-600 bg-blue-50 border-blue-200";
     }
   };
 
@@ -198,24 +198,24 @@ export const SecurityDashboard: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
-      case "authentication":
-        return <Key className="w-5 h-5" />;
-      case "database":
-        return <Database className="w-5 h-5" />;
-      case "access control":
-        return <Users className="w-5 h-5" />;
-      case "network":
-        return <Globe className="w-5 h-5" />;
-      case "audit":
-        return <Eye className="w-5 h-5" />;
-      case "data protection":
-        return <FileText className="w-5 h-5" />;
-      case "compliance":
-        return <Shield className="w-5 h-5" />;
-      case "session management":
-        return <Clock className="w-5 h-5" />;
-      default:
-        return <Shield className="w-5 h-5" />;
+    case "authentication":
+      return <Key className="w-5 h-5" />;
+    case "database":
+      return <Database className="w-5 h-5" />;
+    case "access control":
+      return <Users className="w-5 h-5" />;
+    case "network":
+      return <Globe className="w-5 h-5" />;
+    case "audit":
+      return <Eye className="w-5 h-5" />;
+    case "data protection":
+      return <FileText className="w-5 h-5" />;
+    case "compliance":
+      return <Shield className="w-5 h-5" />;
+    case "session management":
+      return <Clock className="w-5 h-5" />;
+    default:
+      return <Shield className="w-5 h-5" />;
     }
   };
 

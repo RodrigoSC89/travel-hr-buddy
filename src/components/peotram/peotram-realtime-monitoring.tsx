@@ -190,55 +190,55 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "navegando":
-        return "bg-info/20 text-info border-info/30";
-      case "ancorado":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "no_porto":
-        return "bg-success/20 text-success border-success/30";
-      case "manutencao":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "navegando":
+      return "bg-info/20 text-info border-info/30";
+    case "ancorado":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "no_porto":
+      return "bg-success/20 text-success border-success/30";
+    case "manutencao":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getConnectionIcon = (status: string) => {
     switch (status) {
-      case "online":
-        return <Wifi className="w-4 h-4 text-success" />;
-      case "offline":
-        return <WifiOff className="w-4 h-4 text-destructive" />;
-      case "intermitente":
-        return <Radio className="w-4 h-4 text-warning" />;
-      default:
-        return <WifiOff className="w-4 h-4 text-muted-foreground" />;
+    case "online":
+      return <Wifi className="w-4 h-4 text-success" />;
+    case "offline":
+      return <WifiOff className="w-4 h-4 text-destructive" />;
+    case "intermitente":
+      return <Radio className="w-4 h-4 text-warning" />;
+    default:
+      return <WifiOff className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "warning":
-        return "bg-warning/20 text-warning border-warning/30";
-      case "info":
-        return "bg-info/20 text-info border-info/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
+    case "critical":
+      return "bg-destructive/20 text-destructive border-destructive/30";
+    case "warning":
+      return "bg-warning/20 text-warning border-warning/30";
+    case "info":
+      return "bg-info/20 text-info border-info/30";
+    default:
+      return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getSensorStatusColor = (status: string) => {
     switch (status) {
-      case "normal":
-        return "text-success";
-      case "warning":
-        return "text-warning";
-      case "critical":
-        return "text-destructive";
-      default:
-        return "text-muted-foreground";
+    case "normal":
+      return "text-success";
+    case "warning":
+      return "text-warning";
+    case "critical":
+      return "text-destructive";
+    default:
+      return "text-muted-foreground";
     }
   };
 

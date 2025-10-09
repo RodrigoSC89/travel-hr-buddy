@@ -138,45 +138,45 @@ export const FunctionalSystemDashboard: React.FC = () => {
 
   const getStatusColor = (status: SystemMetric["status"]) => {
     switch (status) {
-      case "good":
-        return "text-green-600";
-      case "warning":
-        return "text-yellow-600";
-      case "critical":
-        return "text-red-600";
+    case "good":
+      return "text-green-600";
+    case "warning":
+      return "text-yellow-600";
+    case "critical":
+      return "text-red-600";
     }
   };
 
   const getProgressColor = (status: SystemMetric["status"]) => {
     switch (status) {
-      case "good":
-        return "bg-green-500";
-      case "warning":
-        return "bg-yellow-500";
-      case "critical":
-        return "bg-red-500";
+    case "good":
+      return "bg-green-500";
+    case "warning":
+      return "bg-yellow-500";
+    case "critical":
+      return "bg-red-500";
     }
   };
 
   const getTrendIcon = (trend: SystemMetric["trend"]) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-3 w-3 text-green-500" />;
-      case "down":
-        return <TrendingUp className="h-3 w-3 text-red-500 rotate-180" />;
-      case "stable":
-        return <div className="w-3 h-0.5 bg-gray-400 rounded" />;
+    case "up":
+      return <TrendingUp className="h-3 w-3 text-green-500" />;
+    case "down":
+      return <TrendingUp className="h-3 w-3 text-red-500 rotate-180" />;
+    case "stable":
+      return <div className="w-3 h-0.5 bg-gray-400 rounded" />;
     }
   };
 
   const getAlertIcon = (type: SystemAlert["type"]) => {
     switch (type) {
-      case "info":
-        return <CheckCircle className="h-4 w-4 text-blue-500" />;
-      case "warning":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case "error":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "info":
+      return <CheckCircle className="h-4 w-4 text-blue-500" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "error":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
     }
   };
 
@@ -196,12 +196,12 @@ export const FunctionalSystemDashboard: React.FC = () => {
 
   const getSystemStatusBadge = () => {
     switch (systemStatus) {
-      case "operational":
-        return <Badge className="bg-green-100 text-green-800">Operacional</Badge>;
-      case "degraded":
-        return <Badge variant="destructive">Degradado</Badge>;
-      case "maintenance":
-        return <Badge variant="secondary">Manutenção</Badge>;
+    case "operational":
+      return <Badge className="bg-green-100 text-green-800">Operacional</Badge>;
+    case "degraded":
+      return <Badge variant="destructive">Degradado</Badge>;
+    case "maintenance":
+      return <Badge variant="secondary">Manutenção</Badge>;
     }
   };
 

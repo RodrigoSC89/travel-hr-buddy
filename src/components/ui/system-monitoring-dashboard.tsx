@@ -99,34 +99,34 @@ export const SystemMonitoringDashboard: React.FC = () => {
 
   const getStatusColor = (status: "online" | "warning" | "offline") => {
     switch (status) {
-      case "online":
-        return "text-green-600 bg-green-100";
-      case "warning":
-        return "text-yellow-600 bg-yellow-100";
-      case "offline":
-        return "text-red-600 bg-red-100";
+    case "online":
+      return "text-green-600 bg-green-100";
+    case "warning":
+      return "text-yellow-600 bg-yellow-100";
+    case "offline":
+      return "text-red-600 bg-red-100";
     }
   };
 
   const getStatusIcon = (status: "online" | "warning" | "offline") => {
     switch (status) {
-      case "online":
-        return CheckCircle;
-      case "warning":
-        return AlertTriangle;
-      case "offline":
-        return AlertTriangle;
+    case "online":
+      return CheckCircle;
+    case "warning":
+      return AlertTriangle;
+    case "offline":
+      return AlertTriangle;
     }
   };
 
   const getTrendIcon = (trend: "up" | "down" | "stable") => {
     switch (trend) {
-      case "up":
-        return "↗️";
-      case "down":
-        return "↘️";
-      case "stable":
-        return "→";
+    case "up":
+      return "↗️";
+    case "down":
+      return "↘️";
+    case "stable":
+      return "→";
     }
   };
 

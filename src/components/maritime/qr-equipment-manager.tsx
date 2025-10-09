@@ -62,27 +62,27 @@ export const QREquipmentManager = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "operational":
-        return "bg-green-100 text-green-800";
-      case "maintenance":
-        return "bg-yellow-100 text-yellow-800";
-      case "critical":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "operational":
+      return "bg-green-100 text-green-800";
+    case "maintenance":
+      return "bg-yellow-100 text-yellow-800";
+    case "critical":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "operational":
-        return <div className="w-2 h-2 bg-green-500 rounded-full" />;
-      case "maintenance":
-        return <div className="w-2 h-2 bg-yellow-500 rounded-full" />;
-      case "critical":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      default:
-        return <div className="w-2 h-2 bg-gray-500 rounded-full" />;
+    case "operational":
+      return <div className="w-2 h-2 bg-green-500 rounded-full" />;
+    case "maintenance":
+      return <div className="w-2 h-2 bg-yellow-500 rounded-full" />;
+    case "critical":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    default:
+      return <div className="w-2 h-2 bg-gray-500 rounded-full" />;
     }
   };
 

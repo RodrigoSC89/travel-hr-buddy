@@ -158,23 +158,23 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
       if (!isOpen) return;
 
       switch (e.key) {
-        case "ArrowDown":
-          e.preventDefault();
-          setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
-          break;
-        case "ArrowUp":
-          e.preventDefault();
-          setSelectedIndex(prev => Math.max(prev - 1, 0));
-          break;
-        case "Enter":
-          e.preventDefault();
-          if (results[selectedIndex]) {
-            handleResultClick(results[selectedIndex]);
-          }
-          break;
-        case "Escape":
-          onOpenChange(false);
-          break;
+      case "ArrowDown":
+        e.preventDefault();
+        setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setSelectedIndex(prev => Math.max(prev - 1, 0));
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (results[selectedIndex]) {
+          handleResultClick(results[selectedIndex]);
+        }
+        break;
+      case "Escape":
+        onOpenChange(false);
+        break;
       }
     };
 
@@ -210,35 +210,35 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
 
   const getCategoryIcon = (category: string): React.ComponentType<{ className?: string }> => {
     switch (category.toLowerCase()) {
-      case "auditorias":
-        return FileText;
-      case "módulos":
-        return Hash;
-      case "rh":
-        return Users;
-      case "relatórios":
-        return Calculator;
-      case "ia":
-        return Zap;
-      default:
-        return FileText;
+    case "auditorias":
+      return FileText;
+    case "módulos":
+      return Hash;
+    case "rh":
+      return Users;
+    case "relatórios":
+      return Calculator;
+    case "ia":
+      return Zap;
+    default:
+      return FileText;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
-      case "auditorias":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-      case "módulos":
-        return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
-      case "rh":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-      case "relatórios":
-        return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
-      case "ia":
-        return "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+    case "auditorias":
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    case "módulos":
+      return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
+    case "rh":
+      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+    case "relatórios":
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+    case "ia":
+      return "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200";
+    default:
+      return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
     }
   };
 

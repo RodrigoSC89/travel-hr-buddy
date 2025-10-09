@@ -369,41 +369,41 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "Marítimo":
-        return Ship;
-      case "Tripulação":
-        return Users;
-      case "Analytics":
-        return BarChart3;
-      case "Viagens":
-        return MapPin;
-      case "RH":
-        return Users;
-      case "Operações":
-        return FileText;
-      case "Auditoria":
-        return FileText;
-      case "Admin":
-        return Settings;
-      default:
-        return Sparkles;
+    case "Marítimo":
+      return Ship;
+    case "Tripulação":
+      return Users;
+    case "Analytics":
+      return BarChart3;
+    case "Viagens":
+      return MapPin;
+    case "RH":
+      return Users;
+    case "Operações":
+      return FileText;
+    case "Auditoria":
+      return FileText;
+    case "Admin":
+      return Settings;
+    default:
+      return Sparkles;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "Marítimo":
-        return "bg-blue-100 text-blue-800";
-      case "Analytics":
-        return "bg-purple-100 text-purple-800";
-      case "Viagens":
-        return "bg-green-100 text-green-800";
-      case "RH":
-        return "bg-orange-100 text-orange-800";
-      case "Admin":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-secondary text-secondary-foreground";
+    case "Marítimo":
+      return "bg-blue-100 text-blue-800";
+    case "Analytics":
+      return "bg-purple-100 text-purple-800";
+    case "Viagens":
+      return "bg-green-100 text-green-800";
+    case "RH":
+      return "bg-orange-100 text-orange-800";
+    case "Admin":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-secondary text-secondary-foreground";
     }
   };
 

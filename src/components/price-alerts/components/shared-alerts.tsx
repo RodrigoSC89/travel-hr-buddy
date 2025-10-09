@@ -238,11 +238,11 @@ export const SharedAlerts = () => {
           prev.map(alert =>
             alert.id === sharedAlertId
               ? {
-                  ...alert,
-                  upvotes: newUpvotes,
-                  downvotes: newDownvotes,
-                  user_vote: voteType,
-                }
+                ...alert,
+                upvotes: newUpvotes,
+                downvotes: newDownvotes,
+                user_vote: voteType,
+              }
               : alert
           )
         );

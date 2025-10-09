@@ -175,14 +175,14 @@ export const EnhancedAlertManagement: React.FC = () => {
 
   const getThresholdLabel = (alert: PriceAlert) => {
     switch (alert.thresholdType) {
-      case "below":
-        return `Abaixo de R$ ${alert.targetPrice}`;
-      case "above":
-        return `Acima de R$ ${alert.targetPrice}`;
-      case "change":
-        return `Variação ${alert.changePercentage}%`;
-      default:
-        return "N/A";
+    case "below":
+      return `Abaixo de R$ ${alert.targetPrice}`;
+    case "above":
+      return `Acima de R$ ${alert.targetPrice}`;
+    case "change":
+      return `Variação ${alert.changePercentage}%`;
+    default:
+      return "N/A";
     }
   };
 
@@ -192,14 +192,14 @@ export const EnhancedAlertManagement: React.FC = () => {
 
   const getActionColor = (action: string) => {
     switch (action) {
-      case "purchased":
-        return "bg-success text-azure-50";
-      case "ignored":
-        return "bg-muted text-muted-foreground";
-      case "snoozed":
-        return "bg-warning text-azure-900";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "purchased":
+      return "bg-success text-azure-50";
+    case "ignored":
+      return "bg-muted text-muted-foreground";
+    case "snoozed":
+      return "bg-warning text-azure-900";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 

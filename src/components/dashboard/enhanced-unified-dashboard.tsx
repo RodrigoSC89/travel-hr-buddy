@@ -409,44 +409,44 @@ const EnhancedUnifiedDashboard = () => {
 
   const getStatusIcon = (type: string) => {
     switch (type) {
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-warning" />;
-      case "success":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "info":
-        return <Bell className="w-4 h-4 text-info" />;
-      default:
-        return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "success":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "info":
+      return <Bell className="w-4 h-4 text-info" />;
+    default:
+      return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case "peotram":
-        return <FileText className="w-4 h-4 text-info" />;
-      case "fleet":
-        return <Ship className="w-4 h-4 text-primary" />;
-      case "certificate":
-        return <Award className="w-4 h-4 text-success" />;
-      case "travel":
-        return <MapPin className="w-4 h-4 text-warning" />;
-      case "safety":
-        return <Shield className="w-4 h-4 text-destructive" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "peotram":
+      return <FileText className="w-4 h-4 text-info" />;
+    case "fleet":
+      return <Ship className="w-4 h-4 text-primary" />;
+    case "certificate":
+      return <Award className="w-4 h-4 text-success" />;
+    case "travel":
+      return <MapPin className="w-4 h-4 text-warning" />;
+    case "safety":
+      return <Shield className="w-4 h-4 text-destructive" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getActionStatusColor = (status: string) => {
     switch (status) {
-      case "success":
-        return "text-success-foreground";
-      case "warning":
-        return "text-warning-foreground";
-      case "info":
-        return "text-info-foreground";
-      default:
-        return "text-muted-foreground";
+    case "success":
+      return "text-success-foreground";
+    case "warning":
+      return "text-warning-foreground";
+    case "info":
+      return "text-info-foreground";
+    default:
+      return "text-muted-foreground";
     }
   };
 

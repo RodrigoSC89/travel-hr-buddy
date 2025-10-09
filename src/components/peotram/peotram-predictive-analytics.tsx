@@ -47,7 +47,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       severity: "high",
       title: "Risco de Não Conformidade em Elemento 03",
       description:
-        'Análise preditiva indica 78% de probabilidade de não conformidade em "Gestão de Riscos" no próximo ciclo de auditoria',
+        "Análise preditiva indica 78% de probabilidade de não conformidade em \"Gestão de Riscos\" no próximo ciclo de auditoria",
       probability: 78,
       timeframe: "30-45 dias",
       actionItems: [

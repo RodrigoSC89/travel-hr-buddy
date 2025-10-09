@@ -11,38 +11,38 @@ export const ServiceStatusPanel: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "connected":
-        return <CheckCircle2 className="h-5 w-5 text-success" />;
-      case "error":
-        return <XCircle className="h-5 w-5 text-destructive" />;
-      default:
-        return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
+    case "connected":
+      return <CheckCircle2 className="h-5 w-5 text-success" />;
+    case "error":
+      return <XCircle className="h-5 w-5 text-destructive" />;
+    default:
+      return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "connected":
-        return (
-          <Badge variant="outline" className="bg-success/10 text-success border-success">
+    case "connected":
+      return (
+        <Badge variant="outline" className="bg-success/10 text-success border-success">
             Conectado
-          </Badge>
-        );
-      case "error":
-        return (
-          <Badge
-            variant="outline"
-            className="bg-destructive/10 text-destructive border-destructive"
-          >
+        </Badge>
+      );
+    case "error":
+      return (
+        <Badge
+          variant="outline"
+          className="bg-destructive/10 text-destructive border-destructive"
+        >
             Erro
-          </Badge>
-        );
-      default:
-        return (
-          <Badge variant="outline" className="bg-muted text-muted-foreground">
+        </Badge>
+      );
+    default:
+      return (
+        <Badge variant="outline" className="bg-muted text-muted-foreground">
             Desconectado
-          </Badge>
-        );
+        </Badge>
+      );
     }
   };
 

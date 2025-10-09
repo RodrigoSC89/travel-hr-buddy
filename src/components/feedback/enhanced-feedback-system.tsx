@@ -231,16 +231,16 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "bug":
-        return <AlertTriangle className="w-4 h-4" />;
-      case "feature":
-        return <TrendingUp className="w-4 h-4" />;
-      case "improvement":
-        return <Star className="w-4 h-4" />;
-      case "praise":
-        return <CheckCircle className="w-4 h-4" />;
-      default:
-        return <MessageSquare className="w-4 h-4" />;
+    case "bug":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "feature":
+      return <TrendingUp className="w-4 h-4" />;
+    case "improvement":
+      return <Star className="w-4 h-4" />;
+    case "praise":
+      return <CheckCircle className="w-4 h-4" />;
+    default:
+      return <MessageSquare className="w-4 h-4" />;
     }
   };
 

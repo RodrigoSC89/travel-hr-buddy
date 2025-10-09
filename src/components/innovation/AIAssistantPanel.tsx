@@ -105,40 +105,40 @@ export const AIAssistantPanel = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "analyzing":
-        return <Clock className="h-4 w-4 text-warning animate-pulse" />;
-      case "completed":
-        return <CheckCircle className="h-4 w-4 text-success" />;
-      case "failed":
-        return <AlertTriangle className="h-4 w-4 text-danger" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "analyzing":
+      return <Clock className="h-4 w-4 text-warning animate-pulse" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4 text-success" />;
+    case "failed":
+      return <AlertTriangle className="h-4 w-4 text-danger" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case "optimization":
-        return <TrendingUp className="h-4 w-4 text-success" />;
-      case "risk":
-        return <AlertTriangle className="h-4 w-4 text-danger" />;
-      case "opportunity":
-        return <Lightbulb className="h-4 w-4 text-warning" />;
-      default:
-        return <Brain className="h-4 w-4" />;
+    case "optimization":
+      return <TrendingUp className="h-4 w-4 text-success" />;
+    case "risk":
+      return <AlertTriangle className="h-4 w-4 text-danger" />;
+    case "opportunity":
+      return <Lightbulb className="h-4 w-4 text-warning" />;
+    default:
+      return <Brain className="h-4 w-4" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high":
-        return "bg-danger text-danger-foreground";
-      case "medium":
-        return "bg-warning text-warning-foreground";
-      case "low":
-        return "bg-info text-info-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "high":
+      return "bg-danger text-danger-foreground";
+    case "medium":
+      return "bg-warning text-warning-foreground";
+    case "low":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 

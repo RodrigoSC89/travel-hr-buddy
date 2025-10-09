@@ -104,7 +104,7 @@ export const IntelligentHelpCenter: React.FC = () => {
         },
         {
           step: 2,
-          title: 'Clique em "Nova Escala"',
+          title: "Clique em \"Nova Escala\"",
           description: "Localize o botão no canto superior direito",
         },
         {
@@ -136,7 +136,7 @@ export const IntelligentHelpCenter: React.FC = () => {
       id: "1",
       question: "Como alterar o status de uma reserva?",
       answer:
-        'Para alterar o status de uma reserva, vá até o módulo Reservas, localize a reserva desejada e clique no menu de ações (três pontos). Selecione "Alterar Status" e escolha o novo status.',
+        "Para alterar o status de uma reserva, vá até o módulo Reservas, localize a reserva desejada e clique no menu de ações (três pontos). Selecione \"Alterar Status\" e escolha o novo status.",
       module: "reservations",
       tags: ["reserva", "status", "alteração"],
       helpful: 45,
@@ -145,7 +145,7 @@ export const IntelligentHelpCenter: React.FC = () => {
       id: "2",
       question: "Posso exportar relatórios de viagens?",
       answer:
-        'Sim! No módulo Viagens, clique em "Relatórios" e selecione o período desejado. Você pode exportar em PDF, Excel ou CSV.',
+        "Sim! No módulo Viagens, clique em \"Relatórios\" e selecione o período desejado. Você pode exportar em PDF, Excel ou CSV.",
       module: "travel",
       tags: ["relatórios", "exportar", "viagens"],
       helpful: 32,

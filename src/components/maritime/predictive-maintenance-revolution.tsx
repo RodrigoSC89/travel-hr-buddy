@@ -276,27 +276,27 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
 
   const getPriorityColor = (priority: MaintenancePrediction["priority"]) => {
     switch (priority) {
-      case "critical":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-      case "high":
-        return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-      case "low":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "critical":
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "high":
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "low":
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
     }
   };
 
   const getAvailabilityColor = (availability: SparePart["availability"]) => {
     switch (availability) {
-      case "in-stock":
-        return "text-green-600 dark:text-green-400";
-      case "low-stock":
-        return "text-yellow-600 dark:text-yellow-400";
-      case "out-of-stock":
-        return "text-red-600 dark:text-red-400";
-      case "on-order":
-        return "text-blue-600 dark:text-blue-400";
+    case "in-stock":
+      return "text-green-600 dark:text-green-400";
+    case "low-stock":
+      return "text-yellow-600 dark:text-yellow-400";
+    case "out-of-stock":
+      return "text-red-600 dark:text-red-400";
+    case "on-order":
+      return "text-blue-600 dark:text-blue-400";
     }
   };
 

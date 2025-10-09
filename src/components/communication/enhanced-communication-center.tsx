@@ -86,20 +86,20 @@ export const EnhancedCommunicationCenter = () => {
 
   const getTabIcon = (tab: string) => {
     switch (tab) {
-      case "inbox":
-        return Inbox;
-      case "channels":
-        return Hash;
-      case "compose":
-        return Send;
-      case "notifications":
-        return Bell;
-      case "analytics":
-        return Archive;
-      case "settings":
-        return Settings;
-      default:
-        return MessageSquare;
+    case "inbox":
+      return Inbox;
+    case "channels":
+      return Hash;
+    case "compose":
+      return Send;
+    case "notifications":
+      return Bell;
+    case "analytics":
+      return Archive;
+    case "settings":
+      return Settings;
+    default:
+      return MessageSquare;
     }
   };
 

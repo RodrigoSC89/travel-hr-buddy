@@ -230,33 +230,33 @@ const NauticalCopilot: React.FC = () => {
 
   const getCategoryIcon = (category?: CopilotMessage["category"]) => {
     switch (category) {
-      case "navigation":
-        return <Compass className="w-4 h-4 text-blue-500" />;
-      case "operations":
-        return <Ship className="w-4 h-4 text-green-500" />;
-      case "hr":
-        return <Users className="w-4 h-4 text-purple-500" />;
-      case "analytics":
-        return <BarChart3 className="w-4 h-4 text-orange-500" />;
-      case "logistics":
-        return <Navigation className="w-4 h-4 text-cyan-500" />;
-      default:
-        return <Brain className="w-4 h-4 text-primary" />;
+    case "navigation":
+      return <Compass className="w-4 h-4 text-blue-500" />;
+    case "operations":
+      return <Ship className="w-4 h-4 text-green-500" />;
+    case "hr":
+      return <Users className="w-4 h-4 text-purple-500" />;
+    case "analytics":
+      return <BarChart3 className="w-4 h-4 text-orange-500" />;
+    case "logistics":
+      return <Navigation className="w-4 h-4 text-cyan-500" />;
+    default:
+      return <Brain className="w-4 h-4 text-primary" />;
     }
   };
 
   const getSuggestionColor = (category: SmartSuggestion["category"]) => {
     switch (category) {
-      case "optimization":
-        return "border-l-blue-500 bg-blue-50/50 dark:bg-blue-900/20";
-      case "alert":
-        return "border-l-red-500 bg-red-50/50 dark:bg-red-900/20";
-      case "insight":
-        return "border-l-green-500 bg-green-50/50 dark:bg-green-900/20";
-      case "task":
-        return "border-l-purple-500 bg-purple-50/50 dark:bg-purple-900/20";
-      default:
-        return "border-l-gray-500 bg-gray-50/50 dark:bg-gray-900/20";
+    case "optimization":
+      return "border-l-blue-500 bg-blue-50/50 dark:bg-blue-900/20";
+    case "alert":
+      return "border-l-red-500 bg-red-50/50 dark:bg-red-900/20";
+    case "insight":
+      return "border-l-green-500 bg-green-50/50 dark:bg-green-900/20";
+    case "task":
+      return "border-l-purple-500 bg-purple-50/50 dark:bg-purple-900/20";
+    default:
+      return "border-l-gray-500 bg-gray-50/50 dark:bg-gray-900/20";
     }
   };
 

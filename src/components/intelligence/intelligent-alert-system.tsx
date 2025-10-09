@@ -302,50 +302,50 @@ export const IntelligentAlertSystem = () => {
 
   const getAlertIcon = (type: SmartAlert["type"]) => {
     switch (type) {
-      case "critical":
-        return AlertTriangle;
-      case "warning":
-        return Bell;
-      case "info":
-        return Activity;
-      case "success":
-        return CheckCircle;
-      default:
-        return Bell;
+    case "critical":
+      return AlertTriangle;
+    case "warning":
+      return Bell;
+    case "info":
+      return Activity;
+    case "success":
+      return CheckCircle;
+    default:
+      return Bell;
     }
   };
 
   const getAlertColor = (type: SmartAlert["type"]) => {
     switch (type) {
-      case "critical":
-        return "border-red-500 bg-red-50";
-      case "warning":
-        return "border-yellow-500 bg-yellow-50";
-      case "info":
-        return "border-blue-500 bg-blue-50";
-      case "success":
-        return "border-green-500 bg-green-50";
-      default:
-        return "border-gray-500 bg-gray-50";
+    case "critical":
+      return "border-red-500 bg-red-50";
+    case "warning":
+      return "border-yellow-500 bg-yellow-50";
+    case "info":
+      return "border-blue-500 bg-blue-50";
+    case "success":
+      return "border-green-500 bg-green-50";
+    default:
+      return "border-gray-500 bg-gray-50";
     }
   };
 
   const getCategoryIcon = (category: SmartAlert["category"]) => {
     switch (category) {
-      case "maintenance":
-        return Ship;
-      case "safety":
-        return Shield;
-      case "efficiency":
-        return TrendingUp;
-      case "compliance":
-        return CheckCircle;
-      case "crew":
-        return Users;
-      case "weather":
-        return Thermometer;
-      default:
-        return Activity;
+    case "maintenance":
+      return Ship;
+    case "safety":
+      return Shield;
+    case "efficiency":
+      return TrendingUp;
+    case "compliance":
+      return CheckCircle;
+    case "crew":
+      return Users;
+    case "weather":
+      return Thermometer;
+    default:
+      return Activity;
     }
   };
 

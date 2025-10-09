@@ -300,12 +300,12 @@ export const FinalHomologationReport: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "passed":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "complete":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      default:
-        return <CheckCircle className="w-4 h-4 text-success" />;
+    case "passed":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "complete":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    default:
+      return <CheckCircle className="w-4 h-4 text-success" />;
     }
   };
 

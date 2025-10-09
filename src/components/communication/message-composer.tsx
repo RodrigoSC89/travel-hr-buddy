@@ -360,31 +360,31 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({ onMessageSent 
 
   const getRecipientIcon = (type: string) => {
     switch (type) {
-      case "user":
-        return User;
-      case "channel":
-        return Hash;
-      case "department":
-        return Building;
-      case "broadcast":
-        return Globe;
-      default:
-        return Users;
+    case "user":
+      return User;
+    case "channel":
+      return Hash;
+    case "department":
+      return Building;
+    case "broadcast":
+      return Globe;
+    default:
+      return Users;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "text-destructive";
-      case "high":
-        return "text-warning";
-      case "normal":
-        return "text-primary";
-      case "low":
-        return "text-muted-foreground";
-      default:
-        return "text-muted-foreground";
+    case "critical":
+      return "text-destructive";
+    case "high":
+      return "text-warning";
+    case "normal":
+      return "text-primary";
+    case "low":
+      return "text-muted-foreground";
+    default:
+      return "text-muted-foreground";
     }
   };
 

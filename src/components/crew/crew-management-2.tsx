@@ -209,42 +209,42 @@ export const CrewManagement2: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "bg-green-600";
-      case "onleave":
-        return "bg-blue-600";
-      case "training":
-        return "bg-purple-600";
-      case "standby":
-        return "bg-yellow-600";
-      default:
-        return "bg-gray-600";
+    case "active":
+      return "bg-green-600";
+    case "onleave":
+      return "bg-blue-600";
+    case "training":
+      return "bg-purple-600";
+    case "standby":
+      return "bg-yellow-600";
+    default:
+      return "bg-gray-600";
     }
   };
 
   const getCertStatusColor = (status: string) => {
     switch (status) {
-      case "valid":
-        return "default";
-      case "expiring":
-        return "secondary";
-      case "expired":
-        return "destructive";
-      default:
-        return "outline";
+    case "valid":
+      return "default";
+    case "expiring":
+      return "secondary";
+    case "expired":
+      return "destructive";
+    default:
+      return "outline";
     }
   };
 
   const getHealthStatusColor = (status: string) => {
     switch (status) {
-      case "fit":
-        return "text-green-600";
-      case "restricted":
-        return "text-yellow-600";
-      case "pending":
-        return "text-orange-600";
-      default:
-        return "text-muted-foreground";
+    case "fit":
+      return "text-green-600";
+    case "restricted":
+      return "text-yellow-600";
+    case "pending":
+      return "text-orange-600";
+    default:
+      return "text-muted-foreground";
     }
   };
 

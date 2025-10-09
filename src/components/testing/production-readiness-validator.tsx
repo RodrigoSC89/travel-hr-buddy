@@ -104,27 +104,27 @@ export const ProductionReadinessValidator: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "passed":
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case "failed":
-        return <span className="w-4 h-4 text-danger">❌</span>;
-      case "warning":
-        return <span className="w-4 h-4 text-warning">⚠️</span>;
-      default:
-        return null;
+    case "passed":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "failed":
+      return <span className="w-4 h-4 text-danger">❌</span>;
+    case "warning":
+      return <span className="w-4 h-4 text-warning">⚠️</span>;
+    default:
+      return null;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "passed":
-        return "bg-success text-success-foreground";
-      case "failed":
-        return "bg-danger text-danger-foreground";
-      case "warning":
-        return "bg-warning text-warning-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "passed":
+      return "bg-success text-success-foreground";
+    case "failed":
+      return "bg-danger text-danger-foreground";
+    case "warning":
+      return "bg-warning text-warning-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 

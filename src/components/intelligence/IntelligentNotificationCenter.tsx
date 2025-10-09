@@ -234,38 +234,38 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return <AlertTriangle className="w-4 h-4 text-red-500" />;
-      case "high":
-        return <BellRing className="w-4 h-4 text-orange-500" />;
-      case "medium":
-        return <Bell className="w-4 h-4 text-yellow-500" />;
-      default:
-        return <Info className="w-4 h-4 text-blue-500" />;
+    case "critical":
+      return <AlertTriangle className="w-4 h-4 text-red-500" />;
+    case "high":
+      return <BellRing className="w-4 h-4 text-orange-500" />;
+    case "medium":
+      return <Bell className="w-4 h-4 text-yellow-500" />;
+    default:
+      return <Info className="w-4 h-4 text-blue-500" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-      case "high":
-        return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
-      default:
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    case "critical":
+      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+    case "high":
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+    default:
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
     }
   };
 
   const getFilteredNotifications = () => {
     switch (filter) {
-      case "unread":
-        return notifications.filter(n => !n.isRead);
-      case "high":
-        return notifications.filter(n => n.priority === "high" || n.priority === "critical");
-      default:
-        return notifications;
+    case "unread":
+      return notifications.filter(n => !n.isRead);
+    case "high":
+      return notifications.filter(n => n.priority === "high" || n.priority === "critical");
+    default:
+      return notifications;
     }
   };
 
