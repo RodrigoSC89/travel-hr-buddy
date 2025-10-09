@@ -1,0 +1,10 @@
+node_modules
+.git
+*.log
+.env
+.env.local
+.DS_Store
+*.sw?
+dist
+src
+public
