@@ -59,8 +59,8 @@
 
 ### Pré-requisitos
 ```bash
-# Node.js 18+ e npm
-node -v  # >= 18.0.0
+# Node.js 22+ e npm
+node -v  # >= 22.0.0
 npm -v   # >= 8.0.0
 
 # Git para controle de versão

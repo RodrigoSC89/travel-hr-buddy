@@ -184,7 +184,7 @@ netlify deploy --prod --dir dist
 
 #### Método 4: Docker (Self-hosted)
 ```dockerfile
-FROM node:18-alpine
+FROM node:22-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
