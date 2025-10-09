@@ -9,18 +9,6 @@ O Vercel não estava carregando o programa adequadamente.
 **Antes:**
 ```json
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/"
-    }
-  ]
-}
-```
-
-**Depois:**
-```json
-{
   "routes": [
     {
       "handle": "filesystem"
@@ -29,14 +17,29 @@ O Vercel não estava carregando o programa adequadamente.
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "headers": [...]
+}
+```
+
+**Depois:**
+```json
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [...]
 }
 ```
 
 **Por quê?**
-- O Vercel funciona melhor com `routes` em vez de `rewrites` para SPAs
-- O handler `filesystem` garante que arquivos estáticos sejam servidos primeiro
-- Fallback para `index.html` garante que todas as rotas do React Router funcionem
+- O Vercel não permite usar `routes` (legado) junto com `headers`, `rewrites`, `redirects`, `cleanUrls` ou `trailingSlash`
+- `rewrites` é a abordagem moderna recomendada pelo Vercel para SPAs
+- Automaticamente serve arquivos estáticos primeiro e faz fallback para `index.html`
+- Garante que todas as rotas do React Router funcionem corretamente
 
 ### 2. Headers de Segurança
 Adicionado ao `vercel.json`:
@@ -158,7 +161,7 @@ vercel --prod
 
 ### Rotas retornam 404?
 1. Verifique se o `vercel.json` está na raiz do projeto
-2. Confirme que a configuração de `routes` está correta
+2. Confirme que a configuração de `rewrites` está correta
 3. Redesploy para aplicar as mudanças
 
 ### Variáveis de ambiente não funcionam?

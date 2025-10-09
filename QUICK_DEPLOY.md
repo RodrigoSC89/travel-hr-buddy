@@ -67,7 +67,7 @@ If Vercel is not loading the application correctly:
 1. **Check Framework Detection**: Verify Vercel detected Vite as the framework
 2. **Environment Variables**: Ensure all `VITE_` prefixed variables are set in Vercel dashboard
 3. **Build Output**: Check that build command is `npm run build` and output directory is `dist`
-4. **SPA Routing**: The `vercel.json` file ensures proper SPA routing with the `routes` configuration
+4. **SPA Routing**: The `vercel.json` file ensures proper SPA routing with the `rewrites` configuration
 5. **Cache Issues**: Try clearing Vercel's build cache in Project Settings → General → Clear Cache
 6. **Redeploy**: After configuration changes, trigger a new deployment
 
