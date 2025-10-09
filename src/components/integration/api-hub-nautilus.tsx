@@ -5,6 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { useToast } from '@/hooks/use-toast';
+import { 
   Network, 
   Code,
   Key,
@@ -230,6 +239,32 @@ export const APIHubNautilus: React.FC = () => {
     endpoints.reduce((sum, e) => sum + e.avgResponseTime, 0) / endpoints.length
   );
   const activeIntegrations = integrations.filter(i => i.status === 'active').length;
+  
+  const { toast } = useToast();
+  const [filterCategory, setFilterCategory] = useState({
+    vessel: true,
+    crew: true,
+    weather: true,
+    routes: true,
+    analytics: true,
+    iot: true
+  });
+
+  const handleDocumentation = () => {
+    toast({
+      title: "📚 Documentação API",
+      description: "Abrindo documentação completa com exemplos e referências"
+    });
+    // TODO: Open documentation page or modal
+  };
+
+  const handleNewAPIKey = () => {
+    toast({
+      title: "🔑 Nova API Key",
+      description: "Gerando nova chave de autenticação segura"
+    });
+    // TODO: Open API key generation dialog
+  };
 
   return (
     <div className="space-y-6">
@@ -292,11 +327,11 @@ export const APIHubNautilus: React.FC = () => {
               </CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handleDocumentation}>
                 <Book className="h-4 w-4 mr-2" />
                 Documentação
               </Button>
-              <Button size="sm">
+              <Button size="sm" onClick={handleNewAPIKey}>
                 <Key className="h-4 w-4 mr-2" />
                 Nova API Key
               </Button>
@@ -316,13 +351,69 @@ export const APIHubNautilus: React.FC = () => {
               {/* Search */}
               <div className="flex gap-2">
                 <Input placeholder="Buscar endpoints..." className="flex-1" />
-                <Button variant="outline">
-                  Filtrar
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                      Filtrar
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Filtrar por Categoria</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem
+                      checked={filterCategory.vessel}
+                      onCheckedChange={(checked) => 
+                        setFilterCategory(prev => ({ ...prev, vessel: !!checked }))
+                      }
+                    >
+                      Embarcações
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterCategory.crew}
+                      onCheckedChange={(checked) => 
+                        setFilterCategory(prev => ({ ...prev, crew: !!checked }))
+                      }
+                    >
+                      Tripulação
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterCategory.weather}
+                      onCheckedChange={(checked) => 
+                        setFilterCategory(prev => ({ ...prev, weather: !!checked }))
+                      }
+                    >
+                      Meteorologia
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterCategory.routes}
+                      onCheckedChange={(checked) => 
+                        setFilterCategory(prev => ({ ...prev, routes: !!checked }))
+                      }
+                    >
+                      Rotas
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterCategory.analytics}
+                      onCheckedChange={(checked) => 
+                        setFilterCategory(prev => ({ ...prev, analytics: !!checked }))
+                      }
+                    >
+                      Analytics
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterCategory.iot}
+                      onCheckedChange={(checked) => 
+                        setFilterCategory(prev => ({ ...prev, iot: !!checked }))
+                      }
+                    >
+                      IoT
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
 
               {/* Endpoints List */}
-              {endpoints.map((endpoint) => (
+              {endpoints.filter(endpoint => filterCategory[endpoint.category]).map((endpoint) => (
                 <Card key={endpoint.id} className="border-l-4 border-l-blue-500">
                   <CardHeader>
                     <div className="flex items-start justify-between">

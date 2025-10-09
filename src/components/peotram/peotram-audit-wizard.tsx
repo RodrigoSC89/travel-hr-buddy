@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useToast } from '@/hooks/use-toast';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -176,6 +177,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
   });
   const [elements, setElements] = useState<AuditElement[]>(PEOTRAM_ELEMENTS);
   const [isSaving, setIsSaving] = useState(false);
+  const { toast } = useToast();
 
   const steps = [
     { id: 'info', title: 'Informações Gerais', icon: Info },
@@ -252,6 +254,30 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleFileUpload = () => {
+    toast({
+      title: "📎 Upload de Arquivo",
+      description: "Selecione arquivos PDF, imagens ou documentos como evidência"
+    });
+    // TODO: Implement file upload dialog
+  };
+
+  const handleCameraCapture = () => {
+    toast({
+      title: "📷 Captura de Foto",
+      description: "Tire uma foto diretamente como evidência da auditoria"
+    });
+    // TODO: Implement camera capture functionality
+  };
+
+  const handleAudioRecording = () => {
+    toast({
+      title: "🎙️ Gravação de Áudio",
+      description: "Grave notas de voz ou observações verbais da auditoria"
+    });
+    // TODO: Implement audio recording functionality
   };
 
   const renderStepIndicator = () => (
@@ -652,15 +678,15 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               <div className="space-y-3">
                 <Label>Anexar Evidências</Label>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={handleFileUpload}>
                     <Upload className="w-4 h-4 mr-2" />
                     Upload Arquivo
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={handleCameraCapture}>
                     <Camera className="w-4 h-4 mr-2" />
                     Foto
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={handleAudioRecording}>
                     <Mic className="w-4 h-4 mr-2" />
                     Áudio
                   </Button>

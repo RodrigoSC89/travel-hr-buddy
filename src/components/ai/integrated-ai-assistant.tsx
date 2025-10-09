@@ -436,6 +436,14 @@ Como posso ajudá-lo especificamente hoje?`,
     });
   };
 
+  const handleSettingsClick = () => {
+    toast({
+      title: "⚙️ Configurações do Assistente",
+      description: "Ajuste preferências de idioma, modelo de IA e comportamento"
+    });
+    // TODO: Implement settings dialog with model selection, temperature, etc.
+  };
+
   return (
     <div className="flex h-screen bg-background">
       {/* Sidebar with Conversations and Quick Actions */}
@@ -538,7 +546,7 @@ Como posso ajudá-lo especificamente hoje?`,
               <Button variant="outline" size="sm" onClick={exportConversation}>
                 <Download className="w-4 h-4" />
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handleSettingsClick}>
                 <Settings className="w-4 h-4" />
               </Button>
             </div>

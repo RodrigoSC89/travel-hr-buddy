@@ -3,6 +3,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { useToast } from '@/hooks/use-toast';
 import {
   Bell,
   AlertTriangle,
@@ -131,10 +141,48 @@ const getSeverityLabel = (severity: string) => {
 
 export const IncidentReporting: React.FC = () => {
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearchDialog, setShowSearchDialog] = useState(false);
+  const [filterSeverity, setFilterSeverity] = useState({
+    critical: true,
+    high: true,
+    medium: true,
+    low: true,
+    negligible: true
+  });
+  const [filterType, setFilterType] = useState({
+    accident: true,
+    near_miss: true,
+    environmental: true,
+    security: true,
+    operational: true,
+    other: true
+  });
+  const { toast } = useToast();
 
   const criticalCount = SAMPLE_INCIDENTS.filter(i => i.severity === 'critical').length;
   const highCount = SAMPLE_INCIDENTS.filter(i => i.severity === 'high').length;
   const openCount = SAMPLE_INCIDENTS.filter(i => i.status === 'reported' || i.status === 'investigating').length;
+
+  const handleSearch = () => {
+    setShowSearchDialog(!showSearchDialog);
+    toast({
+      title: "🔍 Busca de Incidentes",
+      description: "Digite o número do incidente, título ou palavra-chave"
+    });
+  };
+
+  const filteredIncidents = SAMPLE_INCIDENTS.filter(incident => {
+    const matchesSearch = searchQuery === '' || 
+      incident.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      incident.number.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (incident.vessel && incident.vessel.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const matchesSeverity = filterSeverity[incident.severity];
+    const matchesType = filterType[incident.type];
+    
+    return matchesSearch && matchesSeverity && matchesType;
+  });
 
   return (
     <div className="space-y-6">
@@ -212,7 +260,7 @@ export const IncidentReporting: React.FC = () => {
           <Tabs defaultValue="all" className="space-y-4">
             <div className="flex items-center justify-between">
               <TabsList className="grid grid-cols-5 w-auto">
-                <TabsTrigger value="all">Todos ({SAMPLE_INCIDENTS.length})</TabsTrigger>
+                <TabsTrigger value="all">Todos ({filteredIncidents.length})</TabsTrigger>
                 <TabsTrigger value="open">Abertos ({openCount})</TabsTrigger>
                 <TabsTrigger value="critical">Críticos ({criticalCount})</TabsTrigger>
                 <TabsTrigger value="investigating">Investigando</TabsTrigger>
@@ -220,19 +268,120 @@ export const IncidentReporting: React.FC = () => {
               </TabsList>
               
               <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  <Search className="h-4 w-4 mr-2" />
-                  Buscar
-                </Button>
-                <Button variant="outline" size="sm">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filtrar
-                </Button>
+                <div className="relative">
+                  {showSearchDialog && (
+                    <div className="absolute right-0 top-12 z-50 w-80 bg-background border rounded-lg shadow-lg p-4">
+                      <Input
+                        placeholder="Buscar incidentes..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full"
+                      />
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Busque por número, título ou embarcação
+                      </p>
+                    </div>
+                  )}
+                  <Button variant="outline" size="sm" onClick={handleSearch}>
+                    <Search className="h-4 w-4 mr-2" />
+                    Buscar
+                  </Button>
+                </div>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Filter className="h-4 w-4 mr-2" />
+                      Filtrar
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Filtrar por Severidade</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem
+                      checked={filterSeverity.critical}
+                      onCheckedChange={(checked) => 
+                        setFilterSeverity(prev => ({ ...prev, critical: !!checked }))
+                      }
+                    >
+                      Crítico
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterSeverity.high}
+                      onCheckedChange={(checked) => 
+                        setFilterSeverity(prev => ({ ...prev, high: !!checked }))
+                      }
+                    >
+                      Alto
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterSeverity.medium}
+                      onCheckedChange={(checked) => 
+                        setFilterSeverity(prev => ({ ...prev, medium: !!checked }))
+                      }
+                    >
+                      Médio
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterSeverity.low}
+                      onCheckedChange={(checked) => 
+                        setFilterSeverity(prev => ({ ...prev, low: !!checked }))
+                      }
+                    >
+                      Baixo
+                    </DropdownMenuCheckboxItem>
+                    
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel>Filtrar por Tipo</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    
+                    <DropdownMenuCheckboxItem
+                      checked={filterType.accident}
+                      onCheckedChange={(checked) => 
+                        setFilterType(prev => ({ ...prev, accident: !!checked }))
+                      }
+                    >
+                      Acidente
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterType.near_miss}
+                      onCheckedChange={(checked) => 
+                        setFilterType(prev => ({ ...prev, near_miss: !!checked }))
+                      }
+                    >
+                      Quase Acidente
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterType.environmental}
+                      onCheckedChange={(checked) => 
+                        setFilterType(prev => ({ ...prev, environmental: !!checked }))
+                      }
+                    >
+                      Ambiental
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterType.security}
+                      onCheckedChange={(checked) => 
+                        setFilterType(prev => ({ ...prev, security: !!checked }))
+                      }
+                    >
+                      Segurança
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filterType.operational}
+                      onCheckedChange={(checked) => 
+                        setFilterType(prev => ({ ...prev, operational: !!checked }))
+                      }
+                    >
+                      Operacional
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 
             <TabsContent value="all" className="space-y-3">
-              {SAMPLE_INCIDENTS.map((incident) => (
+              {filteredIncidents.map((incident) => (
                 <Card 
                   key={incident.id}
                   className="border-2 hover:shadow-lg transition-all cursor-pointer"
@@ -299,7 +448,7 @@ export const IncidentReporting: React.FC = () => {
 
             {['open', 'critical', 'investigating', 'closed'].map((tab) => (
               <TabsContent key={tab} value={tab} className="space-y-3">
-                {SAMPLE_INCIDENTS.filter(i => {
+                {filteredIncidents.filter(i => {
                   if (tab === 'open') return i.status === 'reported' || i.status === 'investigating';
                   if (tab === 'critical') return i.severity === 'critical';
                   if (tab === 'investigating') return i.status === 'investigating';
