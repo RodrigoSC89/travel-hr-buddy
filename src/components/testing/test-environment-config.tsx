@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Settings, Database, Shield, Activity, FileText } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Settings, Database, Shield, Activity, FileText } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface TestConfig {
-  environment: 'development' | 'staging' | 'production';
+  environment: "development" | "staging" | "production";
   debugMode: boolean;
   mockData: boolean;
   cacheEnabled: boolean;
@@ -21,14 +21,14 @@ interface TestConfig {
 
 export const TestEnvironmentConfig: React.FC = () => {
   const [config, setConfig] = useState<TestConfig>({
-    environment: 'staging',
+    environment: "staging",
     debugMode: true,
     mockData: false,
     cacheEnabled: true,
     analyticsEnabled: true,
     errorReporting: true,
     performanceMonitoring: true,
-    securityScanning: true
+    securityScanning: true,
   });
 
   const { toast } = useToast();
@@ -39,57 +39,69 @@ export const TestEnvironmentConfig: React.FC = () => {
 
   const applyConfiguration = () => {
     // Simulate applying configuration
-    localStorage.setItem('nautilus-test-config', JSON.stringify(config));
-    
+    localStorage.setItem("nautilus-test-config", JSON.stringify(config));
+
     toast({
-      title: 'Configuração Aplicada',
+      title: "Configuração Aplicada",
       description: `Ambiente configurado para ${config.environment}`,
     });
   };
 
   const resetToDefaults = () => {
     setConfig({
-      environment: 'staging',
+      environment: "staging",
       debugMode: true,
       mockData: false,
       cacheEnabled: true,
       analyticsEnabled: true,
       errorReporting: true,
       performanceMonitoring: true,
-      securityScanning: true
+      securityScanning: true,
     });
-    
+
     toast({
-      title: 'Configuração Resetada',
-      description: 'Voltou às configurações padrão',
+      title: "Configuração Resetada",
+      description: "Voltou às configurações padrão",
     });
   };
 
   const exportConfig = () => {
     const dataStr = JSON.stringify(config, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const exportFileDefaultName = 'nautilus-test-config.json';
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = "nautilus-test-config.json";
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
-    
+
     toast({
-      title: 'Configuração Exportada',
-      description: 'Arquivo de configuração baixado',
+      title: "Configuração Exportada",
+      description: "Arquivo de configuração baixado",
     });
   };
 
   const getEnvironmentBadge = (env: string) => {
     switch (env) {
-      case 'development':
-        return <Badge variant="outline" className="bg-blue-100 text-blue-800">Desenvolvimento</Badge>;
-      case 'staging':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Homologação</Badge>;
-      case 'production':
-        return <Badge variant="destructive" className="bg-red-100 text-red-800">Produção</Badge>;
+      case "development":
+        return (
+          <Badge variant="outline" className="bg-blue-100 text-blue-800">
+            Desenvolvimento
+          </Badge>
+        );
+      case "staging":
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            Homologação
+          </Badge>
+        );
+      case "production":
+        return (
+          <Badge variant="destructive" className="bg-red-100 text-red-800">
+            Produção
+          </Badge>
+        );
       default:
         return <Badge variant="outline">Desconhecido</Badge>;
     }
@@ -112,9 +124,7 @@ export const TestEnvironmentConfig: React.FC = () => {
           <Button variant="outline" onClick={resetToDefaults}>
             Resetar
           </Button>
-          <Button onClick={applyConfiguration}>
-            Aplicar
-          </Button>
+          <Button onClick={applyConfiguration}>Aplicar</Button>
         </div>
       </div>
 
@@ -131,20 +141,20 @@ export const TestEnvironmentConfig: React.FC = () => {
         <CardContent>
           <div className="flex gap-2">
             <Button
-              variant={config.environment === 'development' ? 'default' : 'outline'}
-              onClick={() => handleConfigChange('environment', 'development')}
+              variant={config.environment === "development" ? "default" : "outline"}
+              onClick={() => handleConfigChange("environment", "development")}
             >
               Desenvolvimento
             </Button>
             <Button
-              variant={config.environment === 'staging' ? 'default' : 'outline'}
-              onClick={() => handleConfigChange('environment', 'staging')}
+              variant={config.environment === "staging" ? "default" : "outline"}
+              onClick={() => handleConfigChange("environment", "staging")}
             >
               Homologação
             </Button>
             <Button
-              variant={config.environment === 'production' ? 'default' : 'outline'}
-              onClick={() => handleConfigChange('environment', 'production')}
+              variant={config.environment === "production" ? "default" : "outline"}
+              onClick={() => handleConfigChange("environment", "production")}
             >
               Produção
             </Button>
@@ -178,20 +188,18 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.debugMode}
-                  onCheckedChange={(checked) => handleConfigChange('debugMode', checked)}
+                  onCheckedChange={checked => handleConfigChange("debugMode", checked)}
                 />
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Dados Mock</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Usa dados simulados para testes
-                  </p>
+                  <p className="text-sm text-muted-foreground">Usa dados simulados para testes</p>
                 </div>
                 <Switch
                   checked={config.mockData}
-                  onCheckedChange={(checked) => handleConfigChange('mockData', checked)}
+                  onCheckedChange={checked => handleConfigChange("mockData", checked)}
                 />
               </div>
 
@@ -204,7 +212,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.cacheEnabled}
-                  onCheckedChange={(checked) => handleConfigChange('cacheEnabled', checked)}
+                  onCheckedChange={checked => handleConfigChange("cacheEnabled", checked)}
                 />
               </div>
             </CardContent>
@@ -221,8 +229,8 @@ export const TestEnvironmentConfig: React.FC = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Configurações do banco de dados estão sendo gerenciadas automaticamente
-                através do Supabase. Verifique o status na aba de monitoramento.
+                Configurações do banco de dados estão sendo gerenciadas automaticamente através do
+                Supabase. Verifique o status na aba de monitoramento.
               </p>
             </CardContent>
           </Card>
@@ -246,7 +254,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.securityScanning}
-                  onCheckedChange={(checked) => handleConfigChange('securityScanning', checked)}
+                  onCheckedChange={checked => handleConfigChange("securityScanning", checked)}
                 />
               </div>
             </CardContent>
@@ -265,13 +273,11 @@ export const TestEnvironmentConfig: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Analytics</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Coleta dados de uso e performance
-                  </p>
+                  <p className="text-sm text-muted-foreground">Coleta dados de uso e performance</p>
                 </div>
                 <Switch
                   checked={config.analyticsEnabled}
-                  onCheckedChange={(checked) => handleConfigChange('analyticsEnabled', checked)}
+                  onCheckedChange={checked => handleConfigChange("analyticsEnabled", checked)}
                 />
               </div>
 
@@ -284,7 +290,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.errorReporting}
-                  onCheckedChange={(checked) => handleConfigChange('errorReporting', checked)}
+                  onCheckedChange={checked => handleConfigChange("errorReporting", checked)}
                 />
               </div>
 
@@ -297,7 +303,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.performanceMonitoring}
-                  onCheckedChange={(checked) => handleConfigChange('performanceMonitoring', checked)}
+                  onCheckedChange={checked => handleConfigChange("performanceMonitoring", checked)}
                 />
               </div>
             </CardContent>

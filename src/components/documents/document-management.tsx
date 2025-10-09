@@ -1,19 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { 
-  FileText, 
-  Plus, 
-  Search, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  FileText,
+  Plus,
+  Search,
   Download,
   Upload,
   Eye,
@@ -22,8 +34,8 @@ import {
   Calendar,
   User,
   Tag,
-  Folder
-} from 'lucide-react';
+  Folder,
+} from "lucide-react";
 
 interface Document {
   id: string;
@@ -33,7 +45,7 @@ interface Document {
   file_size: number;
   file_type: string;
   uploaded_by: string;
-  access_level: 'public' | 'organization' | 'restricted';
+  access_level: "public" | "organization" | "restricted";
   category: string;
   tags: string[];
   version: number;
@@ -54,8 +66,8 @@ export const DocumentManagement: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [categories, setCategories] = useState<DocumentCategory[]>([]);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState<string>("all");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showAddCategoryDialog, setShowAddCategoryDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,19 +75,19 @@ export const DocumentManagement: React.FC = () => {
 
   // Form state for new document
   const [newDocument, setNewDocument] = useState({
-    title: '',
-    description: '',
-    category: '',
-    access_level: 'organization' as 'public' | 'organization' | 'restricted',
+    title: "",
+    description: "",
+    category: "",
+    access_level: "organization" as "public" | "organization" | "restricted",
     tags: [] as string[],
-    expires_at: ''
+    expires_at: "",
   });
 
   // Form state for new category
   const [newCategory, setNewCategory] = useState({
-    name: '',
-    description: '',
-    color: '#3b82f6'
+    name: "",
+    description: "",
+    color: "#3b82f6",
   });
 
   useEffect(() => {
@@ -88,76 +100,76 @@ export const DocumentManagement: React.FC = () => {
       // Mock data for demonstration
       const mockDocuments: Document[] = [
         {
-          id: '1',
-          title: 'Manual de Segurança Marítima',
-          description: 'Procedimentos de segurança para todas as embarcações da frota',
-          file_path: '/docs/manual-seguranca.pdf',
+          id: "1",
+          title: "Manual de Segurança Marítima",
+          description: "Procedimentos de segurança para todas as embarcações da frota",
+          file_path: "/docs/manual-seguranca.pdf",
           file_size: 2567890,
-          file_type: 'application/pdf',
-          uploaded_by: 'Carlos Silva',
-          access_level: 'organization',
-          category: 'Segurança',
-          tags: ['segurança', 'manual', 'procedimentos'],
+          file_type: "application/pdf",
+          uploaded_by: "Carlos Silva",
+          access_level: "organization",
+          category: "Segurança",
+          tags: ["segurança", "manual", "procedimentos"],
           version: 3,
-          expires_at: '2024-12-31T23:59:59Z',
-          created_at: '2024-01-01T10:00:00Z',
-          updated_at: '2024-01-15T14:30:00Z'
+          expires_at: "2024-12-31T23:59:59Z",
+          created_at: "2024-01-01T10:00:00Z",
+          updated_at: "2024-01-15T14:30:00Z",
         },
         {
-          id: '2',
-          title: 'Certificado ISM - MV Atlântico',
-          description: 'Certificado de Gestão de Segurança Internacional',
-          file_path: '/docs/ism-atlantico.pdf',
+          id: "2",
+          title: "Certificado ISM - MV Atlântico",
+          description: "Certificado de Gestão de Segurança Internacional",
+          file_path: "/docs/ism-atlantico.pdf",
           file_size: 1234567,
-          file_type: 'application/pdf',
-          uploaded_by: 'Maria Oliveira',
-          access_level: 'organization',
-          category: 'Certificações',
-          tags: ['ism', 'certificado', 'mv-atlantico'],
+          file_type: "application/pdf",
+          uploaded_by: "Maria Oliveira",
+          access_level: "organization",
+          category: "Certificações",
+          tags: ["ism", "certificado", "mv-atlantico"],
           version: 1,
-          expires_at: '2025-06-15T23:59:59Z',
-          created_at: '2024-01-10T09:00:00Z',
-          updated_at: '2024-01-10T09:00:00Z'
+          expires_at: "2025-06-15T23:59:59Z",
+          created_at: "2024-01-10T09:00:00Z",
+          updated_at: "2024-01-10T09:00:00Z",
         },
         {
-          id: '3',
-          title: 'Plano de Manutenção Preventiva',
-          description: 'Cronograma e procedimentos de manutenção preventiva da frota',
-          file_path: '/docs/plano-manutencao.xlsx',
+          id: "3",
+          title: "Plano de Manutenção Preventiva",
+          description: "Cronograma e procedimentos de manutenção preventiva da frota",
+          file_path: "/docs/plano-manutencao.xlsx",
           file_size: 987654,
-          file_type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          uploaded_by: 'João Santos',
-          access_level: 'organization',
-          category: 'Manutenção',
-          tags: ['manutenção', 'preventiva', 'cronograma'],
+          file_type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          uploaded_by: "João Santos",
+          access_level: "organization",
+          category: "Manutenção",
+          tags: ["manutenção", "preventiva", "cronograma"],
           version: 2,
-          created_at: '2024-01-05T11:00:00Z',
-          updated_at: '2024-01-20T16:00:00Z'
+          created_at: "2024-01-05T11:00:00Z",
+          updated_at: "2024-01-20T16:00:00Z",
         },
         {
-          id: '4',
-          title: 'Relatório de Inspeção - Porto de Santos',
-          description: 'Relatório detalhado da última inspeção portuária',
-          file_path: '/docs/inspecao-santos.docx',
+          id: "4",
+          title: "Relatório de Inspeção - Porto de Santos",
+          description: "Relatório detalhado da última inspeção portuária",
+          file_path: "/docs/inspecao-santos.docx",
           file_size: 567890,
-          file_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          uploaded_by: 'Ana Costa',
-          access_level: 'restricted',
-          category: 'Relatórios',
-          tags: ['inspeção', 'porto', 'santos'],
+          file_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          uploaded_by: "Ana Costa",
+          access_level: "restricted",
+          category: "Relatórios",
+          tags: ["inspeção", "porto", "santos"],
           version: 1,
-          created_at: '2024-01-18T13:00:00Z',
-          updated_at: '2024-01-18T13:00:00Z'
-        }
+          created_at: "2024-01-18T13:00:00Z",
+          updated_at: "2024-01-18T13:00:00Z",
+        },
       ];
-      
+
       setDocuments(mockDocuments);
     } catch (error) {
-      console.error('Erro ao carregar documentos:', error);
+      console.error("Erro ao carregar documentos:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os documentos",
-        variant: "destructive"
+        variant: "destructive",
       });
       setIsLoading(false);
     }
@@ -167,16 +179,46 @@ export const DocumentManagement: React.FC = () => {
     try {
       // Mock categories
       const mockCategories: DocumentCategory[] = [
-        { id: '1', name: 'Segurança', description: 'Documentos relacionados à segurança', color: '#ef4444', count: 5 },
-        { id: '2', name: 'Certificações', description: 'Certificados e licenças', color: '#3b82f6', count: 8 },
-        { id: '3', name: 'Manutenção', description: 'Documentos de manutenção', color: '#f59e0b', count: 3 },
-        { id: '4', name: 'Relatórios', description: 'Relatórios operacionais', color: '#10b981', count: 12 },
-        { id: '5', name: 'Contratos', description: 'Contratos e acordos', color: '#8b5cf6', count: 6 }
+        {
+          id: "1",
+          name: "Segurança",
+          description: "Documentos relacionados à segurança",
+          color: "#ef4444",
+          count: 5,
+        },
+        {
+          id: "2",
+          name: "Certificações",
+          description: "Certificados e licenças",
+          color: "#3b82f6",
+          count: 8,
+        },
+        {
+          id: "3",
+          name: "Manutenção",
+          description: "Documentos de manutenção",
+          color: "#f59e0b",
+          count: 3,
+        },
+        {
+          id: "4",
+          name: "Relatórios",
+          description: "Relatórios operacionais",
+          color: "#10b981",
+          count: 12,
+        },
+        {
+          id: "5",
+          name: "Contratos",
+          description: "Contratos e acordos",
+          color: "#8b5cf6",
+          count: 6,
+        },
       ];
-      
+
       setCategories(mockCategories);
     } catch (error) {
-      console.error('Erro ao carregar categorias:', error);
+      console.error("Erro ao carregar categorias:", error);
     }
   };
 
@@ -185,35 +227,35 @@ export const DocumentManagement: React.FC = () => {
       const document: Document = {
         id: Math.random().toString(),
         ...newDocument,
-        file_path: `/docs/${newDocument.title.toLowerCase().replace(/\s+/g, '-')}.pdf`,
+        file_path: `/docs/${newDocument.title.toLowerCase().replace(/\s+/g, "-")}.pdf`,
         file_size: Math.floor(Math.random() * 5000000) + 100000,
-        file_type: 'application/pdf',
-        uploaded_by: 'Current User',
+        file_type: "application/pdf",
+        uploaded_by: "Current User",
         version: 1,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
-      
+
       setDocuments([...documents, document]);
       setNewDocument({
-        title: '',
-        description: '',
-        category: '',
-        access_level: 'organization',
+        title: "",
+        description: "",
+        category: "",
+        access_level: "organization",
         tags: [],
-        expires_at: ''
+        expires_at: "",
       });
       setShowAddDialog(false);
-      
+
       toast({
         title: "Documento Adicionado",
-        description: `${document.title} foi adicionado com sucesso`
+        description: `${document.title} foi adicionado com sucesso`,
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível adicionar o documento",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -223,69 +265,78 @@ export const DocumentManagement: React.FC = () => {
       const category: DocumentCategory = {
         id: Math.random().toString(),
         ...newCategory,
-        count: 0
+        count: 0,
       };
-      
+
       setCategories([...categories, category]);
       setNewCategory({
-        name: '',
-        description: '',
-        color: '#3b82f6'
+        name: "",
+        description: "",
+        color: "#3b82f6",
       });
       setShowAddCategoryDialog(false);
-      
+
       toast({
         title: "Categoria Criada",
-        description: `${category.name} foi criada com sucesso`
+        description: `${category.name} foi criada com sucesso`,
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a categoria",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const getFileTypeIcon = (fileType: string) => {
-    if (fileType.includes('pdf')) return '📄';
-    if (fileType.includes('word')) return '📝';
-    if (fileType.includes('excel') || fileType.includes('spreadsheet')) return '📊';
-    if (fileType.includes('image')) return '🖼️';
-    return '📁';
+    if (fileType.includes("pdf")) return "📄";
+    if (fileType.includes("word")) return "📝";
+    if (fileType.includes("excel") || fileType.includes("spreadsheet")) return "📊";
+    if (fileType.includes("image")) return "🖼️";
+    return "📁";
   };
 
   const getAccessLevelColor = (level: string) => {
     switch (level) {
-      case 'public': return 'bg-green-500 text-azure-50';
-      case 'organization': return 'bg-blue-500 text-azure-50';
-      case 'restricted': return 'bg-red-500 text-azure-50';
-      default: return 'bg-gray-500 text-azure-50';
+      case "public":
+        return "bg-green-500 text-azure-50";
+      case "organization":
+        return "bg-blue-500 text-azure-50";
+      case "restricted":
+        return "bg-red-500 text-azure-50";
+      default:
+        return "bg-gray-500 text-azure-50";
     }
   };
 
   const getAccessLevelText = (level: string) => {
     switch (level) {
-      case 'public': return 'Público';
-      case 'organization': return 'Organização';
-      case 'restricted': return 'Restrito';
-      default: return 'Desconhecido';
+      case "public":
+        return "Público";
+      case "organization":
+        return "Organização";
+      case "restricted":
+        return "Restrito";
+      default:
+        return "Desconhecido";
     }
   };
 
   const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = filterCategory === 'all' || doc.category === filterCategory;
+    const matchesSearch =
+      doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCategory = filterCategory === "all" || doc.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -302,7 +353,7 @@ export const DocumentManagement: React.FC = () => {
             Organize e gerencie todos os documentos da organização
           </p>
         </div>
-        
+
         <div className="flex gap-2">
           <Dialog open={showAddCategoryDialog} onOpenChange={setShowAddCategoryDialog}>
             <DialogTrigger asChild>
@@ -321,7 +372,7 @@ export const DocumentManagement: React.FC = () => {
                   <Input
                     id="cat-name"
                     value={newCategory.name}
-                    onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                    onChange={e => setNewCategory({ ...newCategory, name: e.target.value })}
                     placeholder="Ex: Contratos"
                   />
                 </div>
@@ -330,7 +381,7 @@ export const DocumentManagement: React.FC = () => {
                   <Textarea
                     id="cat-desc"
                     value={newCategory.description}
-                    onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
+                    onChange={e => setNewCategory({ ...newCategory, description: e.target.value })}
                     placeholder="Descrição da categoria..."
                   />
                 </div>
@@ -340,7 +391,7 @@ export const DocumentManagement: React.FC = () => {
                     id="cat-color"
                     type="color"
                     value={newCategory.color}
-                    onChange={(e) => setNewCategory({ ...newCategory, color: e.target.value })}
+                    onChange={e => setNewCategory({ ...newCategory, color: e.target.value })}
                   />
                 </div>
               </div>
@@ -372,7 +423,7 @@ export const DocumentManagement: React.FC = () => {
                   <Input
                     id="title"
                     value={newDocument.title}
-                    onChange={(e) => setNewDocument({ ...newDocument, title: e.target.value })}
+                    onChange={e => setNewDocument({ ...newDocument, title: e.target.value })}
                     placeholder="Ex: Manual de Procedimentos"
                   />
                 </div>
@@ -381,32 +432,34 @@ export const DocumentManagement: React.FC = () => {
                   <Textarea
                     id="description"
                     value={newDocument.description}
-                    onChange={(e) => setNewDocument({ ...newDocument, description: e.target.value })}
+                    onChange={e => setNewDocument({ ...newDocument, description: e.target.value })}
                     placeholder="Descrição do documento..."
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="category">Categoria</Label>
-                    <Select 
-                      value={newDocument.category} 
-                      onValueChange={(value) => setNewDocument({ ...newDocument, category: value })}
+                    <Select
+                      value={newDocument.category}
+                      onValueChange={value => setNewDocument({ ...newDocument, category: value })}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione a categoria" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categories.map((cat) => (
-                          <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>
+                        {categories.map(cat => (
+                          <SelectItem key={cat.id} value={cat.name}>
+                            {cat.name}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
                     <Label htmlFor="access">Nível de Acesso</Label>
-                    <Select 
-                      value={newDocument.access_level} 
-                      onValueChange={(value: 'public' | 'organization' | 'restricted') => 
+                    <Select
+                      value={newDocument.access_level}
+                      onValueChange={(value: "public" | "organization" | "restricted") =>
                         setNewDocument({ ...newDocument, access_level: value })
                       }
                     >
@@ -427,7 +480,7 @@ export const DocumentManagement: React.FC = () => {
                     id="expires"
                     type="datetime-local"
                     value={newDocument.expires_at}
-                    onChange={(e) => setNewDocument({ ...newDocument, expires_at: e.target.value })}
+                    onChange={e => setNewDocument({ ...newDocument, expires_at: e.target.value })}
                   />
                 </div>
                 <div>
@@ -486,10 +539,13 @@ export const DocumentManagement: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Expirando Breve</p>
                 <p className="text-3xl font-bold text-yellow-600">
-                  {documents.filter(d => 
-                    d.expires_at && 
-                    new Date(d.expires_at) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-                  ).length}
+                  {
+                    documents.filter(
+                      d =>
+                        d.expires_at &&
+                        new Date(d.expires_at) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+                    ).length
+                  }
                 </p>
               </div>
               <Calendar className="h-8 w-8 text-yellow-600" />
@@ -520,14 +576,14 @@ export const DocumentManagement: React.FC = () => {
             <TabsTrigger value="categories">Categorias</TabsTrigger>
             <TabsTrigger value="expired">Vencimentos</TabsTrigger>
           </TabsList>
-          
+
           <div className="flex gap-2">
             <div className="flex items-center gap-2">
               <Search className="h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar documentos..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="w-64"
               />
             </div>
@@ -537,8 +593,10 @@ export const DocumentManagement: React.FC = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas Categorias</SelectItem>
-                {categories.map((cat) => (
-                  <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>
+                {categories.map(cat => (
+                  <SelectItem key={cat.id} value={cat.name}>
+                    {cat.name}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -555,11 +613,11 @@ export const DocumentManagement: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {filteredDocuments.map((doc) => (
-                      <div 
+                    {filteredDocuments.map(doc => (
+                      <div
                         key={doc.id}
                         className={`p-4 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${
-                          selectedDocument?.id === doc.id ? 'border-primary bg-primary/5' : ''
+                          selectedDocument?.id === doc.id ? "border-primary bg-primary/5" : ""
                         }`}
                         onClick={() => setSelectedDocument(doc)}
                       >
@@ -594,7 +652,7 @@ export const DocumentManagement: React.FC = () => {
                             <span>v{doc.version}</span>
                           </div>
                         </div>
-                        
+
                         <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-1">
@@ -603,7 +661,7 @@ export const DocumentManagement: React.FC = () => {
                             </div>
                             <div className="flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
-                              {new Date(doc.created_at).toLocaleDateString('pt-BR')}
+                              {new Date(doc.created_at).toLocaleDateString("pt-BR")}
                             </div>
                           </div>
                           <div className="flex gap-1">
@@ -635,7 +693,9 @@ export const DocumentManagement: React.FC = () => {
                   <CardContent className="space-y-4">
                     <div>
                       <h3 className="font-semibold mb-2">{selectedDocument.title}</h3>
-                      <p className="text-sm text-muted-foreground">{selectedDocument.description}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {selectedDocument.description}
+                      </p>
                     </div>
 
                     <div className="flex gap-2 flex-wrap">
@@ -648,7 +708,9 @@ export const DocumentManagement: React.FC = () => {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-sm">Tamanho:</span>
-                        <span className="text-sm font-medium">{formatFileSize(selectedDocument.file_size)}</span>
+                        <span className="text-sm font-medium">
+                          {formatFileSize(selectedDocument.file_size)}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm">Versão:</span>
@@ -661,14 +723,14 @@ export const DocumentManagement: React.FC = () => {
                       <div className="flex justify-between">
                         <span className="text-sm">Criado em:</span>
                         <span className="text-sm font-medium">
-                          {new Date(selectedDocument.created_at).toLocaleDateString('pt-BR')}
+                          {new Date(selectedDocument.created_at).toLocaleDateString("pt-BR")}
                         </span>
                       </div>
                       {selectedDocument.expires_at && (
                         <div className="flex justify-between">
                           <span className="text-sm">Expira em:</span>
                           <span className="text-sm font-medium">
-                            {new Date(selectedDocument.expires_at).toLocaleDateString('pt-BR')}
+                            {new Date(selectedDocument.expires_at).toLocaleDateString("pt-BR")}
                           </span>
                         </div>
                       )}
@@ -723,23 +785,19 @@ export const DocumentManagement: React.FC = () => {
 
         <TabsContent value="categories">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {categories.map((category) => (
+            {categories.map(category => (
               <Card key={category.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3 mb-3">
-                    <div 
-                      className="w-4 h-4 rounded-full" 
+                    <div
+                      className="w-4 h-4 rounded-full"
                       style={{ backgroundColor: category.color }}
                     />
                     <h3 className="font-semibold">{category.name}</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    {category.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-3">{category.description}</p>
                   <div className="flex justify-between items-center">
-                    <Badge variant="secondary">
-                      {category.count} documentos
-                    </Badge>
+                    <Badge variant="secondary">{category.count} documentos</Badge>
                     <Button size="sm" variant="ghost">
                       Ver todos
                     </Button>

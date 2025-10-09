@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { BaseChecklistManager } from './base-checklist-manager';
-import { DPChecklist } from './dp-checklist';
-import { MachineRoutineChecklist } from './machine-routine-checklist';
-import { NauticalRoutineChecklist } from './nautical-routine-checklist';
-import { SafetyChecklist } from './safety-checklist';
-import { EnvironmentalChecklist } from './environmental-checklist';
-import type { Checklist, ChecklistTemplate } from './checklist-types';
+import React, { useState } from "react";
+import { BaseChecklistManager } from "./base-checklist-manager";
+import { DPChecklist } from "./dp-checklist";
+import { MachineRoutineChecklist } from "./machine-routine-checklist";
+import { NauticalRoutineChecklist } from "./nautical-routine-checklist";
+import { SafetyChecklist } from "./safety-checklist";
+import { EnvironmentalChecklist } from "./environmental-checklist";
+import type { Checklist, ChecklistTemplate } from "./checklist-types";
 
 interface MaritimeChecklistSystemProps {
   userId: string;
@@ -16,15 +16,15 @@ interface MaritimeChecklistSystemProps {
 export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = ({
   userId,
   userRole,
-  vesselId
+  vesselId,
 }) => {
-  const [currentView, setCurrentView] = useState<'manager' | 'checklist'>('manager');
+  const [currentView, setCurrentView] = useState<"manager" | "checklist">("manager");
   const [selectedChecklist, setSelectedChecklist] = useState<Checklist | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<ChecklistTemplate | null>(null);
 
   const handleChecklistSelect = (checklist: Checklist) => {
     setSelectedChecklist(checklist);
-    setCurrentView('checklist');
+    setCurrentView("checklist");
   };
 
   const handleTemplateSelect = (template: ChecklistTemplate) => {
@@ -34,16 +34,16 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
 
   const handleSaveChecklist = async (checklist: Checklist) => {
     // TODO: Implement save to Supabase
-    console.log('Saving checklist:', checklist.id);
+    console.log("Saving checklist:", checklist.id);
   };
 
   const handleSubmitChecklist = async (checklist: Checklist) => {
     // TODO: Implement submit to Supabase
-    console.log('Submitting checklist:', checklist.id);
+    console.log("Submitting checklist:", checklist.id);
   };
 
   const handleBackToManager = () => {
-    setCurrentView('manager');
+    setCurrentView("manager");
     setSelectedChecklist(null);
     setSelectedTemplate(null);
   };
@@ -52,7 +52,7 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
     if (!selectedChecklist) return null;
 
     switch (selectedChecklist.type) {
-      case 'dp':
+      case "dp":
         return (
           <DPChecklist
             checklist={selectedChecklist}
@@ -61,8 +61,8 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
             onBack={handleBackToManager}
           />
         );
-      
-      case 'machine_routine':
+
+      case "machine_routine":
         return (
           <MachineRoutineChecklist
             checklist={selectedChecklist}
@@ -71,8 +71,8 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
             onBack={handleBackToManager}
           />
         );
-      
-      case 'nautical_routine':
+
+      case "nautical_routine":
         return (
           <NauticalRoutineChecklist
             checklist={selectedChecklist}
@@ -81,8 +81,8 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
             onBack={handleBackToManager}
           />
         );
-      
-      case 'safety':
+
+      case "safety":
         return (
           <SafetyChecklist
             checklist={selectedChecklist}
@@ -91,8 +91,8 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
             onBack={handleBackToManager}
           />
         );
-      
-      case 'environmental':
+
+      case "environmental":
         return (
           <EnvironmentalChecklist
             checklist={selectedChecklist}
@@ -101,7 +101,7 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
             onBack={handleBackToManager}
           />
         );
-      
+
       default:
         return (
           <div className="text-center p-8">
@@ -120,7 +120,7 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
     }
   };
 
-  if (currentView === 'checklist') {
+  if (currentView === "checklist") {
     return renderChecklistComponent();
   }
 

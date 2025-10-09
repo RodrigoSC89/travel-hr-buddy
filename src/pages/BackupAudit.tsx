@@ -1,5 +1,5 @@
-import React from 'react';
-import SystemBackupAudit from '@/components/admin/system-backup-audit';
+import React from "react";
+import SystemBackupAudit from "@/components/admin/system-backup-audit";
 
 const BackupAuditPage = () => {
   return (

@@ -6,16 +6,7 @@ import PerformanceOptimizer from "@/components/optimization/performance-optimize
 import { UserExperienceEnhancer } from "@/components/optimization/UserExperienceEnhancer";
 import { SmartInsights } from "@/components/optimization/SmartInsights";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Zap, 
-  TrendingUp, 
-  Users, 
-  Target, 
-  Activity,
-  Gauge,
-  Sparkles,
-  BarChart3
-} from "lucide-react";
+import { Zap, TrendingUp, Users, Target, Activity, Gauge, Sparkles, BarChart3 } from "lucide-react";
 
 const Optimization = () => {
   return (
@@ -26,9 +17,9 @@ const Optimization = () => {
         description="Otimização inteligente de performance, experiência do usuário e insights estratégicos"
         gradient="green"
         badges={[
-          { icon: Gauge, label: '92.5% Performance' },
-          { icon: TrendingUp, label: '47 Melhorias' },
-          { icon: Target, label: '+34% Eficiência' }
+          { icon: Gauge, label: "92.5% Performance" },
+          { icon: TrendingUp, label: "47 Melhorias" },
+          { icon: Target, label: "+34% Eficiência" },
         ]}
       />
 

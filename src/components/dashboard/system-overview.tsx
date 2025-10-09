@@ -1,67 +1,77 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Server, 
-  Database, 
-  Wifi, 
-  Users, 
-  Shield, 
-  Zap, 
-  TrendingUp, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import {
+  Server,
+  Database,
+  Wifi,
+  Users,
+  Shield,
+  Zap,
+  TrendingUp,
   AlertTriangle,
   CheckCircle,
   Clock,
   BarChart3,
-  Activity
-} from 'lucide-react';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, AreaChart, Area } from 'recharts';
+  Activity,
+} from "lucide-react";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  AreaChart,
+  Area,
+} from "recharts";
 
 const SystemOverview = () => {
   const [systemMetrics, setSystemMetrics] = useState({
-    server: { status: 'operational', load: 45, response: 120 },
-    database: { status: 'optimal', connections: 24, queries: 1250 },
-    network: { status: 'stable', latency: 35, bandwidth: 85 },
-    security: { status: 'secure', threats: 0, lastScan: '2h ago' },
+    server: { status: "operational", load: 45, response: 120 },
+    database: { status: "optimal", connections: 24, queries: 1250 },
+    network: { status: "stable", latency: 35, bandwidth: 85 },
+    security: { status: "secure", threats: 0, lastScan: "2h ago" },
     users: { active: 42, peak: 67, sessions: 156 },
-    performance: { score: 95, memory: 68, cpu: 34 }
+    performance: { score: 95, memory: 68, cpu: 34 },
   });
 
   const [realTimeData, setRealTimeData] = useState([
-    { time: '00:00', cpu: 25, memory: 45, users: 15 },
-    { time: '04:00', cpu: 18, memory: 42, users: 8 },
-    { time: '08:00', cpu: 45, memory: 65, users: 35 },
-    { time: '12:00', cpu: 65, memory: 78, users: 45 },
-    { time: '16:00', cpu: 55, memory: 72, users: 38 },
-    { time: '20:00', cpu: 35, memory: 58, users: 25 }
+    { time: "00:00", cpu: 25, memory: 45, users: 15 },
+    { time: "04:00", cpu: 18, memory: 42, users: 8 },
+    { time: "08:00", cpu: 45, memory: 65, users: 35 },
+    { time: "12:00", cpu: 65, memory: 78, users: 45 },
+    { time: "16:00", cpu: 55, memory: 72, users: 38 },
+    { time: "20:00", cpu: 35, memory: 58, users: 25 },
   ]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'operational':
-      case 'optimal':
-      case 'stable':
-      case 'secure':
-        return 'text-success-foreground bg-success/20 border-success/30';
-      case 'warning':
-        return 'text-warning-foreground bg-warning/20 border-warning/30';
-      case 'critical':
-        return 'text-destructive-foreground bg-destructive/20 border-destructive/30';
+      case "operational":
+      case "optimal":
+      case "stable":
+      case "secure":
+        return "text-success-foreground bg-success/20 border-success/30";
+      case "warning":
+        return "text-warning-foreground bg-warning/20 border-warning/30";
+      case "critical":
+        return "text-destructive-foreground bg-destructive/20 border-destructive/30";
       default:
-        return 'text-muted-foreground bg-muted/20 border-muted/30';
+        return "text-muted-foreground bg-muted/20 border-muted/30";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'operational':
-      case 'optimal':
-      case 'stable':
-      case 'secure':
+      case "operational":
+      case "optimal":
+      case "stable":
+      case "secure":
         return <CheckCircle className="w-4 h-4" />;
-      case 'warning':
+      case "warning":
         return <AlertTriangle className="w-4 h-4" />;
       default:
         return <Clock className="w-4 h-4" />;
@@ -76,8 +86,8 @@ const SystemOverview = () => {
           ...prev.performance,
           score: Math.max(90, Math.min(100, prev.performance.score + Math.random() * 2 - 1)),
           memory: Math.max(50, Math.min(85, prev.performance.memory + Math.random() * 4 - 2)),
-          cpu: Math.max(20, Math.min(80, prev.performance.cpu + Math.random() * 6 - 3))
-        }
+          cpu: Math.max(20, Math.min(80, prev.performance.cpu + Math.random() * 6 - 3)),
+        },
       }));
     }, 5000);
 
@@ -255,34 +265,34 @@ const SystemOverview = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="time" />
               <YAxis />
-              <Tooltip 
+              <Tooltip
                 formatter={(value, name) => [`${value}%`, name]}
-                labelFormatter={(label) => `Horário: ${label}`}
+                labelFormatter={label => `Horário: ${label}`}
               />
-              <Area 
-                type="monotone" 
-                dataKey="cpu" 
-                stackId="1" 
-                stroke="hsl(var(--primary))" 
-                fill="hsl(var(--primary))" 
-                fillOpacity={0.6} 
-                name="CPU" 
+              <Area
+                type="monotone"
+                dataKey="cpu"
+                stackId="1"
+                stroke="hsl(var(--primary))"
+                fill="hsl(var(--primary))"
+                fillOpacity={0.6}
+                name="CPU"
               />
-              <Area 
-                type="monotone" 
-                dataKey="memory" 
-                stackId="2" 
-                stroke="hsl(var(--secondary))" 
-                fill="hsl(var(--secondary))" 
-                fillOpacity={0.6} 
-                name="Memória" 
+              <Area
+                type="monotone"
+                dataKey="memory"
+                stackId="2"
+                stroke="hsl(var(--secondary))"
+                fill="hsl(var(--secondary))"
+                fillOpacity={0.6}
+                name="Memória"
               />
-              <Line 
-                type="monotone" 
-                dataKey="users" 
-                stroke="hsl(var(--accent))" 
-                strokeWidth={2} 
-                name="Usuários" 
+              <Line
+                type="monotone"
+                dataKey="users"
+                stroke="hsl(var(--accent))"
+                strokeWidth={2}
+                name="Usuários"
               />
             </AreaChart>
           </ResponsiveContainer>

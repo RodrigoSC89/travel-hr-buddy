@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Shield, 
-  FileText, 
-  Check, 
-  Clock, 
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Shield,
+  FileText,
+  Check,
+  Clock,
   AlertTriangle,
   Download,
   Upload,
@@ -20,17 +20,17 @@ import {
   Users,
   Calendar,
   Award,
-  Eye
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+  Eye,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface BlockchainDocument {
   id: string;
   name: string;
-  type: 'certificate' | 'contract' | 'license' | 'audit' | 'permit';
+  type: "certificate" | "contract" | "license" | "audit" | "permit";
   hash: string;
   timestamp: string;
-  status: 'verified' | 'pending' | 'invalid' | 'expired';
+  status: "verified" | "pending" | "invalid" | "expired";
   issuer: string;
   owner: string;
   expiryDate?: string;
@@ -44,114 +44,125 @@ interface VerificationLog {
   documentId: string;
   verifier: string;
   timestamp: string;
-  result: 'success' | 'failure';
+  result: "success" | "failure";
   details: string;
 }
 
 export const BlockchainDocuments: React.FC = () => {
   const { toast } = useToast();
-  const [searchHash, setSearchHash] = useState('');
+  const [searchHash, setSearchHash] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
 
   const [documents] = useState<BlockchainDocument[]>([
     {
-      id: '1',
-      name: 'Certificado STCW Basic Safety',
-      type: 'certificate',
-      hash: '0x1a2b3c4d5e6f7890abcdef1234567890abcdef12',
-      timestamp: '2024-01-15T10:30:00Z',
-      status: 'verified',
-      issuer: 'IMO - International Maritime Organization',
-      owner: 'João Silva',
-      expiryDate: '2026-01-15',
+      id: "1",
+      name: "Certificado STCW Basic Safety",
+      type: "certificate",
+      hash: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
+      timestamp: "2024-01-15T10:30:00Z",
+      status: "verified",
+      issuer: "IMO - International Maritime Organization",
+      owner: "João Silva",
+      expiryDate: "2026-01-15",
       verifications: 12,
-      smartContractAddress: '0xabcdef1234567890abcdef1234567890abcdef12',
-      ipfsHash: 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG'
+      smartContractAddress: "0xabcdef1234567890abcdef1234567890abcdef12",
+      ipfsHash: "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG",
     },
     {
-      id: '2',
-      name: 'Licença de Operação Portuária',
-      type: 'license',
-      hash: '0x2b3c4d5e6f7890abcdef1234567890abcdef1234',
-      timestamp: '2024-01-10T14:20:00Z',
-      status: 'verified',
-      issuer: 'ANTAQ - Agência Nacional de Transportes Aquaviários',
-      owner: 'Empresa Marítima S.A.',
-      expiryDate: '2025-12-31',
+      id: "2",
+      name: "Licença de Operação Portuária",
+      type: "license",
+      hash: "0x2b3c4d5e6f7890abcdef1234567890abcdef1234",
+      timestamp: "2024-01-10T14:20:00Z",
+      status: "verified",
+      issuer: "ANTAQ - Agência Nacional de Transportes Aquaviários",
+      owner: "Empresa Marítima S.A.",
+      expiryDate: "2025-12-31",
       verifications: 8,
-      smartContractAddress: '0xbcdef1234567890abcdef1234567890abcdef123',
-      ipfsHash: 'QmZwBPKzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdH'
+      smartContractAddress: "0xbcdef1234567890abcdef1234567890abcdef123",
+      ipfsHash: "QmZwBPKzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdH",
     },
     {
-      id: '3',
-      name: 'Contrato de Fretamento',
-      type: 'contract',
-      hash: '0x3c4d5e6f7890abcdef1234567890abcdef123456',
-      timestamp: '2024-01-12T09:15:00Z',
-      status: 'pending',
-      issuer: 'Smart Contract System',
-      owner: 'Nautilus Shipping Co.',
+      id: "3",
+      name: "Contrato de Fretamento",
+      type: "contract",
+      hash: "0x3c4d5e6f7890abcdef1234567890abcdef123456",
+      timestamp: "2024-01-12T09:15:00Z",
+      status: "pending",
+      issuer: "Smart Contract System",
+      owner: "Nautilus Shipping Co.",
       verifications: 3,
-      smartContractAddress: '0xcdef1234567890abcdef1234567890abcdef1234',
-      ipfsHash: 'QmXvAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdI'
-    }
+      smartContractAddress: "0xcdef1234567890abcdef1234567890abcdef1234",
+      ipfsHash: "QmXvAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdI",
+    },
   ]);
 
   const [verificationLogs] = useState<VerificationLog[]>([
     {
-      id: '1',
-      documentId: '1',
-      verifier: 'Sistema Portuário Santos',
-      timestamp: '2024-01-16T08:30:00Z',
-      result: 'success',
-      details: 'Certificado válido e reconhecido'
+      id: "1",
+      documentId: "1",
+      verifier: "Sistema Portuário Santos",
+      timestamp: "2024-01-16T08:30:00Z",
+      result: "success",
+      details: "Certificado válido e reconhecido",
     },
     {
-      id: '2',
-      documentId: '1',
-      verifier: 'Inspeção Marítima RJ',
-      timestamp: '2024-01-14T15:45:00Z',
-      result: 'success',
-      details: 'Verificação completa aprovada'
+      id: "2",
+      documentId: "1",
+      verifier: "Inspeção Marítima RJ",
+      timestamp: "2024-01-14T15:45:00Z",
+      result: "success",
+      details: "Verificação completa aprovada",
     },
     {
-      id: '3',
-      documentId: '2',
-      verifier: 'Autoridade Portuária SP',
-      timestamp: '2024-01-13T11:20:00Z',
-      result: 'success',
-      details: 'Licença válida para operações'
-    }
+      id: "3",
+      documentId: "2",
+      verifier: "Autoridade Portuária SP",
+      timestamp: "2024-01-13T11:20:00Z",
+      result: "success",
+      details: "Licença válida para operações",
+    },
   ]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'verified': return 'text-green-600 bg-green-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'invalid': return 'text-red-600 bg-red-100';
-      case 'expired': return 'text-muted-foreground bg-gray-100';
-      default: return 'text-muted-foreground bg-gray-100';
+      case "verified":
+        return "text-green-600 bg-green-100";
+      case "pending":
+        return "text-yellow-600 bg-yellow-100";
+      case "invalid":
+        return "text-red-600 bg-red-100";
+      case "expired":
+        return "text-muted-foreground bg-gray-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'certificate': return <Award className="h-5 w-5" />;
-      case 'contract': return <FileText className="h-5 w-5" />;
-      case 'license': return <Key className="h-5 w-5" />;
-      case 'audit': return <Eye className="h-5 w-5" />;
-      case 'permit': return <Shield className="h-5 w-5" />;
-      default: return <FileText className="h-5 w-5" />;
+      case "certificate":
+        return <Award className="h-5 w-5" />;
+      case "contract":
+        return <FileText className="h-5 w-5" />;
+      case "license":
+        return <Key className="h-5 w-5" />;
+      case "audit":
+        return <Eye className="h-5 w-5" />;
+      case "permit":
+        return <Shield className="h-5 w-5" />;
+      default:
+        return <FileText className="h-5 w-5" />;
     }
   };
 
   const verifyDocument = async (hash: string) => {
     setIsVerifying(true);
-    
+
     // Simular verificação na blockchain
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     setIsVerifying(false);
     toast({
       title: "Verificação Concluída",
@@ -214,7 +225,9 @@ export const BlockchainDocuments: React.FC = () => {
                 <Check className="h-6 w-6 text-green-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{documents.filter(d => d.status === 'verified').length}</div>
+                <div className="text-2xl font-bold">
+                  {documents.filter(d => d.status === "verified").length}
+                </div>
                 <div className="text-sm text-muted-foreground">Verificados</div>
               </div>
             </div>
@@ -266,10 +279,10 @@ export const BlockchainDocuments: React.FC = () => {
             <Input
               placeholder="Digite o hash do documento (0x...)"
               value={searchHash}
-              onChange={(e) => setSearchHash(e.target.value)}
+              onChange={e => setSearchHash(e.target.value)}
               className="flex-1"
             />
-            <Button 
+            <Button
               onClick={() => verifyDocument(searchHash)}
               disabled={isVerifying || !searchHash}
               className="flex items-center gap-2"
@@ -300,8 +313,11 @@ export const BlockchainDocuments: React.FC = () => {
 
         <TabsContent value="documents" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {documents.map((document) => (
-              <Card key={document.id} className={selectedDocument === document.id ? 'ring-2 ring-primary' : ''}>
+            {documents.map(document => (
+              <Card
+                key={document.id}
+                className={selectedDocument === document.id ? "ring-2 ring-primary" : ""}
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-2">
@@ -309,14 +325,16 @@ export const BlockchainDocuments: React.FC = () => {
                       <CardTitle className="text-lg">{document.name}</CardTitle>
                     </div>
                     <Badge className={getStatusColor(document.status)}>
-                      {document.status === 'verified' ? 'Verificado' :
-                       document.status === 'pending' ? 'Pendente' :
-                       document.status === 'invalid' ? 'Inválido' : 'Expirado'}
+                      {document.status === "verified"
+                        ? "Verificado"
+                        : document.status === "pending"
+                          ? "Pendente"
+                          : document.status === "invalid"
+                            ? "Inválido"
+                            : "Expirado"}
                     </Badge>
                   </div>
-                  <CardDescription>
-                    Emitido por: {document.issuer}
-                  </CardDescription>
+                  <CardDescription>Emitido por: {document.issuer}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4 text-sm">
@@ -346,7 +364,9 @@ export const BlockchainDocuments: React.FC = () => {
 
                   <div className="space-y-2">
                     <div>
-                      <span className="text-xs font-medium text-muted-foreground">Hash do Documento:</span>
+                      <span className="text-xs font-medium text-muted-foreground">
+                        Hash do Documento:
+                      </span>
                       <div className="flex items-center gap-2 p-2 bg-muted rounded text-xs font-mono">
                         <Hash className="h-3 w-3" />
                         {document.hash}
@@ -362,8 +382,8 @@ export const BlockchainDocuments: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       variant="outline"
                       onClick={() => verifyDocument(document.hash)}
                       className="flex items-center gap-1"
@@ -371,8 +391,8 @@ export const BlockchainDocuments: React.FC = () => {
                       <Shield className="h-3 w-3" />
                       Verificar
                     </Button>
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       variant="outline"
                       onClick={() => downloadDocument(document)}
                       className="flex items-center gap-1"
@@ -380,8 +400,8 @@ export const BlockchainDocuments: React.FC = () => {
                       <Download className="h-3 w-3" />
                       Download
                     </Button>
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       variant="outline"
                       onClick={() => setSelectedDocument(document.id)}
                       className="flex items-center gap-1"
@@ -406,15 +426,20 @@ export const BlockchainDocuments: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {verificationLogs.map((log) => {
+                {verificationLogs.map(log => {
                   const document = documents.find(d => d.id === log.documentId);
                   return (
-                    <div key={log.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div
+                      key={log.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="flex items-center space-x-4">
-                        <div className={`p-2 rounded-full ${
-                          log.result === 'success' ? 'bg-green-100' : 'bg-red-100'
-                        }`}>
-                          {log.result === 'success' ? (
+                        <div
+                          className={`p-2 rounded-full ${
+                            log.result === "success" ? "bg-green-100" : "bg-red-100"
+                          }`}
+                        >
+                          {log.result === "success" ? (
                             <Check className="h-4 w-4 text-green-600" />
                           ) : (
                             <AlertTriangle className="h-4 w-4 text-red-600" />
@@ -425,9 +450,7 @@ export const BlockchainDocuments: React.FC = () => {
                           <div className="text-sm text-muted-foreground">
                             Verificado por: {log.verifier}
                           </div>
-                          <div className="text-sm text-muted-foreground">
-                            {log.details}
-                          </div>
+                          <div className="text-sm text-muted-foreground">{log.details}</div>
                         </div>
                       </div>
                       <div className="text-right">
@@ -485,9 +508,7 @@ export const BlockchainDocuments: React.FC = () => {
                   <Key className="h-5 w-5" />
                   Contrato de Verificação
                 </CardTitle>
-                <CardDescription>
-                  Smart contract para verificações e autenticações
-                </CardDescription>
+                <CardDescription>Smart contract para verificações e autenticações</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>

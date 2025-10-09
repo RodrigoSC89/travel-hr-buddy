@@ -1,9 +1,8 @@
-import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import { CompleteSaaSManager } from '@/components/saas/complete-saas-manager';
-import { Crown } from 'lucide-react';
-
+import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import { CompleteSaaSManager } from "@/components/saas/complete-saas-manager";
+import { Crown } from "lucide-react";
 
 const SaaSManager = () => {
   return (
@@ -17,14 +16,11 @@ const SaaSManager = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold">SaaS Manager</h1>
-              <p className="text-muted-foreground">
-                Gestão completa multi-tenant
-              </p>
+              <p className="text-muted-foreground">Gestão completa multi-tenant</p>
             </div>
           </div>
           <CompleteSaaSManager />
         </main>
-        
       </div>
     </SidebarProvider>
   );

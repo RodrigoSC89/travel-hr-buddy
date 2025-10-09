@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import { 
-  Calendar, 
-  Target, 
-  TrendingUp, 
-  Shield, 
-  Brain, 
-  Settings, 
-  CheckCircle, 
-  Clock, 
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import {
+  Calendar,
+  Target,
+  TrendingUp,
+  Shield,
+  Brain,
+  Settings,
+  CheckCircle,
+  Clock,
   AlertCircle,
   Users,
   Rocket,
-  BarChart3
-} from 'lucide-react';
+  BarChart3,
+} from "lucide-react";
 
 interface Sprint {
   id: number;
   name: string;
-  status: 'completed' | 'in-progress' | 'planned';
+  status: "completed" | "in-progress" | "planned";
   progress: number;
   startDate: string;
   endDate: string;
@@ -36,7 +36,7 @@ interface Phase {
   description: string;
   icon: React.ReactNode;
   sprints: Sprint[];
-  status: 'completed' | 'in-progress' | 'planned';
+  status: "completed" | "in-progress" | "planned";
   overallProgress: number;
   expectedResult: string;
   color: string;
@@ -60,8 +60,16 @@ const roadmapData: Phase[] = [
         progress: 100,
         startDate: "2024-01-01",
         endDate: "2024-01-14",
-        objectives: ["Mapear todas as funcionalidades", "Identificar bugs críticos", "Documentar fluxos"],
-        deliverables: ["Relatório de auditoria", "Lista de bugs priorizados", "Documentação técnica"]
+        objectives: [
+          "Mapear todas as funcionalidades",
+          "Identificar bugs críticos",
+          "Documentar fluxos",
+        ],
+        deliverables: [
+          "Relatório de auditoria",
+          "Lista de bugs priorizados",
+          "Documentação técnica",
+        ],
       },
       {
         id: 2,
@@ -71,7 +79,7 @@ const roadmapData: Phase[] = [
         startDate: "2024-01-15",
         endDate: "2024-01-28",
         objectives: ["Corrigir bugs críticos", "Otimizar performance", "Melhorar UX"],
-        deliverables: ["Sistema estabilizado", "Testes automatizados", "Performance otimizada"]
+        deliverables: ["Sistema estabilizado", "Testes automatizados", "Performance otimizada"],
       },
       {
         id: 3,
@@ -81,9 +89,9 @@ const roadmapData: Phase[] = [
         startDate: "2024-01-29",
         endDate: "2024-02-11",
         objectives: ["Preparar checklist", "Executar testes", "Validar com usuários"],
-        deliverables: ["Checklist de homologação", "Relatório de testes", "Aprovação de usuários"]
-      }
-    ]
+        deliverables: ["Checklist de homologação", "Relatório de testes", "Aprovação de usuários"],
+      },
+    ],
   },
   {
     id: 2,
@@ -103,7 +111,11 @@ const roadmapData: Phase[] = [
         startDate: "2024-02-12",
         endDate: "2024-02-25",
         objectives: ["Testes de stress", "Identificar gargalos", "Otimizar queries"],
-        deliverables: ["Relatório de performance", "Otimizações implementadas", "Métricas de carga"]
+        deliverables: [
+          "Relatório de performance",
+          "Otimizações implementadas",
+          "Métricas de carga",
+        ],
       },
       {
         id: 5,
@@ -113,7 +125,7 @@ const roadmapData: Phase[] = [
         startDate: "2024-02-26",
         endDate: "2024-03-11",
         objectives: ["Estrutura multiempresa", "Isolamento de dados", "Gestão de tenants"],
-        deliverables: ["Arquitetura multi-tenant", "Sistema de organizações", "Controle de acesso"]
+        deliverables: ["Arquitetura multi-tenant", "Sistema de organizações", "Controle de acesso"],
       },
       {
         id: 6,
@@ -122,10 +134,14 @@ const roadmapData: Phase[] = [
         progress: 100,
         startDate: "2024-03-12",
         endDate: "2024-03-25",
-        objectives: ["Personalização visual", "Branding por cliente", "Configurações customizáveis"],
-        deliverables: ["Sistema de branding", "Temas personalizáveis", "Configurações white label"]
-      }
-    ]
+        objectives: [
+          "Personalização visual",
+          "Branding por cliente",
+          "Configurações customizáveis",
+        ],
+        deliverables: ["Sistema de branding", "Temas personalizáveis", "Configurações white label"],
+      },
+    ],
   },
   {
     id: 3,
@@ -145,7 +161,7 @@ const roadmapData: Phase[] = [
         startDate: "2024-03-26",
         endDate: "2024-04-08",
         objectives: ["IA conversacional", "Assistente contextual", "Comandos de voz"],
-        deliverables: ["Nautilus Copilot", "Interface de voz", "Chatbot inteligente"]
+        deliverables: ["Nautilus Copilot", "Interface de voz", "Chatbot inteligente"],
       },
       {
         id: 8,
@@ -155,7 +171,11 @@ const roadmapData: Phase[] = [
         startDate: "2024-04-09",
         endDate: "2024-04-22",
         objectives: ["Suporte automatizado", "Base de conhecimento", "Respostas inteligentes"],
-        deliverables: ["Central de ajuda inteligente", "Sistema de tickets", "Base de conhecimento"]
+        deliverables: [
+          "Central de ajuda inteligente",
+          "Sistema de tickets",
+          "Base de conhecimento",
+        ],
       },
       {
         id: 9,
@@ -165,9 +185,9 @@ const roadmapData: Phase[] = [
         startDate: "2024-04-23",
         endDate: "2024-05-06",
         objectives: ["Workflows automáticos", "Alertas inteligentes", "Relatórios automáticos"],
-        deliverables: ["Sistema de automação", "Workflows configuráveis", "Alertas proativos"]
-      }
-    ]
+        deliverables: ["Sistema de automação", "Workflows configuráveis", "Alertas proativos"],
+      },
+    ],
   },
   {
     id: 4,
@@ -176,7 +196,8 @@ const roadmapData: Phase[] = [
     icon: <BarChart3 className="w-6 h-6" />,
     status: "in-progress",
     overallProgress: 75,
-    expectedResult: "Produto com métricas claras, estrutura comercial e gestão inteligente de clientes",
+    expectedResult:
+      "Produto com métricas claras, estrutura comercial e gestão inteligente de clientes",
     color: "bg-orange-500",
     sprints: [
       {
@@ -187,7 +208,7 @@ const roadmapData: Phase[] = [
         startDate: "2024-05-07",
         endDate: "2024-05-20",
         objectives: ["Definir KPIs", "Dashboards executivos", "Métricas operacionais"],
-        deliverables: ["Dashboard executivo", "KPIs definidos", "Relatórios gerenciais"]
+        deliverables: ["Dashboard executivo", "KPIs definidos", "Relatórios gerenciais"],
       },
       {
         id: 11,
@@ -197,9 +218,9 @@ const roadmapData: Phase[] = [
         startDate: "2024-05-21",
         endDate: "2024-06-03",
         objectives: ["Planos de assinatura", "Gestão de clientes", "Billing automático"],
-        deliverables: ["Planos SaaS", "Sistema de billing", "Gestão comercial"]
-      }
-    ]
+        deliverables: ["Planos SaaS", "Sistema de billing", "Gestão comercial"],
+      },
+    ],
   },
   {
     id: 5,
@@ -219,7 +240,7 @@ const roadmapData: Phase[] = [
         startDate: "2024-06-04",
         endDate: "2024-06-17",
         objectives: ["Plano de continuidade", "Backup automatizado", "Políticas de segurança"],
-        deliverables: ["BCP implementado", "Sistema de backup", "Auditoria de segurança"]
+        deliverables: ["BCP implementado", "Sistema de backup", "Auditoria de segurança"],
       },
       {
         id: 13,
@@ -229,10 +250,10 @@ const roadmapData: Phase[] = [
         startDate: "2024-06-18",
         endDate: "2024-07-01",
         objectives: ["Onboarding automático", "Material de vendas", "Treinamento"],
-        deliverables: ["Processo de onboarding", "Kit de vendas", "Documentação comercial"]
-      }
-    ]
-  }
+        deliverables: ["Processo de onboarding", "Kit de vendas", "Documentação comercial"],
+      },
+    ],
+  },
 ];
 
 const ProductRoadmap: React.FC = () => {
@@ -240,11 +261,11 @@ const ProductRoadmap: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
+      case "completed":
         return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'in-progress':
+      case "in-progress":
         return <Clock className="w-4 h-4 text-blue-500" />;
-      case 'planned':
+      case "planned":
         return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
       default:
         return <Clock className="w-4 h-4 text-muted-foreground" />;
@@ -253,14 +274,14 @@ const ProductRoadmap: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'text-green-600 bg-green-50 border-green-200';
-      case 'in-progress':
-        return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'planned':
-        return 'text-muted-foreground bg-gray-50 border-gray-200';
+      case "completed":
+        return "text-green-600 bg-green-50 border-green-200";
+      case "in-progress":
+        return "text-blue-600 bg-blue-50 border-blue-200";
+      case "planned":
+        return "text-muted-foreground bg-gray-50 border-gray-200";
       default:
-        return 'text-muted-foreground bg-gray-50 border-gray-200';
+        return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
@@ -281,7 +302,7 @@ const ProductRoadmap: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -293,7 +314,7 @@ const ProductRoadmap: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -305,7 +326,7 @@ const ProductRoadmap: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -341,12 +362,12 @@ const ProductRoadmap: React.FC = () => {
                     {index < roadmapData.length - 1 && (
                       <div className="absolute left-6 top-12 bottom-0 w-0.5 bg-border" />
                     )}
-                    
+
                     <div className="flex items-start gap-4">
                       <div className={`p-2 rounded-full ${phase.color} text-azure-50`}>
                         {phase.icon}
                       </div>
-                      
+
                       <div className="flex-1 space-y-2">
                         <div className="flex items-center justify-between">
                           <div>
@@ -356,24 +377,30 @@ const ProductRoadmap: React.FC = () => {
                           <div className="flex items-center gap-2">
                             {getStatusIcon(phase.status)}
                             <Badge className={getStatusColor(phase.status)}>
-                              {phase.status === 'completed' ? 'Concluída' : 
-                               phase.status === 'in-progress' ? 'Em Andamento' : 'Planejada'}
+                              {phase.status === "completed"
+                                ? "Concluída"
+                                : phase.status === "in-progress"
+                                  ? "Em Andamento"
+                                  : "Planejada"}
                             </Badge>
                           </div>
                         </div>
-                        
+
                         <div className="w-full bg-secondary rounded-full h-2">
-                          <div 
+                          <div
                             className={`${phase.color} h-2 rounded-full transition-all duration-300`}
                             style={{ width: `${phase.overallProgress}%` }}
                           />
                         </div>
-                        
+
                         <div className="flex justify-between text-sm text-muted-foreground">
-                          <span>Sprints {phase.sprints[0].id}-{phase.sprints[phase.sprints.length - 1].id}</span>
+                          <span>
+                            Sprints {phase.sprints[0].id}-
+                            {phase.sprints[phase.sprints.length - 1].id}
+                          </span>
                           <span>{phase.overallProgress}% concluído</span>
                         </div>
-                        
+
                         <p className="text-sm text-muted-foreground italic">
                           📋 {phase.expectedResult}
                         </p>
@@ -388,7 +415,7 @@ const ProductRoadmap: React.FC = () => {
 
         <TabsContent value="phases" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-            {roadmapData.map((phase) => (
+            {roadmapData.map(phase => (
               <Button
                 key={phase.id}
                 variant={selectedPhase === phase.id ? "default" : "outline"}
@@ -417,14 +444,20 @@ const ProductRoadmap: React.FC = () => {
                   <div>
                     <div className="flex justify-between mb-2">
                       <span className="text-sm font-medium">Progresso Geral</span>
-                      <span className="text-sm text-muted-foreground">{currentPhase.overallProgress}%</span>
+                      <span className="text-sm text-muted-foreground">
+                        {currentPhase.overallProgress}%
+                      </span>
                     </div>
                     <Progress value={currentPhase.overallProgress} className="h-2" />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {currentPhase.sprints.map((sprint) => (
-                      <Card key={sprint.id} className="border-l-4" style={{ borderLeftColor: currentPhase.color.replace('bg-', '#') }}>
+                    {currentPhase.sprints.map(sprint => (
+                      <Card
+                        key={sprint.id}
+                        className="border-l-4"
+                        style={{ borderLeftColor: currentPhase.color.replace("bg-", "#") }}
+                      >
                         <CardHeader className="pb-3">
                           <div className="flex items-center justify-between">
                             <CardTitle className="text-base">Sprint {sprint.id}</CardTitle>
@@ -489,11 +522,13 @@ const ProductRoadmap: React.FC = () => {
               <CardContent className="space-y-4">
                 {roadmapData
                   .flatMap(phase => phase.sprints)
-                  .filter(sprint => sprint.status === 'in-progress')
-                  .map((sprint) => (
+                  .filter(sprint => sprint.status === "in-progress")
+                  .map(sprint => (
                     <div key={sprint.id} className="border rounded-lg p-4">
                       <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-medium">Sprint {sprint.id}: {sprint.name}</h4>
+                        <h4 className="font-medium">
+                          Sprint {sprint.id}: {sprint.name}
+                        </h4>
                         <Badge className="text-blue-600 bg-blue-50 border-blue-200">
                           Em Andamento
                         </Badge>
@@ -517,12 +552,14 @@ const ProductRoadmap: React.FC = () => {
               <CardContent className="space-y-4">
                 {roadmapData
                   .flatMap(phase => phase.sprints)
-                  .filter(sprint => sprint.status === 'planned')
+                  .filter(sprint => sprint.status === "planned")
                   .slice(0, 3)
-                  .map((sprint) => (
+                  .map(sprint => (
                     <div key={sprint.id} className="border rounded-lg p-4">
                       <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-medium">Sprint {sprint.id}: {sprint.name}</h4>
+                        <h4 className="font-medium">
+                          Sprint {sprint.id}: {sprint.name}
+                        </h4>
                         <Badge className="text-muted-foreground bg-gray-50 border-gray-200">
                           Planejado
                         </Badge>

@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Brain, 
-  Send, 
-  Bot, 
-  User, 
-  FileText, 
-  Globe, 
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Brain,
+  Send,
+  Bot,
+  User,
+  FileText,
+  Globe,
   Ship,
   BookOpen,
   Mic,
@@ -27,17 +27,17 @@ import {
   Anchor,
   Shield,
   Compass,
-  MessageCircle
-} from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useToast } from '@/hooks/use-toast';
+  MessageCircle,
+} from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   id: string;
-  type: 'user' | 'ai';
+  type: "user" | "ai";
   content: string;
   timestamp: Date;
-  category: 'general' | 'regulation' | 'documentation' | 'analysis' | 'translation';
+  category: "general" | "regulation" | "documentation" | "analysis" | "translation";
   confidence?: number;
   sources?: string[];
   language?: string;
@@ -54,74 +54,74 @@ interface KnowledgeBase {
 
 export const MaritimeGPT3: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState('pt');
-  const [activeKnowledgeBase, setActiveKnowledgeBase] = useState<string[]>(['all']);
+  const [selectedLanguage, setSelectedLanguage] = useState("pt");
+  const [activeKnowledgeBase, setActiveKnowledgeBase] = useState<string[]>(["all"]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   const knowledgeBases: KnowledgeBase[] = [
     {
-      id: 'imo',
-      name: 'IMO Regulations',
-      description: 'International Maritime Organization standards',
+      id: "imo",
+      name: "IMO Regulations",
+      description: "International Maritime Organization standards",
       coverage: 100,
-      lastUpdated: new Date('2025-01-15'),
-      regulations: ['SOLAS', 'MARPOL', 'STCW', 'ISM Code', 'ISPS Code']
+      lastUpdated: new Date("2025-01-15"),
+      regulations: ["SOLAS", "MARPOL", "STCW", "ISM Code", "ISPS Code"],
     },
     {
-      id: 'solas',
-      name: 'SOLAS Convention',
-      description: 'Safety of Life at Sea',
+      id: "solas",
+      name: "SOLAS Convention",
+      description: "Safety of Life at Sea",
       coverage: 100,
-      lastUpdated: new Date('2025-01-10'),
-      regulations: ['Chapter I-XIV', 'Amendments 2024']
+      lastUpdated: new Date("2025-01-10"),
+      regulations: ["Chapter I-XIV", "Amendments 2024"],
     },
     {
-      id: 'stcw',
-      name: 'STCW Convention',
-      description: 'Standards of Training, Certification and Watchkeeping',
+      id: "stcw",
+      name: "STCW Convention",
+      description: "Standards of Training, Certification and Watchkeeping",
       coverage: 100,
-      lastUpdated: new Date('2024-12-20'),
-      regulations: ['Manila Amendments', 'Competency Standards']
+      lastUpdated: new Date("2024-12-20"),
+      regulations: ["Manila Amendments", "Competency Standards"],
     },
     {
-      id: 'marpol',
-      name: 'MARPOL Convention',
-      description: 'Prevention of Pollution from Ships',
+      id: "marpol",
+      name: "MARPOL Convention",
+      description: "Prevention of Pollution from Ships",
       coverage: 100,
-      lastUpdated: new Date('2025-01-05'),
-      regulations: ['Annex I-VI', 'Environmental Protection']
+      lastUpdated: new Date("2025-01-05"),
+      regulations: ["Annex I-VI", "Environmental Protection"],
     },
     {
-      id: 'colreg',
-      name: 'COLREG',
-      description: 'International Regulations for Preventing Collisions at Sea',
+      id: "colreg",
+      name: "COLREG",
+      description: "International Regulations for Preventing Collisions at Sea",
       coverage: 100,
-      lastUpdated: new Date('2024-11-15'),
-      regulations: ['Rules 1-38', 'Steering and Sailing Rules']
-    }
+      lastUpdated: new Date("2024-11-15"),
+      regulations: ["Rules 1-38", "Steering and Sailing Rules"],
+    },
   ];
 
   const languages = [
-    { code: 'pt', name: 'Português', flag: '🇧🇷' },
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-    { code: 'it', name: 'Italiano', flag: '🇮🇹' },
-    { code: 'ja', name: '日本語', flag: '🇯🇵' },
-    { code: 'zh', name: '中文', flag: '🇨🇳' },
-    { code: 'ko', name: '한국어', flag: '🇰🇷' },
-    { code: 'ar', name: 'العربية', flag: '🇸🇦' }
+    { code: "pt", name: "Português", flag: "🇧🇷" },
+    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: "es", name: "Español", flag: "🇪🇸" },
+    { code: "fr", name: "Français", flag: "🇫🇷" },
+    { code: "de", name: "Deutsch", flag: "🇩🇪" },
+    { code: "it", name: "Italiano", flag: "🇮🇹" },
+    { code: "ja", name: "日本語", flag: "🇯🇵" },
+    { code: "zh", name: "中文", flag: "🇨🇳" },
+    { code: "ko", name: "한국어", flag: "🇰🇷" },
+    { code: "ar", name: "العربية", flag: "🇸🇦" },
   ];
 
   useEffect(() => {
     setMessages([
       {
-        id: 'welcome',
-        type: 'ai',
+        id: "welcome",
+        type: "ai",
         content: `🌊 **MaritimeGPT 3.0 - Superinteligência Marítima Ativada**
 
 Olá! Sou o sistema de IA mais avançado para operações marítimas, com conhecimento completo de:
@@ -141,15 +141,15 @@ Olá! Sou o sistema de IA mais avançado para operações marítimas, com conhec
 
 Como posso ajudá-lo hoje?`,
         timestamp: new Date(),
-        category: 'general',
+        category: "general",
         confidence: 100,
-        language: selectedLanguage
-      }
+        language: selectedLanguage,
+      },
     ]);
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const processMessage = async (message: string) => {
@@ -157,15 +157,15 @@ Como posso ajudá-lo hoje?`,
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      type: 'user',
+      type: "user",
       content: message,
       timestamp: new Date(),
-      category: 'general',
-      language: selectedLanguage
+      category: "general",
+      language: selectedLanguage,
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
+    setInputMessage("");
     setIsProcessing(true);
 
     // Simulate AI processing with maritime-specific responses
@@ -178,14 +178,14 @@ Como posso ajudá-lo hoje?`,
 
   const generateMaritimeResponse = (query: string): Message => {
     const lowerQuery = query.toLowerCase();
-    
+
     // Detect query type and generate appropriate response
-    let content = '';
-    let category: Message['category'] = 'general';
+    let content = "";
+    let category: Message["category"] = "general";
     let sources: string[] = [];
     let confidence = 95;
 
-    if (lowerQuery.includes('solas') || lowerQuery.includes('safety')) {
+    if (lowerQuery.includes("solas") || lowerQuery.includes("safety")) {
       content = `📋 **Consulta SOLAS - Safety of Life at Sea**
 
 De acordo com a Convenção SOLAS (atualização 2024):
@@ -210,10 +210,14 @@ De acordo com a Convenção SOLAS (atualização 2024):
 4. Atualizar documentação de segurança
 
 Precisa de mais detalhes sobre algum capítulo específico?`;
-      category = 'regulation';
-      sources = ['SOLAS Convention 2024', 'IMO Regulations', 'Flag State Requirements'];
+      category = "regulation";
+      sources = ["SOLAS Convention 2024", "IMO Regulations", "Flag State Requirements"];
       confidence = 98;
-    } else if (lowerQuery.includes('marpol') || lowerQuery.includes('pollution') || lowerQuery.includes('environment')) {
+    } else if (
+      lowerQuery.includes("marpol") ||
+      lowerQuery.includes("pollution") ||
+      lowerQuery.includes("environment")
+    ) {
       content = `🌊 **Consulta MARPOL - Prevenção de Poluição**
 
 Regulamentação MARPOL Anexos I-VI:
@@ -245,10 +249,15 @@ Regulamentação MARPOL Anexos I-VI:
 - EEDI/EEXI compliance
 
 **Status de Compliance:** ✅ Verificar sistemas de tratamento ativos`;
-      category = 'regulation';
-      sources = ['MARPOL Convention', 'IMO Environmental Standards', 'Port State Control'];
+      category = "regulation";
+      sources = ["MARPOL Convention", "IMO Environmental Standards", "Port State Control"];
       confidence = 97;
-    } else if (lowerQuery.includes('stcw') || lowerQuery.includes('crew') || lowerQuery.includes('certificate') || lowerQuery.includes('training')) {
+    } else if (
+      lowerQuery.includes("stcw") ||
+      lowerQuery.includes("crew") ||
+      lowerQuery.includes("certificate") ||
+      lowerQuery.includes("training")
+    ) {
       content = `👨‍✈️ **Consulta STCW - Certificação e Treinamento**
 
 Requisitos STCW para tripulação:
@@ -283,10 +292,14 @@ Requisitos STCW para tripulação:
 - [ ] Registros atualizados
 
 Deseja verificar certificações específicas?`;
-      category = 'regulation';
-      sources = ['STCW Convention 2010', 'Manila Amendments', 'Flag State Requirements'];
+      category = "regulation";
+      sources = ["STCW Convention 2010", "Manila Amendments", "Flag State Requirements"];
       confidence = 99;
-    } else if (lowerQuery.includes('colreg') || lowerQuery.includes('navigation') || lowerQuery.includes('collision')) {
+    } else if (
+      lowerQuery.includes("colreg") ||
+      lowerQuery.includes("navigation") ||
+      lowerQuery.includes("collision")
+    ) {
       content = `🧭 **Consulta COLREG - Regras de Navegação**
 
 Regulamentos Internacionais para Prevenção de Colisões:
@@ -321,16 +334,19 @@ Regulamentos Internacionais para Prevenção de Colisões:
 5. Embarcações a motor
 
 Precisa de orientação para uma situação específica?`;
-      category = 'regulation';
-      sources = ['COLREG 1972', 'Collision Avoidance', 'Navigation Safety'];
+      category = "regulation";
+      sources = ["COLREG 1972", "Collision Avoidance", "Navigation Safety"];
       confidence = 96;
-    } else if (lowerQuery.includes('translate') || lowerQuery.includes('traduz')) {
+    } else if (lowerQuery.includes("translate") || lowerQuery.includes("traduz")) {
       content = `🌍 **Serviço de Tradução Técnica Marítima**
 
 Sistema ativo para tradução especializada em 50+ idiomas.
 
 **Idiomas Principais:**
-${languages.slice(0, 10).map(lang => `${lang.flag} ${lang.name}`).join('\n')}
+${languages
+  .slice(0, 10)
+  .map(lang => `${lang.flag} ${lang.name}`)
+  .join("\n")}
 
 **Especialidades:**
 - Documentação técnica marítima
@@ -346,8 +362,8 @@ Para traduzir um texto, forneça:
 4. Texto a traduzir
 
 Exemplo: "Traduzir relatório de inspeção SOLAS de inglês para português"`;
-      category = 'translation';
-      sources = ['Maritime Technical Dictionary', 'IMO Standard Phrases'];
+      category = "translation";
+      sources = ["Maritime Technical Dictionary", "IMO Standard Phrases"];
       confidence = 94;
     } else {
       content = `🤖 **MaritimeGPT 3.0 - Resposta Especializada**
@@ -378,20 +394,20 @@ Entendi sua consulta sobre operações marítimas. Posso ajudar com:
 - Best practices internacionais
 
 Por favor, seja mais específico sobre o que precisa para que eu possa fornecer uma resposta mais detalhada e precisa.`;
-      category = 'general';
-      sources = ['MaritimeGPT Knowledge Base'];
+      category = "general";
+      sources = ["MaritimeGPT Knowledge Base"];
       confidence = 90;
     }
 
     return {
       id: Date.now().toString(),
-      type: 'ai',
+      type: "ai",
       content,
       timestamp: new Date(),
       category,
       confidence,
       sources,
-      language: selectedLanguage
+      language: selectedLanguage,
     };
   };
 
@@ -405,7 +421,9 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
   const generateReport = () => {
     toast({
       title: "📊 Gerando Relatório",
-      description: "Relatório especializado sendo gerado em " + languages.find(l => l.code === selectedLanguage)?.name,
+      description:
+        "Relatório especializado sendo gerado em " +
+        languages.find(l => l.code === selectedLanguage)?.name,
     });
   };
 
@@ -428,7 +446,8 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                   </Badge>
                 </CardTitle>
                 <CardDescription className="text-white/90">
-                  Superinteligência Marítima - Base de Conhecimento Completa IMO/SOLAS/STCW/MARPOL/COLREG
+                  Superinteligência Marítima - Base de Conhecimento Completa
+                  IMO/SOLAS/STCW/MARPOL/COLREG
                 </CardDescription>
               </div>
             </div>
@@ -436,11 +455,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button 
-                      variant="secondary" 
-                      size="icon"
-                      onClick={handleFileUpload}
-                    >
+                    <Button variant="secondary" size="icon" onClick={handleFileUpload}>
                       <Upload className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -449,15 +464,11 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-              
+
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button 
-                      variant="secondary" 
-                      size="icon"
-                      onClick={generateReport}
-                    >
+                    <Button variant="secondary" size="icon" onClick={generateReport}>
                       <Download className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -481,8 +492,11 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {knowledgeBases.map((kb) => (
-              <div key={kb.id} className="p-3 border rounded-lg space-y-2 hover:bg-accent transition-colors">
+            {knowledgeBases.map(kb => (
+              <div
+                key={kb.id}
+                className="p-3 border rounded-lg space-y-2 hover:bg-accent transition-colors"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Ship className="h-4 w-4 text-primary" />
@@ -518,10 +532,10 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                 <Languages className="h-4 w-4 text-muted-foreground" />
                 <select
                   value={selectedLanguage}
-                  onChange={(e) => setSelectedLanguage(e.target.value)}
+                  onChange={e => setSelectedLanguage(e.target.value)}
                   className="text-sm border rounded px-2 py-1"
                 >
-                  {languages.map((lang) => (
+                  {languages.map(lang => (
                     <option key={lang.code} value={lang.code}>
                       {lang.flag} {lang.name}
                     </option>
@@ -533,24 +547,24 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
           <CardContent className="space-y-4">
             <ScrollArea className="h-[500px] pr-4">
               <div className="space-y-4">
-                {messages.map((message) => (
+                {messages.map(message => (
                   <div
                     key={message.id}
-                    className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                    className={`flex gap-3 ${message.type === "user" ? "justify-end" : "justify-start"}`}
                   >
-                    {message.type === 'ai' && (
+                    {message.type === "ai" && (
                       <div className="flex-shrink-0">
                         <div className="p-2 bg-primary rounded-lg">
                           <Bot className="h-5 w-5 text-primary-foreground" />
                         </div>
                       </div>
                     )}
-                    <div className={`max-w-[80%] ${message.type === 'user' ? 'order-first' : ''}`}>
+                    <div className={`max-w-[80%] ${message.type === "user" ? "order-first" : ""}`}>
                       <div
                         className={`p-4 rounded-lg ${
-                          message.type === 'user'
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-muted'
+                          message.type === "user"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted"
                         }`}
                       >
                         <div className="whitespace-pre-wrap text-sm">{message.content}</div>
@@ -564,7 +578,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                             {message.confidence}% confiança
                           </Badge>
                         )}
-                        {message.category && message.category !== 'general' && (
+                        {message.category && message.category !== "general" && (
                           <Badge variant="secondary" className="text-xs">
                             {message.category}
                           </Badge>
@@ -574,12 +588,12 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                         <div className="mt-2 px-2">
                           <div className="flex items-center gap-1 text-xs text-muted-foreground">
                             <FileText className="h-3 w-3" />
-                            <span>Fontes: {message.sources.join(', ')}</span>
+                            <span>Fontes: {message.sources.join(", ")}</span>
                           </div>
                         </div>
                       )}
                     </div>
-                    {message.type === 'user' && (
+                    {message.type === "user" && (
                       <div className="flex-shrink-0">
                         <div className="p-2 bg-primary rounded-lg">
                           <User className="h-5 w-5 text-primary-foreground" />
@@ -610,9 +624,9 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Textarea
                 placeholder="Digite sua consulta marítima... (ex: 'Requisitos SOLAS para embarcações', 'Compliance MARPOL', 'Certificações STCW')"
                 value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
+                onChange={e => setInputMessage(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     processMessage(inputMessage);
                   }
@@ -635,7 +649,9 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setInputMessage('Quais são os requisitos SOLAS para equipamentos salva-vidas?')}
+                onClick={() =>
+                  setInputMessage("Quais são os requisitos SOLAS para equipamentos salva-vidas?")
+                }
               >
                 <Shield className="h-3 w-3 mr-1" />
                 SOLAS
@@ -643,7 +659,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setInputMessage('Como fazer compliance com MARPOL Anexo VI?')}
+                onClick={() => setInputMessage("Como fazer compliance com MARPOL Anexo VI?")}
               >
                 <Anchor className="h-3 w-3 mr-1" />
                 MARPOL
@@ -651,7 +667,9 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setInputMessage('Quais certificações STCW são necessárias para oficiais?')}
+                onClick={() =>
+                  setInputMessage("Quais certificações STCW são necessárias para oficiais?")
+                }
               >
                 <FileText className="h-3 w-3 mr-1" />
                 STCW
@@ -659,7 +677,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setInputMessage('Explique as regras COLREG para navegação em névoa')}
+                onClick={() => setInputMessage("Explique as regras COLREG para navegação em névoa")}
               >
                 <Compass className="h-3 w-3 mr-1" />
                 COLREG

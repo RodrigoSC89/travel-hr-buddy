@@ -1,5 +1,5 @@
-import React from 'react';
-import PerformanceOptimizer from '@/components/optimization/performance-optimizer';
+import React from "react";
+import PerformanceOptimizer from "@/components/optimization/performance-optimizer";
 
 const PerformanceOptimizerPage = () => {
   return <PerformanceOptimizer />;

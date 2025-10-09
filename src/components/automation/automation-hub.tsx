@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Zap, Settings, FileText, Users, Lightbulb } from 'lucide-react';
+import React, { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Zap, Settings, FileText, Users, Lightbulb } from "lucide-react";
 
-import { SmartOnboardingWizard } from './smart-onboarding-wizard';
-import { AISuggestionsPanel } from './ai-suggestions-panel';
-import { AutomationWorkflowsManager } from './automation-workflows-manager';
-import { AutomatedReportsManager } from './automated-reports-manager';
+import { SmartOnboardingWizard } from "./smart-onboarding-wizard";
+import { AISuggestionsPanel } from "./ai-suggestions-panel";
+import { AutomationWorkflowsManager } from "./automation-workflows-manager";
+import { AutomatedReportsManager } from "./automated-reports-manager";
 
 export const AutomationHub: React.FC = () => {
   return (

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { 
-  AlertTriangle, 
-  Shield, 
-  Database, 
-  Globe, 
+import React, { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import {
+  AlertTriangle,
+  Shield,
+  Database,
+  Globe,
   Users,
   Settings,
   Lock,
@@ -19,18 +19,18 @@ import {
   XCircle,
   TrendingUp,
   Eye,
-  Zap
-} from 'lucide-react';
+  Zap,
+} from "lucide-react";
 
 interface Risk {
   id: string;
-  category: 'technical' | 'operational' | 'infrastructure' | 'security';
+  category: "technical" | "operational" | "infrastructure" | "security";
   name: string;
   description: string;
-  probability: 'high' | 'medium' | 'low';
-  impact: 'critical' | 'moderate' | 'light';
+  probability: "high" | "medium" | "low";
+  impact: "critical" | "moderate" | "light";
   priority: number;
-  status: 'open' | 'mitigated' | 'closed';
+  status: "open" | "mitigated" | "closed";
   mitigation: string;
   owner: string;
   lastReview: string;
@@ -39,159 +39,181 @@ interface Risk {
 export const RiskManagementDashboard: React.FC = () => {
   const [risks] = useState<Risk[]>([
     {
-      id: '1',
-      category: 'technical',
-      name: 'Falha do Servidor Principal',
-      description: 'Indisponibilidade completa do servidor principal por falha de hardware',
-      probability: 'medium',
-      impact: 'critical',
+      id: "1",
+      category: "technical",
+      name: "Falha do Servidor Principal",
+      description: "Indisponibilidade completa do servidor principal por falha de hardware",
+      probability: "medium",
+      impact: "critical",
       priority: 1,
-      status: 'mitigated',
-      mitigation: 'Failover automático implementado com redundância geográfica',
-      owner: 'DevOps Team',
-      lastReview: '2024-01-15'
+      status: "mitigated",
+      mitigation: "Failover automático implementado com redundância geográfica",
+      owner: "DevOps Team",
+      lastReview: "2024-01-15",
     },
     {
-      id: '2',
-      category: 'operational',
-      name: 'Exclusão Acidental de Dados',
-      description: 'Usuário administrativo exclui dados críticos por engano',
-      probability: 'high',
-      impact: 'moderate',
+      id: "2",
+      category: "operational",
+      name: "Exclusão Acidental de Dados",
+      description: "Usuário administrativo exclui dados críticos por engano",
+      probability: "high",
+      impact: "moderate",
       priority: 2,
-      status: 'mitigated',
-      mitigation: 'Confirmação dupla + backup versionado com recuperação em 1h',
-      owner: 'Data Team',
-      lastReview: '2024-01-14'
+      status: "mitigated",
+      mitigation: "Confirmação dupla + backup versionado com recuperação em 1h",
+      owner: "Data Team",
+      lastReview: "2024-01-14",
     },
     {
-      id: '3',
-      category: 'security',
-      name: 'Vazamento de Credenciais Admin',
-      description: 'Comprometimento de conta administrativa por phishing ou ataque',
-      probability: 'low',
-      impact: 'critical',
+      id: "3",
+      category: "security",
+      name: "Vazamento de Credenciais Admin",
+      description: "Comprometimento de conta administrativa por phishing ou ataque",
+      probability: "low",
+      impact: "critical",
       priority: 1,
-      status: 'open',
-      mitigation: 'MFA obrigatório + monitoramento de acesso + alertas em tempo real',
-      owner: 'Security Team',
-      lastReview: '2024-01-13'
+      status: "open",
+      mitigation: "MFA obrigatório + monitoramento de acesso + alertas em tempo real",
+      owner: "Security Team",
+      lastReview: "2024-01-13",
     },
     {
-      id: '4',
-      category: 'infrastructure',
-      name: 'Queda de Conectividade DNS',
-      description: 'Falha na resolução DNS impedindo acesso ao sistema',
-      probability: 'medium',
-      impact: 'critical',
+      id: "4",
+      category: "infrastructure",
+      name: "Queda de Conectividade DNS",
+      description: "Falha na resolução DNS impedindo acesso ao sistema",
+      probability: "medium",
+      impact: "critical",
       priority: 1,
-      status: 'mitigated',
-      mitigation: 'Múltiplos provedores DNS + cache local + failover automático',
-      owner: 'Infrastructure Team',
-      lastReview: '2024-01-12'
+      status: "mitigated",
+      mitigation: "Múltiplos provedores DNS + cache local + failover automático",
+      owner: "Infrastructure Team",
+      lastReview: "2024-01-12",
     },
     {
-      id: '5',
-      category: 'technical',
-      name: 'Sobrecarga de Sistema',
-      description: 'Travamento do sistema por alta carga de usuários simultâneos',
-      probability: 'high',
-      impact: 'moderate',
+      id: "5",
+      category: "technical",
+      name: "Sobrecarga de Sistema",
+      description: "Travamento do sistema por alta carga de usuários simultâneos",
+      probability: "high",
+      impact: "moderate",
       priority: 2,
-      status: 'open',
-      mitigation: 'Auto-scaling + load balancing + rate limiting implementado',
-      owner: 'Performance Team',
-      lastReview: '2024-01-11'
+      status: "open",
+      mitigation: "Auto-scaling + load balancing + rate limiting implementado",
+      owner: "Performance Team",
+      lastReview: "2024-01-11",
     },
     {
-      id: '6',
-      category: 'security',
-      name: 'Injeção SQL',
-      description: 'Tentativa de ataque por injeção SQL nos formulários do sistema',
-      probability: 'medium',
-      impact: 'critical',
+      id: "6",
+      category: "security",
+      name: "Injeção SQL",
+      description: "Tentativa de ataque por injeção SQL nos formulários do sistema",
+      probability: "medium",
+      impact: "critical",
       priority: 1,
-      status: 'mitigated',
-      mitigation: 'Validação de entrada + prepared statements + WAF ativo',
-      owner: 'Security Team',
-      lastReview: '2024-01-10'
-    }
+      status: "mitigated",
+      mitigation: "Validação de entrada + prepared statements + WAF ativo",
+      owner: "Security Team",
+      lastReview: "2024-01-10",
+    },
   ]);
 
   const [contingencyPlans] = useState([
     {
-      risk: 'Falha do Servidor Principal',
-      immediate: 'Ativar failover automático em 30 segundos',
-      corrective: 'Investigar causa raiz e substituir hardware em 4h',
-      preventive: 'Implementar monitoramento proativo de hardware'
+      risk: "Falha do Servidor Principal",
+      immediate: "Ativar failover automático em 30 segundos",
+      corrective: "Investigar causa raiz e substituir hardware em 4h",
+      preventive: "Implementar monitoramento proativo de hardware",
     },
     {
-      risk: 'Exclusão Acidental de Dados',
-      immediate: 'Recuperar dados do backup mais recente em 1h',
-      corrective: 'Verificar integridade dos dados restaurados em 2h',
-      preventive: 'Implementar confirmação dupla para exclusões em massa'
+      risk: "Exclusão Acidental de Dados",
+      immediate: "Recuperar dados do backup mais recente em 1h",
+      corrective: "Verificar integridade dos dados restaurados em 2h",
+      preventive: "Implementar confirmação dupla para exclusões em massa",
     },
     {
-      risk: 'Vazamento de Credenciais Admin',
-      immediate: 'Reset imediato de senhas + bloqueio de sessões',
-      corrective: 'Auditoria completa de acesso + análise de logs',
-      preventive: 'MFA obrigatório + treinamento de segurança'
-    }
+      risk: "Vazamento de Credenciais Admin",
+      immediate: "Reset imediato de senhas + bloqueio de sessões",
+      corrective: "Auditoria completa de acesso + análise de logs",
+      preventive: "MFA obrigatório + treinamento de segurança",
+    },
   ]);
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'technical': return Database;
-      case 'operational': return Users;
-      case 'infrastructure': return Globe;
-      case 'security': return Shield;
-      default: return AlertTriangle;
+      case "technical":
+        return Database;
+      case "operational":
+        return Users;
+      case "infrastructure":
+        return Globe;
+      case "security":
+        return Shield;
+      default:
+        return AlertTriangle;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'technical': return 'text-blue-500';
-      case 'operational': return 'text-green-500';
-      case 'infrastructure': return 'text-purple-500';
-      case 'security': return 'text-red-500';
-      default: return 'text-muted-foreground';
+      case "technical":
+        return "text-blue-500";
+      case "operational":
+        return "text-green-500";
+      case "infrastructure":
+        return "text-purple-500";
+      case "security":
+        return "text-red-500";
+      default:
+        return "text-muted-foreground";
     }
   };
 
   const getProbabilityColor = (probability: string) => {
     switch (probability) {
-      case 'high': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      case 'low': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300';
+      case "high":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "low":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'critical': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-      case 'moderate': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      case 'light': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300';
+      case "critical":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      case "moderate":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "light":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'open': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-      case 'mitigated': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      case 'closed': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300';
+      case "open":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      case "mitigated":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "closed":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const riskStats = {
     total: risks.length,
-    critical: risks.filter(r => r.impact === 'critical').length,
-    high: risks.filter(r => r.probability === 'high').length,
-    open: risks.filter(r => r.status === 'open').length,
-    mitigated: risks.filter(r => r.status === 'mitigated').length
+    critical: risks.filter(r => r.impact === "critical").length,
+    high: risks.filter(r => r.probability === "high").length,
+    open: risks.filter(r => r.status === "open").length,
+    mitigated: risks.filter(r => r.status === "mitigated").length,
   };
 
   return (
@@ -290,7 +312,7 @@ export const RiskManagementDashboard: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              {risks.map((risk) => {
+              {risks.map(risk => {
                 const CategoryIcon = getCategoryIcon(risk.category);
                 return (
                   <Card key={risk.id}>
@@ -305,16 +327,25 @@ export const RiskManagementDashboard: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge className={getProbabilityColor(risk.probability)}>
-                            {risk.probability === 'high' ? 'Alta' : 
-                             risk.probability === 'medium' ? 'Média' : 'Baixa'}
+                            {risk.probability === "high"
+                              ? "Alta"
+                              : risk.probability === "medium"
+                                ? "Média"
+                                : "Baixa"}
                           </Badge>
                           <Badge className={getImpactColor(risk.impact)}>
-                            {risk.impact === 'critical' ? 'Crítico' : 
-                             risk.impact === 'moderate' ? 'Moderado' : 'Leve'}
+                            {risk.impact === "critical"
+                              ? "Crítico"
+                              : risk.impact === "moderate"
+                                ? "Moderado"
+                                : "Leve"}
                           </Badge>
                           <Badge className={getStatusColor(risk.status)}>
-                            {risk.status === 'open' ? 'Aberto' : 
-                             risk.status === 'mitigated' ? 'Mitigado' : 'Fechado'}
+                            {risk.status === "open"
+                              ? "Aberto"
+                              : risk.status === "mitigated"
+                                ? "Mitigado"
+                                : "Fechado"}
                           </Badge>
                         </div>
                       </div>
@@ -409,10 +440,16 @@ export const RiskManagementDashboard: React.FC = () => {
             <h3 className="text-lg font-semibold">Matriz de Impacto vs Probabilidade</h3>
             <div className="grid grid-cols-4 gap-2 p-4 border rounded-lg">
               <div className="text-center font-semibold">Impacto / Probabilidade</div>
-              <div className="text-center font-semibold bg-green-100 dark:bg-green-900/20 p-2 rounded">Baixa</div>
-              <div className="text-center font-semibold bg-yellow-100 dark:bg-yellow-900/20 p-2 rounded">Média</div>
-              <div className="text-center font-semibold bg-red-100 dark:bg-red-900/20 p-2 rounded">Alta</div>
-              
+              <div className="text-center font-semibold bg-green-100 dark:bg-green-900/20 p-2 rounded">
+                Baixa
+              </div>
+              <div className="text-center font-semibold bg-yellow-100 dark:bg-yellow-900/20 p-2 rounded">
+                Média
+              </div>
+              <div className="text-center font-semibold bg-red-100 dark:bg-red-900/20 p-2 rounded">
+                Alta
+              </div>
+
               <div className="font-semibold bg-red-100 dark:bg-red-900/20 p-2 rounded">Crítico</div>
               <div className="p-2 border rounded bg-yellow-50 dark:bg-yellow-900/10">
                 <div className="text-xs font-semibold">Médio</div>
@@ -427,7 +464,9 @@ export const RiskManagementDashboard: React.FC = () => {
                 <div className="text-xs">1 risco</div>
               </div>
 
-              <div className="font-semibold bg-yellow-100 dark:bg-yellow-900/20 p-2 rounded">Moderado</div>
+              <div className="font-semibold bg-yellow-100 dark:bg-yellow-900/20 p-2 rounded">
+                Moderado
+              </div>
               <div className="p-2 border rounded bg-green-50 dark:bg-green-900/10">
                 <div className="text-xs font-semibold">Baixo</div>
                 <div className="text-xs">0 riscos</div>
@@ -441,7 +480,9 @@ export const RiskManagementDashboard: React.FC = () => {
                 <div className="text-xs">1 risco</div>
               </div>
 
-              <div className="font-semibold bg-green-100 dark:bg-green-900/20 p-2 rounded">Leve</div>
+              <div className="font-semibold bg-green-100 dark:bg-green-900/20 p-2 rounded">
+                Leve
+              </div>
               <div className="p-2 border rounded bg-green-50 dark:bg-green-900/10">
                 <div className="text-xs font-semibold">Baixo</div>
                 <div className="text-xs">0 riscos</div>
@@ -462,30 +503,33 @@ export const RiskManagementDashboard: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Ações Imediatas Requeridas</h3>
             <div className="space-y-3">
-              {risks.filter(r => r.status === 'open').map((risk) => (
-                <Card key={risk.id} className="border-orange-200 bg-orange-50 dark:bg-orange-900/20">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-semibold text-orange-800 dark:text-orange-200">
-                          {risk.name}
-                        </h4>
-                        <p className="text-sm text-orange-700 dark:text-orange-300">
-                          Prioridade {risk.priority} - Impacto {risk.impact}
-                        </p>
+              {risks
+                .filter(r => r.status === "open")
+                .map(risk => (
+                  <Card
+                    key={risk.id}
+                    className="border-orange-200 bg-orange-50 dark:bg-orange-900/20"
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="font-semibold text-orange-800 dark:text-orange-200">
+                            {risk.name}
+                          </h4>
+                          <p className="text-sm text-orange-700 dark:text-orange-300">
+                            Prioridade {risk.priority} - Impacto {risk.impact}
+                          </p>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="outline">
+                            Implementar Agora
+                          </Button>
+                          <Button size="sm">Marcar como Mitigado</Button>
+                        </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline">
-                          Implementar Agora
-                        </Button>
-                        <Button size="sm">
-                          Marcar como Mitigado
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                ))}
             </div>
           </div>
         </TabsContent>

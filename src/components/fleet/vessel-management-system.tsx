@@ -1,17 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Ship, 
-  Plus, 
-  Search, 
-  MapPin, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Ship,
+  Plus,
+  Search,
+  MapPin,
   Calendar,
   Users,
   Settings,
@@ -27,10 +39,10 @@ import {
   Anchor,
   Navigation,
   Fuel,
-  Clock
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+  Clock,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Vessel {
   id: string;
@@ -57,9 +69,9 @@ interface VesselManagementProps {
 const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate }) => {
   const [vessels, setVessels] = useState<Vessel[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
@@ -67,44 +79,44 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
 
   // Form state for new vessel
   const [newVessel, setNewVessel] = useState({
-    name: '',
-    imo_number: '',
-    vessel_type: '',
-    flag_state: '',
-    next_port: '',
-    eta: '',
-    crew_count: '',
-    cargo_capacity: '',
-    fuel_consumption: ''
+    name: "",
+    imo_number: "",
+    vessel_type: "",
+    flag_state: "",
+    next_port: "",
+    eta: "",
+    crew_count: "",
+    cargo_capacity: "",
+    fuel_consumption: "",
   });
 
   useEffect(() => {
     loadVessels();
-    
+
     // Setup real-time subscriptions
     const channel = supabase
-      .channel('vessels-changes')
+      .channel("vessels-changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'vessels'
+          event: "*",
+          schema: "public",
+          table: "vessels",
         },
-        (payload) => {
-          console.log('Vessel change received:', payload);
-          
-          if (payload.eventType === 'INSERT') {
+        payload => {
+          console.log("Vessel change received:", payload);
+
+          if (payload.eventType === "INSERT") {
             setVessels(prev => [payload.new as Vessel, ...prev]);
             toast({
               title: "Nova Embarcação",
               description: `${payload.new.name} foi adicionada à frota`,
             });
-          } else if (payload.eventType === 'UPDATE') {
-            setVessels(prev => prev.map(vessel => 
-              vessel.id === payload.new.id ? payload.new as Vessel : vessel
-            ));
-          } else if (payload.eventType === 'DELETE') {
+          } else if (payload.eventType === "UPDATE") {
+            setVessels(prev =>
+              prev.map(vessel => (vessel.id === payload.new.id ? (payload.new as Vessel) : vessel))
+            );
+          } else if (payload.eventType === "DELETE") {
             setVessels(prev => prev.filter(vessel => vessel.id !== payload.old.id));
             toast({
               title: "Embarcação Removida",
@@ -123,91 +135,91 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
   const loadVessels = async () => {
     try {
       setIsLoading(true);
-      
+
       const { data: vessels, error } = await supabase
-        .from('vessels')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
+        .from("vessels")
+        .select("*")
+        .order("created_at", { ascending: false });
+
       if (error) {
         // Mock data fallback
         const mockVessels: Vessel[] = [
           {
-            id: '1',
-            name: 'MV Atlântico Explorer',
-            imo_number: '9876543',
-            vessel_type: 'Container Ship',
-            flag_state: 'Brasil',
-            status: 'active',
-            current_location: 'Santos, Brasil',
-            next_port: 'Rio de Janeiro',
-            eta: '2024-01-15T10:00:00Z',
-            created_at: '2024-01-01T00:00:00Z',
+            id: "1",
+            name: "MV Atlântico Explorer",
+            imo_number: "9876543",
+            vessel_type: "Container Ship",
+            flag_state: "Brasil",
+            status: "active",
+            current_location: "Santos, Brasil",
+            next_port: "Rio de Janeiro",
+            eta: "2024-01-15T10:00:00Z",
+            created_at: "2024-01-01T00:00:00Z",
             crew_count: 24,
             cargo_capacity: 12000,
             fuel_consumption: 15.2,
-            last_maintenance: '2024-01-01'
+            last_maintenance: "2024-01-01",
           },
           {
-            id: '2',
-            name: 'MV Pacífico Star',
-            imo_number: '9765432',
-            vessel_type: 'Bulk Carrier',
-            flag_state: 'Brasil',
-            status: 'active',
-            current_location: 'Paranaguá, Brasil',
-            next_port: 'Salvador',
-            eta: '2024-01-18T14:30:00Z',
-            created_at: '2024-01-01T00:00:00Z',
+            id: "2",
+            name: "MV Pacífico Star",
+            imo_number: "9765432",
+            vessel_type: "Bulk Carrier",
+            flag_state: "Brasil",
+            status: "active",
+            current_location: "Paranaguá, Brasil",
+            next_port: "Salvador",
+            eta: "2024-01-18T14:30:00Z",
+            created_at: "2024-01-01T00:00:00Z",
             crew_count: 22,
             cargo_capacity: 18000,
             fuel_consumption: 18.5,
-            last_maintenance: '2023-12-15'
+            last_maintenance: "2023-12-15",
           },
           {
-            id: '3',
-            name: 'MV Índico Pioneer',
-            imo_number: '9654321',
-            vessel_type: 'Tanker',
-            flag_state: 'Brasil',
-            status: 'maintenance',
-            current_location: 'Estaleiro Suape',
-            next_port: 'Fortaleza',
-            eta: '2024-01-22T08:00:00Z',
-            created_at: '2024-01-01T00:00:00Z',
+            id: "3",
+            name: "MV Índico Pioneer",
+            imo_number: "9654321",
+            vessel_type: "Tanker",
+            flag_state: "Brasil",
+            status: "maintenance",
+            current_location: "Estaleiro Suape",
+            next_port: "Fortaleza",
+            eta: "2024-01-22T08:00:00Z",
+            created_at: "2024-01-01T00:00:00Z",
             crew_count: 26,
             cargo_capacity: 25000,
             fuel_consumption: 22.1,
-            last_maintenance: '2024-01-10'
+            last_maintenance: "2024-01-10",
           },
           {
-            id: '4',
-            name: 'MV Mediterrâneo',
-            imo_number: '9543210',
-            vessel_type: 'Cargo Ship',
-            flag_state: 'Brasil',
-            status: 'active',
-            current_location: 'Vitória, Brasil',
-            next_port: 'Recife',
-            eta: '2024-01-20T16:00:00Z',
-            created_at: '2024-01-01T00:00:00Z',
+            id: "4",
+            name: "MV Mediterrâneo",
+            imo_number: "9543210",
+            vessel_type: "Cargo Ship",
+            flag_state: "Brasil",
+            status: "active",
+            current_location: "Vitória, Brasil",
+            next_port: "Recife",
+            eta: "2024-01-20T16:00:00Z",
+            created_at: "2024-01-01T00:00:00Z",
             crew_count: 20,
             cargo_capacity: 8500,
             fuel_consumption: 12.8,
-            last_maintenance: '2023-12-20'
-          }
+            last_maintenance: "2023-12-20",
+          },
         ];
-        
+
         setVessels(mockVessels);
       } else {
         setVessels(vessels || []);
       }
     } catch (error) {
-      console.error('Erro ao carregar embarcações:', error);
+      console.error("Erro ao carregar embarcações:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as embarcações",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -218,10 +230,10 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
     try {
       // Get current organization ID
       const { data: userOrg, error: orgError } = await supabase
-        .from('organization_users')
-        .select('organization_id')
-        .eq('user_id', (await supabase.auth.getUser()).data.user?.id)
-        .eq('status', 'active')
+        .from("organization_users")
+        .select("organization_id")
+        .eq("user_id", (await supabase.auth.getUser()).data.user?.id)
+        .eq("status", "active")
         .single();
 
       const vesselData = {
@@ -231,80 +243,86 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
         flag_state: newVessel.flag_state,
         next_port: newVessel.next_port,
         eta: newVessel.eta ? new Date(newVessel.eta).toISOString() : null,
-        status: 'active',
-        current_location: 'Location TBD',
+        status: "active",
+        current_location: "Location TBD",
         crew_count: parseInt(newVessel.crew_count) || 0,
         cargo_capacity: parseInt(newVessel.cargo_capacity) || 0,
         fuel_consumption: parseFloat(newVessel.fuel_consumption) || 0,
-        organization_id: userOrg?.organization_id
+        organization_id: userOrg?.organization_id,
       };
 
-      const { data, error } = await supabase
-        .from('vessels')
-        .insert([vesselData])
-        .select()
-        .single();
+      const { data, error } = await supabase.from("vessels").insert([vesselData]).select().single();
 
       if (error) {
         throw error;
       }
-      
+
       // Real-time will handle the UI update
       setNewVessel({
-        name: '',
-        imo_number: '',
-        vessel_type: '',
-        flag_state: '',
-        next_port: '',
-        eta: '',
-        crew_count: '',
-        cargo_capacity: '',
-        fuel_consumption: ''
+        name: "",
+        imo_number: "",
+        vessel_type: "",
+        flag_state: "",
+        next_port: "",
+        eta: "",
+        crew_count: "",
+        cargo_capacity: "",
+        fuel_consumption: "",
       });
       setShowAddDialog(false);
       onStatsUpdate();
-      
+
       toast({
         title: "Embarcação Adicionada",
         description: `${data.name} foi adicionada com sucesso à frota`,
       });
     } catch (error) {
-      console.error('Error adding vessel:', error);
+      console.error("Error adding vessel:", error);
       toast({
         title: "Erro",
         description: "Não foi possível adicionar a embarcação",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-success text-success-foreground';
-      case 'maintenance': return 'bg-warning text-warning-foreground';
-      case 'inactive': return 'bg-destructive text-destructive-foreground';
-      case 'docked': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
+      case "active":
+        return "bg-success text-success-foreground";
+      case "maintenance":
+        return "bg-warning text-warning-foreground";
+      case "inactive":
+        return "bg-destructive text-destructive-foreground";
+      case "docked":
+        return "bg-info text-info-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'active': return 'Operacional';
-      case 'maintenance': return 'Manutenção';
-      case 'inactive': return 'Inativa';
-      case 'docked': return 'Atracada';
-      default: return 'Desconhecido';
+      case "active":
+        return "Operacional";
+      case "maintenance":
+        return "Manutenção";
+      case "inactive":
+        return "Inativa";
+      case "docked":
+        return "Atracada";
+      default:
+        return "Desconhecido";
     }
   };
 
   const getVesselTypeIcon = (type: string) => {
     switch (type.toLowerCase()) {
-      case 'container ship':
+      case "container ship":
         return <Ship className="h-5 w-5 text-primary" />;
-      case 'bulk carrier':
+      case "bulk carrier":
         return <Anchor className="h-5 w-5 text-azure-600" />;
-      case 'tanker':
+      case "tanker":
         return <Fuel className="h-5 w-5 text-warning" />;
       default:
         return <Navigation className="h-5 w-5 text-muted-foreground" />;
@@ -312,13 +330,14 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
   };
 
   const filteredVessels = vessels.filter(vessel => {
-    const matchesSearch = vessel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         vessel.vessel_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         vessel.imo_number?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === 'all' || vessel.status === statusFilter;
-    const matchesType = typeFilter === 'all' || vessel.vessel_type === typeFilter;
-    
+    const matchesSearch =
+      vessel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vessel.vessel_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vessel.imo_number?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus = statusFilter === "all" || vessel.status === statusFilter;
+    const matchesType = typeFilter === "all" || vessel.vessel_type === typeFilter;
+
     return matchesSearch && matchesStatus && matchesType;
   });
 
@@ -333,17 +352,15 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
             <Ship className="h-6 w-6 text-primary" />
             Gestão da Frota Ativa
           </h2>
-          <p className="text-muted-foreground">
-            Controle completo das embarcações da organização
-          </p>
+          <p className="text-muted-foreground">Controle completo das embarcações da organização</p>
         </div>
-        
+
         <div className="flex gap-2">
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
             Exportar Lista
           </Button>
-          
+
           <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
             <DialogTrigger asChild>
               <Button className="flex items-center gap-2">
@@ -361,7 +378,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="name"
                     value={newVessel.name}
-                    onChange={(e) => setNewVessel({ ...newVessel, name: e.target.value })}
+                    onChange={e => setNewVessel({ ...newVessel, name: e.target.value })}
                     placeholder="Ex: MV Atlântico Explorer"
                   />
                 </div>
@@ -370,15 +387,15 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="imo"
                     value={newVessel.imo_number}
-                    onChange={(e) => setNewVessel({ ...newVessel, imo_number: e.target.value })}
+                    onChange={e => setNewVessel({ ...newVessel, imo_number: e.target.value })}
                     placeholder="Ex: 9876543"
                   />
                 </div>
                 <div>
                   <Label htmlFor="type">Tipo de Embarcação *</Label>
-                  <Select 
-                    value={newVessel.vessel_type} 
-                    onValueChange={(value) => setNewVessel({ ...newVessel, vessel_type: value })}
+                  <Select
+                    value={newVessel.vessel_type}
+                    onValueChange={value => setNewVessel({ ...newVessel, vessel_type: value })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o tipo" />
@@ -398,7 +415,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="flag"
                     value={newVessel.flag_state}
-                    onChange={(e) => setNewVessel({ ...newVessel, flag_state: e.target.value })}
+                    onChange={e => setNewVessel({ ...newVessel, flag_state: e.target.value })}
                     placeholder="Ex: Brasil"
                   />
                 </div>
@@ -408,7 +425,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     id="crew"
                     type="number"
                     value={newVessel.crew_count}
-                    onChange={(e) => setNewVessel({ ...newVessel, crew_count: e.target.value })}
+                    onChange={e => setNewVessel({ ...newVessel, crew_count: e.target.value })}
                     placeholder="Ex: 24"
                   />
                 </div>
@@ -418,7 +435,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     id="capacity"
                     type="number"
                     value={newVessel.cargo_capacity}
-                    onChange={(e) => setNewVessel({ ...newVessel, cargo_capacity: e.target.value })}
+                    onChange={e => setNewVessel({ ...newVessel, cargo_capacity: e.target.value })}
                     placeholder="Ex: 12000"
                   />
                 </div>
@@ -429,7 +446,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     type="number"
                     step="0.1"
                     value={newVessel.fuel_consumption}
-                    onChange={(e) => setNewVessel({ ...newVessel, fuel_consumption: e.target.value })}
+                    onChange={e => setNewVessel({ ...newVessel, fuel_consumption: e.target.value })}
                     placeholder="Ex: 15.2"
                   />
                 </div>
@@ -438,7 +455,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="port"
                     value={newVessel.next_port}
-                    onChange={(e) => setNewVessel({ ...newVessel, next_port: e.target.value })}
+                    onChange={e => setNewVessel({ ...newVessel, next_port: e.target.value })}
                     placeholder="Ex: Santos"
                   />
                 </div>
@@ -448,7 +465,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     id="eta"
                     type="datetime-local"
                     value={newVessel.eta}
-                    onChange={(e) => setNewVessel({ ...newVessel, eta: e.target.value })}
+                    onChange={e => setNewVessel({ ...newVessel, eta: e.target.value })}
                   />
                 </div>
               </div>
@@ -474,11 +491,11 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
               <Input
                 placeholder="Buscar por nome, tipo ou IMO..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
-            
+
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filtrar por status" />
@@ -491,7 +508,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                 <SelectItem value="inactive">Inativa</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filtrar por tipo" />
@@ -499,7 +516,9 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
               <SelectContent>
                 <SelectItem value="all">Todos os Tipos</SelectItem>
                 {vesselTypes.map(type => (
-                  <SelectItem key={type} value={type}>{type}</SelectItem>
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -521,11 +540,11 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
             <Ship className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-medium mb-2">Nenhuma embarcação encontrada</h3>
             <p className="text-muted-foreground mb-4">
-              {searchTerm || statusFilter !== 'all' || typeFilter !== 'all' 
-                ? 'Tente ajustar os filtros de busca' 
-                : 'Adicione a primeira embarcação à sua frota'}
+              {searchTerm || statusFilter !== "all" || typeFilter !== "all"
+                ? "Tente ajustar os filtros de busca"
+                : "Adicione a primeira embarcação à sua frota"}
             </p>
-            {!searchTerm && statusFilter === 'all' && typeFilter === 'all' && (
+            {!searchTerm && statusFilter === "all" && typeFilter === "all" && (
               <Button onClick={() => setShowAddDialog(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Adicionar Embarcação
@@ -533,7 +552,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
             )}
           </div>
         ) : (
-          filteredVessels.map((vessel) => (
+          filteredVessels.map(vessel => (
             <Card key={vessel.id} className="hover:shadow-lg transition-all duration-300 group">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
@@ -551,37 +570,35 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   </Badge>
                 </div>
               </CardHeader>
-              
+
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-muted-foreground" />
                     <span className="truncate">
-                      {vessel.current_location || 'Localização não informada'}
+                      {vessel.current_location || "Localização não informada"}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4 text-muted-foreground" />
-                    <span>{vessel.crew_count || 'N/A'} tripulantes</span>
+                    <span>{vessel.crew_count || "N/A"} tripulantes</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <span>
-                      ETA: {vessel.eta 
-                        ? new Date(vessel.eta).toLocaleDateString('pt-BR') 
-                        : 'N/A'}
+                      ETA: {vessel.eta ? new Date(vessel.eta).toLocaleDateString("pt-BR") : "N/A"}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Fuel className="h-4 w-4 text-muted-foreground" />
-                    <span>{vessel.fuel_consumption || 'N/A'} L/h</span>
+                    <span>{vessel.fuel_consumption || "N/A"} L/h</span>
                   </div>
                 </div>
 
                 <div className="flex gap-2 pt-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     className="flex-1"
                     onClick={() => {
                       setSelectedVessel(vessel);
@@ -591,15 +608,15 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     <Eye className="h-4 w-4 mr-2" />
                     Detalhes
                   </Button>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
                     className="opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
                     className="opacity-0 group-hover:opacity-100 transition-opacity"
                   >
@@ -621,7 +638,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
               {selectedVessel?.name}
             </DialogTitle>
           </DialogHeader>
-          
+
           {selectedVessel && (
             <Tabs defaultValue="general" className="w-full">
               <TabsList className="grid w-full grid-cols-4">
@@ -630,7 +647,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                 <TabsTrigger value="crew">Tripulação</TabsTrigger>
                 <TabsTrigger value="maintenance">Manutenção</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="general" className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -655,31 +672,33 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   </div>
                   <div>
                     <Label>Capacidade de Carga</Label>
-                    <p className="mt-1 text-sm">{selectedVessel.cargo_capacity || 'N/A'} toneladas</p>
+                    <p className="mt-1 text-sm">
+                      {selectedVessel.cargo_capacity || "N/A"} toneladas
+                    </p>
                   </div>
                   <div>
                     <Label>Consumo de Combustível</Label>
-                    <p className="mt-1 text-sm">{selectedVessel.fuel_consumption || 'N/A'} L/h</p>
+                    <p className="mt-1 text-sm">{selectedVessel.fuel_consumption || "N/A"} L/h</p>
                   </div>
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="location" className="space-y-4">
                 <div className="grid grid-cols-1 gap-4">
                   <div>
                     <Label>Localização Atual</Label>
-                    <p className="mt-1">{selectedVessel.current_location || 'Não informada'}</p>
+                    <p className="mt-1">{selectedVessel.current_location || "Não informada"}</p>
                   </div>
                   <div>
                     <Label>Próximo Porto</Label>
-                    <p className="mt-1">{selectedVessel.next_port || 'Não definido'}</p>
+                    <p className="mt-1">{selectedVessel.next_port || "Não definido"}</p>
                   </div>
                   <div>
                     <Label>ETA</Label>
                     <p className="mt-1">
-                      {selectedVessel.eta 
-                        ? new Date(selectedVessel.eta).toLocaleString('pt-BR')
-                        : 'Não definida'}
+                      {selectedVessel.eta
+                        ? new Date(selectedVessel.eta).toLocaleString("pt-BR")
+                        : "Não definida"}
                     </p>
                   </div>
                 </div>
@@ -690,11 +709,13 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   </Button>
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="crew" className="space-y-4">
                 <div>
                   <Label>Tripulação Atual</Label>
-                  <p className="mt-1 text-2xl font-bold">{selectedVessel.crew_count || 0} membros</p>
+                  <p className="mt-1 text-2xl font-bold">
+                    {selectedVessel.crew_count || 0} membros
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <Button variant="outline" className="w-full justify-start">
@@ -707,14 +728,14 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   </Button>
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="maintenance" className="space-y-4">
                 <div>
                   <Label>Última Manutenção</Label>
                   <p className="mt-1">
-                    {selectedVessel.last_maintenance 
-                      ? new Date(selectedVessel.last_maintenance).toLocaleDateString('pt-BR')
-                      : 'Não registrada'}
+                    {selectedVessel.last_maintenance
+                      ? new Date(selectedVessel.last_maintenance).toLocaleDateString("pt-BR")
+                      : "Não registrada"}
                   </p>
                 </div>
                 <div className="space-y-2">

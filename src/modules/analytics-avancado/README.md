@@ -5,6 +5,7 @@
 The Analytics Avançado (Advanced Analytics) module provides **deep analytical insights and complex reporting** capabilities with advanced statistical analysis and predictive modeling.
 
 **Key Use Cases:**
+
 - Complex data analysis and modeling
 - Predictive analytics and forecasting
 - Custom report generation

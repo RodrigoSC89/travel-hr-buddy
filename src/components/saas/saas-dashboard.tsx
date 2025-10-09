@@ -1,10 +1,10 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
   Building2,
   Users,
   BarChart3,
@@ -18,45 +18,59 @@ import {
   Settings,
   Globe,
   Shield,
-  Smartphone
-} from 'lucide-react';
-import { useTenant } from '@/contexts/TenantContext';
-import { TenantSwitcher } from './tenant-switcher';
-import { WhiteLabelCustomizer } from './white-label-customizer';
-import { TenantSetupWizard } from './tenant-setup-wizard';
-import { BillingManagement } from './billing-management';
-import { UsageAnalytics } from './usage-analytics';
-import { TenantUserManagement } from './tenant-user-management';
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+  Smartphone,
+} from "lucide-react";
+import { useTenant } from "@/contexts/TenantContext";
+import { TenantSwitcher } from "./tenant-switcher";
+import { WhiteLabelCustomizer } from "./white-label-customizer";
+import { TenantSetupWizard } from "./tenant-setup-wizard";
+import { BillingManagement } from "./billing-management";
+import { UsageAnalytics } from "./usage-analytics";
+import { TenantUserManagement } from "./tenant-user-management";
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export const SaaSDashboard: React.FC = () => {
-  const { 
-    currentTenant, 
-    currentBranding, 
+  const {
+    currentTenant,
+    currentBranding,
     currentUser,
     tenantUsage,
     tenantPlans,
     formatCurrency,
     formatDate,
-    checkUsageLimits 
+    checkUsageLimits,
   } = useTenant();
 
   // Dados simulados para gráficos
   const usageData = [
-    { date: '01/01', users: 8, api_calls: 120, storage: 1.2 },
-    { date: '02/01', users: 12, api_calls: 180, storage: 1.4 },
-    { date: '03/01', users: 15, api_calls: 240, storage: 1.8 },
-    { date: '04/01', users: 18, api_calls: 320, storage: 2.1 },
-    { date: '05/01', users: 22, api_calls: 450, storage: 2.3 },
+    { date: "01/01", users: 8, api_calls: 120, storage: 1.2 },
+    { date: "02/01", users: 12, api_calls: 180, storage: 1.4 },
+    { date: "03/01", users: 15, api_calls: 240, storage: 1.8 },
+    { date: "04/01", users: 18, api_calls: 320, storage: 2.1 },
+    { date: "05/01", users: 22, api_calls: 450, storage: 2.3 },
   ];
 
   const planStats = {
     current: tenantPlans.find(p => p.slug === currentTenant?.plan_type),
     usage_percentage: {
       users: tenantUsage ? (tenantUsage.active_users / (currentTenant?.max_users || 1)) * 100 : 0,
-      storage: tenantUsage ? (tenantUsage.storage_used_gb / (currentTenant?.max_storage_gb || 1)) * 100 : 0,
-      api_calls: tenantUsage ? (tenantUsage.api_calls_made / (currentTenant?.max_api_calls_per_month || 1)) * 100 : 0
-    }
+      storage: tenantUsage
+        ? (tenantUsage.storage_used_gb / (currentTenant?.max_storage_gb || 1)) * 100
+        : 0,
+      api_calls: tenantUsage
+        ? (tenantUsage.api_calls_made / (currentTenant?.max_api_calls_per_month || 1)) * 100
+        : 0,
+    },
   };
 
   if (!currentTenant) {
@@ -111,10 +125,7 @@ export const SaaSDashboard: React.FC = () => {
               <Users className="w-8 h-8 text-blue-600" />
             </div>
             <div className="mt-4">
-              <Progress 
-                value={planStats.usage_percentage.users} 
-                className="h-2" 
-              />
+              <Progress value={planStats.usage_percentage.users} className="h-2" />
               <p className="text-xs text-muted-foreground mt-1">
                 {tenantUsage?.active_users} de {currentTenant.max_users} usuários
               </p>
@@ -136,10 +147,7 @@ export const SaaSDashboard: React.FC = () => {
               <BarChart3 className="w-8 h-8 text-orange-600" />
             </div>
             <div className="mt-4">
-              <Progress 
-                value={planStats.usage_percentage.storage} 
-                className="h-2" 
-              />
+              <Progress value={planStats.usage_percentage.storage} className="h-2" />
               <p className="text-xs text-muted-foreground mt-1">
                 {tenantUsage?.storage_used_gb}GB de {currentTenant.max_storage_gb}GB
               </p>
@@ -161,10 +169,7 @@ export const SaaSDashboard: React.FC = () => {
               <Zap className="w-8 h-8 text-purple-600" />
             </div>
             <div className="mt-4">
-              <Progress 
-                value={planStats.usage_percentage.api_calls} 
-                className="h-2" 
-              />
+              <Progress value={planStats.usage_percentage.api_calls} className="h-2" />
               <p className="text-xs text-muted-foreground mt-1">
                 {tenantUsage?.api_calls_made} de {currentTenant.max_api_calls_per_month} chamadas
               </p>
@@ -198,8 +203,8 @@ export const SaaSDashboard: React.FC = () => {
       </div>
 
       {/* Alertas e Status */}
-      {(planStats.usage_percentage.users > 80 || 
-        planStats.usage_percentage.storage > 80 || 
+      {(planStats.usage_percentage.users > 80 ||
+        planStats.usage_percentage.storage > 80 ||
         planStats.usage_percentage.api_calls > 80) && (
         <Card className="border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950">
           <CardContent className="p-4">
@@ -243,11 +248,11 @@ export const SaaSDashboard: React.FC = () => {
                     <XAxis dataKey="date" />
                     <YAxis />
                     <Tooltip />
-                    <Area 
-                      type="monotone" 
-                      dataKey="users" 
-                      stroke="#2563eb" 
-                      fill="#2563eb" 
+                    <Area
+                      type="monotone"
+                      dataKey="users"
+                      stroke="#2563eb"
+                      fill="#2563eb"
                       fillOpacity={0.6}
                       name="Usuários"
                     />
@@ -268,10 +273,10 @@ export const SaaSDashboard: React.FC = () => {
                     <XAxis dataKey="date" />
                     <YAxis />
                     <Tooltip />
-                    <Line 
-                      type="monotone" 
-                      dataKey="api_calls" 
-                      stroke="#7c3aed" 
+                    <Line
+                      type="monotone"
+                      dataKey="api_calls"
+                      stroke="#7c3aed"
                       strokeWidth={2}
                       name="API Calls"
                     />
@@ -366,7 +371,7 @@ export const SaaSDashboard: React.FC = () => {
                       Plano {currentTenant.plan_type}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      Faturamento {currentTenant.billing_cycle === 'monthly' ? 'mensal' : 'anual'}
+                      Faturamento {currentTenant.billing_cycle === "monthly" ? "mensal" : "anual"}
                     </p>
                   </div>
                   <div className="text-right">
@@ -376,11 +381,13 @@ export const SaaSDashboard: React.FC = () => {
                     <p className="text-sm text-muted-foreground">/mês</p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Próxima cobrança</span>
-                    <span>{formatDate(currentTenant.subscription_ends_at || new Date().toISOString())}</span>
+                    <span>
+                      {formatDate(currentTenant.subscription_ends_at || new Date().toISOString())}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Método de pagamento</span>
@@ -404,13 +411,13 @@ export const SaaSDashboard: React.FC = () => {
                 <CardTitle>Planos Disponíveis</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {tenantPlans.slice(0, 3).map((plan) => (
-                  <div 
+                {tenantPlans.slice(0, 3).map(plan => (
+                  <div
                     key={plan.id}
                     className={`p-3 border rounded-lg ${
-                      plan.slug === currentTenant.plan_type 
-                        ? 'border-primary bg-primary/5' 
-                        : 'border-border'
+                      plan.slug === currentTenant.plan_type
+                        ? "border-primary bg-primary/5"
+                        : "border-border"
                     }`}
                   >
                     <div className="flex items-center justify-between">

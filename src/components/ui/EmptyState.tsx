@@ -1,7 +1,7 @@
-import React from 'react';
-import { LucideIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { LucideIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export interface EmptyStateProps {
   icon: LucideIcon | React.ReactNode;
@@ -10,7 +10,7 @@ export interface EmptyStateProps {
   actionLabel?: string;
   onAction?: () => void;
   className?: string;
-  variant?: 'default' | 'compact';
+  variant?: "default" | "compact";
 }
 
 /**
@@ -24,11 +24,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   actionLabel,
   onAction,
   className,
-  variant = 'default',
+  variant = "default",
 }) => {
-  const Icon = typeof icon === 'function' ? icon : null;
+  const Icon = typeof icon === "function" ? icon : null;
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <div className={cn("flex flex-col items-center justify-center p-8 text-center", className)}>
         {icon && (
@@ -38,16 +38,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         )}
         <h3 className="text-lg font-semibold mb-2">{title}</h3>
         {description && (
-          <p className="text-sm text-muted-foreground mb-4 max-w-md">
-            {description}
-          </p>
+          <p className="text-sm text-muted-foreground mb-4 max-w-md">{description}</p>
         )}
         {actionLabel && onAction && (
-          <Button
-            onClick={onAction}
-            variant="default"
-            aria-label={actionLabel}
-          >
+          <Button onClick={onAction} variant="default" aria-label={actionLabel}>
             {actionLabel}
           </Button>
         )}
@@ -56,7 +50,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   }
 
   return (
-    <div className={cn('text-center py-12', className)}>
+    <div className={cn("text-center py-12", className)}>
       <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-6 shadow-soft">
         {Icon ? <Icon className="w-12 h-12 text-muted-foreground" /> : icon}
       </div>

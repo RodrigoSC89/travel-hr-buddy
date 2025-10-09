@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   ChevronRight,
   ChevronLeft,
@@ -18,9 +18,9 @@ import {
   TestTube,
   Ship,
   Save,
-  Send
-} from 'lucide-react';
-import { toast } from 'sonner';
+  Send,
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface WizardStep {
   id: string;
@@ -32,54 +32,54 @@ interface WizardStep {
 
 const WIZARD_STEPS: WizardStep[] = [
   {
-    id: 'basic',
-    title: 'Informações Básicas',
-    description: 'Dados gerais da embarcação e operação',
+    id: "basic",
+    title: "Informações Básicas",
+    description: "Dados gerais da embarcação e operação",
     icon: Ship,
-    fields: ['vessel_name', 'vessel_type', 'dp_class', 'operation_type']
+    fields: ["vessel_name", "vessel_type", "dp_class", "operation_type"],
   },
   {
-    id: 'management',
-    title: 'Gestão',
-    description: 'Organograma e responsabilidades',
+    id: "management",
+    title: "Gestão",
+    description: "Organograma e responsabilidades",
     icon: Users,
-    fields: ['org_structure', 'dp_master', 'responsibilities']
+    fields: ["org_structure", "dp_master", "responsibilities"],
   },
   {
-    id: 'training',
-    title: 'Treinamentos',
-    description: 'Certificações e competências',
+    id: "training",
+    title: "Treinamentos",
+    description: "Certificações e competências",
     icon: GraduationCap,
-    fields: ['required_certs', 'training_plan', 'competency_matrix']
+    fields: ["required_certs", "training_plan", "competency_matrix"],
   },
   {
-    id: 'procedures',
-    title: 'Procedimentos',
-    description: 'FMEA, ASOG e contingência',
+    id: "procedures",
+    title: "Procedimentos",
+    description: "FMEA, ASOG e contingência",
     icon: FileText,
-    fields: ['fmea', 'asog', 'contingency_plan']
+    fields: ["fmea", "asog", "contingency_plan"],
   },
   {
-    id: 'operation',
-    title: 'Operação',
-    description: 'Watch keeping e protocolos',
+    id: "operation",
+    title: "Operação",
+    description: "Watch keeping e protocolos",
     icon: Radio,
-    fields: ['watch_keeping', 'communication', 'protocols']
+    fields: ["watch_keeping", "communication", "protocols"],
   },
   {
-    id: 'maintenance',
-    title: 'Manutenção',
-    description: 'Preventiva, preditiva e corretiva',
+    id: "maintenance",
+    title: "Manutenção",
+    description: "Preventiva, preditiva e corretiva",
     icon: Wrench,
-    fields: ['preventive', 'predictive', 'corrective']
+    fields: ["preventive", "predictive", "corrective"],
   },
   {
-    id: 'testing',
-    title: 'Testes Anuais',
-    description: 'DP trials e validação',
+    id: "testing",
+    title: "Testes Anuais",
+    description: "DP trials e validação",
     icon: TestTube,
-    fields: ['dp_trials', 'capability_plots', 'validation']
-  }
+    fields: ["dp_trials", "capability_plots", "validation"],
+  },
 ];
 
 interface PeoDpWizardProps {
@@ -112,9 +112,9 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
     setIsSubmitting(true);
     try {
       await onComplete(formData);
-      toast.success('Plano PEO-DP criado com sucesso!');
+      toast.success("Plano PEO-DP criado com sucesso!");
     } catch (error) {
-      toast.error('Erro ao criar plano PEO-DP');
+      toast.error("Erro ao criar plano PEO-DP");
     } finally {
       setIsSubmitting(false);
     }
@@ -128,7 +128,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
     const StepIcon = currentWizardStep.icon;
 
     switch (currentWizardStep.id) {
-      case 'basic':
+      case "basic":
         return (
           <div className="space-y-4">
             <div>
@@ -136,8 +136,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               <Input
                 id="vessel_name"
                 placeholder="Ex: PSV Atlantic Explorer"
-                value={formData.vessel_name || ''}
-                onChange={(e) => updateFormData('vessel_name', e.target.value)}
+                value={formData.vessel_name || ""}
+                onChange={e => updateFormData("vessel_name", e.target.value)}
               />
             </div>
             <div>
@@ -145,8 +145,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               <select
                 id="vessel_type"
                 className="w-full px-3 py-2 border rounded-md"
-                value={formData.vessel_type || ''}
-                onChange={(e) => updateFormData('vessel_type', e.target.value)}
+                value={formData.vessel_type || ""}
+                onChange={e => updateFormData("vessel_type", e.target.value)}
               >
                 <option value="">Selecione...</option>
                 <option value="PSV">PSV - Platform Supply Vessel</option>
@@ -161,8 +161,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               <select
                 id="dp_class"
                 className="w-full px-3 py-2 border rounded-md"
-                value={formData.dp_class || ''}
-                onChange={(e) => updateFormData('dp_class', e.target.value)}
+                value={formData.dp_class || ""}
+                onChange={e => updateFormData("dp_class", e.target.value)}
               >
                 <option value="">Selecione...</option>
                 <option value="DP1">DP1</option>
@@ -175,14 +175,14 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               <Input
                 id="operation_type"
                 placeholder="Ex: Apoio à plataforma offshore"
-                value={formData.operation_type || ''}
-                onChange={(e) => updateFormData('operation_type', e.target.value)}
+                value={formData.operation_type || ""}
+                onChange={e => updateFormData("operation_type", e.target.value)}
               />
             </div>
           </div>
         );
 
-      case 'management':
+      case "management":
         return (
           <div className="space-y-4">
             <div>
@@ -191,8 +191,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="org_structure"
                 placeholder="Descreva a estrutura organizacional e hierarquia..."
                 rows={4}
-                value={formData.org_structure || ''}
-                onChange={(e) => updateFormData('org_structure', e.target.value)}
+                value={formData.org_structure || ""}
+                onChange={e => updateFormData("org_structure", e.target.value)}
               />
             </div>
             <div>
@@ -200,8 +200,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               <Input
                 id="dp_master"
                 placeholder="Nome e certificações do DP Master"
-                value={formData.dp_master || ''}
-                onChange={(e) => updateFormData('dp_master', e.target.value)}
+                value={formData.dp_master || ""}
+                onChange={e => updateFormData("dp_master", e.target.value)}
               />
             </div>
             <div>
@@ -210,14 +210,14 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="responsibilities"
                 placeholder="Defina responsabilidades de cada função..."
                 rows={4}
-                value={formData.responsibilities || ''}
-                onChange={(e) => updateFormData('responsibilities', e.target.value)}
+                value={formData.responsibilities || ""}
+                onChange={e => updateFormData("responsibilities", e.target.value)}
               />
             </div>
           </div>
         );
 
-      case 'training':
+      case "training":
         return (
           <div className="space-y-4">
             <div>
@@ -226,8 +226,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="required_certs"
                 placeholder="Liste todas as certificações necessárias (STCW, DP, etc.)"
                 rows={4}
-                value={formData.required_certs || ''}
-                onChange={(e) => updateFormData('required_certs', e.target.value)}
+                value={formData.required_certs || ""}
+                onChange={e => updateFormData("required_certs", e.target.value)}
               />
             </div>
             <div>
@@ -236,8 +236,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="training_plan"
                 placeholder="Descreva o plano de treinamento e reciclagem..."
                 rows={4}
-                value={formData.training_plan || ''}
-                onChange={(e) => updateFormData('training_plan', e.target.value)}
+                value={formData.training_plan || ""}
+                onChange={e => updateFormData("training_plan", e.target.value)}
               />
             </div>
             <div>
@@ -246,14 +246,14 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="competency_matrix"
                 placeholder="Defina a matriz de competências por função..."
                 rows={4}
-                value={formData.competency_matrix || ''}
-                onChange={(e) => updateFormData('competency_matrix', e.target.value)}
+                value={formData.competency_matrix || ""}
+                onChange={e => updateFormData("competency_matrix", e.target.value)}
               />
             </div>
           </div>
         );
 
-      case 'procedures':
+      case "procedures":
         return (
           <div className="space-y-4">
             <div>
@@ -262,8 +262,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="fmea"
                 placeholder="Análise de modos de falha e seus efeitos..."
                 rows={4}
-                value={formData.fmea || ''}
-                onChange={(e) => updateFormData('fmea', e.target.value)}
+                value={formData.fmea || ""}
+                onChange={e => updateFormData("fmea", e.target.value)}
               />
             </div>
             <div>
@@ -272,8 +272,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="asog"
                 placeholder="Diretrizes operacionais específicas da atividade..."
                 rows={4}
-                value={formData.asog || ''}
-                onChange={(e) => updateFormData('asog', e.target.value)}
+                value={formData.asog || ""}
+                onChange={e => updateFormData("asog", e.target.value)}
               />
             </div>
             <div>
@@ -282,14 +282,14 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="contingency_plan"
                 placeholder="Procedimentos de emergência e contingência..."
                 rows={4}
-                value={formData.contingency_plan || ''}
-                onChange={(e) => updateFormData('contingency_plan', e.target.value)}
+                value={formData.contingency_plan || ""}
+                onChange={e => updateFormData("contingency_plan", e.target.value)}
               />
             </div>
           </div>
         );
 
-      case 'operation':
+      case "operation":
         return (
           <div className="space-y-4">
             <div>
@@ -298,8 +298,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="watch_keeping"
                 placeholder="Descreva o sistema de turnos e watch keeping..."
                 rows={4}
-                value={formData.watch_keeping || ''}
-                onChange={(e) => updateFormData('watch_keeping', e.target.value)}
+                value={formData.watch_keeping || ""}
+                onChange={e => updateFormData("watch_keeping", e.target.value)}
               />
             </div>
             <div>
@@ -308,8 +308,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="communication"
                 placeholder="Procedimentos de comunicação interna e externa..."
                 rows={4}
-                value={formData.communication || ''}
-                onChange={(e) => updateFormData('communication', e.target.value)}
+                value={formData.communication || ""}
+                onChange={e => updateFormData("communication", e.target.value)}
               />
             </div>
             <div>
@@ -318,14 +318,14 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="protocols"
                 placeholder="Protocolos de operação DP..."
                 rows={4}
-                value={formData.protocols || ''}
-                onChange={(e) => updateFormData('protocols', e.target.value)}
+                value={formData.protocols || ""}
+                onChange={e => updateFormData("protocols", e.target.value)}
               />
             </div>
           </div>
         );
 
-      case 'maintenance':
+      case "maintenance":
         return (
           <div className="space-y-4">
             <div>
@@ -334,8 +334,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="preventive"
                 placeholder="Programa de manutenção preventiva..."
                 rows={4}
-                value={formData.preventive || ''}
-                onChange={(e) => updateFormData('preventive', e.target.value)}
+                value={formData.preventive || ""}
+                onChange={e => updateFormData("preventive", e.target.value)}
               />
             </div>
             <div>
@@ -344,8 +344,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="predictive"
                 placeholder="Estratégias de manutenção preditiva..."
                 rows={4}
-                value={formData.predictive || ''}
-                onChange={(e) => updateFormData('predictive', e.target.value)}
+                value={formData.predictive || ""}
+                onChange={e => updateFormData("predictive", e.target.value)}
               />
             </div>
             <div>
@@ -354,14 +354,14 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="corrective"
                 placeholder="Procedimentos de manutenção corretiva..."
                 rows={4}
-                value={formData.corrective || ''}
-                onChange={(e) => updateFormData('corrective', e.target.value)}
+                value={formData.corrective || ""}
+                onChange={e => updateFormData("corrective", e.target.value)}
               />
             </div>
           </div>
         );
 
-      case 'testing':
+      case "testing":
         return (
           <div className="space-y-4">
             <div>
@@ -370,8 +370,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="dp_trials"
                 placeholder="Programação e procedimentos dos DP trials..."
                 rows={4}
-                value={formData.dp_trials || ''}
-                onChange={(e) => updateFormData('dp_trials', e.target.value)}
+                value={formData.dp_trials || ""}
+                onChange={e => updateFormData("dp_trials", e.target.value)}
               />
             </div>
             <div>
@@ -380,8 +380,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="capability_plots"
                 placeholder="Análise e atualização dos capability plots..."
                 rows={4}
-                value={formData.capability_plots || ''}
-                onChange={(e) => updateFormData('capability_plots', e.target.value)}
+                value={formData.capability_plots || ""}
+                onChange={e => updateFormData("capability_plots", e.target.value)}
               />
             </div>
             <div>
@@ -390,8 +390,8 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 id="validation"
                 placeholder="Processo de validação e certificação do sistema DP..."
                 rows={4}
-                value={formData.validation || ''}
-                onChange={(e) => updateFormData('validation', e.target.value)}
+                value={formData.validation || ""}
+                onChange={e => updateFormData("validation", e.target.value)}
               />
             </div>
           </div>
@@ -430,16 +430,16 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
                 <div
                   key={step.id}
                   className={`flex flex-col items-center ${
-                    idx <= currentStep ? 'text-primary' : 'text-muted-foreground'
+                    idx <= currentStep ? "text-primary" : "text-muted-foreground"
                   }`}
                 >
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 ${
                       idx < currentStep
-                        ? 'bg-primary text-primary-foreground'
+                        ? "bg-primary text-primary-foreground"
                         : idx === currentStep
-                        ? 'bg-primary/20 border-2 border-primary'
-                        : 'bg-muted'
+                          ? "bg-primary/20 border-2 border-primary"
+                          : "bg-muted"
                     }`}
                   >
                     {idx < currentStep ? (

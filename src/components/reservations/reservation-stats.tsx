@@ -1,16 +1,16 @@
-import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { 
-  CalendarIcon, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  CalendarIcon,
+  Clock,
+  CheckCircle,
+  XCircle,
   AlertTriangle,
   TrendingUp,
   DollarSign,
-  Users
-} from 'lucide-react';
-import { EnhancedReservation } from './enhanced-reservations-dashboard';
+  Users,
+} from "lucide-react";
+import { EnhancedReservation } from "./enhanced-reservations-dashboard";
 
 interface ReservationStatsProps {
   reservations: EnhancedReservation[];
@@ -18,86 +18,84 @@ interface ReservationStatsProps {
 
 export const ReservationStats: React.FC<ReservationStatsProps> = ({ reservations }) => {
   const totalReservations = reservations.length;
-  const confirmedReservations = reservations.filter(r => r.status === 'confirmed').length;
-  const pendingReservations = reservations.filter(r => r.status === 'pending').length;
-  const cancelledReservations = reservations.filter(r => r.status === 'cancelled').length;
-  const completedReservations = reservations.filter(r => r.status === 'completed').length;
+  const confirmedReservations = reservations.filter(r => r.status === "confirmed").length;
+  const pendingReservations = reservations.filter(r => r.status === "pending").length;
+  const cancelledReservations = reservations.filter(r => r.status === "cancelled").length;
+  const completedReservations = reservations.filter(r => r.status === "completed").length;
   const conflictedReservations = reservations.filter(r => r.conflict_detected).length;
-  
+
   const totalAmount = reservations
-    .filter(r => r.total_amount && r.status !== 'cancelled')
+    .filter(r => r.total_amount && r.status !== "cancelled")
     .reduce((sum, r) => sum + (r.total_amount || 0), 0);
 
-  const upcomingReservations = reservations.filter(r => 
-    new Date(r.start_date) > new Date() && r.status === 'confirmed'
+  const upcomingReservations = reservations.filter(
+    r => new Date(r.start_date) > new Date() && r.status === "confirmed"
   ).length;
 
-  const uniqueCrewMembers = new Set(
-    reservations.map(r => r.crew_member_name).filter(Boolean)
-  ).size;
+  const uniqueCrewMembers = new Set(reservations.map(r => r.crew_member_name).filter(Boolean)).size;
 
   const stats = [
     {
-      title: 'Total de Reservas',
+      title: "Total de Reservas",
       value: totalReservations,
       icon: CalendarIcon,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100 dark:bg-blue-900/30'
+      color: "text-blue-600",
+      bgColor: "bg-blue-100 dark:bg-blue-900/30",
     },
     {
-      title: 'Confirmadas',
+      title: "Confirmadas",
       value: confirmedReservations,
       icon: CheckCircle,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100 dark:bg-green-900/30'
+      color: "text-green-600",
+      bgColor: "bg-green-100 dark:bg-green-900/30",
     },
     {
-      title: 'Pendentes',
+      title: "Pendentes",
       value: pendingReservations,
       icon: Clock,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-100 dark:bg-yellow-900/30'
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-100 dark:bg-yellow-900/30",
     },
     {
-      title: 'Próximas',
+      title: "Próximas",
       value: upcomingReservations,
       icon: TrendingUp,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-100 dark:bg-purple-900/30'
+      color: "text-purple-600",
+      bgColor: "bg-purple-100 dark:bg-purple-900/30",
     },
     {
-      title: 'Valor Total',
-      value: new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
+      title: "Valor Total",
+      value: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0
+        maximumFractionDigits: 0,
       }).format(totalAmount),
       icon: DollarSign,
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-100 dark:bg-emerald-900/30'
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-100 dark:bg-emerald-900/30",
     },
     {
-      title: 'Tripulantes',
+      title: "Tripulantes",
       value: uniqueCrewMembers,
       icon: Users,
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-100 dark:bg-indigo-900/30'
+      color: "text-indigo-600",
+      bgColor: "bg-indigo-100 dark:bg-indigo-900/30",
     },
     {
-      title: 'Canceladas',
+      title: "Canceladas",
       value: cancelledReservations,
       icon: XCircle,
-      color: 'text-red-600',
-      bgColor: 'bg-red-100 dark:bg-red-900/30'
+      color: "text-red-600",
+      bgColor: "bg-red-100 dark:bg-red-900/30",
     },
     {
-      title: 'Conflitos',
+      title: "Conflitos",
       value: conflictedReservations,
       icon: AlertTriangle,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-100 dark:bg-orange-900/30'
-    }
+      color: "text-orange-600",
+      bgColor: "bg-orange-100 dark:bg-orange-900/30",
+    },
   ];
 
   return (

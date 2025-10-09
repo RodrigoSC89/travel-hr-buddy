@@ -1,19 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
-import { 
-  DollarSign, 
-  Receipt, 
-  Plus, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
+import {
+  DollarSign,
+  Receipt,
+  Plus,
   Eye,
   Edit,
   Upload,
@@ -35,14 +47,14 @@ import {
   AlertTriangle,
   BarChart3,
   TrendingUp,
-  Target
-} from 'lucide-react';
+  Target,
+} from "lucide-react";
 
 interface Expense {
   id: string;
   tripId: string;
   tripTitle: string;
-  category: 'accommodation' | 'transport' | 'meals' | 'fuel' | 'other';
+  category: "accommodation" | "transport" | "meals" | "fuel" | "other";
   subcategory?: string;
   amount: number;
   currency: string;
@@ -50,7 +62,7 @@ interface Expense {
   date: Date;
   merchant: string;
   receiptUrl?: string;
-  status: 'draft' | 'submitted' | 'approved' | 'rejected' | 'paid';
+  status: "draft" | "submitted" | "approved" | "rejected" | "paid";
   submittedAt?: Date;
   approvedAt?: Date;
   notes?: string;
@@ -72,97 +84,97 @@ export const TravelExpenseSystem: React.FC = () => {
   const { toast } = useToast();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [budgets, setBudgets] = useState<ExpenseBudget[]>([]);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(true);
   const [newExpense, setNewExpense] = useState<Partial<Expense>>({
-    category: 'transport',
-    currency: 'BRL',
+    category: "transport",
+    currency: "BRL",
     reimbursable: true,
-    status: 'draft'
+    status: "draft",
   });
   const [isAddingExpense, setIsAddingExpense] = useState(false);
 
   // Mock data
   const mockExpenses: Expense[] = [
     {
-      id: '1',
-      tripId: 'trip-001',
-      tripTitle: 'Inspeção Técnica - Santos',
-      category: 'transport',
-      subcategory: 'Voo',
-      amount: 850.00,
-      currency: 'BRL',
-      description: 'Passagem aérea São Paulo - Santos',
-      date: new Date('2024-03-15'),
-      merchant: 'GOL Linhas Aéreas',
-      receiptUrl: '/receipts/receipt-001.pdf',
-      status: 'approved',
-      submittedAt: new Date('2024-03-16'),
-      approvedAt: new Date('2024-03-17'),
-      notes: 'Voo aprovado com antecedência',
-      tags: ['voo', 'urgente'],
-      location: 'Santos, SP',
+      id: "1",
+      tripId: "trip-001",
+      tripTitle: "Inspeção Técnica - Santos",
+      category: "transport",
+      subcategory: "Voo",
+      amount: 850.0,
+      currency: "BRL",
+      description: "Passagem aérea São Paulo - Santos",
+      date: new Date("2024-03-15"),
+      merchant: "GOL Linhas Aéreas",
+      receiptUrl: "/receipts/receipt-001.pdf",
+      status: "approved",
+      submittedAt: new Date("2024-03-16"),
+      approvedAt: new Date("2024-03-17"),
+      notes: "Voo aprovado com antecedência",
+      tags: ["voo", "urgente"],
+      location: "Santos, SP",
       reimbursable: true,
-      businessPurpose: 'Inspeção obrigatória de embarcação'
+      businessPurpose: "Inspeção obrigatória de embarcação",
     },
     {
-      id: '2',
-      tripId: 'trip-001',
-      tripTitle: 'Inspeção Técnica - Santos',
-      category: 'accommodation',
-      amount: 320.00,
-      currency: 'BRL',
-      description: 'Hotel Ibis Santos - 2 diárias',
-      date: new Date('2024-03-15'),
-      merchant: 'Ibis Santos',
-      receiptUrl: '/receipts/receipt-002.pdf',
-      status: 'approved',
-      submittedAt: new Date('2024-03-16'),
-      approvedAt: new Date('2024-03-17'),
-      location: 'Santos, SP',
+      id: "2",
+      tripId: "trip-001",
+      tripTitle: "Inspeção Técnica - Santos",
+      category: "accommodation",
+      amount: 320.0,
+      currency: "BRL",
+      description: "Hotel Ibis Santos - 2 diárias",
+      date: new Date("2024-03-15"),
+      merchant: "Ibis Santos",
+      receiptUrl: "/receipts/receipt-002.pdf",
+      status: "approved",
+      submittedAt: new Date("2024-03-16"),
+      approvedAt: new Date("2024-03-17"),
+      location: "Santos, SP",
       reimbursable: true,
-      businessPurpose: 'Hospedagem durante inspeção'
+      businessPurpose: "Hospedagem durante inspeção",
     },
     {
-      id: '3',
-      tripId: 'trip-001',
-      tripTitle: 'Inspeção Técnica - Santos',
-      category: 'meals',
-      amount: 85.50,
-      currency: 'BRL',
-      description: 'Almoço de negócios com cliente',
-      date: new Date('2024-03-16'),
-      merchant: 'Restaurante Mariscos',
-      status: 'submitted',
-      submittedAt: new Date('2024-03-17'),
-      location: 'Santos, SP',
+      id: "3",
+      tripId: "trip-001",
+      tripTitle: "Inspeção Técnica - Santos",
+      category: "meals",
+      amount: 85.5,
+      currency: "BRL",
+      description: "Almoço de negócios com cliente",
+      date: new Date("2024-03-16"),
+      merchant: "Restaurante Mariscos",
+      status: "submitted",
+      submittedAt: new Date("2024-03-17"),
+      location: "Santos, SP",
       reimbursable: true,
-      businessPurpose: 'Reunião com cliente durante inspeção'
+      businessPurpose: "Reunião com cliente durante inspeção",
     },
     {
-      id: '4',
-      tripId: 'trip-002',
-      tripTitle: 'Conferência Marítima - Hamburg',
-      category: 'transport',
-      subcategory: 'Voo Internacional',
-      amount: 4500.00,
-      currency: 'BRL',
-      description: 'Passagem São Paulo - Hamburg (ida e volta)',
-      date: new Date('2024-04-20'),
-      merchant: 'Lufthansa',
-      status: 'draft',
-      location: 'Hamburg, Alemanha',
+      id: "4",
+      tripId: "trip-002",
+      tripTitle: "Conferência Marítima - Hamburg",
+      category: "transport",
+      subcategory: "Voo Internacional",
+      amount: 4500.0,
+      currency: "BRL",
+      description: "Passagem São Paulo - Hamburg (ida e volta)",
+      date: new Date("2024-04-20"),
+      merchant: "Lufthansa",
+      status: "draft",
+      location: "Hamburg, Alemanha",
       reimbursable: true,
-      businessPurpose: 'Participação em conferência técnica'
-    }
+      businessPurpose: "Participação em conferência técnica",
+    },
   ];
 
   const mockBudgets: ExpenseBudget[] = [
-    { category: 'Transporte', allocated: 15000, spent: 5350, remaining: 9650, percentage: 36 },
-    { category: 'Hospedagem', allocated: 8000, spent: 3200, remaining: 4800, percentage: 40 },
-    { category: 'Alimentação', allocated: 3000, spent: 985, remaining: 2015, percentage: 33 },
-    { category: 'Combustível', allocated: 2000, spent: 450, remaining: 1550, percentage: 23 },
-    { category: 'Outros', allocated: 2000, spent: 320, remaining: 1680, percentage: 16 }
+    { category: "Transporte", allocated: 15000, spent: 5350, remaining: 9650, percentage: 36 },
+    { category: "Hospedagem", allocated: 8000, spent: 3200, remaining: 4800, percentage: 40 },
+    { category: "Alimentação", allocated: 3000, spent: 985, remaining: 2015, percentage: 33 },
+    { category: "Combustível", allocated: 2000, spent: 450, remaining: 1550, percentage: 23 },
+    { category: "Outros", allocated: 2000, spent: 320, remaining: 1680, percentage: 16 },
   ];
 
   useEffect(() => {
@@ -176,11 +188,11 @@ export const TravelExpenseSystem: React.FC = () => {
       setExpenses(mockExpenses);
       setBudgets(mockBudgets);
     } catch (error) {
-      console.error('Error loading expenses:', error);
+      console.error("Error loading expenses:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar despesas",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -192,7 +204,7 @@ export const TravelExpenseSystem: React.FC = () => {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -200,27 +212,27 @@ export const TravelExpenseSystem: React.FC = () => {
     try {
       const expense: Expense = {
         id: `exp-${Date.now()}`,
-        tripId: 'trip-current',
-        tripTitle: 'Viagem Atual',
-        category: newExpense.category as Expense['category'],
+        tripId: "trip-current",
+        tripTitle: "Viagem Atual",
+        category: newExpense.category as Expense["category"],
         amount: newExpense.amount!,
-        currency: newExpense.currency || 'BRL',
+        currency: newExpense.currency || "BRL",
         description: newExpense.description!,
         date: new Date(),
         merchant: newExpense.merchant!,
-        status: 'draft',
+        status: "draft",
         reimbursable: newExpense.reimbursable || true,
-        businessPurpose: newExpense.businessPurpose || '',
+        businessPurpose: newExpense.businessPurpose || "",
         location: newExpense.location,
-        notes: newExpense.notes
+        notes: newExpense.notes,
       };
 
       setExpenses(prev => [...prev, expense]);
       setNewExpense({
-        category: 'transport',
-        currency: 'BRL',
+        category: "transport",
+        currency: "BRL",
         reimbursable: true,
-        status: 'draft'
+        status: "draft",
       });
       setIsAddingExpense(false);
 
@@ -229,55 +241,75 @@ export const TravelExpenseSystem: React.FC = () => {
         description: "Despesa criada com sucesso",
       });
     } catch (error) {
-      console.error('Error adding expense:', error);
+      console.error("Error adding expense:", error);
       toast({
         title: "Erro",
         description: "Erro ao adicionar despesa",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'transport': return <Plane className="h-4 w-4" />;
-      case 'accommodation': return <Building className="h-4 w-4" />;
-      case 'meals': return <Utensils className="h-4 w-4" />;
-      case 'fuel': return <Fuel className="h-4 w-4" />;
-      case 'other': return <ShoppingBag className="h-4 w-4" />;
-      default: return <Receipt className="h-4 w-4" />;
+      case "transport":
+        return <Plane className="h-4 w-4" />;
+      case "accommodation":
+        return <Building className="h-4 w-4" />;
+      case "meals":
+        return <Utensils className="h-4 w-4" />;
+      case "fuel":
+        return <Fuel className="h-4 w-4" />;
+      case "other":
+        return <ShoppingBag className="h-4 w-4" />;
+      default:
+        return <Receipt className="h-4 w-4" />;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'approved': return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'rejected': return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      case 'submitted': return <Clock className="h-4 w-4 text-blue-600" />;
-      case 'paid': return <CreditCard className="h-4 w-4 text-purple-600" />;
-      default: return <FileText className="h-4 w-4 text-muted-foreground" />;
+      case "approved":
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
+      case "rejected":
+        return <AlertTriangle className="h-4 w-4 text-red-600" />;
+      case "submitted":
+        return <Clock className="h-4 w-4 text-blue-600" />;
+      case "paid":
+        return <CreditCard className="h-4 w-4 text-purple-600" />;
+      default:
+        return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'approved': return 'bg-green-100 text-green-800 border-green-300';
-      case 'rejected': return 'bg-red-100 text-red-800 border-red-300';
-      case 'submitted': return 'bg-blue-100 text-blue-800 border-blue-300';
-      case 'paid': return 'bg-purple-100 text-purple-800 border-purple-300';
-      default: return 'bg-secondary text-secondary-foreground border-border';
+      case "approved":
+        return "bg-green-100 text-green-800 border-green-300";
+      case "rejected":
+        return "bg-red-100 text-red-800 border-red-300";
+      case "submitted":
+        return "bg-blue-100 text-blue-800 border-blue-300";
+      case "paid":
+        return "bg-purple-100 text-purple-800 border-purple-300";
+      default:
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
-  const formatCurrency = (value: number) => 
-    new Intl.NumberFormat('pt-BR', { 
-      style: 'currency', 
-      currency: 'BRL' 
+  const formatCurrency = (value: number) =>
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
     }).format(value);
 
   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
-  const approvedExpenses = expenses.filter(exp => exp.status === 'approved').reduce((sum, exp) => sum + exp.amount, 0);
-  const pendingExpenses = expenses.filter(exp => exp.status === 'submitted').reduce((sum, exp) => sum + exp.amount, 0);
+  const approvedExpenses = expenses
+    .filter(exp => exp.status === "approved")
+    .reduce((sum, exp) => sum + exp.amount, 0);
+  const pendingExpenses = expenses
+    .filter(exp => exp.status === "submitted")
+    .reduce((sum, exp) => sum + exp.amount, 0);
 
   if (isLoading) {
     return (
@@ -321,10 +353,12 @@ export const TravelExpenseSystem: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Aprovadas</p>
-                <p className="text-3xl font-bold text-success">{formatCurrency(approvedExpenses)}</p>
+                <p className="text-3xl font-bold text-success">
+                  {formatCurrency(approvedExpenses)}
+                </p>
                 <p className="text-xs text-success flex items-center gap-1 mt-1">
                   <CheckCircle className="h-3 w-3" />
-                  {expenses.filter(e => e.status === 'approved').length} itens
+                  {expenses.filter(e => e.status === "approved").length} itens
                 </p>
               </div>
               <CheckCircle className="h-8 w-8 text-success" />
@@ -340,7 +374,7 @@ export const TravelExpenseSystem: React.FC = () => {
                 <p className="text-3xl font-bold text-warning">{formatCurrency(pendingExpenses)}</p>
                 <p className="text-xs text-warning flex items-center gap-1 mt-1">
                   <Clock className="h-3 w-3" />
-                  {expenses.filter(e => e.status === 'submitted').length} itens
+                  {expenses.filter(e => e.status === "submitted").length} itens
                 </p>
               </div>
               <Clock className="h-8 w-8 text-warning" />
@@ -354,7 +388,13 @@ export const TravelExpenseSystem: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Taxa de Aprovação</p>
                 <p className="text-3xl font-bold text-info">
-                  {expenses.length > 0 ? Math.round((expenses.filter(e => e.status === 'approved').length / expenses.length) * 100) : 0}%
+                  {expenses.length > 0
+                    ? Math.round(
+                        (expenses.filter(e => e.status === "approved").length / expenses.length) *
+                          100
+                      )
+                    : 0}
+                  %
                 </p>
                 <p className="text-xs text-info flex items-center gap-1 mt-1">
                   <Target className="h-3 w-3" />
@@ -400,11 +440,11 @@ export const TravelExpenseSystem: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {['transport', 'accommodation', 'meals', 'fuel', 'other'].map((category) => {
+                  {["transport", "accommodation", "meals", "fuel", "other"].map(category => {
                     const categoryExpenses = expenses.filter(e => e.category === category);
                     const total = categoryExpenses.reduce((sum, e) => sum + e.amount, 0);
                     const percentage = totalExpenses > 0 ? (total / totalExpenses) * 100 : 0;
-                    
+
                     return (
                       <div key={category} className="space-y-2">
                         <div className="flex justify-between items-center">
@@ -447,7 +487,9 @@ export const TravelExpenseSystem: React.FC = () => {
                       <Progress value={budget.percentage} className="h-2" />
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Restante: {formatCurrency(budget.remaining)}</span>
-                        <span className={budget.percentage > 80 ? 'text-red-600' : 'text-green-600'}>
+                        <span
+                          className={budget.percentage > 80 ? "text-red-600" : "text-green-600"}
+                        >
                           {budget.percentage}%
                         </span>
                       </div>
@@ -477,7 +519,15 @@ export const TravelExpenseSystem: React.FC = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="category">Categoria</Label>
-                      <Select value={newExpense.category} onValueChange={(value) => setNewExpense(prev => ({ ...prev, category: value as Expense['category'] }))}>
+                      <Select
+                        value={newExpense.category}
+                        onValueChange={value =>
+                          setNewExpense(prev => ({
+                            ...prev,
+                            category: value as Expense["category"],
+                          }))
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -497,8 +547,10 @@ export const TravelExpenseSystem: React.FC = () => {
                         type="number"
                         step="0.01"
                         placeholder="0,00"
-                        value={newExpense.amount || ''}
-                        onChange={(e) => setNewExpense(prev => ({ ...prev, amount: parseFloat(e.target.value) }))}
+                        value={newExpense.amount || ""}
+                        onChange={e =>
+                          setNewExpense(prev => ({ ...prev, amount: parseFloat(e.target.value) }))
+                        }
                       />
                     </div>
                   </div>
@@ -508,8 +560,10 @@ export const TravelExpenseSystem: React.FC = () => {
                     <Input
                       id="description"
                       placeholder="Descrição da despesa"
-                      value={newExpense.description || ''}
-                      onChange={(e) => setNewExpense(prev => ({ ...prev, description: e.target.value }))}
+                      value={newExpense.description || ""}
+                      onChange={e =>
+                        setNewExpense(prev => ({ ...prev, description: e.target.value }))
+                      }
                     />
                   </div>
 
@@ -519,8 +573,10 @@ export const TravelExpenseSystem: React.FC = () => {
                       <Input
                         id="merchant"
                         placeholder="Nome do fornecedor"
-                        value={newExpense.merchant || ''}
-                        onChange={(e) => setNewExpense(prev => ({ ...prev, merchant: e.target.value }))}
+                        value={newExpense.merchant || ""}
+                        onChange={e =>
+                          setNewExpense(prev => ({ ...prev, merchant: e.target.value }))
+                        }
                       />
                     </div>
                     <div>
@@ -528,8 +584,10 @@ export const TravelExpenseSystem: React.FC = () => {
                       <Input
                         id="location"
                         placeholder="Cidade, Estado"
-                        value={newExpense.location || ''}
-                        onChange={(e) => setNewExpense(prev => ({ ...prev, location: e.target.value }))}
+                        value={newExpense.location || ""}
+                        onChange={e =>
+                          setNewExpense(prev => ({ ...prev, location: e.target.value }))
+                        }
                       />
                     </div>
                   </div>
@@ -539,8 +597,10 @@ export const TravelExpenseSystem: React.FC = () => {
                     <Textarea
                       id="businessPurpose"
                       placeholder="Descreva a finalidade comercial da despesa"
-                      value={newExpense.businessPurpose || ''}
-                      onChange={(e) => setNewExpense(prev => ({ ...prev, businessPurpose: e.target.value }))}
+                      value={newExpense.businessPurpose || ""}
+                      onChange={e =>
+                        setNewExpense(prev => ({ ...prev, businessPurpose: e.target.value }))
+                      }
                     />
                   </div>
 
@@ -559,8 +619,11 @@ export const TravelExpenseSystem: React.FC = () => {
           </div>
 
           <div className="grid gap-4">
-            {expenses.map((expense) => (
-              <Card key={expense.id} className="travel-card hover:shadow-lg transition-all duration-300">
+            {expenses.map(expense => (
+              <Card
+                key={expense.id}
+                className="travel-card hover:shadow-lg transition-all duration-300"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-2">
@@ -585,11 +648,11 @@ export const TravelExpenseSystem: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           <Calendar className="h-3 w-3 text-muted-foreground" />
-                          <span>{expense.date.toLocaleDateString('pt-BR')}</span>
+                          <span>{expense.date.toLocaleDateString("pt-BR")}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <MapPin className="h-3 w-3 text-muted-foreground" />
-                          <span>{expense.location || 'N/A'}</span>
+                          <span>{expense.location || "N/A"}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <FileText className="h-3 w-3 text-muted-foreground" />
@@ -626,9 +689,7 @@ export const TravelExpenseSystem: React.FC = () => {
                 <Target className="h-5 w-5 text-primary" />
                 Controle de Orçamentos
               </CardTitle>
-              <CardDescription>
-                Acompanhe o uso dos orçamentos por categoria
-              </CardDescription>
+              <CardDescription>Acompanhe o uso dos orçamentos por categoria</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -638,15 +699,21 @@ export const TravelExpenseSystem: React.FC = () => {
                       <h4 className="font-semibold text-lg">{budget.category}</h4>
                       <div className="text-right">
                         <p className="text-2xl font-bold">{formatCurrency(budget.spent)}</p>
-                        <p className="text-sm text-muted-foreground">de {formatCurrency(budget.allocated)}</p>
+                        <p className="text-sm text-muted-foreground">
+                          de {formatCurrency(budget.allocated)}
+                        </p>
                       </div>
                     </div>
-                    
+
                     <Progress value={budget.percentage} className="h-3 mb-2" />
-                    
+
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Restante: {formatCurrency(budget.remaining)}</span>
-                      <span className={`font-medium ${budget.percentage > 80 ? 'text-red-600' : budget.percentage > 60 ? 'text-yellow-600' : 'text-green-600'}`}>
+                      <span className="text-muted-foreground">
+                        Restante: {formatCurrency(budget.remaining)}
+                      </span>
+                      <span
+                        className={`font-medium ${budget.percentage > 80 ? "text-red-600" : budget.percentage > 60 ? "text-yellow-600" : "text-green-600"}`}
+                      >
                         {budget.percentage}% utilizado
                       </span>
                     </div>
@@ -674,7 +741,7 @@ export const TravelExpenseSystem: React.FC = () => {
                     <p className="text-sm text-muted-foreground">Despesas do mês atual</p>
                   </div>
                 </Button>
-                
+
                 <Button variant="outline" className="btn-travel p-6 h-auto">
                   <div className="text-center">
                     <BarChart3 className="h-8 w-8 mx-auto mb-2" />
@@ -682,7 +749,7 @@ export const TravelExpenseSystem: React.FC = () => {
                     <p className="text-sm text-muted-foreground">Comparativo trimestral</p>
                   </div>
                 </Button>
-                
+
                 <Button variant="outline" className="btn-travel p-6 h-auto">
                   <div className="text-center">
                     <Target className="h-8 w-8 mx-auto mb-2" />
@@ -690,7 +757,7 @@ export const TravelExpenseSystem: React.FC = () => {
                     <p className="text-sm text-muted-foreground">Status dos orçamentos</p>
                   </div>
                 </Button>
-                
+
                 <Button variant="outline" className="btn-travel p-6 h-auto">
                   <div className="text-center">
                     <User className="h-8 w-8 mx-auto mb-2" />

@@ -21,24 +21,24 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
   if (!apiKey) {
     return {
       success: false,
-      message: 'OpenAI API key not configured',
-      error: 'Missing VITE_OPENAI_API_KEY',
+      message: "OpenAI API key not configured",
+      error: "Missing VITE_OPENAI_API_KEY",
     };
   }
 
   try {
     // Test with a simple chat completion
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: "gpt-3.5-turbo",
         messages: [
           {
-            role: 'user',
+            role: "user",
             content: 'Say "API test successful" if you can read this.',
           },
         ],
@@ -63,7 +63,7 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
     if (data.choices && data.choices.length > 0) {
       return {
         success: true,
-        message: 'OpenAI API connection successful',
+        message: "OpenAI API connection successful",
         responseTime,
         data: {
           model: data.model,
@@ -74,16 +74,16 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
 
     return {
       success: false,
-      message: 'OpenAI API returned unexpected data',
+      message: "OpenAI API returned unexpected data",
       responseTime,
-      error: 'Invalid response format',
+      error: "Invalid response format",
     };
   } catch (error) {
     return {
       success: false,
-      message: 'Failed to connect to OpenAI API',
+      message: "Failed to connect to OpenAI API",
       responseTime: Date.now() - startTime,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }

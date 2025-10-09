@@ -1,28 +1,34 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { 
-  Zap, 
-  TestTube, 
-  Bug, 
-  TrendingUp, 
-  Activity, 
-  Flag, 
-  Workflow, 
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import {
+  Zap,
+  TestTube,
+  Bug,
+  TrendingUp,
+  Activity,
+  Flag,
+  Workflow,
   Layers,
   Brain,
   Code,
   Settings2,
   Beaker,
   Lightbulb,
-  Cpu
-} from 'lucide-react';
+  Cpu,
+} from "lucide-react";
 
 interface AdvancedSettings {
   enableFeatureFlags: boolean;
@@ -43,68 +49,66 @@ interface AdvancedFeaturesTabProps {
 export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
   settings,
   onUpdate,
-  testMode
+  testMode,
 }) => {
   const features = [
     {
-      id: 'featureFlags',
-      title: 'Feature Flags',
-      description: 'Controle de recursos por flags dinâmicas',
+      id: "featureFlags",
+      title: "Feature Flags",
+      description: "Controle de recursos por flags dinâmicas",
       icon: Flag,
       enabled: settings.enableFeatureFlags,
       onToggle: (enabled: boolean) => onUpdate({ enableFeatureFlags: enabled }),
-      danger: false
+      danger: false,
     },
     {
-      id: 'debugMode',
-      title: 'Modo Debug',
-      description: 'Logs detalhados e informações de desenvolvimento',
+      id: "debugMode",
+      title: "Modo Debug",
+      description: "Logs detalhados e informações de desenvolvimento",
       icon: Bug,
       enabled: settings.debugMode,
       onToggle: (enabled: boolean) => onUpdate({ debugMode: enabled }),
-      danger: true
+      danger: true,
     },
     {
-      id: 'performanceMonitoring',
-      title: 'Monitoramento de Performance',
-      description: 'Coleta métricas de performance em tempo real',
+      id: "performanceMonitoring",
+      title: "Monitoramento de Performance",
+      description: "Coleta métricas de performance em tempo real",
       icon: TrendingUp,
       enabled: settings.performanceMonitoring,
       onToggle: (enabled: boolean) => onUpdate({ performanceMonitoring: enabled }),
-      danger: false
+      danger: false,
     },
     {
-      id: 'errorTracking',
-      title: 'Rastreamento de Erros',
-      description: 'Captura e análise automática de erros',
+      id: "errorTracking",
+      title: "Rastreamento de Erros",
+      description: "Captura e análise automática de erros",
       icon: Activity,
       enabled: settings.errorTracking,
       onToggle: (enabled: boolean) => onUpdate({ errorTracking: enabled }),
-      danger: false
+      danger: false,
     },
     {
-      id: 'workflowAutomation',
-      title: 'Automação de Workflows',
-      description: 'Automatização inteligente de processos',
+      id: "workflowAutomation",
+      title: "Automação de Workflows",
+      description: "Automatização inteligente de processos",
       icon: Workflow,
       enabled: settings.workflowAutomation,
       onToggle: (enabled: boolean) => onUpdate({ workflowAutomation: enabled }),
-      danger: false
+      danger: false,
     },
     {
-      id: 'betaFeatures',
-      title: 'Recursos Beta',
-      description: 'Acesso antecipado a novos recursos',
+      id: "betaFeatures",
+      title: "Recursos Beta",
+      description: "Acesso antecipado a novos recursos",
       icon: Beaker,
       enabled: settings.enableBetaFeatures,
       onToggle: (enabled: boolean) => onUpdate({ enableBetaFeatures: enabled }),
-      danger: true
-    }
+      danger: true,
+    },
   ];
 
-  const customFieldTypes = [
-    'text', 'number', 'boolean', 'date', 'select', 'multiselect', 'json'
-  ];
+  const customFieldTypes = ["text", "number", "boolean", "date", "select", "multiselect", "json"];
 
   return (
     <div className="space-y-6">
@@ -114,35 +118,37 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
           <CardTitle className="flex items-center gap-2">
             <Zap className="w-5 h-5 text-primary" />
             Recursos Avançados
-            {testMode && <Badge variant="outline" className="ml-2"><TestTube className="w-3 h-3 mr-1" />Teste</Badge>}
+            {testMode && (
+              <Badge variant="outline" className="ml-2">
+                <TestTube className="w-3 h-3 mr-1" />
+                Teste
+              </Badge>
+            )}
           </CardTitle>
-          <CardDescription>
-            Configure recursos avançados e experimentais do sistema
-          </CardDescription>
+          <CardDescription>Configure recursos avançados e experimentais do sistema</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {features.map((feature) => {
+            {features.map(feature => {
               const Icon = feature.icon;
               return (
-                <div 
-                  key={feature.id} 
-                  className={`p-4 border rounded-lg ${feature.danger ? 'border-orange-200 bg-orange-50 dark:bg-orange-900/10' : ''}`}
+                <div
+                  key={feature.id}
+                  className={`p-4 border rounded-lg ${feature.danger ? "border-orange-200 bg-orange-50 dark:bg-orange-900/10" : ""}`}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <Icon className={`w-5 h-5 ${feature.danger ? 'text-orange-600' : 'text-primary'}`} />
+                      <Icon
+                        className={`w-5 h-5 ${feature.danger ? "text-orange-600" : "text-primary"}`}
+                      />
                       <div>
                         <h4 className="font-medium">{feature.title}</h4>
                         <p className="text-sm text-muted-foreground">{feature.description}</p>
                       </div>
                     </div>
-                    <Switch
-                      checked={feature.enabled}
-                      onCheckedChange={feature.onToggle}
-                    />
+                    <Switch checked={feature.enabled} onCheckedChange={feature.onToggle} />
                   </div>
-                  
+
                   {feature.danger && feature.enabled && (
                     <div className="text-xs text-orange-700 dark:text-orange-300 bg-orange-100 dark:bg-orange-900/20 p-2 rounded">
                       ⚠️ Este recurso pode afetar a performance ou estabilidade
@@ -162,9 +168,7 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
             <Brain className="w-5 h-5 text-primary" />
             Inteligência Artificial
           </CardTitle>
-          <CardDescription>
-            Configure recursos de IA e aprendizado de máquina
-          </CardDescription>
+          <CardDescription>Configure recursos de IA e aprendizado de máquina</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -178,9 +182,9 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
                 </div>
                 <Switch defaultChecked />
               </div>
-              
+
               <Separator />
-              
+
               <div className="flex items-center justify-between">
                 <div>
                   <Label className="text-base">Otimização Automática</Label>
@@ -190,9 +194,9 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
                 </div>
                 <Switch />
               </div>
-              
+
               <Separator />
-              
+
               <div className="flex items-center justify-between">
                 <div>
                   <Label className="text-base">Detecção de Anomalias</Label>
@@ -232,18 +236,13 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
             <Layers className="w-5 h-5 text-primary" />
             Campos Customizados
           </CardTitle>
-          <CardDescription>
-            Adicione campos personalizados ao sistema
-          </CardDescription>
+          <CardDescription>Adicione campos personalizados ao sistema</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="fieldName">Nome do Campo</Label>
-              <Input
-                id="fieldName"
-                placeholder="Ex: Código Interno"
-              />
+              <Input id="fieldName" placeholder="Ex: Código Interno" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="fieldType">Tipo</Label>
@@ -261,9 +260,7 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
               </Select>
             </div>
             <div className="flex items-end">
-              <Button className="w-full">
-                Adicionar Campo
-              </Button>
+              <Button className="w-full">Adicionar Campo</Button>
             </div>
           </div>
 
@@ -275,14 +272,18 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
                   <span className="font-medium">Número da Licença</span>
                   <span className="text-sm text-muted-foreground ml-2">(text)</span>
                 </div>
-                <Button variant="ghost" size="sm">Editar</Button>
+                <Button variant="ghost" size="sm">
+                  Editar
+                </Button>
               </div>
               <div className="flex items-center justify-between p-2 bg-muted/50 rounded">
                 <div>
                   <span className="font-medium">Data de Vencimento</span>
                   <span className="text-sm text-muted-foreground ml-2">(date)</span>
                 </div>
-                <Button variant="ghost" size="sm">Editar</Button>
+                <Button variant="ghost" size="sm">
+                  Editar
+                </Button>
               </div>
             </div>
           </div>
@@ -304,18 +305,18 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <h4 className="font-medium">Configurações de Debug</h4>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Label>Console Logs Verbosos</Label>
                   <Switch />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Métricas de Performance</Label>
                   <Switch defaultChecked />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Stack Traces Completos</Label>
                   <Switch />
@@ -325,18 +326,18 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
 
             <div className="space-y-4">
               <h4 className="font-medium">API & Integrações</h4>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Label>Rate Limiting</Label>
                   <Switch defaultChecked />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Request Logging</Label>
                   <Switch defaultChecked />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <Label>API Versioning</Label>
                   <Switch defaultChecked />

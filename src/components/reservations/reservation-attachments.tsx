@@ -1,21 +1,17 @@
-import React, { useState, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { 
-  Paperclip, 
-  Upload, 
-  X, 
-  Download, 
-  FileText, 
-  Image, 
-  File,
-  Trash2,
-  Eye
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Paperclip, Upload, X, Download, FileText, Image, File, Trash2, Eye } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface AttachmentFile {
   id: string;
@@ -35,7 +31,7 @@ interface ReservationAttachmentsProps {
 export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
   reservationId,
   isOpen,
-  onClose
+  onClose,
 }) => {
   const [attachments, setAttachments] = useState<AttachmentFile[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -53,19 +49,19 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('reservation_attachments')
-        .select('*')
-        .eq('reservation_id', reservationId)
-        .order('created_at', { ascending: false });
+        .from("reservation_attachments")
+        .select("*")
+        .eq("reservation_id", reservationId)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setAttachments(data || []);
     } catch (error) {
-      console.error('Error fetching attachments:', error);
+      console.error("Error fetching attachments:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar anexos",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -85,114 +81,112 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
           toast({
             title: "Arquivo muito grande",
             description: `${file.name} excede o limite de 10MB`,
-            variant: "destructive"
+            variant: "destructive",
           });
           continue;
         }
 
         // Upload file to Supabase Storage
-        const fileExt = file.name.split('.').pop();
+        const fileExt = file.name.split(".").pop();
         const fileName = `${reservationId}_${Date.now()}.${fileExt}`;
         const filePath = `reservations/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
-          .from('certificates') // Using existing bucket
+          .from("certificates") // Using existing bucket
           .upload(filePath, file);
 
         if (uploadError) throw uploadError;
 
         // Get public URL
-        const { data: { publicUrl } } = supabase.storage
-          .from('certificates')
-          .getPublicUrl(filePath);
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("certificates").getPublicUrl(filePath);
 
         // Save attachment record
-        const { error: dbError } = await supabase
-          .from('reservation_attachments')
-          .insert({
-            reservation_id: reservationId,
-            file_name: file.name,
-            file_url: publicUrl,
-            file_type: file.type,
-            file_size: file.size,
-            uploaded_by: (await supabase.auth.getUser()).data.user?.id
-          });
+        const { error: dbError } = await supabase.from("reservation_attachments").insert({
+          reservation_id: reservationId,
+          file_name: file.name,
+          file_url: publicUrl,
+          file_type: file.type,
+          file_size: file.size,
+          uploaded_by: (await supabase.auth.getUser()).data.user?.id,
+        });
 
         if (dbError) throw dbError;
       }
 
       toast({
         title: "Sucesso",
-        description: "Anexos enviados com sucesso!"
+        description: "Anexos enviados com sucesso!",
       });
 
       fetchAttachments();
     } catch (error) {
-      console.error('Error uploading files:', error);
+      console.error("Error uploading files:", error);
       toast({
         title: "Erro",
         description: "Erro ao enviar anexos",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     }
   };
 
   const handleDeleteAttachment = async (attachmentId: string, filePath: string) => {
-    if (!confirm('Tem certeza que deseja excluir este anexo?')) return;
+    if (!confirm("Tem certeza que deseja excluir este anexo?")) return;
 
     try {
       // Delete from storage
       const { error: storageError } = await supabase.storage
-        .from('certificates')
+        .from("certificates")
         .remove([filePath]);
 
       // Delete from database
       const { error: dbError } = await supabase
-        .from('reservation_attachments')
+        .from("reservation_attachments")
         .delete()
-        .eq('id', attachmentId);
+        .eq("id", attachmentId);
 
       if (dbError) throw dbError;
 
       toast({
         title: "Sucesso",
-        description: "Anexo excluído com sucesso!"
+        description: "Anexo excluído com sucesso!",
       });
 
       fetchAttachments();
     } catch (error) {
-      console.error('Error deleting attachment:', error);
+      console.error("Error deleting attachment:", error);
       toast({
         title: "Erro",
         description: "Erro ao excluir anexo",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const getFileIcon = (fileType: string) => {
-    if (fileType.startsWith('image/')) return <Image className="h-4 w-4" />;
-    if (fileType === 'application/pdf') return <FileText className="h-4 w-4" />;
+    if (fileType.startsWith("image/")) return <Image className="h-4 w-4" />;
+    if (fileType === "application/pdf") return <FileText className="h-4 w-4" />;
     return <File className="h-4 w-4" />;
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const getFilePathFromUrl = (url: string) => {
     // Extract file path from Supabase storage URL
-    const urlParts = url.split('/');
-    return urlParts.slice(-2).join('/'); // Get 'reservations/filename'
+    const urlParts = url.split("/");
+    return urlParts.slice(-2).join("/"); // Get 'reservations/filename'
   };
 
   return (
@@ -217,7 +211,9 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
             <CardContent>
               <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center">
                 <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-lg font-medium mb-2">Arraste arquivos aqui ou clique para selecionar</p>
+                <p className="text-lg font-medium mb-2">
+                  Arraste arquivos aqui ou clique para selecionar
+                </p>
                 <p className="text-sm text-muted-foreground mb-4">
                   Suporte para PDF, imagens e documentos (máx. 10MB por arquivo)
                 </p>
@@ -229,11 +225,8 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                   onChange={handleFileUpload}
                   className="hidden"
                 />
-                <Button
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
-                >
-                  {uploading ? 'Enviando...' : 'Selecionar Arquivos'}
+                <Button onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                  {uploading ? "Enviando..." : "Selecionar Arquivos"}
                 </Button>
               </div>
             </CardContent>
@@ -257,7 +250,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {attachments.map((attachment) => (
+                  {attachments.map(attachment => (
                     <div
                       key={attachment.id}
                       className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
@@ -276,7 +269,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                                 {formatFileSize(attachment.file_size)}
                               </Badge>
                               <span className="text-xs text-muted-foreground">
-                                {new Date(attachment.created_at).toLocaleDateString('pt-BR')}
+                                {new Date(attachment.created_at).toLocaleDateString("pt-BR")}
                               </span>
                             </div>
                           </div>
@@ -285,7 +278,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => window.open(attachment.file_url, '_blank')}
+                            onClick={() => window.open(attachment.file_url, "_blank")}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
@@ -293,7 +286,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                             size="sm"
                             variant="outline"
                             onClick={() => {
-                              const link = document.createElement('a');
+                              const link = document.createElement("a");
                               link.href = attachment.file_url;
                               link.download = attachment.file_name;
                               link.click();
@@ -304,9 +297,9 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => 
+                            onClick={() =>
                               handleDeleteAttachment(
-                                attachment.id, 
+                                attachment.id,
                                 getFilePathFromUrl(attachment.file_url)
                               )
                             }

@@ -22,20 +22,21 @@ export async function testBookingConnection(): Promise<BookingTestResult> {
   if (!apiKey) {
     return {
       success: false,
-      message: 'Booking.com API key not configured',
-      error: 'Missing VITE_RAPIDAPI_KEY or VITE_BOOKING_API_KEY. Note: Booking.com typically requires RapidAPI subscription.',
+      message: "Booking.com API key not configured",
+      error:
+        "Missing VITE_RAPIDAPI_KEY or VITE_BOOKING_API_KEY. Note: Booking.com typically requires RapidAPI subscription.",
     };
   }
 
   try {
     // Test with a simple locations endpoint
     const response = await fetch(
-      'https://booking-com.p.rapidapi.com/v1/static/countries?locale=en-us',
+      "https://booking-com.p.rapidapi.com/v1/static/countries?locale=en-us",
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': 'booking-com.p.rapidapi.com',
+          "X-RapidAPI-Key": apiKey,
+          "X-RapidAPI-Host": "booking-com.p.rapidapi.com",
         },
       }
     );
@@ -56,26 +57,26 @@ export async function testBookingConnection(): Promise<BookingTestResult> {
     if (data) {
       return {
         success: true,
-        message: 'Booking.com API connection successful',
+        message: "Booking.com API connection successful",
         responseTime,
         data: {
-          countriesCount: Array.isArray(data) ? data.length : 'N/A',
+          countriesCount: Array.isArray(data) ? data.length : "N/A",
         },
       };
     }
 
     return {
       success: false,
-      message: 'Booking.com API returned unexpected data',
+      message: "Booking.com API returned unexpected data",
       responseTime,
-      error: 'Invalid response format',
+      error: "Invalid response format",
     };
   } catch (error) {
     return {
       success: false,
-      message: 'Failed to connect to Booking.com API',
+      message: "Failed to connect to Booking.com API",
       responseTime: Date.now() - startTime,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }

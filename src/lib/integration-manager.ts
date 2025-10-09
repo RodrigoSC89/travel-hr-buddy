@@ -7,7 +7,7 @@ interface ServiceConfig {
   name: string;
   apiKey?: string;
   baseUrl: string;
-  status: 'connected' | 'disconnected' | 'error';
+  status: "connected" | "disconnected" | "error";
   lastCheck?: Date;
   healthCheckUrl?: string;
 }
@@ -33,34 +33,34 @@ export class IntegrationManager {
     // Amadeus API
     const amadeusKey = import.meta.env.VITE_AMADEUS_API_KEY;
     if (amadeusKey) {
-      this.services.set('amadeus', {
-        name: 'Amadeus',
+      this.services.set("amadeus", {
+        name: "Amadeus",
         apiKey: amadeusKey,
-        baseUrl: 'https://test.api.amadeus.com',
-        status: 'disconnected',
-        healthCheckUrl: '/v1/reference-data/locations',
+        baseUrl: "https://test.api.amadeus.com",
+        status: "disconnected",
+        healthCheckUrl: "/v1/reference-data/locations",
       });
     }
 
     // Mapbox
     const mapboxKey = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
     if (mapboxKey) {
-      this.services.set('mapbox', {
-        name: 'Mapbox',
+      this.services.set("mapbox", {
+        name: "Mapbox",
         apiKey: mapboxKey,
-        baseUrl: 'https://api.mapbox.com',
-        status: 'disconnected',
+        baseUrl: "https://api.mapbox.com",
+        status: "disconnected",
       });
     }
 
     // Stripe
     const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
     if (stripeKey) {
-      this.services.set('stripe', {
-        name: 'Stripe',
+      this.services.set("stripe", {
+        name: "Stripe",
         apiKey: stripeKey,
-        baseUrl: 'https://api.stripe.com',
-        status: 'disconnected',
+        baseUrl: "https://api.stripe.com",
+        status: "disconnected",
       });
     }
   }
@@ -73,12 +73,12 @@ export class IntegrationManager {
     config: ServiceConfig
   ): Promise<ServiceTestResponse> {
     try {
-      const url = config.healthCheckUrl 
+      const url = config.healthCheckUrl
         ? `${config.baseUrl}${config.healthCheckUrl}`
         : `${config.baseUrl}/health`;
 
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
           ...(config.apiKey && { Authorization: `Bearer ${config.apiKey}` }),
         },
@@ -86,20 +86,20 @@ export class IntegrationManager {
 
       if (response.ok || response.status === 401) {
         // 401 means the service is up but needs auth
-        return { 
-          success: true, 
-          message: `${serviceName} is reachable` 
+        return {
+          success: true,
+          message: `${serviceName} is reachable`,
         };
       }
 
-      return { 
-        success: false, 
-        error: `Service returned status ${response.status}` 
+      return {
+        success: false,
+        error: `Service returned status ${response.status}`,
       };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -115,9 +115,9 @@ export class IntegrationManager {
       const existingConfig = this.services.get(serviceName);
       const finalConfig: ServiceConfig = {
         name: serviceName,
-        baseUrl: config?.baseUrl || existingConfig?.baseUrl || '',
+        baseUrl: config?.baseUrl || existingConfig?.baseUrl || "",
         apiKey: config?.apiKey || existingConfig?.apiKey,
-        status: 'disconnected',
+        status: "disconnected",
         ...config,
       };
 
@@ -126,30 +126,30 @@ export class IntegrationManager {
       if (testResponse.success) {
         this.services.set(serviceName, {
           ...finalConfig,
-          status: 'connected',
+          status: "connected",
           lastCheck: new Date(),
         });
 
-        return { 
-          success: true, 
-          message: `${serviceName} conectado com sucesso` 
+        return {
+          success: true,
+          message: `${serviceName} conectado com sucesso`,
         };
       } else {
         this.services.set(serviceName, {
           ...finalConfig,
-          status: 'error',
+          status: "error",
           lastCheck: new Date(),
         });
 
-        return { 
-          success: false, 
-          error: testResponse.error 
+        return {
+          success: false,
+          error: testResponse.error,
         };
       }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -198,7 +198,7 @@ export class IntegrationManager {
    */
   isServiceAvailable(serviceName: string): boolean {
     const service = this.services.get(serviceName);
-    return service?.status === 'connected';
+    return service?.status === "connected";
   }
 }
 

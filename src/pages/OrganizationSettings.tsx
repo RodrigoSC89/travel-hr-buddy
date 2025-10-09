@@ -1,8 +1,8 @@
-import React from 'react';
-import { OrganizationCustomization } from '@/components/admin/organization-customization';
-import { OrganizationBrandingPreview } from '@/components/admin/organization-branding-preview';
-import { OrganizationStatsCards } from '@/components/admin/organization-stats-cards';
-import { OrganizationLayout } from '@/components/layout/organization-layout';
+import React from "react";
+import { OrganizationCustomization } from "@/components/admin/organization-customization";
+import { OrganizationBrandingPreview } from "@/components/admin/organization-branding-preview";
+import { OrganizationStatsCards } from "@/components/admin/organization-stats-cards";
+import { OrganizationLayout } from "@/components/layout/organization-layout";
 
 export default function OrganizationSettings() {
   return (

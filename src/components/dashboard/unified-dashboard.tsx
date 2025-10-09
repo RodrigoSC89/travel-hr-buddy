@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  TrendingUp, 
-  Users, 
-  DollarSign, 
-  Bell, 
-  AlertTriangle, 
-  CheckCircle, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { useNavigate } from "react-router-dom";
+import {
+  LayoutDashboard,
+  TrendingUp,
+  Users,
+  DollarSign,
+  Bell,
+  AlertTriangle,
+  CheckCircle,
   Calendar,
   BarChart3,
   Activity,
@@ -20,120 +20,159 @@ import {
   Zap,
   Globe,
   ArrowRight,
-  RefreshCw
-} from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { EnhancedDashboardFilters } from './enhanced-dashboard-filters';
+  RefreshCw,
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+} from "recharts";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { EnhancedDashboardFilters } from "./enhanced-dashboard-filters";
 
 const UnifiedDashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedKPIs, setSelectedKPIs] = useState(['revenue', 'employees', 'efficiency', 'satisfaction']);
+  const [selectedKPIs, setSelectedKPIs] = useState([
+    "revenue",
+    "employees",
+    "efficiency",
+    "satisfaction",
+  ]);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [isAutoUpdate, setIsAutoUpdate] = useState(true);
-  const [filterPeriod, setFilterPeriod] = useState('30d');
+  const [filterPeriod, setFilterPeriod] = useState("30d");
 
   // Dados simulados consolidados
   const [dashboardData, setDashboardData] = useState({
     kpis: {
-      revenue: { value: 2450000, change: 12.5, status: 'up' },
-      employees: { value: 125, change: 4.2, status: 'up' },
-      efficiency: { value: 94.2, change: 2.8, status: 'up' },
-      satisfaction: { value: 4.6, change: 4.5, status: 'up' }
+      revenue: { value: 2450000, change: 12.5, status: "up" },
+      employees: { value: 125, change: 4.2, status: "up" },
+      efficiency: { value: 94.2, change: 2.8, status: "up" },
+      satisfaction: { value: 4.6, change: 4.5, status: "up" },
     },
     alerts: [
-      { id: 1, title: 'Certificado expirando', type: 'warning', priority: 'medium' },
-      { id: 2, title: 'Meta de vendas atingida', type: 'success', priority: 'low' },
-      { id: 3, title: 'Sistema otimização sugerida', type: 'info', priority: 'medium' }
+      { id: 1, title: "Certificado expirando", type: "warning", priority: "medium" },
+      { id: 2, title: "Meta de vendas atingida", type: "success", priority: "low" },
+      { id: 3, title: "Sistema otimização sugerida", type: "info", priority: "medium" },
     ],
     recentActivities: [
-      { id: 1, user: 'João Silva', action: 'Completou treinamento STCW', time: '2h atrás', type: 'certificate' },
-      { id: 2, user: 'Maria Santos', action: 'Aprovado relatório mensal', time: '4h atrás', type: 'report' },
-      { id: 3, user: 'Carlos Lima', action: 'Atualizado cronograma viagem', time: '6h atrás', type: 'travel' }
+      {
+        id: 1,
+        user: "João Silva",
+        action: "Completou treinamento STCW",
+        time: "2h atrás",
+        type: "certificate",
+      },
+      {
+        id: 2,
+        user: "Maria Santos",
+        action: "Aprovado relatório mensal",
+        time: "4h atrás",
+        type: "report",
+      },
+      {
+        id: 3,
+        user: "Carlos Lima",
+        action: "Atualizado cronograma viagem",
+        time: "6h atrás",
+        type: "travel",
+      },
     ],
     systemHealth: {
       performance: 95,
       uptime: 99.9,
       activeUsers: 42,
-      errorRate: 0.1
-    }
+      errorRate: 0.1,
+    },
   });
 
   const performanceData = [
-    { time: '00:00', users: 15, performance: 92 },
-    { time: '04:00', users: 8, performance: 95 },
-    { time: '08:00', users: 35, performance: 88 },
-    { time: '12:00', users: 45, performance: 85 },
-    { time: '16:00', users: 38, performance: 90 },
-    { time: '20:00', users: 25, performance: 94 }
+    { time: "00:00", users: 15, performance: 92 },
+    { time: "04:00", users: 8, performance: 95 },
+    { time: "08:00", users: 35, performance: 88 },
+    { time: "12:00", users: 45, performance: 85 },
+    { time: "16:00", users: 38, performance: 90 },
+    { time: "20:00", users: 25, performance: 94 },
   ];
 
   const quickActions = [
-    { 
-      title: 'Relatórios Avançados', 
-      description: 'Gerar relatórios detalhados', 
-      icon: BarChart3, 
-      path: '/advanced-reports',
-      color: 'bg-blue-500'
+    {
+      title: "Relatórios Avançados",
+      description: "Gerar relatórios detalhados",
+      icon: BarChart3,
+      path: "/advanced-reports",
+      color: "bg-blue-500",
     },
-    { 
-      title: 'Dashboard Executivo', 
-      description: 'Visão estratégica completa', 
-      icon: Target, 
-      path: '/executive',
-      color: 'bg-purple-500'
+    {
+      title: "Dashboard Executivo",
+      description: "Visão estratégica completa",
+      icon: Target,
+      path: "/executive",
+      color: "bg-purple-500",
     },
-    { 
-      title: 'Monitor Sistema', 
-      description: 'Performance em tempo real', 
-      icon: Activity, 
-      path: '/system-monitor',
-      color: 'bg-green-500'
+    {
+      title: "Monitor Sistema",
+      description: "Performance em tempo real",
+      icon: Activity,
+      path: "/system-monitor",
+      color: "bg-green-500",
     },
-    { 
-      title: 'Centro Notificações', 
-      description: 'Alertas inteligentes', 
-      icon: Bell, 
-      path: '/notification-center',
-      color: 'bg-orange-500'
+    {
+      title: "Centro Notificações",
+      description: "Alertas inteligentes",
+      icon: Bell,
+      path: "/notification-center",
+      color: "bg-orange-500",
     },
-    { 
-      title: 'IA & Inovação', 
-      description: 'Ferramentas avançadas', 
-      icon: Zap, 
-      path: '/innovation',
-      color: 'bg-cyan-500'
+    {
+      title: "IA & Inovação",
+      description: "Ferramentas avançadas",
+      icon: Zap,
+      path: "/innovation",
+      color: "bg-cyan-500",
     },
-    { 
-      title: 'Sistema Marítimo', 
-      description: 'Gestão completa marítima', 
-      icon: Globe, 
-      path: '/maritime',
-      color: 'bg-indigo-500'
-    }
+    {
+      title: "Sistema Marítimo",
+      description: "Gestão completa marítima",
+      icon: Globe,
+      path: "/maritime",
+      color: "bg-indigo-500",
+    },
   ];
 
   const refreshData = async () => {
     setIsRefreshing(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     // Simular atualização dos dados
     setDashboardData(prev => ({
       ...prev,
       kpis: {
         ...prev.kpis,
-        efficiency: { ...prev.kpis.efficiency, value: prev.kpis.efficiency.value + Math.random() * 2 - 1 }
+        efficiency: {
+          ...prev.kpis.efficiency,
+          value: prev.kpis.efficiency.value + Math.random() * 2 - 1,
+        },
       },
       systemHealth: {
         ...prev.systemHealth,
-        performance: Math.max(90, Math.min(100, prev.systemHealth.performance + Math.random() * 4 - 2))
-      }
+        performance: Math.max(
+          90,
+          Math.min(100, prev.systemHealth.performance + Math.random() * 4 - 2)
+        ),
+      },
     }));
-    
+
     setLastUpdated(new Date());
     setIsRefreshing(false);
     toast({
@@ -143,11 +182,7 @@ const UnifiedDashboard = () => {
   };
 
   const handleKPIToggle = (kpi: string) => {
-    setSelectedKPIs(prev => 
-      prev.includes(kpi) 
-        ? prev.filter(k => k !== kpi)
-        : [...prev, kpi]
-    );
+    setSelectedKPIs(prev => (prev.includes(kpi) ? prev.filter(k => k !== kpi) : [...prev, kpi]));
   };
 
   // Auto-update effect
@@ -160,18 +195,25 @@ const UnifiedDashboard = () => {
 
   const getStatusIcon = (type: string) => {
     switch (type) {
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-orange-500" />;
-      case 'success': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      default: return <Bell className="w-4 h-4 text-blue-500" />;
+      case "warning":
+        return <AlertTriangle className="w-4 h-4 text-orange-500" />;
+      case "success":
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      default:
+        return <Bell className="w-4 h-4 text-blue-500" />;
     }
   };
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'certificate': return <CheckCircle className="w-4 h-4 text-success" />;
-      case 'report': return <BarChart3 className="w-4 h-4 text-info" />;
-      case 'travel': return <Calendar className="w-4 h-4 text-primary" />;
-      default: return <Activity className="w-4 h-4 text-muted-foreground" />;
+      case "certificate":
+        return <CheckCircle className="w-4 h-4 text-success" />;
+      case "report":
+        return <BarChart3 className="w-4 h-4 text-info" />;
+      case "travel":
+        return <Calendar className="w-4 h-4 text-primary" />;
+      default:
+        return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -179,7 +221,7 @@ const UnifiedDashboard = () => {
     revenue: dashboardData.kpis.revenue,
     employees: dashboardData.kpis.employees,
     efficiency: dashboardData.kpis.efficiency,
-    satisfaction: dashboardData.kpis.satisfaction
+    satisfaction: dashboardData.kpis.satisfaction,
   };
 
   return (
@@ -202,20 +244,16 @@ const UnifiedDashboard = () => {
             Dashboard Principal - Nautilus One
           </h1>
           <p className="text-muted-foreground">
-            Bem-vindo de volta, {user?.email?.split('@')[0] || 'Usuário'}! 
-            Aqui está o resumo do seu sistema.
+            Bem-vindo de volta, {user?.email?.split("@")[0] || "Usuário"}! Aqui está o resumo do seu
+            sistema.
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            onClick={refreshData}
-            disabled={isRefreshing}
-          >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+          <Button variant="outline" onClick={refreshData} disabled={isRefreshing}>
+            <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
-          <Button onClick={() => navigate('/executive')}>
+          <Button onClick={() => navigate("/executive")}>
             <Target className="w-4 h-4 mr-2" />
             Visão Executiva
           </Button>
@@ -224,13 +262,15 @@ const UnifiedDashboard = () => {
 
       {/* KPIs Principais - Filtered by user selection */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {selectedKPIs.includes('revenue') && (
+        {selectedKPIs.includes("revenue") && (
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Receita Total</p>
-                  <p className="text-2xl font-bold">R$ {(availableKPIs.revenue.value / 1000000).toFixed(1)}M</p>
+                  <p className="text-2xl font-bold">
+                    R$ {(availableKPIs.revenue.value / 1000000).toFixed(1)}M
+                  </p>
                   <div className="flex items-center gap-1 mt-1">
                     <TrendingUp className="w-4 h-4 text-green-600" />
                     <span className="text-sm text-green-600">+{availableKPIs.revenue.change}%</span>
@@ -242,7 +282,7 @@ const UnifiedDashboard = () => {
           </Card>
         )}
 
-        {selectedKPIs.includes('employees') && (
+        {selectedKPIs.includes("employees") && (
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -251,7 +291,9 @@ const UnifiedDashboard = () => {
                   <p className="text-2xl font-bold">{availableKPIs.employees.value}</p>
                   <div className="flex items-center gap-1 mt-1">
                     <TrendingUp className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm text-blue-600">+{availableKPIs.employees.change}%</span>
+                    <span className="text-sm text-blue-600">
+                      +{availableKPIs.employees.change}%
+                    </span>
                   </div>
                 </div>
                 <Users className="w-8 h-8 text-blue-600" />
@@ -260,7 +302,7 @@ const UnifiedDashboard = () => {
           </Card>
         )}
 
-        {selectedKPIs.includes('efficiency') && (
+        {selectedKPIs.includes("efficiency") && (
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -269,7 +311,9 @@ const UnifiedDashboard = () => {
                   <p className="text-2xl font-bold">{availableKPIs.efficiency.value.toFixed(1)}%</p>
                   <div className="flex items-center gap-1 mt-1">
                     <TrendingUp className="w-4 h-4 text-orange-600" />
-                    <span className="text-sm text-orange-600">+{availableKPIs.efficiency.change}%</span>
+                    <span className="text-sm text-orange-600">
+                      +{availableKPIs.efficiency.change}%
+                    </span>
                   </div>
                 </div>
                 <Activity className="w-8 h-8 text-orange-600" />
@@ -278,7 +322,7 @@ const UnifiedDashboard = () => {
           </Card>
         )}
 
-        {selectedKPIs.includes('satisfaction') && (
+        {selectedKPIs.includes("satisfaction") && (
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -287,7 +331,9 @@ const UnifiedDashboard = () => {
                   <p className="text-2xl font-bold">{availableKPIs.satisfaction.value}/5</p>
                   <div className="flex items-center gap-1 mt-1">
                     <TrendingUp className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm text-purple-600">+{availableKPIs.satisfaction.change}%</span>
+                    <span className="text-sm text-purple-600">
+                      +{availableKPIs.satisfaction.change}%
+                    </span>
                   </div>
                 </div>
                 <Target className="w-8 h-8 text-purple-600" />
@@ -306,7 +352,10 @@ const UnifiedDashboard = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickActions.map((action, index) => (
-              <Card key={index} className="hover:shadow-lg hover-lift transition-all cursor-pointer border-l-4 border-l-primary">
+              <Card
+                key={index}
+                className="hover:shadow-lg hover-lift transition-all cursor-pointer border-l-4 border-l-primary"
+              >
                 <CardContent className="p-4" onClick={() => navigate(action.path)}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -341,8 +390,24 @@ const UnifiedDashboard = () => {
                 <XAxis dataKey="time" />
                 <YAxis />
                 <Tooltip />
-                <Area type="monotone" dataKey="users" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="Usuários" />
-                <Area type="monotone" dataKey="performance" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name="Performance %" />
+                <Area
+                  type="monotone"
+                  dataKey="users"
+                  stackId="1"
+                  stroke="#3b82f6"
+                  fill="#3b82f6"
+                  fillOpacity={0.6}
+                  name="Usuários"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="performance"
+                  stackId="2"
+                  stroke="#10b981"
+                  fill="#10b981"
+                  fillOpacity={0.6}
+                  name="Performance %"
+                />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
@@ -373,11 +438,15 @@ const UnifiedDashboard = () => {
 
             <div className="grid grid-cols-2 gap-4 pt-4">
               <div className="text-center">
-                <p className="text-2xl font-bold text-blue-600">{dashboardData.systemHealth.activeUsers}</p>
+                <p className="text-2xl font-bold text-blue-600">
+                  {dashboardData.systemHealth.activeUsers}
+                </p>
                 <p className="text-xs text-muted-foreground">Usuários Ativos</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-green-600">{dashboardData.systemHealth.errorRate}%</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {dashboardData.systemHealth.errorRate}%
+                </p>
                 <p className="text-xs text-muted-foreground">Taxa de Erro</p>
               </div>
             </div>
@@ -391,13 +460,13 @@ const UnifiedDashboard = () => {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Alertas e Notificações
-              <Button variant="outline" size="sm" onClick={() => navigate('/notification-center')}>
+              <Button variant="outline" size="sm" onClick={() => navigate("/notification-center")}>
                 Ver Todos
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {dashboardData.alerts.map((alert) => (
+            {dashboardData.alerts.map(alert => (
               <div key={alert.id} className="flex items-center gap-3 p-3 border rounded-lg">
                 {getStatusIcon(alert.type)}
                 <div className="flex-1">
@@ -418,7 +487,7 @@ const UnifiedDashboard = () => {
             <CardTitle>Atividades Recentes</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {dashboardData.recentActivities.map((activity) => (
+            {dashboardData.recentActivities.map(activity => (
               <div key={activity.id} className="flex items-center gap-3 p-3 border rounded-lg">
                 {getActivityIcon(activity.type)}
                 <div className="flex-1">

@@ -1,31 +1,50 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { 
-  FileText, 
-  Mail, 
-  Calendar, 
-  Download, 
-  Plus, 
-  Settings, 
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  FileText,
+  Mail,
+  Calendar,
+  Download,
+  Plus,
+  Settings,
   Trash2,
   Play,
   Clock,
   Users,
   BarChart3,
   CheckCircle,
-  AlertCircle
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+  AlertCircle,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AutomatedReport {
   id: string;
@@ -35,7 +54,7 @@ interface AutomatedReport {
   schedule_cron: string;
   recipients: string[];
   filters: any;
-  format: 'pdf' | 'excel' | 'html';
+  format: "pdf" | "excel" | "html";
   is_active: boolean;
   last_generated_at?: string;
   next_scheduled_at?: string;
@@ -44,49 +63,49 @@ interface AutomatedReport {
 
 const reportTypes = {
   weekly_summary: {
-    name: 'Resumo Semanal',
-    description: 'Resumo das principais atividades da semana',
+    name: "Resumo Semanal",
+    description: "Resumo das principais atividades da semana",
     icon: Calendar,
-    defaultSchedule: '0 8 * * MON'
+    defaultSchedule: "0 8 * * MON",
   },
   monthly_analysis: {
-    name: 'Análise Mensal',
-    description: 'Relatório completo de performance mensal',
+    name: "Análise Mensal",
+    description: "Relatório completo de performance mensal",
     icon: BarChart3,
-    defaultSchedule: '0 9 1 * *'
+    defaultSchedule: "0 9 1 * *",
   },
   compliance_check: {
-    name: 'Verificação de Compliance',
-    description: 'Status de conformidade e certificações',
+    name: "Verificação de Compliance",
+    description: "Status de conformidade e certificações",
     icon: CheckCircle,
-    defaultSchedule: '0 10 * * *'
+    defaultSchedule: "0 10 * * *",
   },
   crew_report: {
-    name: 'Relatório de Tripulação',
-    description: 'Escalas, certificações e performance da tripulação',
+    name: "Relatório de Tripulação",
+    description: "Escalas, certificações e performance da tripulação",
     icon: Users,
-    defaultSchedule: '0 7 * * FRI'
+    defaultSchedule: "0 7 * * FRI",
   },
   financial_summary: {
-    name: 'Resumo Financeiro',
-    description: 'Custos operacionais e indicadores financeiros',
+    name: "Resumo Financeiro",
+    description: "Custos operacionais e indicadores financeiros",
     icon: BarChart3,
-    defaultSchedule: '0 9 * * MON'
+    defaultSchedule: "0 9 * * MON",
   },
   maintenance_report: {
-    name: 'Relatório de Manutenção',
-    description: 'Status de manutenções e programações',
+    name: "Relatório de Manutenção",
+    description: "Status de manutenções e programações",
     icon: Settings,
-    defaultSchedule: '0 8 * * *'
-  }
+    defaultSchedule: "0 8 * * *",
+  },
 };
 
 const cronPatterns = {
-  'daily': { label: 'Diário (9:00)', cron: '0 9 * * *' },
-  'weekly_mon': { label: 'Semanal (Segunda 8:00)', cron: '0 8 * * MON' },
-  'weekly_fri': { label: 'Semanal (Sexta 17:00)', cron: '0 17 * * FRI' },
-  'monthly': { label: 'Mensal (Dia 1 às 9:00)', cron: '0 9 1 * *' },
-  'custom': { label: 'Personalizado', cron: '' }
+  daily: { label: "Diário (9:00)", cron: "0 9 * * *" },
+  weekly_mon: { label: "Semanal (Segunda 8:00)", cron: "0 8 * * MON" },
+  weekly_fri: { label: "Semanal (Sexta 17:00)", cron: "0 17 * * FRI" },
+  monthly: { label: "Mensal (Dia 1 às 9:00)", cron: "0 9 1 * *" },
+  custom: { label: "Personalizado", cron: "" },
 };
 
 export const AutomatedReportsManager: React.FC = () => {
@@ -97,30 +116,30 @@ export const AutomatedReportsManager: React.FC = () => {
 
   // Form state
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    report_type: '',
-    schedule_cron: '0 9 * * *',
-    recipients: [''],
-    format: 'pdf' as const,
-    filters: {}
+    name: "",
+    description: "",
+    report_type: "",
+    schedule_cron: "0 9 * * *",
+    recipients: [""],
+    format: "pdf" as const,
+    filters: {},
   });
 
   const loadReports = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from('automated_reports')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("automated_reports")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setReports(data as AutomatedReport[] || []);
+      setReports((data as AutomatedReport[]) || []);
     } catch (error) {
-      console.error('Erro ao carregar relatórios:', error);
+      console.error("Erro ao carregar relatórios:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os relatórios automáticos.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -134,32 +153,30 @@ export const AutomatedReportsManager: React.FC = () => {
   const createReport = async () => {
     try {
       const { data: user } = await supabase.auth.getUser();
-      
-      const { error } = await supabase
-        .from('automated_reports')
-        .insert({
-          ...formData,
-          recipients: formData.recipients.filter(email => email.trim() !== ''),
-          created_by: user.user?.id,
-          organization_id: user.user?.id // Temporário para demo
-        });
+
+      const { error } = await supabase.from("automated_reports").insert({
+        ...formData,
+        recipients: formData.recipients.filter(email => email.trim() !== ""),
+        created_by: user.user?.id,
+        organization_id: user.user?.id, // Temporário para demo
+      });
 
       if (error) throw error;
 
       setIsCreateDialogOpen(false);
       resetForm();
       await loadReports();
-      
+
       toast({
         title: "Relatório criado!",
         description: "Relatório automático configurado com sucesso.",
       });
     } catch (error) {
-      console.error('Erro ao criar relatório:', error);
+      console.error("Erro ao criar relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o relatório automático.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -167,30 +184,26 @@ export const AutomatedReportsManager: React.FC = () => {
   const toggleReport = async (report: AutomatedReport) => {
     try {
       const { error } = await supabase
-        .from('automated_reports')
+        .from("automated_reports")
         .update({ is_active: !report.is_active })
-        .eq('id', report.id);
+        .eq("id", report.id);
 
       if (error) throw error;
 
-      setReports(prev => 
-        prev.map(r => 
-          r.id === report.id 
-            ? { ...r, is_active: !r.is_active }
-            : r
-        )
+      setReports(prev =>
+        prev.map(r => (r.id === report.id ? { ...r, is_active: !r.is_active } : r))
       );
 
       toast({
         title: report.is_active ? "Relatório pausado" : "Relatório ativado",
-        description: `${report.name} foi ${report.is_active ? 'pausado' : 'ativado'}.`,
+        description: `${report.name} foi ${report.is_active ? "pausado" : "ativado"}.`,
       });
     } catch (error) {
-      console.error('Erro ao atualizar relatório:', error);
+      console.error("Erro ao atualizar relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o relatório.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -199,10 +212,7 @@ export const AutomatedReportsManager: React.FC = () => {
     if (!confirm(`Tem certeza que deseja excluir "${report.name}"?`)) return;
 
     try {
-      const { error } = await supabase
-        .from('automated_reports')
-        .delete()
-        .eq('id', report.id);
+      const { error } = await supabase.from("automated_reports").delete().eq("id", report.id);
 
       if (error) throw error;
 
@@ -212,11 +222,11 @@ export const AutomatedReportsManager: React.FC = () => {
         description: `${report.name} foi removido.`,
       });
     } catch (error) {
-      console.error('Erro ao excluir relatório:', error);
+      console.error("Erro ao excluir relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível excluir o relatório.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -231,57 +241,58 @@ export const AutomatedReportsManager: React.FC = () => {
 
       // Aqui você implementaria a lógica real de geração
       // Por exemplo, chamar uma edge function que gera o relatório
-      
     } catch (error) {
-      console.error('Erro ao gerar relatório:', error);
+      console.error("Erro ao gerar relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar o relatório.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      description: '',
-      report_type: '',
-      schedule_cron: '0 9 * * *',
-      recipients: [''],
-      format: 'pdf',
-      filters: {}
+      name: "",
+      description: "",
+      report_type: "",
+      schedule_cron: "0 9 * * *",
+      recipients: [""],
+      format: "pdf",
+      filters: {},
     });
   };
 
   const addRecipient = () => {
     setFormData(prev => ({
       ...prev,
-      recipients: [...prev.recipients, '']
+      recipients: [...prev.recipients, ""],
     }));
   };
 
   const updateRecipient = (index: number, value: string) => {
     setFormData(prev => ({
       ...prev,
-      recipients: prev.recipients.map((email, i) => i === index ? value : email)
+      recipients: prev.recipients.map((email, i) => (i === index ? value : email)),
     }));
   };
 
   const removeRecipient = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      recipients: prev.recipients.filter((_, i) => i !== index)
+      recipients: prev.recipients.filter((_, i) => i !== index),
     }));
   };
 
   const getReportTypeInfo = (type: string) => {
-    return reportTypes[type as keyof typeof reportTypes] || {
-      name: type,
-      description: 'Relatório personalizado',
-      icon: FileText,
-      defaultSchedule: '0 9 * * *'
-    };
+    return (
+      reportTypes[type as keyof typeof reportTypes] || {
+        name: type,
+        description: "Relatório personalizado",
+        icon: FileText,
+        defaultSchedule: "0 9 * * *",
+      }
+    );
   };
 
   const getScheduleDescription = (cron: string) => {
@@ -318,7 +329,7 @@ export const AutomatedReportsManager: React.FC = () => {
             Configure relatórios periódicos enviados automaticamente por email
           </p>
         </div>
-        
+
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -330,7 +341,7 @@ export const AutomatedReportsManager: React.FC = () => {
             <DialogHeader>
               <DialogTitle>Criar Relatório Automático</DialogTitle>
             </DialogHeader>
-            
+
             <div className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -338,23 +349,23 @@ export const AutomatedReportsManager: React.FC = () => {
                   <Input
                     id="report-name"
                     value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Ex: Relatório Semanal de Operações"
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="report-type">Tipo de Relatório</Label>
-                  <Select 
-                    value={formData.report_type} 
-                    onValueChange={(value) => {
+                  <Select
+                    value={formData.report_type}
+                    onValueChange={value => {
                       const typeInfo = getReportTypeInfo(value);
-                      setFormData(prev => ({ 
-                        ...prev, 
+                      setFormData(prev => ({
+                        ...prev,
                         report_type: value,
                         schedule_cron: typeInfo.defaultSchedule,
                         name: prev.name || typeInfo.name,
-                        description: prev.description || typeInfo.description
+                        description: prev.description || typeInfo.description,
                       }));
                     }}
                   >
@@ -371,27 +382,31 @@ export const AutomatedReportsManager: React.FC = () => {
                   </Select>
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="description">Descrição</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Descreva o conteúdo e objetivo deste relatório..."
                 />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="schedule">Frequência</Label>
-                  <Select 
-                    value={Object.entries(cronPatterns).find(([_, p]) => p.cron === formData.schedule_cron)?.[0] || 'custom'}
-                    onValueChange={(value) => {
-                      if (value === 'custom') return;
-                      setFormData(prev => ({ 
-                        ...prev, 
-                        schedule_cron: cronPatterns[value as keyof typeof cronPatterns].cron 
+                  <Select
+                    value={
+                      Object.entries(cronPatterns).find(
+                        ([_, p]) => p.cron === formData.schedule_cron
+                      )?.[0] || "custom"
+                    }
+                    onValueChange={value => {
+                      if (value === "custom") return;
+                      setFormData(prev => ({
+                        ...prev,
+                        schedule_cron: cronPatterns[value as keyof typeof cronPatterns].cron,
                       }));
                     }}
                   >
@@ -407,12 +422,14 @@ export const AutomatedReportsManager: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="format">Formato</Label>
-                  <Select 
-                    value={formData.format} 
-                    onValueChange={(value: any) => setFormData(prev => ({ ...prev, format: value }))}
+                  <Select
+                    value={formData.format}
+                    onValueChange={(value: any) =>
+                      setFormData(prev => ({ ...prev, format: value }))
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -425,7 +442,7 @@ export const AutomatedReportsManager: React.FC = () => {
                   </Select>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label>Destinatários de Email</Label>
@@ -434,36 +451,36 @@ export const AutomatedReportsManager: React.FC = () => {
                     Adicionar
                   </Button>
                 </div>
-                
+
                 {formData.recipients.map((email, index) => (
                   <div key={index} className="flex gap-2">
                     <Input
                       type="email"
                       value={email}
-                      onChange={(e) => updateRecipient(index, e.target.value)}
+                      onChange={e => updateRecipient(index, e.target.value)}
                       placeholder="email@empresa.com"
                       className="flex-1"
                     />
                     {formData.recipients.length > 1 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeRecipient(index)}
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => removeRecipient(index)}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     )}
                   </div>
                 ))}
               </div>
-              
+
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button 
+                <Button
                   onClick={createReport}
-                  disabled={!formData.name || !formData.report_type || formData.recipients.filter(e => e.trim()).length === 0}
+                  disabled={
+                    !formData.name ||
+                    !formData.report_type ||
+                    formData.recipients.filter(e => e.trim()).length === 0
+                  }
                 >
                   Criar Relatório
                 </Button>
@@ -502,10 +519,10 @@ export const AutomatedReportsManager: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {reports.map((report) => {
+                {reports.map(report => {
                   const typeInfo = getReportTypeInfo(report.report_type);
                   const Icon = typeInfo.icon;
-                  
+
                   return (
                     <TableRow key={report.id}>
                       <TableCell>
@@ -531,19 +548,14 @@ export const AutomatedReportsManager: React.FC = () => {
                         <Badge variant="secondary">{report.format.toUpperCase()}</Badge>
                       </TableCell>
                       <TableCell>
-                        <div className="text-sm">
-                          {report.recipients.length} destinatário(s)
-                        </div>
+                        <div className="text-sm">{report.recipients.length} destinatário(s)</div>
                       </TableCell>
-                      <TableCell>
-                        {getStatusBadge(report)}
-                      </TableCell>
+                      <TableCell>{getStatusBadge(report)}</TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          {report.last_generated_at 
-                            ? new Date(report.last_generated_at).toLocaleString('pt-BR')
-                            : 'Nunca'
-                          }
+                          {report.last_generated_at
+                            ? new Date(report.last_generated_at).toLocaleString("pt-BR")
+                            : "Nunca"}
                         </div>
                       </TableCell>
                       <TableCell>

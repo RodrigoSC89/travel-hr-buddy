@@ -1,17 +1,23 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Users, 
-  Target, 
-  AlertCircle, 
-  Activity, 
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Users,
+  Target,
+  AlertCircle,
+  Activity,
   Calendar,
   Briefcase,
   BarChart3,
@@ -19,13 +25,26 @@ import {
   Globe,
   Zap,
   Shield,
-  Clock
-} from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+  Clock,
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const Executive = () => {
-  const [selectedPeriod, setSelectedPeriod] = React.useState('month');
-  const [selectedView, setSelectedView] = React.useState('overview');
+  const [selectedPeriod, setSelectedPeriod] = React.useState("month");
+  const [selectedView, setSelectedView] = React.useState("overview");
 
   // Dados simulados para o dashboard executivo
   const kpiData = {
@@ -34,24 +53,24 @@ const Executive = () => {
     efficiency: { current: 94.2, previous: 91.8, target: 95 },
     satisfaction: { current: 4.6, previous: 4.4, target: 4.8 },
     projects: { completed: 18, ongoing: 12, delayed: 3 },
-    costs: { current: 1850000, previous: 1920000, budget: 1800000 }
+    costs: { current: 1850000, previous: 1920000, budget: 1800000 },
   };
 
   const revenueData = [
-    { month: 'Jan', revenue: 2100000, profit: 420000, expenses: 1680000 },
-    { month: 'Fev', revenue: 2200000, profit: 460000, expenses: 1740000 },
-    { month: 'Mar', revenue: 2350000, profit: 520000, expenses: 1830000 },
-    { month: 'Abr', revenue: 2280000, profit: 485000, expenses: 1795000 },
-    { month: 'Mai', revenue: 2450000, profit: 580000, expenses: 1870000 },
-    { month: 'Jun', revenue: 2520000, profit: 630000, expenses: 1890000 }
+    { month: "Jan", revenue: 2100000, profit: 420000, expenses: 1680000 },
+    { month: "Fev", revenue: 2200000, profit: 460000, expenses: 1740000 },
+    { month: "Mar", revenue: 2350000, profit: 520000, expenses: 1830000 },
+    { month: "Abr", revenue: 2280000, profit: 485000, expenses: 1795000 },
+    { month: "Mai", revenue: 2450000, profit: 580000, expenses: 1870000 },
+    { month: "Jun", revenue: 2520000, profit: 630000, expenses: 1890000 },
   ];
 
   const getPercentageChange = (current: number, previous: number) => {
-    return ((current - previous) / previous * 100).toFixed(1);
+    return (((current - previous) / previous) * 100).toFixed(1);
   };
 
   const getTargetProgress = (current: number, target: number) => {
-    return (current / target * 100).toFixed(1);
+    return ((current / target) * 100).toFixed(1);
   };
 
   const getTrendIcon = (current: number, previous: number) => {
@@ -59,7 +78,7 @@ const Executive = () => {
   };
 
   const getTrendColor = (current: number, previous: number) => {
-    return current > previous ? 'text-green-600' : 'text-red-600';
+    return current > previous ? "text-green-600" : "text-red-600";
   };
 
   return (
@@ -98,12 +117,19 @@ const Executive = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Receita</p>
-                <p className="text-2xl font-bold">R$ {(kpiData.revenue.current / 1000000).toFixed(1)}M</p>
+                <p className="text-2xl font-bold">
+                  R$ {(kpiData.revenue.current / 1000000).toFixed(1)}M
+                </p>
                 <div className="flex items-center gap-1 mt-1">
-                  {React.createElement(getTrendIcon(kpiData.revenue.current, kpiData.revenue.previous), {
-                    className: `w-4 h-4 ${getTrendColor(kpiData.revenue.current, kpiData.revenue.previous)}`
-                  })}
-                  <span className={`text-sm ${getTrendColor(kpiData.revenue.current, kpiData.revenue.previous)}`}>
+                  {React.createElement(
+                    getTrendIcon(kpiData.revenue.current, kpiData.revenue.previous),
+                    {
+                      className: `w-4 h-4 ${getTrendColor(kpiData.revenue.current, kpiData.revenue.previous)}`,
+                    }
+                  )}
+                  <span
+                    className={`text-sm ${getTrendColor(kpiData.revenue.current, kpiData.revenue.previous)}`}
+                  >
                     {getPercentageChange(kpiData.revenue.current, kpiData.revenue.previous)}%
                   </span>
                 </div>
@@ -180,7 +206,8 @@ const Executive = () => {
               <div className="text-right">
                 <Target className="w-8 h-8 text-purple-600" />
                 <p className="text-xs text-muted-foreground mt-1">
-                  Meta: {getTargetProgress(kpiData.satisfaction.current, kpiData.satisfaction.target)}%
+                  Meta:{" "}
+                  {getTargetProgress(kpiData.satisfaction.current, kpiData.satisfaction.target)}%
                 </p>
               </div>
             </div>
@@ -201,8 +228,24 @@ const Executive = () => {
               <YAxis />
               <Tooltip formatter={(value: number) => `R$ ${(value / 1000000).toFixed(1)}M`} />
               <Legend />
-              <Area type="monotone" dataKey="revenue" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="Receita" />
-              <Area type="monotone" dataKey="profit" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.8} name="Lucro" />
+              <Area
+                type="monotone"
+                dataKey="revenue"
+                stackId="1"
+                stroke="#3b82f6"
+                fill="#3b82f6"
+                fillOpacity={0.6}
+                name="Receita"
+              />
+              <Area
+                type="monotone"
+                dataKey="profit"
+                stackId="2"
+                stroke="#10b981"
+                fill="#10b981"
+                fillOpacity={0.8}
+                name="Lucro"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </CardContent>
@@ -245,11 +288,15 @@ const Executive = () => {
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-muted-foreground">Atual</p>
-                <p className="text-lg font-semibold">R$ {(kpiData.costs.current / 1000000).toFixed(1)}M</p>
+                <p className="text-lg font-semibold">
+                  R$ {(kpiData.costs.current / 1000000).toFixed(1)}M
+                </p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Orçamento</p>
-                <p className="text-lg font-semibold">R$ {(kpiData.costs.budget / 1000000).toFixed(1)}M</p>
+                <p className="text-lg font-semibold">
+                  R$ {(kpiData.costs.budget / 1000000).toFixed(1)}M
+                </p>
               </div>
               <div className="flex items-center gap-1">
                 <TrendingDown className="w-4 h-4 text-green-600" />

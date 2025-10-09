@@ -1,8 +1,8 @@
-import React from 'react';
-import SystemOverview from '@/components/dashboard/system-overview';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
-import { ModuleHeader } from '@/components/ui/module-header';
-import { BarChart3 } from 'lucide-react';
+import React from "react";
+import SystemOverview from "@/components/dashboard/system-overview";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { BarChart3 } from "lucide-react";
 
 const SystemOverviewPage = () => {
   return (

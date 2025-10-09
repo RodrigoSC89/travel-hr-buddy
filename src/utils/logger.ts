@@ -3,7 +3,7 @@
  * Conditionally logs based on environment to avoid console pollution in production
  */
 
-const isDevelopment = import.meta.env.MODE === 'development' || import.meta.env.DEV;
+const isDevelopment = import.meta.env.MODE === "development" || import.meta.env.DEV;
 
 export const logger = {
   /**
@@ -54,5 +54,5 @@ export const logger = {
     if (isDevelopment) {
       console.table(data);
     }
-  }
+  },
 };

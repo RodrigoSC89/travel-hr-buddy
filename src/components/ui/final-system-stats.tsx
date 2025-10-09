@@ -1,18 +1,18 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
-  CheckCircle, 
-  Star, 
-  TrendingUp, 
-  Shield, 
-  Zap, 
-  Users, 
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  CheckCircle,
+  Star,
+  TrendingUp,
+  Shield,
+  Zap,
+  Users,
   Globe,
   Award,
   Target,
-  Clock
-} from 'lucide-react';
+  Clock,
+} from "lucide-react";
 
 export const FinalSystemStats: React.FC = () => {
   const systemStats = [
@@ -22,8 +22,8 @@ export const FinalSystemStats: React.FC = () => {
         { label: "Módulos Completos", value: "45+", icon: CheckCircle, color: "text-green-600" },
         { label: "Páginas Funcionais", value: "120+", icon: Star, color: "text-blue-600" },
         { label: "Componentes UI", value: "200+", icon: Zap, color: "text-purple-600" },
-        { label: "Hooks Customizados", value: "25+", icon: Target, color: "text-orange-600" }
-      ]
+        { label: "Hooks Customizados", value: "25+", icon: Target, color: "text-orange-600" },
+      ],
     },
     {
       category: "Qualidade e Performance",
@@ -31,8 +31,8 @@ export const FinalSystemStats: React.FC = () => {
         { label: "Contraste WCAG", value: "AA+", icon: Shield, color: "text-green-600" },
         { label: "Performance Score", value: "95%", icon: TrendingUp, color: "text-blue-600" },
         { label: "Acessibilidade", value: "100%", icon: Users, color: "text-purple-600" },
-        { label: "SEO Score", value: "98%", icon: Globe, color: "text-orange-600" }
-      ]
+        { label: "SEO Score", value: "98%", icon: Globe, color: "text-orange-600" },
+      ],
     },
     {
       category: "Recursos Avançados",
@@ -40,9 +40,9 @@ export const FinalSystemStats: React.FC = () => {
         { label: "IA Integration", value: "✓", icon: Award, color: "text-green-600" },
         { label: "PWA Ready", value: "✓", icon: Star, color: "text-blue-600" },
         { label: "Offline Support", value: "✓", icon: Zap, color: "text-purple-600" },
-        { label: "Real-time Sync", value: "✓", icon: Clock, color: "text-orange-600" }
-      ]
-    }
+        { label: "Real-time Sync", value: "✓", icon: Clock, color: "text-orange-600" },
+      ],
+    },
   ];
 
   return (
@@ -62,12 +62,8 @@ export const FinalSystemStats: React.FC = () => {
             <Badge className="bg-green-100 text-green-800 border-green-200">
               ✅ PRODUÇÃO READY
             </Badge>
-            <Badge className="bg-blue-100 text-blue-800 border-blue-200">
-              🏆 QUALIDADE AAA
-            </Badge>
-            <Badge className="bg-purple-100 text-purple-800 border-purple-200">
-              🚀 INOVAÇÃO
-            </Badge>
+            <Badge className="bg-blue-100 text-blue-800 border-blue-200">🏆 QUALIDADE AAA</Badge>
+            <Badge className="bg-purple-100 text-purple-800 border-purple-200">🚀 INOVAÇÃO</Badge>
           </div>
         </CardHeader>
       </Card>
@@ -112,19 +108,13 @@ export const FinalSystemStats: React.FC = () => {
               Sistema 100% Completo!
             </h3>
             <p className="text-green-700 dark:text-green-300 mb-4">
-              Todas as funcionalidades foram implementadas, testadas e validadas.
-              O sistema está pronto para uso em produção.
+              Todas as funcionalidades foram implementadas, testadas e validadas. O sistema está
+              pronto para uso em produção.
             </p>
             <div className="flex justify-center gap-4">
-              <Badge className="bg-success text-success-foreground">
-                ✅ Zero Bugs Críticos
-              </Badge>
-              <Badge className="bg-info text-info-foreground">
-                🔒 Segurança Validada
-              </Badge>
-              <Badge className="bg-accent text-accent-foreground">
-                ⚡ Performance Otimizada
-              </Badge>
+              <Badge className="bg-success text-success-foreground">✅ Zero Bugs Críticos</Badge>
+              <Badge className="bg-info text-info-foreground">🔒 Segurança Validada</Badge>
+              <Badge className="bg-accent text-accent-foreground">⚡ Performance Otimizada</Badge>
             </div>
           </div>
         </CardContent>

@@ -4,11 +4,11 @@
  */
 
 // Re-export from the new unified NotificationCenter component
-export { 
+export {
   NotificationCenter,
   type Notification,
-  type NotificationCenterProps
-} from '@/components/ui/NotificationCenter';
+  type NotificationCenterProps,
+} from "@/components/ui/NotificationCenter";
 
 // Export default for backward compatibility
-export { NotificationCenter as default } from '@/components/ui/NotificationCenter';
+export { NotificationCenter as default } from "@/components/ui/NotificationCenter";

@@ -21,8 +21,8 @@ export async function testMapboxConnection(): Promise<MapboxTestResult> {
   if (!apiKey) {
     return {
       success: false,
-      message: 'Mapbox API key not configured',
-      error: 'Missing VITE_MAPBOX_ACCESS_TOKEN or VITE_MAPBOX_TOKEN',
+      message: "Mapbox API key not configured",
+      error: "Missing VITE_MAPBOX_ACCESS_TOKEN or VITE_MAPBOX_TOKEN",
     };
   }
 
@@ -31,7 +31,7 @@ export async function testMapboxConnection(): Promise<MapboxTestResult> {
     const response = await fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/Rio%20de%20Janeiro.json?access_token=${apiKey}&limit=1`,
       {
-        method: 'GET',
+        method: "GET",
       }
     );
 
@@ -51,7 +51,7 @@ export async function testMapboxConnection(): Promise<MapboxTestResult> {
     if (data.features && data.features.length > 0) {
       return {
         success: true,
-        message: 'Mapbox API connection successful',
+        message: "Mapbox API connection successful",
         responseTime,
         data: {
           location: data.features[0].place_name,
@@ -62,16 +62,16 @@ export async function testMapboxConnection(): Promise<MapboxTestResult> {
 
     return {
       success: false,
-      message: 'Mapbox API returned unexpected data',
+      message: "Mapbox API returned unexpected data",
       responseTime,
-      error: 'Invalid response format',
+      error: "Invalid response format",
     };
   } catch (error) {
     return {
       success: false,
-      message: 'Failed to connect to Mapbox API',
+      message: "Failed to connect to Mapbox API",
       responseTime: Date.now() - startTime,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }

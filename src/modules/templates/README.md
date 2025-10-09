@@ -5,6 +5,7 @@
 The Templates module provides **template management and generation** for various documents, forms, and workflows throughout the system.
 
 **Key Use Cases:**
+
 - Create and manage document templates
 - Email and notification templates
 - Form templates for data collection

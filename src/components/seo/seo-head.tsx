@@ -1,5 +1,5 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import React from "react";
+import { Helmet } from "react-helmet-async";
 
 interface SEOHeadProps {
   title?: string;
@@ -11,12 +11,12 @@ interface SEOHeadProps {
 }
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
-  title = 'Nautilus One - Sistema Marítimo Inteligente',
-  description = 'Plataforma completa para gestão marítima com IA, analytics avançados e automação inteligente.',
-  keywords = 'maritimo, gestão, navegação, IA, analytics, automação, nautilus',
-  image = '/nautilus-og-image.jpg',
-  url = 'https://nautilus-one.app',
-  type = 'website'
+  title = "Nautilus One - Sistema Marítimo Inteligente",
+  description = "Plataforma completa para gestão marítima com IA, analytics avançados e automação inteligente.",
+  keywords = "maritimo, gestão, navegação, IA, analytics, automação, nautilus",
+  image = "/nautilus-og-image.jpg",
+  url = "https://nautilus-one.app",
+  type = "website",
 }) => {
   return (
     <Helmet>
@@ -48,21 +48,21 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="theme-color" content="#0369a1" />
       <meta name="msapplication-TileColor" content="#0369a1" />
       <link rel="canonical" href={url} />
-      
+
       {/* Structured Data */}
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          "name": "Nautilus One",
-          "description": description,
-          "url": url,
-          "applicationCategory": "BusinessApplication",
-          "operatingSystem": "Web",
-          "offers": {
+          name: "Nautilus One",
+          description: description,
+          url: url,
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Web",
+          offers: {
             "@type": "Offer",
-            "category": "Enterprise Software"
-          }
+            category: "Enterprise Software",
+          },
         })}
       </script>
     </Helmet>

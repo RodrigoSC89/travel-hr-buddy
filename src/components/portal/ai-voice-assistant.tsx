@@ -1,27 +1,24 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Mic, MicOff, Volume2, VolumeX, Loader2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useRef, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Mic, MicOff, Volume2, VolumeX, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VoiceAssistantProps {
   crewMemberId?: string;
   onResponse?: (response: string) => void;
 }
 
-export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({ 
-  crewMemberId, 
-  onResponse 
-}) => {
+export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({ crewMemberId, onResponse }) => {
   const { toast } = useToast();
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [transcript, setTranscript] = useState('');
+  const [transcript, setTranscript] = useState("");
   const [audioPermission, setAudioPermission] = useState<boolean | null>(null);
-  
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const speechSynthRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -34,12 +31,12 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       stream.getTracks().forEach(track => track.stop());
       return true;
     } catch (error) {
-      console.error('Erro ao solicitar permissão de microfone:', error);
+      console.error("Erro ao solicitar permissão de microfone:", error);
       setAudioPermission(false);
       toast({
         title: "Permissão negada",
         description: "Precisamos da permissão do microfone para o assistente por voz",
-        variant: "destructive"
+        variant: "destructive",
       });
       return false;
     }
@@ -57,25 +54,25 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       mediaRecorderRef.current = new MediaRecorder(stream);
       audioChunksRef.current = [];
 
-      mediaRecorderRef.current.ondataavailable = (event) => {
+      mediaRecorderRef.current.ondataavailable = event => {
         audioChunksRef.current.push(event.data);
       };
 
       mediaRecorderRef.current.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
         processAudio(audioBlob);
         stream.getTracks().forEach(track => track.stop());
       };
 
       mediaRecorderRef.current.start();
       setIsListening(true);
-      setTranscript('Ouvindo...');
+      setTranscript("Ouvindo...");
     } catch (error) {
-      console.error('Erro ao iniciar gravação:', error);
+      console.error("Erro ao iniciar gravação:", error);
       toast({
         title: "Erro",
         description: "Não foi possível iniciar a gravação",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -86,7 +83,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       mediaRecorderRef.current.stop();
       setIsListening(false);
       setIsProcessing(true);
-      setTranscript('Processando...');
+      setTranscript("Processando...");
     }
   };
 
@@ -96,19 +93,19 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       // Converter blob para base64
       const reader = new FileReader();
       reader.onloadend = async () => {
-        const base64Audio = reader.result?.toString().split(',')[1];
-        
+        const base64Audio = reader.result?.toString().split(",")[1];
+
         if (!base64Audio) {
-          throw new Error('Erro ao converter áudio');
+          throw new Error("Erro ao converter áudio");
         }
 
         // Enviar para edge function
-        const { data, error } = await supabase.functions.invoke('eleven-labs-voice', {
+        const { data, error } = await supabase.functions.invoke("eleven-labs-voice", {
           body: {
-            type: 'speech_to_text',
+            type: "speech_to_text",
             audio: base64Audio,
-            crewMemberId
-          }
+            crewMemberId,
+          },
         });
 
         if (error) throw error;
@@ -117,14 +114,17 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         setTranscript(transcription);
 
         // Processar resposta com IA
-        const { data: aiResponse, error: aiError } = await supabase.functions.invoke('crew-ai-insights', {
-          body: {
-            type: 'voice_chat',
-            message: transcription,
-            crewMemberId,
-            responseFormat: 'voice'
+        const { data: aiResponse, error: aiError } = await supabase.functions.invoke(
+          "crew-ai-insights",
+          {
+            body: {
+              type: "voice_chat",
+              message: transcription,
+              crewMemberId,
+              responseFormat: "voice",
+            },
           }
-        });
+        );
 
         if (aiError) throw aiError;
 
@@ -133,17 +133,15 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
 
         // Converter resposta para fala
         await textToSpeech(response);
-
       };
       reader.readAsDataURL(audioBlob);
-
     } catch (error) {
-      console.error('Erro ao processar áudio:', error);
-      setTranscript('Erro no processamento');
+      console.error("Erro ao processar áudio:", error);
+      setTranscript("Erro no processamento");
       toast({
         title: "Erro",
         description: "Não foi possível processar o áudio",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsProcessing(false);
@@ -155,13 +153,13 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
     try {
       setIsSpeaking(true);
 
-      const { data, error } = await supabase.functions.invoke('eleven-labs-voice', {
+      const { data, error } = await supabase.functions.invoke("eleven-labs-voice", {
         body: {
-          type: 'text_to_speech',
+          type: "text_to_speech",
           text,
-          voiceId: 'Sarah', // Voz padrão
-          crewMemberId
-        }
+          voiceId: "Sarah", // Voz padrão
+          crewMemberId,
+        },
       });
 
       if (error) throw error;
@@ -170,11 +168,10 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       const audio = new Audio(`data:audio/mp3;base64,${data.audio}`);
       audio.onended = () => setIsSpeaking(false);
       await audio.play();
-
     } catch (error) {
-      console.error('Erro na síntese de fala:', error);
+      console.error("Erro na síntese de fala:", error);
       setIsSpeaking(false);
-      
+
       // Fallback para síntese nativa do navegador
       fallbackTextToSpeech(text);
     }
@@ -182,15 +179,15 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
 
   // Fallback para síntese de fala nativa
   const fallbackTextToSpeech = (text: string) => {
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       speechSynthRef.current = new SpeechSynthesisUtterance(text);
-      speechSynthRef.current.lang = 'pt-BR';
+      speechSynthRef.current.lang = "pt-BR";
       speechSynthRef.current.rate = 0.9;
       speechSynthRef.current.pitch = 1;
-      
+
       speechSynthRef.current.onend = () => setIsSpeaking(false);
       speechSynthRef.current.onerror = () => setIsSpeaking(false);
-      
+
       window.speechSynthesis.speak(speechSynthRef.current);
       setIsSpeaking(true);
     } else {
@@ -198,14 +195,14 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       toast({
         title: "Síntese de fala não disponível",
         description: "Seu navegador não suporta síntese de fala",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   // Parar fala
   const stopSpeaking = () => {
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     }
     setIsSpeaking(false);
@@ -273,11 +270,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
           </Button>
 
           {isSpeaking && (
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={stopSpeaking}
-            >
+            <Button variant="outline" size="lg" onClick={stopSpeaking}>
               <VolumeX className="h-4 w-4" />
             </Button>
           )}
@@ -285,14 +278,8 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
 
         {audioPermission === false && (
           <div className="text-center">
-            <p className="text-sm text-muted-foreground mb-2">
-              Permissão de microfone negada
-            </p>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={requestMicrophonePermission}
-            >
+            <p className="text-sm text-muted-foreground mb-2">Permissão de microfone negada</p>
+            <Button variant="outline" size="sm" onClick={requestMicrophonePermission}>
               Tentar Novamente
             </Button>
           </div>

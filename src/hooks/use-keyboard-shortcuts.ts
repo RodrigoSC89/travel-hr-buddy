@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface KeyboardShortcut {
   key: string;
@@ -15,62 +15,63 @@ export const useKeyboardShortcuts = (onGlobalSearch?: () => void) => {
 
   const shortcuts: KeyboardShortcut[] = [
     {
-      key: 'k',
+      key: "k",
       ctrlKey: true,
       action: () => onGlobalSearch?.(),
-      description: 'Abrir busca global'
+      description: "Abrir busca global",
     },
     {
-      key: '1',
+      key: "1",
       ctrlKey: true,
-      action: () => navigate('/'),
-      description: 'Ir para Dashboard'
+      action: () => navigate("/"),
+      description: "Ir para Dashboard",
     },
     {
-      key: '2',
+      key: "2",
       ctrlKey: true,
-      action: () => navigate('/travel'),
-      description: 'Ir para Viagens'
+      action: () => navigate("/travel"),
+      description: "Ir para Viagens",
     },
     {
-      key: '3',
+      key: "3",
       ctrlKey: true,
-      action: () => navigate('/maritime'),
-      description: 'Ir para Sistema Marítimo'
+      action: () => navigate("/maritime"),
+      description: "Ir para Sistema Marítimo",
     },
     {
-      key: '4',
+      key: "4",
       ctrlKey: true,
-      action: () => navigate('/human-resources'),
-      description: 'Ir para RH'
+      action: () => navigate("/human-resources"),
+      description: "Ir para RH",
     },
     {
-      key: '5',
+      key: "5",
       ctrlKey: true,
-      action: () => navigate('/price-alerts'),
-      description: 'Ir para Alertas'
+      action: () => navigate("/price-alerts"),
+      description: "Ir para Alertas",
     },
     {
-      key: '6',
+      key: "6",
       ctrlKey: true,
-      action: () => navigate('/communication'),
-      description: 'Ir para Comunicação'
+      action: () => navigate("/communication"),
+      description: "Ir para Comunicação",
     },
     {
-      key: 's',
+      key: "s",
       ctrlKey: true,
-      action: () => navigate('/settings'),
-      description: 'Ir para Configurações'
-    }
+      action: () => navigate("/settings"),
+      description: "Ir para Configurações",
+    },
   ];
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const shortcut = shortcuts.find(s => 
-        s.key.toLowerCase() === event.key.toLowerCase() &&
-        !!s.ctrlKey === event.ctrlKey &&
-        !!s.altKey === event.altKey &&
-        !!s.shiftKey === event.shiftKey
+      const shortcut = shortcuts.find(
+        s =>
+          s.key.toLowerCase() === event.key.toLowerCase() &&
+          !!s.ctrlKey === event.ctrlKey &&
+          !!s.altKey === event.altKey &&
+          !!s.shiftKey === event.shiftKey
       );
 
       if (shortcut) {
@@ -80,8 +81,8 @@ export const useKeyboardShortcuts = (onGlobalSearch?: () => void) => {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [navigate, onGlobalSearch, shortcuts]);
 
   return { shortcuts };

@@ -1,22 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  BarChart3, 
-  PieChart as PieChartIcon, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import {
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
+  PieChart as PieChartIcon,
   Calendar,
   DollarSign,
   Target,
   Zap,
   Download,
   Filter,
-  RefreshCw
-} from 'lucide-react';
+  RefreshCw,
+} from "lucide-react";
 
 interface PriceData {
   date: string;
@@ -38,13 +57,13 @@ interface AnalyticsData {
   };
 }
 
-const COLORS = ['#0EA5E9', '#38BDF8', '#7DD3FC', '#BAE6FD', '#E0F2FE'];
+const COLORS = ["#0EA5E9", "#38BDF8", "#7DD3FC", "#BAE6FD", "#E0F2FE"];
 
 export const PriceAnalyticsDashboard: React.FC = () => {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [timeRange, setTimeRange] = useState('30d');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [timeRange, setTimeRange] = useState("30d");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
     loadAnalytics();
@@ -52,53 +71,53 @@ export const PriceAnalyticsDashboard: React.FC = () => {
 
   const loadAnalytics = async () => {
     setIsLoading(true);
-    
+
     // Simulated analytics data - in production, this would come from your backend
     setTimeout(() => {
       const mockAnalytics: AnalyticsData = {
         categoryDistribution: [
-          { name: 'Viagens', value: 35, color: COLORS[0] },
-          { name: 'Hospedagem', value: 28, color: COLORS[1] },
-          { name: 'Combustível', value: 20, color: COLORS[2] },
-          { name: 'Suprimentos', value: 12, color: COLORS[3] },
-          { name: 'Equipamentos', value: 5, color: COLORS[4] }
+          { name: "Viagens", value: 35, color: COLORS[0] },
+          { name: "Hospedagem", value: 28, color: COLORS[1] },
+          { name: "Combustível", value: 20, color: COLORS[2] },
+          { name: "Suprimentos", value: 12, color: COLORS[3] },
+          { name: "Equipamentos", value: 5, color: COLORS[4] },
         ],
         priceHistory: [
-          { date: '2024-01', viagens: 1200, hospedagem: 800, combustivel: 600 },
-          { date: '2024-02', viagens: 1150, hospedagem: 750, combustivel: 580 },
-          { date: '2024-03', viagens: 1100, hospedagem: 720, combustivel: 620 },
-          { date: '2024-04', viagens: 1250, hospedagem: 780, combustivel: 640 },
-          { date: '2024-05', viagens: 1180, hospedagem: 760, combustivel: 590 },
-          { date: '2024-06', viagens: 1080, hospedagem: 700, combustivel: 570 }
+          { date: "2024-01", viagens: 1200, hospedagem: 800, combustivel: 600 },
+          { date: "2024-02", viagens: 1150, hospedagem: 750, combustivel: 580 },
+          { date: "2024-03", viagens: 1100, hospedagem: 720, combustivel: 620 },
+          { date: "2024-04", viagens: 1250, hospedagem: 780, combustivel: 640 },
+          { date: "2024-05", viagens: 1180, hospedagem: 760, combustivel: 590 },
+          { date: "2024-06", viagens: 1080, hospedagem: 700, combustivel: 570 },
         ],
         savingsOverTime: [
-          { month: 'Jan', savings: 2450, alerts: 12 },
-          { month: 'Fev', savings: 1890, alerts: 8 },
-          { month: 'Mar', savings: 3200, alerts: 15 },
-          { month: 'Abr', savings: 2100, alerts: 10 },
-          { month: 'Mai', savings: 2800, alerts: 13 },
-          { month: 'Jun', savings: 3450, alerts: 16 }
+          { month: "Jan", savings: 2450, alerts: 12 },
+          { month: "Fev", savings: 1890, alerts: 8 },
+          { month: "Mar", savings: 3200, alerts: 15 },
+          { month: "Abr", savings: 2100, alerts: 10 },
+          { month: "Mai", savings: 2800, alerts: 13 },
+          { month: "Jun", savings: 3450, alerts: 16 },
         ],
         topProducts: [
-          { name: 'Passagem SP-RJ', savings: 850, frequency: 5 },
-          { name: 'Hotel Copacabana', savings: 650, frequency: 3 },
-          { name: 'Combustível MGO', savings: 420, frequency: 8 },
-          { name: 'Lubrificante Motor', savings: 280, frequency: 4 }
+          { name: "Passagem SP-RJ", savings: 850, frequency: 5 },
+          { name: "Hotel Copacabana", savings: 650, frequency: 3 },
+          { name: "Combustível MGO", savings: 420, frequency: 8 },
+          { name: "Lubrificante Motor", savings: 280, frequency: 4 },
         ],
         trends: {
           totalAlerts: 47,
           activeSavings: 12450,
           avgDiscount: 18.5,
-          successRate: 76
-        }
+          successRate: 76,
+        },
       };
-      
+
       setAnalytics(mockAnalytics);
       setIsLoading(false);
     }, 1000);
   };
 
-  const formatCurrency = (value: number) => `R$ ${value.toLocaleString('pt-BR')}`;
+  const formatCurrency = (value: number) => `R$ ${value.toLocaleString("pt-BR")}`;
   const formatPercentage = (value: number) => `${value}%`;
 
   if (isLoading) {
@@ -136,7 +155,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
                   <SelectItem value="1y">1 ano</SelectItem>
                 </SelectContent>
               </Select>
-              
+
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger className="w-40 border-primary/20">
                   <SelectValue />
@@ -148,7 +167,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
                   <SelectItem value="combustivel">Combustível</SelectItem>
                 </SelectContent>
               </Select>
-              
+
               <Button variant="outline" className="border-primary/20 hover:bg-primary/5">
                 <Download className="w-4 h-4 mr-2" />
                 Exportar
@@ -169,9 +188,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
               </div>
               <Target className="w-8 h-8 text-primary" />
             </div>
-            <div className="text-xs text-muted-foreground mt-2">
-              +12% vs. período anterior
-            </div>
+            <div className="text-xs text-muted-foreground mt-2">+12% vs. período anterior</div>
           </CardContent>
         </Card>
 
@@ -180,13 +197,13 @@ export const PriceAnalyticsDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Economia Total</p>
-                <p className="text-2xl font-bold text-success">{formatCurrency(analytics.trends.activeSavings)}</p>
+                <p className="text-2xl font-bold text-success">
+                  {formatCurrency(analytics.trends.activeSavings)}
+                </p>
               </div>
               <DollarSign className="w-8 h-8 text-success" />
             </div>
-            <div className="text-xs text-muted-foreground mt-2">
-              +25% vs. período anterior
-            </div>
+            <div className="text-xs text-muted-foreground mt-2">+25% vs. período anterior</div>
           </CardContent>
         </Card>
 
@@ -195,13 +212,13 @@ export const PriceAnalyticsDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Desconto Médio</p>
-                <p className="text-2xl font-bold text-warning">{formatPercentage(analytics.trends.avgDiscount)}</p>
+                <p className="text-2xl font-bold text-warning">
+                  {formatPercentage(analytics.trends.avgDiscount)}
+                </p>
               </div>
               <TrendingDown className="w-8 h-8 text-warning" />
             </div>
-            <div className="text-xs text-muted-foreground mt-2">
-              +3.2% vs. período anterior
-            </div>
+            <div className="text-xs text-muted-foreground mt-2">+3.2% vs. período anterior</div>
           </CardContent>
         </Card>
 
@@ -210,13 +227,13 @@ export const PriceAnalyticsDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Taxa de Sucesso</p>
-                <p className="text-2xl font-bold text-info">{formatPercentage(analytics.trends.successRate)}</p>
+                <p className="text-2xl font-bold text-info">
+                  {formatPercentage(analytics.trends.successRate)}
+                </p>
               </div>
               <Zap className="w-8 h-8 text-info" />
             </div>
-            <div className="text-xs text-muted-foreground mt-2">
-              +5% vs. período anterior
-            </div>
+            <div className="text-xs text-muted-foreground mt-2">+5% vs. período anterior</div>
           </CardContent>
         </Card>
       </div>
@@ -235,42 +252,38 @@ export const PriceAnalyticsDashboard: React.FC = () => {
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={analytics.priceHistory}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis 
-                  dataKey="date" 
+                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                <YAxis
                   stroke="hsl(var(--muted-foreground))"
                   fontSize={12}
+                  tickFormatter={value => `R$ ${value}`}
                 />
-                <YAxis 
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tickFormatter={(value) => `R$ ${value}`}
-                />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{
-                    backgroundColor: 'hsl(var(--background))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
                   }}
-                  formatter={(value: any) => [`R$ ${value}`, '']}
+                  formatter={(value: any) => [`R$ ${value}`, ""]}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="viagens" 
-                  stroke="hsl(var(--primary))" 
+                <Line
+                  type="monotone"
+                  dataKey="viagens"
+                  stroke="hsl(var(--primary))"
                   strokeWidth={2}
                   name="Viagens"
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="hospedagem" 
-                  stroke="hsl(var(--success))" 
+                <Line
+                  type="monotone"
+                  dataKey="hospedagem"
+                  stroke="hsl(var(--success))"
                   strokeWidth={2}
                   name="Hospedagem"
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="combustivel" 
-                  stroke="hsl(var(--warning))" 
+                <Line
+                  type="monotone"
+                  dataKey="combustivel"
+                  stroke="hsl(var(--warning))"
                   strokeWidth={2}
                   name="Combustível"
                 />
@@ -304,11 +317,11 @@ export const PriceAnalyticsDashboard: React.FC = () => {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip 
+                <Tooltip
                   contentStyle={{
-                    backgroundColor: 'hsl(var(--background))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
                   }}
                 />
               </PieChart>
@@ -328,32 +341,24 @@ export const PriceAnalyticsDashboard: React.FC = () => {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={analytics.savingsOverTime}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis 
-                  dataKey="month" 
+                <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                <YAxis
                   stroke="hsl(var(--muted-foreground))"
                   fontSize={12}
+                  tickFormatter={value => `R$ ${value}`}
                 />
-                <YAxis 
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tickFormatter={(value) => `R$ ${value}`}
-                />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{
-                    backgroundColor: 'hsl(var(--background))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
                   }}
                   formatter={(value: any, name: string) => [
-                    name === 'savings' ? `R$ ${value}` : `${value} alertas`,
-                    name === 'savings' ? 'Economia' : 'Alertas'
+                    name === "savings" ? `R$ ${value}` : `${value} alertas`,
+                    name === "savings" ? "Economia" : "Alertas",
                   ]}
                 />
-                <Bar 
-                  dataKey="savings" 
-                  fill="hsl(var(--success))" 
-                  radius={[4, 4, 0, 0]}
-                />
+                <Bar dataKey="savings" fill="hsl(var(--success))" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -370,7 +375,10 @@ export const PriceAnalyticsDashboard: React.FC = () => {
           <CardContent>
             <div className="space-y-4">
               {analytics.topProducts.map((product, index) => (
-                <div key={product.name} className="flex items-center justify-between p-3 rounded-lg border border-primary/10 bg-primary/5">
+                <div
+                  key={product.name}
+                  className="flex items-center justify-between p-3 rounded-lg border border-primary/10 bg-primary/5"
+                >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-bold text-primary">
                       {index + 1}
@@ -412,7 +420,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
                 <strong>Viagens</strong> teve o maior desconto médio (22%) no último mês.
               </p>
             </div>
-            
+
             <div className="p-4 rounded-lg border border-warning/20 bg-warning/5">
               <div className="flex items-center gap-2 mb-2">
                 <Calendar className="w-4 h-4 text-warning" />
@@ -422,14 +430,15 @@ export const PriceAnalyticsDashboard: React.FC = () => {
                 <strong>Terças-feiras</strong> apresentam os melhores preços para viagens.
               </p>
             </div>
-            
+
             <div className="p-4 rounded-lg border border-info/20 bg-info/5">
               <div className="flex items-center gap-2 mb-2">
                 <Target className="w-4 h-4 text-info" />
                 <span className="text-sm font-medium text-info">Recomendação</span>
               </div>
               <p className="text-sm">
-                Configure mais alertas para <strong>Hospedagem</strong> - alta oportunidade de economia.
+                Configure mais alertas para <strong>Hospedagem</strong> - alta oportunidade de
+                economia.
               </p>
             </div>
           </div>

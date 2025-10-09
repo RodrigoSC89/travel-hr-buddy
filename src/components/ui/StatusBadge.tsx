@@ -1,30 +1,35 @@
-import React from 'react';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import { getStatusColor, getStatusDot, getPriorityColor, getVesselStatusColor } from '@/lib/status-utils';
+import React from "react";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import {
+  getStatusColor,
+  getStatusDot,
+  getPriorityColor,
+  getVesselStatusColor,
+} from "@/lib/status-utils";
 
 export interface StatusBadgeProps {
   status: string;
-  type?: 'default' | 'priority' | 'vessel';
+  type?: "default" | "priority" | "vessel";
   className?: string;
-  variant?: 'default' | 'secondary' | 'outline' | 'destructive';
+  variant?: "default" | "secondary" | "outline" | "destructive";
 }
 
 /**
  * Unified StatusBadge component with semantic colors
  * Consolidates StatusBadge from enhanced-status-components.tsx
  */
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ 
-  status, 
-  type = 'default', 
+export const StatusBadge: React.FC<StatusBadgeProps> = ({
+  status,
+  type = "default",
   className,
-  variant = 'secondary'
+  variant = "secondary",
 }) => {
   const getColorClass = () => {
     switch (type) {
-      case 'priority':
+      case "priority":
         return getPriorityColor(status);
-      case 'vessel':
+      case "vessel":
         return getVesselStatusColor(status);
       default:
         return getStatusColor(status);
@@ -32,10 +37,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   };
 
   return (
-    <Badge 
-      className={cn(getColorClass(), className)}
-      variant={variant}
-    >
+    <Badge className={cn(getColorClass(), className)} variant={variant}>
       {status}
     </Badge>
   );
@@ -46,7 +48,7 @@ export interface StatusIndicatorProps {
   label?: string;
   showDot?: boolean;
   className?: string;
-  type?: 'default' | 'priority' | 'vessel';
+  type?: "default" | "priority" | "vessel";
 }
 
 /**
@@ -58,13 +60,13 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   label,
   showDot = true,
   className,
-  type = 'default'
+  type = "default",
 }) => {
   const getDotColor = () => {
     switch (type) {
-      case 'priority':
+      case "priority":
         return getPriorityColor(status);
-      case 'vessel':
+      case "vessel":
         return getVesselStatusColor(status);
       default:
         return getStatusDot(status);
@@ -73,12 +75,8 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      {showDot && (
-        <div className={cn("w-2 h-2 rounded-full", getDotColor())} />
-      )}
-      <span className="text-sm font-medium">
-        {label || status}
-      </span>
+      {showDot && <div className={cn("w-2 h-2 rounded-full", getDotColor())} />}
+      <span className="text-sm font-medium">{label || status}</span>
     </div>
   );
 };

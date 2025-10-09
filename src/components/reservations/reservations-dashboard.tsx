@@ -1,16 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar as CalendarIcon, Plus, Clock, MapPin, Users, Edit, Trash2, Smartphone } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Calendar as CalendarIcon,
+  Plus,
+  Clock,
+  MapPin,
+  Users,
+  Edit,
+  Trash2,
+  Smartphone,
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 interface Reservation {
   id: string;
@@ -20,7 +42,7 @@ interface Reservation {
   start_date: string;
   end_date: string;
   location?: string;
-  status: 'pending' | 'confirmed' | 'cancelled';
+  status: "pending" | "confirmed" | "cancelled";
   created_at: string;
 }
 
@@ -30,13 +52,13 @@ export const ReservationsDashboard: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    reservation_type: '',
-    start_date: '',
-    end_date: '',
-    location: '',
-    status: 'confirmed' as 'pending' | 'confirmed' | 'cancelled'
+    title: "",
+    description: "",
+    reservation_type: "",
+    start_date: "",
+    end_date: "",
+    location: "",
+    status: "confirmed" as "pending" | "confirmed" | "cancelled",
   });
 
   const { toast } = useToast();
@@ -52,7 +74,7 @@ export const ReservationsDashboard: React.FC = () => {
     try {
       await Haptics.impact({ style: ImpactStyle.Medium });
     } catch (error) {
-      console.log('Haptics not available');
+      console.log("Haptics not available");
     }
   };
 
@@ -60,18 +82,18 @@ export const ReservationsDashboard: React.FC = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('reservations')
-        .select('*')
-        .order('start_date', { ascending: true });
+        .from("reservations")
+        .select("*")
+        .order("start_date", { ascending: true });
 
       if (error) throw error;
       setReservations((data || []) as Reservation[]);
     } catch (error) {
-      console.error('Error fetching reservations:', error);
+      console.error("Error fetching reservations:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar reservas",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -94,24 +116,22 @@ export const ReservationsDashboard: React.FC = () => {
 
       if (selectedReservation) {
         const { error } = await supabase
-          .from('reservations')
+          .from("reservations")
           .update(reservationData)
-          .eq('id', selectedReservation.id);
+          .eq("id", selectedReservation.id);
 
         if (error) throw error;
         toast({
           title: "Sucesso",
-          description: "Reserva atualizada com sucesso!"
+          description: "Reserva atualizada com sucesso!",
         });
       } else {
-        const { error } = await supabase
-          .from('reservations')
-          .insert([reservationData]);
+        const { error } = await supabase.from("reservations").insert([reservationData]);
 
         if (error) throw error;
         toast({
           title: "Sucesso",
-          description: "Reserva criada com sucesso!"
+          description: "Reserva criada com sucesso!",
         });
       }
 
@@ -119,50 +139,47 @@ export const ReservationsDashboard: React.FC = () => {
       resetForm();
       fetchReservations();
     } catch (error) {
-      console.error('Error saving reservation:', error);
+      console.error("Error saving reservation:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar reserva",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const handleDelete = async (id: string) => {
     await triggerHaptics();
-    
+
     try {
-      const { error } = await supabase
-        .from('reservations')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from("reservations").delete().eq("id", id);
 
       if (error) throw error;
-      
+
       toast({
         title: "Sucesso",
-        description: "Reserva excluída com sucesso!"
+        description: "Reserva excluída com sucesso!",
       });
       fetchReservations();
     } catch (error) {
-      console.error('Error deleting reservation:', error);
+      console.error("Error deleting reservation:", error);
       toast({
         title: "Erro",
         description: "Erro ao excluir reserva",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const resetForm = () => {
     setFormData({
-      title: '',
-      description: '',
-      reservation_type: '',
-      start_date: '',
-      end_date: '',
-      location: '',
-      status: 'confirmed' as 'pending' | 'confirmed' | 'cancelled'
+      title: "",
+      description: "",
+      reservation_type: "",
+      start_date: "",
+      end_date: "",
+      location: "",
+      status: "confirmed" as "pending" | "confirmed" | "cancelled",
     });
     setSelectedReservation(null);
   };
@@ -171,12 +188,12 @@ export const ReservationsDashboard: React.FC = () => {
     setSelectedReservation(reservation);
     setFormData({
       title: reservation.title,
-      description: reservation.description || '',
+      description: reservation.description || "",
       reservation_type: reservation.reservation_type,
       start_date: new Date(reservation.start_date).toISOString().slice(0, 16),
       end_date: new Date(reservation.end_date).toISOString().slice(0, 16),
-      location: reservation.location || '',
-      status: reservation.status
+      location: reservation.location || "",
+      status: reservation.status,
     });
     setIsDialogOpen(true);
   };
@@ -188,19 +205,27 @@ export const ReservationsDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'bg-green-100 text-green-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      default: return 'bg-secondary text-secondary-foreground';
+      case "confirmed":
+        return "bg-green-100 text-green-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "cancelled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'Confirmada';
-      case 'pending': return 'Pendente';
-      case 'cancelled': return 'Cancelada';
-      default: return 'Desconhecida';
+      case "confirmed":
+        return "Confirmada";
+      case "pending":
+        return "Pendente";
+      case "cancelled":
+        return "Cancelada";
+      default:
+        return "Desconhecida";
     }
   };
 
@@ -237,11 +262,9 @@ export const ReservationsDashboard: React.FC = () => {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>
-                {selectedReservation ? 'Editar Reserva' : 'Nova Reserva'}
-              </DialogTitle>
+              <DialogTitle>{selectedReservation ? "Editar Reserva" : "Nova Reserva"}</DialogTitle>
               <DialogDescription>
-                {selectedReservation ? 'Edite os detalhes da reserva' : 'Crie uma nova reserva'}
+                {selectedReservation ? "Edite os detalhes da reserva" : "Crie uma nova reserva"}
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -249,7 +272,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Título</label>
                 <Input
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={e => setFormData({ ...formData, title: e.target.value })}
                   placeholder="Título da reserva"
                   required
                 />
@@ -258,7 +281,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Tipo</label>
                 <Select
                   value={formData.reservation_type}
-                  onValueChange={(value) => setFormData({ ...formData, reservation_type: value })}
+                  onValueChange={value => setFormData({ ...formData, reservation_type: value })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o tipo" />
@@ -278,7 +301,7 @@ export const ReservationsDashboard: React.FC = () => {
                   <Input
                     type="datetime-local"
                     value={formData.start_date}
-                    onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                    onChange={e => setFormData({ ...formData, start_date: e.target.value })}
                     required
                   />
                 </div>
@@ -287,7 +310,7 @@ export const ReservationsDashboard: React.FC = () => {
                   <Input
                     type="datetime-local"
                     value={formData.end_date}
-                    onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                    onChange={e => setFormData({ ...formData, end_date: e.target.value })}
                     required
                   />
                 </div>
@@ -296,7 +319,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Local</label>
                 <Input
                   value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  onChange={e => setFormData({ ...formData, location: e.target.value })}
                   placeholder="Local da reserva"
                 />
               </div>
@@ -304,7 +327,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Descrição</label>
                 <Textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={e => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Descrição adicional"
                   rows={3}
                 />
@@ -313,7 +336,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Status</label>
                 <Select
                   value={formData.status}
-                  onValueChange={(value: 'pending' | 'confirmed' | 'cancelled') => 
+                  onValueChange={(value: "pending" | "confirmed" | "cancelled") =>
                     setFormData({ ...formData, status: value })
                   }
                 >
@@ -329,13 +352,9 @@ export const ReservationsDashboard: React.FC = () => {
               </div>
               <div className="flex gap-2">
                 <Button type="submit" className="flex-1">
-                  {selectedReservation ? 'Atualizar' : 'Criar'}
+                  {selectedReservation ? "Atualizar" : "Criar"}
                 </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsDialogOpen(false)}
-                >
+                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancelar
                 </Button>
               </div>
@@ -364,7 +383,7 @@ export const ReservationsDashboard: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Confirmadas</p>
                 <p className="text-2xl font-bold">
-                  {reservations.filter(r => r.status === 'confirmed').length}
+                  {reservations.filter(r => r.status === "confirmed").length}
                 </p>
               </div>
             </div>
@@ -377,7 +396,7 @@ export const ReservationsDashboard: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
                 <p className="text-2xl font-bold">
-                  {reservations.filter(r => r.status === 'pending').length}
+                  {reservations.filter(r => r.status === "pending").length}
                 </p>
               </div>
             </div>
@@ -390,7 +409,7 @@ export const ReservationsDashboard: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Canceladas</p>
                 <p className="text-2xl font-bold">
-                  {reservations.filter(r => r.status === 'cancelled').length}
+                  {reservations.filter(r => r.status === "cancelled").length}
                 </p>
               </div>
             </div>
@@ -400,7 +419,7 @@ export const ReservationsDashboard: React.FC = () => {
 
       {/* Reservations List - Mobile Optimized */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {reservations.map((reservation) => (
+        {reservations.map(reservation => (
           <Card key={reservation.id} className="hover:shadow-lg transition-shadow">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
@@ -418,8 +437,8 @@ export const ReservationsDashboard: React.FC = () => {
                 <div className="flex items-center gap-2 text-sm">
                   <Clock className="h-4 w-4" />
                   <span>
-                    {new Date(reservation.start_date).toLocaleString('pt-BR')} - 
-                    {new Date(reservation.end_date).toLocaleString('pt-BR')}
+                    {new Date(reservation.start_date).toLocaleString("pt-BR")} -
+                    {new Date(reservation.end_date).toLocaleString("pt-BR")}
                   </span>
                 </div>
                 {reservation.location && (
@@ -429,9 +448,7 @@ export const ReservationsDashboard: React.FC = () => {
                   </div>
                 )}
                 {reservation.description && (
-                  <p className="text-sm text-muted-foreground">
-                    {reservation.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{reservation.description}</p>
                 )}
               </div>
               <div className="flex gap-2 mt-4">

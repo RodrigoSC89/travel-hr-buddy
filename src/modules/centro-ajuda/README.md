@@ -5,6 +5,7 @@
 The Centro de Ajuda (Help Center) module provides **comprehensive help, support, and knowledge management** for users with documentation, tutorials, FAQs, and support ticketing.
 
 **Key Use Cases:**
+
 - Access help documentation and guides
 - Search knowledge base articles
 - Submit and track support tickets

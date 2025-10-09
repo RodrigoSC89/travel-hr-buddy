@@ -1,101 +1,125 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
-import { 
-  Users, 
-  UserPlus, 
-  Search, 
-  Shield, 
-  Mail, 
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Users,
+  UserPlus,
+  Search,
+  Shield,
+  Mail,
   Phone,
   Calendar,
   UserCheck,
   UserX,
   Settings,
   Edit,
-  Trash2
-} from 'lucide-react';
+  Trash2,
+} from "lucide-react";
 
 const UserManagementDashboard = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [roleFilter, setRoleFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const { toast } = useToast();
 
   const users = [
     {
       id: 1,
-      name: 'João Silva',
-      email: 'joao.silva@nautilus.com',
-      role: 'Admin',
-      status: 'Ativo',
-      lastLogin: '2024-01-15 14:30',
-      department: 'TI',
-      phone: '+55 11 99999-9999'
+      name: "João Silva",
+      email: "joao.silva@nautilus.com",
+      role: "Admin",
+      status: "Ativo",
+      lastLogin: "2024-01-15 14:30",
+      department: "TI",
+      phone: "+55 11 99999-9999",
     },
     {
       id: 2,
-      name: 'Maria Santos',
-      email: 'maria.santos@nautilus.com',
-      role: 'HR Manager',
-      status: 'Ativo',
-      lastLogin: '2024-01-15 13:45',
-      department: 'Recursos Humanos',
-      phone: '+55 11 88888-8888'
+      name: "Maria Santos",
+      email: "maria.santos@nautilus.com",
+      role: "HR Manager",
+      status: "Ativo",
+      lastLogin: "2024-01-15 13:45",
+      department: "Recursos Humanos",
+      phone: "+55 11 88888-8888",
     },
     {
       id: 3,
-      name: 'Pedro Costa',
-      email: 'pedro.costa@nautilus.com',
-      role: 'Employee',
-      status: 'Inativo',
-      lastLogin: '2024-01-10 09:15',
-      department: 'Operações',
-      phone: '+55 11 77777-7777'
+      name: "Pedro Costa",
+      email: "pedro.costa@nautilus.com",
+      role: "Employee",
+      status: "Inativo",
+      lastLogin: "2024-01-10 09:15",
+      department: "Operações",
+      phone: "+55 11 77777-7777",
     },
     {
       id: 4,
-      name: 'Ana Oliveira',
-      email: 'ana.oliveira@nautilus.com',
-      role: 'Manager',
-      status: 'Ativo',
-      lastLogin: '2024-01-15 12:20',
-      department: 'Logística',
-      phone: '+55 11 66666-6666'
-    }
+      name: "Ana Oliveira",
+      email: "ana.oliveira@nautilus.com",
+      role: "Manager",
+      status: "Ativo",
+      lastLogin: "2024-01-15 12:20",
+      department: "Logística",
+      phone: "+55 11 66666-6666",
+    },
   ];
 
   const userStats = {
     total: 247,
     active: 198,
     inactive: 49,
-    newThisMonth: 12
+    newThisMonth: 12,
   };
 
   const getRoleBadge = (role: string) => {
     const roleColors = {
-      'Admin': 'bg-red-100 text-red-800',
-      'HR Manager': 'bg-blue-100 text-blue-800',
-      'Manager': 'bg-green-100 text-green-800',
-      'Employee': 'bg-secondary text-secondary-foreground'
+      Admin: "bg-red-100 text-red-800",
+      "HR Manager": "bg-blue-100 text-blue-800",
+      Manager: "bg-green-100 text-green-800",
+      Employee: "bg-secondary text-secondary-foreground",
     };
     return (
-      <Badge className={roleColors[role as keyof typeof roleColors] || 'bg-secondary text-secondary-foreground'}>
+      <Badge
+        className={
+          roleColors[role as keyof typeof roleColors] || "bg-secondary text-secondary-foreground"
+        }
+      >
         {role}
       </Badge>
     );
   };
 
   const getStatusBadge = (status: string) => {
-    return status === 'Ativo' ? (
+    return status === "Ativo" ? (
       <Badge variant="default" className="bg-green-100 text-green-800">
         <UserCheck className="w-3 h-3 mr-1" />
         Ativo
@@ -109,11 +133,12 @@ const UserManagementDashboard = () => {
   };
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
-    const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
-    
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = roleFilter === "all" || user.role === roleFilter;
+    const matchesStatus = statusFilter === "all" || user.status === statusFilter;
+
     return matchesSearch && matchesRole && matchesStatus;
   });
 
@@ -143,9 +168,7 @@ const UserManagementDashboard = () => {
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>Criar Novo Usuário</DialogTitle>
-              <DialogDescription>
-                Adicione um novo usuário ao sistema
-              </DialogDescription>
+              <DialogDescription>Adicione um novo usuário ao sistema</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -251,7 +274,7 @@ const UserManagementDashboard = () => {
                       id="search"
                       placeholder="Nome ou email..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={e => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>
@@ -292,9 +315,7 @@ const UserManagementDashboard = () => {
           <Card>
             <CardHeader>
               <CardTitle>Lista de Usuários</CardTitle>
-              <CardDescription>
-                {filteredUsers.length} usuário(s) encontrado(s)
-              </CardDescription>
+              <CardDescription>{filteredUsers.length} usuário(s) encontrado(s)</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -309,7 +330,7 @@ const UserManagementDashboard = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredUsers.map((user) => (
+                  {filteredUsers.map(user => (
                     <TableRow key={user.id}>
                       <TableCell>
                         <div>
@@ -335,24 +356,24 @@ const UserManagementDashboard = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-2">
-                          <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             variant="outline"
-                            onClick={() => handleUserAction('Editar', user.id)}
+                            onClick={() => handleUserAction("Editar", user.id)}
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
-                          <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             variant="outline"
-                            onClick={() => handleUserAction('Configurar', user.id)}
+                            onClick={() => handleUserAction("Configurar", user.id)}
                           >
                             <Settings className="w-4 h-4" />
                           </Button>
-                          <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             variant="outline"
-                            onClick={() => handleUserAction('Desativar', user.id)}
+                            onClick={() => handleUserAction("Desativar", user.id)}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
@@ -373,9 +394,7 @@ const UserManagementDashboard = () => {
                 <Shield className="w-5 h-5" />
                 Gestão de Funções
               </CardTitle>
-              <CardDescription>
-                Configure funções e suas permissões no sistema
-              </CardDescription>
+              <CardDescription>Configure funções e suas permissões no sistema</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -386,12 +405,8 @@ const UserManagementDashboard = () => {
                         <h3 className="font-semibold">Admin</h3>
                         <Badge className="bg-red-100 text-red-800">Máximo</Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Acesso total ao sistema
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        3 usuários
-                      </p>
+                      <p className="text-sm text-muted-foreground">Acesso total ao sistema</p>
+                      <p className="text-xs text-muted-foreground">3 usuários</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -403,12 +418,8 @@ const UserManagementDashboard = () => {
                         <h3 className="font-semibold">HR Manager</h3>
                         <Badge className="bg-blue-100 text-blue-800">Alto</Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Gestão de recursos humanos
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        8 usuários
-                      </p>
+                      <p className="text-sm text-muted-foreground">Gestão de recursos humanos</p>
+                      <p className="text-xs text-muted-foreground">8 usuários</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -420,12 +431,8 @@ const UserManagementDashboard = () => {
                         <h3 className="font-semibold">Manager</h3>
                         <Badge className="bg-green-100 text-green-800">Médio</Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Supervisão de equipes
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        25 usuários
-                      </p>
+                      <p className="text-sm text-muted-foreground">Supervisão de equipes</p>
+                      <p className="text-xs text-muted-foreground">25 usuários</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -437,12 +444,8 @@ const UserManagementDashboard = () => {
                         <h3 className="font-semibold">Employee</h3>
                         <Badge className="bg-secondary text-secondary-foreground">Básico</Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Acesso limitado
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        211 usuários
-                      </p>
+                      <p className="text-sm text-muted-foreground">Acesso limitado</p>
+                      <p className="text-xs text-muted-foreground">211 usuários</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -455,9 +458,7 @@ const UserManagementDashboard = () => {
           <Card>
             <CardHeader>
               <CardTitle>Matriz de Permissões</CardTitle>
-              <CardDescription>
-                Visualize e configure permissões por função
-              </CardDescription>
+              <CardDescription>Visualize e configure permissões por função</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">

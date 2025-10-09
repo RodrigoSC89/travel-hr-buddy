@@ -1,20 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
-import { 
-  User, 
-  Ship, 
-  Award, 
-  Calendar, 
-  FileText, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import {
+  User,
+  Ship,
+  Award,
+  Calendar,
+  FileText,
   AlertTriangle,
   CheckCircle,
   Clock,
@@ -36,13 +42,13 @@ import {
   Shield,
   Anchor,
   Compass,
-  Waves
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { format, differenceInDays } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+  Waves,
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { format, differenceInDays } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface CrewMember {
   id: string;
@@ -168,10 +174,10 @@ export const ProfessionalCrewDossier: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [selectedCrewId, setSelectedCrewId] = useState<string>('');
+  const [selectedCrewId, setSelectedCrewId] = useState<string>("");
   const [isHRUser, setIsHRUser] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
-  
+  const [activeTab, setActiveTab] = useState("overview");
+
   // Data states
   const [crewMember, setCrewMember] = useState<CrewMember | null>(null);
   const [dossier, setDossier] = useState<CrewDossier | null>(null);
@@ -181,12 +187,12 @@ export const ProfessionalCrewDossier: React.FC = () => {
   const [aiRecommendations, setAIRecommendations] = useState<AIRecommendation[]>([]);
   const [documents, setDocuments] = useState<DossierDocument[]>([]);
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
-  
+
   // Filter states
-  const [searchTerm, setSearchTerm] = useState('');
-  const [vesselTypeFilter, setVesselTypeFilter] = useState('all');
-  const [dpClassFilter, setDpClassFilter] = useState('all');
-  const [periodFilter, setPeriodFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [vesselTypeFilter, setVesselTypeFilter] = useState("all");
+  const [dpClassFilter, setDpClassFilter] = useState("all");
+  const [periodFilter, setPeriodFilter] = useState("all");
 
   useEffect(() => {
     initializeDossier();
@@ -206,37 +212,37 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
       // Verificar se é usuário de RH
       const { data: roleData } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
         .single();
 
-      const isHR = roleData?.role === 'admin' || roleData?.role === 'hr_manager';
+      const isHR = roleData?.role === "admin" || roleData?.role === "hr_manager";
       setIsHRUser(isHR);
 
       if (isHR) {
         // Buscar todos os tripulantes
         const { data: allCrew, error } = await supabase
-          .from('crew_members')
-          .select('*')
-          .order('full_name');
+          .from("crew_members")
+          .select("*")
+          .order("full_name");
 
         if (error) throw error;
         setCrewMembers(allCrew || []);
-        
+
         if (allCrew && allCrew.length > 0) {
           setSelectedCrewId(allCrew[0].id);
         }
       } else {
         // Buscar apenas o próprio tripulante
         const { data: ownCrew, error } = await supabase
-          .from('crew_members')
-          .select('*')
-          .eq('user_id', user.id)
+          .from("crew_members")
+          .select("*")
+          .eq("user_id", user.id)
           .single();
 
         if (error) {
-          console.log('Tripulante não encontrado, criando...');
+          console.log("Tripulante não encontrado, criando...");
           await createCrewMember();
           return;
         }
@@ -245,11 +251,11 @@ export const ProfessionalCrewDossier: React.FC = () => {
         setSelectedCrewId(ownCrew.id);
       }
     } catch (error) {
-      console.error('Erro ao inicializar dossiê:', error);
+      console.error("Erro ao inicializar dossiê:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -261,16 +267,16 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
     try {
       const { data: newCrew, error } = await supabase
-        .from('crew_members')
+        .from("crew_members")
         .insert({
           user_id: user.id,
-          employee_id: user.email?.split('@')[0] || 'temp_id',
-          full_name: user.email?.split('@')[0] || 'Usuário',
-          position: 'Marinheiro',
-          rank: 'Ordinary Seaman',
-          nationality: 'Brasil',
+          employee_id: user.email?.split("@")[0] || "temp_id",
+          full_name: user.email?.split("@")[0] || "Usuário",
+          position: "Marinheiro",
+          rank: "Ordinary Seaman",
+          nationality: "Brasil",
           email: user.email,
-          status: 'available'
+          status: "available",
         })
         .select()
         .single();
@@ -279,17 +285,17 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
       setCrewMembers([newCrew]);
       setSelectedCrewId(newCrew.id);
-      
+
       toast({
         title: "Perfil criado",
-        description: "Seu perfil de tripulante foi criado com sucesso"
+        description: "Seu perfil de tripulante foi criado com sucesso",
       });
     } catch (error) {
-      console.error('Erro ao criar tripulante:', error);
+      console.error("Erro ao criar tripulante:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar perfil de tripulante",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -302,9 +308,9 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
       // Buscar dados do tripulante
       const { data: memberData, error: memberError } = await supabase
-        .from('crew_members')
-        .select('*')
-        .eq('id', selectedCrewId)
+        .from("crew_members")
+        .select("*")
+        .eq("id", selectedCrewId)
         .single();
 
       if (memberError) throw memberError;
@@ -312,9 +318,9 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
       // Buscar dossiê
       const { data: dossierData, error: dossierError } = await supabase
-        .from('crew_dossier')
-        .select('*')
-        .eq('crew_member_id', selectedCrewId)
+        .from("crew_dossier")
+        .select("*")
+        .eq("crew_member_id", selectedCrewId)
         .maybeSingle();
 
       if (dossierError) throw dossierError;
@@ -322,64 +328,63 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
       // Buscar embarques
       const { data: embarkData, error: embarkError } = await supabase
-        .from('crew_embarkations')
-        .select('*')
-        .eq('crew_member_id', selectedCrewId)
-        .order('embark_date', { ascending: false });
+        .from("crew_embarkations")
+        .select("*")
+        .eq("crew_member_id", selectedCrewId)
+        .order("embark_date", { ascending: false });
 
       if (embarkError) throw embarkError;
       setEmbarkations(embarkData || []);
 
       // Buscar certificações
       const { data: certData, error: certError } = await supabase
-        .from('crew_certifications')
-        .select('*')
-        .eq('crew_member_id', selectedCrewId)
-        .order('expiry_date', { ascending: true });
+        .from("crew_certifications")
+        .select("*")
+        .eq("crew_member_id", selectedCrewId)
+        .order("expiry_date", { ascending: true });
 
       if (certError) throw certError;
       setCertifications(certData || []);
 
       // Buscar avaliações de performance
       const { data: reviewData, error: reviewError } = await supabase
-        .from('crew_performance_reviews')
-        .select('*')
-        .eq('crew_member_id', selectedCrewId)
-        .order('review_date', { ascending: false });
+        .from("crew_performance_reviews")
+        .select("*")
+        .eq("crew_member_id", selectedCrewId)
+        .order("review_date", { ascending: false });
 
       if (reviewError) throw reviewError;
       setPerformanceReviews(reviewData || []);
 
       // Buscar recomendações de IA
       const { data: aiData, error: aiError } = await supabase
-        .from('crew_ai_recommendations')
-        .select('*')
-        .eq('crew_member_id', selectedCrewId)
-        .eq('status', 'active')
-        .order('priority', { ascending: false });
+        .from("crew_ai_recommendations")
+        .select("*")
+        .eq("crew_member_id", selectedCrewId)
+        .eq("status", "active")
+        .order("priority", { ascending: false });
 
       if (aiError) throw aiError;
       setAIRecommendations(aiData || []);
 
       // Buscar documentos
       const { data: docData, error: docError } = await supabase
-        .from('crew_dossier_documents')
-        .select('*')
-        .eq('crew_member_id', selectedCrewId)
-        .order('upload_date', { ascending: false });
+        .from("crew_dossier_documents")
+        .select("*")
+        .eq("crew_member_id", selectedCrewId)
+        .order("upload_date", { ascending: false });
 
       if (docError) throw docError;
       setDocuments(docData || []);
 
       // Gerar recomendações de IA
       await generateAIRecommendations();
-
     } catch (error) {
-      console.error('Erro ao buscar dados do dossiê:', error);
+      console.error("Erro ao buscar dados do dossiê:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -390,83 +395,99 @@ export const ProfessionalCrewDossier: React.FC = () => {
     if (!selectedCrewId) return;
 
     try {
-      const { error } = await supabase.rpc('generate_crew_ai_recommendations', {
-        crew_uuid: selectedCrewId
+      const { error } = await supabase.rpc("generate_crew_ai_recommendations", {
+        crew_uuid: selectedCrewId,
       });
 
       if (error) throw error;
 
       // Recarregar recomendações
       const { data: aiData } = await supabase
-        .from('crew_ai_recommendations')
-        .select('*')
-        .eq('crew_member_id', selectedCrewId)
-        .eq('status', 'active')
-        .order('priority', { ascending: false });
+        .from("crew_ai_recommendations")
+        .select("*")
+        .eq("crew_member_id", selectedCrewId)
+        .eq("status", "active")
+        .order("priority", { ascending: false });
 
       setAIRecommendations(aiData || []);
     } catch (error) {
-      console.error('Erro ao gerar recomendações:', error);
+      console.error("Erro ao gerar recomendações:", error);
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-secondary text-secondary-foreground border-border';
+      case "urgent":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "high":
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "low":
+        return "bg-green-100 text-green-800 border-green-200";
+      default:
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'valid':
-      case 'active':
-      case 'verified':
-        return 'bg-green-100 text-green-800';
-      case 'expiring_soon':
-      case 'expiring':
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'expired':
-      case 'rejected':
-        return 'bg-red-100 text-red-800';
+      case "valid":
+      case "active":
+      case "verified":
+        return "bg-green-100 text-green-800";
+      case "expiring_soon":
+      case "expiring":
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "expired":
+      case "rejected":
+        return "bg-red-100 text-red-800";
       default:
-        return 'bg-secondary text-secondary-foreground';
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const calculateDashboardStats = () => {
     const totalEmbarkations = embarkations.length;
-    const totalSeaTime = embarkations.reduce((total, embark) => total + (embark.hours_worked || 0), 0);
+    const totalSeaTime = embarkations.reduce(
+      (total, embark) => total + (embark.hours_worked || 0),
+      0
+    );
     const totalSeaDays = Math.round(totalSeaTime / 24);
-    
-    const vesselTypes = embarkations.reduce((acc, embark) => {
-      acc[embark.vessel_type || 'Unknown'] = (acc[embark.vessel_type || 'Unknown'] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    const mostFrequentVesselType = Object.entries(vesselTypes)
-      .sort(([,a], [,b]) => b - a)[0]?.[0] || 'N/A';
+
+    const vesselTypes = embarkations.reduce(
+      (acc, embark) => {
+        acc[embark.vessel_type || "Unknown"] = (acc[embark.vessel_type || "Unknown"] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    const mostFrequentVesselType =
+      Object.entries(vesselTypes).sort(([, a], [, b]) => b - a)[0]?.[0] || "N/A";
 
     const dpOperations = embarkations.flatMap(embark => embark.dp_operation_modes || []);
-    const mostFrequentDP = dpOperations.reduce((acc, mode) => {
-      acc[mode] = (acc[mode] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    const topDPMode = Object.entries(mostFrequentDP)
-      .sort(([,a], [,b]) => b - a)[0]?.[0] || 'N/A';
+    const mostFrequentDP = dpOperations.reduce(
+      (acc, mode) => {
+        acc[mode] = (acc[mode] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
-    const avgPerformance = performanceReviews.length > 0 
-      ? performanceReviews.reduce((sum, review) => sum + review.overall_score, 0) / performanceReviews.length
-      : 0;
+    const topDPMode = Object.entries(mostFrequentDP).sort(([, a], [, b]) => b - a)[0]?.[0] || "N/A";
 
-    const validCertifications = certifications.filter(cert => cert.status === 'valid').length;
+    const avgPerformance =
+      performanceReviews.length > 0
+        ? performanceReviews.reduce((sum, review) => sum + review.overall_score, 0) /
+          performanceReviews.length
+        : 0;
+
+    const validCertifications = certifications.filter(cert => cert.status === "valid").length;
     const totalCertifications = certifications.length;
-    const complianceRate = totalCertifications > 0 ? (validCertifications / totalCertifications) * 100 : 0;
+    const complianceRate =
+      totalCertifications > 0 ? (validCertifications / totalCertifications) * 100 : 0;
 
     return {
       totalEmbarkations,
@@ -475,7 +496,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
       mostFrequentVesselType,
       topDPMode,
       avgPerformance: Math.round(avgPerformance * 10) / 10,
-      complianceRate: Math.round(complianceRate)
+      complianceRate: Math.round(complianceRate),
     };
   };
 
@@ -498,9 +519,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
         <p className="text-muted-foreground mb-4">
           Não foi possível carregar os dados do tripulante
         </p>
-        <Button onClick={initializeDossier}>
-          Tentar Novamente
-        </Button>
+        <Button onClick={initializeDossier}>Tentar Novamente</Button>
       </div>
     );
   }
@@ -515,12 +534,18 @@ export const ProfessionalCrewDossier: React.FC = () => {
           <Avatar className="h-16 w-16">
             <AvatarImage src={dossier?.profile_photo_url} />
             <AvatarFallback className="text-lg font-semibold bg-primary/10">
-              {crewMember.full_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+              {crewMember.full_name
+                .split(" ")
+                .map(n => n[0])
+                .join("")
+                .slice(0, 2)}
             </AvatarFallback>
           </Avatar>
           <div>
             <h1 className="text-3xl font-bold">{crewMember.full_name}</h1>
-            <p className="text-lg text-muted-foreground">{crewMember.position} - {crewMember.rank}</p>
+            <p className="text-lg text-muted-foreground">
+              {crewMember.position} - {crewMember.rank}
+            </p>
             <div className="flex items-center gap-4 mt-1">
               <Badge variant="outline">{crewMember.employee_id}</Badge>
               {dossier?.cat_number && <Badge variant="outline">CAT: {dossier.cat_number}</Badge>}
@@ -536,7 +561,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                 <SelectValue placeholder="Selecionar tripulante" />
               </SelectTrigger>
               <SelectContent>
-                {crewMembers.map((crew) => (
+                {crewMembers.map(crew => (
                   <SelectItem key={crew.id} value={crew.id}>
                     {crew.full_name} - {crew.position}
                   </SelectItem>
@@ -619,8 +644,11 @@ export const ProfessionalCrewDossier: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {aiRecommendations.map((recommendation) => (
-                <div key={recommendation.id} className={`p-4 rounded-lg border ${getPriorityColor(recommendation.priority)}`}>
+              {aiRecommendations.map(recommendation => (
+                <div
+                  key={recommendation.id}
+                  className={`p-4 rounded-lg border ${getPriorityColor(recommendation.priority)}`}
+                >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h4 className="font-medium">{recommendation.title}</h4>
@@ -677,7 +705,9 @@ export const ProfessionalCrewDossier: React.FC = () => {
                   </div>
                   <div>
                     <label className="text-sm font-medium">Experiência</label>
-                    <p className="text-sm text-muted-foreground">{crewMember.experience_years} anos</p>
+                    <p className="text-sm text-muted-foreground">
+                      {crewMember.experience_years} anos
+                    </p>
                   </div>
                   {dossier?.cat_number && (
                     <div>
@@ -692,14 +722,16 @@ export const ProfessionalCrewDossier: React.FC = () => {
                     </div>
                   )}
                 </div>
-                
+
                 {dossier?.cir_expiry_date && (
                   <div>
                     <label className="text-sm font-medium">Validade CIR</label>
                     <p className="text-sm text-muted-foreground">
-                      {format(new Date(dossier.cir_expiry_date), 'dd/MM/yyyy', { locale: ptBR })}
+                      {format(new Date(dossier.cir_expiry_date), "dd/MM/yyyy", { locale: ptBR })}
                       {differenceInDays(new Date(dossier.cir_expiry_date), new Date()) < 30 && (
-                        <Badge variant="destructive" className="ml-2">Vencendo</Badge>
+                        <Badge variant="destructive" className="ml-2">
+                          Vencendo
+                        </Badge>
                       )}
                     </p>
                   </div>
@@ -714,17 +746,18 @@ export const ProfessionalCrewDossier: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {embarkations.slice(0, 3).map((embark) => (
+                  {embarkations.slice(0, 3).map(embark => (
                     <div key={embark.id} className="flex items-center space-x-3">
                       <Ship className="h-5 w-5 text-blue-500" />
                       <div className="flex-1">
                         <p className="text-sm font-medium">{embark.vessel_name}</p>
                         <p className="text-xs text-muted-foreground">
-                          {format(new Date(embark.embark_date), 'dd/MM/yyyy', { locale: ptBR })} - 
-                          {embark.disembark_date 
-                            ? format(new Date(embark.disembark_date), 'dd/MM/yyyy', { locale: ptBR })
-                            : 'Em curso'
-                          }
+                          {format(new Date(embark.embark_date), "dd/MM/yyyy", { locale: ptBR })} -
+                          {embark.disembark_date
+                            ? format(new Date(embark.disembark_date), "dd/MM/yyyy", {
+                                locale: ptBR,
+                              })
+                            : "Em curso"}
                         </p>
                       </div>
                       <Badge variant="outline">{embark.function_role}</Badge>
@@ -746,7 +779,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                   <Input
                     placeholder="Buscar por embarcação..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={e => setSearchTerm(e.target.value)}
                     className="w-full"
                   />
                 </div>
@@ -780,16 +813,16 @@ export const ProfessionalCrewDossier: React.FC = () => {
           {/* Embarkations List */}
           <div className="space-y-4">
             {embarkations
-              .filter(embark => 
-                searchTerm === '' || embark.vessel_name.toLowerCase().includes(searchTerm.toLowerCase())
+              .filter(
+                embark =>
+                  searchTerm === "" ||
+                  embark.vessel_name.toLowerCase().includes(searchTerm.toLowerCase())
               )
-              .filter(embark => 
-                vesselTypeFilter === 'all' || embark.vessel_type === vesselTypeFilter
+              .filter(
+                embark => vesselTypeFilter === "all" || embark.vessel_type === vesselTypeFilter
               )
-              .filter(embark => 
-                dpClassFilter === 'all' || embark.dp_class === dpClassFilter
-              )
-              .map((embark) => (
+              .filter(embark => dpClassFilter === "all" || embark.dp_class === dpClassFilter)
+              .map(embark => (
                 <Card key={embark.id}>
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
@@ -797,54 +830,74 @@ export const ProfessionalCrewDossier: React.FC = () => {
                         <h3 className="text-lg font-semibold">{embark.vessel_name}</h3>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                           <div>
-                            <label className="text-xs font-medium text-muted-foreground">Tipo</label>
-                            <p className="text-sm">{embark.vessel_type || 'N/A'}</p>
+                            <label className="text-xs font-medium text-muted-foreground">
+                              Tipo
+                            </label>
+                            <p className="text-sm">{embark.vessel_type || "N/A"}</p>
                           </div>
                           <div>
-                            <label className="text-xs font-medium text-muted-foreground">Classe</label>
-                            <p className="text-sm">{embark.vessel_class || 'N/A'}</p>
+                            <label className="text-xs font-medium text-muted-foreground">
+                              Classe
+                            </label>
+                            <p className="text-sm">{embark.vessel_class || "N/A"}</p>
                           </div>
                           <div>
                             <label className="text-xs font-medium text-muted-foreground">DP</label>
-                            <p className="text-sm">{embark.dp_class || 'N/A'}</p>
+                            <p className="text-sm">{embark.dp_class || "N/A"}</p>
                           </div>
                           <div>
-                            <label className="text-xs font-medium text-muted-foreground">Função</label>
+                            <label className="text-xs font-medium text-muted-foreground">
+                              Função
+                            </label>
                             <p className="text-sm">{embark.function_role}</p>
                           </div>
                           <div>
-                            <label className="text-xs font-medium text-muted-foreground">Embarque</label>
+                            <label className="text-xs font-medium text-muted-foreground">
+                              Embarque
+                            </label>
                             <p className="text-sm">
-                              {format(new Date(embark.embark_date), 'dd/MM/yyyy', { locale: ptBR })}
+                              {format(new Date(embark.embark_date), "dd/MM/yyyy", { locale: ptBR })}
                             </p>
                           </div>
                           <div>
-                            <label className="text-xs font-medium text-muted-foreground">Desembarque</label>
+                            <label className="text-xs font-medium text-muted-foreground">
+                              Desembarque
+                            </label>
                             <p className="text-sm">
-                              {embark.disembark_date 
-                                ? format(new Date(embark.disembark_date), 'dd/MM/yyyy', { locale: ptBR })
-                                : 'Em curso'
-                              }
+                              {embark.disembark_date
+                                ? format(new Date(embark.disembark_date), "dd/MM/yyyy", {
+                                    locale: ptBR,
+                                  })
+                                : "Em curso"}
                             </p>
                           </div>
                           <div>
-                            <label className="text-xs font-medium text-muted-foreground">Horas</label>
+                            <label className="text-xs font-medium text-muted-foreground">
+                              Horas
+                            </label>
                             <p className="text-sm">{embark.hours_worked || 0}h</p>
                           </div>
                           <div>
-                            <label className="text-xs font-medium text-muted-foreground">Performance</label>
+                            <label className="text-xs font-medium text-muted-foreground">
+                              Performance
+                            </label>
                             <div className="flex items-center gap-2">
                               <p className="text-sm">{embark.performance_rating || 0}/10</p>
                               {embark.performance_rating && (
-                                <Progress value={embark.performance_rating * 10} className="w-16 h-2" />
+                                <Progress
+                                  value={embark.performance_rating * 10}
+                                  className="w-16 h-2"
+                                />
                               )}
                             </div>
                           </div>
                         </div>
-                        
+
                         {embark.dp_operation_modes && embark.dp_operation_modes.length > 0 && (
                           <div className="mt-4">
-                            <label className="text-xs font-medium text-muted-foreground">Modos DP Operados</label>
+                            <label className="text-xs font-medium text-muted-foreground">
+                              Modos DP Operados
+                            </label>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {embark.dp_operation_modes.map((mode, index) => (
                                 <Badge key={index} variant="secondary" className="text-xs">
@@ -857,7 +910,9 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
                         {embark.equipment_operated && embark.equipment_operated.length > 0 && (
                           <div className="mt-4">
-                            <label className="text-xs font-medium text-muted-foreground">Equipamentos Operados</label>
+                            <label className="text-xs font-medium text-muted-foreground">
+                              Equipamentos Operados
+                            </label>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {embark.equipment_operated.map((equipment, index) => (
                                 <Badge key={index} variant="outline" className="text-xs">
@@ -878,7 +933,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
         {/* Certifications Tab */}
         <TabsContent value="certifications" className="space-y-6">
           <div className="space-y-4">
-            {certifications.map((cert) => (
+            {certifications.map(cert => (
               <Card key={cert.id}>
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
@@ -890,23 +945,29 @@ export const ProfessionalCrewDossier: React.FC = () => {
                           <p className="text-sm">{cert.certification_type}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Autoridade</label>
+                          <label className="text-xs font-medium text-muted-foreground">
+                            Autoridade
+                          </label>
                           <p className="text-sm">{cert.issuing_authority}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Emissão</label>
+                          <label className="text-xs font-medium text-muted-foreground">
+                            Emissão
+                          </label>
                           <p className="text-sm">
-                            {format(new Date(cert.issue_date), 'dd/MM/yyyy', { locale: ptBR })}
+                            {format(new Date(cert.issue_date), "dd/MM/yyyy", { locale: ptBR })}
                           </p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Validade</label>
+                          <label className="text-xs font-medium text-muted-foreground">
+                            Validade
+                          </label>
                           <p className="text-sm">
-                            {format(new Date(cert.expiry_date), 'dd/MM/yyyy', { locale: ptBR })}
+                            {format(new Date(cert.expiry_date), "dd/MM/yyyy", { locale: ptBR })}
                           </p>
                         </div>
                       </div>
-                      
+
                       {cert.grade && (
                         <div className="mt-4">
                           <label className="text-xs font-medium text-muted-foreground">Nota</label>
@@ -914,13 +975,16 @@ export const ProfessionalCrewDossier: React.FC = () => {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="flex flex-col items-end gap-2">
                       <Badge className={getStatusColor(cert.status)}>
-                        {cert.status === 'valid' ? 'Válido' :
-                         cert.status === 'expiring_soon' ? 'Vencendo' : 'Expirado'}
+                        {cert.status === "valid"
+                          ? "Válido"
+                          : cert.status === "expiring_soon"
+                            ? "Vencendo"
+                            : "Expirado"}
                       </Badge>
-                      
+
                       {cert.certificate_file_url && (
                         <Button variant="outline" size="sm">
                           <Eye className="h-4 w-4 mr-2" />
@@ -938,20 +1002,26 @@ export const ProfessionalCrewDossier: React.FC = () => {
         {/* Performance Tab */}
         <TabsContent value="performance" className="space-y-6">
           <div className="space-y-4">
-            {performanceReviews.map((review) => (
+            {performanceReviews.map(review => (
               <Card key={review.id}>
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-lg font-semibold">Avaliação - {review.review_period}</h3>
                       <p className="text-sm text-muted-foreground">
-                        {format(new Date(review.review_date), 'dd/MM/yyyy', { locale: ptBR })} - 
+                        {format(new Date(review.review_date), "dd/MM/yyyy", { locale: ptBR })} -
                         Avaliador: {review.reviewer_name}
                       </p>
                     </div>
-                    <Badge className={review.overall_score >= 8 ? 'bg-green-100 text-green-800' : 
-                                    review.overall_score >= 6 ? 'bg-yellow-100 text-yellow-800' : 
-                                    'bg-red-100 text-red-800'}>
+                    <Badge
+                      className={
+                        review.overall_score >= 8
+                          ? "bg-green-100 text-green-800"
+                          : review.overall_score >= 6
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
+                      }
+                    >
                       {review.overall_score}/10
                     </Badge>
                   </div>
@@ -965,7 +1035,9 @@ export const ProfessionalCrewDossier: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-muted-foreground">Comportamental</label>
+                      <label className="text-xs font-medium text-muted-foreground">
+                        Comportamental
+                      </label>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium">{review.behavioral_score}/10</span>
                         <Progress value={review.behavioral_score * 10} className="flex-1 h-2" />
@@ -980,7 +1052,9 @@ export const ProfessionalCrewDossier: React.FC = () => {
                     </div>
                     {review.leadership_score && (
                       <div>
-                        <label className="text-xs font-medium text-muted-foreground">Liderança</label>
+                        <label className="text-xs font-medium text-muted-foreground">
+                          Liderança
+                        </label>
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium">{review.leadership_score}/10</span>
                           <Progress value={review.leadership_score * 10} className="flex-1 h-2" />
@@ -992,14 +1066,20 @@ export const ProfessionalCrewDossier: React.FC = () => {
                   {review.positive_feedback && (
                     <div className="mb-4">
                       <label className="text-sm font-medium text-green-700">Pontos Positivos</label>
-                      <p className="text-sm text-muted-foreground mt-1">{review.positive_feedback}</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {review.positive_feedback}
+                      </p>
                     </div>
                   )}
 
                   {review.improvement_areas && (
                     <div className="mb-4">
-                      <label className="text-sm font-medium text-orange-700">Áreas de Melhoria</label>
-                      <p className="text-sm text-muted-foreground mt-1">{review.improvement_areas}</p>
+                      <label className="text-sm font-medium text-orange-700">
+                        Áreas de Melhoria
+                      </label>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {review.improvement_areas}
+                      </p>
                     </div>
                   )}
 
@@ -1036,7 +1116,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
           </Card>
 
           <div className="space-y-4">
-            {documents.map((doc) => (
+            {documents.map(doc => (
               <Card key={doc.id}>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
@@ -1045,8 +1125,8 @@ export const ProfessionalCrewDossier: React.FC = () => {
                       <div>
                         <h4 className="font-medium">{doc.document_name}</h4>
                         <p className="text-sm text-muted-foreground">
-                          {doc.document_category} - 
-                          {format(new Date(doc.upload_date), 'dd/MM/yyyy', { locale: ptBR })}
+                          {doc.document_category} -
+                          {format(new Date(doc.upload_date), "dd/MM/yyyy", { locale: ptBR })}
                         </p>
                         {doc.tags.length > 0 && (
                           <div className="flex gap-1 mt-1">
@@ -1059,11 +1139,14 @@ export const ProfessionalCrewDossier: React.FC = () => {
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       <Badge className={getStatusColor(doc.verification_status)}>
-                        {doc.verification_status === 'verified' ? 'Verificado' :
-                         doc.verification_status === 'pending' ? 'Pendente' : 'Rejeitado'}
+                        {doc.verification_status === "verified"
+                          ? "Verificado"
+                          : doc.verification_status === "pending"
+                            ? "Pendente"
+                            : "Rejeitado"}
                       </Badge>
                       <Button variant="ghost" size="sm">
                         <Eye className="h-4 w-4" />

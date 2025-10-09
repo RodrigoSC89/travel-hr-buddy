@@ -11,31 +11,31 @@ export const statusColors = {
   offline: "bg-status-inactive text-status-inactive-foreground",
   connected: "bg-status-active text-status-active-foreground",
   disconnected: "bg-status-inactive text-status-inactive-foreground",
-  
+
   // Process States
   success: "bg-success text-success-foreground",
   completed: "bg-success text-success-foreground",
   approved: "bg-success text-success-foreground",
   published: "bg-success text-success-foreground",
-  
+
   // Warning States
   warning: "bg-warning text-warning-foreground",
   pending: "bg-warning text-warning-foreground",
   in_progress: "bg-warning text-warning-foreground",
   maintenance: "bg-warning text-warning-foreground",
-  
+
   // Error States
   error: "bg-status-error text-status-error-foreground",
   failed: "bg-status-error text-status-error-foreground",
   rejected: "bg-status-error text-status-error-foreground",
   emergency: "bg-status-error text-status-error-foreground",
-  
+
   // Info States
   info: "bg-info text-info-foreground",
   draft: "bg-info text-info-foreground",
   scheduled: "bg-info text-info-foreground",
   navigation: "bg-info text-info-foreground",
-  
+
   // Default
   default: "bg-muted text-muted-foreground",
 } as const;
@@ -58,7 +58,7 @@ export const statusDots = {
 // Priority colors
 export const priorityColors = {
   high: "bg-status-error text-status-error-foreground",
-  medium: "bg-warning text-warning-foreground", 
+  medium: "bg-warning text-warning-foreground",
   low: "bg-info text-info-foreground",
   critical: "bg-status-error text-status-error-foreground",
   normal: "bg-info text-info-foreground",
@@ -66,12 +66,12 @@ export const priorityColors = {
 
 // Helper functions
 export const getStatusColor = (status: string): string => {
-  const normalizedStatus = status.toLowerCase().replace(/\s+/g, '_');
+  const normalizedStatus = status.toLowerCase().replace(/\s+/g, "_");
   return statusColors[normalizedStatus as keyof typeof statusColors] || statusColors.default;
 };
 
 export const getStatusDot = (status: string): string => {
-  const normalizedStatus = status.toLowerCase().replace(/\s+/g, '_');
+  const normalizedStatus = status.toLowerCase().replace(/\s+/g, "_");
   return statusDots[normalizedStatus as keyof typeof statusDots] || statusDots.default;
 };
 
@@ -90,7 +90,10 @@ export const difficultyColors = {
 
 export const getDifficultyColor = (difficulty: string): string => {
   const normalizedDifficulty = difficulty.toLowerCase();
-  return difficultyColors[normalizedDifficulty as keyof typeof difficultyColors] || difficultyColors.beginner;
+  return (
+    difficultyColors[normalizedDifficulty as keyof typeof difficultyColors] ||
+    difficultyColors.beginner
+  );
 };
 
 // Vessel/Fleet status colors
@@ -108,5 +111,8 @@ export const vesselStatusColors = {
 
 export const getVesselStatusColor = (status: string): string => {
   const normalizedStatus = status.toLowerCase();
-  return vesselStatusColors[normalizedStatus as keyof typeof vesselStatusColors] || vesselStatusColors.offline;
+  return (
+    vesselStatusColors[normalizedStatus as keyof typeof vesselStatusColors] ||
+    vesselStatusColors.offline
+  );
 };

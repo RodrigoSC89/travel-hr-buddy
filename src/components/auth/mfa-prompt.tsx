@@ -1,21 +1,13 @@
-import React, { useState, useCallback } from 'react';
-import { 
-  Shield, 
-  Key, 
-  Lock, 
-  AlertTriangle,
-  Smartphone,
-  Clock,
-  CheckCircle
-} from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useCallback } from "react";
+import { Shield, Key, Lock, AlertTriangle, Smartphone, Clock, CheckCircle } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface MFAPromptProps {
   onSuccess: () => void;
@@ -24,10 +16,10 @@ interface MFAPromptProps {
 
 export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => {
   const { toast } = useToast();
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [challenge, setChallenge] = useState<any>(null);
-  const [factorId, setFactorId] = useState<string>('');
+  const [factorId, setFactorId] = useState<string>("");
 
   const initiateMFAChallenge = useCallback(async () => {
     try {
@@ -35,12 +27,12 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
       const { data: factorsData, error: factorsError } = await supabase.auth.mfa.listFactors();
       if (factorsError) throw factorsError;
 
-      const verifiedFactor = factorsData?.all?.find(f => f.status === 'verified');
+      const verifiedFactor = factorsData?.all?.find(f => f.status === "verified");
       if (!verifiedFactor) {
         toast({
           title: "2FA não configurado",
           description: "Configure a autenticação de dois fatores primeiro",
-          variant: "destructive"
+          variant: "destructive",
         });
         onCancel();
         return;
@@ -48,9 +40,9 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
 
       // Create challenge
       const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
-        factorId: verifiedFactor.id
+        factorId: verifiedFactor.id,
       });
-      
+
       if (challengeError) throw challengeError;
 
       setChallenge(challengeData);
@@ -59,7 +51,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
       toast({
         title: "Erro",
         description: error.message || "Falha ao iniciar verificação 2FA",
-        variant: "destructive"
+        variant: "destructive",
       });
       onCancel();
     }
@@ -74,7 +66,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
       toast({
         title: "Código Inválido",
         description: "Digite um código de 6 dígitos",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -84,7 +76,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
       const { error } = await supabase.auth.mfa.verify({
         factorId,
         challengeId: challenge.id,
-        code
+        code,
       });
 
       if (error) throw error;
@@ -99,9 +91,9 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
       toast({
         title: "Código Incorreto",
         description: "Verifique o código e tente novamente",
-        variant: "destructive"
+        variant: "destructive",
       });
-      setCode('');
+      setCode("");
     } finally {
       setIsLoading(false);
     }
@@ -115,9 +107,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
             <Shield className="h-8 w-8 text-primary" />
           </div>
           <CardTitle>Verificação de Segurança</CardTitle>
-          <CardDescription>
-            Digite o código de 6 dígitos do seu app autenticador
-          </CardDescription>
+          <CardDescription>Digite o código de 6 dígitos do seu app autenticador</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <Alert>
@@ -132,13 +122,13 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
             <Input
               id="mfa-code"
               value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              onChange={e => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
               placeholder="000000"
               className="text-center font-mono text-xl tracking-widest"
               maxLength={6}
               autoFocus
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && code.length === 6) {
+              onKeyDown={e => {
+                if (e.key === "Enter" && code.length === 6) {
                   verifyMFA();
                 }
               }}
@@ -151,12 +141,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
           </div>
 
           <div className="flex gap-3">
-            <Button
-              variant="outline"
-              onClick={onCancel}
-              className="flex-1"
-              disabled={isLoading}
-            >
+            <Button variant="outline" onClick={onCancel} className="flex-1" disabled={isLoading}>
               Cancelar
             </Button>
             <Button
@@ -170,11 +155,8 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
 
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
-              Não consegue acessar seu app autenticador?{' '}
-              <button 
-                className="text-primary hover:underline"
-                onClick={onCancel}
-              >
+              Não consegue acessar seu app autenticador?{" "}
+              <button className="text-primary hover:underline" onClick={onCancel}>
                 Cancelar login
               </button>
             </p>
@@ -193,7 +175,7 @@ export const useMFA = () => {
   } | null>(null);
 
   const requireMFA = (): Promise<boolean> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setMfaResolver({ resolve });
       setShowMFAPrompt(true);
     });
@@ -212,14 +194,11 @@ export const useMFA = () => {
   };
 
   const MFAPromptComponent = showMFAPrompt ? (
-    <MFAPrompt 
-      onSuccess={handleMFASuccess}
-      onCancel={handleMFACancel}
-    />
+    <MFAPrompt onSuccess={handleMFASuccess} onCancel={handleMFACancel} />
   ) : null;
 
   return {
     requireMFA,
-    MFAPromptComponent
+    MFAPromptComponent,
   };
 };

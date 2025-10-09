@@ -1,21 +1,33 @@
-import React, { useState } from 'react';
-import { ResponsiveDashboard } from './responsive-dashboard';
-import { EnhancedDashboard } from './enhanced-dashboard';
-import PersonalizedRecommendations from '../intelligence/PersonalizedRecommendations';
-import IntelligentNotificationCenter from '../intelligence/IntelligentNotificationCenter';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Brain, Bell, BarChart3, Sparkles, Users, Target, Trophy, Activity, Lightbulb, LineChart, Star } from 'lucide-react';
+import React, { useState } from "react";
+import { ResponsiveDashboard } from "./responsive-dashboard";
+import { EnhancedDashboard } from "./enhanced-dashboard";
+import PersonalizedRecommendations from "../intelligence/PersonalizedRecommendations";
+import IntelligentNotificationCenter from "../intelligence/IntelligentNotificationCenter";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Brain,
+  Bell,
+  BarChart3,
+  Sparkles,
+  Users,
+  Target,
+  Trophy,
+  Activity,
+  Lightbulb,
+  LineChart,
+  Star,
+} from "lucide-react";
 
-import { RealTimeCollaboration } from '@/components/innovation/RealTimeCollaboration';
-import { AIAssistantPanel } from '@/components/innovation/AIAssistantPanel';
-import { SmartWorkflow } from '@/components/innovation/SmartWorkflow';
-import { SystemHealthDashboard } from '@/components/innovation/SystemHealthDashboard';
-import { Gamification } from '@/components/innovation/Gamification';
-import { AdvancedAIAssistant } from '@/components/innovation/AdvancedAIAssistant';
-import { BusinessIntelligence } from '@/components/innovation/BusinessIntelligence';
+import { RealTimeCollaboration } from "@/components/innovation/RealTimeCollaboration";
+import { AIAssistantPanel } from "@/components/innovation/AIAssistantPanel";
+import { SmartWorkflow } from "@/components/innovation/SmartWorkflow";
+import { SystemHealthDashboard } from "@/components/innovation/SystemHealthDashboard";
+import { Gamification } from "@/components/innovation/Gamification";
+import { AdvancedAIAssistant } from "@/components/innovation/AdvancedAIAssistant";
+import { BusinessIntelligence } from "@/components/innovation/BusinessIntelligence";
 
 interface GlobalDashboardProps {
   onNavigate?: (module: string) => void;
@@ -35,7 +47,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
     { id: "system-health", label: "Status Sistema", icon: Activity },
     { id: "recommendations", label: "Recomendações", icon: Star },
     { id: "notifications", label: "Notificações", icon: Bell },
-    { id: "insights", label: "Insights IA", icon: Lightbulb }
+    { id: "insights", label: "Insights IA", icon: Lightbulb },
   ];
 
   return (
@@ -92,7 +104,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
           <div className="relative">
             <ScrollArea className="w-full">
               <div className="flex gap-2 p-2 bg-card/50 backdrop-blur-sm rounded-2xl border border-border/50 shadow-lg">
-                {tabs.map((tab) => {
+                {tabs.map(tab => {
                   const IconComponent = tab.icon;
                   const isActive = activeTab === tab.id;
                   return (
@@ -101,13 +113,14 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                       onClick={() => setActiveTab(tab.id)}
                       className={`
                         relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 min-w-fit
-                        ${isActive 
-                          ? 'bg-primary text-primary-foreground shadow-lg transform scale-105' 
-                          : 'text-foreground/80 hover:text-foreground hover:bg-accent/50 hover:scale-102'
+                        ${
+                          isActive
+                            ? "bg-primary text-primary-foreground shadow-lg transform scale-105"
+                            : "text-foreground/80 hover:text-foreground hover:bg-accent/50 hover:scale-102"
                         }
                       `}
                     >
-                      <IconComponent className={`w-5 h-5 ${isActive ? 'animate-pulse' : ''}`} />
+                      <IconComponent className={`w-5 h-5 ${isActive ? "animate-pulse" : ""}`} />
                       <span className="font-medium whitespace-nowrap">{tab.label}</span>
                       {isActive && (
                         <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-primary-foreground rounded-full" />
@@ -123,7 +136,6 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/2 via-transparent to-secondary/2 rounded-3xl" />
             <div className="relative backdrop-blur-sm rounded-3xl border border-border/50 bg-card/30 p-6 shadow-xl">
-              
               <TabsContent value="overview" className="mt-0 space-y-6 animate-fade-in">
                 <EnhancedDashboard />
                 <ResponsiveDashboard />
@@ -137,7 +149,9 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Colaboração em Tempo Real</h2>
-                      <p className="text-muted-foreground">Conecte-se e trabalhe junto com sua equipe</p>
+                      <p className="text-muted-foreground">
+                        Conecte-se e trabalhe junto com sua equipe
+                      </p>
                     </div>
                   </div>
                   <RealTimeCollaboration />
@@ -152,7 +166,9 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Assistente IA Inteligente</h2>
-                      <p className="text-muted-foreground">Insights automáticos e recomendações personalizadas</p>
+                      <p className="text-muted-foreground">
+                        Insights automáticos e recomendações personalizadas
+                      </p>
                     </div>
                   </div>
                   <AIAssistantPanel />
@@ -167,7 +183,9 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">IA Executiva Avançada</h2>
-                      <p className="text-muted-foreground">Análise estratégica e insights de negócio</p>
+                      <p className="text-muted-foreground">
+                        Análise estratégica e insights de negócio
+                      </p>
                     </div>
                   </div>
                   <AdvancedAIAssistant />
@@ -197,7 +215,9 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Business Intelligence</h2>
-                      <p className="text-muted-foreground">Analytics avançados e insights preditivos</p>
+                      <p className="text-muted-foreground">
+                        Analytics avançados e insights preditivos
+                      </p>
                     </div>
                   </div>
                   <BusinessIntelligence />
@@ -212,7 +232,9 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Gamificação Corporativa</h2>
-                      <p className="text-muted-foreground">Engajamento e produtividade através de jogos</p>
+                      <p className="text-muted-foreground">
+                        Engajamento e produtividade através de jogos
+                      </p>
                     </div>
                   </div>
                   <Gamification />
@@ -227,7 +249,9 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Status do Sistema</h2>
-                      <p className="text-muted-foreground">Monitoramento em tempo real de todos os módulos</p>
+                      <p className="text-muted-foreground">
+                        Monitoramento em tempo real de todos os módulos
+                      </p>
                     </div>
                   </div>
                   <SystemHealthDashboard />
@@ -242,13 +266,12 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Recomendações IA</h2>
-                      <p className="text-muted-foreground">Sugestões personalizadas baseadas em seu uso</p>
+                      <p className="text-muted-foreground">
+                        Sugestões personalizadas baseadas em seu uso
+                      </p>
                     </div>
                   </div>
-                  <PersonalizedRecommendations 
-                    context="dashboard" 
-                    onNavigate={onNavigate}
-                  />
+                  <PersonalizedRecommendations context="dashboard" onNavigate={onNavigate} />
                 </div>
               </TabsContent>
 
@@ -260,7 +283,9 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Centro de Notificações</h2>
-                      <p className="text-muted-foreground">Alertas inteligentes e comunicações importantes</p>
+                      <p className="text-muted-foreground">
+                        Alertas inteligentes e comunicações importantes
+                      </p>
                     </div>
                   </div>
                   <IntelligentNotificationCenter onNavigate={onNavigate} />
@@ -275,10 +300,12 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Insights Avançados</h2>
-                      <p className="text-muted-foreground">Análises profundas e tendências de mercado</p>
+                      <p className="text-muted-foreground">
+                        Análises profundas e tendências de mercado
+                      </p>
                     </div>
                   </div>
-                  
+
                   <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 border-border/50">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
@@ -367,8 +394,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                           <CardContent className="p-6">
                             <div className="space-y-4">
                               <h3 className="font-semibold text-orange-700 flex items-center gap-2">
-                                <Bell className="w-5 h-5" />
-                                ⚡ Ações Prioritárias
+                                <Bell className="w-5 h-5" />⚡ Ações Prioritárias
                               </h3>
                               <ul className="space-y-3 text-sm">
                                 <li className="flex items-start gap-2">
@@ -395,18 +421,35 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                           💡 Insight Principal da Semana
                         </h3>
                         <p className="text-sm leading-relaxed">
-                          A implementação completa das funcionalidades de IA disponíveis pode resultar em:
-                          <strong className="text-primary"> 40% de redução no tempo de tarefas administrativas</strong>, 
-                          <strong className="text-success-foreground"> 25% de economia em custos operacionais</strong> e 
-                          <strong className="text-info-foreground"> 60% de melhoria na tomada de decisões</strong> baseadas em dados.
+                          A implementação completa das funcionalidades de IA disponíveis pode
+                          resultar em:
+                          <strong className="text-primary">
+                            {" "}
+                            40% de redução no tempo de tarefas administrativas
+                          </strong>
+                          ,
+                          <strong className="text-success-foreground">
+                            {" "}
+                            25% de economia em custos operacionais
+                          </strong>{" "}
+                          e
+                          <strong className="text-info-foreground">
+                            {" "}
+                            60% de melhoria na tomada de decisões
+                          </strong>{" "}
+                          baseadas em dados.
                         </p>
                         <div className="mt-4 flex items-center justify-between">
                           <span className="text-xs text-muted-foreground">
                             Baseado na análise de uso dos últimos 30 dias • Confiança: 92%
                           </span>
                           <div className="flex gap-2">
-                            <Badge variant="outline" className="text-xs">IA Validado</Badge>
-                            <Badge variant="outline" className="text-xs">Alta Confiança</Badge>
+                            <Badge variant="outline" className="text-xs">
+                              IA Validado
+                            </Badge>
+                            <Badge variant="outline" className="text-xs">
+                              Alta Confiança
+                            </Badge>
                           </div>
                         </div>
                       </div>

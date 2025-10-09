@@ -1,13 +1,13 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { 
-  Clock, 
-  MapPin, 
-  Edit, 
-  Trash2, 
-  ExternalLink, 
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Clock,
+  MapPin,
+  Edit,
+  Trash2,
+  ExternalLink,
   AlertTriangle,
   Building,
   Plane,
@@ -18,11 +18,11 @@ import {
   FileText,
   Phone,
   Paperclip,
-  Download
-} from 'lucide-react';
-import { EnhancedReservation } from './enhanced-reservations-dashboard';
-import { ReservationAttachments } from './reservation-attachments';
-import { ReservationPDFGenerator } from './reservation-pdf-generator';
+  Download,
+} from "lucide-react";
+import { EnhancedReservation } from "./enhanced-reservations-dashboard";
+import { ReservationAttachments } from "./reservation-attachments";
+import { ReservationPDFGenerator } from "./reservation-pdf-generator";
 
 interface ReservationCardProps {
   reservation: EnhancedReservation;
@@ -33,62 +33,87 @@ interface ReservationCardProps {
 export const ReservationCard: React.FC<ReservationCardProps> = ({
   reservation,
   onEdit,
-  onDelete
+  onDelete,
 }) => {
   const [showAttachments, setShowAttachments] = React.useState(false);
   const [showPDFGenerator, setShowPDFGenerator] = React.useState(false);
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'pending': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'cancelled': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      case 'completed': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      default: return 'bg-secondary text-secondary-foreground';
+      case "confirmed":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+      case "cancelled":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+      case "completed":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'Confirmada';
-      case 'pending': return 'Pendente';
-      case 'cancelled': return 'Cancelada';
-      case 'completed': return 'Concluída';
-      default: return 'Desconhecida';
+      case "confirmed":
+        return "Confirmada";
+      case "pending":
+        return "Pendente";
+      case "cancelled":
+        return "Cancelada";
+      case "completed":
+        return "Concluída";
+      default:
+        return "Desconhecida";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'hotel': return <Building className="h-4 w-4" />;
-      case 'flight': return <Plane className="h-4 w-4" />;
-      case 'transport': return <Car className="h-4 w-4" />;
-      case 'embarkation': return <Ship className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+      case "hotel":
+        return <Building className="h-4 w-4" />;
+      case "flight":
+        return <Plane className="h-4 w-4" />;
+      case "transport":
+        return <Car className="h-4 w-4" />;
+      case "embarkation":
+        return <Ship className="h-4 w-4" />;
+      default:
+        return <FileText className="h-4 w-4" />;
     }
   };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'hotel': return 'Hotel';
-      case 'flight': return 'Voo';
-      case 'transport': return 'Transporte';
-      case 'embarkation': return 'Embarque';
-      case 'other': return 'Outro';
-      default: return type;
+      case "hotel":
+        return "Hotel";
+      case "flight":
+        return "Voo";
+      case "transport":
+        return "Transporte";
+      case "embarkation":
+        return "Embarque";
+      case "other":
+        return "Outro";
+      default:
+        return type;
     }
   };
 
-  const formatCurrency = (amount: number, currency: string = 'BRL') => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: currency
+  const formatCurrency = (amount: number, currency: string = "BRL") => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: currency,
     }).format(amount);
   };
 
   return (
-    <Card className={`hover:shadow-lg transition-all duration-200 ${
-      reservation.conflict_detected ? 'border-red-200 bg-red-50/50 dark:border-red-800 dark:bg-red-950/20' : ''
-    }`}>
+    <Card
+      className={`hover:shadow-lg transition-all duration-200 ${
+        reservation.conflict_detected
+          ? "border-red-200 bg-red-50/50 dark:border-red-800 dark:bg-red-950/20"
+          : ""
+      }`}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
@@ -110,28 +135,29 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-3">
         {/* Dates */}
         <div className="flex items-center gap-2 text-sm">
           <Clock className="h-4 w-4 text-muted-foreground flex-shrink-0" />
           <div className="min-w-0">
             <div className="font-medium">
-              {new Date(reservation.start_date).toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
+              {new Date(reservation.start_date).toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
               })}
             </div>
             <div className="text-muted-foreground">
-              até {new Date(reservation.end_date).toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
+              até{" "}
+              {new Date(reservation.end_date).toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
               })}
             </div>
           </div>
@@ -172,9 +198,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
 
         {/* Room Type */}
         {reservation.room_type && (
-          <div className="text-xs text-muted-foreground">
-            Tipo: {reservation.room_type}
-          </div>
+          <div className="text-xs text-muted-foreground">Tipo: {reservation.room_type}</div>
         )}
 
         {/* Contact Info */}
@@ -187,9 +211,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
 
         {/* Description */}
         {reservation.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2">
-            {reservation.description}
-          </p>
+          <p className="text-sm text-muted-foreground line-clamp-2">{reservation.description}</p>
         )}
 
         {/* Conflict Warning */}
@@ -218,33 +240,25 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
             <Edit className="h-4 w-4 mr-1" />
             Editar
           </Button>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowAttachments(true)}
-          >
+
+          <Button variant="outline" size="sm" onClick={() => setShowAttachments(true)}>
             <Paperclip className="h-4 w-4" />
           </Button>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowPDFGenerator(true)}
-          >
+
+          <Button variant="outline" size="sm" onClick={() => setShowPDFGenerator(true)}>
             <Download className="h-4 w-4" />
           </Button>
-          
+
           {reservation.supplier_url && (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => window.open(reservation.supplier_url, '_blank')}
+              onClick={() => window.open(reservation.supplier_url, "_blank")}
             >
               <ExternalLink className="h-4 w-4" />
             </Button>
           )}
-          
+
           <Button
             variant="outline"
             size="sm"
@@ -262,7 +276,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
         isOpen={showAttachments}
         onClose={() => setShowAttachments(false)}
       />
-      
+
       <ReservationPDFGenerator
         reservation={reservation}
         isOpen={showPDFGenerator}

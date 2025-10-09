@@ -5,6 +5,7 @@
 The Sistema Marítimo (Maritime System) module manages **fleet operations and vessel management**. It provides comprehensive tools for tracking vessels, managing maritime checklists, monitoring IoT sensors, and ensuring operational excellence at sea.
 
 **Key Use Cases:**
+
 - Track vessel locations and status in real-time
 - Manage maritime safety checklists (SGSO)
 - Monitor IoT sensors on vessels

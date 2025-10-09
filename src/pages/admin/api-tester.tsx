@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
-import { ModuleHeader } from '@/components/ui/module-header';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
 import {
   CheckCircle,
   XCircle,
@@ -20,14 +20,14 @@ import {
   Ship,
   AlertCircle,
   Clock,
-} from 'lucide-react';
-import { testMapboxConnection } from '@/services/mapbox';
-import { testOpenAIConnection } from '@/services/openai';
-import { testWhisperConnection } from '@/services/whisper';
-import { testSkyscannerConnection } from '@/services/skyscanner';
-import { testBookingConnection } from '@/services/booking';
-import { testWindyConnection } from '@/services/windy';
-import { testMarineTrafficConnection } from '@/services/marinetraffic';
+} from "lucide-react";
+import { testMapboxConnection } from "@/services/mapbox";
+import { testOpenAIConnection } from "@/services/openai";
+import { testWhisperConnection } from "@/services/whisper";
+import { testSkyscannerConnection } from "@/services/skyscanner";
+import { testBookingConnection } from "@/services/booking";
+import { testWindyConnection } from "@/services/windy";
+import { testMarineTrafficConnection } from "@/services/marinetraffic";
 
 interface APITest {
   id: string;
@@ -35,7 +35,7 @@ interface APITest {
   description: string;
   icon: React.ElementType;
   testFn: () => Promise<any>;
-  status: 'idle' | 'loading' | 'success' | 'error';
+  status: "idle" | "loading" | "success" | "error";
   result?: {
     message: string;
     responseTime?: number;
@@ -47,82 +47,82 @@ interface APITest {
 const APITester = () => {
   const [tests, setTests] = useState<APITest[]>([
     {
-      id: 'mapbox',
-      name: 'Mapbox',
-      description: 'Test geolocation or static map load',
+      id: "mapbox",
+      name: "Mapbox",
+      description: "Test geolocation or static map load",
       icon: MapPin,
       testFn: testMapboxConnection,
-      status: 'idle',
+      status: "idle",
     },
     {
-      id: 'openai',
-      name: 'OpenAI (Chat)',
-      description: 'Test simple chat response',
+      id: "openai",
+      name: "OpenAI (Chat)",
+      description: "Test simple chat response",
       icon: MessageSquare,
       testFn: testOpenAIConnection,
-      status: 'idle',
+      status: "idle",
     },
     {
-      id: 'whisper',
-      name: 'Whisper',
-      description: 'Test audio transcription',
+      id: "whisper",
+      name: "Whisper",
+      description: "Test audio transcription",
       icon: Mic,
       testFn: testWhisperConnection,
-      status: 'idle',
+      status: "idle",
     },
     {
-      id: 'skyscanner',
-      name: 'Skyscanner',
-      description: 'Search flight sample',
+      id: "skyscanner",
+      name: "Skyscanner",
+      description: "Search flight sample",
       icon: Plane,
       testFn: testSkyscannerConnection,
-      status: 'idle',
+      status: "idle",
     },
     {
-      id: 'booking',
-      name: 'Booking.com',
-      description: 'Fetch hotels for a city',
+      id: "booking",
+      name: "Booking.com",
+      description: "Fetch hotels for a city",
       icon: Hotel,
       testFn: testBookingConnection,
-      status: 'idle',
+      status: "idle",
     },
     {
-      id: 'windy',
-      name: 'Windy',
-      description: 'Weather data by coordinates',
+      id: "windy",
+      name: "Windy",
+      description: "Weather data by coordinates",
       icon: Cloud,
       testFn: testWindyConnection,
-      status: 'idle',
+      status: "idle",
     },
     {
-      id: 'marinetraffic',
-      name: 'MarineTraffic',
-      description: 'Ship location by ID',
+      id: "marinetraffic",
+      name: "MarineTraffic",
+      description: "Ship location by ID",
       icon: Ship,
       testFn: testMarineTrafficConnection,
-      status: 'idle',
+      status: "idle",
     },
   ]);
 
   const runTest = async (testId: string) => {
-    setTests((prev) =>
-      prev.map((test) =>
-        test.id === testId ? { ...test, status: 'loading', result: undefined } : test
+    setTests(prev =>
+      prev.map(test =>
+        test.id === testId ? { ...test, status: "loading", result: undefined } : test
       )
     );
 
-    const test = tests.find((t) => t.id === testId);
+    const test = tests.find(t => t.id === testId);
     if (!test) return;
 
     try {
       const result = await test.testFn();
 
-      setTests((prev) =>
-        prev.map((t) =>
+      setTests(prev =>
+        prev.map(t =>
           t.id === testId
             ? {
                 ...t,
-                status: result.success ? 'success' : 'error',
+                status: result.success ? "success" : "error",
                 result: {
                   message: result.message,
                   responseTime: result.responseTime,
@@ -134,15 +134,15 @@ const APITester = () => {
         )
       );
     } catch (error) {
-      setTests((prev) =>
-        prev.map((t) =>
+      setTests(prev =>
+        prev.map(t =>
           t.id === testId
             ? {
                 ...t,
-                status: 'error',
+                status: "error",
                 result: {
-                  message: 'Test execution failed',
-                  error: error instanceof Error ? error.message : 'Unknown error',
+                  message: "Test execution failed",
+                  error: error instanceof Error ? error.message : "Unknown error",
                 },
               }
             : t
@@ -155,17 +155,17 @@ const APITester = () => {
     for (const test of tests) {
       await runTest(test.id);
       // Add a small delay between tests to avoid rate limiting
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500));
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'loading':
+      case "loading":
         return <Loader2 className="h-5 w-5 animate-spin text-blue-600" />;
-      case 'success':
+      case "success":
         return <CheckCircle className="h-5 w-5 text-green-600" />;
-      case 'error':
+      case "error":
         return <XCircle className="h-5 w-5 text-red-600" />;
       default:
         return <AlertCircle className="h-5 w-5 text-gray-400" />;
@@ -174,19 +174,19 @@ const APITester = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'loading':
+      case "loading":
         return (
           <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
             Testing...
           </Badge>
         );
-      case 'success':
+      case "success":
         return (
           <Badge variant="default" className="bg-green-600 text-white">
             ✅ Success
           </Badge>
         );
-      case 'error':
+      case "error":
         return (
           <Badge variant="destructive" className="bg-red-600 text-white">
             ❌ Failed
@@ -201,8 +201,8 @@ const APITester = () => {
     }
   };
 
-  const successCount = tests.filter((t) => t.status === 'success').length;
-  const errorCount = tests.filter((t) => t.status === 'error').length;
+  const successCount = tests.filter(t => t.status === "success").length;
+  const errorCount = tests.filter(t => t.status === "error").length;
   const totalCount = tests.length;
 
   return (
@@ -251,12 +251,12 @@ const APITester = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {tests.filter((t) => t.result?.responseTime).length > 0
+                  {tests.filter(t => t.result?.responseTime).length > 0
                     ? Math.round(
                         tests
-                          .filter((t) => t.result?.responseTime)
+                          .filter(t => t.result?.responseTime)
                           .reduce((acc, t) => acc + (t.result?.responseTime || 0), 0) /
-                          tests.filter((t) => t.result?.responseTime).length
+                          tests.filter(t => t.result?.responseTime).length
                       )
                     : 0}
                   ms
@@ -276,7 +276,7 @@ const APITester = () => {
               <div className="flex gap-3">
                 <Button
                   onClick={runAllTests}
-                  disabled={tests.some((t) => t.status === 'loading')}
+                  disabled={tests.some(t => t.status === "loading")}
                   className="flex items-center gap-2"
                 >
                   <TestTube className="h-4 w-4" />
@@ -285,8 +285,8 @@ const APITester = () => {
                 <Button
                   variant="outline"
                   onClick={() => {
-                    setTests((prev) =>
-                      prev.map((t) => ({ ...t, status: 'idle' as const, result: undefined }))
+                    setTests(prev =>
+                      prev.map(t => ({ ...t, status: "idle" as const, result: undefined }))
                     );
                   }}
                 >
@@ -303,7 +303,7 @@ const APITester = () => {
               <CardDescription>Test each external service integration</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {tests.map((test) => {
+              {tests.map(test => {
                 const Icon = test.icon;
                 return (
                   <div
@@ -324,7 +324,7 @@ const APITester = () => {
                           {test.result && (
                             <div className="mt-2">
                               <Alert
-                                variant={test.status === 'error' ? 'destructive' : 'default'}
+                                variant={test.status === "error" ? "destructive" : "default"}
                                 className="py-2"
                               >
                                 <AlertDescription className="text-xs">
@@ -356,17 +356,17 @@ const APITester = () => {
                       </div>
                       <Button
                         onClick={() => runTest(test.id)}
-                        disabled={test.status === 'loading'}
+                        disabled={test.status === "loading"}
                         size="sm"
                         className="min-w-[80px]"
                       >
-                        {test.status === 'loading' ? (
+                        {test.status === "loading" ? (
                           <>
                             <Loader2 className="h-4 w-4 animate-spin mr-2" />
                             Testing
                           </>
                         ) : (
-                          'Test'
+                          "Test"
                         )}
                       </Button>
                     </div>

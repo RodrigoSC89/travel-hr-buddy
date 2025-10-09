@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  AlertTriangle, 
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
   CheckCircle,
   Brain,
   BarChart3,
@@ -17,89 +23,111 @@ import {
   Zap,
   Clock,
   Settings,
-  Download
-} from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+  Download,
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 const PredictiveAnalytics: React.FC = () => {
-  const [selectedTimeframe, setSelectedTimeframe] = useState('30d');
-  const [selectedModel, setSelectedModel] = useState('maintenance');
+  const [selectedTimeframe, setSelectedTimeframe] = useState("30d");
+  const [selectedModel, setSelectedModel] = useState("maintenance");
 
   // Sample data for charts
   const maintenanceData = [
-    { month: 'Jan', predicted: 85, actual: 82, confidence: 94 },
-    { month: 'Fev', predicted: 78, actual: 76, confidence: 91 },
-    { month: 'Mar', predicted: 92, actual: 89, confidence: 87 },
-    { month: 'Abr', predicted: 67, actual: 71, confidence: 89 },
-    { month: 'Mai', predicted: 88, actual: null, confidence: 92 },
-    { month: 'Jun', predicted: 75, actual: null, confidence: 88 },
+    { month: "Jan", predicted: 85, actual: 82, confidence: 94 },
+    { month: "Fev", predicted: 78, actual: 76, confidence: 91 },
+    { month: "Mar", predicted: 92, actual: 89, confidence: 87 },
+    { month: "Abr", predicted: 67, actual: 71, confidence: 89 },
+    { month: "Mai", predicted: 88, actual: null, confidence: 92 },
+    { month: "Jun", predicted: 75, actual: null, confidence: 88 },
   ];
 
   const performanceData = [
-    { category: 'Motores', efficiency: 92, prediction: 'stable' },
-    { category: 'Navegação', efficiency: 88, prediction: 'improving' },
-    { category: 'Combustível', efficiency: 85, prediction: 'declining' },
-    { category: 'Elétrica', efficiency: 94, prediction: 'stable' },
+    { category: "Motores", efficiency: 92, prediction: "stable" },
+    { category: "Navegação", efficiency: 88, prediction: "improving" },
+    { category: "Combustível", efficiency: 85, prediction: "declining" },
+    { category: "Elétrica", efficiency: 94, prediction: "stable" },
   ];
 
   const riskData = [
-    { name: 'Baixo Risco', value: 65, color: '#10b981' },
-    { name: 'Médio Risco', value: 25, color: '#f59e0b' },
-    { name: 'Alto Risco', value: 10, color: '#ef4444' },
+    { name: "Baixo Risco", value: 65, color: "#10b981" },
+    { name: "Médio Risco", value: 25, color: "#f59e0b" },
+    { name: "Alto Risco", value: 10, color: "#ef4444" },
   ];
 
   const predictions = [
     {
       id: 1,
-      title: 'Motor Principal - Manutenção Preventiva',
+      title: "Motor Principal - Manutenção Preventiva",
       confidence: 94,
-      timeframe: '15 dias',
-      priority: 'high',
-      description: 'Baseado em padrões de vibração e temperatura, recomenda-se manutenção preventiva.',
-      actions: ['Verificar filtros', 'Analisar óleo', 'Inspeção visual']
+      timeframe: "15 dias",
+      priority: "high",
+      description:
+        "Baseado em padrões de vibração e temperatura, recomenda-se manutenção preventiva.",
+      actions: ["Verificar filtros", "Analisar óleo", "Inspeção visual"],
     },
     {
       id: 2,
-      title: 'Consumo de Combustível - Otimização',
+      title: "Consumo de Combustível - Otimização",
       confidence: 87,
-      timeframe: '7 dias',
-      priority: 'medium',
-      description: 'Padrão de consumo indica oportunidade de otimização de rota.',
-      actions: ['Revisar rotas', 'Otimizar velocidade', 'Calibrar sistemas']
+      timeframe: "7 dias",
+      priority: "medium",
+      description: "Padrão de consumo indica oportunidade de otimização de rota.",
+      actions: ["Revisar rotas", "Otimizar velocidade", "Calibrar sistemas"],
     },
     {
       id: 3,
-      title: 'Sistema Elétrico - Estabilidade',
+      title: "Sistema Elétrico - Estabilidade",
       confidence: 91,
-      timeframe: '30 dias',
-      priority: 'low',
-      description: 'Todos os indicadores apontam para operação estável do sistema elétrico.',
-      actions: ['Monitoramento contínuo', 'Manutenção programada']
-    }
+      timeframe: "30 dias",
+      priority: "low",
+      description: "Todos os indicadores apontam para operação estável do sistema elétrico.",
+      actions: ["Monitoramento contínuo", "Manutenção programada"],
+    },
   ];
 
   const modelAccuracy = {
     maintenance: 94.2,
     performance: 89.7,
     fuel: 91.3,
-    safety: 96.1
+    safety: 96.1,
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'destructive';
-      case 'medium': return 'warning';
-      case 'low': return 'default';
-      default: return 'default';
+      case "high":
+        return "destructive";
+      case "medium":
+        return "warning";
+      case "low":
+        return "default";
+      default:
+        return "default";
     }
   };
 
   const getPredictionIcon = (prediction: string) => {
     switch (prediction) {
-      case 'improving': return <TrendingUp className="h-4 w-4 text-success" />;
-      case 'declining': return <TrendingDown className="h-4 w-4 text-destructive" />;
-      case 'stable': return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
-      default: return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+      case "improving":
+        return <TrendingUp className="h-4 w-4 text-success" />;
+      case "declining":
+        return <TrendingDown className="h-4 w-4 text-destructive" />;
+      case "stable":
+        return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+      default:
+        return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -192,7 +220,7 @@ const PredictiveAnalytics: React.FC = () => {
                 <SelectItem value="safety">Segurança</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={selectedTimeframe} onValueChange={setSelectedTimeframe}>
               <SelectTrigger className="w-32">
                 <SelectValue placeholder="Período" />
@@ -211,7 +239,7 @@ const PredictiveAnalytics: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {predictions.map((prediction) => (
+            {predictions.map(prediction => (
               <Card key={prediction.id} className="relative">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -235,9 +263,7 @@ const PredictiveAnalytics: React.FC = () => {
                     <span>Prazo: {prediction.timeframe}</span>
                   </div>
 
-                  <p className="text-sm text-muted-foreground">
-                    {prediction.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{prediction.description}</p>
 
                   <div className="space-y-2">
                     <div className="text-sm font-medium">Ações Recomendadas:</div>
@@ -277,17 +303,17 @@ const PredictiveAnalytics: React.FC = () => {
                   <XAxis dataKey="month" />
                   <YAxis />
                   <Tooltip />
-                  <Line 
-                    type="monotone" 
-                    dataKey="predicted" 
-                    stroke="hsl(var(--primary))" 
+                  <Line
+                    type="monotone"
+                    dataKey="predicted"
+                    stroke="hsl(var(--primary))"
                     strokeWidth={2}
                     name="Predito"
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="actual" 
-                    stroke="hsl(var(--secondary))" 
+                  <Line
+                    type="monotone"
+                    dataKey="actual"
+                    stroke="hsl(var(--secondary))"
                     strokeWidth={2}
                     name="Real"
                   />
@@ -315,8 +341,12 @@ const PredictiveAnalytics: React.FC = () => {
                     </div>
                     <Progress value={item.efficiency} />
                     <div className="text-sm text-muted-foreground">
-                      Tendência: {item.prediction === 'improving' ? 'Melhorando' : 
-                                 item.prediction === 'declining' ? 'Declinando' : 'Estável'}
+                      Tendência:{" "}
+                      {item.prediction === "improving"
+                        ? "Melhorando"
+                        : item.prediction === "declining"
+                          ? "Declinando"
+                          : "Estável"}
                     </div>
                   </div>
                 </CardContent>
@@ -362,10 +392,12 @@ const PredictiveAnalytics: React.FC = () => {
                   <AlertTriangle className="h-4 w-4 text-destructive" />
                   <div className="flex-1">
                     <div className="font-medium text-sm">Alto Risco - Motor Auxiliar</div>
-                    <div className="text-xs text-muted-foreground">Temperatura elevada detectada</div>
+                    <div className="text-xs text-muted-foreground">
+                      Temperatura elevada detectada
+                    </div>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-3 p-3 bg-warning/10 rounded-lg">
                   <AlertTriangle className="h-4 w-4 text-warning" />
                   <div className="flex-1">

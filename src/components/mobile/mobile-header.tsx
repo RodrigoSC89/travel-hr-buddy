@@ -1,12 +1,12 @@
-import React from 'react';
-import { Menu, Search, Bell } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { NotificationCenter } from '@/components/notifications/notification-center';
-import { useEnhancedNotifications } from '@/hooks/use-enhanced-notifications';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Menu, Search, Bell } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { NotificationCenter } from "@/components/notifications/notification-center";
+import { useEnhancedNotifications } from "@/hooks/use-enhanced-notifications";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 interface MobileHeaderProps {
   title?: string;
@@ -19,7 +19,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
   title = "Sistema",
   onMenuClick,
   showSearch = true,
-  showNotifications = true
+  showNotifications = true,
 }) => {
   const { unreadCount } = useEnhancedNotifications();
   const isMobile = useIsMobile();
@@ -31,12 +31,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
       <div className="container flex h-14 items-center px-4">
         {/* Menu Button */}
         {onMenuClick && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="mr-2 h-8 w-8"
-            onClick={onMenuClick}
-          >
+          <Button variant="ghost" size="icon" className="mr-2 h-8 w-8" onClick={onMenuClick}>
             <Menu className="h-4 w-4" />
             <span className="sr-only">Abrir menu</span>
           </Button>
@@ -49,11 +44,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
 
         {/* Search Button */}
         {showSearch && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="mr-2 h-8 w-8"
-          >
+          <Button variant="ghost" size="icon" className="mr-2 h-8 w-8">
             <Search className="h-4 w-4" />
             <span className="sr-only">Buscar</span>
           </Button>
@@ -68,10 +59,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
         <div className="border-t px-4 py-2">
           <div className="relative">
             <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Buscar..."
-              className="pl-8 h-8"
-            />
+            <Input placeholder="Buscar..." className="pl-8 h-8" />
           </div>
         </div>
       )}

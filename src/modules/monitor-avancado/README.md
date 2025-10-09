@@ -5,6 +5,7 @@
 The Monitor Avançado (Advanced Monitoring) module provides **comprehensive and sophisticated monitoring capabilities** with advanced diagnostics, alerting, and system intelligence.
 
 **Key Use Cases:**
+
 - Advanced system diagnostics
 - Predictive failure detection
 - Complex alerting rules

@@ -1,16 +1,16 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
-import { 
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, Settings, LogOut } from 'lucide-react';
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User, Settings, LogOut } from "lucide-react";
 
 export const UserMenu: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -18,7 +18,7 @@ export const UserMenu: React.FC = () => {
   if (!user) return null;
 
   const getInitials = (email: string) => {
-    return email.split('@')[0].substring(0, 2).toUpperCase();
+    return email.split("@")[0].substring(0, 2).toUpperCase();
   };
 
   const handleSignOut = async () => {
@@ -28,11 +28,14 @@ export const UserMenu: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full hover:bg-accent transition-colors">
+        <Button
+          variant="ghost"
+          className="relative h-8 w-8 rounded-full hover:bg-accent transition-colors"
+        >
           <Avatar className="h-8 w-8 border-2 border-border">
             <AvatarImage src={user.user_metadata?.avatar_url} alt="Avatar" />
             <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
-              {getInitials(user.email || 'U')}
+              {getInitials(user.email || "U")}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -41,11 +44,9 @@ export const UserMenu: React.FC = () => {
         <DropdownMenuLabel className="font-normal p-3">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none text-foreground">
-              {user.user_metadata?.full_name || user.email?.split('@')[0]}
+              {user.user_metadata?.full_name || user.email?.split("@")[0]}
             </p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user.email}
-            </p>
+            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -58,7 +59,10 @@ export const UserMenu: React.FC = () => {
           <span className="text-foreground">Configurações</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive focus:text-destructive">
+        <DropdownMenuItem
+          onClick={handleSignOut}
+          className="cursor-pointer text-destructive focus:text-destructive"
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sair</span>
         </DropdownMenuItem>

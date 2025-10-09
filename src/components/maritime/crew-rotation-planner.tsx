@@ -1,19 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Calendar } from '@/components/ui/calendar';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { 
-  Users, 
-  Calendar as CalendarIcon, 
-  Plane, 
-  Ship, 
-  Clock, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Users,
+  Calendar as CalendarIcon,
+  Plane,
+  Ship,
+  Clock,
   MapPin,
   AlertTriangle,
   CheckCircle,
@@ -23,9 +36,9 @@ import {
   Globe,
   UserCheck,
   UserX,
-  FileText
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+  FileText,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface CrewRotation {
   id: string;
@@ -36,10 +49,10 @@ interface CrewRotation {
     nationality: string;
     experience: number;
   };
-  rotationType: 'sign_on' | 'sign_off' | 'transfer';
+  rotationType: "sign_on" | "sign_off" | "transfer";
   scheduledDate: Date;
   port: string;
-  status: 'planned' | 'confirmed' | 'in_progress' | 'completed' | 'delayed';
+  status: "planned" | "confirmed" | "in_progress" | "completed" | "delayed";
   costs: {
     travel: number;
     accommodation: number;
@@ -54,16 +67,16 @@ interface CrewRotation {
 }
 
 interface OptimizationSuggestion {
-  type: 'cost_reduction' | 'efficiency' | 'compliance';
+  type: "cost_reduction" | "efficiency" | "compliance";
   description: string;
   potential_savings: number;
-  impact: 'low' | 'medium' | 'high';
+  impact: "low" | "medium" | "high";
 }
 
 export const CrewRotationPlanner: React.FC = () => {
   const [rotations, setRotations] = useState<CrewRotation[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [activeTab, setActiveTab] = useState('schedule');
+  const [activeTab, setActiveTab] = useState("schedule");
   const [optimizations, setOptimizations] = useState<OptimizationSuggestion[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -72,71 +85,71 @@ export const CrewRotationPlanner: React.FC = () => {
     // Mock data para demonstração
     const mockRotations: CrewRotation[] = [
       {
-        id: '1',
-        vesselName: 'MV Ocean Pioneer',
+        id: "1",
+        vesselName: "MV Ocean Pioneer",
         crewMember: {
-          name: 'Carlos Silva',
-          rank: 'AB Seaman',
-          nationality: 'Brazilian',
-          experience: 8
+          name: "Carlos Silva",
+          rank: "AB Seaman",
+          nationality: "Brazilian",
+          experience: 8,
         },
-        rotationType: 'sign_off',
-        scheduledDate: new Date('2024-01-15'),
-        port: 'Santos, BR',
-        status: 'planned',
+        rotationType: "sign_off",
+        scheduledDate: new Date("2024-01-15"),
+        port: "Santos, BR",
+        status: "planned",
         costs: {
           travel: 800,
           accommodation: 200,
           visa: 0,
-          total: 1000
+          total: 1000,
         },
         replacementCrew: {
-          name: 'João Santos',
-          rank: 'AB Seaman',
-          availability: new Date('2024-01-14')
-        }
+          name: "João Santos",
+          rank: "AB Seaman",
+          availability: new Date("2024-01-14"),
+        },
       },
       {
-        id: '2',
-        vesselName: 'MV Atlantic Star',
+        id: "2",
+        vesselName: "MV Atlantic Star",
         crewMember: {
-          name: 'Maria Costa',
-          rank: 'Cook',
-          nationality: 'Brazilian',
-          experience: 5
+          name: "Maria Costa",
+          rank: "Cook",
+          nationality: "Brazilian",
+          experience: 5,
         },
-        rotationType: 'sign_on',
-        scheduledDate: new Date('2024-01-20'),
-        port: 'Rio de Janeiro, BR',
-        status: 'confirmed',
+        rotationType: "sign_on",
+        scheduledDate: new Date("2024-01-20"),
+        port: "Rio de Janeiro, BR",
+        status: "confirmed",
         costs: {
           travel: 600,
           accommodation: 150,
           visa: 100,
-          total: 850
-        }
-      }
+          total: 850,
+        },
+      },
     ];
 
     const mockOptimizations: OptimizationSuggestion[] = [
       {
-        type: 'cost_reduction',
-        description: 'Combinar rotações no mesmo porto pode reduzir custos de logística',
+        type: "cost_reduction",
+        description: "Combinar rotações no mesmo porto pode reduzir custos de logística",
         potential_savings: 2500,
-        impact: 'high'
+        impact: "high",
       },
       {
-        type: 'efficiency',
-        description: 'Antecipar rotação da MV Ocean Pioneer em 2 dias melhora eficiência',
+        type: "efficiency",
+        description: "Antecipar rotação da MV Ocean Pioneer em 2 dias melhora eficiência",
         potential_savings: 1200,
-        impact: 'medium'
+        impact: "medium",
       },
       {
-        type: 'compliance',
-        description: 'Verificar documentação para rotação internacional',
+        type: "compliance",
+        description: "Verificar documentação para rotação internacional",
         potential_savings: 0,
-        impact: 'high'
-      }
+        impact: "high",
+      },
     ];
 
     setRotations(mockRotations);
@@ -145,41 +158,61 @@ export const CrewRotationPlanner: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'planned': return 'bg-blue-500';
-      case 'confirmed': return 'bg-green-500';
-      case 'in_progress': return 'bg-yellow-500';
-      case 'completed': return 'bg-green-600';
-      case 'delayed': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case "planned":
+        return "bg-blue-500";
+      case "confirmed":
+        return "bg-green-500";
+      case "in_progress":
+        return "bg-yellow-500";
+      case "completed":
+        return "bg-green-600";
+      case "delayed":
+        return "bg-red-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'planned': return 'Planejado';
-      case 'confirmed': return 'Confirmado';
-      case 'in_progress': return 'Em Andamento';
-      case 'completed': return 'Concluído';
-      case 'delayed': return 'Atrasado';
-      default: return 'Desconhecido';
+      case "planned":
+        return "Planejado";
+      case "confirmed":
+        return "Confirmado";
+      case "in_progress":
+        return "Em Andamento";
+      case "completed":
+        return "Concluído";
+      case "delayed":
+        return "Atrasado";
+      default:
+        return "Desconhecido";
     }
   };
 
   const getRotationTypeIcon = (type: string) => {
     switch (type) {
-      case 'sign_on': return <UserCheck className="h-4 w-4 text-green-500" />;
-      case 'sign_off': return <UserX className="h-4 w-4 text-red-500" />;
-      case 'transfer': return <Users className="h-4 w-4 text-blue-500" />;
-      default: return <Users className="h-4 w-4" />;
+      case "sign_on":
+        return <UserCheck className="h-4 w-4 text-green-500" />;
+      case "sign_off":
+        return <UserX className="h-4 w-4 text-red-500" />;
+      case "transfer":
+        return <Users className="h-4 w-4 text-blue-500" />;
+      default:
+        return <Users className="h-4 w-4" />;
     }
   };
 
   const getRotationTypeLabel = (type: string) => {
     switch (type) {
-      case 'sign_on': return 'Embarque';
-      case 'sign_off': return 'Desembarque';
-      case 'transfer': return 'Transferência';
-      default: return 'Não Definido';
+      case "sign_on":
+        return "Embarque";
+      case "sign_off":
+        return "Desembarque";
+      case "transfer":
+        return "Transferência";
+      default:
+        return "Não Definido";
     }
   };
 
@@ -188,7 +221,7 @@ export const CrewRotationPlanner: React.FC = () => {
       title: "🧠 IA Analisando",
       description: "Otimizando cronograma de rotações com IA...",
     });
-    
+
     setTimeout(() => {
       toast({
         title: "✅ Otimização Concluída",
@@ -238,7 +271,7 @@ export const CrewRotationPlanner: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{rotations.length}</div>
             <p className="text-xs text-muted-foreground">
-              {rotations.filter(r => r.status === 'confirmed').length} confirmadas
+              {rotations.filter(r => r.status === "confirmed").length} confirmadas
             </p>
           </CardContent>
         </Card>
@@ -250,9 +283,7 @@ export const CrewRotationPlanner: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">R$ {totalCosts.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              Este mês
-            </p>
+            <p className="text-xs text-muted-foreground">Este mês</p>
           </CardContent>
         </Card>
 
@@ -262,10 +293,10 @@ export const CrewRotationPlanner: React.FC = () => {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">R$ {potentialSavings.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              Com otimização IA
-            </p>
+            <div className="text-2xl font-bold text-green-600">
+              R$ {potentialSavings.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground">Com otimização IA</p>
           </CardContent>
         </Card>
 
@@ -276,9 +307,7 @@ export const CrewRotationPlanner: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">98.5%</div>
-            <p className="text-xs text-muted-foreground">
-              Score de conformidade
-            </p>
+            <p className="text-xs text-muted-foreground">Score de conformidade</p>
           </CardContent>
         </Card>
       </div>
@@ -297,22 +326,27 @@ export const CrewRotationPlanner: React.FC = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>Rotações Programadas</CardTitle>
-                  <CardDescription>
-                    Embarques e desembarques nos próximos 30 dias
-                  </CardDescription>
+                  <CardDescription>Embarques e desembarques nos próximos 30 dias</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {rotations.map((rotation) => (
-                      <div key={rotation.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+                    {rotations.map(rotation => (
+                      <div
+                        key={rotation.id}
+                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
+                      >
                         <div className="flex items-center gap-4">
                           <div className="flex flex-col items-center">
                             {getRotationTypeIcon(rotation.rotationType)}
-                            <span className="text-xs mt-1">{getRotationTypeLabel(rotation.rotationType)}</span>
+                            <span className="text-xs mt-1">
+                              {getRotationTypeLabel(rotation.rotationType)}
+                            </span>
                           </div>
                           <div className="space-y-1">
                             <h4 className="font-semibold">{rotation.crewMember.name}</h4>
-                            <p className="text-sm text-muted-foreground">{rotation.crewMember.rank}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {rotation.crewMember.rank}
+                            </p>
                             <p className="text-xs text-muted-foreground flex items-center gap-1">
                               <Ship className="h-3 w-3" />
                               {rotation.vesselName}
@@ -326,14 +360,18 @@ export const CrewRotationPlanner: React.FC = () => {
                         <div className="flex items-center gap-4">
                           <div className="text-center">
                             <p className="text-sm font-medium">
-                              {rotation.scheduledDate.toLocaleDateString('pt-BR')}
+                              {rotation.scheduledDate.toLocaleDateString("pt-BR")}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              {rotation.scheduledDate.toLocaleDateString('pt-BR', { weekday: 'short' })}
+                              {rotation.scheduledDate.toLocaleDateString("pt-BR", {
+                                weekday: "short",
+                              })}
                             </p>
                           </div>
                           <div className="text-center">
-                            <p className="text-sm font-medium">R$ {rotation.costs.total.toLocaleString()}</p>
+                            <p className="text-sm font-medium">
+                              R$ {rotation.costs.total.toLocaleString()}
+                            </p>
                             <p className="text-xs text-muted-foreground">Custo total</p>
                           </div>
                           <Badge variant="secondary" className={getStatusColor(rotation.status)}>
@@ -383,21 +421,37 @@ export const CrewRotationPlanner: React.FC = () => {
                     <div key={index} className="p-4 border rounded-lg">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <Badge variant="outline" className={
-                            opt.type === 'cost_reduction' ? 'border-green-500 text-green-700' :
-                            opt.type === 'efficiency' ? 'border-blue-500 text-blue-700' :
-                            'border-yellow-500 text-yellow-700'
-                          }>
-                            {opt.type === 'cost_reduction' ? 'Economia' :
-                             opt.type === 'efficiency' ? 'Eficiência' : 'Compliance'}
+                          <Badge
+                            variant="outline"
+                            className={
+                              opt.type === "cost_reduction"
+                                ? "border-green-500 text-green-700"
+                                : opt.type === "efficiency"
+                                  ? "border-blue-500 text-blue-700"
+                                  : "border-yellow-500 text-yellow-700"
+                            }
+                          >
+                            {opt.type === "cost_reduction"
+                              ? "Economia"
+                              : opt.type === "efficiency"
+                                ? "Eficiência"
+                                : "Compliance"}
                           </Badge>
-                          <Badge variant="secondary" className={
-                            opt.impact === 'high' ? 'bg-red-100 text-red-700' :
-                            opt.impact === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                            'bg-green-100 text-green-700'
-                          }>
-                            {opt.impact === 'high' ? 'Alto Impacto' :
-                             opt.impact === 'medium' ? 'Médio Impacto' : 'Baixo Impacto'}
+                          <Badge
+                            variant="secondary"
+                            className={
+                              opt.impact === "high"
+                                ? "bg-red-100 text-red-700"
+                                : opt.impact === "medium"
+                                  ? "bg-yellow-100 text-yellow-700"
+                                  : "bg-green-100 text-green-700"
+                            }
+                          >
+                            {opt.impact === "high"
+                              ? "Alto Impacto"
+                              : opt.impact === "medium"
+                                ? "Médio Impacto"
+                                : "Baixo Impacto"}
                           </Badge>
                         </div>
                         {opt.potential_savings > 0 && (
@@ -480,7 +534,7 @@ export const CrewRotationPlanner: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {rotations.map((rotation) => (
+                  {rotations.map(rotation => (
                     <div key={rotation.id} className="p-3 border rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-medium">{rotation.crewMember.name}</h4>
@@ -634,13 +688,15 @@ export const CrewRotationPlanner: React.FC = () => {
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
               Cancelar
             </Button>
-            <Button onClick={() => {
-              setIsDialogOpen(false);
-              toast({
-                title: "Rotação Criada",
-                description: "Nova rotação adicionada ao cronograma",
-              });
-            }}>
+            <Button
+              onClick={() => {
+                setIsDialogOpen(false);
+                toast({
+                  title: "Rotação Criada",
+                  description: "Nova rotação adicionada ao cronograma",
+                });
+              }}
+            >
               Criar Rotação
             </Button>
           </div>

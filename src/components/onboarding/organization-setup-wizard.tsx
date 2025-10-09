@@ -1,28 +1,34 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { useOrganization } from '@/contexts/OrganizationContext';
-import { 
-  Building2, 
-  Users, 
-  Ship, 
-  Settings, 
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useOrganization } from "@/contexts/OrganizationContext";
+import {
+  Building2,
+  Users,
+  Ship,
+  Settings,
   CheckCircle,
   ArrowRight,
   ArrowLeft,
-  Sparkles
-} from 'lucide-react';
+  Sparkles,
+} from "lucide-react";
 
 interface SetupStep {
   id: string;
@@ -50,76 +56,76 @@ export const OrganizationSetupWizard: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [orgData, setOrgData] = useState<OrganizationData>({
-    name: currentOrganization?.name || '',
-    description: '',
-    industry: '',
-    size: '',
-    country: 'BR',
-    primary_color: '#3b82f6',
+    name: currentOrganization?.name || "",
+    description: "",
+    industry: "",
+    size: "",
+    country: "BR",
+    primary_color: "#3b82f6",
     modules: [],
-    timezone: 'America/Sao_Paulo',
-    currency: 'BRL'
+    timezone: "America/Sao_Paulo",
+    currency: "BRL",
   });
 
   const steps: SetupStep[] = [
     {
-      id: 'basic',
-      title: 'Informações Básicas',
-      description: 'Configure os dados fundamentais da sua organização',
+      id: "basic",
+      title: "Informações Básicas",
+      description: "Configure os dados fundamentais da sua organização",
       icon: Building2,
-      completed: orgData.name && orgData.industry && orgData.size ? true : false
+      completed: orgData.name && orgData.industry && orgData.size ? true : false,
     },
     {
-      id: 'modules',
-      title: 'Módulos e Funcionalidades',
-      description: 'Escolha os módulos que sua organização utilizará',
+      id: "modules",
+      title: "Módulos e Funcionalidades",
+      description: "Escolha os módulos que sua organização utilizará",
       icon: Settings,
-      completed: orgData.modules.length > 0
+      completed: orgData.modules.length > 0,
     },
     {
-      id: 'branding',
-      title: 'Personalização',
-      description: 'Configure cores, moeda e fuso horário',
+      id: "branding",
+      title: "Personalização",
+      description: "Configure cores, moeda e fuso horário",
       icon: Sparkles,
-      completed: orgData.primary_color && orgData.timezone && orgData.currency ? true : false
+      completed: orgData.primary_color && orgData.timezone && orgData.currency ? true : false,
     },
     {
-      id: 'complete',
-      title: 'Finalização',
-      description: 'Confirme e ative sua organização',
+      id: "complete",
+      title: "Finalização",
+      description: "Confirme e ative sua organização",
       icon: CheckCircle,
-      completed: false
-    }
+      completed: false,
+    },
   ];
 
   const availableModules = [
-    { id: 'maritime', name: 'Sistema Marítimo', description: 'Gestão de embarcações e tripulação' },
-    { id: 'fleet', name: 'Gestão de Frota', description: 'Rastreamento e monitoramento' },
-    { id: 'hr', name: 'Recursos Humanos', description: 'Gestão de funcionários e certificados' },
-    { id: 'travel', name: 'Viagens Corporativas', description: 'Reservas e alertas de preços' },
-    { id: 'analytics', name: 'Analytics Avançado', description: 'Dashboards e relatórios' },
-    { id: 'communication', name: 'Comunicação', description: 'Chat e colaboração' },
-    { id: 'intelligence', name: 'IA e Automação', description: 'Assistente IA e workflows' }
+    { id: "maritime", name: "Sistema Marítimo", description: "Gestão de embarcações e tripulação" },
+    { id: "fleet", name: "Gestão de Frota", description: "Rastreamento e monitoramento" },
+    { id: "hr", name: "Recursos Humanos", description: "Gestão de funcionários e certificados" },
+    { id: "travel", name: "Viagens Corporativas", description: "Reservas e alertas de preços" },
+    { id: "analytics", name: "Analytics Avançado", description: "Dashboards e relatórios" },
+    { id: "communication", name: "Comunicação", description: "Chat e colaboração" },
+    { id: "intelligence", name: "IA e Automação", description: "Assistente IA e workflows" },
   ];
 
   const industries = [
-    'Maritime & Shipping',
-    'Oil & Gas',
-    'Logistics & Transportation',
-    'Manufacturing',
-    'Technology',
-    'Consulting',
-    'Other'
+    "Maritime & Shipping",
+    "Oil & Gas",
+    "Logistics & Transportation",
+    "Manufacturing",
+    "Technology",
+    "Consulting",
+    "Other",
   ];
 
   const companySizes = [
-    '1-10 funcionários',
-    '11-50 funcionários', 
-    '51-200 funcionários',
-    '201-1000 funcionários',
-    '1000+ funcionários'
+    "1-10 funcionários",
+    "11-50 funcionários",
+    "51-200 funcionários",
+    "201-1000 funcionários",
+    "1000+ funcionários",
   ];
 
   const progress = ((currentStep + 1) / steps.length) * 100;
@@ -129,7 +135,7 @@ export const OrganizationSetupWizard: React.FC = () => {
       ...prev,
       modules: prev.modules.includes(moduleId)
         ? prev.modules.filter(m => m !== moduleId)
-        : [...prev.modules, moduleId]
+        : [...prev.modules, moduleId],
     }));
   };
 
@@ -151,25 +157,23 @@ export const OrganizationSetupWizard: React.FC = () => {
     setIsLoading(true);
     try {
       // Update organization branding
-      const { error: brandingError } = await supabase
-        .from('organization_branding')
-        .upsert({
-          organization_id: currentOrganization.id,
-          company_name: orgData.name,
-          primary_color: orgData.primary_color,
-          secondary_color: '#64748b',
-          accent_color: '#f59e0b',
-          theme_mode: 'system',
-          default_language: 'pt-BR',
-          default_currency: orgData.currency,
-          timezone: orgData.timezone,
-          enabled_modules: orgData.modules,
-          custom_fields: {
-            industry: orgData.industry,
-            company_size: orgData.size,
-            description: orgData.description
-          }
-        });
+      const { error: brandingError } = await supabase.from("organization_branding").upsert({
+        organization_id: currentOrganization.id,
+        company_name: orgData.name,
+        primary_color: orgData.primary_color,
+        secondary_color: "#64748b",
+        accent_color: "#f59e0b",
+        theme_mode: "system",
+        default_language: "pt-BR",
+        default_currency: orgData.currency,
+        timezone: orgData.timezone,
+        enabled_modules: orgData.modules,
+        custom_fields: {
+          industry: orgData.industry,
+          company_size: orgData.size,
+          description: orgData.description,
+        },
+      });
 
       if (brandingError) throw brandingError;
 
@@ -177,32 +181,31 @@ export const OrganizationSetupWizard: React.FC = () => {
       await updateBranding({
         company_name: orgData.name,
         primary_color: orgData.primary_color,
-        secondary_color: '#64748b',
-        accent_color: '#f59e0b',
+        secondary_color: "#64748b",
+        accent_color: "#f59e0b",
         default_currency: orgData.currency,
         timezone: orgData.timezone,
         enabled_modules: orgData.modules,
         custom_fields: {
           industry: orgData.industry,
           company_size: orgData.size,
-          description: orgData.description
-        }
+          description: orgData.description,
+        },
       });
-      
+
       toast({
         title: "Configuração Concluída!",
         description: "Sua organização foi configurada com sucesso.",
       });
 
       // Redirect to dashboard
-      navigate('/');
-      
+      navigate("/");
     } catch (error: any) {
-      console.error('Setup error:', error);
+      console.error("Setup error:", error);
       toast({
         title: "Erro na Configuração",
         description: error.message || "Erro ao salvar configurações",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -219,17 +222,17 @@ export const OrganizationSetupWizard: React.FC = () => {
               <Input
                 id="name"
                 value={orgData.name}
-                onChange={(e) => setOrgData(prev => ({ ...prev, name: e.target.value }))}
+                onChange={e => setOrgData(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="Ex: Empresa Marítima LTDA"
               />
             </div>
-            
+
             <div>
               <Label htmlFor="description">Descrição (Opcional)</Label>
               <Textarea
                 id="description"
                 value={orgData.description}
-                onChange={(e) => setOrgData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={e => setOrgData(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Breve descrição da sua empresa..."
                 rows={3}
               />
@@ -238,13 +241,18 @@ export const OrganizationSetupWizard: React.FC = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="industry">Setor</Label>
-                <Select value={orgData.industry} onValueChange={(value) => setOrgData(prev => ({ ...prev, industry: value }))}>
+                <Select
+                  value={orgData.industry}
+                  onValueChange={value => setOrgData(prev => ({ ...prev, industry: value }))}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o setor" />
                   </SelectTrigger>
                   <SelectContent>
                     {industries.map(industry => (
-                      <SelectItem key={industry} value={industry}>{industry}</SelectItem>
+                      <SelectItem key={industry} value={industry}>
+                        {industry}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -252,13 +260,18 @@ export const OrganizationSetupWizard: React.FC = () => {
 
               <div>
                 <Label htmlFor="size">Tamanho da Empresa</Label>
-                <Select value={orgData.size} onValueChange={(value) => setOrgData(prev => ({ ...prev, size: value }))}>
+                <Select
+                  value={orgData.size}
+                  onValueChange={value => setOrgData(prev => ({ ...prev, size: value }))}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Número de funcionários" />
                   </SelectTrigger>
                   <SelectContent>
                     {companySizes.map(size => (
-                      <SelectItem key={size} value={size}>{size}</SelectItem>
+                      <SelectItem key={size} value={size}>
+                        {size}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -271,9 +284,10 @@ export const OrganizationSetupWizard: React.FC = () => {
         return (
           <div className="space-y-6">
             <p className="text-muted-foreground">
-              Selecione os módulos que sua organização utilizará. Você pode adicionar mais módulos posteriormente.
+              Selecione os módulos que sua organização utilizará. Você pode adicionar mais módulos
+              posteriormente.
             </p>
-            
+
             <div className="grid grid-cols-1 gap-4">
               {availableModules.map(module => (
                 <div key={module.id} className="flex items-start space-x-3">
@@ -320,12 +334,12 @@ export const OrganizationSetupWizard: React.FC = () => {
                   type="color"
                   id="color"
                   value={orgData.primary_color}
-                  onChange={(e) => setOrgData(prev => ({ ...prev, primary_color: e.target.value }))}
+                  onChange={e => setOrgData(prev => ({ ...prev, primary_color: e.target.value }))}
                   className="w-12 h-12 rounded border"
                 />
                 <Input
                   value={orgData.primary_color}
-                  onChange={(e) => setOrgData(prev => ({ ...prev, primary_color: e.target.value }))}
+                  onChange={e => setOrgData(prev => ({ ...prev, primary_color: e.target.value }))}
                   placeholder="#3b82f6"
                   className="flex-1"
                 />
@@ -335,7 +349,10 @@ export const OrganizationSetupWizard: React.FC = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="timezone">Fuso Horário</Label>
-                <Select value={orgData.timezone} onValueChange={(value) => setOrgData(prev => ({ ...prev, timezone: value }))}>
+                <Select
+                  value={orgData.timezone}
+                  onValueChange={value => setOrgData(prev => ({ ...prev, timezone: value }))}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -350,7 +367,10 @@ export const OrganizationSetupWizard: React.FC = () => {
 
               <div>
                 <Label htmlFor="currency">Moeda</Label>
-                <Select value={orgData.currency} onValueChange={(value) => setOrgData(prev => ({ ...prev, currency: value }))}>
+                <Select
+                  value={orgData.currency}
+                  onValueChange={value => setOrgData(prev => ({ ...prev, currency: value }))}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -422,8 +442,8 @@ export const OrganizationSetupWizard: React.FC = () => {
                     <div>
                       <span className="text-muted-foreground">Cor:</span>
                       <div className="flex items-center space-x-2">
-                        <div 
-                          className="w-4 h-4 rounded" 
+                        <div
+                          className="w-4 h-4 rounded"
                           style={{ backgroundColor: orgData.primary_color }}
                         />
                         <span className="font-medium">{orgData.primary_color}</span>
@@ -435,7 +455,7 @@ export const OrganizationSetupWizard: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-muted-foreground">Fuso:</span>
-                      <p className="font-medium">{orgData.timezone.split('/')[1]}</p>
+                      <p className="font-medium">{orgData.timezone.split("/")[1]}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -480,20 +500,20 @@ export const OrganizationSetupWizard: React.FC = () => {
                   key={step.id}
                   className={`p-3 rounded-lg border transition-colors ${
                     isActive
-                      ? 'border-primary bg-primary/5'
+                      ? "border-primary bg-primary/5"
                       : isCompleted
-                      ? 'border-green-200 bg-green-50'
-                      : 'border-border'
+                        ? "border-green-200 bg-green-50"
+                        : "border-border"
                   }`}
                 >
                   <div className="flex items-center space-x-3">
                     <div
                       className={`p-2 rounded-full ${
                         isActive
-                          ? 'bg-primary text-primary-foreground'
+                          ? "bg-primary text-primary-foreground"
                           : isCompleted
-                          ? 'bg-green-500 text-azure-50'
-                          : 'bg-muted text-muted-foreground'
+                            ? "bg-green-500 text-azure-50"
+                            : "bg-muted text-muted-foreground"
                       }`}
                     >
                       {isCompleted ? (
@@ -522,25 +542,19 @@ export const OrganizationSetupWizard: React.FC = () => {
               <CardTitle>{steps[currentStep].title}</CardTitle>
               <p className="text-muted-foreground">{steps[currentStep].description}</p>
             </CardHeader>
-            <CardContent>
-              {renderStepContent()}
-            </CardContent>
+            <CardContent>{renderStepContent()}</CardContent>
           </Card>
 
           {/* Navigation */}
           <div className="flex justify-between mt-6">
-            <Button
-              variant="outline"
-              onClick={handlePrevious}
-              disabled={currentStep === 0}
-            >
+            <Button variant="outline" onClick={handlePrevious} disabled={currentStep === 0}>
               <ArrowLeft className="w-4 h-4 mr-2" />
               Anterior
             </Button>
 
             {currentStep === steps.length - 1 ? (
               <Button onClick={handleComplete} disabled={isLoading}>
-                {isLoading ? 'Finalizando...' : 'Finalizar Configuração'}
+                {isLoading ? "Finalizando..." : "Finalizar Configuração"}
                 <CheckCircle className="w-4 h-4 ml-2" />
               </Button>
             ) : (

@@ -4,9 +4,9 @@
  */
 
 // Re-export from the new unified Loading component
-export { 
-  Loading as LoadingState, 
+export {
+  Loading as LoadingState,
   LoadingOverlay,
   type LoadingProps as LoadingStateProps,
-  type LoadingOverlayProps
-} from './Loading';
+  type LoadingOverlayProps,
+} from "./Loading";

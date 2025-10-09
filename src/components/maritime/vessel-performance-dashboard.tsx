@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
-import { 
-  Ship, 
-  MapPin, 
-  Fuel, 
-  Users, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import {
+  Ship,
+  MapPin,
+  Fuel,
+  Users,
   Calendar,
   Wrench,
   AlertTriangle,
   TrendingUp,
-  Activity
-} from 'lucide-react';
+  Activity,
+} from "lucide-react";
 
 interface VesselPerformance {
   fuelEfficiency: number;
@@ -46,7 +46,7 @@ interface VesselDetails {
 export const VesselPerformanceDashboard = () => {
   const [vessels, setVessels] = useState<VesselDetails[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
-  const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d'>('7d');
+  const [timeRange, setTimeRange] = useState<"24h" | "7d" | "30d">("7d");
 
   useEffect(() => {
     loadVesselData();
@@ -56,53 +56,53 @@ export const VesselPerformanceDashboard = () => {
     // Mock data - in real implementation, this would come from Supabase
     const mockVessels: VesselDetails[] = [
       {
-        id: '1',
-        name: 'MV Atlantic Explorer',
-        type: 'Container Ship',
-        imo: 'IMO9876543',
-        flag: 'Brazil',
+        id: "1",
+        name: "MV Atlantic Explorer",
+        type: "Container Ship",
+        imo: "IMO9876543",
+        flag: "Brazil",
         built: 2018,
         capacity: 14000,
         crew: 22,
-        status: 'En Route',
-        location: 'Santos - Rio de Janeiro',
+        status: "En Route",
+        location: "Santos - Rio de Janeiro",
         performance: {
           fuelEfficiency: 87,
           averageSpeed: 18.5,
           uptime: 94,
           maintenanceScore: 91,
           safetyScore: 98,
-          emissions: 76
+          emissions: 76,
         },
-        lastMaintenance: new Date('2024-11-15'),
-        nextMaintenance: new Date('2024-12-20'),
-        certificates: ['ISPS', 'ISM', 'MLC', 'MARPOL'],
-        route: 'Santos-Rio-Vitória'
+        lastMaintenance: new Date("2024-11-15"),
+        nextMaintenance: new Date("2024-12-20"),
+        certificates: ["ISPS", "ISM", "MLC", "MARPOL"],
+        route: "Santos-Rio-Vitória",
       },
       {
-        id: '2',
-        name: 'MV Pacific Navigator',
-        type: 'Bulk Carrier',
-        imo: 'IMO9876544',
-        flag: 'Brazil',
+        id: "2",
+        name: "MV Pacific Navigator",
+        type: "Bulk Carrier",
+        imo: "IMO9876544",
+        flag: "Brazil",
         built: 2020,
         capacity: 180000,
         crew: 25,
-        status: 'Loading',
-        location: 'Porto de Paranaguá',
+        status: "Loading",
+        location: "Porto de Paranaguá",
         performance: {
           fuelEfficiency: 92,
           averageSpeed: 16.2,
           uptime: 97,
           maintenanceScore: 88,
           safetyScore: 95,
-          emissions: 82
+          emissions: 82,
         },
-        lastMaintenance: new Date('2024-12-01'),
-        nextMaintenance: new Date('2025-01-15'),
-        certificates: ['ISPS', 'ISM', 'MLC', 'MARPOL', 'BWM'],
-        route: 'Paranaguá-Suape-Santos'
-      }
+        lastMaintenance: new Date("2024-12-01"),
+        nextMaintenance: new Date("2025-01-15"),
+        certificates: ["ISPS", "ISM", "MLC", "MARPOL", "BWM"],
+        route: "Paranaguá-Suape-Santos",
+      },
     ];
 
     setVessels(mockVessels);
@@ -110,18 +110,23 @@ export const VesselPerformanceDashboard = () => {
   };
 
   const getPerformanceColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 75) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 90) return "text-green-600";
+    if (score >= 75) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'en route': return 'bg-blue-100 text-blue-800';
-      case 'loading': return 'bg-yellow-100 text-yellow-800';
-      case 'docked': return 'bg-green-100 text-green-800';
-      case 'maintenance': return 'bg-red-100 text-red-800';
-      default: return 'bg-secondary text-secondary-foreground';
+      case "en route":
+        return "bg-blue-100 text-blue-800";
+      case "loading":
+        return "bg-yellow-100 text-yellow-800";
+      case "docked":
+        return "bg-green-100 text-green-800";
+      case "maintenance":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
@@ -139,14 +144,14 @@ export const VesselPerformanceDashboard = () => {
 
       {/* Time Range Selector */}
       <div className="flex space-x-2">
-        {(['24h', '7d', '30d'] as const).map((range) => (
+        {(["24h", "7d", "30d"] as const).map(range => (
           <Button
             key={range}
-            variant={timeRange === range ? 'default' : 'outline'}
+            variant={timeRange === range ? "default" : "outline"}
             size="sm"
             onClick={() => setTimeRange(range)}
           >
-            {range === '24h' ? '24 Horas' : range === '7d' ? '7 Dias' : '30 Dias'}
+            {range === "24h" ? "24 Horas" : range === "7d" ? "7 Dias" : "30 Dias"}
           </Button>
         ))}
       </div>
@@ -154,11 +159,11 @@ export const VesselPerformanceDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Vessel List */}
         <div className="space-y-4">
-          {vessels.map((vessel) => (
-            <Card 
+          {vessels.map(vessel => (
+            <Card
               key={vessel.id}
               className={`cursor-pointer transition-all hover:shadow-md ${
-                selectedVessel === vessel.id ? 'ring-2 ring-primary' : ''
+                selectedVessel === vessel.id ? "ring-2 ring-primary" : ""
               }`}
               onClick={() => setSelectedVessel(vessel.id)}
             >
@@ -168,9 +173,7 @@ export const VesselPerformanceDashboard = () => {
                     <Ship className="h-5 w-5" />
                     {vessel.name}
                   </CardTitle>
-                  <Badge className={getStatusColor(vessel.status)}>
-                    {vessel.status}
-                  </Badge>
+                  <Badge className={getStatusColor(vessel.status)}>{vessel.status}</Badge>
                 </div>
                 <CardDescription>{vessel.type}</CardDescription>
               </CardHeader>
@@ -178,13 +181,17 @@ export const VesselPerformanceDashboard = () => {
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
                     <div className="text-muted-foreground">Eficiência</div>
-                    <div className={`font-semibold ${getPerformanceColor(vessel.performance.fuelEfficiency)}`}>
+                    <div
+                      className={`font-semibold ${getPerformanceColor(vessel.performance.fuelEfficiency)}`}
+                    >
                       {vessel.performance.fuelEfficiency}%
                     </div>
                   </div>
                   <div>
                     <div className="text-muted-foreground">Uptime</div>
-                    <div className={`font-semibold ${getPerformanceColor(vessel.performance.uptime)}`}>
+                    <div
+                      className={`font-semibold ${getPerformanceColor(vessel.performance.uptime)}`}
+                    >
                       {vessel.performance.uptime}%
                     </div>
                   </div>
@@ -209,7 +216,8 @@ export const VesselPerformanceDashboard = () => {
                   {selectedVesselData.name}
                 </CardTitle>
                 <CardDescription>
-                  {selectedVesselData.type} • {selectedVesselData.imo} • Bandeira: {selectedVesselData.flag}
+                  {selectedVesselData.type} • {selectedVesselData.imo} • Bandeira:{" "}
+                  {selectedVesselData.flag}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -220,7 +228,9 @@ export const VesselPerformanceDashboard = () => {
                   </div>
                   <div>
                     <div className="text-muted-foreground">Capacidade</div>
-                    <div className="font-semibold">{selectedVesselData.capacity.toLocaleString()} TEU</div>
+                    <div className="font-semibold">
+                      {selectedVesselData.capacity.toLocaleString()} TEU
+                    </div>
                   </div>
                   <div>
                     <div className="text-muted-foreground">Tripulação</div>
@@ -251,31 +261,47 @@ export const VesselPerformanceDashboard = () => {
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>Eficiência de Combustível</span>
-                        <span className={getPerformanceColor(selectedVesselData.performance.fuelEfficiency)}>
+                        <span
+                          className={getPerformanceColor(
+                            selectedVesselData.performance.fuelEfficiency
+                          )}
+                        >
                           {selectedVesselData.performance.fuelEfficiency}%
                         </span>
                       </div>
-                      <Progress value={selectedVesselData.performance.fuelEfficiency} className="h-2" />
+                      <Progress
+                        value={selectedVesselData.performance.fuelEfficiency}
+                        className="h-2"
+                      />
                     </div>
-                    
+
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>Uptime Operacional</span>
-                        <span className={getPerformanceColor(selectedVesselData.performance.uptime)}>
+                        <span
+                          className={getPerformanceColor(selectedVesselData.performance.uptime)}
+                        >
                           {selectedVesselData.performance.uptime}%
                         </span>
                       </div>
                       <Progress value={selectedVesselData.performance.uptime} className="h-2" />
                     </div>
-                    
+
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>Score de Manutenção</span>
-                        <span className={getPerformanceColor(selectedVesselData.performance.maintenanceScore)}>
+                        <span
+                          className={getPerformanceColor(
+                            selectedVesselData.performance.maintenanceScore
+                          )}
+                        >
                           {selectedVesselData.performance.maintenanceScore}%
                         </span>
                       </div>
-                      <Progress value={selectedVesselData.performance.maintenanceScore} className="h-2" />
+                      <Progress
+                        value={selectedVesselData.performance.maintenanceScore}
+                        className="h-2"
+                      />
                     </div>
                   </div>
 
@@ -283,23 +309,32 @@ export const VesselPerformanceDashboard = () => {
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>Score de Segurança</span>
-                        <span className={getPerformanceColor(selectedVesselData.performance.safetyScore)}>
+                        <span
+                          className={getPerformanceColor(
+                            selectedVesselData.performance.safetyScore
+                          )}
+                        >
                           {selectedVesselData.performance.safetyScore}%
                         </span>
                       </div>
-                      <Progress value={selectedVesselData.performance.safetyScore} className="h-2" />
+                      <Progress
+                        value={selectedVesselData.performance.safetyScore}
+                        className="h-2"
+                      />
                     </div>
-                    
+
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>Performance Ambiental</span>
-                        <span className={getPerformanceColor(selectedVesselData.performance.emissions)}>
+                        <span
+                          className={getPerformanceColor(selectedVesselData.performance.emissions)}
+                        >
                           {selectedVesselData.performance.emissions}%
                         </span>
                       </div>
                       <Progress value={selectedVesselData.performance.emissions} className="h-2" />
                     </div>
-                    
+
                     <div className="p-3 bg-blue-50 rounded-lg">
                       <div className="text-sm font-medium text-blue-800">Velocidade Média</div>
                       <div className="text-lg font-bold text-blue-900">
@@ -324,22 +359,31 @@ export const VesselPerformanceDashboard = () => {
                   <div>
                     <div className="text-sm text-muted-foreground">Última Manutenção</div>
                     <div className="font-semibold">
-                      {selectedVesselData.lastMaintenance.toLocaleDateString('pt-BR')}
+                      {selectedVesselData.lastMaintenance.toLocaleDateString("pt-BR")}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {Math.floor((Date.now() - selectedVesselData.lastMaintenance.getTime()) / (1000 * 60 * 60 * 24))} dias atrás
+                      {Math.floor(
+                        (Date.now() - selectedVesselData.lastMaintenance.getTime()) /
+                          (1000 * 60 * 60 * 24)
+                      )}{" "}
+                      dias atrás
                     </div>
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div>
                     <div className="text-sm text-muted-foreground">Próxima Manutenção</div>
                     <div className="font-semibold">
-                      {selectedVesselData.nextMaintenance.toLocaleDateString('pt-BR')}
+                      {selectedVesselData.nextMaintenance.toLocaleDateString("pt-BR")}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      Em {Math.floor((selectedVesselData.nextMaintenance.getTime() - Date.now()) / (1000 * 60 * 60 * 24))} dias
+                      Em{" "}
+                      {Math.floor(
+                        (selectedVesselData.nextMaintenance.getTime() - Date.now()) /
+                          (1000 * 60 * 60 * 24)
+                      )}{" "}
+                      dias
                     </div>
                   </div>
                 </CardContent>

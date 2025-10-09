@@ -9,7 +9,7 @@ export class APIError extends Error {
     public response?: any
   ) {
     super(message);
-    this.name = 'APIError';
+    this.name = "APIError";
   }
 }
 
@@ -21,21 +21,17 @@ export class APIManager {
   private retryDelay = 1000;
 
   constructor(baseURL?: string, apiKey?: string) {
-    this.baseURL = baseURL || import.meta.env.VITE_API_BASE_URL || '';
-    this.apiKey = apiKey || import.meta.env.VITE_API_KEY || '';
+    this.baseURL = baseURL || import.meta.env.VITE_API_BASE_URL || "";
+    this.apiKey = apiKey || import.meta.env.VITE_API_KEY || "";
   }
 
   /**
    * Make an API request with retry logic
    */
-  async makeRequest<T>(
-    endpoint: string,
-    options?: RequestInit,
-    retryCount = 0
-  ): Promise<T> {
+  async makeRequest<T>(endpoint: string, options?: RequestInit, retryCount = 0): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const headers = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(this.apiKey && { Authorization: `Bearer ${this.apiKey}` }),
       ...options?.headers,
     };
@@ -45,11 +41,7 @@ export class APIManager {
 
       if (!response.ok) {
         const errorBody = await response.text();
-        throw new APIError(
-          `Request failed: ${response.statusText}`,
-          response.status,
-          errorBody
-        );
+        throw new APIError(`Request failed: ${response.statusText}`, response.status, errorBody);
       }
 
       return response.json();
@@ -62,13 +54,13 @@ export class APIManager {
             `API request failed, retrying in ${delay}ms (attempt ${retryCount + 1}/${this.maxRetries})`,
             error
           );
-          
-          await new Promise((resolve) => setTimeout(resolve, delay));
+
+          await new Promise(resolve => setTimeout(resolve, delay));
           return this.makeRequest<T>(endpoint, options, retryCount + 1);
         }
       }
-      
-      console.error('API request failed after max retries', error);
+
+      console.error("API request failed after max retries", error);
       throw error;
     }
   }
@@ -77,7 +69,7 @@ export class APIManager {
    * GET request
    */
   async get<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    return this.makeRequest<T>(endpoint, { ...options, method: 'GET' });
+    return this.makeRequest<T>(endpoint, { ...options, method: "GET" });
   }
 
   /**
@@ -86,7 +78,7 @@ export class APIManager {
   async post<T>(endpoint: string, data?: any, options?: RequestInit): Promise<T> {
     return this.makeRequest<T>(endpoint, {
       ...options,
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
@@ -97,7 +89,7 @@ export class APIManager {
   async put<T>(endpoint: string, data?: any, options?: RequestInit): Promise<T> {
     return this.makeRequest<T>(endpoint, {
       ...options,
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
@@ -106,7 +98,7 @@ export class APIManager {
    * DELETE request
    */
   async delete<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    return this.makeRequest<T>(endpoint, { ...options, method: 'DELETE' });
+    return this.makeRequest<T>(endpoint, { ...options, method: "DELETE" });
   }
 
   /**
@@ -114,10 +106,10 @@ export class APIManager {
    */
   async healthCheck(): Promise<boolean> {
     try {
-      await this.get('/health');
+      await this.get("/health");
       return true;
     } catch (error) {
-      console.error('API health check failed:', error);
+      console.error("API health check failed:", error);
       return false;
     }
   }

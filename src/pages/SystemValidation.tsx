@@ -1,19 +1,11 @@
-import React from 'react';
-import ProductionReadinessValidator from '@/components/testing/production-readiness-validator';
-import AccessibilityAuditor from '@/components/testing/accessibility-auditor';
-import FinalHomologationReport from '@/components/testing/final-homologation-report';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Shield, 
-  CheckCircle, 
-  Award, 
-  FileText,
-  Eye,
-  Zap,
-  Target
-} from 'lucide-react';
+import React from "react";
+import ProductionReadinessValidator from "@/components/testing/production-readiness-validator";
+import AccessibilityAuditor from "@/components/testing/accessibility-auditor";
+import FinalHomologationReport from "@/components/testing/final-homologation-report";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Shield, CheckCircle, Award, FileText, Eye, Zap, Target } from "lucide-react";
 
 const SystemValidation: React.FC = () => {
   return (
@@ -31,18 +23,10 @@ const SystemValidation: React.FC = () => {
             Nautilus One - Certificação Completa para Produção
           </p>
           <div className="flex justify-center gap-3 mt-4">
-            <Badge className="bg-success text-success-foreground">
-              ✅ 100% Funcional
-            </Badge>
-            <Badge className="bg-info text-info-foreground">
-              🔒 Seguro
-            </Badge>
-            <Badge className="bg-accent text-accent-foreground">
-              ⚡ Otimizado
-            </Badge>
-            <Badge className="bg-warning text-warning-foreground">
-              🎯 Produção Ready
-            </Badge>
+            <Badge className="bg-success text-success-foreground">✅ 100% Funcional</Badge>
+            <Badge className="bg-info text-info-foreground">🔒 Seguro</Badge>
+            <Badge className="bg-accent text-accent-foreground">⚡ Otimizado</Badge>
+            <Badge className="bg-warning text-warning-foreground">🎯 Produção Ready</Badge>
           </div>
         </CardHeader>
       </Card>
@@ -114,9 +98,7 @@ const SystemValidation: React.FC = () => {
                     <Shield className="w-12 h-12 text-info mx-auto mb-4" />
                     <h3 className="font-semibold text-info mb-2">Segurança</h3>
                     <div className="text-2xl font-bold text-info mb-1">A+</div>
-                    <p className="text-info/80 text-sm">
-                      RLS, autenticação e validação completos
-                    </p>
+                    <p className="text-info/80 text-sm">RLS, autenticação e validação completos</p>
                   </CardContent>
                 </Card>
 
@@ -126,9 +108,7 @@ const SystemValidation: React.FC = () => {
                     <Zap className="w-12 h-12 text-accent mx-auto mb-4" />
                     <h3 className="font-semibold text-accent mb-2">Performance</h3>
                     <div className="text-2xl font-bold text-accent mb-1">95+</div>
-                    <p className="text-accent/80 text-sm">
-                      Lighthouse score e Core Web Vitals
-                    </p>
+                    <p className="text-accent/80 text-sm">Lighthouse score e Core Web Vitals</p>
                   </CardContent>
                 </Card>
 
@@ -150,9 +130,7 @@ const SystemValidation: React.FC = () => {
                     <div className="text-primary text-4xl mx-auto mb-4">📱</div>
                     <h3 className="font-semibold text-primary mb-2">Responsividade</h3>
                     <div className="text-2xl font-bold text-primary mb-1">Universal</div>
-                    <p className="text-primary/80 text-sm">
-                      Mobile, tablet, desktop e 4K
-                    </p>
+                    <p className="text-primary/80 text-sm">Mobile, tablet, desktop e 4K</p>
                   </CardContent>
                 </Card>
 
@@ -160,7 +138,9 @@ const SystemValidation: React.FC = () => {
                 <Card className="border-secondary bg-secondary/5">
                   <CardContent className="pt-6 text-center">
                     <div className="text-secondary-foreground text-4xl mx-auto mb-4">🌐</div>
-                    <h3 className="font-semibold text-secondary-foreground mb-2">Compatibilidade</h3>
+                    <h3 className="font-semibold text-secondary-foreground mb-2">
+                      Compatibilidade
+                    </h3>
                     <div className="text-2xl font-bold text-secondary-foreground mb-1">100%</div>
                     <p className="text-secondary-foreground/80 text-sm">
                       Todos os navegadores modernos
@@ -174,13 +154,11 @@ const SystemValidation: React.FC = () => {
                 <CardContent className="pt-6">
                   <div className="text-center space-y-4">
                     <div className="text-6xl">🏆</div>
-                    <h2 className="text-3xl font-bold text-primary">
-                      SISTEMA CERTIFICADO
-                    </h2>
+                    <h2 className="text-3xl font-bold text-primary">SISTEMA CERTIFICADO</h2>
                     <p className="text-lg text-muted-foreground">
                       Nautilus One está oficialmente validado e aprovado para deploy em produção
                     </p>
-                    
+
                     <div className="bg-background p-6 rounded-lg border max-w-2xl mx-auto">
                       <div className="space-y-3">
                         <div className="flex justify-between">
@@ -189,7 +167,7 @@ const SystemValidation: React.FC = () => {
                         </div>
                         <div className="flex justify-between">
                           <span className="font-medium">Data de Validação:</span>
-                          <span>{new Date().toLocaleDateString('pt-BR')}</span>
+                          <span>{new Date().toLocaleDateString("pt-BR")}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="font-medium">Status:</span>
@@ -199,18 +177,16 @@ const SystemValidation: React.FC = () => {
                         </div>
                         <div className="flex justify-between">
                           <span className="font-medium">Certificação:</span>
-                          <Badge className="bg-primary text-primary-foreground">
-                            NÍVEL AAA
-                          </Badge>
+                          <Badge className="bg-primary text-primary-foreground">NÍVEL AAA</Badge>
                         </div>
                       </div>
                     </div>
 
                     <div className="pt-4">
                       <p className="text-sm text-muted-foreground">
-                        Este certificado confirma que o sistema passou por todos os testes de 
-                        qualidade, segurança, performance e acessibilidade, estando pronto 
-                        para uso em ambiente de produção.
+                        Este certificado confirma que o sistema passou por todos os testes de
+                        qualidade, segurança, performance e acessibilidade, estando pronto para uso
+                        em ambiente de produção.
                       </p>
                     </div>
                   </div>

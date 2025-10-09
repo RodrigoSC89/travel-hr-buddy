@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useArrowNavigation } from '@/hooks/use-arrow-navigation';
-import { Code, ArrowDown, ArrowUp, Keyboard } from 'lucide-react';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useArrowNavigation } from "@/hooks/use-arrow-navigation";
+import { Code, ArrowDown, ArrowUp, Keyboard } from "lucide-react";
 
 /**
  * Example demonstrating the useArrowNavigation hook
@@ -13,22 +13,22 @@ export const ArrowNavigationExample: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const menuItems = [
-    { id: '1', label: 'Dashboard', icon: '📊' },
-    { id: '2', label: 'Settings', icon: '⚙️' },
-    { id: '3', label: 'Profile', icon: '👤' },
-    { id: '4', label: 'Notifications', icon: '🔔' },
-    { id: '5', label: 'Help', icon: '❓' },
+    { id: "1", label: "Dashboard", icon: "📊" },
+    { id: "2", label: "Settings", icon: "⚙️" },
+    { id: "3", label: "Profile", icon: "👤" },
+    { id: "4", label: "Notifications", icon: "🔔" },
+    { id: "5", label: "Help", icon: "❓" },
   ];
 
   const { focusedIndex, getItemProps } = useArrowNavigation({
     isOpen: isMenuOpen,
     itemCount: menuItems.length,
-    onSelect: (index) => {
+    onSelect: index => {
       setSelectedItem(menuItems[index].label);
       setIsMenuOpen(false);
     },
     onClose: () => setIsMenuOpen(false),
-    orientation: 'vertical',
+    orientation: "vertical",
     loop: true,
   });
 
@@ -48,17 +48,10 @@ export const ArrowNavigationExample: React.FC = () => {
           {/* Demo Menu */}
           <div className="space-y-4">
             <div className="flex items-center gap-4">
-              <Button 
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                variant="outline"
-              >
-                {isMenuOpen ? 'Close Menu' : 'Open Menu'}
+              <Button onClick={() => setIsMenuOpen(!isMenuOpen)} variant="outline">
+                {isMenuOpen ? "Close Menu" : "Open Menu"}
               </Button>
-              {selectedItem && (
-                <Badge variant="default">
-                  Selected: {selectedItem}
-                </Badge>
-              )}
+              {selectedItem && <Badge variant="default">Selected: {selectedItem}</Badge>}
             </div>
 
             {isMenuOpen && (
@@ -76,9 +69,10 @@ export const ArrowNavigationExample: React.FC = () => {
                         className={`
                           w-full text-left px-4 py-3 rounded-md transition-colors
                           flex items-center gap-3
-                          ${focusedIndex === index 
-                            ? 'bg-primary text-primary-foreground ring-2 ring-primary/50' 
-                            : 'hover:bg-accent hover:text-accent-foreground'
+                          ${
+                            focusedIndex === index
+                              ? "bg-primary text-primary-foreground ring-2 ring-primary/50"
+                              : "hover:bg-accent hover:text-accent-foreground"
                           }
                           focus:outline-none
                         `}
@@ -142,7 +136,7 @@ export const ArrowNavigationExample: React.FC = () => {
             </CardHeader>
             <CardContent>
               <pre className="text-xs overflow-x-auto p-4 bg-background rounded-md border">
-{`import { useArrowNavigation } from '@/hooks/use-arrow-navigation';
+                {`import { useArrowNavigation } from '@/hooks/use-arrow-navigation';
 
 const MyMenu = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,5 +1,5 @@
-import React from 'react';
-import { UserFeedbackSystem } from '@/components/feedback/user-feedback-system';
+import React from "react";
+import { UserFeedbackSystem } from "@/components/feedback/user-feedback-system";
 
 const FeedbackPage = () => {
   return (

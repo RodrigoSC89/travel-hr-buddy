@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Globe, 
-  Link, 
-  Code, 
-  Database, 
-  Smartphone, 
-  Mail, 
-  MessageSquare, 
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Globe,
+  Link,
+  Code,
+  Database,
+  Smartphone,
+  Mail,
+  MessageSquare,
   Calendar,
   DollarSign,
   BarChart3,
@@ -24,9 +30,9 @@ import {
   RefreshCw,
   CheckCircle,
   AlertTriangle,
-  ExternalLink
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+  ExternalLink,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Integration {
   id: string;
@@ -34,113 +40,142 @@ interface Integration {
   description: string;
   icon: any;
   category: string;
-  status: 'connected' | 'disconnected' | 'error';
+  status: "connected" | "disconnected" | "error";
   lastSync?: Date;
   config?: Record<string, any>;
 }
 
 const IntegrationsHub = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [zapierWebhook, setZapierWebhook] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [zapierWebhook, setZapierWebhook] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const [integrations, setIntegrations] = useState<Integration[]>([
     {
-      id: 'zapier',
-      name: 'Zapier',
-      description: 'Automatize workflows conectando milhares de aplicativos',
+      id: "zapier",
+      name: "Zapier",
+      description: "Automatize workflows conectando milhares de aplicativos",
       icon: Link,
-      category: 'automation',
-      status: 'disconnected'
+      category: "automation",
+      status: "disconnected",
     },
     {
-      id: 'slack',
-      name: 'Slack',
-      description: 'Notificações em tempo real para sua equipe',
+      id: "slack",
+      name: "Slack",
+      description: "Notificações em tempo real para sua equipe",
       icon: MessageSquare,
-      category: 'communication',
-      status: 'connected',
-      lastSync: new Date(Date.now() - 30 * 60 * 1000)
+      category: "communication",
+      status: "connected",
+      lastSync: new Date(Date.now() - 30 * 60 * 1000),
     },
     {
-      id: 'google-calendar',
-      name: 'Google Calendar',
-      description: 'Sincronize eventos e compromissos',
+      id: "google-calendar",
+      name: "Google Calendar",
+      description: "Sincronize eventos e compromissos",
       icon: Calendar,
-      category: 'productivity',
-      status: 'connected',
-      lastSync: new Date(Date.now() - 15 * 60 * 1000)
+      category: "productivity",
+      status: "connected",
+      lastSync: new Date(Date.now() - 15 * 60 * 1000),
     },
     {
-      id: 'stripe',
-      name: 'Stripe',
-      description: 'Processamento de pagamentos integrado',
+      id: "stripe",
+      name: "Stripe",
+      description: "Processamento de pagamentos integrado",
       icon: DollarSign,
-      category: 'payments',
-      status: 'error',
-      lastSync: new Date(Date.now() - 2 * 60 * 60 * 1000)
+      category: "payments",
+      status: "error",
+      lastSync: new Date(Date.now() - 2 * 60 * 60 * 1000),
     },
     {
-      id: 'google-analytics',
-      name: 'Google Analytics',
-      description: 'Análise de dados e métricas avançadas',
+      id: "google-analytics",
+      name: "Google Analytics",
+      description: "Análise de dados e métricas avançadas",
       icon: BarChart3,
-      category: 'analytics',
-      status: 'connected',
-      lastSync: new Date(Date.now() - 5 * 60 * 1000)
+      category: "analytics",
+      status: "connected",
+      lastSync: new Date(Date.now() - 5 * 60 * 1000),
     },
     {
-      id: 'mailchimp',
-      name: 'Mailchimp',
-      description: 'Marketing por email automatizado',
+      id: "mailchimp",
+      name: "Mailchimp",
+      description: "Marketing por email automatizado",
       icon: Mail,
-      category: 'marketing',
-      status: 'disconnected'
+      category: "marketing",
+      status: "disconnected",
     },
     {
-      id: 'whatsapp-business',
-      name: 'WhatsApp Business',
-      description: 'Comunicação direta com clientes',
+      id: "whatsapp-business",
+      name: "WhatsApp Business",
+      description: "Comunicação direta com clientes",
       icon: Smartphone,
-      category: 'communication',
-      status: 'disconnected'
+      category: "communication",
+      status: "disconnected",
     },
     {
-      id: 'postgresql',
-      name: 'PostgreSQL',
-      description: 'Banco de dados principal do sistema',
+      id: "postgresql",
+      name: "PostgreSQL",
+      description: "Banco de dados principal do sistema",
       icon: Database,
-      category: 'database',
-      status: 'connected',
-      lastSync: new Date(Date.now() - 1 * 60 * 1000)
-    }
+      category: "database",
+      status: "connected",
+      lastSync: new Date(Date.now() - 1 * 60 * 1000),
+    },
   ]);
 
   const categories = [
-    { id: 'all', name: 'Todas', count: integrations.length },
-    { id: 'communication', name: 'Comunicação', count: integrations.filter(i => i.category === 'communication').length },
-    { id: 'automation', name: 'Automação', count: integrations.filter(i => i.category === 'automation').length },
-    { id: 'analytics', name: 'Analytics', count: integrations.filter(i => i.category === 'analytics').length },
-    { id: 'payments', name: 'Pagamentos', count: integrations.filter(i => i.category === 'payments').length },
-    { id: 'productivity', name: 'Produtividade', count: integrations.filter(i => i.category === 'productivity').length },
-    { id: 'marketing', name: 'Marketing', count: integrations.filter(i => i.category === 'marketing').length },
-    { id: 'database', name: 'Banco de Dados', count: integrations.filter(i => i.category === 'database').length }
+    { id: "all", name: "Todas", count: integrations.length },
+    {
+      id: "communication",
+      name: "Comunicação",
+      count: integrations.filter(i => i.category === "communication").length,
+    },
+    {
+      id: "automation",
+      name: "Automação",
+      count: integrations.filter(i => i.category === "automation").length,
+    },
+    {
+      id: "analytics",
+      name: "Analytics",
+      count: integrations.filter(i => i.category === "analytics").length,
+    },
+    {
+      id: "payments",
+      name: "Pagamentos",
+      count: integrations.filter(i => i.category === "payments").length,
+    },
+    {
+      id: "productivity",
+      name: "Produtividade",
+      count: integrations.filter(i => i.category === "productivity").length,
+    },
+    {
+      id: "marketing",
+      name: "Marketing",
+      count: integrations.filter(i => i.category === "marketing").length,
+    },
+    {
+      id: "database",
+      name: "Banco de Dados",
+      count: integrations.filter(i => i.category === "database").length,
+    },
   ];
 
   const filteredIntegrations = integrations.filter(integration => {
-    const matchesCategory = selectedCategory === 'all' || integration.category === selectedCategory;
-    const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         integration.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
+    const matchesSearch =
+      integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected':
+      case "connected":
         return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'error':
+      case "error":
         return <AlertTriangle className="w-4 h-4 text-red-600" />;
       default:
         return <RefreshCw className="w-4 h-4 text-muted-foreground" />;
@@ -149,18 +184,18 @@ const IntegrationsHub = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected':
-        return 'text-green-600 bg-green-100';
-      case 'error':
-        return 'text-red-600 bg-red-100';
+      case "connected":
+        return "text-green-600 bg-green-100";
+      case "error":
+        return "text-red-600 bg-red-100";
       default:
-        return 'text-muted-foreground bg-gray-100';
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
   const handleTriggerZapier = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!zapierWebhook) {
       toast({
         title: "Erro",
@@ -184,13 +219,14 @@ const IntegrationsHub = () => {
           timestamp: new Date().toISOString(),
           triggered_from: window.location.origin,
           user_id: "user-123",
-          event_type: "manual_trigger"
+          event_type: "manual_trigger",
         }),
       });
 
       toast({
         title: "Webhook Enviado",
-        description: "A requisição foi enviada para o Zapier. Verifique o histórico do seu Zap para confirmar.",
+        description:
+          "A requisição foi enviada para o Zapier. Verifique o histórico do seu Zap para confirmar.",
       });
     } catch (error) {
       console.error("Error triggering webhook:", error);
@@ -205,17 +241,19 @@ const IntegrationsHub = () => {
   };
 
   const toggleIntegration = (id: string) => {
-    setIntegrations(prev => prev.map(integration => {
-      if (integration.id === id) {
-        const newStatus = integration.status === 'connected' ? 'disconnected' : 'connected';
-        return {
-          ...integration,
-          status: newStatus,
-          lastSync: newStatus === 'connected' ? new Date() : undefined
-        };
-      }
-      return integration;
-    }));
+    setIntegrations(prev =>
+      prev.map(integration => {
+        if (integration.id === id) {
+          const newStatus = integration.status === "connected" ? "disconnected" : "connected";
+          return {
+            ...integration,
+            status: newStatus,
+            lastSync: newStatus === "connected" ? new Date() : undefined,
+          };
+        }
+        return integration;
+      })
+    );
 
     toast({
       title: "Integração atualizada",
@@ -224,15 +262,17 @@ const IntegrationsHub = () => {
   };
 
   const syncIntegration = (id: string) => {
-    setIntegrations(prev => prev.map(integration => {
-      if (integration.id === id && integration.status === 'connected') {
-        return {
-          ...integration,
-          lastSync: new Date()
-        };
-      }
-      return integration;
-    }));
+    setIntegrations(prev =>
+      prev.map(integration => {
+        if (integration.id === id && integration.status === "connected") {
+          return {
+            ...integration,
+            lastSync: new Date(),
+          };
+        }
+        return integration;
+      })
+    );
 
     toast({
       title: "Sincronização concluída",
@@ -241,18 +281,18 @@ const IntegrationsHub = () => {
   };
 
   const getRelativeTime = (date?: Date) => {
-    if (!date) return 'Nunca';
+    if (!date) return "Nunca";
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
-    if (diffInMinutes < 1) return 'Agora';
+
+    if (diffInMinutes < 1) return "Agora";
     if (diffInMinutes < 60) return `${diffInMinutes}m atrás`;
     if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h atrás`;
     return `${Math.floor(diffInMinutes / 1440)}d atrás`;
   };
 
-  const connectedCount = integrations.filter(i => i.status === 'connected').length;
-  const errorCount = integrations.filter(i => i.status === 'error').length;
+  const connectedCount = integrations.filter(i => i.status === "connected").length;
+  const errorCount = integrations.filter(i => i.status === "error").length;
 
   return (
     <div className="space-y-6">
@@ -263,7 +303,8 @@ const IntegrationsHub = () => {
             Hub de Integrações
           </h1>
           <p className="text-muted-foreground">
-            {connectedCount} conectadas · {errorCount} com erro · {integrations.length - connectedCount - errorCount} disponíveis
+            {connectedCount} conectadas · {errorCount} com erro ·{" "}
+            {integrations.length - connectedCount - errorCount} disponíveis
           </p>
         </div>
         <Button>
@@ -285,7 +326,7 @@ const IntegrationsHub = () => {
             <Input
               placeholder="Buscar integrações..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="md:max-w-xs"
             />
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -293,7 +334,7 @@ const IntegrationsHub = () => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((category) => (
+                {categories.map(category => (
                   <SelectItem key={category.id} value={category.id}>
                     {category.name} ({category.count})
                   </SelectItem>
@@ -303,7 +344,7 @@ const IntegrationsHub = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredIntegrations.map((integration) => (
+            {filteredIntegrations.map(integration => (
               <Card key={integration.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
@@ -314,36 +355,37 @@ const IntegrationsHub = () => {
                       <div>
                         <h3 className="font-semibold">{integration.name}</h3>
                         <Badge className={getStatusColor(integration.status)} variant="secondary">
-                          {integration.status === 'connected' ? 'Conectado' : 
-                           integration.status === 'error' ? 'Erro' : 'Desconectado'}
+                          {integration.status === "connected"
+                            ? "Conectado"
+                            : integration.status === "error"
+                              ? "Erro"
+                              : "Desconectado"}
                         </Badge>
                       </div>
                     </div>
                     {getStatusIcon(integration.status)}
                   </div>
-                  
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {integration.description}
-                  </p>
-                  
+
+                  <p className="text-sm text-muted-foreground mb-4">{integration.description}</p>
+
                   {integration.lastSync && (
                     <p className="text-xs text-muted-foreground mb-4">
                       Última sinc: {getRelativeTime(integration.lastSync)}
                     </p>
                   )}
-                  
+
                   <div className="flex gap-2">
-                    <Button 
-                      variant={integration.status === 'connected' ? 'destructive' : 'default'}
+                    <Button
+                      variant={integration.status === "connected" ? "destructive" : "default"}
                       size="sm"
                       onClick={() => toggleIntegration(integration.id)}
                       className="flex-1"
                     >
-                      {integration.status === 'connected' ? 'Desconectar' : 'Conectar'}
+                      {integration.status === "connected" ? "Desconectar" : "Conectar"}
                     </Button>
-                    {integration.status === 'connected' && (
-                      <Button 
-                        variant="outline" 
+                    {integration.status === "connected" && (
+                      <Button
+                        variant="outline"
                         size="sm"
                         onClick={() => syncIntegration(integration.id)}
                       >
@@ -377,13 +419,13 @@ const IntegrationsHub = () => {
                     type="url"
                     placeholder="https://hooks.zapier.com/hooks/catch/..."
                     value={zapierWebhook}
-                    onChange={(e) => setZapierWebhook(e.target.value)}
+                    onChange={e => setZapierWebhook(e.target.value)}
                   />
                   <p className="text-xs text-muted-foreground mt-1">
                     Cole a URL do webhook do seu Zap aqui
                   </p>
                 </div>
-                
+
                 <Button type="submit" disabled={isLoading}>
                   {isLoading ? (
                     <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
@@ -425,7 +467,12 @@ const IntegrationsHub = () => {
                 <div>
                   <Label>Eventos</Label>
                   <div className="grid grid-cols-2 gap-2 mt-2">
-                    {['user.created', 'certificate.expired', 'report.generated', 'alert.triggered'].map((event) => (
+                    {[
+                      "user.created",
+                      "certificate.expired",
+                      "report.generated",
+                      "alert.triggered",
+                    ].map(event => (
                       <label key={event} className="flex items-center space-x-2">
                         <input type="checkbox" className="rounded" />
                         <span className="text-sm">{event}</span>
@@ -446,39 +493,33 @@ const IntegrationsHub = () => {
                 <Code className="w-5 h-5" />
                 API e Tokens
               </CardTitle>
-              <CardDescription>
-                Gerencie chaves de API e tokens de acesso
-              </CardDescription>
+              <CardDescription>Gerencie chaves de API e tokens de acesso</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div>
                   <Label>Chave da API</Label>
                   <div className="flex gap-2">
-                    <Input 
-                      type="password" 
-                      value="sk_live_xxxxxxxxxxxxxxxxxxxxx" 
-                      readOnly 
+                    <Input
+                      type="password"
+                      value="sk_live_xxxxxxxxxxxxxxxxxxxxx"
+                      readOnly
                       className="font-mono"
                     />
                     <Button variant="outline">Regenerar</Button>
                   </div>
                 </div>
-                
+
                 <div>
                   <Label>Base URL da API</Label>
-                  <Input 
-                    value="https://api.nautilus.com/v1" 
-                    readOnly 
-                    className="font-mono"
-                  />
+                  <Input value="https://api.nautilus.com/v1" readOnly className="font-mono" />
                 </div>
               </div>
 
               <div className="mt-6 p-4 bg-muted rounded-lg">
                 <h4 className="font-medium mb-2">Exemplo de uso:</h4>
                 <pre className="text-xs bg-background p-3 rounded border overflow-x-auto">
-{`curl -X GET "https://api.nautilus.com/v1/users" \\
+                  {`curl -X GET "https://api.nautilus.com/v1/users" \\
   -H "Authorization: Bearer your-api-key" \\
   -H "Content-Type: application/json"`}
                 </pre>

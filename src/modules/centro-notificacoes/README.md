@@ -5,6 +5,7 @@
 The Centro de Notificações (Notification Center) module is the **centralized notification management system** that handles all types of alerts, notifications, and user communications across the platform.
 
 **Key Use Cases:**
+
 - Display system-wide notifications
 - Manage notification preferences
 - Push notifications to web and mobile

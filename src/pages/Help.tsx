@@ -1,6 +1,6 @@
-import React from 'react';
-import HelpCenter from '@/components/help/help-center';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import React from "react";
+import HelpCenter from "@/components/help/help-center";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 
 const Help = () => {
   return (

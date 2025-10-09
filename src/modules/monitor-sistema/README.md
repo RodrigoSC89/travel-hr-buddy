@@ -5,6 +5,7 @@
 The Monitor do Sistema (System Monitor) module provides **comprehensive system monitoring and health tracking**. It monitors infrastructure, application health, and user experience to ensure system reliability and performance.
 
 **Key Use Cases:**
+
 - Monitor system health and uptime
 - Track API performance and availability
 - Monitor database performance

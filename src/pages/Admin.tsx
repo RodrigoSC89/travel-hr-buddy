@@ -1,9 +1,9 @@
-import React from 'react';
-import { AdminPanel } from '@/components/auth/admin-panel';
-import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
-import { ModuleHeader } from '@/components/ui/module-header';
-import { Shield, Users, Settings, Lock } from 'lucide-react';
+import React from "react";
+import { AdminPanel } from "@/components/auth/admin-panel";
+import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { Shield, Users, Settings, Lock } from "lucide-react";
 
 const Admin = () => {
   return (
@@ -15,9 +15,9 @@ const Admin = () => {
           description="Gerenciamento completo de usuários, permissões e configurações do sistema"
           gradient="red"
           badges={[
-            { icon: Users, label: 'Gestão de Usuários' },
-            { icon: Lock, label: 'Segurança' },
-            { icon: Settings, label: 'Configurações' }
+            { icon: Users, label: "Gestão de Usuários" },
+            { icon: Lock, label: "Segurança" },
+            { icon: Settings, label: "Configurações" },
           ]}
         />
         <AdminPanel />

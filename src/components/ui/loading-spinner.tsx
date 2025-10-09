@@ -4,7 +4,4 @@
  */
 
 // Re-export from the new unified Loading component
-export { 
-  Loading as LoadingSpinner,
-  type LoadingProps as LoadingSpinnerProps
-} from './Loading';
+export { Loading as LoadingSpinner, type LoadingProps as LoadingSpinnerProps } from "./Loading";

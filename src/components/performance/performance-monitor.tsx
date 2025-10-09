@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Activity, Zap, Clock, Gauge } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Activity, Zap, Clock, Gauge } from "lucide-react";
 
 interface PerformanceMetrics {
   loadTime: number;
@@ -17,13 +17,15 @@ export const PerformanceMonitor: React.FC = () => {
     memoryUsage: 0,
     networkLatency: 0,
     renderTime: 0,
-    score: 0
+    score: 0,
   });
 
   useEffect(() => {
     const measurePerformance = () => {
       // Measure load time
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType(
+        "navigation"
+      )[0] as PerformanceNavigationTiming;
       const loadTime = navigation.loadEventEnd - navigation.fetchStart;
 
       // Measure memory (if available)
@@ -37,22 +39,22 @@ export const PerformanceMonitor: React.FC = () => {
       const networkLatency = navigation.responseEnd - navigation.requestStart;
 
       // Calculate performance score
-      const score = Math.max(0, Math.min(100, 100 - (loadTime / 50)));
+      const score = Math.max(0, Math.min(100, 100 - loadTime / 50));
 
       setMetrics({
         loadTime: Math.round(loadTime),
         memoryUsage: Math.round(memoryUsage),
         networkLatency: Math.round(networkLatency),
         renderTime: Math.round(renderTime),
-        score: Math.round(score)
+        score: Math.round(score),
       });
     };
 
     // Initial measurement
-    if (document.readyState === 'complete') {
+    if (document.readyState === "complete") {
       measurePerformance();
     } else {
-      window.addEventListener('load', measurePerformance);
+      window.addEventListener("load", measurePerformance);
     }
 
     // Periodic measurements
@@ -61,27 +63,27 @@ export const PerformanceMonitor: React.FC = () => {
       if (memory) {
         setMetrics(prev => ({
           ...prev,
-          memoryUsage: Math.round((memory.usedJSHeapSize / memory.totalJSHeapSize) * 100)
+          memoryUsage: Math.round((memory.usedJSHeapSize / memory.totalJSHeapSize) * 100),
         }));
       }
     }, 5000);
 
     return () => {
-      window.removeEventListener('load', measurePerformance);
+      window.removeEventListener("load", measurePerformance);
       clearInterval(interval);
     };
   }, []);
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-500';
-    if (score >= 70) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 90) return "text-green-500";
+    if (score >= 70) return "text-yellow-500";
+    return "text-red-500";
   };
 
   const getScoreBadge = (score: number) => {
-    if (score >= 90) return { variant: 'default' as const, text: 'Excelente' };
-    if (score >= 70) return { variant: 'secondary' as const, text: 'Bom' };
-    return { variant: 'destructive' as const, text: 'Precisa Melhorar' };
+    if (score >= 90) return { variant: "default" as const, text: "Excelente" };
+    if (score >= 70) return { variant: "secondary" as const, text: "Bom" };
+    return { variant: "destructive" as const, text: "Precisa Melhorar" };
   };
 
   return (
@@ -108,9 +110,7 @@ export const PerformanceMonitor: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{metrics.loadTime}ms</div>
-          <p className="text-xs text-muted-foreground">
-            Inicial da página
-          </p>
+          <p className="text-xs text-muted-foreground">Inicial da página</p>
         </CardContent>
       </Card>
 
@@ -121,9 +121,7 @@ export const PerformanceMonitor: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{metrics.memoryUsage}%</div>
-          <p className="text-xs text-muted-foreground">
-            Heap JavaScript
-          </p>
+          <p className="text-xs text-muted-foreground">Heap JavaScript</p>
         </CardContent>
       </Card>
 
@@ -134,9 +132,7 @@ export const PerformanceMonitor: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{metrics.networkLatency}ms</div>
-          <p className="text-xs text-muted-foreground">
-            Resposta do servidor
-          </p>
+          <p className="text-xs text-muted-foreground">Resposta do servidor</p>
         </CardContent>
       </Card>
     </div>

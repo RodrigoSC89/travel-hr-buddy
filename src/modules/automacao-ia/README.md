@@ -5,6 +5,7 @@
 The Automação IA (AI Automation) module provides **AI-powered intelligent automation** that learns from user behavior and automates repetitive tasks using machine learning and AI agents.
 
 **Key Use Cases:**
+
 - Intelligent task automation
 - Process discovery and optimization
 - AI-powered decision automation

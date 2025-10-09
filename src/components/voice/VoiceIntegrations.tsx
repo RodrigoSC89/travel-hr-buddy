@@ -1,17 +1,17 @@
-import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { 
-  Plane, 
-  Users, 
-  TrendingUp, 
-  FileText, 
+import React from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import {
+  Plane,
+  Users,
+  TrendingUp,
+  FileText,
   Building,
   ArrowRight,
-  ExternalLink
-} from 'lucide-react';
+  ExternalLink,
+} from "lucide-react";
 
 interface VoiceIntegration {
   module: string;
@@ -20,7 +20,7 @@ interface VoiceIntegration {
   description: string;
   isConnected: boolean;
   actions: string[];
-  status: 'active' | 'inactive' | 'error';
+  status: "active" | "inactive" | "error";
 }
 
 interface VoiceIntegrationsProps {
@@ -31,72 +31,76 @@ interface VoiceIntegrationsProps {
 
 const integrations: VoiceIntegration[] = [
   {
-    module: 'hr',
-    name: 'Recursos Humanos',
+    module: "hr",
+    name: "Recursos Humanos",
     icon: Users,
-    description: 'Gestão de funcionários e certificados',
+    description: "Gestão de funcionários e certificados",
     isConnected: true,
-    actions: ['Consultar certificados', 'Buscar funcionário', 'Verificar vencimentos'],
-    status: 'active'
+    actions: ["Consultar certificados", "Buscar funcionário", "Verificar vencimentos"],
+    status: "active",
   },
   {
-    module: 'travel',
-    name: 'Módulo de Viagens',
+    module: "travel",
+    name: "Módulo de Viagens",
     icon: Plane,
-    description: 'Busca de voos e hotéis',
+    description: "Busca de voos e hotéis",
     isConnected: true,
-    actions: ['Buscar voos', 'Encontrar hotéis', 'Verificar preços'],
-    status: 'active'
+    actions: ["Buscar voos", "Encontrar hotéis", "Verificar preços"],
+    status: "active",
   },
   {
-    module: 'price-alerts',
-    name: 'Alertas de Preço',
+    module: "price-alerts",
+    name: "Alertas de Preço",
     icon: TrendingUp,
-    description: 'Monitoramento de preços',
+    description: "Monitoramento de preços",
     isConnected: true,
-    actions: ['Criar alerta', 'Ver estatísticas', 'Configurar notificações'],
-    status: 'active'
+    actions: ["Criar alerta", "Ver estatísticas", "Configurar notificações"],
+    status: "active",
   },
   {
-    module: 'reports',
-    name: 'Relatórios',
+    module: "reports",
+    name: "Relatórios",
     icon: FileText,
-    description: 'Análises e dashboards',
+    description: "Análises e dashboards",
     isConnected: false,
-    actions: ['Gerar relatório', 'Ver métricas', 'Exportar dados'],
-    status: 'inactive'
+    actions: ["Gerar relatório", "Ver métricas", "Exportar dados"],
+    status: "inactive",
   },
   {
-    module: 'dashboard',
-    name: 'Dashboard Principal',
+    module: "dashboard",
+    name: "Dashboard Principal",
     icon: Building,
-    description: 'Visão geral do sistema',
+    description: "Visão geral do sistema",
     isConnected: true,
-    actions: ['Ver resumo', 'Abrir módulos', 'Verificar status'],
-    status: 'active'
-  }
+    actions: ["Ver resumo", "Abrir módulos", "Verificar status"],
+    status: "active",
+  },
 ];
 
-const VoiceIntegrations: React.FC<VoiceIntegrationsProps> = ({
-  isOpen,
-  onClose,
-  onNavigate
-}) => {
+const VoiceIntegrations: React.FC<VoiceIntegrationsProps> = ({ isOpen, onClose, onNavigate }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-emerald-500';
-      case 'inactive': return 'bg-muted';
-      case 'error': return 'bg-red-500';
-      default: return 'bg-muted';
+      case "active":
+        return "bg-emerald-500";
+      case "inactive":
+        return "bg-muted";
+      case "error":
+        return "bg-red-500";
+      default:
+        return "bg-muted";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'active': return 'Ativo';
-      case 'inactive': return 'Inativo';
-      case 'error': return 'Erro';
-      default: return 'Desconhecido';
+      case "active":
+        return "Ativo";
+      case "inactive":
+        return "Inativo";
+      case "error":
+        return "Erro";
+      default:
+        return "Desconhecido";
     }
   };
 
@@ -129,15 +133,16 @@ const VoiceIntegrations: React.FC<VoiceIntegrationsProps> = ({
           </div>
           <Progress value={connectivityPercentage} className="h-2" />
           <div className="text-sm text-muted-foreground">
-            O assistente de voz pode interagir com {activeIntegrations} dos {totalIntegrations} módulos disponíveis.
+            O assistente de voz pode interagir com {activeIntegrations} dos {totalIntegrations}{" "}
+            módulos disponíveis.
           </div>
         </div>
 
         {/* Integrations Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {integrations.map((integration) => {
+          {integrations.map(integration => {
             const IconComponent = integration.icon;
-            
+
             return (
               <Card key={integration.module} className="p-4 space-y-4">
                 <div className="flex items-start justify-between">
@@ -147,9 +152,7 @@ const VoiceIntegrations: React.FC<VoiceIntegrationsProps> = ({
                     </div>
                     <div className="space-y-1">
                       <h4 className="font-medium">{integration.name}</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {integration.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground">{integration.description}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">

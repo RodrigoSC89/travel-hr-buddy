@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TrendingUp, BarChart3, Brain, Target } from 'lucide-react';
-import PredictiveAnalytics from './PredictiveAnalytics';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TrendingUp, BarChart3, Brain, Target } from "lucide-react";
+import PredictiveAnalytics from "./PredictiveAnalytics";
 
 const AnalyticsDashboard = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('30d');
+  const [selectedPeriod, setSelectedPeriod] = useState("30d");
 
   return (
     <div className="space-y-6">
@@ -117,7 +117,7 @@ const AnalyticsDashboard = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-4">
                     <h4 className="font-medium">Alertas e Notificações</h4>
                     <div className="space-y-2">
@@ -162,37 +162,38 @@ const AnalyticsDashboard = () => {
                         Oportunidade de Crescimento
                       </h4>
                       <p className="text-sm text-blue-700 dark:text-blue-300">
-                        Identificamos uma correlação de 87% entre treinamentos em IA e aumento de produtividade. 
-                        Recomendamos expandir o programa de capacitação.
+                        Identificamos uma correlação de 87% entre treinamentos em IA e aumento de
+                        produtividade. Recomendamos expandir o programa de capacitação.
                       </p>
                     </div>
-                    
+
                     <div className="p-4 border rounded-lg bg-green-50 dark:bg-green-950">
                       <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">
                         Otimização de Custos
                       </h4>
                       <p className="text-sm text-green-700 dark:text-green-300">
-                        Automatizar 3 processos específicos pode reduzir custos operacionais em até 23% 
-                        nos próximos 6 meses.
+                        Automatizar 3 processos específicos pode reduzir custos operacionais em até
+                        23% nos próximos 6 meses.
                       </p>
                     </div>
-                    
+
                     <div className="p-4 border rounded-lg bg-purple-50 dark:bg-purple-950">
                       <h4 className="font-medium text-purple-800 dark:text-purple-200 mb-2">
                         Retenção de Talentos
                       </h4>
                       <p className="text-sm text-purple-700 dark:text-purple-300">
-                        Funcionários com acesso a ferramentas de IA têm 34% menos probabilidade de deixar a empresa.
+                        Funcionários com acesso a ferramentas de IA têm 34% menos probabilidade de
+                        deixar a empresa.
                       </p>
                     </div>
-                    
+
                     <div className="p-4 border rounded-lg bg-orange-50 dark:bg-orange-950">
                       <h4 className="font-medium text-orange-800 dark:text-orange-200 mb-2">
                         Satisfação do Cliente
                       </h4>
                       <p className="text-sm text-orange-700 dark:text-orange-300">
-                        Implementar chatbot inteligente pode melhorar tempo de resposta em 67% 
-                        e satisfação geral em 15%.
+                        Implementar chatbot inteligente pode melhorar tempo de resposta em 67% e
+                        satisfação geral em 15%.
                       </p>
                     </div>
                   </div>
@@ -200,10 +201,12 @@ const AnalyticsDashboard = () => {
                   <div className="p-6 border rounded-lg bg-gradient-to-r from-primary/10 to-secondary/10">
                     <h4 className="font-medium mb-3">Recomendação Estratégica</h4>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      Com base na análise de todos os dados disponíveis, recomendamos focar em três áreas principais: 
-                      <strong> automatização de processos</strong>, <strong>capacitação em IA</strong> e 
-                      <strong> melhoria da experiência do cliente</strong>. Esta estratégia pode resultar em um ROI de 280% 
-                      nos próximos 12 meses.
+                      Com base na análise de todos os dados disponíveis, recomendamos focar em três
+                      áreas principais:
+                      <strong> automatização de processos</strong>,{" "}
+                      <strong>capacitação em IA</strong> e
+                      <strong> melhoria da experiência do cliente</strong>. Esta estratégia pode
+                      resultar em um ROI de 280% nos próximos 12 meses.
                     </p>
                   </div>
                 </div>
@@ -224,11 +227,16 @@ const AnalyticsDashboard = () => {
               <CardContent>
                 <div className="space-y-6">
                   {[
-                    { name: 'Receita Anual', current: 85, target: 100, color: 'bg-blue-500' },
-                    { name: 'Satisfação Cliente', current: 94, target: 96, color: 'bg-green-500' },
-                    { name: 'Eficiência Operacional', current: 87, target: 90, color: 'bg-purple-500' },
-                    { name: 'Redução de Custos', current: 76, target: 85, color: 'bg-orange-500' },
-                    { name: 'Inovação (IA)', current: 68, target: 80, color: 'bg-pink-500' }
+                    { name: "Receita Anual", current: 85, target: 100, color: "bg-blue-500" },
+                    { name: "Satisfação Cliente", current: 94, target: 96, color: "bg-green-500" },
+                    {
+                      name: "Eficiência Operacional",
+                      current: 87,
+                      target: 90,
+                      color: "bg-purple-500",
+                    },
+                    { name: "Redução de Custos", current: 76, target: 85, color: "bg-orange-500" },
+                    { name: "Inovação (IA)", current: 68, target: 80, color: "bg-pink-500" },
                   ].map((goal, index) => (
                     <div key={index} className="space-y-2">
                       <div className="flex items-center justify-between">
@@ -238,7 +246,7 @@ const AnalyticsDashboard = () => {
                         </span>
                       </div>
                       <div className="w-full bg-muted rounded-full h-2">
-                        <div 
+                        <div
                           className={`h-2 rounded-full transition-all duration-300 ${goal.color}`}
                           style={{ width: `${(goal.current / goal.target) * 100}%` }}
                         />
@@ -252,15 +260,21 @@ const AnalyticsDashboard = () => {
                   <div className="space-y-2">
                     <div className="flex items-start gap-2">
                       <div className="w-2 h-2 bg-primary rounded-full mt-1.5" />
-                      <p className="text-sm">Implementar 2 novos fluxos de automação para melhorar eficiência</p>
+                      <p className="text-sm">
+                        Implementar 2 novos fluxos de automação para melhorar eficiência
+                      </p>
                     </div>
                     <div className="flex items-start gap-2">
                       <div className="w-2 h-2 bg-primary rounded-full mt-1.5" />
-                      <p className="text-sm">Expandir programa de treinamento em IA para mais 25% da equipe</p>
+                      <p className="text-sm">
+                        Expandir programa de treinamento em IA para mais 25% da equipe
+                      </p>
                     </div>
                     <div className="flex items-start gap-2">
                       <div className="w-2 h-2 bg-primary rounded-full mt-1.5" />
-                      <p className="text-sm">Revisar processos de atendimento ao cliente com foco em velocidade</p>
+                      <p className="text-sm">
+                        Revisar processos de atendimento ao cliente com foco em velocidade
+                      </p>
                     </div>
                   </div>
                 </div>

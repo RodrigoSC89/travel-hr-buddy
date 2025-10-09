@@ -1,29 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { 
-  Heart, 
-  Share2, 
-  ThumbsUp, 
-  ThumbsDown, 
-  Star, 
-  TrendingUp, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Heart,
+  Share2,
+  ThumbsUp,
+  ThumbsDown,
+  Star,
+  TrendingUp,
   Users,
   Plus,
   ExternalLink,
   Copy,
-  Check
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+  Check,
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface SharedAlert {
   id: string;
@@ -44,7 +50,7 @@ interface SharedAlert {
     store_name: string;
     category: string;
   };
-  user_vote?: 'upvote' | 'downvote';
+  user_vote?: "upvote" | "downvote";
 }
 
 interface ShareAlertForm {
@@ -60,9 +66,9 @@ export const SharedAlerts = () => {
   const [userAlerts, setUserAlerts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [shareForm, setShareForm] = useState<ShareAlertForm>({
-    alert_id: '',
-    title: '',
-    description: '',
+    alert_id: "",
+    title: "",
+    description: "",
   });
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
@@ -77,8 +83,9 @@ export const SharedAlerts = () => {
   const loadSharedAlerts = async () => {
     try {
       const { data, error } = await supabase
-        .from('shared_alerts')
-        .select(`
+        .from("shared_alerts")
+        .select(
+          `
           *,
           alert:price_alerts (
             product_name,
@@ -89,12 +96,13 @@ export const SharedAlerts = () => {
             store_name,
             category
           )
-        `)
-        .order('upvotes', { ascending: false })
+        `
+        )
+        .order("upvotes", { ascending: false })
         .limit(20);
 
       if (error) {
-        console.error('Error loading shared alerts:', error);
+        console.error("Error loading shared alerts:", error);
         return;
       }
 
@@ -102,19 +110,23 @@ export const SharedAlerts = () => {
         // Carregar votos do usuário
         const alertIds = data.map(alert => alert.id);
         const { data: votes } = await supabase
-          .from('alert_votes')
-          .select('shared_alert_id, vote_type')
-          .eq('user_id', user.id)
-          .in('shared_alert_id', alertIds);
+          .from("alert_votes")
+          .select("shared_alert_id, vote_type")
+          .eq("user_id", user.id)
+          .in("shared_alert_id", alertIds);
 
-        const votesMap = votes?.reduce((acc, vote) => {
-          acc[vote.shared_alert_id] = vote.vote_type;
-          return acc;
-        }, {} as Record<string, string>) || {};
+        const votesMap =
+          votes?.reduce(
+            (acc, vote) => {
+              acc[vote.shared_alert_id] = vote.vote_type;
+              return acc;
+            },
+            {} as Record<string, string>
+          ) || {};
 
         const alertsWithVotes = data.map(alert => ({
           ...alert,
-          user_vote: votesMap[alert.id] as 'upvote' | 'downvote' | undefined,
+          user_vote: votesMap[alert.id] as "upvote" | "downvote" | undefined,
         }));
 
         setSharedAlerts(alertsWithVotes);
@@ -122,7 +134,7 @@ export const SharedAlerts = () => {
         setSharedAlerts(data || []);
       }
     } catch (error) {
-      console.error('Error loading shared alerts:', error);
+      console.error("Error loading shared alerts:", error);
     } finally {
       setLoading(false);
     }
@@ -131,23 +143,23 @@ export const SharedAlerts = () => {
   const loadUserAlerts = async () => {
     try {
       const { data, error } = await supabase
-        .from('price_alerts')
-        .select('id, product_name, current_price, target_price')
-        .eq('user_id', user?.id)
-        .eq('is_active', true);
+        .from("price_alerts")
+        .select("id, product_name, current_price, target_price")
+        .eq("user_id", user?.id)
+        .eq("is_active", true);
 
       if (error) {
-        console.error('Error loading user alerts:', error);
+        console.error("Error loading user alerts:", error);
         return;
       }
 
       setUserAlerts(data || []);
     } catch (error) {
-      console.error('Error loading user alerts:', error);
+      console.error("Error loading user alerts:", error);
     }
   };
 
-  const handleVote = async (sharedAlertId: string, voteType: 'upvote' | 'downvote') => {
+  const handleVote = async (sharedAlertId: string, voteType: "upvote" | "downvote") => {
     if (!user) {
       toast({
         title: "Login necessário",
@@ -164,37 +176,37 @@ export const SharedAlerts = () => {
       // Se está votando no mesmo tipo, remove o voto
       if (currentVote === voteType) {
         const { error } = await supabase
-          .from('alert_votes')
+          .from("alert_votes")
           .delete()
-          .eq('shared_alert_id', sharedAlertId)
-          .eq('user_id', user.id);
+          .eq("shared_alert_id", sharedAlertId)
+          .eq("user_id", user.id);
 
         if (error) throw error;
 
         // Atualizar contadores
-        const updateField = voteType === 'upvote' ? 'upvotes' : 'downvotes';
+        const updateField = voteType === "upvote" ? "upvotes" : "downvotes";
         const newCount = Math.max(0, (currentAlert?.[updateField] || 0) - 1);
-        
+
         await supabase
-          .from('shared_alerts')
+          .from("shared_alerts")
           .update({ [updateField]: newCount })
-          .eq('id', sharedAlertId);
+          .eq("id", sharedAlertId);
 
         // Atualizar estado local
-        setSharedAlerts(prev => prev.map(alert => 
-          alert.id === sharedAlertId 
-            ? { ...alert, [updateField]: newCount, user_vote: undefined }
-            : alert
-        ));
+        setSharedAlerts(prev =>
+          prev.map(alert =>
+            alert.id === sharedAlertId
+              ? { ...alert, [updateField]: newCount, user_vote: undefined }
+              : alert
+          )
+        );
       } else {
         // Inserir ou atualizar voto
-        const { error } = await supabase
-          .from('alert_votes')
-          .upsert({
-            shared_alert_id: sharedAlertId,
-            user_id: user.id,
-            vote_type: voteType,
-          });
+        const { error } = await supabase.from("alert_votes").upsert({
+          shared_alert_id: sharedAlertId,
+          user_id: user.id,
+          vote_type: voteType,
+        });
 
         if (error) throw error;
 
@@ -202,36 +214,38 @@ export const SharedAlerts = () => {
         let upvoteDelta = 0;
         let downvoteDelta = 0;
 
-        if (voteType === 'upvote') {
+        if (voteType === "upvote") {
           upvoteDelta = 1;
-          if (currentVote === 'downvote') downvoteDelta = -1;
+          if (currentVote === "downvote") downvoteDelta = -1;
         } else {
           downvoteDelta = 1;
-          if (currentVote === 'upvote') upvoteDelta = -1;
+          if (currentVote === "upvote") upvoteDelta = -1;
         }
 
         const newUpvotes = Math.max(0, (currentAlert?.upvotes || 0) + upvoteDelta);
         const newDownvotes = Math.max(0, (currentAlert?.downvotes || 0) + downvoteDelta);
 
         await supabase
-          .from('shared_alerts')
-          .update({ 
+          .from("shared_alerts")
+          .update({
             upvotes: newUpvotes,
-            downvotes: newDownvotes
+            downvotes: newDownvotes,
           })
-          .eq('id', sharedAlertId);
+          .eq("id", sharedAlertId);
 
         // Atualizar estado local
-        setSharedAlerts(prev => prev.map(alert => 
-          alert.id === sharedAlertId 
-            ? { 
-                ...alert, 
-                upvotes: newUpvotes,
-                downvotes: newDownvotes,
-                user_vote: voteType 
-              }
-            : alert
-        ));
+        setSharedAlerts(prev =>
+          prev.map(alert =>
+            alert.id === sharedAlertId
+              ? {
+                  ...alert,
+                  upvotes: newUpvotes,
+                  downvotes: newDownvotes,
+                  user_vote: voteType,
+                }
+              : alert
+          )
+        );
       }
 
       toast({
@@ -239,7 +253,7 @@ export const SharedAlerts = () => {
         description: "Seu voto foi registrado com sucesso!",
       });
     } catch (error) {
-      console.error('Error voting:', error);
+      console.error("Error voting:", error);
       toast({
         title: "Erro",
         description: "Erro ao registrar seu voto. Tente novamente.",
@@ -259,14 +273,12 @@ export const SharedAlerts = () => {
     }
 
     try {
-      const { error } = await supabase
-        .from('shared_alerts')
-        .insert({
-          alert_id: shareForm.alert_id,
-          shared_by: user.id,
-          title: shareForm.title,
-          description: shareForm.description,
-        });
+      const { error } = await supabase.from("shared_alerts").insert({
+        alert_id: shareForm.alert_id,
+        shared_by: user.id,
+        title: shareForm.title,
+        description: shareForm.description,
+      });
 
       if (error) throw error;
 
@@ -275,11 +287,11 @@ export const SharedAlerts = () => {
         description: "Alerta compartilhado com a comunidade!",
       });
 
-      setShareForm({ alert_id: '', title: '', description: '' });
+      setShareForm({ alert_id: "", title: "", description: "" });
       setIsShareDialogOpen(false);
       loadSharedAlerts();
     } catch (error) {
-      console.error('Error sharing alert:', error);
+      console.error("Error sharing alert:", error);
       toast({
         title: "Erro",
         description: "Erro ao compartilhar alerta. Tente novamente.",
@@ -293,7 +305,7 @@ export const SharedAlerts = () => {
       await navigator.clipboard.writeText(url);
       setCopiedUrl(url);
       setTimeout(() => setCopiedUrl(null), 2000);
-      
+
       toast({
         title: "Link copiado",
         description: `Link do produto "${productName}" copiado!`,
@@ -334,7 +346,7 @@ export const SharedAlerts = () => {
             Descubra e compartilhe ofertas incríveis com outros usuários
           </p>
         </div>
-        
+
         {user && userAlerts.length > 0 && (
           <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
             <DialogTrigger asChild>
@@ -354,7 +366,7 @@ export const SharedAlerts = () => {
                     id="alert-select"
                     className="w-full p-2 border rounded-md"
                     value={shareForm.alert_id}
-                    onChange={(e) => setShareForm(prev => ({ ...prev, alert_id: e.target.value }))}
+                    onChange={e => setShareForm(prev => ({ ...prev, alert_id: e.target.value }))}
                   >
                     <option value="">Escolha um alerta</option>
                     {userAlerts.map(alert => (
@@ -364,28 +376,28 @@ export const SharedAlerts = () => {
                     ))}
                   </select>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="title">Título *</Label>
                   <Input
                     id="title"
                     value={shareForm.title}
-                    onChange={(e) => setShareForm(prev => ({ ...prev, title: e.target.value }))}
+                    onChange={e => setShareForm(prev => ({ ...prev, title: e.target.value }))}
                     placeholder="Ex: Ótima oportunidade para smartphone!"
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor="description">Descrição</Label>
                   <Textarea
                     id="description"
                     value={shareForm.description}
-                    onChange={(e) => setShareForm(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={e => setShareForm(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="Conte por que este é um bom negócio..."
                     rows={3}
                   />
                 </div>
-                
+
                 <div className="flex gap-2">
                   <Button onClick={handleShareAlert} className="flex-1">
                     Compartilhar
@@ -418,11 +430,11 @@ export const SharedAlerts = () => {
 
         <TabsContent value="popular" className="space-y-4">
           {sharedAlerts
-            .sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes))
+            .sort((a, b) => b.upvotes - b.downvotes - (a.upvotes - a.downvotes))
             .map(alert => (
-              <SharedAlertCard 
-                key={alert.id} 
-                alert={alert} 
+              <SharedAlertCard
+                key={alert.id}
+                alert={alert}
                 onVote={handleVote}
                 onCopyUrl={copyProductUrl}
                 copiedUrl={copiedUrl}
@@ -434,9 +446,9 @@ export const SharedAlerts = () => {
           {sharedAlerts
             .filter(alert => alert.is_featured)
             .map(alert => (
-              <SharedAlertCard 
-                key={alert.id} 
-                alert={alert} 
+              <SharedAlertCard
+                key={alert.id}
+                alert={alert}
                 onVote={handleVote}
                 onCopyUrl={copyProductUrl}
                 copiedUrl={copiedUrl}
@@ -448,9 +460,9 @@ export const SharedAlerts = () => {
           {sharedAlerts
             .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
             .map(alert => (
-              <SharedAlertCard 
-                key={alert.id} 
-                alert={alert} 
+              <SharedAlertCard
+                key={alert.id}
+                alert={alert}
                 onVote={handleVote}
                 onCopyUrl={copyProductUrl}
                 copiedUrl={copiedUrl}
@@ -482,16 +494,16 @@ export const SharedAlerts = () => {
 
 interface SharedAlertCardProps {
   alert: SharedAlert;
-  onVote: (alertId: string, voteType: 'upvote' | 'downvote') => void;
+  onVote: (alertId: string, voteType: "upvote" | "downvote") => void;
   onCopyUrl: (url: string, productName: string) => void;
   copiedUrl: string | null;
 }
 
-const SharedAlertCard: React.FC<SharedAlertCardProps> = ({ 
-  alert, 
-  onVote, 
+const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
+  alert,
+  onVote,
   onCopyUrl,
-  copiedUrl 
+  copiedUrl,
 }) => {
   const { user } = useAuth();
 
@@ -509,7 +521,7 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
                 </Badge>
               )}
             </div>
-            
+
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
               <Avatar className="h-6 w-6">
                 <AvatarFallback className="text-xs">
@@ -518,43 +530,33 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
               </Avatar>
               <span>Compartilhado em {new Date(alert.created_at).toLocaleDateString()}</span>
             </div>
-            
-            {alert.description && (
-              <p className="text-muted-foreground">{alert.description}</p>
-            )}
+
+            {alert.description && <p className="text-muted-foreground">{alert.description}</p>}
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent>
         <div className="bg-muted/50 rounded-lg p-4 mb-4">
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-medium">{alert.alert.product_name}</h4>
             <div className="flex gap-2">
-              {alert.alert.store_name && (
-                <Badge variant="outline">{alert.alert.store_name}</Badge>
-              )}
-              {alert.alert.category && (
-                <Badge variant="outline">{alert.alert.category}</Badge>
-              )}
+              {alert.alert.store_name && <Badge variant="outline">{alert.alert.store_name}</Badge>}
+              {alert.alert.category && <Badge variant="outline">{alert.alert.category}</Badge>}
             </div>
           </div>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
             <div>
               <span className="text-muted-foreground">Preço Atual:</span>
-              <p className="font-bold">
-                R$ {alert.alert.current_price?.toFixed(2) || 'N/A'}
-              </p>
+              <p className="font-bold">R$ {alert.alert.current_price?.toFixed(2) || "N/A"}</p>
             </div>
-            
+
             <div>
               <span className="text-muted-foreground">Preço Meta:</span>
-              <p className="font-bold text-primary">
-                R$ {alert.alert.target_price.toFixed(2)}
-              </p>
+              <p className="font-bold text-primary">R$ {alert.alert.target_price.toFixed(2)}</p>
             </div>
-            
+
             {alert.alert.discount_percentage > 0 && (
               <div>
                 <span className="text-muted-foreground">Economia:</span>
@@ -565,25 +567,25 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
             )}
           </div>
         </div>
-        
+
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {user && (
               <>
                 <Button
-                  variant={alert.user_vote === 'upvote' ? 'default' : 'outline'}
+                  variant={alert.user_vote === "upvote" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => onVote(alert.id, 'upvote')}
+                  onClick={() => onVote(alert.id, "upvote")}
                   className="flex items-center gap-1"
                 >
                   <ThumbsUp className="h-4 w-4" />
                   {alert.upvotes}
                 </Button>
-                
+
                 <Button
-                  variant={alert.user_vote === 'downvote' ? 'destructive' : 'outline'}
+                  variant={alert.user_vote === "downvote" ? "destructive" : "outline"}
                   size="sm"
-                  onClick={() => onVote(alert.id, 'downvote')}
+                  onClick={() => onVote(alert.id, "downvote")}
                   className="flex items-center gap-1"
                 >
                   <ThumbsDown className="h-4 w-4" />
@@ -592,7 +594,7 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
               </>
             )}
           </div>
-          
+
           <div className="flex gap-2">
             <Button
               variant="outline"
@@ -607,15 +609,11 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
               )}
               Copiar Link
             </Button>
-            
-            <Button
-              variant="default"
-              size="sm"
-              asChild
-            >
-              <a 
-                href={alert.alert.product_url} 
-                target="_blank" 
+
+            <Button variant="default" size="sm" asChild>
+              <a
+                href={alert.alert.product_url}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-1"
               >

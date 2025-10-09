@@ -4,9 +4,9 @@
  */
 
 // Re-export from the new unified Loading component
-export { 
+export {
   LoadingSkeleton as Skeleton,
   LoadingDashboard as DashboardSkeleton,
   LoadingCard as CardSkeleton,
-  type LoadingSkeletonProps as SkeletonProps
-} from './Loading';
+  type LoadingSkeletonProps as SkeletonProps,
+} from "./Loading";

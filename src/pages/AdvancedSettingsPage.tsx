@@ -220,7 +220,6 @@ export default function AdvancedSettingsPage() {
               </TabsTrigger>
             </TabsList>
           </div>
-          </TabsList>
 
           <TabsContent value="notifications" className="space-y-6 mt-6">
             <Card>

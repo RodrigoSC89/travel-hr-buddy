@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Bell, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Bell,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
   Ship,
   Calendar,
   FileText,
@@ -20,19 +20,26 @@ import {
   BrainCircuit,
   Shield,
   BarChart3,
-  RefreshCw
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+  RefreshCw,
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export interface Notification {
   id: string;
-  type: 'checklist_due' | 'certificate_expiring' | 'maintenance_due' | 'compliance_alert' | 
-        'info' | 'warning' | 'error' | 'success';
+  type:
+    | "checklist_due"
+    | "certificate_expiring"
+    | "maintenance_due"
+    | "compliance_alert"
+    | "info"
+    | "warning"
+    | "error"
+    | "success";
   title: string;
   message: string;
   description?: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
   isRead: boolean;
   is_read?: boolean;
   createdAt: Date;
@@ -45,7 +52,7 @@ export interface Notification {
 
 export interface NotificationCenterProps {
   userId?: string;
-  variant?: 'maritime' | 'fleet' | 'default';
+  variant?: "maritime" | "fleet" | "default";
   showFilters?: boolean;
   autoRefresh?: boolean;
   refreshInterval?: number; // in milliseconds
@@ -56,61 +63,73 @@ export interface NotificationCenterProps {
  * Unified NotificationCenter component
  * Consolidates maritime/notification-center.tsx and fleet/notification-center.tsx
  */
-export const NotificationCenter: React.FC<NotificationCenterProps> = ({ 
-  userId = 'default-user',
-  variant = 'default',
+export const NotificationCenter: React.FC<NotificationCenterProps> = ({
+  userId = "default-user",
+  variant = "default",
   showFilters = true,
   autoRefresh = true,
   refreshInterval = 30000,
-  className = ''
+  className = "",
 }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState("all");
   const { toast } = useToast();
 
   useEffect(() => {
     loadNotifications();
-    
+
     // Set up real-time subscription for new notifications
     const notificationChannel = supabase
-      .channel('notifications-channel')
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'intelligent_notifications',
-        filter: userId ? `user_id=eq.${userId}` : undefined
-      }, handleNewNotification)
+      .channel("notifications-channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "intelligent_notifications",
+          filter: userId ? `user_id=eq.${userId}` : undefined,
+        },
+        handleNewNotification
+      )
       .subscribe();
 
     // Setup maritime-specific subscriptions if variant is maritime or fleet
     let alertsChannel: any;
     let maintenanceChannel: any;
 
-    if (variant === 'maritime' || variant === 'fleet') {
+    if (variant === "maritime" || variant === "fleet") {
       alertsChannel = supabase
-        .channel('maritime-alerts-notifications')
-        .on('postgres_changes', {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'maritime_alerts'
-        }, (payload) => {
-          console.log('New alert received:', payload);
-          createNotificationFromAlert(payload.new);
-        })
+        .channel("maritime-alerts-notifications")
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "maritime_alerts",
+          },
+          payload => {
+            console.log("New alert received:", payload);
+            createNotificationFromAlert(payload.new);
+          }
+        )
         .subscribe();
 
       maintenanceChannel = supabase
-        .channel('maintenance-notifications')
-        .on('postgres_changes', {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'maintenance_records'
-        }, (payload) => {
-          console.log('New maintenance record:', payload);
-          createNotificationFromMaintenance(payload.new);
-        })
+        .channel("maintenance-notifications")
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "maintenance_records",
+          },
+          payload => {
+            console.log("New maintenance record:", payload);
+            createNotificationFromMaintenance(payload.new);
+          }
+        )
         .subscribe();
     }
 
@@ -133,42 +152,43 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const loadNotifications = async () => {
     try {
       setLoading(true);
-      
+
       // Load from intelligent_notifications table
       const { data, error } = await supabase
-        .from('intelligent_notifications')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
+        .from("intelligent_notifications")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
 
-      const formattedNotifications: Notification[] = data?.map(n => ({
-        id: n.id,
-        type: n.type as any,
-        title: n.title,
-        message: n.message,
-        description: n.description || n.message,
-        priority: n.priority as any,
-        isRead: n.is_read,
-        is_read: n.is_read,
-        createdAt: new Date(n.created_at),
-        timestamp: n.created_at,
-        actionData: n.action_data,
-        action_url: n.action_url,
-        auto_dismiss: n.auto_dismiss,
-        metadata: n.metadata
-      })) || [];
+      const formattedNotifications: Notification[] =
+        data?.map(n => ({
+          id: n.id,
+          type: n.type as any,
+          title: n.title,
+          message: n.message,
+          description: n.description || n.message,
+          priority: n.priority as any,
+          isRead: n.is_read,
+          is_read: n.is_read,
+          createdAt: new Date(n.created_at),
+          timestamp: n.created_at,
+          actionData: n.action_data,
+          action_url: n.action_url,
+          auto_dismiss: n.auto_dismiss,
+          metadata: n.metadata,
+        })) || [];
 
       setNotifications(formattedNotifications);
       setUnreadCount(formattedNotifications.filter(n => !n.isRead).length);
     } catch (error) {
-      console.error('Error loading notifications:', error);
+      console.error("Error loading notifications:", error);
       toast({
-        title: 'Erro ao carregar notificações',
-        description: 'Não foi possível carregar as notificações',
-        variant: 'destructive'
+        title: "Erro ao carregar notificações",
+        description: "Não foi possível carregar as notificações",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -186,7 +206,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       isRead: false,
       createdAt: new Date(payload.new.created_at),
       timestamp: payload.new.created_at,
-      actionData: payload.new.action_data
+      actionData: payload.new.action_data,
     };
 
     setNotifications(prev => [newNotification, ...prev]);
@@ -201,13 +221,13 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const createNotificationFromAlert = (alert: any) => {
     const notification: Notification = {
       id: `alert-${alert.id}`,
-      type: 'compliance_alert',
-      title: 'Novo Alerta Marítimo',
-      message: alert.message || 'Um novo alerta foi criado',
-      priority: alert.severity || 'medium',
+      type: "compliance_alert",
+      title: "Novo Alerta Marítimo",
+      message: alert.message || "Um novo alerta foi criado",
+      priority: alert.severity || "medium",
       isRead: false,
       createdAt: new Date(alert.created_at),
-      actionData: alert
+      actionData: alert,
     };
 
     setNotifications(prev => [notification, ...prev]);
@@ -217,13 +237,13 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const createNotificationFromMaintenance = (maintenance: any) => {
     const notification: Notification = {
       id: `maintenance-${maintenance.id}`,
-      type: 'maintenance_due',
-      title: 'Nova Manutenção Registrada',
-      message: maintenance.description || 'Uma nova manutenção foi registrada',
-      priority: maintenance.priority || 'medium',
+      type: "maintenance_due",
+      title: "Nova Manutenção Registrada",
+      message: maintenance.description || "Uma nova manutenção foi registrada",
+      priority: maintenance.priority || "medium",
       isRead: false,
       createdAt: new Date(maintenance.created_at),
-      actionData: maintenance
+      actionData: maintenance,
     };
 
     setNotifications(prev => [notification, ...prev]);
@@ -233,79 +253,75 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const markAsRead = async (notificationId: string) => {
     try {
       const { error } = await supabase
-        .from('intelligent_notifications')
+        .from("intelligent_notifications")
         .update({ is_read: true })
-        .eq('id', notificationId);
+        .eq("id", notificationId);
 
       if (error) throw error;
 
       setNotifications(prev =>
-        prev.map(n =>
-          n.id === notificationId ? { ...n, isRead: true } : n
-        )
+        prev.map(n => (n.id === notificationId ? { ...n, isRead: true } : n))
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      console.error("Error marking notification as read:", error);
     }
   };
 
   const markAllAsRead = async () => {
     try {
       const unreadIds = notifications.filter(n => !n.isRead).map(n => n.id);
-      
+
       if (unreadIds.length === 0) return;
 
       const { error } = await supabase
-        .from('intelligent_notifications')
+        .from("intelligent_notifications")
         .update({ is_read: true })
-        .in('id', unreadIds);
+        .in("id", unreadIds);
 
       if (error) throw error;
 
-      setNotifications(prev =>
-        prev.map(n => ({ ...n, isRead: true }))
-      );
+      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
       setUnreadCount(0);
 
       toast({
-        title: 'Notificações marcadas como lidas',
+        title: "Notificações marcadas como lidas",
         description: `${unreadIds.length} notificações foram marcadas como lidas`,
       });
     } catch (error) {
-      console.error('Error marking all as read:', error);
+      console.error("Error marking all as read:", error);
     }
   };
 
   const deleteNotification = async (notificationId: string) => {
     try {
       const { error } = await supabase
-        .from('intelligent_notifications')
+        .from("intelligent_notifications")
         .delete()
-        .eq('id', notificationId);
+        .eq("id", notificationId);
 
       if (error) throw error;
 
       setNotifications(prev => prev.filter(n => n.id !== notificationId));
-      
+
       const wasUnread = notifications.find(n => n.id === notificationId)?.isRead === false;
       if (wasUnread) {
         setUnreadCount(prev => Math.max(0, prev - 1));
       }
     } catch (error) {
-      console.error('Error deleting notification:', error);
+      console.error("Error deleting notification:", error);
     }
   };
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-      case 'critical':
+      case "critical":
         return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case 'high':
+      case "high":
         return <TrendingUp className="h-5 w-5 text-orange-500" />;
-      case 'medium':
+      case "medium":
         return <Activity className="h-5 w-5 text-yellow-500" />;
-      case 'low':
+      case "low":
         return <TrendingDown className="h-5 w-5 text-blue-500" />;
       default:
         return <Bell className="h-5 w-5 text-gray-500" />;
@@ -314,23 +330,23 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
   const getPriorityBadgeColor = (priority: string) => {
     switch (priority) {
-      case 'critical':
-        return 'bg-red-500 text-white';
-      case 'high':
-        return 'bg-orange-500 text-white';
-      case 'medium':
-        return 'bg-yellow-500 text-black';
-      case 'low':
-        return 'bg-blue-500 text-white';
+      case "critical":
+        return "bg-red-500 text-white";
+      case "high":
+        return "bg-orange-500 text-white";
+      case "medium":
+        return "bg-yellow-500 text-black";
+      case "low":
+        return "bg-blue-500 text-white";
       default:
-        return 'bg-gray-500 text-white';
+        return "bg-gray-500 text-white";
     }
   };
 
   const filteredNotifications = notifications.filter(n => {
-    if (filter === 'all') return true;
-    if (filter === 'unread') return !n.isRead;
-    if (filter === 'high') return n.priority === 'high' || n.priority === 'critical';
+    if (filter === "all") return true;
+    if (filter === "unread") return !n.isRead;
+    if (filter === "high") return n.priority === "high" || n.priority === "critical";
     return true;
   });
 
@@ -360,9 +376,9 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               )}
             </CardTitle>
             <CardDescription>
-              {variant === 'maritime' && 'Notificações do Sistema Marítimo'}
-              {variant === 'fleet' && 'Notificações da Gestão de Frota'}
-              {variant === 'default' && 'Todas as suas notificações'}
+              {variant === "maritime" && "Notificações do Sistema Marítimo"}
+              {variant === "fleet" && "Notificações da Gestão de Frota"}
+              {variant === "default" && "Todas as suas notificações"}
             </CardDescription>
           </div>
           <div className="flex gap-2">
@@ -394,25 +410,23 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               <CheckCircle className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <h3 className="text-lg font-medium mb-2">Sem notificações</h3>
               <p className="text-muted-foreground">
-                {filter === 'unread' 
-                  ? 'Você não tem notificações não lidas' 
-                  : 'Você está em dia com todas as notificações'}
+                {filter === "unread"
+                  ? "Você não tem notificações não lidas"
+                  : "Você está em dia com todas as notificações"}
               </p>
             </div>
           ) : (
-            filteredNotifications.map((notification) => (
+            filteredNotifications.map(notification => (
               <div
                 key={notification.id}
                 className={`p-4 rounded-lg border transition-colors ${
                   notification.isRead
-                    ? 'bg-card border-border'
-                    : 'bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900'
+                    ? "bg-card border-border"
+                    : "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900"
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5">
-                    {getPriorityIcon(notification.priority)}
-                  </div>
+                  <div className="mt-0.5">{getPriorityIcon(notification.priority)}</div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 mb-1">
                       <h4 className="font-semibold text-sm">{notification.title}</h4>
@@ -426,7 +440,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                     <div className="flex items-center gap-3 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
-                        {new Date(notification.createdAt).toLocaleString('pt-BR')}
+                        {new Date(notification.createdAt).toLocaleString("pt-BR")}
                       </div>
                       <div className="flex gap-2">
                         {!notification.isRead && (

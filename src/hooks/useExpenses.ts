@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 export interface Expense {
   id: string;
@@ -37,16 +37,16 @@ export const useExpenses = () => {
       setError(null);
 
       const { data, error: fetchError } = await supabase
-        .from('expenses')
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('date', { ascending: false });
+        .from("expenses")
+        .select("*")
+        .eq("user_id", user?.id)
+        .order("date", { ascending: false });
 
       if (fetchError) throw fetchError;
 
       setExpenses(data || []);
     } catch (err: any) {
-      const errorMessage = err.message || 'Erro ao carregar despesas';
+      const errorMessage = err.message || "Erro ao carregar despesas";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -62,15 +62,15 @@ export const useExpenses = () => {
 
   const createExpense = async (expenseData: ExpenseFormData) => {
     try {
-      if (!user) throw new Error('Usuário não autenticado');
+      if (!user) throw new Error("Usuário não autenticado");
 
       const { data, error: createError } = await supabase
-        .from('expenses')
+        .from("expenses")
         .insert([
           {
             ...expenseData,
             user_id: user.id,
-            status: 'pending',
+            status: "pending",
           },
         ])
         .select()
@@ -78,12 +78,12 @@ export const useExpenses = () => {
 
       if (createError) throw createError;
 
-      setExpenses((prev) => [data, ...prev]);
-      toast.success('Despesa criada com sucesso');
+      setExpenses(prev => [data, ...prev]);
+      toast.success("Despesa criada com sucesso");
 
       return data;
     } catch (err: any) {
-      const errorMessage = err.message || 'Erro ao criar despesa';
+      const errorMessage = err.message || "Erro ao criar despesa";
       toast.error(errorMessage);
       throw err;
     }
@@ -92,23 +92,21 @@ export const useExpenses = () => {
   const updateExpense = async (id: string, updates: Partial<ExpenseFormData>) => {
     try {
       const { data, error: updateError } = await supabase
-        .from('expenses')
+        .from("expenses")
         .update(updates)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
       if (updateError) throw updateError;
 
-      setExpenses((prev) =>
-        prev.map((exp) => (exp.id === id ? data : exp))
-      );
+      setExpenses(prev => prev.map(exp => (exp.id === id ? data : exp)));
 
-      toast.success('Despesa atualizada com sucesso');
+      toast.success("Despesa atualizada com sucesso");
 
       return data;
     } catch (err: any) {
-      const errorMessage = err.message || 'Erro ao atualizar despesa';
+      const errorMessage = err.message || "Erro ao atualizar despesa";
       toast.error(errorMessage);
       throw err;
     }
@@ -116,17 +114,14 @@ export const useExpenses = () => {
 
   const deleteExpense = async (id: string) => {
     try {
-      const { error: deleteError } = await supabase
-        .from('expenses')
-        .delete()
-        .eq('id', id);
+      const { error: deleteError } = await supabase.from("expenses").delete().eq("id", id);
 
       if (deleteError) throw deleteError;
 
-      setExpenses((prev) => prev.filter((exp) => exp.id !== id));
-      toast.success('Despesa removida com sucesso');
+      setExpenses(prev => prev.filter(exp => exp.id !== id));
+      toast.success("Despesa removida com sucesso");
     } catch (err: any) {
-      const errorMessage = err.message || 'Erro ao remover despesa';
+      const errorMessage = err.message || "Erro ao remover despesa";
       toast.error(errorMessage);
       throw err;
     }

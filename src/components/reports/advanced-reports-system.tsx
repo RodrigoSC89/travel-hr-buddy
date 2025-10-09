@@ -1,50 +1,102 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, FileText, TrendingUp, Users, DollarSign, AlertCircle, Download, Filter, RefreshCw } from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Calendar,
+  FileText,
+  TrendingUp,
+  Users,
+  DollarSign,
+  AlertCircle,
+  Download,
+  Filter,
+  RefreshCw,
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import { useToast } from "@/hooks/use-toast";
 
 const AdvancedReportsSystem = () => {
   const { toast } = useToast();
-  const [selectedReport, setSelectedReport] = useState('financial');
-  const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const [selectedReport, setSelectedReport] = useState("financial");
+  const [selectedPeriod, setSelectedPeriod] = useState("month");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
   // Dados simulados para relatórios
   const financialData = [
-    { month: 'Jan', revenue: 45000, expenses: 32000, profit: 13000 },
-    { month: 'Fev', revenue: 52000, expenses: 35000, profit: 17000 },
-    { month: 'Mar', revenue: 48000, expenses: 33000, profit: 15000 },
-    { month: 'Abr', revenue: 61000, expenses: 40000, profit: 21000 },
-    { month: 'Mai', revenue: 55000, expenses: 38000, profit: 17000 },
-    { month: 'Jun', revenue: 67000, expenses: 42000, profit: 25000 }
+    { month: "Jan", revenue: 45000, expenses: 32000, profit: 13000 },
+    { month: "Fev", revenue: 52000, expenses: 35000, profit: 17000 },
+    { month: "Mar", revenue: 48000, expenses: 33000, profit: 15000 },
+    { month: "Abr", revenue: 61000, expenses: 40000, profit: 21000 },
+    { month: "Mai", revenue: 55000, expenses: 38000, profit: 17000 },
+    { month: "Jun", revenue: 67000, expenses: 42000, profit: 25000 },
   ];
 
   const performanceData = [
-    { category: 'Vendas', target: 100, actual: 85, variance: -15 },
-    { category: 'Marketing', target: 100, actual: 92, variance: -8 },
-    { category: 'Operações', target: 100, actual: 110, variance: 10 },
-    { category: 'Suporte', target: 100, actual: 88, variance: -12 }
+    { category: "Vendas", target: 100, actual: 85, variance: -15 },
+    { category: "Marketing", target: 100, actual: 92, variance: -8 },
+    { category: "Operações", target: 100, actual: 110, variance: 10 },
+    { category: "Suporte", target: 100, actual: 88, variance: -12 },
   ];
 
   const departmentData = [
-    { name: 'TI', budget: 150000, spent: 135000, employees: 25 },
-    { name: 'Vendas', budget: 200000, spent: 185000, employees: 35 },
-    { name: 'Marketing', budget: 120000, spent: 110000, employees: 15 },
-    { name: 'RH', budget: 80000, spent: 75000, employees: 10 },
-    { name: 'Operações', budget: 180000, spent: 170000, employees: 40 }
+    { name: "TI", budget: 150000, spent: 135000, employees: 25 },
+    { name: "Vendas", budget: 200000, spent: 185000, employees: 35 },
+    { name: "Marketing", budget: 120000, spent: 110000, employees: 15 },
+    { name: "RH", budget: 80000, spent: 75000, employees: 10 },
+    { name: "Operações", budget: 180000, spent: 170000, employees: 40 },
   ];
 
   const reportTypes = [
-    { id: 'financial', name: 'Relatório Financeiro', icon: DollarSign, description: 'Receitas, despesas e análise de lucratividade' },
-    { id: 'performance', name: 'Performance Organizacional', icon: TrendingUp, description: 'KPIs e métricas de desempenho por departamento' },
-    { id: 'hr', name: 'Recursos Humanos', icon: Users, description: 'Análise de pessoal, produtividade e custos' },
-    { id: 'operational', name: 'Operacional', icon: FileText, description: 'Processos, eficiência e qualidade operacional' }
+    {
+      id: "financial",
+      name: "Relatório Financeiro",
+      icon: DollarSign,
+      description: "Receitas, despesas e análise de lucratividade",
+    },
+    {
+      id: "performance",
+      name: "Performance Organizacional",
+      icon: TrendingUp,
+      description: "KPIs e métricas de desempenho por departamento",
+    },
+    {
+      id: "hr",
+      name: "Recursos Humanos",
+      icon: Users,
+      description: "Análise de pessoal, produtividade e custos",
+    },
+    {
+      id: "operational",
+      name: "Operacional",
+      icon: FileText,
+      description: "Processos, eficiência e qualidade operacional",
+    },
   ];
 
   const generateReport = async () => {
@@ -75,21 +127,24 @@ const AdvancedReportsSystem = () => {
         type: selectedReport,
         period: selectedPeriod,
         timestamp: new Date().toISOString(),
-        data: selectedReport === 'financial' ? financialData : 
-              selectedReport === 'performance' ? performanceData : 
-              departmentData
+        data:
+          selectedReport === "financial"
+            ? financialData
+            : selectedReport === "performance"
+              ? performanceData
+              : departmentData,
       };
 
       // Simulate export delay
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       toast({
         title: "Exportação Concluída",
         description: `Relatório exportado em formato ${format.toUpperCase()} com sucesso!`,
       });
 
       // In a real implementation, this would trigger a file download
-      console.log('Export data:', reportData);
+      console.log("Export data:", reportData);
     } catch (error) {
       toast({
         title: "Erro na Exportação",
@@ -136,7 +191,7 @@ const AdvancedReportsSystem = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {reportTypes.map((type) => (
+                  {reportTypes.map(type => (
                     <SelectItem key={type.id} value={type.id}>
                       {type.name}
                     </SelectItem>
@@ -163,31 +218,31 @@ const AdvancedReportsSystem = () => {
             <div className="pt-4 border-t">
               <h4 className="font-medium mb-3">Exportar Relatório</h4>
               <div className="space-y-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   className="w-full justify-start"
-                  onClick={() => exportReport('pdf')}
+                  onClick={() => exportReport("pdf")}
                   disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
                   PDF
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   className="w-full justify-start"
-                  onClick={() => exportReport('excel')}
+                  onClick={() => exportReport("excel")}
                   disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Excel
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   className="w-full justify-start"
-                  onClick={() => exportReport('csv')}
+                  onClick={() => exportReport("csv")}
                   disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -201,10 +256,10 @@ const AdvancedReportsSystem = () => {
         <div className="lg:col-span-3">
           <Tabs value={selectedReport} onValueChange={setSelectedReport}>
             <TabsList className="grid w-full grid-cols-4">
-              {reportTypes.map((type) => (
+              {reportTypes.map(type => (
                 <TabsTrigger key={type.id} value={type.id} className="flex items-center gap-2">
                   <type.icon className="w-4 h-4" />
-                  {type.name.split(' ')[0]}
+                  {type.name.split(" ")[0]}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -263,8 +318,22 @@ const AdvancedReportsSystem = () => {
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <Area type="monotone" dataKey="revenue" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.6} />
-                      <Area type="monotone" dataKey="expenses" stackId="2" stroke="#ef4444" fill="#ef4444" fillOpacity={0.6} />
+                      <Area
+                        type="monotone"
+                        dataKey="revenue"
+                        stackId="1"
+                        stroke="#10b981"
+                        fill="#10b981"
+                        fillOpacity={0.6}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="expenses"
+                        stackId="2"
+                        stroke="#ef4444"
+                        fill="#ef4444"
+                        fillOpacity={0.6}
+                      />
                       <Line type="monotone" dataKey="profit" stroke="#3b82f6" strokeWidth={3} />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -299,8 +368,9 @@ const AdvancedReportsSystem = () => {
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium">{dept.category}</h4>
-                        <Badge variant={dept.variance >= 0 ? 'default' : 'destructive'}>
-                          {dept.variance >= 0 ? '+' : ''}{dept.variance}%
+                        <Badge variant={dept.variance >= 0 ? "default" : "destructive"}>
+                          {dept.variance >= 0 ? "+" : ""}
+                          {dept.variance}%
                         </Badge>
                       </div>
                       <div className="space-y-2">
@@ -344,7 +414,9 @@ const AdvancedReportsSystem = () => {
                             <td className="p-2 text-right">R$ {dept.budget.toLocaleString()}</td>
                             <td className="p-2 text-right">R$ {dept.spent.toLocaleString()}</td>
                             <td className="p-2 text-right">{dept.employees}</td>
-                            <td className="p-2 text-right">R$ {Math.round(dept.spent / dept.employees).toLocaleString()}</td>
+                            <td className="p-2 text-right">
+                              R$ {Math.round(dept.spent / dept.employees).toLocaleString()}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -361,7 +433,9 @@ const AdvancedReportsSystem = () => {
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Eficiência Operacional</p>
                       <p className="text-3xl font-bold text-green-600">94%</p>
-                      <Badge variant="default" className="mt-2">+3% vs anterior</Badge>
+                      <Badge variant="default" className="mt-2">
+                        +3% vs anterior
+                      </Badge>
                     </div>
                   </CardContent>
                 </Card>
@@ -371,7 +445,9 @@ const AdvancedReportsSystem = () => {
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Tempo Médio Processo</p>
                       <p className="text-3xl font-bold text-blue-600">2.3h</p>
-                      <Badge variant="secondary" className="mt-2">-0.2h vs anterior</Badge>
+                      <Badge variant="secondary" className="mt-2">
+                        -0.2h vs anterior
+                      </Badge>
                     </div>
                   </CardContent>
                 </Card>
@@ -381,7 +457,9 @@ const AdvancedReportsSystem = () => {
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Taxa de Erro</p>
                       <p className="text-3xl font-bold text-red-600">1.2%</p>
-                      <Badge variant="destructive" className="mt-2">+0.1% vs anterior</Badge>
+                      <Badge variant="destructive" className="mt-2">
+                        +0.1% vs anterior
+                      </Badge>
                     </div>
                   </CardContent>
                 </Card>
@@ -391,7 +469,9 @@ const AdvancedReportsSystem = () => {
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Satisfação Cliente</p>
                       <p className="text-3xl font-bold text-purple-600">4.8</p>
-                      <Badge variant="default" className="mt-2">+0.1 vs anterior</Badge>
+                      <Badge variant="default" className="mt-2">
+                        +0.1 vs anterior
+                      </Badge>
                     </div>
                   </CardContent>
                 </Card>

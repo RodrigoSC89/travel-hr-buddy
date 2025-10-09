@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { useNavigate } from 'react-router-dom';
-import { useOrganization } from '@/contexts/OrganizationContext';
-import { supabase } from '@/integrations/supabase/client';
-import { 
-  Search, 
-  Ship, 
-  Users, 
-  FileText, 
-  Settings, 
+import React, { useState, useEffect, useMemo } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useNavigate } from "react-router-dom";
+import { useOrganization } from "@/contexts/OrganizationContext";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  Search,
+  Ship,
+  Users,
+  FileText,
+  Settings,
   BarChart3,
   MapPin,
   Calendar,
@@ -20,14 +20,14 @@ import {
   MessageSquare,
   ArrowRight,
   Clock,
-  Sparkles
-} from 'lucide-react';
+  Sparkles,
+} from "lucide-react";
 
 interface SearchResult {
   id: string;
   title: string;
   description: string;
-  type: 'module' | 'data' | 'action' | 'page';
+  type: "module" | "data" | "action" | "page";
   category: string;
   url: string;
   icon: React.ElementType;
@@ -42,9 +42,9 @@ interface IntelligentGlobalSearchProps {
 
 export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = ({
   isOpen,
-  onClose
+  onClose,
 }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
@@ -54,175 +54,175 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
   // Base modules and pages
   const baseResults: SearchResult[] = [
     {
-      id: 'dashboard',
-      title: 'Dashboard Principal',
-      description: 'Visão geral da organização e métricas principais',
-      type: 'page',
-      category: 'Dashboard',
-      url: '/',
+      id: "dashboard",
+      title: "Dashboard Principal",
+      description: "Visão geral da organização e métricas principais",
+      type: "page",
+      category: "Dashboard",
+      url: "/",
       icon: BarChart3,
-      priority: 10
+      priority: 10,
     },
     {
-      id: 'fleet-management',
-      title: 'Gestão de Frota',
-      description: 'Gerenciar embarcações e monitorar performance',
-      type: 'module',
-      category: 'Marítimo',
-      url: '/fleet-management',
+      id: "fleet-management",
+      title: "Gestão de Frota",
+      description: "Gerenciar embarcações e monitorar performance",
+      type: "module",
+      category: "Marítimo",
+      url: "/fleet-management",
       icon: Ship,
-      priority: 9
+      priority: 9,
     },
     {
-      id: 'fleet-tracking',
-      title: 'Rastreamento de Frota',
-      description: 'Monitoramento em tempo real das embarcações',
-      type: 'module',
-      category: 'Marítimo',
-      url: '/fleet-tracking',
+      id: "fleet-tracking",
+      title: "Rastreamento de Frota",
+      description: "Monitoramento em tempo real das embarcações",
+      type: "module",
+      category: "Marítimo",
+      url: "/fleet-tracking",
       icon: MapPin,
-      priority: 9
+      priority: 9,
     },
     {
-      id: 'crew-management',
-      title: 'Gestão de Tripulação',
-      description: 'Gerenciar membros da tripulação e escalas',
-      type: 'module',
-      category: 'Marítimo',
-      url: '/crew-management',
+      id: "crew-management",
+      title: "Gestão de Tripulação",
+      description: "Gerenciar membros da tripulação e escalas",
+      type: "module",
+      category: "Marítimo",
+      url: "/crew-management",
       icon: Users,
-      priority: 8
+      priority: 8,
     },
     {
-      id: 'maritime-certifications',
-      title: 'Certificações Marítimas',
-      description: 'Gerenciar certificados e licenças da tripulação',
-      type: 'module',
-      category: 'Marítimo',
-      url: '/maritime-certifications',
+      id: "maritime-certifications",
+      title: "Certificações Marítimas",
+      description: "Gerenciar certificados e licenças da tripulação",
+      type: "module",
+      category: "Marítimo",
+      url: "/maritime-certifications",
       icon: Award,
-      priority: 8
+      priority: 8,
     },
     {
-      id: 'analytics',
-      title: 'Analytics',
-      description: 'Dashboards e relatórios analíticos',
-      type: 'module',
-      category: 'Analytics',
-      url: '/analytics',
+      id: "analytics",
+      title: "Analytics",
+      description: "Dashboards e relatórios analíticos",
+      type: "module",
+      category: "Analytics",
+      url: "/analytics",
       icon: BarChart3,
-      priority: 7
+      priority: 7,
     },
     {
-      id: 'travel',
-      title: 'Viagens Corporativas',
-      description: 'Reservas de voos e hotéis com alertas de preço',
-      type: 'module',
-      category: 'Viagens',
-      url: '/travel',
+      id: "travel",
+      title: "Viagens Corporativas",
+      description: "Reservas de voos e hotéis com alertas de preço",
+      type: "module",
+      category: "Viagens",
+      url: "/travel",
       icon: MapPin,
-      priority: 7
+      priority: 7,
     },
     {
-      id: 'price-alerts',
-      title: 'Alertas de Preços',
-      description: 'Monitoramento de preços de voos e hotéis',
-      type: 'module',
-      category: 'Viagens',
-      url: '/price-alerts',
+      id: "price-alerts",
+      title: "Alertas de Preços",
+      description: "Monitoramento de preços de voos e hotéis",
+      type: "module",
+      category: "Viagens",
+      url: "/price-alerts",
       icon: Clock,
-      priority: 6
+      priority: 6,
     },
     {
-      id: 'communication',
-      title: 'Comunicação',
-      description: 'Chat interno e sistema de mensagens',
-      type: 'module',
-      category: 'Colaboração',
-      url: '/communication',
+      id: "communication",
+      title: "Comunicação",
+      description: "Chat interno e sistema de mensagens",
+      type: "module",
+      category: "Colaboração",
+      url: "/communication",
       icon: MessageSquare,
-      priority: 6
+      priority: 6,
     },
     {
-      id: 'hr',
-      title: 'Recursos Humanos',
-      description: 'Gestão de funcionários e certificados',
-      type: 'module',
-      category: 'RH',
-      url: '/hr',
+      id: "hr",
+      title: "Recursos Humanos",
+      description: "Gestão de funcionários e certificados",
+      type: "module",
+      category: "RH",
+      url: "/hr",
       icon: Users,
-      priority: 6
+      priority: 6,
     },
     {
-      id: 'reports',
-      title: 'Relatórios',
-      description: 'Relatórios operacionais e gerenciais',
-      type: 'module',
-      category: 'Relatórios',
-      url: '/reports',
+      id: "reports",
+      title: "Relatórios",
+      description: "Relatórios operacionais e gerenciais",
+      type: "module",
+      category: "Relatórios",
+      url: "/reports",
       icon: FileText,
-      priority: 5
+      priority: 5,
     },
     {
-      id: 'checklists-inteligentes',
-      title: 'Checklists Inteligentes',
-      description: 'Sistema de checklists operacionais com IA',
-      type: 'module',
-      category: 'Operações',
-      url: '/checklists-inteligentes',
+      id: "checklists-inteligentes",
+      title: "Checklists Inteligentes",
+      description: "Sistema de checklists operacionais com IA",
+      type: "module",
+      category: "Operações",
+      url: "/checklists-inteligentes",
       icon: FileText,
-      priority: 5
+      priority: 5,
     },
     {
-      id: 'peotram',
-      title: 'PEOTRAM',
-      description: 'Sistema de auditoria PEOTRAM',
-      type: 'module',
-      category: 'Auditoria',
-      url: '/peotram',
+      id: "peotram",
+      title: "PEOTRAM",
+      description: "Sistema de auditoria PEOTRAM",
+      type: "module",
+      category: "Auditoria",
+      url: "/peotram",
       icon: FileText,
-      priority: 5
+      priority: 5,
     },
     {
-      id: 'settings',
-      title: 'Configurações',
-      description: 'Configurações do sistema e usuário',
-      type: 'page',
-      category: 'Sistema',
-      url: '/settings',
+      id: "settings",
+      title: "Configurações",
+      description: "Configurações do sistema e usuário",
+      type: "page",
+      category: "Sistema",
+      url: "/settings",
       icon: Settings,
-      priority: 4
+      priority: 4,
     },
     {
-      id: 'organization-settings',
-      title: 'Configurações da Organização',
-      description: 'Configurar branding e módulos da organização',
-      type: 'action',
-      category: 'Admin',
-      url: '/organization-settings',
+      id: "organization-settings",
+      title: "Configurações da Organização",
+      description: "Configurar branding e módulos da organização",
+      type: "action",
+      category: "Admin",
+      url: "/organization-settings",
       icon: Settings,
-      priority: 4
+      priority: 4,
     },
     {
-      id: 'users',
-      title: 'Gerenciar Usuários',
-      description: 'Adicionar e gerenciar usuários da organização',
-      type: 'action',
-      category: 'Admin',
-      url: '/users',
+      id: "users",
+      title: "Gerenciar Usuários",
+      description: "Adicionar e gerenciar usuários da organização",
+      type: "action",
+      category: "Admin",
+      url: "/users",
       icon: Users,
-      priority: 4
-    }
+      priority: 4,
+    },
   ];
 
   useEffect(() => {
     // Load recent searches from localStorage
-    const saved = localStorage.getItem('nautilus-recent-searches');
+    const saved = localStorage.getItem("nautilus-recent-searches");
     if (saved) {
       try {
         setRecentSearches(JSON.parse(saved));
       } catch (error) {
-        console.error('Error loading recent searches:', error);
+        console.error("Error loading recent searches:", error);
       }
     }
   }, []);
@@ -257,7 +257,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
       setResults(allResults);
     } catch (error) {
-      console.error('Search error:', error);
+      console.error("Search error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -269,9 +269,9 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
     try {
       // Search in crew members
       const { data: crewData } = await supabase
-        .from('crew_members')
-        .select('id, full_name, position, status')
-        .eq('organization_id', currentOrganization.id)
+        .from("crew_members")
+        .select("id, full_name, position, status")
+        .eq("organization_id", currentOrganization.id)
         .or(`full_name.ilike.%${searchQuery}%, position.ilike.%${searchQuery}%`)
         .limit(5);
 
@@ -281,12 +281,12 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
             id: `crew-${crew.id}`,
             title: crew.full_name,
             description: `${crew.position} - Status: ${crew.status}`,
-            type: 'data',
-            category: 'Tripulação',
-            url: '/crew-management',
+            type: "data",
+            category: "Tripulação",
+            url: "/crew-management",
             icon: Users,
             priority: 6,
-            metadata: { id: crew.id, type: 'crew' }
+            metadata: { id: crew.id, type: "crew" },
           });
         });
       }
@@ -317,9 +317,9 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
       // Search in checklists
       const { data: checklistData } = await supabase
-        .from('operational_checklists')
-        .select('id, title, type, status')
-        .eq('organization_id', currentOrganization.id)
+        .from("operational_checklists")
+        .select("id, title, type, status")
+        .eq("organization_id", currentOrganization.id)
         .or(`title.ilike.%${searchQuery}%, type.ilike.%${searchQuery}%`)
         .limit(3);
 
@@ -329,34 +329,33 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
             id: `checklist-${checklist.id}`,
             title: checklist.title,
             description: `Checklist ${checklist.type} - Status: ${checklist.status}`,
-            type: 'data',
-            category: 'Checklists',
-            url: '/checklists-inteligentes',
+            type: "data",
+            category: "Checklists",
+            url: "/checklists-inteligentes",
             icon: FileText,
             priority: 5,
-            metadata: { id: checklist.id, type: 'checklist' }
+            metadata: { id: checklist.id, type: "checklist" },
           });
         });
       }
-
     } catch (error) {
-      console.error('Database search error:', error);
+      console.error("Database search error:", error);
     }
   };
 
   const saveRecentSearch = (searchTerm: string) => {
     if (searchTerm.length < 2) return;
-    
+
     const updated = [searchTerm, ...recentSearches.filter(s => s !== searchTerm)].slice(0, 5);
     setRecentSearches(updated);
-    localStorage.setItem('nautilus-recent-searches', JSON.stringify(updated));
+    localStorage.setItem("nautilus-recent-searches", JSON.stringify(updated));
   };
 
   const handleResultClick = (result: SearchResult) => {
     saveRecentSearch(query);
     navigate(result.url);
     onClose();
-    setQuery('');
+    setQuery("");
   };
 
   const handleRecentSearchClick = (searchTerm: string) => {
@@ -365,31 +364,46 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
   const clearRecentSearches = () => {
     setRecentSearches([]);
-    localStorage.removeItem('nautilus-recent-searches');
+    localStorage.removeItem("nautilus-recent-searches");
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'Marítimo': return Ship;
-      case 'Tripulação': return Users;
-      case 'Analytics': return BarChart3;
-      case 'Viagens': return MapPin;
-      case 'RH': return Users;
-      case 'Operações': return FileText;
-      case 'Auditoria': return FileText;
-      case 'Admin': return Settings;
-      default: return Sparkles;
+      case "Marítimo":
+        return Ship;
+      case "Tripulação":
+        return Users;
+      case "Analytics":
+        return BarChart3;
+      case "Viagens":
+        return MapPin;
+      case "RH":
+        return Users;
+      case "Operações":
+        return FileText;
+      case "Auditoria":
+        return FileText;
+      case "Admin":
+        return Settings;
+      default:
+        return Sparkles;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'Marítimo': return 'bg-blue-100 text-blue-800';
-      case 'Analytics': return 'bg-purple-100 text-purple-800';
-      case 'Viagens': return 'bg-green-100 text-green-800';
-      case 'RH': return 'bg-orange-100 text-orange-800';
-      case 'Admin': return 'bg-red-100 text-red-800';
-      default: return 'bg-secondary text-secondary-foreground';
+      case "Marítimo":
+        return "bg-blue-100 text-blue-800";
+      case "Analytics":
+        return "bg-purple-100 text-purple-800";
+      case "Viagens":
+        return "bg-green-100 text-green-800";
+      case "RH":
+        return "bg-orange-100 text-orange-800";
+      case "Admin":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
@@ -409,7 +423,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
             <Input
               placeholder="Buscar módulos, dados, ações..."
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={e => setQuery(e.target.value)}
               className="pl-10"
               autoFocus
             />
@@ -452,10 +466,10 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
                     <p className="text-sm text-muted-foreground mt-2">Buscando...</p>
                   </div>
                 ) : results.length > 0 ? (
-                  results.map((result) => {
+                  results.map(result => {
                     const ResultIcon = result.icon;
                     const CategoryIcon = getCategoryIcon(result.category);
-                    
+
                     return (
                       <div
                         key={result.id}
@@ -465,12 +479,12 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
                         <div className="p-2 rounded-lg bg-primary/10">
                           <ResultIcon className="w-4 h-4 text-primary" />
                         </div>
-                        
+
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center space-x-2">
                             <h4 className="font-medium truncate">{result.title}</h4>
-                            <Badge 
-                              variant="secondary" 
+                            <Badge
+                              variant="secondary"
                               className={`text-xs ${getCategoryColor(result.category)}`}
                             >
                               {result.category}
@@ -499,7 +513,8 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
           <div className="border-t pt-4">
             <p className="text-xs text-muted-foreground text-center">
-              Use <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl+K</kbd> para abrir a busca rapidamente
+              Use <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl+K</kbd> para abrir a
+              busca rapidamente
             </p>
           </div>
         </div>

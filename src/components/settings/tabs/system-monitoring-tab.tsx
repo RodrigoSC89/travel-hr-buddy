@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
-import { 
-  Activity, 
-  TestTube, 
-  Server, 
-  Database, 
-  Cpu, 
-  HardDrive, 
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import {
+  Activity,
+  TestTube,
+  Server,
+  Database,
+  Cpu,
+  HardDrive,
   Network,
   Clock,
   AlertTriangle,
@@ -20,8 +20,8 @@ import {
   TrendingUp,
   BarChart3,
   LineChart,
-  PieChart
-} from 'lucide-react';
+  PieChart,
+} from "lucide-react";
 
 interface MonitoringSettings {
   enableMetrics: boolean;
@@ -39,7 +39,7 @@ interface SystemMonitoringTabProps {
 export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
   settings,
   onUpdate,
-  testMode
+  testMode,
 }) => {
   const [realTimeData] = useState({
     cpu: 65,
@@ -49,59 +49,63 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
     responseTime: 250,
     activeUsers: 24,
     errors: 3,
-    uptime: 99.8
+    uptime: 99.8,
   });
 
   const metrics = [
     {
-      label: 'CPU',
+      label: "CPU",
       value: realTimeData.cpu,
       threshold: settings.alertThresholds.cpu || 80,
-      unit: '%',
+      unit: "%",
       icon: Cpu,
-      color: realTimeData.cpu > 80 ? 'red' : realTimeData.cpu > 60 ? 'yellow' : 'green'
+      color: realTimeData.cpu > 80 ? "red" : realTimeData.cpu > 60 ? "yellow" : "green",
     },
     {
-      label: 'Memória',
+      label: "Memória",
       value: realTimeData.memory,
       threshold: settings.alertThresholds.memory || 85,
-      unit: '%',
+      unit: "%",
       icon: Server,
-      color: realTimeData.memory > 85 ? 'red' : realTimeData.memory > 70 ? 'yellow' : 'green'
+      color: realTimeData.memory > 85 ? "red" : realTimeData.memory > 70 ? "yellow" : "green",
     },
     {
-      label: 'Disco',
+      label: "Disco",
       value: realTimeData.disk,
       threshold: settings.alertThresholds.disk || 90,
-      unit: '%',
+      unit: "%",
       icon: HardDrive,
-      color: realTimeData.disk > 90 ? 'red' : realTimeData.disk > 75 ? 'yellow' : 'green'
+      color: realTimeData.disk > 90 ? "red" : realTimeData.disk > 75 ? "yellow" : "green",
     },
     {
-      label: 'Rede',
+      label: "Rede",
       value: realTimeData.network,
       threshold: 100,
-      unit: 'Mbps',
+      unit: "Mbps",
       icon: Network,
-      color: 'green'
-    }
+      color: "green",
+    },
   ];
 
   const updateThreshold = (metric: string, value: number) => {
     onUpdate({
       alertThresholds: {
         ...settings.alertThresholds,
-        [metric]: value
-      }
+        [metric]: value,
+      },
     });
   };
 
   const getStatusColor = (color: string) => {
     switch (color) {
-      case 'red': return 'text-red-600 bg-red-100';
-      case 'yellow': return 'text-yellow-600 bg-yellow-100';
-      case 'green': return 'text-green-600 bg-green-100';
-      default: return 'text-muted-foreground bg-secondary';
+      case "red":
+        return "text-red-600 bg-red-100";
+      case "yellow":
+        return "text-yellow-600 bg-yellow-100";
+      case "green":
+        return "text-green-600 bg-green-100";
+      default:
+        return "text-muted-foreground bg-secondary";
     }
   };
 
@@ -113,39 +117,53 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
           <CardTitle className="flex items-center gap-2">
             <Activity className="w-5 h-5 text-primary" />
             Monitoramento do Sistema
-            {testMode && <Badge variant="outline" className="ml-2"><TestTube className="w-3 h-3 mr-1" />Teste</Badge>}
+            {testMode && (
+              <Badge variant="outline" className="ml-2">
+                <TestTube className="w-3 h-3 mr-1" />
+                Teste
+              </Badge>
+            )}
           </CardTitle>
-          <CardDescription>
-            Monitore a saúde e performance do sistema em tempo real
-          </CardDescription>
+          <CardDescription>Monitore a saúde e performance do sistema em tempo real</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Real-time Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {metrics.map((metric) => {
+            {metrics.map(metric => {
               const Icon = metric.icon;
               return (
                 <div key={metric.label} className="p-4 border rounded-lg">
                   <div className="flex items-center justify-between mb-2">
                     <Icon className="w-5 h-5 text-primary" />
                     <Badge className={getStatusColor(metric.color)}>
-                      {metric.color === 'red' ? 'Crítico' : metric.color === 'yellow' ? 'Atenção' : 'Normal'}
+                      {metric.color === "red"
+                        ? "Crítico"
+                        : metric.color === "yellow"
+                          ? "Atenção"
+                          : "Normal"}
                     </Badge>
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">{metric.label}</span>
-                      <span className="text-lg font-bold">{metric.value}{metric.unit}</span>
+                      <span className="text-lg font-bold">
+                        {metric.value}
+                        {metric.unit}
+                      </span>
                     </div>
-                    <Progress 
-                      value={metric.value} 
+                    <Progress
+                      value={metric.value}
                       className={`h-2 ${
-                        metric.color === 'red' ? '[&>div]:bg-red-500' : 
-                        metric.color === 'yellow' ? '[&>div]:bg-yellow-500' : '[&>div]:bg-green-500'
+                        metric.color === "red"
+                          ? "[&>div]:bg-red-500"
+                          : metric.color === "yellow"
+                            ? "[&>div]:bg-yellow-500"
+                            : "[&>div]:bg-green-500"
                       }`}
                     />
                     <div className="text-xs text-muted-foreground">
-                      Limite: {metric.threshold}{metric.unit}
+                      Limite: {metric.threshold}
+                      {metric.unit}
                     </div>
                   </div>
                 </div>
@@ -158,7 +176,9 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
             <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <CheckCircle className="w-5 h-5 text-green-600" />
-                <span className="font-medium text-green-800 dark:text-green-200">Sistema Operacional</span>
+                <span className="font-medium text-green-800 dark:text-green-200">
+                  Sistema Operacional
+                </span>
               </div>
               <div className="text-sm text-green-700 dark:text-green-300">
                 Uptime: {realTimeData.uptime}% • {realTimeData.activeUsers} usuários ativos
@@ -168,7 +188,9 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
             <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Clock className="w-5 h-5 text-blue-600" />
-                <span className="font-medium text-blue-800 dark:text-blue-200">Tempo de Resposta</span>
+                <span className="font-medium text-blue-800 dark:text-blue-200">
+                  Tempo de Resposta
+                </span>
               </div>
               <div className="text-sm text-blue-700 dark:text-blue-300">
                 Médio: {realTimeData.responseTime}ms • Último check: agora
@@ -195,9 +217,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
             <AlertTriangle className="w-5 h-5 text-primary" />
             Configuração de Alertas
           </CardTitle>
-          <CardDescription>
-            Configure limites para alertas automáticos
-          </CardDescription>
+          <CardDescription>Configure limites para alertas automáticos</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
@@ -210,7 +230,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
               </div>
               <Switch
                 checked={settings.enableMetrics}
-                onCheckedChange={(checked) => onUpdate({ enableMetrics: checked })}
+                onCheckedChange={checked => onUpdate({ enableMetrics: checked })}
               />
             </div>
 
@@ -223,7 +243,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
               </div>
               <Switch
                 checked={settings.enableHealthChecks}
-                onCheckedChange={(checked) => onUpdate({ enableHealthChecks: checked })}
+                onCheckedChange={checked => onUpdate({ enableHealthChecks: checked })}
               />
             </div>
           </div>
@@ -231,7 +251,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <h4 className="font-medium">Limites de Alertas</h4>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Label>CPU (%)</Label>
@@ -240,11 +260,11 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="0"
                     max="100"
                     value={settings.alertThresholds.cpu || 80}
-                    onChange={(e) => updateThreshold('cpu', parseInt(e.target.value))}
+                    onChange={e => updateThreshold("cpu", parseInt(e.target.value))}
                     className="w-20"
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Memória (%)</Label>
                   <Input
@@ -252,11 +272,11 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="0"
                     max="100"
                     value={settings.alertThresholds.memory || 85}
-                    onChange={(e) => updateThreshold('memory', parseInt(e.target.value))}
+                    onChange={e => updateThreshold("memory", parseInt(e.target.value))}
                     className="w-20"
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Disco (%)</Label>
                   <Input
@@ -264,18 +284,18 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="0"
                     max="100"
                     value={settings.alertThresholds.disk || 90}
-                    onChange={(e) => updateThreshold('disk', parseInt(e.target.value))}
+                    onChange={e => updateThreshold("disk", parseInt(e.target.value))}
                     className="w-20"
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Tempo de Resposta (ms)</Label>
                   <Input
                     type="number"
                     min="0"
                     value={settings.alertThresholds.responseTime || 2000}
-                    onChange={(e) => updateThreshold('responseTime', parseInt(e.target.value))}
+                    onChange={e => updateThreshold("responseTime", parseInt(e.target.value))}
                     className="w-24"
                   />
                 </div>
@@ -284,7 +304,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
 
             <div className="space-y-4">
               <h4 className="font-medium">Retenção de Dados</h4>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Label>Dias de Retenção</Label>
@@ -293,14 +313,19 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="1"
                     max="365"
                     value={settings.retentionDays}
-                    onChange={(e) => onUpdate({ retentionDays: parseInt(e.target.value) })}
+                    onChange={e => onUpdate({ retentionDays: parseInt(e.target.value) })}
                     className="w-20"
                   />
                 </div>
-                
+
                 <div className="text-sm text-muted-foreground p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-                  <p>Dados mais antigos que {settings.retentionDays} dias serão automaticamente removidos.</p>
-                  <p className="mt-1">Espaço estimado: ~{Math.round(settings.retentionDays * 0.1)}GB</p>
+                  <p>
+                    Dados mais antigos que {settings.retentionDays} dias serão automaticamente
+                    removidos.
+                  </p>
+                  <p className="mt-1">
+                    Espaço estimado: ~{Math.round(settings.retentionDays * 0.1)}GB
+                  </p>
                 </div>
               </div>
             </div>
@@ -315,9 +340,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
             <BarChart3 className="w-5 h-5 text-primary" />
             Analytics e Relatórios
           </CardTitle>
-          <CardDescription>
-            Visualize tendências e gere relatórios de performance
-          </CardDescription>
+          <CardDescription>Visualize tendências e gere relatórios de performance</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -325,12 +348,12 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
               <LineChart className="w-6 h-6 mb-2" />
               <span>Gráfico de Tendências</span>
             </Button>
-            
+
             <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
               <PieChart className="w-6 h-6 mb-2" />
               <span>Distribuição de Recursos</span>
             </Button>
-            
+
             <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
               <TrendingUp className="w-6 h-6 mb-2" />
               <span>Relatório de Performance</span>

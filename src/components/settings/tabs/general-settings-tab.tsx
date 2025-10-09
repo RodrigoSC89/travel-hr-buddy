@@ -1,20 +1,18 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Building2, 
-  Globe, 
-  Clock, 
-  Palette, 
-  Calendar,
-  TestTube,
-  InfoIcon
-} from 'lucide-react';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Building2, Globe, Clock, Palette, Calendar, TestTube, InfoIcon } from "lucide-react";
 
 interface GeneralSettings {
   companyName: string;
@@ -33,34 +31,34 @@ interface GeneralSettingsTabProps {
 export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
   settings,
   onUpdate,
-  testMode
+  testMode,
 }) => {
   const timezones = [
-    { value: 'America/Sao_Paulo', label: 'São Paulo (UTC-3)' },
-    { value: 'America/New_York', label: 'Nova York (UTC-5)' },
-    { value: 'Europe/London', label: 'Londres (UTC+0)' },
-    { value: 'Asia/Tokyo', label: 'Tóquio (UTC+9)' },
-    { value: 'Australia/Sydney', label: 'Sydney (UTC+10)' },
+    { value: "America/Sao_Paulo", label: "São Paulo (UTC-3)" },
+    { value: "America/New_York", label: "Nova York (UTC-5)" },
+    { value: "Europe/London", label: "Londres (UTC+0)" },
+    { value: "Asia/Tokyo", label: "Tóquio (UTC+9)" },
+    { value: "Australia/Sydney", label: "Sydney (UTC+10)" },
   ];
 
   const languages = [
-    { value: 'pt-BR', label: 'Português (Brasil)', flag: '🇧🇷' },
-    { value: 'en-US', label: 'English (United States)', flag: '🇺🇸' },
-    { value: 'es-ES', label: 'Español (España)', flag: '🇪🇸' },
-    { value: 'fr-FR', label: 'Français (France)', flag: '🇫🇷' },
+    { value: "pt-BR", label: "Português (Brasil)", flag: "🇧🇷" },
+    { value: "en-US", label: "English (United States)", flag: "🇺🇸" },
+    { value: "es-ES", label: "Español (España)", flag: "🇪🇸" },
+    { value: "fr-FR", label: "Français (France)", flag: "🇫🇷" },
   ];
 
   const themes = [
-    { value: 'system', label: 'Automático (Sistema)', icon: '🔄' },
-    { value: 'light', label: 'Modo Claro', icon: '☀️' },
-    { value: 'dark', label: 'Modo Escuro', icon: '🌙' },
+    { value: "system", label: "Automático (Sistema)", icon: "🔄" },
+    { value: "light", label: "Modo Claro", icon: "☀️" },
+    { value: "dark", label: "Modo Escuro", icon: "🌙" },
   ];
 
   const dateFormats = [
-    { value: 'DD/MM/YYYY HH:mm', label: '31/12/2024 14:30' },
-    { value: 'MM/DD/YYYY HH:mm', label: '12/31/2024 2:30 PM' },
-    { value: 'YYYY-MM-DD HH:mm', label: '2024-12-31 14:30' },
-    { value: 'DD.MM.YYYY HH:mm', label: '31.12.2024 14:30' },
+    { value: "DD/MM/YYYY HH:mm", label: "31/12/2024 14:30" },
+    { value: "MM/DD/YYYY HH:mm", label: "12/31/2024 2:30 PM" },
+    { value: "YYYY-MM-DD HH:mm", label: "2024-12-31 14:30" },
+    { value: "DD.MM.YYYY HH:mm", label: "31.12.2024 14:30" },
   ];
 
   return (
@@ -71,11 +69,14 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
           <CardTitle className="flex items-center gap-2">
             <Building2 className="w-5 h-5 text-primary" />
             Informações da Empresa
-            {testMode && <Badge variant="outline" className="ml-2"><TestTube className="w-3 h-3 mr-1" />Teste</Badge>}
+            {testMode && (
+              <Badge variant="outline" className="ml-2">
+                <TestTube className="w-3 h-3 mr-1" />
+                Teste
+              </Badge>
+            )}
           </CardTitle>
-          <CardDescription>
-            Configure as informações básicas da sua organização
-          </CardDescription>
+          <CardDescription>Configure as informações básicas da sua organização</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
@@ -83,7 +84,7 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
             <Input
               id="companyName"
               value={settings.companyName}
-              onChange={(e) => onUpdate({ companyName: e.target.value })}
+              onChange={e => onUpdate({ companyName: e.target.value })}
               placeholder="Digite o nome da sua empresa"
               className="text-lg font-medium"
             />
@@ -101,23 +102,21 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
             <Globe className="w-5 h-5 text-primary" />
             Idioma e Localização
           </CardTitle>
-          <CardDescription>
-            Configure o idioma padrão e configurações regionais
-          </CardDescription>
+          <CardDescription>Configure o idioma padrão e configurações regionais</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="language">Idioma Padrão</Label>
-              <Select 
-                value={settings.defaultLanguage} 
-                onValueChange={(value) => onUpdate({ defaultLanguage: value })}
+              <Select
+                value={settings.defaultLanguage}
+                onValueChange={value => onUpdate({ defaultLanguage: value })}
               >
                 <SelectTrigger id="language">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {languages.map((lang) => (
+                  {languages.map(lang => (
                     <SelectItem key={lang.value} value={lang.value}>
                       <div className="flex items-center gap-2">
                         <span>{lang.flag}</span>
@@ -134,15 +133,15 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
 
             <div className="space-y-2">
               <Label htmlFor="timezone">Fuso Horário</Label>
-              <Select 
-                value={settings.timezone} 
-                onValueChange={(value) => onUpdate({ timezone: value })}
+              <Select
+                value={settings.timezone}
+                onValueChange={value => onUpdate({ timezone: value })}
               >
                 <SelectTrigger id="timezone">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {timezones.map((tz) => (
+                  {timezones.map(tz => (
                     <SelectItem key={tz.value} value={tz.value}>
                       {tz.label}
                     </SelectItem>
@@ -164,23 +163,21 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
             <Palette className="w-5 h-5 text-primary" />
             Aparência e Exibição
           </CardTitle>
-          <CardDescription>
-            Configure a aparência e formato de exibição de dados
-          </CardDescription>
+          <CardDescription>Configure a aparência e formato de exibição de dados</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="theme">Tema do Sistema</Label>
-              <Select 
-                value={settings.systemTheme} 
-                onValueChange={(value) => onUpdate({ systemTheme: value })}
+              <Select
+                value={settings.systemTheme}
+                onValueChange={value => onUpdate({ systemTheme: value })}
               >
                 <SelectTrigger id="theme">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {themes.map((theme) => (
+                  {themes.map(theme => (
                     <SelectItem key={theme.value} value={theme.value}>
                       <div className="flex items-center gap-2">
                         <span>{theme.icon}</span>
@@ -197,15 +194,15 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
 
             <div className="space-y-2">
               <Label htmlFor="dateFormat">Formato de Data/Hora</Label>
-              <Select 
-                value={settings.dateTimeFormat} 
-                onValueChange={(value) => onUpdate({ dateTimeFormat: value })}
+              <Select
+                value={settings.dateTimeFormat}
+                onValueChange={value => onUpdate({ dateTimeFormat: value })}
               >
                 <SelectTrigger id="dateFormat">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {dateFormats.map((format) => (
+                  {dateFormats.map(format => (
                     <SelectItem key={format.value} value={format.value}>
                       <div className="flex items-center gap-2">
                         <Calendar className="w-3 h-3" />
@@ -230,9 +227,7 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
             <InfoIcon className="w-5 h-5 text-primary" />
             Informações do Sistema
           </CardTitle>
-          <CardDescription>
-            Informações sobre a versão e status do sistema
-          </CardDescription>
+          <CardDescription>Informações sobre a versão e status do sistema</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -243,15 +238,17 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
                 Nautilus One
               </Badge>
             </div>
-            
+
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-muted-foreground">Última Atualização</Label>
+              <Label className="text-sm font-medium text-muted-foreground">
+                Última Atualização
+              </Label>
               <div className="text-lg font-semibold">29/09/2024</div>
               <Badge variant="outline" className="text-xs text-green-600 border-green-200">
                 Atualizado
               </Badge>
             </div>
-            
+
             <div className="space-y-2">
               <Label className="text-sm font-medium text-muted-foreground">Status</Label>
               <div className="text-lg font-semibold text-green-600">Operacional</div>

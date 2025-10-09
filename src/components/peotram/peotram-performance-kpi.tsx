@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Target, 
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  TrendingUp,
+  TrendingDown,
+  Target,
   Award,
   BarChart3,
   PieChart,
@@ -22,19 +28,19 @@ import {
   RefreshCw,
   Download,
   Calendar,
-  Filter
-} from 'lucide-react';
+  Filter,
+} from "lucide-react";
 
 interface KPIMetric {
   id: string;
   name: string;
-  category: 'safety' | 'operational' | 'financial' | 'environmental' | 'quality';
+  category: "safety" | "operational" | "financial" | "environmental" | "quality";
   current: number;
   target: number;
   unit: string;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   trendValue: number;
-  status: 'excellent' | 'good' | 'warning' | 'critical';
+  status: "excellent" | "good" | "warning" | "critical";
   description: string;
   lastUpdated: string;
 }
@@ -48,129 +54,150 @@ interface PerformanceData {
 
 export const PeotramPerformanceKPI: React.FC = () => {
   const [metrics, setMetrics] = useState<KPIMetric[]>(getDemoMetrics());
-  const [selectedPeriod, setSelectedPeriod] = useState('month');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedPeriod, setSelectedPeriod] = useState("month");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   function getDemoMetrics(): KPIMetric[] {
     return [
       {
-        id: 'SAFETY001',
-        name: 'Taxa de Incidentes de Segurança',
-        category: 'safety',
+        id: "SAFETY001",
+        name: "Taxa de Incidentes de Segurança",
+        category: "safety",
         current: 0.12,
         target: 0.05,
-        unit: 'por 1000h',
-        trend: 'down',
+        unit: "por 1000h",
+        trend: "down",
         trendValue: -15.2,
-        status: 'warning',
-        description: 'Número de incidentes de segurança por 1000 horas trabalhadas',
-        lastUpdated: '2024-01-22T10:00:00Z'
+        status: "warning",
+        description: "Número de incidentes de segurança por 1000 horas trabalhadas",
+        lastUpdated: "2024-01-22T10:00:00Z",
       },
       {
-        id: 'OPS001',
-        name: 'Eficiência Operacional',
-        category: 'operational',
+        id: "OPS001",
+        name: "Eficiência Operacional",
+        category: "operational",
         current: 94.5,
         target: 95.0,
-        unit: '%',
-        trend: 'up',
+        unit: "%",
+        trend: "up",
         trendValue: 2.1,
-        status: 'good',
-        description: 'Percentual de operações realizadas conforme planejado',
-        lastUpdated: '2024-01-22T09:30:00Z'
+        status: "good",
+        description: "Percentual de operações realizadas conforme planejado",
+        lastUpdated: "2024-01-22T09:30:00Z",
       },
       {
-        id: 'ENV001',
-        name: 'Emissões de CO2',
-        category: 'environmental',
+        id: "ENV001",
+        name: "Emissões de CO2",
+        category: "environmental",
         current: 285,
         target: 250,
-        unit: 'ton/mês',
-        trend: 'down',
+        unit: "ton/mês",
+        trend: "down",
         trendValue: -8.7,
-        status: 'warning',
-        description: 'Emissões mensais de dióxido de carbono',
-        lastUpdated: '2024-01-22T08:15:00Z'
+        status: "warning",
+        description: "Emissões mensais de dióxido de carbono",
+        lastUpdated: "2024-01-22T08:15:00Z",
       },
       {
-        id: 'QUAL001',
-        name: 'Conformidade de Auditoria',
-        category: 'quality',
+        id: "QUAL001",
+        name: "Conformidade de Auditoria",
+        category: "quality",
         current: 98.2,
         target: 99.0,
-        unit: '%',
-        trend: 'up',
+        unit: "%",
+        trend: "up",
         trendValue: 1.5,
-        status: 'excellent',
-        description: 'Percentual de conformidade em auditorias PEOTRAM',
-        lastUpdated: '2024-01-22T07:45:00Z'
+        status: "excellent",
+        description: "Percentual de conformidade em auditorias PEOTRAM",
+        lastUpdated: "2024-01-22T07:45:00Z",
       },
       {
-        id: 'FIN001',
-        name: 'Custo por Operação',
-        category: 'financial',
+        id: "FIN001",
+        name: "Custo por Operação",
+        category: "financial",
         current: 15420,
         target: 14500,
-        unit: 'R$',
-        trend: 'up',
+        unit: "R$",
+        trend: "up",
         trendValue: 3.2,
-        status: 'warning',
-        description: 'Custo médio por operação realizada',
-        lastUpdated: '2024-01-22T06:30:00Z'
+        status: "warning",
+        description: "Custo médio por operação realizada",
+        lastUpdated: "2024-01-22T06:30:00Z",
       },
       {
-        id: 'OPS002',
-        name: 'Tempo de Resposta',
-        category: 'operational',
+        id: "OPS002",
+        name: "Tempo de Resposta",
+        category: "operational",
         current: 8.5,
         target: 10.0,
-        unit: 'min',
-        trend: 'down',
+        unit: "min",
+        trend: "down",
         trendValue: -12.5,
-        status: 'excellent',
-        description: 'Tempo médio de resposta a emergências',
-        lastUpdated: '2024-01-22T05:20:00Z'
-      }
+        status: "excellent",
+        description: "Tempo médio de resposta a emergências",
+        lastUpdated: "2024-01-22T05:20:00Z",
+      },
     ];
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'excellent': return 'bg-success/20 text-success border-success/30';
-      case 'good': return 'bg-info/20 text-info border-info/30';
-      case 'warning': return 'bg-warning/20 text-warning border-warning/30';
-      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+      case "excellent":
+        return "bg-success/20 text-success border-success/30";
+      case "good":
+        return "bg-info/20 text-info border-info/30";
+      case "warning":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "critical":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'safety': return 'bg-destructive/20 text-destructive';
-      case 'operational': return 'bg-primary/20 text-primary';
-      case 'financial': return 'bg-success/20 text-success';
-      case 'environmental': return 'bg-info/20 text-info';
-      case 'quality': return 'bg-warning/20 text-warning';
-      default: return 'bg-muted/20 text-muted-foreground';
+      case "safety":
+        return "bg-destructive/20 text-destructive";
+      case "operational":
+        return "bg-primary/20 text-primary";
+      case "financial":
+        return "bg-success/20 text-success";
+      case "environmental":
+        return "bg-info/20 text-info";
+      case "quality":
+        return "bg-warning/20 text-warning";
+      default:
+        return "bg-muted/20 text-muted-foreground";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'safety': return <AlertTriangle className="w-4 h-4" />;
-      case 'operational': return <Activity className="w-4 h-4" />;
-      case 'financial': return <DollarSign className="w-4 h-4" />;
-      case 'environmental': return <TrendingUp className="w-4 h-4" />;
-      case 'quality': return <Award className="w-4 h-4" />;
-      default: return <BarChart3 className="w-4 h-4" />;
+      case "safety":
+        return <AlertTriangle className="w-4 h-4" />;
+      case "operational":
+        return <Activity className="w-4 h-4" />;
+      case "financial":
+        return <DollarSign className="w-4 h-4" />;
+      case "environmental":
+        return <TrendingUp className="w-4 h-4" />;
+      case "quality":
+        return <Award className="w-4 h-4" />;
+      default:
+        return <BarChart3 className="w-4 h-4" />;
     }
   };
 
   const getTrendIcon = (trend: string, value: number) => {
-    if (trend === 'up') {
-      return <TrendingUp className={`w-4 h-4 ${value > 0 ? 'text-success' : 'text-destructive'}`} />;
-    } else if (trend === 'down') {
-      return <TrendingDown className={`w-4 h-4 ${value < 0 ? 'text-success' : 'text-destructive'}`} />;
+    if (trend === "up") {
+      return (
+        <TrendingUp className={`w-4 h-4 ${value > 0 ? "text-success" : "text-destructive"}`} />
+      );
+    } else if (trend === "down") {
+      return (
+        <TrendingDown className={`w-4 h-4 ${value < 0 ? "text-success" : "text-destructive"}`} />
+      );
     }
     return <Activity className="w-4 h-4 text-muted-foreground" />;
   };
@@ -179,20 +206,21 @@ export const PeotramPerformanceKPI: React.FC = () => {
     return Math.min((current / target) * 100, 100);
   };
 
-  const filteredMetrics = metrics.filter(metric => 
-    selectedCategory === 'all' || metric.category === selectedCategory
+  const filteredMetrics = metrics.filter(
+    metric => selectedCategory === "all" || metric.category === selectedCategory
   );
 
   const categoryStats = {
-    safety: metrics.filter(m => m.category === 'safety').length,
-    operational: metrics.filter(m => m.category === 'operational').length,
-    financial: metrics.filter(m => m.category === 'financial').length,
-    environmental: metrics.filter(m => m.category === 'environmental').length,
-    quality: metrics.filter(m => m.category === 'quality').length
+    safety: metrics.filter(m => m.category === "safety").length,
+    operational: metrics.filter(m => m.category === "operational").length,
+    financial: metrics.filter(m => m.category === "financial").length,
+    environmental: metrics.filter(m => m.category === "environmental").length,
+    quality: metrics.filter(m => m.category === "quality").length,
   };
 
   const overallPerformance = Math.round(
-    metrics.reduce((acc, metric) => acc + calculateProgress(metric.current, metric.target), 0) / metrics.length
+    metrics.reduce((acc, metric) => acc + calculateProgress(metric.current, metric.target), 0) /
+      metrics.length
   );
 
   return (
@@ -204,7 +232,7 @@ export const PeotramPerformanceKPI: React.FC = () => {
             Indicadores chave de performance e métricas operacionais
           </p>
         </div>
-        
+
         <div className="flex gap-2">
           <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
             <SelectTrigger className="w-32">
@@ -254,7 +282,7 @@ export const PeotramPerformanceKPI: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Metas Atingidas</p>
                 <p className="text-2xl font-bold text-success">
-                  {metrics.filter(m => m.status === 'excellent' || m.status === 'good').length}
+                  {metrics.filter(m => m.status === "excellent" || m.status === "good").length}
                 </p>
               </div>
             </div>
@@ -270,7 +298,7 @@ export const PeotramPerformanceKPI: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Alertas</p>
                 <p className="text-2xl font-bold text-warning">
-                  {metrics.filter(m => m.status === 'warning').length}
+                  {metrics.filter(m => m.status === "warning").length}
                 </p>
               </div>
             </div>
@@ -317,7 +345,7 @@ export const PeotramPerformanceKPI: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredMetrics.map((metric) => (
+            {filteredMetrics.map(metric => (
               <Card key={metric.id} className="border-l-4 border-l-primary">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -343,22 +371,26 @@ export const PeotramPerformanceKPI: React.FC = () => {
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Atual</p>
                       <p className="text-2xl font-bold text-primary">
-                        {metric.current}{metric.unit}
+                        {metric.current}
+                        {metric.unit}
                       </p>
                     </div>
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Meta</p>
                       <p className="text-xl font-semibold text-muted-foreground">
-                        {metric.target}{metric.unit}
+                        {metric.target}
+                        {metric.unit}
                       </p>
                     </div>
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Tendência</p>
                       <div className="flex items-center justify-center gap-1">
                         {getTrendIcon(metric.trend, metric.trendValue)}
-                        <span className={`font-semibold ${
-                          metric.trendValue > 0 ? 'text-success' : 'text-destructive'
-                        }`}>
+                        <span
+                          className={`font-semibold ${
+                            metric.trendValue > 0 ? "text-success" : "text-destructive"
+                          }`}
+                        >
                           {Math.abs(metric.trendValue)}%
                         </span>
                       </div>
@@ -387,9 +419,7 @@ export const PeotramPerformanceKPI: React.FC = () => {
           <div className="text-center p-8">
             <TrendingUp className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">Análise de Tendências</h3>
-            <p className="text-muted-foreground mb-4">
-              Gráficos de tendência histórica dos KPIs
-            </p>
+            <p className="text-muted-foreground mb-4">Gráficos de tendência histórica dos KPIs</p>
             <Button>
               <BarChart3 className="w-4 h-4 mr-2" />
               Visualizar Gráficos
@@ -400,10 +430,15 @@ export const PeotramPerformanceKPI: React.FC = () => {
         <TabsContent value="categories" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Object.entries(categoryStats).map(([category, count]) => (
-              <Card key={category} className="cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => setSelectedCategory(category)}>
+              <Card
+                key={category}
+                className="cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => setSelectedCategory(category)}
+              >
                 <CardContent className="p-6 text-center">
-                  <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full mb-4 ${getCategoryColor(category)}`}>
+                  <div
+                    className={`inline-flex items-center justify-center w-12 h-12 rounded-full mb-4 ${getCategoryColor(category)}`}
+                  >
                     {getCategoryIcon(category)}
                   </div>
                   <h3 className="font-semibold capitalize mb-2">{category}</h3>

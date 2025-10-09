@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from './AuthContext';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "./AuthContext";
 
 interface SaasTenant {
   id: string;
@@ -111,31 +111,31 @@ interface TenantContextType {
   tenantPlans: SaasPlan[];
   tenantUsage: TenantUsage | null;
   availableTenants: SaasTenant[];
-  
+
   // Estado de loading
   isLoading: boolean;
   error: string | null;
-  
+
   // Funções de gestão
   switchTenant: (tenantId: string) => Promise<void>;
   updateBranding: (branding: Partial<TenantBranding>) => Promise<void>;
   updateTenantSettings: (settings: Partial<SaasTenant>) => Promise<void>;
-  
+
   // Funções de usuários
   inviteTenantUser: (email: string, role: string) => Promise<void>;
   updateUserRole: (userId: string, role: string) => Promise<void>;
   removeTenantUser: (userId: string) => Promise<void>;
   getTenantUsers: () => Promise<TenantUser[]>;
-  
+
   // Funções de verificação
   checkPermission: (permission: string) => boolean;
   checkFeatureAccess: (feature: string) => boolean;
   checkUsageLimits: (type: string) => boolean;
-  
+
   // Funções de planos
   upgradePlan: (planId: string) => Promise<void>;
   downgradeplan: (planId: string) => Promise<void>;
-  
+
   // Utilidades
   formatCurrency: (amount: number) => string;
   formatDate: (date: string) => string;
@@ -147,14 +147,14 @@ const TenantContext = createContext<TenantContextType | undefined>(undefined);
 export const useTenant = () => {
   const context = useContext(TenantContext);
   if (context === undefined) {
-    throw new Error('useTenant must be used within a TenantProvider');
+    throw new Error("useTenant must be used within a TenantProvider");
   }
   return context;
 };
 
 export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
-  
+
   // Estados
   const [currentTenant, setCurrentTenant] = useState<SaasTenant | null>(null);
   const [currentBranding, setCurrentBranding] = useState<TenantBranding | null>(null);
@@ -183,13 +183,15 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       // 1. Carregar tenants do usuário
       const { data: userTenants, error: tenantsError } = await supabase
-        .from('tenant_users')
-        .select(`
+        .from("tenant_users")
+        .select(
+          `
           *,
           saas_tenants!inner(*)
-        `)
-        .eq('user_id', user?.id)
-        .eq('status', 'active');
+        `
+        )
+        .eq("user_id", user?.id)
+        .eq("status", "active");
 
       if (tenantsError) throw tenantsError;
 
@@ -198,28 +200,28 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       // 2. Usar primeiro tenant como padrão ou tenant demo
       const defaultTenant = tenants[0] || {
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        slug: 'nautilus-demo',
-        name: 'Nautilus Demo Corporation',
-        description: 'Empresa demonstrativa do sistema Nautilus One',
-        status: 'active',
-        plan_type: 'enterprise',
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        slug: "nautilus-demo",
+        name: "Nautilus Demo Corporation",
+        description: "Empresa demonstrativa do sistema Nautilus One",
+        status: "active",
+        plan_type: "enterprise",
         max_users: 100,
         max_vessels: 50,
         max_storage_gb: 100,
         max_api_calls_per_month: 50000,
-        billing_cycle: 'monthly',
-        subdomain: 'demo',
+        billing_cycle: "monthly",
+        subdomain: "demo",
         metadata: {},
         features: {
           peotram: true,
           fleet_management: true,
           advanced_analytics: true,
           ai_analysis: true,
-          white_label: true
+          white_label: true,
         },
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       setCurrentTenant(defaultTenant as SaasTenant);
@@ -232,10 +234,9 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       // 5. Carregar usage do tenant
       await loadTenantUsage(defaultTenant.id);
-
     } catch (err) {
-      console.error('Erro ao carregar dados do tenant:', err);
-      setError('Erro ao carregar dados da empresa');
+      console.error("Erro ao carregar dados do tenant:", err);
+      setError("Erro ao carregar dados da empresa");
     } finally {
       setIsLoading(false);
     }
@@ -244,29 +245,29 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const loadTenantBranding = async (tenantId: string) => {
     try {
       const { data: branding, error } = await supabase
-        .from('tenant_branding')
-        .select('*')
-        .eq('tenant_id', tenantId)
+        .from("tenant_branding")
+        .select("*")
+        .eq("tenant_id", tenantId)
         .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== "PGRST116") throw error;
 
       const defaultBranding: TenantBranding = {
-        id: 'demo-branding',
+        id: "demo-branding",
         tenant_id: tenantId,
-        company_name: 'Nautilus One Demo',
-        logo_url: '',
-        favicon_url: '',
-        primary_color: '#2563eb',
-        secondary_color: '#64748b',
-        accent_color: '#7c3aed',
-        background_color: '#ffffff',
-        text_color: '#000000',
-        theme_mode: 'light',
-        default_language: 'pt-BR',
-        default_currency: 'BRL',
-        timezone: 'America/Sao_Paulo',
-        date_format: 'DD/MM/YYYY',
+        company_name: "Nautilus One Demo",
+        logo_url: "",
+        favicon_url: "",
+        primary_color: "#2563eb",
+        secondary_color: "#64748b",
+        accent_color: "#7c3aed",
+        background_color: "#ffffff",
+        text_color: "#000000",
+        theme_mode: "light",
+        default_language: "pt-BR",
+        default_currency: "BRL",
+        timezone: "America/Sao_Paulo",
+        date_format: "DD/MM/YYYY",
         header_style: {},
         sidebar_style: {},
         button_style: {},
@@ -275,71 +276,69 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           fleet_management: true,
           analytics: true,
           hr: true,
-          ai_analysis: true
+          ai_analysis: true,
         },
         module_settings: {
           peotram: {
             templates_enabled: true,
             ai_analysis: true,
-            permissions_matrix: true
+            permissions_matrix: true,
           },
           fleet: {
-            real_time_tracking: true
+            real_time_tracking: true,
           },
           analytics: {
-            advanced_reports: true
-          }
+            advanced_reports: true,
+          },
         },
         custom_fields: {},
         business_rules: {
           max_reservations_per_user: 10,
-          alert_frequency: 'daily',
-          auto_backup: true
+          alert_frequency: "daily",
+          auto_backup: true,
         },
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       const finalBranding = branding || defaultBranding;
       setCurrentBranding(finalBranding);
       applyBrandingTheme(finalBranding);
-
     } catch (err) {
-      console.error('Erro ao carregar branding:', err);
+      console.error("Erro ao carregar branding:", err);
     }
   };
 
   const loadCurrentTenantUser = async (tenantId: string) => {
     try {
       const { data: tenantUser, error } = await supabase
-        .from('tenant_users')
-        .select('*')
-        .eq('tenant_id', tenantId)
-        .eq('user_id', user?.id)
-        .eq('status', 'active')
+        .from("tenant_users")
+        .select("*")
+        .eq("tenant_id", tenantId)
+        .eq("user_id", user?.id)
+        .eq("status", "active")
         .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== "PGRST116") throw error;
 
       const defaultUser: TenantUser = {
-        id: 'demo-user',
+        id: "demo-user",
         tenant_id: tenantId,
-        user_id: user?.id || '',
-        role: 'admin',
-        status: 'active',
-        display_name: user?.user_metadata?.full_name || user?.email || 'Usuário Demo',
-        job_title: 'Administrador',
-        department: 'TI',
+        user_id: user?.id || "",
+        role: "admin",
+        status: "active",
+        display_name: user?.user_metadata?.full_name || user?.email || "Usuário Demo",
+        job_title: "Administrador",
+        department: "TI",
         permissions: {},
         joined_at: new Date().toISOString(),
         last_active_at: new Date().toISOString(),
-        metadata: {}
+        metadata: {},
       };
 
       setCurrentUser(tenantUser || defaultUser);
-
     } catch (err) {
-      console.error('Erro ao carregar usuário do tenant:', err);
+      console.error("Erro ao carregar usuário do tenant:", err);
     }
   };
 
@@ -350,18 +349,18 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       startOfMonth.setHours(0, 0, 0, 0);
 
       const { data: usage, error } = await supabase
-        .from('tenant_usage')
-        .select('*')
-        .eq('tenant_id', tenantId)
-        .gte('period_start', startOfMonth.toISOString())
-        .order('created_at', { ascending: false })
+        .from("tenant_usage")
+        .select("*")
+        .eq("tenant_id", tenantId)
+        .gte("period_start", startOfMonth.toISOString())
+        .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== "PGRST116") throw error;
 
       const defaultUsage: TenantUsage = {
-        id: 'demo-usage',
+        id: "demo-usage",
         tenant_id: tenantId,
         period_start: startOfMonth.toISOString(),
         period_end: new Date().toISOString(),
@@ -373,56 +372,54 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         vessels_managed: 8,
         documents_processed: 42,
         reports_generated: 23,
-        metadata: {}
+        metadata: {},
       };
 
       setTenantUsage(usage || defaultUsage);
-
     } catch (err) {
-      console.error('Erro ao carregar usage do tenant:', err);
+      console.error("Erro ao carregar usage do tenant:", err);
     }
   };
 
   const loadPlans = async () => {
     try {
       const { data: plans, error } = await supabase
-        .from('saas_plans')
-        .select('*')
-        .eq('is_active', true)
-        .order('price_monthly', { ascending: true });
+        .from("saas_plans")
+        .select("*")
+        .eq("is_active", true)
+        .order("price_monthly", { ascending: true });
 
       if (error) throw error;
       setTenantPlans(plans || []);
-
     } catch (err) {
-      console.error('Erro ao carregar planos:', err);
+      console.error("Erro ao carregar planos:", err);
     }
   };
 
   const applyBrandingTheme = (branding: TenantBranding) => {
     const root = document.documentElement;
-    
+
     // Aplicar cores personalizadas
-    root.style.setProperty('--primary', branding.primary_color);
-    root.style.setProperty('--secondary', branding.secondary_color);
-    root.style.setProperty('--accent', branding.accent_color);
-    
+    root.style.setProperty("--primary", branding.primary_color);
+    root.style.setProperty("--secondary", branding.secondary_color);
+    root.style.setProperty("--accent", branding.accent_color);
+
     if (branding.background_color) {
-      root.style.setProperty('--background', branding.background_color);
+      root.style.setProperty("--background", branding.background_color);
     }
-    
+
     if (branding.text_color) {
-      root.style.setProperty('--foreground', branding.text_color);
+      root.style.setProperty("--foreground", branding.text_color);
     }
-    
+
     // Atualizar título da página
     if (branding.company_name) {
       document.title = `${branding.company_name} - Plataforma Marítima`;
     }
-    
+
     // Aplicar tema escuro/claro
-    if (branding.theme_mode !== 'auto') {
-      document.documentElement.classList.toggle('dark', branding.theme_mode === 'dark');
+    if (branding.theme_mode !== "auto") {
+      document.documentElement.classList.toggle("dark", branding.theme_mode === "dark");
     }
   };
 
@@ -431,16 +428,15 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       setIsLoading(true);
       const tenant = availableTenants.find(t => t.id === tenantId);
-      if (!tenant) throw new Error('Tenant não encontrado');
+      if (!tenant) throw new Error("Tenant não encontrado");
 
       setCurrentTenant(tenant);
       await loadTenantBranding(tenantId);
       await loadCurrentTenantUser(tenantId);
       await loadTenantUsage(tenantId);
-
     } catch (err) {
-      console.error('Erro ao trocar tenant:', err);
-      setError('Erro ao trocar empresa');
+      console.error("Erro ao trocar tenant:", err);
+      setError("Erro ao trocar empresa");
     } finally {
       setIsLoading(false);
     }
@@ -451,9 +447,9 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     try {
       const { data, error } = await supabase
-        .from('tenant_branding')
+        .from("tenant_branding")
         .update(brandingUpdate)
-        .eq('tenant_id', currentTenant.id)
+        .eq("tenant_id", currentTenant.id)
         .select()
         .single();
 
@@ -461,9 +457,8 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       setCurrentBranding(data);
       applyBrandingTheme(data);
-
     } catch (err) {
-      console.error('Erro ao atualizar branding:', err);
+      console.error("Erro ao atualizar branding:", err);
       throw err;
     }
   };
@@ -473,34 +468,33 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     try {
       const { data, error } = await supabase
-        .from('saas_tenants')
+        .from("saas_tenants")
         .update(settings)
-        .eq('id', currentTenant.id)
+        .eq("id", currentTenant.id)
         .select()
         .single();
 
       if (error) throw error;
       setCurrentTenant(data);
-
     } catch (err) {
-      console.error('Erro ao atualizar configurações:', err);
+      console.error("Erro ao atualizar configurações:", err);
       throw err;
     }
   };
 
   const inviteTenantUser = async (email: string, role: string) => {
-    if (!currentTenant) throw new Error('Nenhum tenant selecionado');
+    if (!currentTenant) throw new Error("Nenhum tenant selecionado");
     // Invite functionality to be implemented
   };
 
   const updateUserRole = async (userId: string, role: string) => {
     if (!currentTenant) return;
-    console.log('Funcionalidade de atualização de role será implementada');
+    console.log("Funcionalidade de atualização de role será implementada");
   };
 
   const removeTenantUser = async (userId: string) => {
     if (!currentTenant) return;
-    console.log('Funcionalidade de remoção será implementada');
+    console.log("Funcionalidade de remoção será implementada");
   };
 
   const getTenantUsers = async (): Promise<TenantUser[]> => {
@@ -508,33 +502,33 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // Mock data para demo
     return [
       {
-        id: '1',
+        id: "1",
         tenant_id: currentTenant.id,
-        user_id: user?.id || '',
-        role: 'admin',
-        status: 'active',
-        display_name: 'Administrador',
-        job_title: 'Administrador do Sistema',
-        department: 'TI',
+        user_id: user?.id || "",
+        role: "admin",
+        status: "active",
+        display_name: "Administrador",
+        job_title: "Administrador do Sistema",
+        department: "TI",
         permissions: {},
         joined_at: new Date().toISOString(),
         last_active_at: new Date().toISOString(),
-        metadata: {}
-      }
+        metadata: {},
+      },
     ];
   };
 
   const checkPermission = (permission: string): boolean => {
     if (!currentUser) return false;
-    
+
     // Admin tem todas as permissões
-    if (currentUser.role === 'owner' || currentUser.role === 'admin') return true;
-    
+    if (currentUser.role === "owner" || currentUser.role === "admin") return true;
+
     const rolePermissions = {
-      manager: ['view_analytics', 'manage_data', 'manage_team'],
-      operator: ['manage_data', 'view_data'],
-      member: ['view_data'],
-      viewer: ['view_data']
+      manager: ["view_analytics", "manage_data", "manage_team"],
+      operator: ["manage_data", "view_data"],
+      member: ["view_data"],
+      viewer: ["view_data"],
     };
 
     const userPermissions = rolePermissions[currentUser.role as keyof typeof rolePermissions] || [];
@@ -548,15 +542,15 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const checkUsageLimits = (type: string): boolean => {
     if (!currentTenant || !tenantUsage) return false;
-    
+
     switch (type) {
-      case 'users':
+      case "users":
         return tenantUsage.active_users < currentTenant.max_users;
-      case 'vessels':
+      case "vessels":
         return tenantUsage.vessels_managed < currentTenant.max_vessels;
-      case 'storage':
+      case "storage":
         return tenantUsage.storage_used_gb < currentTenant.max_storage_gb;
-      case 'api_calls':
+      case "api_calls":
         return tenantUsage.api_calls_made < currentTenant.max_api_calls_per_month;
       default:
         return false;
@@ -564,34 +558,34 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const upgradePlan = async (planId: string) => {
-    console.log('Funcionalidade de upgrade será implementada');
+    console.log("Funcionalidade de upgrade será implementada");
   };
 
   const downgradeplan = async (planId: string) => {
-    console.log('Funcionalidade de downgrade será implementada');
+    console.log("Funcionalidade de downgrade será implementada");
   };
 
   const formatCurrency = (amount: number): string => {
-    const currency = currentBranding?.default_currency || 'BRL';
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: currency
+    const currency = currentBranding?.default_currency || "BRL";
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: currency,
     }).format(amount);
   };
 
   const formatDate = (date: string): string => {
-    const format = currentBranding?.date_format || 'DD/MM/YYYY';
+    const format = currentBranding?.date_format || "DD/MM/YYYY";
     const dateObj = new Date(date);
-    
-    if (format === 'DD/MM/YYYY') {
-      return dateObj.toLocaleDateString('pt-BR');
+
+    if (format === "DD/MM/YYYY") {
+      return dateObj.toLocaleDateString("pt-BR");
     }
-    
+
     return dateObj.toLocaleDateString();
   };
 
   const getSubdomain = (): string => {
-    return currentTenant?.subdomain || 'demo';
+    return currentTenant?.subdomain || "demo";
   };
 
   const value: TenantContextType = {
@@ -617,12 +611,8 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     downgradeplan,
     formatCurrency,
     formatDate,
-    getSubdomain
+    getSubdomain,
   };
 
-  return (
-    <TenantContext.Provider value={value}>
-      {children}
-    </TenantContext.Provider>
-  );
+  return <TenantContext.Provider value={value}>{children}</TenantContext.Provider>;
 };

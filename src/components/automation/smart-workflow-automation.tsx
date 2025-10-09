@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -21,16 +21,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { 
-  Workflow, 
-  Play, 
-  Pause, 
-  Settings, 
-  Plus, 
-  GitBranch, 
-  Clock, 
-  CheckCircle, 
+} from "@/components/ui/dialog";
+import {
+  Workflow,
+  Play,
+  Pause,
+  Settings,
+  Plus,
+  GitBranch,
+  Clock,
+  CheckCircle,
   AlertCircle,
   XCircle,
   Edit,
@@ -46,13 +46,13 @@ import {
   Activity,
   BarChart3,
   Users,
-  MessageSquare
-} from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+  MessageSquare,
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface WorkflowStep {
   id: string;
-  type: 'trigger' | 'condition' | 'action' | 'delay';
+  type: "trigger" | "condition" | "action" | "delay";
   title: string;
   description: string;
   config: Record<string, any>;
@@ -64,7 +64,7 @@ interface Workflow {
   id: string;
   name: string;
   description: string;
-  status: 'active' | 'inactive' | 'draft';
+  status: "active" | "inactive" | "draft";
   trigger: string;
   steps: WorkflowStep[];
   executions: number;
@@ -78,13 +78,13 @@ interface Workflow {
 interface WorkflowExecution {
   id: string;
   workflowId: string;
-  status: 'running' | 'completed' | 'failed' | 'cancelled';
+  status: "running" | "completed" | "failed" | "cancelled";
   startedAt: Date;
   completedAt?: Date;
   duration?: number;
   steps: Array<{
     stepId: string;
-    status: 'pending' | 'running' | 'completed' | 'failed';
+    status: "pending" | "running" | "completed" | "failed";
     result?: any;
   }>;
 }
@@ -92,135 +92,137 @@ interface WorkflowExecution {
 const SmartWorkflowAutomation = () => {
   const [workflows, setWorkflows] = useState<Workflow[]>([
     {
-      id: '1',
-      name: 'Aprovação de Documentos',
-      description: 'Workflow para aprovação automática de documentos baseado em regras',
-      status: 'active',
-      trigger: 'Documento Enviado',
+      id: "1",
+      name: "Aprovação de Documentos",
+      description: "Workflow para aprovação automática de documentos baseado em regras",
+      status: "active",
+      trigger: "Documento Enviado",
       steps: [],
       executions: 247,
       successRate: 94.2,
       createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       lastRun: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      category: 'Documentos',
-      tags: ['aprovação', 'automático', 'documento']
+      category: "Documentos",
+      tags: ["aprovação", "automático", "documento"],
     },
     {
-      id: '2',
-      name: 'Onboarding de Funcionários',
-      description: 'Processo completo de integração de novos colaboradores',
-      status: 'active',
-      trigger: 'Novo Funcionário',
+      id: "2",
+      name: "Onboarding de Funcionários",
+      description: "Processo completo de integração de novos colaboradores",
+      status: "active",
+      trigger: "Novo Funcionário",
       steps: [],
       executions: 23,
       successRate: 100,
       createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
       lastRun: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-      category: 'RH',
-      tags: ['onboarding', 'funcionário', 'integração']
+      category: "RH",
+      tags: ["onboarding", "funcionário", "integração"],
     },
     {
-      id: '3',
-      name: 'Alertas de Performance',
-      description: 'Monitoramento automático de KPIs com notificações inteligentes',
-      status: 'active',
-      trigger: 'Dados Atualizados',
+      id: "3",
+      name: "Alertas de Performance",
+      description: "Monitoramento automático de KPIs com notificações inteligentes",
+      status: "active",
+      trigger: "Dados Atualizados",
       steps: [],
       executions: 1520,
       successRate: 98.7,
       createdAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000),
       lastRun: new Date(Date.now() - 30 * 60 * 1000),
-      category: 'Monitoramento',
-      tags: ['kpi', 'alerta', 'performance']
-    }
+      category: "Monitoramento",
+      tags: ["kpi", "alerta", "performance"],
+    },
   ]);
 
   const [executions, setExecutions] = useState<WorkflowExecution[]>([
     {
-      id: '1',
-      workflowId: '1',
-      status: 'completed',
+      id: "1",
+      workflowId: "1",
+      status: "completed",
       startedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
       completedAt: new Date(Date.now() - 2 * 60 * 60 * 1000 + 45000),
       duration: 45,
       steps: [
-        { stepId: '1', status: 'completed' },
-        { stepId: '2', status: 'completed' },
-        { stepId: '3', status: 'completed' }
-      ]
+        { stepId: "1", status: "completed" },
+        { stepId: "2", status: "completed" },
+        { stepId: "3", status: "completed" },
+      ],
     },
     {
-      id: '2',
-      workflowId: '2',
-      status: 'running',
+      id: "2",
+      workflowId: "2",
+      status: "running",
       startedAt: new Date(Date.now() - 30 * 60 * 1000),
       steps: [
-        { stepId: '1', status: 'completed' },
-        { stepId: '2', status: 'running' },
-        { stepId: '3', status: 'pending' }
-      ]
-    }
+        { stepId: "1", status: "completed" },
+        { stepId: "2", status: "running" },
+        { stepId: "3", status: "pending" },
+      ],
+    },
   ]);
 
   const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [newWorkflow, setNewWorkflow] = useState({
-    name: '',
-    description: '',
-    category: '',
-    trigger: ''
+    name: "",
+    description: "",
+    category: "",
+    trigger: "",
   });
 
   // Predefined workflow templates
   const workflowTemplates = [
     {
-      name: 'Aprovação de Despesas',
-      description: 'Automatiza o processo de aprovação de reembolsos',
-      category: 'Financeiro',
-      trigger: 'Nova Despesa',
-      steps: 3
+      name: "Aprovação de Despesas",
+      description: "Automatiza o processo de aprovação de reembolsos",
+      category: "Financeiro",
+      trigger: "Nova Despesa",
+      steps: 3,
     },
     {
-      name: 'Backup Automático',
-      description: 'Executa backups programados dos dados críticos',
-      category: 'TI',
-      trigger: 'Agendamento',
-      steps: 4
+      name: "Backup Automático",
+      description: "Executa backups programados dos dados críticos",
+      category: "TI",
+      trigger: "Agendamento",
+      steps: 4,
     },
     {
-      name: 'Relatório Semanal',
-      description: 'Gera e distribui relatórios automaticamente',
-      category: 'Relatórios',
-      trigger: 'Cronograma',
-      steps: 5
+      name: "Relatório Semanal",
+      description: "Gera e distribui relatórios automaticamente",
+      category: "Relatórios",
+      trigger: "Cronograma",
+      steps: 5,
     },
     {
-      name: 'Notificação de Vendas',
-      description: 'Alerta sobre metas e oportunidades de vendas',
-      category: 'Vendas',
-      trigger: 'Meta Atingida',
-      steps: 2
-    }
+      name: "Notificação de Vendas",
+      description: "Alerta sobre metas e oportunidades de vendas",
+      category: "Vendas",
+      trigger: "Meta Atingida",
+      steps: 2,
+    },
   ];
 
   // Real-time updates simulation
   useEffect(() => {
     const interval = setInterval(() => {
       // Update running executions
-      setExecutions(prev => prev.map(exec => {
-        if (exec.status === 'running') {
-          const shouldComplete = Math.random() > 0.7;
-          if (shouldComplete) {
-            return {
-              ...exec,
-              status: 'completed',
-              completedAt: new Date(),
-              duration: Math.floor((Date.now() - exec.startedAt.getTime()) / 1000)
-            };
+      setExecutions(prev =>
+        prev.map(exec => {
+          if (exec.status === "running") {
+            const shouldComplete = Math.random() > 0.7;
+            if (shouldComplete) {
+              return {
+                ...exec,
+                status: "completed",
+                completedAt: new Date(),
+                duration: Math.floor((Date.now() - exec.startedAt.getTime()) / 1000),
+              };
+            }
           }
-        }
-        return exec;
-      }));
+          return exec;
+        })
+      );
     }, 10000);
 
     return () => clearInterval(interval);
@@ -228,11 +230,11 @@ const SmartWorkflowAutomation = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active':
+      case "active":
         return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'inactive':
+      case "inactive":
         return <Pause className="w-4 h-4 text-muted-foreground" />;
-      case 'draft':
+      case "draft":
         return <Edit className="w-4 h-4 text-blue-500" />;
       default:
         return <AlertCircle className="w-4 h-4 text-yellow-500" />;
@@ -241,13 +243,13 @@ const SmartWorkflowAutomation = () => {
 
   const getExecutionStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
+      case "completed":
         return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'running':
+      case "running":
         return <Activity className="w-4 h-4 text-blue-500 animate-pulse" />;
-      case 'failed':
+      case "failed":
         return <XCircle className="w-4 h-4 text-red-500" />;
-      case 'cancelled':
+      case "cancelled":
         return <Pause className="w-4 h-4 text-muted-foreground" />;
       default:
         return <Clock className="w-4 h-4 text-yellow-500" />;
@@ -255,18 +257,20 @@ const SmartWorkflowAutomation = () => {
   };
 
   const toggleWorkflowStatus = (id: string) => {
-    setWorkflows(prev => prev.map(workflow => 
-      workflow.id === id 
-        ? { 
-            ...workflow, 
-            status: workflow.status === 'active' ? 'inactive' : 'active' 
-          }
-        : workflow
-    ));
-    
+    setWorkflows(prev =>
+      prev.map(workflow =>
+        workflow.id === id
+          ? {
+              ...workflow,
+              status: workflow.status === "active" ? "inactive" : "active",
+            }
+          : workflow
+      )
+    );
+
     toast({
       title: "Status atualizado",
-      description: "Workflow foi ativado/desativado com sucesso"
+      description: "Workflow foi ativado/desativado com sucesso",
     });
   };
 
@@ -274,20 +278,20 @@ const SmartWorkflowAutomation = () => {
     const newExecution: WorkflowExecution = {
       id: Date.now().toString(),
       workflowId: id,
-      status: 'running',
+      status: "running",
       startedAt: new Date(),
       steps: [
-        { stepId: '1', status: 'running' },
-        { stepId: '2', status: 'pending' },
-        { stepId: '3', status: 'pending' }
-      ]
+        { stepId: "1", status: "running" },
+        { stepId: "2", status: "pending" },
+        { stepId: "3", status: "pending" },
+      ],
     };
 
     setExecutions(prev => [newExecution, ...prev]);
-    
+
     toast({
       title: "Workflow iniciado",
-      description: "Execução em andamento..."
+      description: "Execução em andamento...",
     });
   };
 
@@ -298,23 +302,23 @@ const SmartWorkflowAutomation = () => {
       id: Date.now().toString(),
       name: newWorkflow.name,
       description: newWorkflow.description,
-      status: 'draft',
+      status: "draft",
       trigger: newWorkflow.trigger,
       steps: [],
       executions: 0,
       successRate: 0,
       createdAt: new Date(),
       category: newWorkflow.category,
-      tags: []
+      tags: [],
     };
 
     setWorkflows(prev => [workflow, ...prev]);
     setShowCreateDialog(false);
-    setNewWorkflow({ name: '', description: '', category: '', trigger: '' });
-    
+    setNewWorkflow({ name: "", description: "", category: "", trigger: "" });
+
     toast({
       title: "Workflow criado",
-      description: "Novo workflow adicionado como rascunho"
+      description: "Novo workflow adicionado como rascunho",
     });
   };
 
@@ -323,17 +327,17 @@ const SmartWorkflowAutomation = () => {
       ...workflow,
       id: Date.now().toString(),
       name: `${workflow.name} (Cópia)`,
-      status: 'draft',
+      status: "draft",
       executions: 0,
       createdAt: new Date(),
-      lastRun: undefined
+      lastRun: undefined,
     };
 
     setWorkflows(prev => [duplicated, ...prev]);
-    
+
     toast({
       title: "Workflow duplicado",
-      description: "Cópia criada como rascunho"
+      description: "Cópia criada como rascunho",
     });
   };
 
@@ -341,33 +345,33 @@ const SmartWorkflowAutomation = () => {
     setWorkflows(prev => prev.filter(w => w.id !== id));
     toast({
       title: "Workflow excluído",
-      description: "Workflow removido permanentemente"
+      description: "Workflow removido permanentemente",
     });
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
-      case 'documentos':
+      case "documentos":
         return <FileText className="w-4 h-4" />;
-      case 'rh':
+      case "rh":
         return <Users className="w-4 h-4" />;
-      case 'monitoramento':
+      case "monitoramento":
         return <BarChart3 className="w-4 h-4" />;
-      case 'financeiro':
+      case "financeiro":
         return <Target className="w-4 h-4" />;
-      case 'ti':
+      case "ti":
         return <Database className="w-4 h-4" />;
-      case 'vendas':
+      case "vendas":
         return <Zap className="w-4 h-4" />;
       default:
         return <Workflow className="w-4 h-4" />;
     }
   };
 
-  const activeWorkflows = workflows.filter(w => w.status === 'active').length;
+  const activeWorkflows = workflows.filter(w => w.status === "active").length;
   const totalExecutions = workflows.reduce((sum, w) => sum + w.executions, 0);
   const avgSuccessRate = workflows.reduce((sum, w) => sum + w.successRate, 0) / workflows.length;
-  const runningExecutions = executions.filter(e => e.status === 'running').length;
+  const runningExecutions = executions.filter(e => e.status === "running").length;
 
   return (
     <div className="p-6 space-y-6 bg-background min-h-screen">
@@ -391,16 +395,14 @@ const SmartWorkflowAutomation = () => {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Criar Novo Workflow</DialogTitle>
-                <DialogDescription>
-                  Configure um novo processo automatizado
-                </DialogDescription>
+                <DialogDescription>Configure um novo processo automatizado</DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
                   <label className="text-sm font-medium">Nome do Workflow</label>
                   <Input
                     value={newWorkflow.name}
-                    onChange={(e) => setNewWorkflow(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={e => setNewWorkflow(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Ex: Aprovação de Documentos"
                   />
                 </div>
@@ -408,13 +410,18 @@ const SmartWorkflowAutomation = () => {
                   <label className="text-sm font-medium">Descrição</label>
                   <Textarea
                     value={newWorkflow.description}
-                    onChange={(e) => setNewWorkflow(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={e =>
+                      setNewWorkflow(prev => ({ ...prev, description: e.target.value }))
+                    }
                     placeholder="Descreva o objetivo deste workflow..."
                   />
                 </div>
                 <div>
                   <label className="text-sm font-medium">Categoria</label>
-                  <Select value={newWorkflow.category} onValueChange={(value) => setNewWorkflow(prev => ({ ...prev, category: value }))}>
+                  <Select
+                    value={newWorkflow.category}
+                    onValueChange={value => setNewWorkflow(prev => ({ ...prev, category: value }))}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione uma categoria" />
                     </SelectTrigger>
@@ -432,7 +439,7 @@ const SmartWorkflowAutomation = () => {
                   <label className="text-sm font-medium">Trigger</label>
                   <Input
                     value={newWorkflow.trigger}
-                    onChange={(e) => setNewWorkflow(prev => ({ ...prev, trigger: e.target.value }))}
+                    onChange={e => setNewWorkflow(prev => ({ ...prev, trigger: e.target.value }))}
                     placeholder="Ex: Documento Enviado"
                   />
                 </div>
@@ -440,9 +447,7 @@ const SmartWorkflowAutomation = () => {
                   <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={createWorkflow}>
-                    Criar Workflow
-                  </Button>
+                  <Button onClick={createWorkflow}>Criar Workflow</Button>
                 </div>
               </div>
             </DialogContent>
@@ -459,9 +464,7 @@ const SmartWorkflowAutomation = () => {
               <span className="text-sm font-medium">Workflows Ativos</span>
             </div>
             <div className="text-2xl font-bold">{activeWorkflows}</div>
-            <p className="text-xs text-muted-foreground">
-              de {workflows.length} total
-            </p>
+            <p className="text-xs text-muted-foreground">de {workflows.length} total</p>
           </CardContent>
         </Card>
 
@@ -472,9 +475,7 @@ const SmartWorkflowAutomation = () => {
               <span className="text-sm font-medium">Execuções</span>
             </div>
             <div className="text-2xl font-bold">{totalExecutions.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              {runningExecutions} em execução
-            </p>
+            <p className="text-xs text-muted-foreground">{runningExecutions} em execução</p>
           </CardContent>
         </Card>
 
@@ -485,9 +486,7 @@ const SmartWorkflowAutomation = () => {
               <span className="text-sm font-medium">Taxa de Sucesso</span>
             </div>
             <div className="text-2xl font-bold">{avgSuccessRate.toFixed(1)}%</div>
-            <p className="text-xs text-muted-foreground">
-              Média geral
-            </p>
+            <p className="text-xs text-muted-foreground">Média geral</p>
           </CardContent>
         </Card>
 
@@ -498,9 +497,7 @@ const SmartWorkflowAutomation = () => {
               <span className="text-sm font-medium">Tempo Economizado</span>
             </div>
             <div className="text-2xl font-bold">847h</div>
-            <p className="text-xs text-muted-foreground">
-              Este mês
-            </p>
+            <p className="text-xs text-muted-foreground">Este mês</p>
           </CardContent>
         </Card>
       </div>
@@ -515,7 +512,7 @@ const SmartWorkflowAutomation = () => {
 
         <TabsContent value="workflows" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {workflows.map((workflow) => (
+            {workflows.map(workflow => (
               <Card key={workflow.id} className="border-border hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -525,14 +522,12 @@ const SmartWorkflowAutomation = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       {getStatusIcon(workflow.status)}
-                      <Badge variant={workflow.status === 'active' ? 'default' : 'secondary'}>
+                      <Badge variant={workflow.status === "active" ? "default" : "secondary"}>
                         {workflow.status}
                       </Badge>
                     </div>
                   </div>
-                  <CardDescription className="line-clamp-2">
-                    {workflow.description}
-                  </CardDescription>
+                  <CardDescription className="line-clamp-2">{workflow.description}</CardDescription>
                 </CardHeader>
 
                 <CardContent className="space-y-4">
@@ -563,7 +558,8 @@ const SmartWorkflowAutomation = () => {
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Clock className="w-3 h-3" />
                     <span>
-                      Última execução: {workflow.lastRun ? workflow.lastRun.toLocaleString() : 'Nunca'}
+                      Última execução:{" "}
+                      {workflow.lastRun ? workflow.lastRun.toLocaleString() : "Nunca"}
                     </span>
                   </div>
 
@@ -576,32 +572,29 @@ const SmartWorkflowAutomation = () => {
                   </div>
 
                   <div className="flex gap-2 pt-2">
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       onClick={() => executeWorkflow(workflow.id)}
-                      disabled={workflow.status !== 'active'}
+                      disabled={workflow.status !== "active"}
                       className="flex-1"
                     >
                       <Play className="w-3 h-3 mr-1" />
                       Executar
                     </Button>
-                    
-                    <Button 
-                      size="sm" 
+
+                    <Button
+                      size="sm"
                       variant="outline"
                       onClick={() => toggleWorkflowStatus(workflow.id)}
                     >
-                      {workflow.status === 'active' ? 
-                        <Pause className="w-3 h-3" /> : 
+                      {workflow.status === "active" ? (
+                        <Pause className="w-3 h-3" />
+                      ) : (
                         <Play className="w-3 h-3" />
-                      }
+                      )}
                     </Button>
 
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => duplicateWorkflow(workflow)}
-                    >
+                    <Button size="sm" variant="outline" onClick={() => duplicateWorkflow(workflow)}>
                       <Copy className="w-3 h-3" />
                     </Button>
                   </div>
@@ -615,25 +608,30 @@ const SmartWorkflowAutomation = () => {
           <Card>
             <CardHeader>
               <CardTitle>Execuções Recentes</CardTitle>
-              <CardDescription>
-                Histórico de execuções de workflows em tempo real
-              </CardDescription>
+              <CardDescription>Histórico de execuções de workflows em tempo real</CardDescription>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[500px]">
                 <div className="space-y-3">
-                  {executions.map((execution) => {
+                  {executions.map(execution => {
                     const workflow = workflows.find(w => w.id === execution.workflowId);
                     return (
-                      <div key={execution.id} className="flex items-center gap-4 p-4 border border-border rounded-lg">
+                      <div
+                        key={execution.id}
+                        className="flex items-center gap-4 p-4 border border-border rounded-lg"
+                      >
                         <div className="flex items-center gap-2">
                           {getExecutionStatusIcon(execution.status)}
                           <div>
                             <h4 className="font-medium">{workflow?.name}</h4>
                             <p className="text-sm text-muted-foreground">
-                              {execution.status === 'running' ? 'Em execução' : 
-                               execution.status === 'completed' ? 'Concluído' :
-                               execution.status === 'failed' ? 'Falhou' : 'Cancelado'}
+                              {execution.status === "running"
+                                ? "Em execução"
+                                : execution.status === "completed"
+                                  ? "Concluído"
+                                  : execution.status === "failed"
+                                    ? "Falhou"
+                                    : "Cancelado"}
                             </p>
                           </div>
                         </div>
@@ -642,13 +640,17 @@ const SmartWorkflowAutomation = () => {
                           <div className="flex justify-between text-sm mb-2">
                             <span>Progresso</span>
                             <span>
-                              {execution.steps.filter(s => s.status === 'completed').length}/
+                              {execution.steps.filter(s => s.status === "completed").length}/
                               {execution.steps.length} etapas
                             </span>
                           </div>
-                          <Progress 
-                            value={(execution.steps.filter(s => s.status === 'completed').length / execution.steps.length) * 100} 
-                            className="h-2" 
+                          <Progress
+                            value={
+                              (execution.steps.filter(s => s.status === "completed").length /
+                                execution.steps.length) *
+                              100
+                            }
+                            className="h-2"
                           />
                         </div>
 
@@ -657,7 +659,7 @@ const SmartWorkflowAutomation = () => {
                             {execution.startedAt.toLocaleTimeString()}
                           </div>
                           <div className="text-muted-foreground">
-                            {execution.duration ? `${execution.duration}s` : 'Em andamento'}
+                            {execution.duration ? `${execution.duration}s` : "Em andamento"}
                           </div>
                         </div>
                       </div>
@@ -672,7 +674,10 @@ const SmartWorkflowAutomation = () => {
         <TabsContent value="templates" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             {workflowTemplates.map((template, index) => (
-              <Card key={index} className="border-border hover:shadow-md transition-shadow cursor-pointer">
+              <Card
+                key={index}
+                className="border-border hover:shadow-md transition-shadow cursor-pointer"
+              >
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">

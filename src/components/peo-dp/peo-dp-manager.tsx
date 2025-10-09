@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { PeoDpWizard } from './peo-dp-wizard';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { PeoDpWizard } from "./peo-dp-wizard";
 import {
   LayoutDashboard,
   FileText,
@@ -23,16 +23,16 @@ import {
   AlertTriangle,
   TrendingUp,
   Target,
-  Shield
-} from 'lucide-react';
-import { toast } from 'sonner';
+  Shield,
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface DPPlan {
   id: string;
   vessel_name: string;
   vessel_type: string;
-  dp_class: 'DP1' | 'DP2' | 'DP3';
-  status: 'draft' | 'in_review' | 'approved' | 'active';
+  dp_class: "DP1" | "DP2" | "DP3";
+  status: "draft" | "in_review" | "approved" | "active";
   created_at: Date;
   updated_at: Date;
   sections: {
@@ -49,85 +49,85 @@ interface DPPlan {
 interface SectionStatus {
   completed: number;
   total: number;
-  status: 'pending' | 'in_progress' | 'completed';
+  status: "pending" | "in_progress" | "completed";
   last_updated: Date;
 }
 
 const SECTIONS = [
   {
-    id: 'management',
-    name: 'Gestão',
+    id: "management",
+    name: "Gestão",
     icon: Users,
-    description: 'Organograma, responsabilidades e estrutura',
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50'
+    description: "Organograma, responsabilidades e estrutura",
+    color: "text-blue-600",
+    bgColor: "bg-blue-50",
   },
   {
-    id: 'training',
-    name: 'Treinamentos',
+    id: "training",
+    name: "Treinamentos",
     icon: GraduationCap,
-    description: 'Certificações, competências e capacitação',
-    color: 'text-green-600',
-    bgColor: 'bg-green-50'
+    description: "Certificações, competências e capacitação",
+    color: "text-green-600",
+    bgColor: "bg-green-50",
   },
   {
-    id: 'procedures',
-    name: 'Procedimentos',
+    id: "procedures",
+    name: "Procedimentos",
     icon: FileText,
-    description: 'FMEA, ASOG, contingência e emergência',
-    color: 'text-purple-600',
-    bgColor: 'bg-purple-50'
+    description: "FMEA, ASOG, contingência e emergência",
+    color: "text-purple-600",
+    bgColor: "bg-purple-50",
   },
   {
-    id: 'operation',
-    name: 'Operação',
+    id: "operation",
+    name: "Operação",
     icon: Radio,
-    description: 'Watch keeping, comunicação e protocolos',
-    color: 'text-orange-600',
-    bgColor: 'bg-orange-50'
+    description: "Watch keeping, comunicação e protocolos",
+    color: "text-orange-600",
+    bgColor: "bg-orange-50",
   },
   {
-    id: 'maintenance',
-    name: 'Manutenção',
+    id: "maintenance",
+    name: "Manutenção",
     icon: Wrench,
-    description: 'Preventiva, preditiva e corretiva',
-    color: 'text-red-600',
-    bgColor: 'bg-red-50'
+    description: "Preventiva, preditiva e corretiva",
+    color: "text-red-600",
+    bgColor: "bg-red-50",
   },
   {
-    id: 'testing',
-    name: 'Testes Anuais',
+    id: "testing",
+    name: "Testes Anuais",
     icon: TestTube,
-    description: 'DP trials, capability plots e validação',
-    color: 'text-indigo-600',
-    bgColor: 'bg-indigo-50'
-  }
+    description: "DP trials, capability plots e validação",
+    color: "text-indigo-600",
+    bgColor: "bg-indigo-50",
+  },
 ];
 
 export const PeoDpManager: React.FC = () => {
   const [plans, setPlans] = useState<DPPlan[]>([
     {
-      id: 'plan-1',
-      vessel_name: 'PSV Atlantic Explorer',
-      vessel_type: 'PSV',
-      dp_class: 'DP2',
-      status: 'in_review',
-      created_at: new Date('2024-01-15'),
+      id: "plan-1",
+      vessel_name: "PSV Atlantic Explorer",
+      vessel_type: "PSV",
+      dp_class: "DP2",
+      status: "in_review",
+      created_at: new Date("2024-01-15"),
       updated_at: new Date(),
       sections: {
-        management: { completed: 12, total: 15, status: 'in_progress', last_updated: new Date() },
-        training: { completed: 8, total: 10, status: 'in_progress', last_updated: new Date() },
-        procedures: { completed: 15, total: 20, status: 'in_progress', last_updated: new Date() },
-        operation: { completed: 18, total: 18, status: 'completed', last_updated: new Date() },
-        maintenance: { completed: 10, total: 12, status: 'in_progress', last_updated: new Date() },
-        testing: { completed: 0, total: 8, status: 'pending', last_updated: new Date() }
+        management: { completed: 12, total: 15, status: "in_progress", last_updated: new Date() },
+        training: { completed: 8, total: 10, status: "in_progress", last_updated: new Date() },
+        procedures: { completed: 15, total: 20, status: "in_progress", last_updated: new Date() },
+        operation: { completed: 18, total: 18, status: "completed", last_updated: new Date() },
+        maintenance: { completed: 10, total: 12, status: "in_progress", last_updated: new Date() },
+        testing: { completed: 0, total: 8, status: "pending", last_updated: new Date() },
       },
-      overall_compliance: 73
-    }
+      overall_compliance: 73,
+    },
   ]);
 
   const [selectedPlan, setSelectedPlan] = useState<DPPlan | null>(plans[0] || null);
-  const [activeView, setActiveView] = useState<'dashboard' | 'plans' | 'analytics'>('dashboard');
+  const [activeView, setActiveView] = useState<"dashboard" | "plans" | "analytics">("dashboard");
   const [isWizardOpen, setIsWizardOpen] = useState(false);
 
   const createNewPlan = () => {
@@ -135,27 +135,27 @@ export const PeoDpManager: React.FC = () => {
   };
 
   const handleWizardComplete = async (data: any) => {
-    console.log('Wizard completed with data:', data);
+    console.log("Wizard completed with data:", data);
     // TODO: Create plan in database
     setIsWizardOpen(false);
-    toast.success('Plano PEO-DP criado com sucesso!');
+    toast.success("Plano PEO-DP criado com sucesso!");
   };
 
-  const getStatusBadge = (status: DPPlan['status']) => {
+  const getStatusBadge = (status: DPPlan["status"]) => {
     const variants = {
-      draft: { label: 'Rascunho', color: 'bg-secondary text-secondary-foreground' },
-      in_review: { label: 'Em Revisão', color: 'bg-yellow-100 text-yellow-800' },
-      approved: { label: 'Aprovado', color: 'bg-blue-100 text-blue-800' },
-      active: { label: 'Ativo', color: 'bg-green-100 text-green-800' }
+      draft: { label: "Rascunho", color: "bg-secondary text-secondary-foreground" },
+      in_review: { label: "Em Revisão", color: "bg-yellow-100 text-yellow-800" },
+      approved: { label: "Aprovado", color: "bg-blue-100 text-blue-800" },
+      active: { label: "Ativo", color: "bg-green-100 text-green-800" },
     };
     const variant = variants[status];
     return <Badge className={variant.color}>{variant.label}</Badge>;
   };
 
   const getComplianceColor = (compliance: number) => {
-    if (compliance >= 90) return 'text-green-600';
-    if (compliance >= 70) return 'text-yellow-600';
-    return 'text-red-600';
+    if (compliance >= 90) return "text-green-600";
+    if (compliance >= 70) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getSectionProgress = (section: SectionStatus) => {
@@ -174,20 +174,18 @@ export const PeoDpManager: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">
-              {plans.filter(p => p.status === 'active').length}
+              {plans.filter(p => p.status === "active").length}
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Em Revisão
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Em Revisão</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-yellow-600">
-              {plans.filter(p => p.status === 'in_review').length}
+              {plans.filter(p => p.status === "in_review").length}
             </div>
           </CardContent>
         </Card>
@@ -199,9 +197,11 @@ export const PeoDpManager: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-3xl font-bold ${getComplianceColor(
-              plans.reduce((sum, p) => sum + p.overall_compliance, 0) / plans.length
-            )}`}>
+            <div
+              className={`text-3xl font-bold ${getComplianceColor(
+                plans.reduce((sum, p) => sum + p.overall_compliance, 0) / plans.length
+              )}`}
+            >
               {Math.round(plans.reduce((sum, p) => sum + p.overall_compliance, 0) / plans.length)}%
             </div>
           </CardContent>
@@ -216,8 +216,12 @@ export const PeoDpManager: React.FC = () => {
           <CardContent>
             <div className="text-3xl font-bold text-red-600">
               {plans.reduce((sum, p) => {
-                return sum + Object.values(p.sections).reduce((s, section) => 
-                  s + (section.total - section.completed), 0
+                return (
+                  sum +
+                  Object.values(p.sections).reduce(
+                    (s, section) => s + (section.total - section.completed),
+                    0
+                  )
                 );
               }, 0)}
             </div>
@@ -226,7 +230,7 @@ export const PeoDpManager: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <Tabs value={activeView} onValueChange={(v) => setActiveView(v as any)} className="space-y-6">
+      <Tabs value={activeView} onValueChange={v => setActiveView(v as any)} className="space-y-6">
         <div className="flex items-center justify-between">
           <TabsList className="grid w-full max-w-md grid-cols-3">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
@@ -266,7 +270,9 @@ export const PeoDpManager: React.FC = () => {
                       </CardDescription>
                     </div>
                     <div className="text-right">
-                      <div className={`text-4xl font-bold ${getComplianceColor(selectedPlan.overall_compliance)}`}>
+                      <div
+                        className={`text-4xl font-bold ${getComplianceColor(selectedPlan.overall_compliance)}`}
+                      >
                         {selectedPlan.overall_compliance}%
                       </div>
                       <p className="text-sm text-muted-foreground">Compliance</p>
@@ -277,8 +283,9 @@ export const PeoDpManager: React.FC = () => {
 
               {/* Sections Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {SECTIONS.map((section) => {
-                  const sectionData = selectedPlan.sections[section.id as keyof typeof selectedPlan.sections];
+                {SECTIONS.map(section => {
+                  const sectionData =
+                    selectedPlan.sections[section.id as keyof typeof selectedPlan.sections];
                   const progress = getSectionProgress(sectionData);
                   const Icon = section.icon;
 
@@ -293,7 +300,7 @@ export const PeoDpManager: React.FC = () => {
                               {section.description}
                             </CardDescription>
                           </div>
-                          {sectionData.status === 'completed' && (
+                          {sectionData.status === "completed" && (
                             <CheckCircle className="h-5 w-5 text-green-600" />
                           )}
                         </div>
@@ -307,13 +314,13 @@ export const PeoDpManager: React.FC = () => {
                         </div>
                         <Progress value={progress} className="h-2" />
                         <div className="flex items-center justify-between">
-                          <Badge 
-                            variant={sectionData.status === 'completed' ? 'default' : 'secondary'}
+                          <Badge
+                            variant={sectionData.status === "completed" ? "default" : "secondary"}
                             className="text-xs"
                           >
-                            {sectionData.status === 'pending' && 'Pendente'}
-                            {sectionData.status === 'in_progress' && 'Em Andamento'}
-                            {sectionData.status === 'completed' && 'Concluído'}
+                            {sectionData.status === "pending" && "Pendente"}
+                            {sectionData.status === "in_progress" && "Em Andamento"}
+                            {sectionData.status === "completed" && "Concluído"}
                           </Badge>
                           <div className="flex gap-1">
                             <Button size="sm" variant="ghost">
@@ -384,11 +391,13 @@ export const PeoDpManager: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {plans.map((plan) => (
+                {plans.map(plan => (
                   <div
                     key={plan.id}
                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                      selectedPlan?.id === plan.id ? 'bg-primary/5 border-primary' : 'hover:bg-muted/50'
+                      selectedPlan?.id === plan.id
+                        ? "bg-primary/5 border-primary"
+                        : "hover:bg-muted/50"
                     }`}
                     onClick={() => setSelectedPlan(plan)}
                   >
@@ -404,7 +413,9 @@ export const PeoDpManager: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="text-right">
-                          <p className={`text-lg font-bold ${getComplianceColor(plan.overall_compliance)}`}>
+                          <p
+                            className={`text-lg font-bold ${getComplianceColor(plan.overall_compliance)}`}
+                          >
                             {plan.overall_compliance}%
                           </p>
                           <p className="text-xs text-muted-foreground">Compliance</p>
@@ -424,9 +435,7 @@ export const PeoDpManager: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Analytics e Insights</CardTitle>
-              <CardDescription>
-                Análise avançada de compliance e performance
-              </CardDescription>
+              <CardDescription>Análise avançada de compliance e performance</CardDescription>
             </CardHeader>
             <CardContent className="py-12 text-center text-muted-foreground">
               <TrendingUp className="h-12 w-12 mx-auto mb-3 opacity-50" />
@@ -442,10 +451,7 @@ export const PeoDpManager: React.FC = () => {
           <DialogHeader>
             <DialogTitle>Criar Novo Plano PEO-DP</DialogTitle>
           </DialogHeader>
-          <PeoDpWizard
-            onComplete={handleWizardComplete}
-            onCancel={() => setIsWizardOpen(false)}
-          />
+          <PeoDpWizard onComplete={handleWizardComplete} onCancel={() => setIsWizardOpen(false)} />
         </DialogContent>
       </Dialog>
     </div>

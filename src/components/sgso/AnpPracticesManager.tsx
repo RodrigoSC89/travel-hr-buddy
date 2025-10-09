@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   CheckCircle,
   XCircle,
@@ -13,14 +13,14 @@ import {
   Calendar,
   Users,
   TrendingUp,
-  Shield
-} from 'lucide-react';
+  Shield,
+} from "lucide-react";
 
 interface AnpPractice {
   id: number;
   name: string;
   description: string;
-  status: 'compliant' | 'non_compliant' | 'pending' | 'in_progress';
+  status: "compliant" | "non_compliant" | "pending" | "in_progress";
   compliance_level: number;
   last_audit?: string;
   next_audit?: string;
@@ -28,34 +28,136 @@ interface AnpPractice {
 }
 
 const ANP_PRACTICES: AnpPractice[] = [
-  { id: 1, name: "Liderança e Responsabilidade", description: "Definição de responsabilidades e liderança em segurança operacional", status: "compliant", compliance_level: 95 },
-  { id: 2, name: "Identificação de Perigos e Avaliação de Riscos", description: "Processos sistemáticos de identificação e avaliação de riscos", status: "in_progress", compliance_level: 78 },
-  { id: 3, name: "Controle de Riscos", description: "Implementação de medidas de controle e mitigação de riscos", status: "compliant", compliance_level: 92 },
-  { id: 4, name: "Competência, Treinamento e Conscientização", description: "Gestão de competências e programas de treinamento", status: "non_compliant", compliance_level: 65 },
-  { id: 5, name: "Comunicação e Consulta", description: "Canais de comunicação e consulta sobre segurança", status: "compliant", compliance_level: 88 },
-  { id: 6, name: "Documentação do SGSO", description: "Gestão documental do sistema de segurança", status: "compliant", compliance_level: 90 },
-  { id: 7, name: "Controle Operacional", description: "Procedimentos operacionais e controles", status: "in_progress", compliance_level: 75 },
-  { id: 8, name: "Preparação e Resposta a Emergências", description: "Planos de emergência e resposta", status: "compliant", compliance_level: 94 },
-  { id: 9, name: "Monitoramento e Medição", description: "Indicadores e métricas de segurança", status: "compliant", compliance_level: 85 },
-  { id: 10, name: "Avaliação de Conformidade", description: "Avaliação de conformidade regulatória", status: "in_progress", compliance_level: 72 },
-  { id: 11, name: "Investigação de Incidentes", description: "Processos de investigação e análise de incidentes", status: "compliant", compliance_level: 89 },
-  { id: 12, name: "Análise Crítica pela Direção", description: "Revisões gerenciais do SGSO", status: "compliant", compliance_level: 91 },
-  { id: 13, name: "Gestão de Mudanças", description: "Processos de gestão de mudanças organizacionais", status: "non_compliant", compliance_level: 58 },
-  { id: 14, name: "Aquisição e Contratação", description: "Critérios de segurança em aquisições", status: "compliant", compliance_level: 87 },
-  { id: 15, name: "Projeto e Construção", description: "Segurança em projetos e construções", status: "pending", compliance_level: 70 },
-  { id: 16, name: "Informações de Segurança de Processo", description: "Gestão de informações críticas de segurança", status: "compliant", compliance_level: 93 },
-  { id: 17, name: "Integridade Mecânica", description: "Manutenção e integridade de equipamentos", status: "non_compliant", compliance_level: 62 }
+  {
+    id: 1,
+    name: "Liderança e Responsabilidade",
+    description: "Definição de responsabilidades e liderança em segurança operacional",
+    status: "compliant",
+    compliance_level: 95,
+  },
+  {
+    id: 2,
+    name: "Identificação de Perigos e Avaliação de Riscos",
+    description: "Processos sistemáticos de identificação e avaliação de riscos",
+    status: "in_progress",
+    compliance_level: 78,
+  },
+  {
+    id: 3,
+    name: "Controle de Riscos",
+    description: "Implementação de medidas de controle e mitigação de riscos",
+    status: "compliant",
+    compliance_level: 92,
+  },
+  {
+    id: 4,
+    name: "Competência, Treinamento e Conscientização",
+    description: "Gestão de competências e programas de treinamento",
+    status: "non_compliant",
+    compliance_level: 65,
+  },
+  {
+    id: 5,
+    name: "Comunicação e Consulta",
+    description: "Canais de comunicação e consulta sobre segurança",
+    status: "compliant",
+    compliance_level: 88,
+  },
+  {
+    id: 6,
+    name: "Documentação do SGSO",
+    description: "Gestão documental do sistema de segurança",
+    status: "compliant",
+    compliance_level: 90,
+  },
+  {
+    id: 7,
+    name: "Controle Operacional",
+    description: "Procedimentos operacionais e controles",
+    status: "in_progress",
+    compliance_level: 75,
+  },
+  {
+    id: 8,
+    name: "Preparação e Resposta a Emergências",
+    description: "Planos de emergência e resposta",
+    status: "compliant",
+    compliance_level: 94,
+  },
+  {
+    id: 9,
+    name: "Monitoramento e Medição",
+    description: "Indicadores e métricas de segurança",
+    status: "compliant",
+    compliance_level: 85,
+  },
+  {
+    id: 10,
+    name: "Avaliação de Conformidade",
+    description: "Avaliação de conformidade regulatória",
+    status: "in_progress",
+    compliance_level: 72,
+  },
+  {
+    id: 11,
+    name: "Investigação de Incidentes",
+    description: "Processos de investigação e análise de incidentes",
+    status: "compliant",
+    compliance_level: 89,
+  },
+  {
+    id: 12,
+    name: "Análise Crítica pela Direção",
+    description: "Revisões gerenciais do SGSO",
+    status: "compliant",
+    compliance_level: 91,
+  },
+  {
+    id: 13,
+    name: "Gestão de Mudanças",
+    description: "Processos de gestão de mudanças organizacionais",
+    status: "non_compliant",
+    compliance_level: 58,
+  },
+  {
+    id: 14,
+    name: "Aquisição e Contratação",
+    description: "Critérios de segurança em aquisições",
+    status: "compliant",
+    compliance_level: 87,
+  },
+  {
+    id: 15,
+    name: "Projeto e Construção",
+    description: "Segurança em projetos e construções",
+    status: "pending",
+    compliance_level: 70,
+  },
+  {
+    id: 16,
+    name: "Informações de Segurança de Processo",
+    description: "Gestão de informações críticas de segurança",
+    status: "compliant",
+    compliance_level: 93,
+  },
+  {
+    id: 17,
+    name: "Integridade Mecânica",
+    description: "Manutenção e integridade de equipamentos",
+    status: "non_compliant",
+    compliance_level: 62,
+  },
 ];
 
 const getStatusIcon = (status: string) => {
   switch (status) {
-    case 'compliant':
+    case "compliant":
       return <CheckCircle className="h-5 w-5 text-green-600" />;
-    case 'non_compliant':
+    case "non_compliant":
       return <XCircle className="h-5 w-5 text-red-600" />;
-    case 'in_progress':
+    case "in_progress":
       return <Clock className="h-5 w-5 text-yellow-600" />;
-    case 'pending':
+    case "pending":
       return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
     default:
       return null;
@@ -64,17 +166,17 @@ const getStatusIcon = (status: string) => {
 
 const getStatusBadge = (status: string) => {
   const styles = {
-    compliant: 'bg-green-100 text-green-800 border-green-200',
-    non_compliant: 'bg-red-100 text-red-800 border-red-200',
-    in_progress: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    pending: 'bg-secondary text-secondary-foreground border-border'
+    compliant: "bg-green-100 text-green-800 border-green-200",
+    non_compliant: "bg-red-100 text-red-800 border-red-200",
+    in_progress: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    pending: "bg-secondary text-secondary-foreground border-border",
   };
 
   const labels = {
-    compliant: 'Conforme',
-    non_compliant: 'Não Conforme',
-    in_progress: 'Em Andamento',
-    pending: 'Pendente'
+    compliant: "Conforme",
+    non_compliant: "Não Conforme",
+    in_progress: "Em Andamento",
+    pending: "Pendente",
   };
 
   return (
@@ -87,10 +189,12 @@ const getStatusBadge = (status: string) => {
 export const AnpPracticesManager: React.FC = () => {
   const [selectedPractice, setSelectedPractice] = useState<AnpPractice | null>(null);
 
-  const compliantCount = ANP_PRACTICES.filter(p => p.status === 'compliant').length;
-  const nonCompliantCount = ANP_PRACTICES.filter(p => p.status === 'non_compliant').length;
-  const inProgressCount = ANP_PRACTICES.filter(p => p.status === 'in_progress').length;
-  const overallCompliance = Math.round(ANP_PRACTICES.reduce((acc, p) => acc + p.compliance_level, 0) / 17);
+  const compliantCount = ANP_PRACTICES.filter(p => p.status === "compliant").length;
+  const nonCompliantCount = ANP_PRACTICES.filter(p => p.status === "non_compliant").length;
+  const inProgressCount = ANP_PRACTICES.filter(p => p.status === "in_progress").length;
+  const overallCompliance = Math.round(
+    ANP_PRACTICES.reduce((acc, p) => acc + p.compliance_level, 0) / 17
+  );
 
   return (
     <div className="space-y-6">
@@ -167,8 +271,8 @@ export const AnpPracticesManager: React.FC = () => {
             </TabsList>
 
             <TabsContent value="all" className="space-y-3">
-              {ANP_PRACTICES.map((practice) => (
-                <Card 
+              {ANP_PRACTICES.map(practice => (
+                <Card
                   key={practice.id}
                   className="border-2 hover:shadow-lg transition-all cursor-pointer"
                   onClick={() => setSelectedPractice(practice)}
@@ -180,7 +284,10 @@ export const AnpPracticesManager: React.FC = () => {
                           {getStatusIcon(practice.status)}
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300 font-bold">
+                              <Badge
+                                variant="outline"
+                                className="bg-blue-50 text-blue-700 border-blue-300 font-bold"
+                              >
                                 Prática {practice.id}
                               </Badge>
                               <h3 className="font-bold text-lg text-gray-900">{practice.name}</h3>
@@ -188,19 +295,18 @@ export const AnpPracticesManager: React.FC = () => {
                             <p className="text-sm text-muted-foreground">{practice.description}</p>
                           </div>
                         </div>
-                        
+
                         <div className="space-y-1">
                           <div className="flex items-center justify-between text-sm">
                             <span className="font-medium text-gray-700">Nível de Conformidade</span>
-                            <span className="font-bold text-gray-900">{practice.compliance_level}%</span>
+                            <span className="font-bold text-gray-900">
+                              {practice.compliance_level}%
+                            </span>
                           </div>
-                          <Progress 
-                            value={practice.compliance_level} 
-                            className="h-2"
-                          />
+                          <Progress value={practice.compliance_level} className="h-2" />
                         </div>
                       </div>
-                      
+
                       <div className="flex flex-col items-end gap-2">
                         {getStatusBadge(practice.status)}
                         <Button variant="outline" size="sm" className="bg-white hover:bg-gray-50">
@@ -214,10 +320,10 @@ export const AnpPracticesManager: React.FC = () => {
               ))}
             </TabsContent>
 
-            {['compliant', 'non_compliant', 'in_progress', 'pending'].map((status) => (
+            {["compliant", "non_compliant", "in_progress", "pending"].map(status => (
               <TabsContent key={status} value={status} className="space-y-3">
-                {ANP_PRACTICES.filter(p => p.status === status).map((practice) => (
-                  <Card 
+                {ANP_PRACTICES.filter(p => p.status === status).map(practice => (
+                  <Card
                     key={practice.id}
                     className="border-2 hover:shadow-lg transition-all cursor-pointer"
                     onClick={() => setSelectedPractice(practice)}
@@ -229,27 +335,33 @@ export const AnpPracticesManager: React.FC = () => {
                             {getStatusIcon(practice.status)}
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300 font-bold">
+                                <Badge
+                                  variant="outline"
+                                  className="bg-blue-50 text-blue-700 border-blue-300 font-bold"
+                                >
                                   Prática {practice.id}
                                 </Badge>
                                 <h3 className="font-bold text-lg text-gray-900">{practice.name}</h3>
                               </div>
-                              <p className="text-sm text-muted-foreground">{practice.description}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {practice.description}
+                              </p>
                             </div>
                           </div>
-                          
+
                           <div className="space-y-1">
                             <div className="flex items-center justify-between text-sm">
-                              <span className="font-medium text-gray-700">Nível de Conformidade</span>
-                              <span className="font-bold text-gray-900">{practice.compliance_level}%</span>
+                              <span className="font-medium text-gray-700">
+                                Nível de Conformidade
+                              </span>
+                              <span className="font-bold text-gray-900">
+                                {practice.compliance_level}%
+                              </span>
                             </div>
-                            <Progress 
-                              value={practice.compliance_level} 
-                              className="h-2"
-                            />
+                            <Progress value={practice.compliance_level} className="h-2" />
                           </div>
                         </div>
-                        
+
                         <div className="flex flex-col items-end gap-2">
                           {getStatusBadge(practice.status)}
                           <Button variant="outline" size="sm" className="bg-white hover:bg-gray-50">

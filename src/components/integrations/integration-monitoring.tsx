@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { 
-  Activity, 
-  TrendingUp, 
-  TrendingDown, 
-  Zap, 
-  Clock, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import {
+  Activity,
+  TrendingUp,
+  TrendingDown,
+  Zap,
+  Clock,
   AlertTriangle,
   CheckCircle,
   BarChart3,
   Gauge,
   RefreshCw,
-  Download
-} from 'lucide-react';
+  Download,
+} from "lucide-react";
 
 interface MetricData {
   name: string;
   value: number;
   change: number;
-  trend: 'up' | 'down' | 'stable';
-  status: 'good' | 'warning' | 'critical';
+  trend: "up" | "down" | "stable";
+  status: "good" | "warning" | "critical";
 }
 
 interface PerformanceMetric {
@@ -37,75 +37,75 @@ interface PerformanceMetric {
 export const IntegrationMonitoring: React.FC = () => {
   const [metrics, setMetrics] = useState<MetricData[]>([
     {
-      name: 'Requisições Totais',
+      name: "Requisições Totais",
       value: 12847,
       change: 8.2,
-      trend: 'up',
-      status: 'good'
+      trend: "up",
+      status: "good",
     },
     {
-      name: 'Taxa de Sucesso',
+      name: "Taxa de Sucesso",
       value: 98.7,
       change: -0.3,
-      trend: 'down',
-      status: 'warning'
+      trend: "down",
+      status: "warning",
     },
     {
-      name: 'Tempo de Resposta',
+      name: "Tempo de Resposta",
       value: 245,
       change: -12.4,
-      trend: 'down',
-      status: 'good'
+      trend: "down",
+      status: "good",
     },
     {
-      name: 'Uptime Médio',
+      name: "Uptime Médio",
       value: 99.2,
       change: 0.5,
-      trend: 'up',
-      status: 'good'
-    }
+      trend: "up",
+      status: "good",
+    },
   ]);
 
   const [performanceData, setPerformanceData] = useState<PerformanceMetric[]>([
     {
-      integration: 'Supabase Database',
+      integration: "Supabase Database",
       responseTime: 120,
       successRate: 99.8,
       requestCount: 4521,
       errorRate: 0.2,
-      uptime: 99.9
+      uptime: 99.9,
     },
     {
-      integration: 'Nautilus AI Analytics',
+      integration: "Nautilus AI Analytics",
       responseTime: 340,
       successRate: 97.2,
       requestCount: 1243,
       errorRate: 2.8,
-      uptime: 97.1
+      uptime: 97.1,
     },
     {
-      integration: 'WhatsApp Business',
+      integration: "WhatsApp Business",
       responseTime: 560,
       successRate: 94.5,
       requestCount: 892,
       errorRate: 5.5,
-      uptime: 94.8
+      uptime: 94.8,
     },
     {
-      integration: 'Microsoft Outlook',
+      integration: "Microsoft Outlook",
       responseTime: 280,
       successRate: 96.7,
       requestCount: 524,
       errorRate: 3.3,
-      uptime: 96.2
-    }
+      uptime: 96.2,
+    },
   ]);
 
   const [realTimeData, setRealTimeData] = useState({
     activeConnections: 24,
     requestsPerMinute: 156,
     averageLatency: 245,
-    errorCount: 3
+    errorCount: 3,
   });
 
   // Simular dados em tempo real
@@ -113,36 +113,45 @@ export const IntegrationMonitoring: React.FC = () => {
     const interval = setInterval(() => {
       setRealTimeData(prev => ({
         activeConnections: Math.max(15, prev.activeConnections + Math.floor(Math.random() * 6 - 3)),
-        requestsPerMinute: Math.max(100, prev.requestsPerMinute + Math.floor(Math.random() * 20 - 10)),
+        requestsPerMinute: Math.max(
+          100,
+          prev.requestsPerMinute + Math.floor(Math.random() * 20 - 10)
+        ),
         averageLatency: Math.max(150, prev.averageLatency + Math.floor(Math.random() * 50 - 25)),
-        errorCount: Math.max(0, prev.errorCount + Math.floor(Math.random() * 3 - 1))
+        errorCount: Math.max(0, prev.errorCount + Math.floor(Math.random() * 3 - 1)),
       }));
     }, 3000);
 
     return () => clearInterval(interval);
   }, []);
 
-  const getStatusColor = (status: MetricData['status']) => {
+  const getStatusColor = (status: MetricData["status"]) => {
     switch (status) {
-      case 'good': return 'text-success';
-      case 'warning': return 'text-warning';
-      case 'critical': return 'text-destructive';
+      case "good":
+        return "text-success";
+      case "warning":
+        return "text-warning";
+      case "critical":
+        return "text-destructive";
     }
   };
 
-  const getTrendIcon = (trend: MetricData['trend']) => {
+  const getTrendIcon = (trend: MetricData["trend"]) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="w-4 h-4 text-success" />;
-      case 'down': return <TrendingDown className="w-4 h-4 text-destructive" />;
-      default: return <Activity className="w-4 h-4 text-muted-foreground" />;
+      case "up":
+        return <TrendingUp className="w-4 h-4 text-success" />;
+      case "down":
+        return <TrendingDown className="w-4 h-4 text-destructive" />;
+      default:
+        return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getPerformanceScore = (metric: PerformanceMetric) => {
-    const responseScore = Math.max(0, 100 - (metric.responseTime / 10));
+    const responseScore = Math.max(0, 100 - metric.responseTime / 10);
     const successScore = metric.successRate;
     const uptimeScore = metric.uptime;
-    
+
     return Math.round((responseScore + successScore + uptimeScore) / 3);
   };
 
@@ -191,12 +200,17 @@ export const IntegrationMonitoring: React.FC = () => {
               <div className="flex items-end justify-between">
                 <div>
                   <p className={`text-2xl font-bold ${getStatusColor(metric.status)}`}>
-                    {metric.name.includes('Tempo') ? `${metric.value}ms` : 
-                     metric.name.includes('Taxa') || metric.name.includes('Uptime') ? `${metric.value}%` : 
-                     metric.value.toLocaleString()}
+                    {metric.name.includes("Tempo")
+                      ? `${metric.value}ms`
+                      : metric.name.includes("Taxa") || metric.name.includes("Uptime")
+                        ? `${metric.value}%`
+                        : metric.value.toLocaleString()}
                   </p>
-                  <p className={`text-xs ${metric.change >= 0 ? 'text-success' : 'text-destructive'}`}>
-                    {metric.change >= 0 ? '+' : ''}{metric.change}% vs. período anterior
+                  <p
+                    className={`text-xs ${metric.change >= 0 ? "text-success" : "text-destructive"}`}
+                  >
+                    {metric.change >= 0 ? "+" : ""}
+                    {metric.change}% vs. período anterior
                   </p>
                 </div>
               </div>
@@ -302,11 +316,13 @@ export const IntegrationMonitoring: React.FC = () => {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <h4 className="font-medium text-foreground">{integration.integration}</h4>
-                    <Badge 
+                    <Badge
                       className={
-                        getPerformanceScore(integration) >= 90 ? 'bg-success/20 text-success border-success/30' :
-                        getPerformanceScore(integration) >= 70 ? 'bg-warning/20 text-warning border-warning/30' :
-                        'bg-destructive/20 text-destructive border-destructive/30'
+                        getPerformanceScore(integration) >= 90
+                          ? "bg-success/20 text-success border-success/30"
+                          : getPerformanceScore(integration) >= 70
+                            ? "bg-warning/20 text-warning border-warning/30"
+                            : "bg-destructive/20 text-destructive border-destructive/30"
                       }
                     >
                       Score: {getPerformanceScore(integration)}%
@@ -316,42 +332,33 @@ export const IntegrationMonitoring: React.FC = () => {
                     <p>{integration.requestCount.toLocaleString()} requisições</p>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                   <div>
                     <p className="text-muted-foreground">Tempo Resposta</p>
                     <p className="font-medium text-foreground">{integration.responseTime}ms</p>
-                    <Progress 
-                      value={Math.max(0, 100 - (integration.responseTime / 10))} 
+                    <Progress
+                      value={Math.max(0, 100 - integration.responseTime / 10)}
                       className="h-1 mt-1"
                     />
                   </div>
-                  
+
                   <div>
                     <p className="text-muted-foreground">Taxa Sucesso</p>
                     <p className="font-medium text-foreground">{integration.successRate}%</p>
-                    <Progress 
-                      value={integration.successRate} 
-                      className="h-1 mt-1"
-                    />
+                    <Progress value={integration.successRate} className="h-1 mt-1" />
                   </div>
-                  
+
                   <div>
                     <p className="text-muted-foreground">Taxa Erro</p>
                     <p className="font-medium text-foreground">{integration.errorRate}%</p>
-                    <Progress 
-                      value={100 - integration.errorRate} 
-                      className="h-1 mt-1"
-                    />
+                    <Progress value={100 - integration.errorRate} className="h-1 mt-1" />
                   </div>
-                  
+
                   <div>
                     <p className="text-muted-foreground">Uptime</p>
                     <p className="font-medium text-foreground">{integration.uptime}%</p>
-                    <Progress 
-                      value={integration.uptime} 
-                      className="h-1 mt-1"
-                    />
+                    <Progress value={integration.uptime} className="h-1 mt-1" />
                   </div>
                 </div>
               </div>
@@ -382,7 +389,7 @@ export const IntegrationMonitoring: React.FC = () => {
                 5min atrás
               </Badge>
             </div>
-            
+
             <div className="flex items-center gap-3 p-3 bg-destructive/5 border border-destructive/20 rounded-lg">
               <AlertTriangle className="w-4 h-4 text-destructive" />
               <div className="flex-1">

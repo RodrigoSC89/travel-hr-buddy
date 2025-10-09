@@ -1,5 +1,5 @@
-import { useNavigate, NavigateOptions } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
+import { useNavigate, NavigateOptions } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 /**
  * Enhanced Navigation Manager with error handling and user feedback
@@ -10,16 +10,16 @@ export const useNavigationManager = () => {
 
   const navigateTo = (
     path: string,
-    options?: NavigateOptions & { 
+    options?: NavigateOptions & {
       showToast?: boolean;
       toastMessage?: string;
     }
   ) => {
     try {
       const { showToast = false, toastMessage, ...navigateOptions } = options || {};
-      
+
       navigate(path, navigateOptions);
-      
+
       if (showToast) {
         toast({
           title: "Navegação",
@@ -28,7 +28,7 @@ export const useNavigationManager = () => {
         });
       }
     } catch (error) {
-      console.error('Navigation error:', error);
+      console.error("Navigation error:", error);
       toast({
         title: "Erro de Navegação",
         description: "Falha ao navegar. Tente novamente.",
@@ -41,7 +41,7 @@ export const useNavigationManager = () => {
     try {
       navigate(-1);
     } catch (error) {
-      console.error('Navigation back error:', error);
+      console.error("Navigation back error:", error);
       toast({
         title: "Erro de Navegação",
         description: "Não foi possível voltar.",
@@ -51,7 +51,7 @@ export const useNavigationManager = () => {
   };
 
   const navigateHome = () => {
-    navigateTo('/', { replace: true });
+    navigateTo("/", { replace: true });
   };
 
   return {

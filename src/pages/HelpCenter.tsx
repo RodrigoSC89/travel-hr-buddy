@@ -1,5 +1,5 @@
-import React from 'react';
-import IntelligentHelpCenter from '@/components/help/intelligent-help-center';
+import React from "react";
+import IntelligentHelpCenter from "@/components/help/intelligent-help-center";
 
 const HelpCenter: React.FC = () => {
   return <IntelligentHelpCenter />;

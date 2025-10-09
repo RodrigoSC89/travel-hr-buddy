@@ -1,4 +1,4 @@
-import Tesseract from 'tesseract.js';
+import Tesseract from "tesseract.js";
 
 export interface OCRResult {
   text: string;
@@ -27,13 +27,13 @@ export interface OCRProgress {
 export class OCRService {
   private worker: Tesseract.Worker | null = null;
 
-  async initialize(language: string = 'por+eng'): Promise<void> {
+  async initialize(language: string = "por+eng"): Promise<void> {
     if (this.worker) {
       await this.terminate();
     }
 
     this.worker = await Tesseract.createWorker(language, 1, {
-      logger: (m) => console.log('OCR:', m),
+      logger: m => console.log("OCR:", m),
     });
   }
 
@@ -52,16 +52,17 @@ export class OCRService {
     const processingTime = Date.now() - startTime;
 
     // Extract blocks with bounding boxes
-    const blocks: OCRBlock[] = data.blocks?.map(block => ({
-      text: block.text,
-      confidence: block.confidence,
-      bbox: block.bbox,
-    })) || [];
+    const blocks: OCRBlock[] =
+      data.blocks?.map(block => ({
+        text: block.text,
+        confidence: block.confidence,
+        bbox: block.bbox,
+      })) || [];
 
     return {
       text: data.text,
       confidence: data.confidence,
-      language: 'por+eng',
+      language: "por+eng",
       processingTime,
       blocks,
     };
@@ -74,7 +75,7 @@ export class OCRService {
     const results: OCRResult[] = [];
 
     for (let i = 0; i < images.length; i++) {
-      const result = await this.processImage(images[i], (progress) => {
+      const result = await this.processImage(images[i], progress => {
         if (onProgress) {
           onProgress(i, images.length, progress);
         }
@@ -90,8 +91,8 @@ export class OCRService {
     const fields = new Map<string, string>();
 
     // Parse text to extract form fields (basic implementation)
-    const lines = result.text.split('\n');
-    
+    const lines = result.text.split("\n");
+
     for (const line of lines) {
       // Look for key-value patterns like "Field Name: Value"
       const match = line.match(/^([^:]+):\s*(.+)$/);
@@ -113,7 +114,7 @@ export class OCRService {
 
   // Enhance image for better OCR results
   static preprocessImage(canvas: HTMLCanvasElement): void {
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -125,8 +126,8 @@ export class OCRService {
       // Increase contrast
       const contrast = (gray - 128) * 1.5 + 128;
       const pixel = Math.max(0, Math.min(255, contrast));
-      
-      data[i] = pixel;     // R
+
+      data[i] = pixel; // R
       data[i + 1] = pixel; // G
       data[i + 2] = pixel; // B
     }

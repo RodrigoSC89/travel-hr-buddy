@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Smartphone,
   Tablet,
   Monitor,
@@ -37,16 +43,32 @@ import {
   Layers,
   Settings,
   Target,
-  Trophy
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+  Trophy,
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  PieChart as RechartsPieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 interface UserSession {
   id: string;
   userId: string;
-  device: 'mobile' | 'tablet' | 'desktop';
+  device: "mobile" | "tablet" | "desktop";
   os: string;
   browser: string;
   location: string;
@@ -80,28 +102,30 @@ interface UserBehavior {
 export const MobileOptimizationCenter: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   const [sessions, setSessions] = useState<UserSession[]>([]);
   const [performance, setPerformance] = useState<PerformanceMetric[]>([]);
   const [behavior, setBehavior] = useState<UserBehavior[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [dateRange, setDateRange] = useState('7d');
-  const [deviceFilter, setDeviceFilter] = useState('all');
+  const [dateRange, setDateRange] = useState("7d");
+  const [deviceFilter, setDeviceFilter] = useState("all");
 
   // Dados simulados para demonstração
   const generateMockData = () => {
     const mockSessions: UserSession[] = Array.from({ length: 50 }, (_, i) => ({
       id: `session-${i}`,
       userId: `user-${Math.floor(Math.random() * 20)}`,
-      device: ['mobile', 'tablet', 'desktop'][Math.floor(Math.random() * 3)] as any,
-      os: ['iOS', 'Android', 'Windows', 'macOS'][Math.floor(Math.random() * 4)],
-      browser: ['Chrome', 'Safari', 'Firefox', 'Edge'][Math.floor(Math.random() * 4)],
-      location: ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Recife'][Math.floor(Math.random() * 4)],
+      device: ["mobile", "tablet", "desktop"][Math.floor(Math.random() * 3)] as any,
+      os: ["iOS", "Android", "Windows", "macOS"][Math.floor(Math.random() * 4)],
+      browser: ["Chrome", "Safari", "Firefox", "Edge"][Math.floor(Math.random() * 4)],
+      location: ["São Paulo", "Rio de Janeiro", "Brasília", "Recife"][
+        Math.floor(Math.random() * 4)
+      ],
       startTime: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
       duration: Math.floor(Math.random() * 1800) + 60, // 1-31 minutos
       pages: Math.floor(Math.random() * 10) + 1,
       actions: Math.floor(Math.random() * 20) + 1,
-      isActive: Math.random() > 0.7
+      isActive: Math.random() > 0.7,
     }));
 
     const mockPerformance: PerformanceMetric[] = Array.from({ length: 7 }, (_, i) => ({
@@ -111,17 +135,66 @@ export const MobileOptimizationCenter: React.FC = () => {
       largestContentfulPaint: Math.random() * 2000 + 800,
       cumulativeLayoutShift: Math.random() * 0.2,
       firstInputDelay: Math.random() * 100 + 10,
-      timeToInteractive: Math.random() * 3000 + 1000
+      timeToInteractive: Math.random() * 3000 + 1000,
     }));
 
     const mockBehavior: UserBehavior[] = [
-      { page: '/dashboard', sessions: 342, bounceRate: 24, avgTimeOnPage: 180, conversions: 89, exitRate: 32 },
-      { page: '/hr', sessions: 156, bounceRate: 18, avgTimeOnPage: 240, conversions: 45, exitRate: 28 },
-      { page: '/analytics', sessions: 89, bounceRate: 31, avgTimeOnPage: 320, conversions: 23, exitRate: 41 },
-      { page: '/reports', sessions: 78, bounceRate: 29, avgTimeOnPage: 280, conversions: 34, exitRate: 38 },
-      { page: '/maritime', sessions: 67, bounceRate: 22, avgTimeOnPage: 200, conversions: 12, exitRate: 35 },
-      { page: '/travel', sessions: 54, bounceRate: 45, avgTimeOnPage: 120, conversions: 8, exitRate: 52 },
-      { page: '/settings', sessions: 43, bounceRate: 38, avgTimeOnPage: 90, conversions: 15, exitRate: 48 }
+      {
+        page: "/dashboard",
+        sessions: 342,
+        bounceRate: 24,
+        avgTimeOnPage: 180,
+        conversions: 89,
+        exitRate: 32,
+      },
+      {
+        page: "/hr",
+        sessions: 156,
+        bounceRate: 18,
+        avgTimeOnPage: 240,
+        conversions: 45,
+        exitRate: 28,
+      },
+      {
+        page: "/analytics",
+        sessions: 89,
+        bounceRate: 31,
+        avgTimeOnPage: 320,
+        conversions: 23,
+        exitRate: 41,
+      },
+      {
+        page: "/reports",
+        sessions: 78,
+        bounceRate: 29,
+        avgTimeOnPage: 280,
+        conversions: 34,
+        exitRate: 38,
+      },
+      {
+        page: "/maritime",
+        sessions: 67,
+        bounceRate: 22,
+        avgTimeOnPage: 200,
+        conversions: 12,
+        exitRate: 35,
+      },
+      {
+        page: "/travel",
+        sessions: 54,
+        bounceRate: 45,
+        avgTimeOnPage: 120,
+        conversions: 8,
+        exitRate: 52,
+      },
+      {
+        page: "/settings",
+        sessions: 43,
+        bounceRate: 38,
+        avgTimeOnPage: 90,
+        conversions: 15,
+        exitRate: 48,
+      },
     ];
 
     setSessions(mockSessions);
@@ -136,59 +209,76 @@ export const MobileOptimizationCenter: React.FC = () => {
 
   const getDeviceIcon = (device: string) => {
     switch (device) {
-      case 'mobile': return <Smartphone className="h-4 w-4" />;
-      case 'tablet': return <Tablet className="h-4 w-4" />;
-      case 'desktop': return <Monitor className="h-4 w-4" />;
-      default: return <Monitor className="h-4 w-4" />;
+      case "mobile":
+        return <Smartphone className="h-4 w-4" />;
+      case "tablet":
+        return <Tablet className="h-4 w-4" />;
+      case "desktop":
+        return <Monitor className="h-4 w-4" />;
+      default:
+        return <Monitor className="h-4 w-4" />;
     }
   };
 
   const getDeviceStats = () => {
     const total = sessions.length;
     return {
-      mobile: Math.round((sessions.filter(s => s.device === 'mobile').length / total) * 100),
-      tablet: Math.round((sessions.filter(s => s.device === 'tablet').length / total) * 100),
-      desktop: Math.round((sessions.filter(s => s.device === 'desktop').length / total) * 100)
+      mobile: Math.round((sessions.filter(s => s.device === "mobile").length / total) * 100),
+      tablet: Math.round((sessions.filter(s => s.device === "tablet").length / total) * 100),
+      desktop: Math.round((sessions.filter(s => s.device === "desktop").length / total) * 100),
     };
   };
 
   const getPerformanceScore = () => {
     if (performance.length === 0) return 0;
     const latest = performance[performance.length - 1];
-    
+
     // Calcular score baseado em Core Web Vitals
-    const fcpScore = latest.firstContentfulPaint < 1800 ? 100 : (latest.firstContentfulPaint < 3000 ? 50 : 0);
-    const lcpScore = latest.largestContentfulPaint < 2500 ? 100 : (latest.largestContentfulPaint < 4000 ? 50 : 0);
-    const clsScore = latest.cumulativeLayoutShift < 0.1 ? 100 : (latest.cumulativeLayoutShift < 0.25 ? 50 : 0);
-    const fidScore = latest.firstInputDelay < 100 ? 100 : (latest.firstInputDelay < 300 ? 50 : 0);
-    
+    const fcpScore =
+      latest.firstContentfulPaint < 1800 ? 100 : latest.firstContentfulPaint < 3000 ? 50 : 0;
+    const lcpScore =
+      latest.largestContentfulPaint < 2500 ? 100 : latest.largestContentfulPaint < 4000 ? 50 : 0;
+    const clsScore =
+      latest.cumulativeLayoutShift < 0.1 ? 100 : latest.cumulativeLayoutShift < 0.25 ? 50 : 0;
+    const fidScore = latest.firstInputDelay < 100 ? 100 : latest.firstInputDelay < 300 ? 50 : 0;
+
     return Math.round((fcpScore + lcpScore + clsScore + fidScore) / 4);
   };
 
-  const filteredSessions = sessions.filter(session => 
-    deviceFilter === 'all' || session.device === deviceFilter
+  const filteredSessions = sessions.filter(
+    session => deviceFilter === "all" || session.device === deviceFilter
   );
 
   const activeSessions = sessions.filter(s => s.isActive).length;
-  const avgSessionDuration = Math.round(sessions.reduce((acc, s) => acc + s.duration, 0) / sessions.length / 60);
-  const bounceRate = Math.round(behavior.reduce((acc, b) => acc + b.bounceRate, 0) / behavior.length);
+  const avgSessionDuration = Math.round(
+    sessions.reduce((acc, s) => acc + s.duration, 0) / sessions.length / 60
+  );
+  const bounceRate = Math.round(
+    behavior.reduce((acc, b) => acc + b.bounceRate, 0) / behavior.length
+  );
   const deviceStats = getDeviceStats();
   const performanceScore = getPerformanceScore();
 
-  const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--accent))', '#8884d8', '#82ca9d'];
+  const COLORS = [
+    "hsl(var(--primary))",
+    "hsl(var(--secondary))",
+    "hsl(var(--accent))",
+    "#8884d8",
+    "#82ca9d",
+  ];
 
   const performanceChartData = performance.map(p => ({
     date: p.timestamp.toLocaleDateString(),
-    'Page Load': p.pageLoad,
-    'FCP': p.firstContentfulPaint,
-    'LCP': p.largestContentfulPaint,
-    'TTI': p.timeToInteractive
+    "Page Load": p.pageLoad,
+    FCP: p.firstContentfulPaint,
+    LCP: p.largestContentfulPaint,
+    TTI: p.timeToInteractive,
   }));
 
   const deviceDistribution = [
-    { name: 'Mobile', value: deviceStats.mobile, color: COLORS[0] },
-    { name: 'Desktop', value: deviceStats.desktop, color: COLORS[1] },
-    { name: 'Tablet', value: deviceStats.tablet, color: COLORS[2] }
+    { name: "Mobile", value: deviceStats.mobile, color: COLORS[0] },
+    { name: "Desktop", value: deviceStats.desktop, color: COLORS[1] },
+    { name: "Tablet", value: deviceStats.tablet, color: COLORS[2] },
   ];
 
   const handleOptimizeImages = () => {
@@ -225,11 +315,9 @@ export const MobileOptimizationCenter: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Otimização Mobile</h2>
-          <p className="text-muted-foreground">
-            Analytics e otimizações para dispositivos móveis
-          </p>
+          <p className="text-muted-foreground">Analytics e otimizações para dispositivos móveis</p>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <Select value={dateRange} onValueChange={setDateRange}>
             <SelectTrigger className="w-32">
@@ -258,9 +346,7 @@ export const MobileOptimizationCenter: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{activeSessions}</div>
-            <p className="text-xs text-muted-foreground">
-              usuários online agora
-            </p>
+            <p className="text-xs text-muted-foreground">usuários online agora</p>
           </CardContent>
         </Card>
 
@@ -271,9 +357,7 @@ export const MobileOptimizationCenter: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{avgSessionDuration}min</div>
-            <p className="text-xs text-muted-foreground">
-              tempo por sessão
-            </p>
+            <p className="text-xs text-muted-foreground">tempo por sessão</p>
           </CardContent>
         </Card>
 
@@ -284,9 +368,7 @@ export const MobileOptimizationCenter: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{bounceRate}%</div>
-            <p className="text-xs text-muted-foreground">
-              média geral
-            </p>
+            <p className="text-xs text-muted-foreground">média geral</p>
           </CardContent>
         </Card>
 
@@ -296,12 +378,12 @@ export const MobileOptimizationCenter: React.FC = () => {
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${performanceScore >= 90 ? 'text-green-600' : performanceScore >= 70 ? 'text-yellow-600' : 'text-red-600'}`}>
+            <div
+              className={`text-2xl font-bold ${performanceScore >= 90 ? "text-green-600" : performanceScore >= 70 ? "text-yellow-600" : "text-red-600"}`}
+            >
               {performanceScore}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Core Web Vitals
-            </p>
+            <p className="text-xs text-muted-foreground">Core Web Vitals</p>
           </CardContent>
         </Card>
 
@@ -312,9 +394,7 @@ export const MobileOptimizationCenter: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{deviceStats.mobile}%</div>
-            <p className="text-xs text-muted-foreground">
-              do tráfego total
-            </p>
+            <p className="text-xs text-muted-foreground">do tráfego total</p>
           </CardContent>
         </Card>
       </div>
@@ -365,10 +445,10 @@ export const MobileOptimizationCenter: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {['iOS', 'Android', 'Windows', 'macOS'].map((os) => {
+                  {["iOS", "Android", "Windows", "macOS"].map(os => {
                     const count = sessions.filter(s => s.os === os).length;
                     const percentage = (count / sessions.length) * 100;
-                    
+
                     return (
                       <div key={os} className="flex items-center justify-between">
                         <span>{os}</span>
@@ -389,31 +469,34 @@ export const MobileOptimizationCenter: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Sessões Ativas</CardTitle>
-              <CardDescription>
-                Usuários conectados em tempo real
-              </CardDescription>
+              <CardDescription>Usuários conectados em tempo real</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2 max-h-64 overflow-y-auto">
-                {filteredSessions.filter(s => s.isActive).map((session) => (
-                  <div key={session.id} className="flex items-center justify-between p-3 border border-border rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      {getDeviceIcon(session.device)}
-                      <div>
-                        <p className="text-sm font-medium">{session.userId}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {session.os} • {session.browser} • {session.location}
-                        </p>
+                {filteredSessions
+                  .filter(s => s.isActive)
+                  .map(session => (
+                    <div
+                      key={session.id}
+                      className="flex items-center justify-between p-3 border border-border rounded-lg"
+                    >
+                      <div className="flex items-center space-x-3">
+                        {getDeviceIcon(session.device)}
+                        <div>
+                          <p className="text-sm font-medium">{session.userId}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {session.os} • {session.browser} • {session.location}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                        <span>{Math.floor(session.duration / 60)}min</span>
+                        <span>{session.pages} páginas</span>
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                       </div>
                     </div>
-                    
-                    <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                      <span>{Math.floor(session.duration / 60)}min</span>
-                      <span>{session.pages} páginas</span>
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </Card>
@@ -450,9 +533,22 @@ export const MobileOptimizationCenter: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {performance.length > 0 ? Math.round(performance[performance.length - 1].firstContentfulPaint) : 0}ms
+                  {performance.length > 0
+                    ? Math.round(performance[performance.length - 1].firstContentfulPaint)
+                    : 0}
+                  ms
                 </div>
-                <Progress value={performance.length > 0 ? Math.min((1800 / performance[performance.length - 1].firstContentfulPaint) * 100, 100) : 0} className="mt-2" />
+                <Progress
+                  value={
+                    performance.length > 0
+                      ? Math.min(
+                          (1800 / performance[performance.length - 1].firstContentfulPaint) * 100,
+                          100
+                        )
+                      : 0
+                  }
+                  className="mt-2"
+                />
                 <p className="text-xs text-muted-foreground mt-1">Meta: &lt; 1.8s</p>
               </CardContent>
             </Card>
@@ -464,9 +560,22 @@ export const MobileOptimizationCenter: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {performance.length > 0 ? Math.round(performance[performance.length - 1].largestContentfulPaint) : 0}ms
+                  {performance.length > 0
+                    ? Math.round(performance[performance.length - 1].largestContentfulPaint)
+                    : 0}
+                  ms
                 </div>
-                <Progress value={performance.length > 0 ? Math.min((2500 / performance[performance.length - 1].largestContentfulPaint) * 100, 100) : 0} className="mt-2" />
+                <Progress
+                  value={
+                    performance.length > 0
+                      ? Math.min(
+                          (2500 / performance[performance.length - 1].largestContentfulPaint) * 100,
+                          100
+                        )
+                      : 0
+                  }
+                  className="mt-2"
+                />
                 <p className="text-xs text-muted-foreground mt-1">Meta: &lt; 2.5s</p>
               </CardContent>
             </Card>
@@ -478,9 +587,21 @@ export const MobileOptimizationCenter: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {performance.length > 0 ? performance[performance.length - 1].cumulativeLayoutShift.toFixed(3) : 0}
+                  {performance.length > 0
+                    ? performance[performance.length - 1].cumulativeLayoutShift.toFixed(3)
+                    : 0}
                 </div>
-                <Progress value={performance.length > 0 ? Math.min((0.1 / performance[performance.length - 1].cumulativeLayoutShift) * 100, 100) : 0} className="mt-2" />
+                <Progress
+                  value={
+                    performance.length > 0
+                      ? Math.min(
+                          (0.1 / performance[performance.length - 1].cumulativeLayoutShift) * 100,
+                          100
+                        )
+                      : 0
+                  }
+                  className="mt-2"
+                />
                 <p className="text-xs text-muted-foreground mt-1">Meta: &lt; 0.1</p>
               </CardContent>
             </Card>
@@ -496,7 +617,10 @@ export const MobileOptimizationCenter: React.FC = () => {
             <CardContent>
               <div className="space-y-4">
                 {behavior.map((page, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border border-border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border border-border rounded-lg"
+                  >
                     <div className="flex-1">
                       <h4 className="font-medium">{page.page}</h4>
                       <div className="flex items-center space-x-6 mt-2 text-sm text-muted-foreground">
@@ -514,11 +638,13 @@ export const MobileOptimizationCenter: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
                         <p className="text-sm font-medium">Taxa de Rejeição</p>
-                        <p className={`text-lg font-bold ${page.bounceRate < 30 ? 'text-green-600' : page.bounceRate < 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                        <p
+                          className={`text-lg font-bold ${page.bounceRate < 30 ? "text-green-600" : page.bounceRate < 50 ? "text-yellow-600" : "text-red-600"}`}
+                        >
                           {page.bounceRate}%
                         </p>
                       </div>
@@ -550,7 +676,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                     </div>
                     <Badge className="bg-green-100 text-green-600">Ativo</Badge>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />
@@ -558,7 +684,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                     </div>
                     <Badge className="bg-green-100 text-green-600">Ativo</Badge>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <AlertTriangle className="h-4 w-4 text-yellow-600" />
@@ -566,7 +692,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                     </div>
                     <Badge className="bg-yellow-100 text-yellow-600">Pendente</Badge>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <AlertTriangle className="h-4 w-4 text-yellow-600" />
@@ -585,33 +711,33 @@ export const MobileOptimizationCenter: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="w-full justify-start"
                     onClick={handleOptimizeImages}
                   >
                     <Zap className="h-4 w-4 mr-2" />
                     Otimizar Imagens para Mobile
                   </Button>
-                  
-                  <Button 
-                    variant="outline" 
+
+                  <Button
+                    variant="outline"
                     className="w-full justify-start"
                     onClick={handleEnablePWA}
                   >
                     <Smartphone className="h-4 w-4 mr-2" />
                     Habilitar PWA
                   </Button>
-                  
-                  <Button 
-                    variant="outline" 
+
+                  <Button
+                    variant="outline"
                     className="w-full justify-start"
                     onClick={handleLazyLoad}
                   >
                     <Eye className="h-4 w-4 mr-2" />
                     Configurar Lazy Loading
                   </Button>
-                  
+
                   <Button variant="outline" className="w-full justify-start">
                     <Layers className="h-4 w-4 mr-2" />
                     Implementar Code Splitting
@@ -675,7 +801,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                     </div>
                     <Progress value={72} className="mt-2" />
                   </div>
-                  
+
                   <div className="p-4 border border-border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium">Botões de Ação</h4>
@@ -711,7 +837,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                       <span className="text-sm font-bold">87%</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span>Velocidade Percebida</span>
                     <div className="flex items-center space-x-2">
@@ -719,7 +845,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                       <span className="text-sm font-bold">78%</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span>Facilidade de Leitura</span>
                     <div className="flex items-center space-x-2">
@@ -727,7 +853,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                       <span className="text-sm font-bold">92%</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span>Interface Intuitiva</span>
                     <div className="flex items-center space-x-2">
@@ -735,7 +861,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                       <span className="text-sm font-bold">84%</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span>Satisfação Geral</span>
                     <div className="flex items-center space-x-2">

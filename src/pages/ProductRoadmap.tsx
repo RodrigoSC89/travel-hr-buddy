@@ -1,9 +1,8 @@
-import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import ProductRoadmap from '@/components/strategic/ProductRoadmap';
-import { Map } from 'lucide-react';
-
+import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import ProductRoadmap from "@/components/strategic/ProductRoadmap";
+import { Map } from "lucide-react";
 
 const ProductRoadmapPage = () => {
   return (
@@ -24,7 +23,6 @@ const ProductRoadmapPage = () => {
           </div>
           <ProductRoadmap />
         </main>
-        
       </div>
     </SidebarProvider>
   );

@@ -1,27 +1,33 @@
-import React, { useState } from 'react';
-import { useSystemActions } from '@/hooks/use-system-actions';
-import { 
-  Settings, 
-  User, 
-  Bell, 
-  Shield, 
-  Palette, 
+import React, { useState } from "react";
+import { useSystemActions } from "@/hooks/use-system-actions";
+import {
+  Settings,
+  User,
+  Bell,
+  Shield,
+  Palette,
   Globe,
   Database,
   Save,
-  RotateCcw
-} from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/hooks/use-toast';
-import { useProfile } from '@/hooks/use-profile';
-import { TwoFactorSettings } from '@/components/auth/two-factor-settings';
+  RotateCcw,
+} from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { useProfile } from "@/hooks/use-profile";
+import { TwoFactorSettings } from "@/components/auth/two-factor-settings";
 
 export const SettingsModule: React.FC = () => {
   const { toast } = useToast();
@@ -32,19 +38,19 @@ export const SettingsModule: React.FC = () => {
       email: true,
       push: true,
       desktop: false,
-      marketing: false
+      marketing: false,
     },
     privacy: {
       profileVisible: true,
       activityTracking: true,
-      dataSharing: false
+      dataSharing: false,
     },
     preferences: {
-      language: 'pt-BR',
-      timezone: 'America/Sao_Paulo',
-      currency: 'BRL',
-      theme: 'system'
-    }
+      language: "pt-BR",
+      timezone: "America/Sao_Paulo",
+      currency: "BRL",
+      theme: "system",
+    },
   });
 
   const handleSave = () => {
@@ -60,19 +66,19 @@ export const SettingsModule: React.FC = () => {
         email: true,
         push: true,
         desktop: false,
-        marketing: false
+        marketing: false,
       },
       privacy: {
         profileVisible: true,
         activityTracking: true,
-        dataSharing: false
+        dataSharing: false,
       },
       preferences: {
-        language: 'pt-BR',
-        timezone: 'America/Sao_Paulo',
-        currency: 'BRL',
-        theme: 'system'
-      }
+        language: "pt-BR",
+        timezone: "America/Sao_Paulo",
+        currency: "BRL",
+        theme: "system",
+      },
     });
     toast({
       title: "Configurações restauradas",
@@ -124,42 +130,40 @@ export const SettingsModule: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Informações do Perfil</CardTitle>
-              <CardDescription>
-                Atualize suas informações pessoais e profissionais
-              </CardDescription>
+              <CardDescription>Atualize suas informações pessoais e profissionais</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Nome Completo</Label>
-                  <Input 
-                    id="fullName" 
-                    defaultValue={profile?.full_name || ''} 
+                  <Input
+                    id="fullName"
+                    defaultValue={profile?.full_name || ""}
                     placeholder="Seu nome completo"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input 
-                    id="email" 
-                    type="email" 
-                    defaultValue={profile?.email || ''} 
+                  <Input
+                    id="email"
+                    type="email"
+                    defaultValue={profile?.email || ""}
                     placeholder="seu@email.com"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Telefone</Label>
-                  <Input 
-                    id="phone" 
-                    defaultValue={profile?.phone || ''} 
+                  <Input
+                    id="phone"
+                    defaultValue={profile?.phone || ""}
                     placeholder="(11) 99999-9999"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="department">Departamento</Label>
-                  <Input 
-                    id="department" 
-                    defaultValue={profile?.department || ''} 
+                  <Input
+                    id="department"
+                    defaultValue={profile?.department || ""}
                     placeholder="Seu departamento"
                   />
                 </div>
@@ -179,9 +183,7 @@ export const SettingsModule: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Configurações de Notificação</CardTitle>
-              <CardDescription>
-                Escolha como e quando receber notificações
-              </CardDescription>
+              <CardDescription>Escolha como e quando receber notificações</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -192,12 +194,12 @@ export const SettingsModule: React.FC = () => {
                       Receba alertas importantes por email
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.notifications.email}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={checked =>
                       setSettings(prev => ({
                         ...prev,
-                        notifications: { ...prev.notifications, email: checked }
+                        notifications: { ...prev.notifications, email: checked },
                       }))
                     }
                   />
@@ -210,12 +212,12 @@ export const SettingsModule: React.FC = () => {
                       Receba notificações instantâneas no navegador
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.notifications.push}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={checked =>
                       setSettings(prev => ({
                         ...prev,
-                        notifications: { ...prev.notifications, push: checked }
+                        notifications: { ...prev.notifications, push: checked },
                       }))
                     }
                   />
@@ -228,12 +230,12 @@ export const SettingsModule: React.FC = () => {
                       Mostrar notificações na área de trabalho
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.notifications.desktop}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={checked =>
                       setSettings(prev => ({
                         ...prev,
-                        notifications: { ...prev.notifications, desktop: checked }
+                        notifications: { ...prev.notifications, desktop: checked },
                       }))
                     }
                   />
@@ -246,12 +248,12 @@ export const SettingsModule: React.FC = () => {
                       Receba updates e novidades sobre o sistema
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.notifications.marketing}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={checked =>
                       setSettings(prev => ({
                         ...prev,
-                        notifications: { ...prev.notifications, marketing: checked }
+                        notifications: { ...prev.notifications, marketing: checked },
                       }))
                     }
                   />
@@ -265,9 +267,7 @@ export const SettingsModule: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Configurações de Privacidade</CardTitle>
-              <CardDescription>
-                Controle como seus dados são utilizados
-              </CardDescription>
+              <CardDescription>Controle como seus dados são utilizados</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -278,12 +278,12 @@ export const SettingsModule: React.FC = () => {
                       Permitir que outros usuários vejam seu perfil
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.privacy.profileVisible}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={checked =>
                       setSettings(prev => ({
                         ...prev,
-                        privacy: { ...prev.privacy, profileVisible: checked }
+                        privacy: { ...prev.privacy, profileVisible: checked },
                       }))
                     }
                   />
@@ -296,12 +296,12 @@ export const SettingsModule: React.FC = () => {
                       Permitir análise de uso para melhorar o sistema
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.privacy.activityTracking}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={checked =>
                       setSettings(prev => ({
                         ...prev,
-                        privacy: { ...prev.privacy, activityTracking: checked }
+                        privacy: { ...prev.privacy, activityTracking: checked },
                       }))
                     }
                   />
@@ -314,12 +314,12 @@ export const SettingsModule: React.FC = () => {
                       Compartilhar dados anônimos para pesquisa
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.privacy.dataSharing}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={checked =>
                       setSettings(prev => ({
                         ...prev,
-                        privacy: { ...prev.privacy, dataSharing: checked }
+                        privacy: { ...prev.privacy, dataSharing: checked },
                       }))
                     }
                   />
@@ -333,9 +333,7 @@ export const SettingsModule: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Preferências do Sistema</CardTitle>
-              <CardDescription>
-                Configure a aparência e comportamento do sistema
-              </CardDescription>
+              <CardDescription>Configure a aparência e comportamento do sistema</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -400,9 +398,7 @@ export const SettingsModule: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Configurações do Sistema</CardTitle>
-              <CardDescription>
-                Informações e configurações avançadas
-              </CardDescription>
+              <CardDescription>Informações e configurações avançadas</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -426,11 +422,19 @@ export const SettingsModule: React.FC = () => {
                 <div className="space-y-4">
                   <h4 className="font-medium">Ações do Sistema</h4>
                   <div className="space-y-2">
-                    <Button variant="outline" className="w-full justify-start" onClick={handleRefreshData}>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start"
+                      onClick={handleRefreshData}
+                    >
                       <Globe className="h-4 w-4 mr-2" />
                       Verificar Atualizações
                     </Button>
-                    <Button variant="outline" className="w-full justify-start" onClick={handleBackup}>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start"
+                      onClick={handleBackup}
+                    >
                       <Database className="h-4 w-4 mr-2" />
                       Backup dos Dados
                     </Button>

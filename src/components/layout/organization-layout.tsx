@@ -1,6 +1,6 @@
-import React from 'react';
-import { MultiTenantWrapper } from './multi-tenant-wrapper';
-import { BackToDashboard } from '@/components/ui/back-to-dashboard';
+import React from "react";
+import { MultiTenantWrapper } from "./multi-tenant-wrapper";
+import { BackToDashboard } from "@/components/ui/back-to-dashboard";
 
 interface OrganizationLayoutProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ export const OrganizationLayout: React.FC<OrganizationLayoutProps> = ({
   children,
   title,
   showBackButton = true,
-  requiresOrganization = true
+  requiresOrganization = true,
 }) => {
   return (
     <MultiTenantWrapper requiresOrganization={requiresOrganization}>

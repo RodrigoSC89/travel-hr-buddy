@@ -4,8 +4,8 @@
  */
 
 // Re-export from the new unified Loading component
-export { 
+export {
   Loading as MaritimeLoading,
   LoadingCard as MaritimeCardSkeleton,
-  type LoadingProps as MaritimeLoadingProps
-} from './Loading';
+  type LoadingProps as MaritimeLoadingProps,
+} from "./Loading";

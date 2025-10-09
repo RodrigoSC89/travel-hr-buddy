@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useToast } from '@/hooks/use-toast';
-import { 
-  Globe, 
-  Zap, 
-  CheckCircle, 
-  AlertTriangle, 
-  Settings, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Globe,
+  Zap,
+  CheckCircle,
+  AlertTriangle,
+  Settings,
   Plus,
   ExternalLink,
   Database,
@@ -42,24 +49,24 @@ import {
   Lock,
   Key,
   Gauge,
-  Calendar
-} from 'lucide-react';
-import { IntegrationMonitoring } from './integration-monitoring';
-import { IntegrationSecurity } from './integration-security';
-import { AIIntegrationAssistant } from './ai-integration-assistant';
-import { IntegrationTemplates as IntegrationTemplatesComponent } from './integration-templates';
-import { IntegrationTesting } from './integration-testing';
-import { IntegrationAutomation } from './integration-automation';
-import { SmartOptimization } from './smart-optimization';
-import { WebhookBuilder } from './webhook-builder';
-import { IntegrationMarketplace } from './integration-marketplace';
+  Calendar,
+} from "lucide-react";
+import { IntegrationMonitoring } from "./integration-monitoring";
+import { IntegrationSecurity } from "./integration-security";
+import { AIIntegrationAssistant } from "./ai-integration-assistant";
+import { IntegrationTemplates as IntegrationTemplatesComponent } from "./integration-templates";
+import { IntegrationTesting } from "./integration-testing";
+import { IntegrationAutomation } from "./integration-automation";
+import { SmartOptimization } from "./smart-optimization";
+import { WebhookBuilder } from "./webhook-builder";
+import { IntegrationMarketplace } from "./integration-marketplace";
 
 interface Integration {
   id: string;
   name: string;
   description: string;
-  category: 'data' | 'communication' | 'payment' | 'analytics' | 'automation' | 'ai' | 'security';
-  status: 'connected' | 'disconnected' | 'error' | 'configuring';
+  category: "data" | "communication" | "payment" | "analytics" | "automation" | "ai" | "security";
+  status: "connected" | "disconnected" | "error" | "configuring";
   icon: React.ElementType;
   isEnabled: boolean;
   lastSync?: string;
@@ -76,7 +83,7 @@ interface LogEntry {
   id: string;
   integrationId: string;
   timestamp: string;
-  type: 'success' | 'error' | 'warning' | 'info';
+  type: "success" | "error" | "warning" | "info";
   message: string;
   statusCode?: number;
   duration?: number;
@@ -85,7 +92,7 @@ interface LogEntry {
 
 interface AIInsight {
   id: string;
-  type: 'suggestion' | 'warning' | 'optimization';
+  type: "suggestion" | "warning" | "optimization";
   title: string;
   description: string;
   confidence: number;
@@ -93,10 +100,10 @@ interface AIInsight {
 }
 
 export const AdvancedIntegrationsHub: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [isWizardOpen, setIsWizardOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
@@ -113,97 +120,97 @@ export const AdvancedIntegrationsHub: React.FC = () => {
   const loadIntegrations = () => {
     const mockIntegrations: Integration[] = [
       {
-        id: '1',
-        name: 'Supabase Database',
-        description: 'Sistema de banco de dados principal com sincronização em tempo real',
-        category: 'data',
-        status: 'connected',
+        id: "1",
+        name: "Supabase Database",
+        description: "Sistema de banco de dados principal com sincronização em tempo real",
+        category: "data",
+        status: "connected",
         icon: Database,
         isEnabled: true,
-        lastSync: '2024-01-15T10:30:00Z',
-        provider: 'Supabase',
+        lastSync: "2024-01-15T10:30:00Z",
+        provider: "Supabase",
         healthScore: 98,
         requests24h: 2847,
         uptime: 99.8,
         errorRate: 0.1,
-        template: true
+        template: true,
       },
       {
-        id: '2',
-        name: 'WhatsApp Business API',
-        description: 'Comunicação direta com tripulação via WhatsApp Business',
-        category: 'communication',
-        status: 'configuring',
+        id: "2",
+        name: "WhatsApp Business API",
+        description: "Comunicação direta com tripulação via WhatsApp Business",
+        category: "communication",
+        status: "configuring",
         icon: MessageSquare,
         isEnabled: false,
-        provider: 'Meta',
+        provider: "Meta",
         healthScore: 0,
         requests24h: 0,
         uptime: 0,
         errorRate: 0,
-        template: true
+        template: true,
       },
       {
-        id: '3',
-        name: 'Nautilus Analytics AI',
-        description: 'IA preditiva para análise de performance e otimização operacional',
-        category: 'ai',
-        status: 'connected',
+        id: "3",
+        name: "Nautilus Analytics AI",
+        description: "IA preditiva para análise de performance e otimização operacional",
+        category: "ai",
+        status: "connected",
         icon: Brain,
         isEnabled: true,
-        lastSync: '2024-01-15T11:00:00Z',
-        provider: 'Nautilus AI',
+        lastSync: "2024-01-15T11:00:00Z",
+        provider: "Nautilus AI",
         healthScore: 95,
         requests24h: 1243,
         uptime: 97.2,
-        errorRate: 0.3
+        errorRate: 0.3,
       },
       {
-        id: '4',
-        name: 'Stripe Payments',
-        description: 'Processamento seguro de pagamentos e cobrança automática',
-        category: 'payment',
-        status: 'error',
+        id: "4",
+        name: "Stripe Payments",
+        description: "Processamento seguro de pagamentos e cobrança automática",
+        category: "payment",
+        status: "error",
         icon: CreditCard,
         isEnabled: false,
-        provider: 'Stripe',
+        provider: "Stripe",
         healthScore: 45,
         requests24h: 156,
         uptime: 85.4,
         errorRate: 2.1,
-        template: true
+        template: true,
       },
       {
-        id: '5',
-        name: 'Microsoft Outlook',
-        description: 'Integração com calendário e emails corporativos',
-        category: 'communication',
-        status: 'connected',
+        id: "5",
+        name: "Microsoft Outlook",
+        description: "Integração com calendário e emails corporativos",
+        category: "communication",
+        status: "connected",
         icon: Mail,
         isEnabled: true,
-        lastSync: '2024-01-15T10:45:00Z',
-        provider: 'Microsoft',
+        lastSync: "2024-01-15T10:45:00Z",
+        provider: "Microsoft",
         healthScore: 89,
         requests24h: 524,
         uptime: 96.7,
         errorRate: 0.8,
-        template: true
+        template: true,
       },
       {
-        id: '6',
-        name: 'Power BI Dashboard',
-        description: 'Dashboards avançados e relatórios executivos em tempo real',
-        category: 'analytics',
-        status: 'disconnected',
+        id: "6",
+        name: "Power BI Dashboard",
+        description: "Dashboards avançados e relatórios executivos em tempo real",
+        category: "analytics",
+        status: "disconnected",
         icon: BarChart3,
         isEnabled: false,
-        provider: 'Microsoft',
+        provider: "Microsoft",
         healthScore: 0,
         requests24h: 0,
         uptime: 0,
         errorRate: 0,
-        template: true
-      }
+        template: true,
+      },
     ];
 
     setIntegrations(mockIntegrations);
@@ -212,32 +219,32 @@ export const AdvancedIntegrationsHub: React.FC = () => {
   const loadLogs = () => {
     const mockLogs: LogEntry[] = [
       {
-        id: '1',
-        integrationId: '1',
+        id: "1",
+        integrationId: "1",
         timestamp: new Date().toISOString(),
-        type: 'success',
-        message: 'Sincronização de dados concluída com sucesso',
+        type: "success",
+        message: "Sincronização de dados concluída com sucesso",
         statusCode: 200,
-        duration: 1250
+        duration: 1250,
       },
       {
-        id: '2',
-        integrationId: '4',
+        id: "2",
+        integrationId: "4",
         timestamp: new Date(Date.now() - 300000).toISOString(),
-        type: 'error',
-        message: 'Falha na autenticação - Token expirado',
+        type: "error",
+        message: "Falha na autenticação - Token expirado",
         statusCode: 401,
-        duration: 2100
+        duration: 2100,
       },
       {
-        id: '3',
-        integrationId: '3',
+        id: "3",
+        integrationId: "3",
         timestamp: new Date(Date.now() - 600000).toISOString(),
-        type: 'warning',
-        message: 'Taxa de requisições próxima do limite',
+        type: "warning",
+        message: "Taxa de requisições próxima do limite",
         statusCode: 429,
-        duration: 890
-      }
+        duration: 890,
+      },
     ];
 
     setLogs(mockLogs);
@@ -246,28 +253,30 @@ export const AdvancedIntegrationsHub: React.FC = () => {
   const loadAIInsights = () => {
     const mockInsights: AIInsight[] = [
       {
-        id: '1',
-        type: 'warning',
-        title: 'Token de autenticação expirado',
-        description: 'A integração Stripe está retornando erro 401. O token de autenticação precisa ser renovado.',
+        id: "1",
+        type: "warning",
+        title: "Token de autenticação expirado",
+        description:
+          "A integração Stripe está retornando erro 401. O token de autenticação precisa ser renovado.",
         confidence: 95,
-        action: 'Renovar token na configuração'
+        action: "Renovar token na configuração",
       },
       {
-        id: '2',
-        type: 'suggestion',
-        title: 'Integração recomendada: Google Calendar',
-        description: 'Baseado no uso de alertas de viagem, recomendamos integrar com Google Calendar para melhor organização.',
-        confidence: 78
+        id: "2",
+        type: "suggestion",
+        title: "Integração recomendada: Google Calendar",
+        description:
+          "Baseado no uso de alertas de viagem, recomendamos integrar com Google Calendar para melhor organização.",
+        confidence: 78,
       },
       {
-        id: '3',
-        type: 'optimization',
-        title: 'Otimização de cache detectada',
-        description: 'A configuração de cache pode ser otimizada para reduzir latência em 15%.',
+        id: "3",
+        type: "optimization",
+        title: "Otimização de cache detectada",
+        description: "A configuração de cache pode ser otimizada para reduzir latência em 15%.",
         confidence: 82,
-        action: 'Aplicar otimização automática'
-      }
+        action: "Aplicar otimização automática",
+      },
     ];
 
     setAiInsights(mockInsights);
@@ -275,39 +284,51 @@ export const AdvancedIntegrationsHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected': return 'bg-success/10 text-success border-success/20';
-      case 'disconnected': return 'bg-muted text-muted-foreground border-border';
-      case 'error': return 'bg-destructive/10 text-destructive border-destructive/20';
-      case 'configuring': return 'bg-warning/10 text-warning border-warning/20';
-      default: return 'bg-muted text-muted-foreground border-border';
+      case "connected":
+        return "bg-success/10 text-success border-success/20";
+      case "disconnected":
+        return "bg-muted text-muted-foreground border-border";
+      case "error":
+        return "bg-destructive/10 text-destructive border-destructive/20";
+      case "configuring":
+        return "bg-warning/10 text-warning border-warning/20";
+      default:
+        return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected': return <CheckCircle className="w-4 h-4" />;
-      case 'disconnected': return <Gauge className="w-4 h-4" />;
-      case 'error': return <AlertTriangle className="w-4 h-4" />;
-      case 'configuring': return <Settings className="w-4 h-4 animate-spin" />;
-      default: return <Gauge className="w-4 h-4" />;
+      case "connected":
+        return <CheckCircle className="w-4 h-4" />;
+      case "disconnected":
+        return <Gauge className="w-4 h-4" />;
+      case "error":
+        return <AlertTriangle className="w-4 h-4" />;
+      case "configuring":
+        return <Settings className="w-4 h-4 animate-spin" />;
+      default:
+        return <Gauge className="w-4 h-4" />;
     }
   };
 
   const handleToggleIntegration = (id: string) => {
-    setIntegrations(prev => prev.map(integration => 
-      integration.id === id 
-        ? { 
-            ...integration, 
-            isEnabled: !integration.isEnabled,
-            status: !integration.isEnabled ? 'connected' : 'disconnected'
-          }
-        : integration
-    ));
-    
+    setIntegrations(prev =>
+      prev.map(integration =>
+        integration.id === id
+          ? {
+              ...integration,
+              isEnabled: !integration.isEnabled,
+              status: !integration.isEnabled ? "connected" : "disconnected",
+            }
+          : integration
+      )
+    );
+
     const integration = integrations.find(i => i.id === id);
     toast({
       title: "Status Atualizado",
-      description: `${integration?.name} foi ${integration?.isEnabled ? 'desabilitada' : 'habilitada'}`,
+      description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
     });
   };
 
@@ -317,7 +338,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
       title: "Testando Conexão",
       description: `Verificando conectividade com ${integration?.name}...`,
     });
-    
+
     // Simular teste de conexão
     setTimeout(() => {
       toast({
@@ -328,14 +349,15 @@ export const AdvancedIntegrationsHub: React.FC = () => {
   };
 
   const filteredIntegrations = integrations.filter(integration => {
-    const matchesCategory = selectedCategory === 'all' || integration.category === selectedCategory;
-    const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         integration.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
+    const matchesSearch =
+      integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
-  const connectedCount = integrations.filter(i => i.status === 'connected').length;
-  const errorCount = integrations.filter(i => i.status === 'error').length;
+  const connectedCount = integrations.filter(i => i.status === "connected").length;
+  const errorCount = integrations.filter(i => i.status === "error").length;
   const totalRequests = integrations.reduce((sum, i) => sum + i.requests24h, 0);
 
   return (
@@ -391,7 +413,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border-primary/20 bg-primary/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -403,7 +425,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border-destructive/20 bg-destructive/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -415,7 +437,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border-nautical/20 bg-nautical/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -482,21 +504,21 @@ export const AdvancedIntegrationsHub: React.FC = () => {
                 <Input
                   placeholder="Buscar integrações..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
             </div>
             <div className="flex gap-2">
-              {['all', 'data', 'communication', 'payment', 'analytics', 'ai'].map((category) => (
+              {["all", "data", "communication", "payment", "analytics", "ai"].map(category => (
                 <Button
                   key={category}
-                  variant={selectedCategory === category ? 'default' : 'outline'}
+                  variant={selectedCategory === category ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedCategory(category)}
                   className="capitalize"
                 >
-                  {category === 'all' ? 'Todas' : category}
+                  {category === "all" ? "Todas" : category}
                 </Button>
               ))}
             </div>
@@ -504,9 +526,9 @@ export const AdvancedIntegrationsHub: React.FC = () => {
 
           {/* Grid de Integrações */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredIntegrations.map((integration) => (
-              <IntegrationCard 
-                key={integration.id} 
+            {filteredIntegrations.map(integration => (
+              <IntegrationCard
+                key={integration.id}
                 integration={integration}
                 onToggle={handleToggleIntegration}
                 onTest={handleTestConnection}
@@ -565,24 +587,34 @@ const IntegrationCard: React.FC<{
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected': return 'bg-success/10 text-success border-success/20';
-      case 'disconnected': return 'bg-muted text-muted-foreground border-border';
-      case 'error': return 'bg-destructive/10 text-destructive border-destructive/20';
-      case 'configuring': return 'bg-warning/10 text-warning border-warning/20';
-      default: return 'bg-muted text-muted-foreground border-border';
+      case "connected":
+        return "bg-success/10 text-success border-success/20";
+      case "disconnected":
+        return "bg-muted text-muted-foreground border-border";
+      case "error":
+        return "bg-destructive/10 text-destructive border-destructive/20";
+      case "configuring":
+        return "bg-warning/10 text-warning border-warning/20";
+      default:
+        return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected': return <CheckCircle className="w-4 h-4" />;
-      case 'disconnected': return <Gauge className="w-4 h-4" />;
-      case 'error': return <AlertTriangle className="w-4 h-4" />;
-      case 'configuring': return <Settings className="w-4 h-4 animate-spin" />;
-      default: return <Gauge className="w-4 h-4" />;
+      case "connected":
+        return <CheckCircle className="w-4 h-4" />;
+      case "disconnected":
+        return <Gauge className="w-4 h-4" />;
+      case "error":
+        return <AlertTriangle className="w-4 h-4" />;
+      case "configuring":
+        return <Settings className="w-4 h-4 animate-spin" />;
+      default:
+        return <Gauge className="w-4 h-4" />;
     }
   };
-  
+
   return (
     <Card className="hover:shadow-lg transition-all duration-300 group border border-border/50">
       <CardHeader className="pb-3">
@@ -596,16 +628,16 @@ const IntegrationCard: React.FC<{
               <p className="text-sm text-muted-foreground">{integration.provider}</p>
             </div>
           </div>
-          <Switch 
+          <Switch
             checked={integration.isEnabled}
             onCheckedChange={() => onToggle(integration.id)}
           />
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         <p className="text-sm text-muted-foreground">{integration.description}</p>
-        
+
         <div className="flex items-center justify-between">
           <Badge className={getStatusColor(integration.status)}>
             {getStatusIcon(integration.status)}
@@ -617,9 +649,9 @@ const IntegrationCard: React.FC<{
             </Badge>
           )}
         </div>
-        
+
         {/* Métricas */}
-        {integration.status === 'connected' && (
+        {integration.status === "connected" && (
           <div className="grid grid-cols-2 gap-2 text-xs">
             <div className="bg-muted/50 rounded p-2">
               <p className="text-muted-foreground">Saúde</p>
@@ -631,16 +663,16 @@ const IntegrationCard: React.FC<{
             </div>
           </div>
         )}
-        
+
         {integration.lastSync && (
           <p className="text-xs text-muted-foreground">
-            Última sync: {new Date(integration.lastSync).toLocaleString('pt-BR')}
+            Última sync: {new Date(integration.lastSync).toLocaleString("pt-BR")}
           </p>
         )}
-        
+
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={() => onTest(integration.id)}
             className="flex-1"
@@ -673,17 +705,13 @@ const AISystemStatus: React.FC<{
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <CheckCircle className="w-8 h-8 text-success" />
-              <Badge className="bg-success/20 text-success border-success/30">
-                Operacional
-              </Badge>
+              <Badge className="bg-success/20 text-success border-success/30">Operacional</Badge>
             </div>
             <h3 className="font-semibold text-lg text-foreground mb-2">Integrações Ativas</h3>
             <p className="text-3xl font-bold text-success mb-2">
-              {integrations.filter(i => i.status === 'connected').length}
+              {integrations.filter(i => i.status === "connected").length}
             </p>
-            <p className="text-sm text-muted-foreground">
-              de {integrations.length} configuradas
-            </p>
+            <p className="text-sm text-muted-foreground">de {integrations.length} configuradas</p>
           </CardContent>
         </Card>
 
@@ -691,17 +719,16 @@ const AISystemStatus: React.FC<{
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <Cpu className="w-8 h-8 text-primary" />
-              <Badge className="bg-primary/20 text-primary border-primary/30">
-                Em Tempo Real
-              </Badge>
+              <Badge className="bg-primary/20 text-primary border-primary/30">Em Tempo Real</Badge>
             </div>
             <h3 className="font-semibold text-lg text-foreground mb-2">Performance</h3>
             <p className="text-3xl font-bold text-primary mb-2">
-              {Math.round(integrations.reduce((sum, i) => sum + i.healthScore, 0) / integrations.length)}%
+              {Math.round(
+                integrations.reduce((sum, i) => sum + i.healthScore, 0) / integrations.length
+              )}
+              %
             </p>
-            <p className="text-sm text-muted-foreground">
-              saúde geral do sistema
-            </p>
+            <p className="text-sm text-muted-foreground">saúde geral do sistema</p>
           </CardContent>
         </Card>
 
@@ -709,15 +736,11 @@ const AISystemStatus: React.FC<{
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <Brain className="w-8 h-8 text-nautical" />
-              <Badge className="bg-nautical/20 text-nautical border-nautical/30">
-                IA Ativa
-              </Badge>
+              <Badge className="bg-nautical/20 text-nautical border-nautical/30">IA Ativa</Badge>
             </div>
             <h3 className="font-semibold text-lg text-foreground mb-2">Insights de IA</h3>
             <p className="text-3xl font-bold text-nautical mb-2">{insights.length}</p>
-            <p className="text-sm text-muted-foreground">
-              recomendações ativas
-            </p>
+            <p className="text-sm text-muted-foreground">recomendações ativas</p>
           </CardContent>
         </Card>
       </div>
@@ -732,7 +755,7 @@ const AISystemStatus: React.FC<{
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {insights.slice(0, 3).map((insight) => (
+            {insights.slice(0, 3).map(insight => (
               <Alert key={insight.id} className="border border-border/50">
                 <Brain className="w-4 h-4" />
                 <AlertDescription>
@@ -761,33 +784,33 @@ const IntegrationTemplates: React.FC<{
 }> = ({ onSelect }) => {
   const templates = [
     {
-      name: 'Google Calendar',
-      description: 'Sincronização automática de eventos e agendamentos',
+      name: "Google Calendar",
+      description: "Sincronização automática de eventos e agendamentos",
       icon: Calendar,
-      category: 'communication',
-      popular: true
+      category: "communication",
+      popular: true,
     },
     {
-      name: 'Slack/Teams',
-      description: 'Notificações e alertas em tempo real',
+      name: "Slack/Teams",
+      description: "Notificações e alertas em tempo real",
       icon: MessageSquare,
-      category: 'communication',
-      popular: true
+      category: "communication",
+      popular: true,
     },
     {
-      name: 'Power BI',
-      description: 'Dashboards e relatórios executivos',
+      name: "Power BI",
+      description: "Dashboards e relatórios executivos",
       icon: BarChart3,
-      category: 'analytics',
-      popular: false
+      category: "analytics",
+      popular: false,
     },
     {
-      name: 'OCR Service',
-      description: 'Processamento automático de documentos',
+      name: "OCR Service",
+      description: "Processamento automático de documentos",
       icon: Eye,
-      category: 'ai',
-      popular: false
-    }
+      category: "ai",
+      popular: false,
+    },
   ];
 
   return (
@@ -800,25 +823,26 @@ const IntegrationTemplates: React.FC<{
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {templates.map((template) => {
+        {templates.map(template => {
           const Icon = template.icon;
           return (
-            <Card key={template.name} className="hover:shadow-lg transition-all duration-300 cursor-pointer group border border-border/50">
+            <Card
+              key={template.name}
+              className="hover:shadow-lg transition-all duration-300 cursor-pointer group border border-border/50"
+            >
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="p-3 rounded-xl bg-primary/10 border border-primary/20">
                     <Icon className="w-6 h-6 text-primary" />
                   </div>
                   {template.popular && (
-                    <Badge className="bg-warning/20 text-warning border-warning/30">
-                      Popular
-                    </Badge>
+                    <Badge className="bg-warning/20 text-warning border-warning/30">Popular</Badge>
                   )}
                 </div>
                 <h4 className="font-semibold text-lg text-foreground mb-2">{template.name}</h4>
                 <p className="text-sm text-muted-foreground mb-4">{template.description}</p>
-                <Button 
-                  onClick={() => onSelect(template.name)} 
+                <Button
+                  onClick={() => onSelect(template.name)}
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   Configurar Agora
@@ -837,13 +861,18 @@ const LogsViewer: React.FC<{
   logs: LogEntry[];
   integrations: Integration[];
 }> = ({ logs, integrations }) => {
-  const getLogTypeColor = (type: LogEntry['type']) => {
+  const getLogTypeColor = (type: LogEntry["type"]) => {
     switch (type) {
-      case 'success': return 'text-success bg-success/10 border-success/20';
-      case 'error': return 'text-destructive bg-destructive/10 border-destructive/20';
-      case 'warning': return 'text-warning bg-warning/10 border-warning/20';
-      case 'info': return 'text-info bg-info/10 border-info/20';
-      default: return 'text-muted-foreground bg-muted border-border';
+      case "success":
+        return "text-success bg-success/10 border-success/20";
+      case "error":
+        return "text-destructive bg-destructive/10 border-destructive/20";
+      case "warning":
+        return "text-warning bg-warning/10 border-warning/20";
+      case "info":
+        return "text-info bg-info/10 border-info/20";
+      default:
+        return "text-muted-foreground bg-muted border-border";
     }
   };
 
@@ -866,21 +895,22 @@ const LogsViewer: React.FC<{
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          {logs.map((log) => {
+          {logs.map(log => {
             const integration = integrations.find(i => i.id === log.integrationId);
             return (
-              <div key={log.id} className="flex items-center justify-between p-3 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors">
+              <div
+                key={log.id}
+                className="flex items-center justify-between p-3 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors"
+              >
                 <div className="flex items-center gap-3">
-                  <Badge className={getLogTypeColor(log.type)}>
-                    {log.type}
-                  </Badge>
+                  <Badge className={getLogTypeColor(log.type)}>{log.type}</Badge>
                   <div>
                     <p className="font-medium text-foreground">{integration?.name}</p>
                     <p className="text-sm text-muted-foreground">{log.message}</p>
                   </div>
                 </div>
                 <div className="text-right text-sm text-muted-foreground">
-                  <p>{new Date(log.timestamp).toLocaleTimeString('pt-BR')}</p>
+                  <p>{new Date(log.timestamp).toLocaleTimeString("pt-BR")}</p>
                   {log.duration && <p>{log.duration}ms</p>}
                 </div>
               </div>
@@ -896,21 +926,29 @@ const LogsViewer: React.FC<{
 const AIInsightsPanel: React.FC<{
   insights: AIInsight[];
 }> = ({ insights }) => {
-  const getInsightColor = (type: AIInsight['type']) => {
+  const getInsightColor = (type: AIInsight["type"]) => {
     switch (type) {
-      case 'suggestion': return 'border-primary/20 bg-primary/5';
-      case 'warning': return 'border-warning/20 bg-warning/5';
-      case 'optimization': return 'border-success/20 bg-success/5';
-      default: return 'border-border bg-background';
+      case "suggestion":
+        return "border-primary/20 bg-primary/5";
+      case "warning":
+        return "border-warning/20 bg-warning/5";
+      case "optimization":
+        return "border-success/20 bg-success/5";
+      default:
+        return "border-border bg-background";
     }
   };
 
-  const getInsightIcon = (type: AIInsight['type']) => {
+  const getInsightIcon = (type: AIInsight["type"]) => {
     switch (type) {
-      case 'suggestion': return <Brain className="w-5 h-5 text-primary" />;
-      case 'warning': return <AlertTriangle className="w-5 h-5 text-warning" />;
-      case 'optimization': return <TrendingUp className="w-5 h-5 text-success" />;
-      default: return <Brain className="w-5 h-5 text-muted-foreground" />;
+      case "suggestion":
+        return <Brain className="w-5 h-5 text-primary" />;
+      case "warning":
+        return <AlertTriangle className="w-5 h-5 text-warning" />;
+      case "optimization":
+        return <TrendingUp className="w-5 h-5 text-success" />;
+      default:
+        return <Brain className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -919,7 +957,9 @@ const AIInsightsPanel: React.FC<{
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold text-foreground">Análise de IA</h3>
-          <p className="text-muted-foreground">Insights inteligentes para otimizar suas integrações</p>
+          <p className="text-muted-foreground">
+            Insights inteligentes para otimizar suas integrações
+          </p>
         </div>
         <Button variant="outline">
           <RefreshCw className="w-4 h-4 mr-2" />
@@ -928,7 +968,7 @@ const AIInsightsPanel: React.FC<{
       </div>
 
       <div className="space-y-4">
-        {insights.map((insight) => (
+        {insights.map(insight => (
           <Card key={insight.id} className={`border ${getInsightColor(insight.type)}`}>
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
@@ -944,7 +984,10 @@ const AIInsightsPanel: React.FC<{
                   </div>
                   <p className="text-muted-foreground mb-3">{insight.description}</p>
                   {insight.action && (
-                    <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                    <Button
+                      size="sm"
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                    >
                       {insight.action}
                     </Button>
                   )}
@@ -964,19 +1007,19 @@ const IntegrationWizard: React.FC<{
 }> = ({ onClose }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    name: '',
-    type: '',
-    endpoint: '',
-    method: 'GET',
+    name: "",
+    type: "",
+    endpoint: "",
+    method: "GET",
     headers: {},
-    auth: ''
+    auth: "",
   });
 
   const steps = [
-    { title: 'Tipo de Integração', description: 'Selecione o tipo de integração' },
-    { title: 'Configuração', description: 'Configure os parâmetros' },
-    { title: 'Autenticação', description: 'Configure a autenticação' },
-    { title: 'Teste', description: 'Teste a conexão' }
+    { title: "Tipo de Integração", description: "Selecione o tipo de integração" },
+    { title: "Configuração", description: "Configure os parâmetros" },
+    { title: "Autenticação", description: "Configure a autenticação" },
+    { title: "Teste", description: "Teste a conexão" },
   ];
 
   return (
@@ -985,15 +1028,21 @@ const IntegrationWizard: React.FC<{
       <div className="flex items-center justify-between">
         {steps.map((step, index) => (
           <div key={index} className="flex items-center">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
-              index + 1 <= currentStep ? 'bg-primary border-primary text-primary-foreground' : 'border-border text-muted-foreground'
-            }`}>
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
+                index + 1 <= currentStep
+                  ? "bg-primary border-primary text-primary-foreground"
+                  : "border-border text-muted-foreground"
+              }`}
+            >
               {index + 1}
             </div>
             {index < steps.length - 1 && (
-              <div className={`h-0.5 w-16 ml-2 ${
-                index + 1 < currentStep ? 'bg-primary' : 'bg-border'
-              }`} />
+              <div
+                className={`h-0.5 w-16 ml-2 ${
+                  index + 1 < currentStep ? "bg-primary" : "bg-border"
+                }`}
+              />
             )}
           </div>
         ))}
@@ -1003,12 +1052,18 @@ const IntegrationWizard: React.FC<{
       <div className="min-h-[300px]">
         {currentStep === 1 && (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground">Selecione o Tipo de Integração</h3>
+            <h3 className="text-lg font-semibold text-foreground">
+              Selecione o Tipo de Integração
+            </h3>
             <div className="grid grid-cols-2 gap-4">
-              {['REST API', 'Webhook', 'OAuth 2.0', 'Database'].map((type) => (
-                <Card key={type} className={`cursor-pointer transition-all hover:shadow-md border ${
-                  formData.type === type ? 'border-primary bg-primary/5' : 'border-border'
-                }`} onClick={() => setFormData(prev => ({ ...prev, type }))}>
+              {["REST API", "Webhook", "OAuth 2.0", "Database"].map(type => (
+                <Card
+                  key={type}
+                  className={`cursor-pointer transition-all hover:shadow-md border ${
+                    formData.type === type ? "border-primary bg-primary/5" : "border-border"
+                  }`}
+                  onClick={() => setFormData(prev => ({ ...prev, type }))}
+                >
                   <CardContent className="p-4 text-center">
                     <p className="font-medium text-foreground">{type}</p>
                   </CardContent>
@@ -1027,7 +1082,7 @@ const IntegrationWizard: React.FC<{
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="Ex: Sistema ERP Interno"
                 />
               </div>
@@ -1036,15 +1091,15 @@ const IntegrationWizard: React.FC<{
                 <Input
                   id="endpoint"
                   value={formData.endpoint}
-                  onChange={(e) => setFormData(prev => ({ ...prev, endpoint: e.target.value }))}
+                  onChange={e => setFormData(prev => ({ ...prev, endpoint: e.target.value }))}
                   placeholder="https://api.exemplo.com/v1"
                 />
               </div>
               <div>
                 <Label htmlFor="method">Método HTTP</Label>
-                <select 
+                <select
                   value={formData.method}
-                  onChange={(e) => setFormData(prev => ({ ...prev, method: e.target.value }))}
+                  onChange={e => setFormData(prev => ({ ...prev, method: e.target.value }))}
                   className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground"
                 >
                   <option value="GET">GET</option>
@@ -1063,9 +1118,9 @@ const IntegrationWizard: React.FC<{
             <div className="space-y-3">
               <div>
                 <Label htmlFor="auth">Tipo de Autenticação</Label>
-                <select 
+                <select
                   value={formData.auth}
-                  onChange={(e) => setFormData(prev => ({ ...prev, auth: e.target.value }))}
+                  onChange={e => setFormData(prev => ({ ...prev, auth: e.target.value }))}
                   className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground"
                 >
                   <option value="">Selecione...</option>
@@ -1078,11 +1133,7 @@ const IntegrationWizard: React.FC<{
               {formData.auth && (
                 <div>
                   <Label htmlFor="token">Token/Chave</Label>
-                  <Input
-                    id="token"
-                    type="password"
-                    placeholder="Cole seu token aqui"
-                  />
+                  <Input id="token" type="password" placeholder="Cole seu token aqui" />
                 </div>
               )}
             </div>
@@ -1104,14 +1155,14 @@ const IntegrationWizard: React.FC<{
 
       {/* Navigation */}
       <div className="flex justify-between">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
           disabled={currentStep === 1}
         >
           Anterior
         </Button>
-        <Button 
+        <Button
           onClick={() => {
             if (currentStep === steps.length) {
               onClose();
@@ -1121,7 +1172,7 @@ const IntegrationWizard: React.FC<{
           }}
           className="bg-primary hover:bg-primary/90 text-primary-foreground"
         >
-          {currentStep === steps.length ? 'Finalizar' : 'Próximo'}
+          {currentStep === steps.length ? "Finalizar" : "Próximo"}
         </Button>
       </div>
     </div>

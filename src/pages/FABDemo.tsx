@@ -1,7 +1,7 @@
-import React from 'react';
-import { FloatingActionButton } from '@/components/ui/floating-action-button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { FloatingActionButton } from "@/components/ui/floating-action-button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 /**
  * Demo page to showcase the Floating Action Button
@@ -12,9 +12,7 @@ const FABDemo: React.FC = () => {
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold text-foreground">
-            Floating Action Button Demo
-          </h1>
+          <h1 className="text-4xl font-bold text-foreground">Floating Action Button Demo</h1>
           <p className="text-muted-foreground">
             Demonstração do botão de ação flutuante com funcionalidade completa
           </p>
@@ -29,9 +27,7 @@ const FABDemo: React.FC = () => {
                   Implementado
                 </Badge>
               </CardTitle>
-              <CardDescription>
-                O FAB está totalmente funcional e responsivo
-              </CardDescription>
+              <CardDescription>O FAB está totalmente funcional e responsivo</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-2">
@@ -61,9 +57,7 @@ const FABDemo: React.FC = () => {
                   WCAG AAA
                 </Badge>
               </CardTitle>
-              <CardDescription>
-                Cores otimizadas para acessibilidade
-              </CardDescription>
+              <CardDescription>Cores otimizadas para acessibilidade</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-2">
@@ -89,9 +83,7 @@ const FABDemo: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle>Como usar o FAB</CardTitle>
-            <CardDescription>
-              Instruções de uso do botão de ação flutuante
-            </CardDescription>
+            <CardDescription>Instruções de uso do botão de ação flutuante</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -118,9 +110,9 @@ const FABDemo: React.FC = () => {
         <div className="bg-muted/30 rounded-lg p-6 space-y-3">
           <h3 className="font-semibold text-foreground">💡 Nota Importante</h3>
           <p className="text-sm text-muted-foreground">
-            O FAB está posicionado no canto inferior direito com z-index elevado (50-70) para garantir 
-            que fique sempre visível acima de outros elementos. As ações são logadas tanto no console 
-            quanto no localStorage para facilitar a depuração.
+            O FAB está posicionado no canto inferior direito com z-index elevado (50-70) para
+            garantir que fique sempre visível acima de outros elementos. As ações são logadas tanto
+            no console quanto no localStorage para facilitar a depuração.
           </p>
         </div>
       </div>

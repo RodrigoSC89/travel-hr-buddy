@@ -1,9 +1,9 @@
-import { useMaritimeActions } from '@/hooks/useMaritimeActions';
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { useMaritimeActions } from "@/hooks/useMaritimeActions";
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   Calendar,
   CheckCircle,
@@ -13,15 +13,15 @@ import {
   Users,
   Target,
   TrendingUp,
-  Plus
-} from 'lucide-react';
+  Plus,
+} from "lucide-react";
 
 interface Audit {
   id: string;
-  type: 'internal' | 'external' | 'regulatory' | 'certification';
+  type: "internal" | "external" | "regulatory" | "certification";
   title: string;
   scope: string;
-  status: 'planned' | 'in_progress' | 'completed' | 'overdue';
+  status: "planned" | "in_progress" | "completed" | "overdue";
   scheduled_date: string;
   completion_date?: string;
   auditor: string;
@@ -32,114 +32,113 @@ interface Audit {
 
 const SAMPLE_AUDITS: Audit[] = [
   {
-    id: '1',
-    type: 'internal',
-    title: 'Auditoria Prática 13 - Gestão de Mudanças',
-    scope: 'Verificação MOC procedures',
-    status: 'planned',
-    scheduled_date: '2024-10-15',
-    auditor: 'Eng. Roberto Santos',
-    practices_covered: [13]
+    id: "1",
+    type: "internal",
+    title: "Auditoria Prática 13 - Gestão de Mudanças",
+    scope: "Verificação MOC procedures",
+    status: "planned",
+    scheduled_date: "2024-10-15",
+    auditor: "Eng. Roberto Santos",
+    practices_covered: [13],
   },
   {
-    id: '2',
-    type: 'regulatory',
-    title: 'Auditoria ANP - Compliance Geral',
-    scope: 'Verificação 17 práticas ANP',
-    status: 'in_progress',
-    scheduled_date: '2024-10-08',
-    auditor: 'Auditor ANP - Maria Costa',
+    id: "2",
+    type: "regulatory",
+    title: "Auditoria ANP - Compliance Geral",
+    scope: "Verificação 17 práticas ANP",
+    status: "in_progress",
+    scheduled_date: "2024-10-08",
+    auditor: "Auditor ANP - Maria Costa",
     findings_count: 5,
-    practices_covered: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+    practices_covered: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
   },
   {
-    id: '3',
-    type: 'internal',
-    title: 'Auditoria Integridade Mecânica',
-    scope: 'Prática 17 - Equipamentos críticos',
-    status: 'overdue',
-    scheduled_date: '2024-09-30',
-    auditor: 'Eng. João Oliveira',
-    practices_covered: [17]
+    id: "3",
+    type: "internal",
+    title: "Auditoria Integridade Mecânica",
+    scope: "Prática 17 - Equipamentos críticos",
+    status: "overdue",
+    scheduled_date: "2024-09-30",
+    auditor: "Eng. João Oliveira",
+    practices_covered: [17],
   },
   {
-    id: '4',
-    type: 'certification',
-    title: 'ISO 45001 - Recertificação',
-    scope: 'Sistema de gestão completo',
-    status: 'completed',
-    scheduled_date: '2024-09-15',
-    completion_date: '2024-09-20',
-    auditor: 'Bureau Veritas - Carlos Lima',
+    id: "4",
+    type: "certification",
+    title: "ISO 45001 - Recertificação",
+    scope: "Sistema de gestão completo",
+    status: "completed",
+    scheduled_date: "2024-09-15",
+    completion_date: "2024-09-20",
+    auditor: "Bureau Veritas - Carlos Lima",
     findings_count: 3,
     non_conformities: 0,
-    practices_covered: [1, 2, 3, 4, 5, 8, 9, 10, 11, 12]
+    practices_covered: [1, 2, 3, 4, 5, 8, 9, 10, 11, 12],
   },
   {
-    id: '5',
-    type: 'internal',
-    title: 'Auditoria Treinamento e Competência',
-    scope: 'Prática 4 - Compliance treinamentos',
-    status: 'planned',
-    scheduled_date: '2024-11-05',
-    auditor: 'RH - Ana Paula',
-    practices_covered: [4]
-  }
+    id: "5",
+    type: "internal",
+    title: "Auditoria Treinamento e Competência",
+    scope: "Prática 4 - Compliance treinamentos",
+    status: "planned",
+    scheduled_date: "2024-11-05",
+    auditor: "RH - Ana Paula",
+    practices_covered: [4],
+  },
 ];
 
 const getStatusConfig = (status: string) => {
   const configs = {
     planned: {
       icon: Calendar,
-      color: 'bg-blue-600 text-white',
-      label: 'Planejada',
-      badgeVariant: 'default' as const
+      color: "bg-blue-600 text-white",
+      label: "Planejada",
+      badgeVariant: "default" as const,
     },
     in_progress: {
       icon: Clock,
-      color: 'bg-yellow-600 text-white',
-      label: 'Em Andamento',
-      badgeVariant: 'default' as const
+      color: "bg-yellow-600 text-white",
+      label: "Em Andamento",
+      badgeVariant: "default" as const,
     },
     completed: {
       icon: CheckCircle,
-      color: 'bg-green-600 text-white',
-      label: 'Concluída',
-      badgeVariant: 'default' as const
+      color: "bg-green-600 text-white",
+      label: "Concluída",
+      badgeVariant: "default" as const,
     },
     overdue: {
       icon: AlertTriangle,
-      color: 'bg-red-600 text-white',
-      label: 'Atrasada',
-      badgeVariant: 'destructive' as const
-    }
+      color: "bg-red-600 text-white",
+      label: "Atrasada",
+      badgeVariant: "destructive" as const,
+    },
   };
   return configs[status as keyof typeof configs] || configs.planned;
 };
 
 const getTypeLabel = (type: string) => {
   const labels = {
-    internal: 'Interna',
-    external: 'Externa',
-    regulatory: 'Regulatória',
-    certification: 'Certificação'
+    internal: "Interna",
+    external: "Externa",
+    regulatory: "Regulatória",
+    certification: "Certificação",
   };
   return labels[type as keyof typeof labels] || type;
 };
 
 export const AuditPlanner: React.FC = () => {
-  const [selectedType, setSelectedType] = useState<string>('all');
+  const [selectedType, setSelectedType] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(false);
   const { handleViewDetails, showInfo, handleCreate, handleGenerateReport } = useMaritimeActions();
 
-  const plannedCount = SAMPLE_AUDITS.filter(a => a.status === 'planned').length;
-  const inProgressCount = SAMPLE_AUDITS.filter(a => a.status === 'in_progress').length;
-  const completedCount = SAMPLE_AUDITS.filter(a => a.status === 'completed').length;
-  const overdueCount = SAMPLE_AUDITS.filter(a => a.status === 'overdue').length;
+  const plannedCount = SAMPLE_AUDITS.filter(a => a.status === "planned").length;
+  const inProgressCount = SAMPLE_AUDITS.filter(a => a.status === "in_progress").length;
+  const completedCount = SAMPLE_AUDITS.filter(a => a.status === "completed").length;
+  const overdueCount = SAMPLE_AUDITS.filter(a => a.status === "overdue").length;
 
-  const filteredAudits = selectedType === 'all'
-    ? SAMPLE_AUDITS
-    : SAMPLE_AUDITS.filter(a => a.type === selectedType);
+  const filteredAudits =
+    selectedType === "all" ? SAMPLE_AUDITS : SAMPLE_AUDITS.filter(a => a.type === selectedType);
 
   const totalAudits = SAMPLE_AUDITS.length;
   const completionRate = Math.round((completedCount / totalAudits) * 100);
@@ -205,36 +204,36 @@ export const AuditPlanner: React.FC = () => {
         <CardContent>
           <div className="flex flex-wrap gap-2">
             <Button
-              variant={selectedType === 'all' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('all')}
+              variant={selectedType === "all" ? "default" : "outline"}
+              onClick={() => setSelectedType("all")}
               className="min-h-[44px]"
             >
               Todas
             </Button>
             <Button
-              variant={selectedType === 'internal' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('internal')}
+              variant={selectedType === "internal" ? "default" : "outline"}
+              onClick={() => setSelectedType("internal")}
               className="min-h-[44px]"
             >
               Internas
             </Button>
             <Button
-              variant={selectedType === 'external' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('external')}
+              variant={selectedType === "external" ? "default" : "outline"}
+              onClick={() => setSelectedType("external")}
               className="min-h-[44px]"
             >
               Externas
             </Button>
             <Button
-              variant={selectedType === 'regulatory' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('regulatory')}
+              variant={selectedType === "regulatory" ? "default" : "outline"}
+              onClick={() => setSelectedType("regulatory")}
               className="min-h-[44px]"
             >
               Regulatórias
             </Button>
             <Button
-              variant={selectedType === 'certification' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('certification')}
+              variant={selectedType === "certification" ? "default" : "outline"}
+              onClick={() => setSelectedType("certification")}
               className="min-h-[44px]"
             >
               Certificação
@@ -253,7 +252,7 @@ export const AuditPlanner: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {filteredAudits.map((audit) => {
+            {filteredAudits.map(audit => {
               const statusConfig = getStatusConfig(audit.status);
               const StatusIcon = statusConfig.icon;
 
@@ -268,9 +267,7 @@ export const AuditPlanner: React.FC = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h3 className="text-lg font-bold text-gray-900">{audit.title}</h3>
-                            <Badge className={statusConfig.color}>
-                              {statusConfig.label}
-                            </Badge>
+                            <Badge className={statusConfig.color}>{statusConfig.label}</Badge>
                             <Badge variant="outline" className="bg-white">
                               {getTypeLabel(audit.type)}
                             </Badge>
@@ -281,10 +278,12 @@ export const AuditPlanner: React.FC = () => {
                           </p>
                           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
-                              <p className="text-xs text-muted-foreground font-medium">Data Agendada</p>
+                              <p className="text-xs text-muted-foreground font-medium">
+                                Data Agendada
+                              </p>
                               <p className="text-sm font-bold text-gray-900">
                                 <Calendar className="h-3 w-3 inline mr-1" />
-                                {new Date(audit.scheduled_date).toLocaleDateString('pt-BR')}
+                                {new Date(audit.scheduled_date).toLocaleDateString("pt-BR")}
                               </p>
                             </div>
                             <div>
@@ -295,7 +294,9 @@ export const AuditPlanner: React.FC = () => {
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-muted-foreground font-medium">Práticas Cobertas</p>
+                              <p className="text-xs text-muted-foreground font-medium">
+                                Práticas Cobertas
+                              </p>
                               <p className="text-sm font-bold text-gray-900">
                                 {audit.practices_covered.length} de 17
                               </p>
@@ -317,19 +318,21 @@ export const AuditPlanner: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => handleViewDetails('audit', audit.id)} disabled={isLoading}
+                          onClick={() => handleViewDetails("audit", audit.id)}
+                          disabled={isLoading}
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Detalhes
                         </Button>
-                        {audit.status !== 'completed' && (
+                        {audit.status !== "completed" && (
                           <Button
                             size="sm"
                             className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
-                            onClick={() => showInfo('Iniciando Auditoria', 'Preparando auditoria')} disabled={isLoading}
+                            onClick={() => showInfo("Iniciando Auditoria", "Preparando auditoria")}
+                            disabled={isLoading}
                           >
                             <CheckCircle className="h-4 w-4 mr-2" />
-                            {audit.status === 'in_progress' ? 'Continuar' : 'Iniciar'}
+                            {audit.status === "in_progress" ? "Continuar" : "Iniciar"}
                           </Button>
                         )}
                       </div>
@@ -359,28 +362,32 @@ export const AuditPlanner: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleCreate('Auditoria')} disabled={isLoading}
+              onClick={() => handleCreate("Auditoria")}
+              disabled={isLoading}
             >
               <Plus className="h-6 w-6" />
               <span className="font-semibold">Nova Auditoria</span>
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo('Calendário', 'Abrindo calendário de auditorias')} disabled={isLoading}
+              onClick={() => showInfo("Calendário", "Abrindo calendário de auditorias")}
+              disabled={isLoading}
             >
               <Calendar className="h-6 w-6" />
               <span className="font-semibold">Calendário</span>
             </Button>
             <Button
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleGenerateReport('Relatório de Auditorias')} disabled={isLoading}
+              onClick={() => handleGenerateReport("Relatório de Auditorias")}
+              disabled={isLoading}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button
               className="bg-purple-600 hover:bg-purple-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo('Tendências', 'Abrindo análise de tendências')} disabled={isLoading}
+              onClick={() => showInfo("Tendências", "Abrindo análise de tendências")}
+              disabled={isLoading}
             >
               <TrendingUp className="h-6 w-6" />
               <span className="font-semibold">Tendências</span>

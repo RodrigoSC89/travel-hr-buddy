@@ -1,21 +1,21 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Home } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Home } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface BackToDashboardProps {
   className?: string;
-  variant?: 'default' | 'outline' | 'ghost';
+  variant?: "default" | "outline" | "ghost";
 }
 
-export const BackToDashboard: React.FC<BackToDashboardProps> = ({ 
-  className = '', 
-  variant = 'outline' 
+export const BackToDashboard: React.FC<BackToDashboardProps> = ({
+  className = "",
+  variant = "outline",
 }) => {
   const navigate = useNavigate();
 
   const handleBackToDashboard = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (

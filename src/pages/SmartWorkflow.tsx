@@ -1,6 +1,6 @@
-import React from 'react';
-import SmartWorkflowAutomation from '@/components/automation/smart-workflow-automation';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import React from "react";
+import SmartWorkflowAutomation from "@/components/automation/smart-workflow-automation";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 
 const SmartWorkflowPage = () => {
   return (

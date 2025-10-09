@@ -1,6 +1,6 @@
-import React from 'react';
-import { EnhancedFeedbackSystem } from '@/components/feedback/enhanced-feedback-system';
-import { OrganizationLayout } from '@/components/layout/organization-layout';
+import React from "react";
+import { EnhancedFeedbackSystem } from "@/components/feedback/enhanced-feedback-system";
+import { OrganizationLayout } from "@/components/layout/organization-layout";
 
 export default function FeedbackPage() {
   return (

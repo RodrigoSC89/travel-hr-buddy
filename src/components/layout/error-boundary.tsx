@@ -1,7 +1,7 @@
-import React, { Component, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import React, { Component, ReactNode } from "react";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -27,12 +27,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-    this.setState(prevState => ({ 
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
+    this.setState(prevState => ({
       errorInfo,
-      errorCount: prevState.errorCount + 1 
+      errorCount: prevState.errorCount + 1,
     }));
-    
+
     // Call optional error handler
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
@@ -44,7 +44,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   };
 
   handleGoHome = () => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   render() {
@@ -58,31 +58,29 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
       return (
         <div className="min-h-[400px] flex items-center justify-center p-4">
-          <Alert className={`max-w-md ${isCritical ? 'border-destructive bg-destructive/10' : ''}`}>
-            <AlertTriangle className={`h-4 w-4 ${isCritical ? 'text-destructive' : ''}`} />
+          <Alert className={`max-w-md ${isCritical ? "border-destructive bg-destructive/10" : ""}`}>
+            <AlertTriangle className={`h-4 w-4 ${isCritical ? "text-destructive" : ""}`} />
             <AlertTitle className="font-bold">
-              {isCritical ? 'Erro Crítico Detectado' : 'Oops! Algo deu errado'}
+              {isCritical ? "Erro Crítico Detectado" : "Oops! Algo deu errado"}
             </AlertTitle>
             <AlertDescription className="mt-2 space-y-3">
               <p>
-                {isCritical 
-                  ? 'Múltiplos erros foram detectados. Por favor, retorne à página inicial.'
-                  : 'Ocorreu um erro inesperado. Nossa equipe foi notificada e está trabalhando na correção.'}
+                {isCritical
+                  ? "Múltiplos erros foram detectados. Por favor, retorne à página inicial."
+                  : "Ocorreu um erro inesperado. Nossa equipe foi notificada e está trabalhando na correção."}
               </p>
-              
-              {error && process.env.NODE_ENV === 'development' && (
+
+              {error && process.env.NODE_ENV === "development" && (
                 <div className="mt-3 p-3 bg-muted rounded-md">
-                  <p className="text-xs font-mono text-foreground break-all">
-                    {error.toString()}
-                  </p>
+                  <p className="text-xs font-mono text-foreground break-all">{error.toString()}</p>
                 </div>
               )}
-              
+
               <div className="flex gap-2 mt-4">
                 {!isCritical && (
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={this.handleRetry}
                     className="flex items-center gap-2 min-h-[44px]"
                   >
@@ -90,9 +88,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                     Tentar novamente
                   </Button>
                 )}
-                <Button 
+                <Button
                   variant={isCritical ? "destructive" : "default"}
-                  size="sm" 
+                  size="sm"
                   onClick={this.handleGoHome}
                   className="flex items-center gap-2 min-h-[44px]"
                 >
@@ -100,8 +98,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                   Ir para Início
                 </Button>
               </div>
-              
-              {process.env.NODE_ENV === 'development' && error && (
+
+              {process.env.NODE_ENV === "development" && error && (
                 <details className="mt-4">
                   <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
                     Detalhes do erro (desenvolvimento)

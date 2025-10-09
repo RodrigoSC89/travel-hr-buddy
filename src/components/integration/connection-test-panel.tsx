@@ -1,18 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { supabaseManager } from '@/lib/supabase-manager';
-import { apiManager } from '@/lib/api-manager';
-import { 
-  CheckCircle2, 
-  XCircle, 
-  Loader2, 
-  Database, 
-  Globe, 
-  AlertCircle 
-} from 'lucide-react';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { supabaseManager } from "@/lib/supabase-manager";
+import { apiManager } from "@/lib/api-manager";
+import { CheckCircle2, XCircle, Loader2, Database, Globe, AlertCircle } from "lucide-react";
 
 interface TestResult {
   name: string;
@@ -30,25 +23,25 @@ export const ConnectionTestPanel: React.FC = () => {
     setIsTestingSupabase(true);
     try {
       const isHealthy = await supabaseManager.healthCheck();
-      
+
       const result: TestResult = {
-        name: 'Supabase',
+        name: "Supabase",
         success: isHealthy,
-        message: isHealthy 
-          ? 'Conexão com Supabase estabelecida com sucesso'
-          : 'Falha na conexão com Supabase',
+        message: isHealthy
+          ? "Conexão com Supabase estabelecida com sucesso"
+          : "Falha na conexão com Supabase",
         timestamp: new Date(),
       };
-      
-      setResults((prev) => [result, ...prev]);
+
+      setResults(prev => [result, ...prev]);
     } catch (error) {
       const result: TestResult = {
-        name: 'Supabase',
+        name: "Supabase",
         success: false,
-        message: error instanceof Error ? error.message : 'Erro desconhecido',
+        message: error instanceof Error ? error.message : "Erro desconhecido",
         timestamp: new Date(),
       };
-      setResults((prev) => [result, ...prev]);
+      setResults(prev => [result, ...prev]);
     } finally {
       setIsTestingSupabase(false);
     }
@@ -58,25 +51,25 @@ export const ConnectionTestPanel: React.FC = () => {
     setIsTestingAPI(true);
     try {
       const isHealthy = await apiManager.healthCheck();
-      
+
       const result: TestResult = {
-        name: 'API Externa',
+        name: "API Externa",
         success: isHealthy,
-        message: isHealthy 
-          ? 'API externa respondendo normalmente'
-          : 'API externa não está respondendo',
+        message: isHealthy
+          ? "API externa respondendo normalmente"
+          : "API externa não está respondendo",
         timestamp: new Date(),
       };
-      
-      setResults((prev) => [result, ...prev]);
+
+      setResults(prev => [result, ...prev]);
     } catch (error) {
       const result: TestResult = {
-        name: 'API Externa',
+        name: "API Externa",
         success: false,
-        message: error instanceof Error ? error.message : 'Erro desconhecido',
+        message: error instanceof Error ? error.message : "Erro desconhecido",
         timestamp: new Date(),
       };
-      setResults((prev) => [result, ...prev]);
+      setResults(prev => [result, ...prev]);
     } finally {
       setIsTestingAPI(false);
     }
@@ -88,30 +81,30 @@ export const ConnectionTestPanel: React.FC = () => {
       await supabaseManager.executeWithRetry(async () => {
         const { data, error } = await supabaseManager
           .getClient()
-          .from('profiles')
-          .select('id')
+          .from("profiles")
+          .select("id")
           .limit(1);
-        
+
         if (error) throw error;
         return data;
       });
-      
+
       const result: TestResult = {
-        name: 'Supabase com Retry',
+        name: "Supabase com Retry",
         success: true,
-        message: 'Operação com retry executada com sucesso',
+        message: "Operação com retry executada com sucesso",
         timestamp: new Date(),
       };
-      
-      setResults((prev) => [result, ...prev]);
+
+      setResults(prev => [result, ...prev]);
     } catch (error) {
       const result: TestResult = {
-        name: 'Supabase com Retry',
+        name: "Supabase com Retry",
         success: false,
-        message: error instanceof Error ? error.message : 'Erro desconhecido',
+        message: error instanceof Error ? error.message : "Erro desconhecido",
         timestamp: new Date(),
       };
-      setResults((prev) => [result, ...prev]);
+      setResults(prev => [result, ...prev]);
     } finally {
       setIsTestingSupabase(false);
     }
@@ -194,7 +187,7 @@ export const ConnectionTestPanel: React.FC = () => {
             {results.map((result, index) => (
               <Alert
                 key={index}
-                variant={result.success ? 'default' : 'destructive'}
+                variant={result.success ? "default" : "destructive"}
                 className="flex items-start gap-3"
               >
                 {result.success ? (
@@ -205,13 +198,13 @@ export const ConnectionTestPanel: React.FC = () => {
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
                     <p className="font-semibold">{result.name}</p>
-                    <Badge variant={result.success ? 'outline' : 'destructive'}>
-                      {result.success ? 'Sucesso' : 'Falha'}
+                    <Badge variant={result.success ? "outline" : "destructive"}>
+                      {result.success ? "Sucesso" : "Falha"}
                     </Badge>
                   </div>
                   <AlertDescription>{result.message}</AlertDescription>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {result.timestamp.toLocaleString('pt-BR')}
+                    {result.timestamp.toLocaleString("pt-BR")}
                   </p>
                 </div>
               </Alert>

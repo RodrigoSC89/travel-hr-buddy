@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { 
-  Store, 
-  Download, 
-  Star, 
-  Search, 
+import React, { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Store,
+  Download,
+  Star,
+  Search,
   Filter,
   Zap,
   Shield,
@@ -18,8 +18,8 @@ import {
   FileText,
   Users,
   Settings,
-  Truck
-} from 'lucide-react';
+  Truck,
+} from "lucide-react";
 
 interface Integration {
   id: string;
@@ -28,7 +28,7 @@ interface Integration {
   category: string;
   rating: number;
   downloads: number;
-  price: 'free' | 'paid' | 'freemium';
+  price: "free" | "paid" | "freemium";
   icon: React.ComponentType<any>;
   features: string[];
   developer: string;
@@ -36,122 +36,151 @@ interface Integration {
 }
 
 export const IntegrationMarketplace: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const integrations: Integration[] = [
     {
-      id: '1',
-      name: 'Port Management Pro',
-      description: 'Gestão completa de operações portuárias com rastreamento em tempo real',
-      category: 'operations',
+      id: "1",
+      name: "Port Management Pro",
+      description: "Gestão completa de operações portuárias com rastreamento em tempo real",
+      category: "operations",
       rating: 4.8,
       downloads: 1250,
-      price: 'paid',
+      price: "paid",
       icon: Anchor,
-      features: ['API REST', 'Webhooks', 'Dashboard', 'Mobile'],
-      developer: 'Maritime Solutions',
-      version: '2.1.0'
+      features: ["API REST", "Webhooks", "Dashboard", "Mobile"],
+      developer: "Maritime Solutions",
+      version: "2.1.0",
     },
     {
-      id: '2',
-      name: 'Weather Pro Maritime',
-      description: 'Previsões meteorológicas precisas para navegação marítima',
-      category: 'weather',
+      id: "2",
+      name: "Weather Pro Maritime",
+      description: "Previsões meteorológicas precisas para navegação marítima",
+      category: "weather",
       rating: 4.9,
       downloads: 2100,
-      price: 'freemium',
+      price: "freemium",
       icon: Globe,
-      features: ['API Weather', 'Alertas', 'Mapas', 'Histórico'],
-      developer: 'WeatherTech',
-      version: '1.5.2'
+      features: ["API Weather", "Alertas", "Mapas", "Histórico"],
+      developer: "WeatherTech",
+      version: "1.5.2",
     },
     {
-      id: '3',
-      name: 'Fleet Analytics Suite',
-      description: 'Analytics avançado para performance e otimização de frotas',
-      category: 'analytics',
+      id: "3",
+      name: "Fleet Analytics Suite",
+      description: "Analytics avançado para performance e otimização de frotas",
+      category: "analytics",
       rating: 4.7,
       downloads: 890,
-      price: 'paid',
+      price: "paid",
       icon: BarChart,
-      features: ['ML Analytics', 'Dashboards', 'Reports', 'API'],
-      developer: 'DataMarine',
-      version: '3.0.1'
+      features: ["ML Analytics", "Dashboards", "Reports", "API"],
+      developer: "DataMarine",
+      version: "3.0.1",
     },
     {
-      id: '4',
-      name: 'Document Manager',
-      description: 'Gestão digital de documentos marítimos e certificações',
-      category: 'documents',
+      id: "4",
+      name: "Document Manager",
+      description: "Gestão digital de documentos marítimos e certificações",
+      category: "documents",
       rating: 4.6,
       downloads: 1500,
-      price: 'free',
+      price: "free",
       icon: FileText,
-      features: ['OCR', 'Blockchain', 'Cloud Storage', 'Templates'],
-      developer: 'DocuMarine',
-      version: '1.8.0'
+      features: ["OCR", "Blockchain", "Cloud Storage", "Templates"],
+      developer: "DocuMarine",
+      version: "1.8.0",
     },
     {
-      id: '5',
-      name: 'Crew Management Plus',
-      description: 'Solução completa para gestão de tripulação e escala',
-      category: 'hr',
+      id: "5",
+      name: "Crew Management Plus",
+      description: "Solução completa para gestão de tripulação e escala",
+      category: "hr",
       rating: 4.5,
       downloads: 750,
-      price: 'freemium',
+      price: "freemium",
       icon: Users,
-      features: ['Schedule', 'Certificates', 'Training', 'Compliance'],
-      developer: 'CrewTech',
-      version: '2.3.1'
+      features: ["Schedule", "Certificates", "Training", "Compliance"],
+      developer: "CrewTech",
+      version: "2.3.1",
     },
     {
-      id: '6',
-      name: 'Cargo Logistics Hub',
-      description: 'Otimização logística e rastreamento de cargas',
-      category: 'logistics',
+      id: "6",
+      name: "Cargo Logistics Hub",
+      description: "Otimização logística e rastreamento de cargas",
+      category: "logistics",
       rating: 4.4,
       downloads: 620,
-      price: 'paid',
+      price: "paid",
       icon: Truck,
-      features: ['Tracking', 'Route Optimization', 'Customs', 'EDI'],
-      developer: 'LogiMarine',
-      version: '1.9.3'
-    }
+      features: ["Tracking", "Route Optimization", "Customs", "EDI"],
+      developer: "LogiMarine",
+      version: "1.9.3",
+    },
   ];
 
   const categories = [
-    { id: 'all', name: 'Todas', count: integrations.length },
-    { id: 'operations', name: 'Operações', count: integrations.filter(i => i.category === 'operations').length },
-    { id: 'weather', name: 'Meteorologia', count: integrations.filter(i => i.category === 'weather').length },
-    { id: 'analytics', name: 'Analytics', count: integrations.filter(i => i.category === 'analytics').length },
-    { id: 'documents', name: 'Documentos', count: integrations.filter(i => i.category === 'documents').length },
-    { id: 'hr', name: 'RH', count: integrations.filter(i => i.category === 'hr').length },
-    { id: 'logistics', name: 'Logística', count: integrations.filter(i => i.category === 'logistics').length }
+    { id: "all", name: "Todas", count: integrations.length },
+    {
+      id: "operations",
+      name: "Operações",
+      count: integrations.filter(i => i.category === "operations").length,
+    },
+    {
+      id: "weather",
+      name: "Meteorologia",
+      count: integrations.filter(i => i.category === "weather").length,
+    },
+    {
+      id: "analytics",
+      name: "Analytics",
+      count: integrations.filter(i => i.category === "analytics").length,
+    },
+    {
+      id: "documents",
+      name: "Documentos",
+      count: integrations.filter(i => i.category === "documents").length,
+    },
+    { id: "hr", name: "RH", count: integrations.filter(i => i.category === "hr").length },
+    {
+      id: "logistics",
+      name: "Logística",
+      count: integrations.filter(i => i.category === "logistics").length,
+    },
   ];
 
   const filteredIntegrations = integrations.filter(integration => {
-    const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         integration.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || integration.category === selectedCategory;
+    const matchesSearch =
+      integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      integration.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   const getPriceColor = (price: string) => {
     switch (price) {
-      case 'free': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-      case 'paid': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300';
-      case 'freemium': return 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300';
+      case "free":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      case "paid":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+      case "freemium":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getPriceText = (price: string) => {
     switch (price) {
-      case 'free': return 'Gratuito';
-      case 'paid': return 'Pago';
-      case 'freemium': return 'Freemium';
-      default: return price;
+      case "free":
+        return "Gratuito";
+      case "paid":
+        return "Pago";
+      case "freemium":
+        return "Freemium";
+      default:
+        return price;
     }
   };
 
@@ -176,7 +205,7 @@ export const IntegrationMarketplace: React.FC = () => {
           <Input
             placeholder="Buscar integrações..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -188,7 +217,7 @@ export const IntegrationMarketplace: React.FC = () => {
 
       <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="space-y-4">
         <TabsList className="grid w-full grid-cols-7">
-          {categories.map((category) => (
+          {categories.map(category => (
             <TabsTrigger key={category.id} value={category.id}>
               {category.name} ({category.count})
             </TabsTrigger>
@@ -197,7 +226,7 @@ export const IntegrationMarketplace: React.FC = () => {
 
         <TabsContent value={selectedCategory}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredIntegrations.map((integration) => {
+            {filteredIntegrations.map(integration => {
               const IconComponent = integration.icon;
               return (
                 <Card key={integration.id} className="hover:shadow-lg transition-shadow">
@@ -216,7 +245,7 @@ export const IntegrationMarketplace: React.FC = () => {
                         {getPriceText(integration.price)}
                       </Badge>
                     </div>
-                    
+
                     <p className="text-sm text-muted-foreground line-clamp-2">
                       {integration.description}
                     </p>
@@ -250,9 +279,7 @@ export const IntegrationMarketplace: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="text-xs text-muted-foreground">
-                      Por {integration.developer}
-                    </div>
+                    <div className="text-xs text-muted-foreground">Por {integration.developer}</div>
 
                     <div className="flex gap-2 pt-2">
                       <Button className="flex-1" size="sm">
@@ -273,9 +300,7 @@ export const IntegrationMarketplace: React.FC = () => {
             <div className="text-center py-12">
               <Store className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-medium mb-2">Nenhuma integração encontrada</h3>
-              <p className="text-muted-foreground">
-                Tente ajustar os filtros ou termo de busca
-              </p>
+              <p className="text-muted-foreground">Tente ajustar os filtros ou termo de busca</p>
             </div>
           )}
         </TabsContent>

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { useSidebarActions } from '@/hooks/use-sidebar-actions';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Plane, 
-  Hotel, 
+import React, { useState } from "react";
+import { useSidebarActions } from "@/hooks/use-sidebar-actions";
+import {
+  LayoutDashboard,
+  Users,
+  Plane,
+  Hotel,
   BarChart3,
   Calendar,
   Database,
-  FileText, 
+  FileText,
   Settings,
   ChevronDown,
   Bell,
@@ -35,10 +35,10 @@ import {
   TestTube,
   MapPin,
   CheckCircle,
-  Scan
+  Scan,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import nautilusOneLogo from '@/assets/nautilus-one-logo.png';
+import nautilusOneLogo from "@/assets/nautilus-one-logo.png";
 import { usePermissions } from "@/hooks/use-permissions";
 
 import {
@@ -62,11 +62,7 @@ import {
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 // Navigation items with improved structure
 const navigationItems = [
@@ -74,7 +70,7 @@ const navigationItems = [
     title: "Dashboard",
     url: "/",
     icon: LayoutDashboard,
-    alwaysVisible: true
+    alwaysVisible: true,
   },
   {
     title: "Dashboard Executivo",
@@ -102,7 +98,7 @@ const navigationItems = [
   },
   {
     title: "RH",
-    url: "/hr", 
+    url: "/hr",
     icon: Users,
     permission: "certificates" as const,
   },
@@ -217,7 +213,7 @@ const navigationItems = [
       },
       {
         title: "Hotéis",
-        url: "/travel", 
+        url: "/travel",
         icon: Hotel,
       },
     ],
@@ -347,42 +343,42 @@ const navigationItems = [
       { title: "Feedback Sistema", url: "/feedback", icon: MessageSquare },
       { title: "Sync Offline", url: "/offline-sync", icon: Database },
     ],
-    requiresRole: ['admin']
+    requiresRole: ["admin"],
   },
   {
     title: "Documentos",
     url: "/documents",
-    icon: FileText
+    icon: FileText,
   },
   {
     title: "Colaboração",
     url: "/collaboration",
-    icon: Users
+    icon: Users,
   },
   {
     title: "Otimização Mobile",
     url: "/mobile-optimization",
-    icon: Smartphone
+    icon: Smartphone,
   },
   {
     title: "Checklists Inteligentes",
-    url: "/checklists-inteligentes", 
-    icon: CheckCircle
+    url: "/checklists-inteligentes",
+    icon: CheckCircle,
   },
   {
     title: "PEOTRAM",
     url: "/peotram",
-    icon: Shield
+    icon: Shield,
   },
   {
     title: "PEO-DP",
     url: "/peo-dp",
-    icon: Anchor
+    icon: Anchor,
   },
   {
     title: "SGSO",
     url: "/sgso",
-    icon: Shield
+    icon: Shield,
   },
   {
     title: "Templates",
@@ -392,37 +388,37 @@ const navigationItems = [
   {
     title: "Analytics Avançado",
     url: "/advanced-analytics",
-    icon: TrendingUp
+    icon: TrendingUp,
   },
   {
-    title: "Analytics Tempo Real", 
+    title: "Analytics Tempo Real",
     url: "/real-time-analytics",
-    icon: Activity
+    icon: Activity,
   },
   {
     title: "Monitor Avançado",
     url: "/advanced-system-monitor",
-    icon: Activity
+    icon: Activity,
   },
   {
     title: "Documentos IA",
     url: "/intelligent-documents",
-    icon: Brain
+    icon: Brain,
   },
   {
     title: "Assistente IA",
     url: "/ai-assistant",
-    icon: MessageSquare
+    icon: MessageSquare,
   },
   {
     title: "Business Intelligence",
     url: "/business-intelligence",
-    icon: BarChart3
+    icon: BarChart3,
   },
   {
     title: "Smart Workflow",
     url: "/smart-workflow",
-    icon: Workflow
+    icon: Workflow,
   },
   {
     title: "Centro de Ajuda",
@@ -439,17 +435,15 @@ interface AppSidebarProps {
 export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const [openItems, setOpenItems] = useState<string[]>([]);
   const { state } = useSidebar();
-  const collapsed = state === 'collapsed';
+  const collapsed = state === "collapsed";
   const navigate = useNavigate();
   const location = useLocation();
   const { canAccessModule, hasPermission, getRoleDisplayName, userRole } = usePermissions();
   const { handleNavigation } = useSidebarActions();
 
   const toggleItem = (itemUrl: string) => {
-    setOpenItems(prev => 
-      prev.includes(itemUrl) 
-        ? prev.filter(item => item !== itemUrl)
-        : [...prev, itemUrl]
+    setOpenItems(prev =>
+      prev.includes(itemUrl) ? prev.filter(item => item !== itemUrl) : [...prev, itemUrl]
     );
   };
 
@@ -459,17 +453,17 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
 
   const canAccessItem = (item: any) => {
     if (item.alwaysVisible) return true;
-    
+
     // Verificar se requer role específico
     if (item.requiresRole) {
       return userRole && item.requiresRole.includes(userRole);
     }
-    
+
     // Verificar permissão específica
     if (item.permission) {
-      return hasPermission(item.permission, 'read');
+      return hasPermission(item.permission, "read");
     }
-    
+
     return true;
   };
 
@@ -479,24 +473,17 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   };
 
   // Determinar se o grupo de navegação principal deve estar aberto
-  const isMainGroupOpen = navigationItems.some(item => 
+  const isMainGroupOpen = navigationItems.some(item =>
     item.items ? item.items.some(subItem => isItemActive(subItem.url)) : isItemActive(item.url)
   );
 
   return (
-    <Sidebar 
-      className={`border-r transition-all duration-300`}
-      collapsible="icon"
-    >
+    <Sidebar className={"border-r transition-all duration-300"} collapsible="icon">
       {/* Header */}
       <SidebarHeader className="p-4 border-b border-border">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
-            <img 
-              src={nautilusOneLogo} 
-              alt="Nautilus One" 
-              className="w-10 h-10 object-contain"
-            />
+            <img src={nautilusOneLogo} alt="Nautilus One" className="w-10 h-10 object-contain" />
           </div>
           {!collapsed && (
             <div className="flex flex-col min-w-0">
@@ -518,144 +505,146 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             {!collapsed && <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>}
             <SidebarGroupContent>
               <SidebarMenu>
-                {navigationItems.map((item) => {
-                // Verificar permissões para exibir o item
-                if (!canAccessItem(item)) {
-                  return null;
-                }
+                {navigationItems.map(item => {
+                  // Verificar permissões para exibir o item
+                  if (!canAccessItem(item)) {
+                    return null;
+                  }
 
-                // Item com subitens
-                if (item.items) {
+                  // Item com subitens
+                  if (item.items) {
+                    return (
+                      <Collapsible
+                        key={item.url}
+                        open={openItems.includes(item.url)}
+                        onOpenChange={() => toggleItem(item.url)}
+                      >
+                        <SidebarMenuItem>
+                          <CollapsibleTrigger asChild>
+                            <SidebarMenuButton className="w-full justify-between">
+                              <div className="flex items-center">
+                                <item.icon className="h-4 w-4" />
+                                {!collapsed && <span className="ml-2">{item.title}</span>}
+                              </div>
+                              {!collapsed && (
+                                <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                              )}
+                            </SidebarMenuButton>
+                          </CollapsibleTrigger>
+                          {!collapsed && (
+                            <CollapsibleContent>
+                              <SidebarMenuSub>
+                                {item.items.map(subItem => (
+                                  <SidebarMenuSubItem key={subItem.url}>
+                                    <SidebarMenuSubButton
+                                      onClick={() => handleItemClick(subItem.url)}
+                                      isActive={isItemActive(subItem.url)}
+                                      className="w-full"
+                                    >
+                                      <subItem.icon className="h-4 w-4" />
+                                      <span className="ml-2">{subItem.title}</span>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                ))}
+                              </SidebarMenuSub>
+                            </CollapsibleContent>
+                          )}
+                        </SidebarMenuItem>
+                      </Collapsible>
+                    );
+                  }
+
+                  // Item simples
                   return (
-                    <Collapsible 
-                      key={item.url}
-                      open={openItems.includes(item.url)}
-                      onOpenChange={() => toggleItem(item.url)}
-                    >
-                      <SidebarMenuItem>
-                        <CollapsibleTrigger asChild>
-                          <SidebarMenuButton className="w-full justify-between">
-                            <div className="flex items-center">
-                              <item.icon className="h-4 w-4" />
-                              {!collapsed && <span className="ml-2">{item.title}</span>}
-                            </div>
-                            {!collapsed && (
-                              <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                            )}
-                          </SidebarMenuButton>
-                        </CollapsibleTrigger>
-                        {!collapsed && (
-                          <CollapsibleContent>
-                            <SidebarMenuSub>
-                              {item.items.map((subItem) => (
-                                <SidebarMenuSubItem key={subItem.url}>
-                                  <SidebarMenuSubButton 
-                                    onClick={() => handleItemClick(subItem.url)}
-                                    isActive={isItemActive(subItem.url)}
-                                    className="w-full"
-                                  >
-                                    <subItem.icon className="h-4 w-4" />
-                                    <span className="ml-2">{subItem.title}</span>
-                                  </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
-                              ))}
-                            </SidebarMenuSub>
-                          </CollapsibleContent>
-                        )}
-                      </SidebarMenuItem>
-                    </Collapsible>
+                    <SidebarMenuItem key={item.url}>
+                      <SidebarMenuButton
+                        onClick={() => handleItemClick(item.url)}
+                        isActive={isItemActive(item.url)}
+                        className="w-full justify-start"
+                        title={collapsed ? item.title : undefined}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && <span className="ml-2">{item.title}</span>}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
                   );
-                }
+                })}
 
-                // Item simples
-                return (
-                  <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton 
-                      onClick={() => handleItemClick(item.url)}
-                      isActive={isItemActive(item.url)}
+                {/* Administração - Apenas para admins e gerentes de RH */}
+                {canAccessModule("admin") && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() => handleItemClick("admin")}
+                      isActive={isItemActive("admin")}
                       className="w-full justify-start"
-                      title={collapsed ? item.title : undefined}
+                      title={collapsed ? "Administração" : undefined}
                     >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span className="ml-2">{item.title}</span>}
+                      <UserCog className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">Administração</span>}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                );
-              })}
+                )}
 
-              {/* Administração - Apenas para admins e gerentes de RH */}
-              {canAccessModule('admin') && (
+                {/* Automação IA - Para todos os usuários */}
                 <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    onClick={() => handleItemClick("admin")}
-                    isActive={isItemActive("admin")}
+                  <SidebarMenuButton
+                    onClick={() => navigate("/automation")}
+                    isActive={location.pathname === "/automation"}
                     className="w-full justify-start"
-                    title={collapsed ? "Administração" : undefined}
+                    title={collapsed ? "Automação IA" : undefined}
                   >
-                    <UserCog className="h-4 w-4" />
-                    {!collapsed && <span className="ml-2">Administração</span>}
+                    <Zap className="h-4 w-4" />
+                    {!collapsed && <span className="ml-2">Automação IA</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              )}
 
-              {/* Automação IA - Para todos os usuários */}
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  onClick={() => navigate("/automation")}
-                  isActive={location.pathname === "/automation"}
-                  className="w-full justify-start"
-                  title={collapsed ? "Automação IA" : undefined}
-                >
-                  <Zap className="h-4 w-4" />
-                  {!collapsed && <span className="ml-2">Automação IA</span>}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+                {/* SaaS Manager - Para super admins */}
+                {userRole === "admin" && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() => navigate("/saas-manager")}
+                      isActive={location.pathname === "/saas-manager"}
+                      className="w-full justify-start"
+                      title={collapsed ? "SaaS Manager" : undefined}
+                    >
+                      <Building2 className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">SaaS Manager</span>}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
 
-              {/* SaaS Manager - Para super admins */}
-              {userRole === 'admin' && (
+                {/* Dashboard Executivo - Para admins e gerentes */}
+                {(userRole === "admin" ||
+                  userRole === "hr_manager" ||
+                  userRole === "department_manager") && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() => handleItemClick("executive")}
+                      isActive={isItemActive("executive")}
+                      className="w-full justify-start"
+                      title={collapsed ? "Dashboard Executivo" : undefined}
+                    >
+                      <BarChart3 className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">Dashboard Executivo</span>}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
+
+                {/* Visão Geral do Sistema */}
                 <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    onClick={() => navigate("/saas-manager")}
-                    isActive={location.pathname === "/saas-manager"}
+                  <SidebarMenuButton
+                    onClick={() => handleItemClick("system-overview")}
+                    isActive={isItemActive("system-overview")}
                     className="w-full justify-start"
-                    title={collapsed ? "SaaS Manager" : undefined}
+                    title={collapsed ? "Visão Geral" : undefined}
                   >
-                    <Building2 className="h-4 w-4" />
-                    {!collapsed && <span className="ml-2">SaaS Manager</span>}
+                    <Activity className="h-4 w-4" />
+                    {!collapsed && <span className="ml-2">Visão Geral</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              )}
-
-              {/* Dashboard Executivo - Para admins e gerentes */}
-              {(userRole === 'admin' || userRole === 'hr_manager' || userRole === 'department_manager') && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    onClick={() => handleItemClick("executive")}
-                    isActive={isItemActive("executive")}
-                    className="w-full justify-start"
-                    title={collapsed ? "Dashboard Executivo" : undefined}
-                  >
-                    <BarChart3 className="h-4 w-4" />
-                    {!collapsed && <span className="ml-2">Dashboard Executivo</span>}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
-
-              {/* Visão Geral do Sistema */}
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  onClick={() => handleItemClick("system-overview")}
-                  isActive={isItemActive("system-overview")}
-                  className="w-full justify-start"
-                  title={collapsed ? "Visão Geral" : undefined}
-                >
-                  <Activity className="h-4 w-4" />
-                  {!collapsed && <span className="ml-2">Visão Geral</span>}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
         </ScrollArea>
       </SidebarContent>
 
@@ -664,7 +653,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
         {!collapsed && (
           <div className="space-y-2">
             <div className="text-xs text-muted-foreground">
-              <p className="font-medium">Você é: {getRoleDisplayName(userRole || 'employee')}</p>
+              <p className="font-medium">Você é: {getRoleDisplayName(userRole || "employee")}</p>
             </div>
             <div className="text-xs text-muted-foreground text-center">
               <p>Versão 2.1.0</p>
@@ -673,7 +662,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
           </div>
         )}
       </SidebarFooter>
-      
+
       <SidebarRail />
     </Sidebar>
   );

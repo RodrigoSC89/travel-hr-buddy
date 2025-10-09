@@ -1,48 +1,48 @@
-import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { 
-  Home, 
-  BarChart3, 
-  Bell, 
-  Settings, 
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import {
+  Home,
+  BarChart3,
+  Bell,
+  Settings,
   User,
   AlertTriangle,
   Users,
   Plane,
   Bot,
-  Trophy
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-import { useEnhancedNotifications } from '@/hooks/use-enhanced-notifications';
+  Trophy,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { useEnhancedNotifications } from "@/hooks/use-enhanced-notifications";
 
 const navigationItems = [
   {
-    href: '/',
+    href: "/",
     icon: Home,
-    label: 'Início',
-    end: true
+    label: "Início",
+    end: true,
   },
   {
-    href: '/portal',
+    href: "/portal",
     icon: User,
-    label: 'Portal'
+    label: "Portal",
   },
   {
-    href: '/innovation',
+    href: "/innovation",
     icon: Bot,
-    label: 'IA'
+    label: "IA",
   },
   {
-    href: '/gamification',
+    href: "/gamification",
     icon: Trophy,
-    label: 'Ranking'
+    label: "Ranking",
   },
   {
-    href: '/price-alerts',
+    href: "/price-alerts",
     icon: AlertTriangle,
-    label: 'Alertas'
-  }
+    label: "Alertas",
+  },
 ];
 
 export const MobileNavigation: React.FC = () => {
@@ -59,41 +59,34 @@ export const MobileNavigation: React.FC = () => {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border lg:hidden">
       <div className="grid grid-cols-5 h-16">
-        {navigationItems.map((item) => {
+        {navigationItems.map(item => {
           const Icon = item.icon;
           const active = isActive(item.href, item.end);
-          
+
           return (
             <NavLink
               key={item.href}
               to={item.href}
               className={cn(
                 "flex flex-col items-center justify-center gap-1 py-2 px-1 text-xs font-medium transition-colors relative",
-                active 
-                  ? "text-primary bg-primary/10" 
+                active
+                  ? "text-primary bg-primary/10"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
-              <Icon 
-                className={cn(
-                  "h-5 w-5",
-                  active && "scale-110"
-                )} 
-              />
-              <span className="truncate max-w-full">
-                {item.label}
-              </span>
-              
+              <Icon className={cn("h-5 w-5", active && "scale-110")} />
+              <span className="truncate max-w-full">{item.label}</span>
+
               {/* Badge para notificações na navegação de alertas */}
-              {item.href === '/price-alerts' && unreadCount > 0 && (
-                <Badge 
-                  variant="destructive" 
+              {item.href === "/price-alerts" && unreadCount > 0 && (
+                <Badge
+                  variant="destructive"
                   className="absolute -top-1 -right-1 h-4 w-4 text-xs p-0 flex items-center justify-center scale-75"
                 >
-                  {unreadCount > 9 ? '9+' : unreadCount}
+                  {unreadCount > 9 ? "9+" : unreadCount}
                 </Badge>
               )}
-              
+
               {/* Indicador visual para item ativo */}
               {active && (
                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full" />

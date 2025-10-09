@@ -1,43 +1,43 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
   LineChart,
-  Line
-} from 'recharts';
-import { Ship, Fuel, Users, Calendar } from 'lucide-react';
+  Line,
+} from "recharts";
+import { Ship, Fuel, Users, Calendar } from "lucide-react";
 
 const vesselStatusData = [
-  { name: 'Ativas', value: 12, color: '#10b981' },
-  { name: 'Manutenção', value: 3, color: '#f59e0b' },
-  { name: 'Porto', value: 5, color: '#3b82f6' },
-  { name: 'Inativas', value: 1, color: '#ef4444' }
+  { name: "Ativas", value: 12, color: "#10b981" },
+  { name: "Manutenção", value: 3, color: "#f59e0b" },
+  { name: "Porto", value: 5, color: "#3b82f6" },
+  { name: "Inativas", value: 1, color: "#ef4444" },
 ];
 
 const fuelConsumptionData = [
-  { month: 'Jan', consumption: 2400 },
-  { month: 'Fev', consumption: 2100 },
-  { month: 'Mar', consumption: 2800 },
-  { month: 'Abr', consumption: 2200 },
-  { month: 'Mai', consumption: 2600 },
-  { month: 'Jun', consumption: 2300 }
+  { month: "Jan", consumption: 2400 },
+  { month: "Fev", consumption: 2100 },
+  { month: "Mar", consumption: 2800 },
+  { month: "Abr", consumption: 2200 },
+  { month: "Mai", consumption: 2600 },
+  { month: "Jun", consumption: 2300 },
 ];
 
 const vesselUtilizationData = [
-  { vessel: 'MV Atlântico', utilization: 95 },
-  { vessel: 'MV Pacífico', utilization: 87 },
-  { vessel: 'MV Índico', utilization: 78 },
-  { vessel: 'MV Ártico', utilization: 92 },
-  { vessel: 'MV Antártico', utilization: 85 }
+  { vessel: "MV Atlântico", utilization: 95 },
+  { vessel: "MV Pacífico", utilization: 87 },
+  { vessel: "MV Índico", utilization: 78 },
+  { vessel: "MV Ártico", utilization: 92 },
+  { vessel: "MV Antártico", utilization: 85 },
 ];
 
 export const FleetAnalytics: React.FC = () => {
@@ -131,10 +131,10 @@ export const FleetAnalytics: React.FC = () => {
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Line 
-                  type="monotone" 
-                  dataKey="consumption" 
-                  stroke="hsl(var(--primary))" 
+                <Line
+                  type="monotone"
+                  dataKey="consumption"
+                  stroke="hsl(var(--primary))"
                   strokeWidth={2}
                 />
               </LineChart>

@@ -5,6 +5,7 @@
 The Comunicação (Communication) module is the **central communication and messaging hub** for the organization. It provides unified messaging, notifications, and collaboration tools for internal and external communication.
 
 **Key Use Cases:**
+
 - Send and receive internal messages
 - Create and manage announcements
 - Real-time chat and collaboration

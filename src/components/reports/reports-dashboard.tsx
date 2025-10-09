@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Brain, TrendingUp, Download } from 'lucide-react';
-import AIReportGenerator from './AIReportGenerator';
-import DocumentProcessor from '../intelligence/DocumentProcessor';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileText, Brain, TrendingUp, Download } from "lucide-react";
+import AIReportGenerator from "./AIReportGenerator";
+import DocumentProcessor from "../intelligence/DocumentProcessor";
 
 const ReportsDashboard = () => {
   const [activeReport, setActiveReport] = useState<any>(null);
@@ -61,26 +61,30 @@ const ReportsDashboard = () => {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Relatórios Gerados</p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Relatórios Gerados
+                        </p>
                         <p className="text-2xl font-bold">24</p>
                       </div>
                       <FileText className="w-8 h-8 text-primary" />
                     </div>
                   </CardContent>
                 </Card>
-                
+
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Documentos Processados</p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Documentos Processados
+                        </p>
                         <p className="text-2xl font-bold">156</p>
                       </div>
                       <Brain className="w-8 h-8 text-primary" />
                     </div>
                   </CardContent>
                 </Card>
-                
+
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
@@ -106,7 +110,7 @@ const ReportsDashboard = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start gap-3">
                     <FileText className="w-5 h-5 text-primary mt-0.5" />
                     <div>
@@ -116,7 +120,7 @@ const ReportsDashboard = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start gap-3">
                     <Download className="w-5 h-5 text-primary mt-0.5" />
                     <div>
@@ -126,7 +130,7 @@ const ReportsDashboard = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start gap-3">
                     <TrendingUp className="w-5 h-5 text-primary mt-0.5" />
                     <div>

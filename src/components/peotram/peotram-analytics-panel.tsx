@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, 
-  Tooltip, ResponsiveContainer, RadialBarChart, RadialBar, AreaChart, Area
-} from 'recharts';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Activity, 
-  Target, 
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  RadialBarChart,
+  RadialBar,
+  AreaChart,
+  Area,
+} from "recharts";
+import {
+  TrendingUp,
+  TrendingDown,
+  Activity,
+  Target,
   AlertTriangle,
   CheckCircle,
   Clock,
@@ -27,8 +47,8 @@ import {
   PieChart as PieChartIcon,
   Calendar,
   Download,
-  RefreshCw
-} from 'lucide-react';
+  RefreshCw,
+} from "lucide-react";
 
 interface AnalyticsData {
   complianceTrends: Array<{
@@ -75,74 +95,74 @@ interface AnalyticsData {
 
 const mockAnalyticsData: AnalyticsData = {
   complianceTrends: [
-    { period: 'Jan 2024', score: 85.2, target: 90, audits: 12 },
-    { period: 'Fev 2024', score: 86.1, target: 90, audits: 15 },
-    { period: 'Mar 2024', score: 87.3, target: 90, audits: 18 },
-    { period: 'Abr 2024', score: 88.7, target: 90, audits: 14 },
-    { period: 'Mai 2024', score: 87.9, target: 90, audits: 16 },
-    { period: 'Jun 2024', score: 89.1, target: 90, audits: 20 },
-    { period: 'Jul 2024', score: 88.5, target: 90, audits: 17 },
-    { period: 'Ago 2024', score: 90.2, target: 90, audits: 19 },
-    { period: 'Set 2024', score: 89.8, target: 90, audits: 21 },
-    { period: 'Out 2024', score: 91.1, target: 90, audits: 23 },
-    { period: 'Nov 2024', score: 88.9, target: 90, audits: 18 },
-    { period: 'Dez 2024', score: 87.5, target: 90, audits: 15 }
+    { period: "Jan 2024", score: 85.2, target: 90, audits: 12 },
+    { period: "Fev 2024", score: 86.1, target: 90, audits: 15 },
+    { period: "Mar 2024", score: 87.3, target: 90, audits: 18 },
+    { period: "Abr 2024", score: 88.7, target: 90, audits: 14 },
+    { period: "Mai 2024", score: 87.9, target: 90, audits: 16 },
+    { period: "Jun 2024", score: 89.1, target: 90, audits: 20 },
+    { period: "Jul 2024", score: 88.5, target: 90, audits: 17 },
+    { period: "Ago 2024", score: 90.2, target: 90, audits: 19 },
+    { period: "Set 2024", score: 89.8, target: 90, audits: 21 },
+    { period: "Out 2024", score: 91.1, target: 90, audits: 23 },
+    { period: "Nov 2024", score: 88.9, target: 90, audits: 18 },
+    { period: "Dez 2024", score: 87.5, target: 90, audits: 15 },
   ],
   elementPerformance: [
-    { element: 'Liderança', score: 92.3, trend: 2.1, audits: 45 },
-    { element: 'Conformidade Legal', score: 88.7, trend: -1.2, audits: 45 },
-    { element: 'Gestão de Riscos', score: 85.4, trend: 3.4, audits: 43 },
-    { element: 'Competência', score: 91.8, trend: 1.8, audits: 44 },
-    { element: 'Segurança Técnica', score: 86.2, trend: 0.7, audits: 42 },
-    { element: 'Manutenção', score: 89.1, trend: 2.3, audits: 45 },
-    { element: 'Emergências', score: 87.6, trend: -0.8, audits: 41 },
-    { element: 'Seg. Operacional', score: 90.4, trend: 1.5, audits: 44 },
-    { element: 'Meio Ambiente', score: 84.9, trend: 4.2, audits: 40 },
-    { element: 'Monitoramento', score: 88.3, trend: 1.1, audits: 43 }
+    { element: "Liderança", score: 92.3, trend: 2.1, audits: 45 },
+    { element: "Conformidade Legal", score: 88.7, trend: -1.2, audits: 45 },
+    { element: "Gestão de Riscos", score: 85.4, trend: 3.4, audits: 43 },
+    { element: "Competência", score: 91.8, trend: 1.8, audits: 44 },
+    { element: "Segurança Técnica", score: 86.2, trend: 0.7, audits: 42 },
+    { element: "Manutenção", score: 89.1, trend: 2.3, audits: 45 },
+    { element: "Emergências", score: 87.6, trend: -0.8, audits: 41 },
+    { element: "Seg. Operacional", score: 90.4, trend: 1.5, audits: 44 },
+    { element: "Meio Ambiente", score: 84.9, trend: 4.2, audits: 40 },
+    { element: "Monitoramento", score: 88.3, trend: 1.1, audits: 43 },
   ],
   nonConformityDistribution: [
-    { type: 'Críticas', count: 2, percentage: 8, color: 'hsl(var(--destructive))' },
-    { type: 'Graves', count: 5, percentage: 20, color: '#ff6b35' },
-    { type: 'Moderadas', count: 12, percentage: 48, color: 'hsl(var(--warning))' },
-    { type: 'Leves', count: 6, percentage: 24, color: 'hsl(var(--info))' }
+    { type: "Críticas", count: 2, percentage: 8, color: "hsl(var(--destructive))" },
+    { type: "Graves", count: 5, percentage: 20, color: "#ff6b35" },
+    { type: "Moderadas", count: 12, percentage: 48, color: "hsl(var(--warning))" },
+    { type: "Leves", count: 6, percentage: 24, color: "hsl(var(--info))" },
   ],
   auditTypeComparison: [
-    { type: 'Embarcações', score: 88.2, audits: 28, target: 90 },
-    { type: 'Base Terrestre', score: 89.7, audits: 17, target: 90 }
+    { type: "Embarcações", score: 88.2, audits: 28, target: 90 },
+    { type: "Base Terrestre", score: 89.7, audits: 17, target: 90 },
   ],
   monthlyProgress: [
-    { month: 'Jan', completed: 12, planned: 15, efficiency: 80 },
-    { month: 'Fev', completed: 15, planned: 16, efficiency: 94 },
-    { month: 'Mar', completed: 18, planned: 20, efficiency: 90 },
-    { month: 'Abr', completed: 14, planned: 18, efficiency: 78 },
-    { month: 'Mai', completed: 16, planned: 16, efficiency: 100 },
-    { month: 'Jun', completed: 20, planned: 22, efficiency: 91 }
+    { month: "Jan", completed: 12, planned: 15, efficiency: 80 },
+    { month: "Fev", completed: 15, planned: 16, efficiency: 94 },
+    { month: "Mar", completed: 18, planned: 20, efficiency: 90 },
+    { month: "Abr", completed: 14, planned: 18, efficiency: 78 },
+    { month: "Mai", completed: 16, planned: 16, efficiency: 100 },
+    { month: "Jun", completed: 20, planned: 22, efficiency: 91 },
   ],
   kpis: {
     averageScore: 88.9,
     totalAudits: 45,
     activeNonConformities: 25,
-    certificationStatus: 'Válida',
+    certificationStatus: "Válida",
     tasoScore: 92.3,
     idembScore: 88.7,
     innovationIndex: 75.2,
-    timeToResolution: 18.5
-  }
+    timeToResolution: 18.5,
+  },
 };
 
 export const PeotramAnalyticsPanel: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('2024');
-  const [selectedMetric, setSelectedMetric] = useState('compliance');
+  const [selectedPeriod, setSelectedPeriod] = useState("2024");
+  const [selectedMetric, setSelectedMetric] = useState("compliance");
   const [data, setData] = useState<AnalyticsData>(mockAnalyticsData);
 
   const refreshData = () => {
     // Simular atualização dos dados
-    console.log('Atualizando dados de analytics...');
+    console.log("Atualizando dados de analytics...");
   };
 
   const exportData = () => {
     // Implementar exportação dos dados
-    console.log('Exportando dados de analytics...');
+    console.log("Exportando dados de analytics...");
   };
 
   const getTrendIcon = (trend: number) => {
@@ -152,9 +172,9 @@ export const PeotramAnalyticsPanel: React.FC = () => {
   };
 
   const getTrendColor = (trend: number) => {
-    if (trend > 0) return 'text-success';
-    if (trend < 0) return 'text-destructive';
-    return 'text-muted-foreground';
+    if (trend > 0) return "text-success";
+    if (trend < 0) return "text-destructive";
+    return "text-muted-foreground";
   };
 
   return (
@@ -163,11 +183,9 @@ export const PeotramAnalyticsPanel: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Analytics PEOTRAM</h2>
-          <p className="text-muted-foreground">
-            Análise avançada de performance e tendências
-          </p>
+          <p className="text-muted-foreground">Análise avançada de performance e tendências</p>
         </div>
-        
+
         <div className="flex gap-2">
           <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
             <SelectTrigger className="w-32">
@@ -179,12 +197,12 @@ export const PeotramAnalyticsPanel: React.FC = () => {
               <SelectItem value="all">Todos</SelectItem>
             </SelectContent>
           </Select>
-          
+
           <Button variant="outline" onClick={refreshData}>
             <RefreshCw className="w-4 h-4 mr-2" />
             Atualizar
           </Button>
-          
+
           <Button variant="outline" onClick={exportData}>
             <Download className="w-4 h-4 mr-2" />
             Exportar
@@ -219,7 +237,9 @@ export const PeotramAnalyticsPanel: React.FC = () => {
             <div className="flex items-center justify-center mb-2">
               <AlertTriangle className="w-6 h-6 text-warning" />
             </div>
-            <div className="text-2xl font-bold text-foreground">{data.kpis.activeNonConformities}</div>
+            <div className="text-2xl font-bold text-foreground">
+              {data.kpis.activeNonConformities}
+            </div>
             <p className="text-sm text-muted-foreground">NC Ativas</p>
           </CardContent>
         </Card>
@@ -253,9 +273,7 @@ export const PeotramAnalyticsPanel: React.FC = () => {
                   <TrendingUp className="w-5 h-5" />
                   Evolução da Conformidade
                 </CardTitle>
-                <CardDescription>
-                  Score de conformidade vs meta ao longo do tempo
-                </CardDescription>
+                <CardDescription>Score de conformidade vs meta ao longo do tempo</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -263,27 +281,27 @@ export const PeotramAnalyticsPanel: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="period" stroke="hsl(var(--muted-foreground))" />
                     <YAxis stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'hsl(var(--card))', 
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '8px'
-                      }} 
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--card))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "8px",
+                      }}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="score" 
-                      stroke="hsl(var(--primary))" 
+                    <Line
+                      type="monotone"
+                      dataKey="score"
+                      stroke="hsl(var(--primary))"
                       strokeWidth={3}
-                      dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 4 }}
+                      dot={{ fill: "hsl(var(--primary))", strokeWidth: 2, r: 4 }}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="target" 
-                      stroke="hsl(var(--success))" 
+                    <Line
+                      type="monotone"
+                      dataKey="target"
+                      stroke="hsl(var(--success))"
                       strokeWidth={2}
                       strokeDasharray="5 5"
-                      dot={{ fill: 'hsl(var(--success))', strokeWidth: 2, r: 3 }}
+                      dot={{ fill: "hsl(var(--success))", strokeWidth: 2, r: 3 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -297,9 +315,7 @@ export const PeotramAnalyticsPanel: React.FC = () => {
                   <PieChartIcon className="w-5 h-5" />
                   Distribuição de Não Conformidades
                 </CardTitle>
-                <CardDescription>
-                  Classificação por nível de criticidade
-                </CardDescription>
+                <CardDescription>Classificação por nível de criticidade</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -323,11 +339,10 @@ export const PeotramAnalyticsPanel: React.FC = () => {
                 <div className="mt-4 grid grid-cols-2 gap-2">
                   {data.nonConformityDistribution.map((item, index) => (
                     <div key={index} className="flex items-center gap-2">
-                      <div 
-                        className="w-3 h-3 rounded" 
-                        style={{ backgroundColor: item.color }}
-                      />
-                      <span className="text-sm">{item.type}: {item.count}</span>
+                      <div className="w-3 h-3 rounded" style={{ backgroundColor: item.color }} />
+                      <span className="text-sm">
+                        {item.type}: {item.count}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -349,15 +364,20 @@ export const PeotramAnalyticsPanel: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="type" stroke="hsl(var(--muted-foreground))" />
                   <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'hsl(var(--card))', 
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px'
-                    }} 
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "8px",
+                    }}
                   />
                   <Bar dataKey="score" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="target" fill="hsl(var(--success))" radius={[4, 4, 0, 0]} opacity={0.7} />
+                  <Bar
+                    dataKey="target"
+                    fill="hsl(var(--success))"
+                    radius={[4, 4, 0, 0]}
+                    opacity={0.7}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -372,14 +392,15 @@ export const PeotramAnalyticsPanel: React.FC = () => {
                 <Shield className="w-5 h-5" />
                 Performance por Elemento PEOTRAM
               </CardTitle>
-              <CardDescription>
-                Score e tendência de cada elemento
-              </CardDescription>
+              <CardDescription>Score e tendência de cada elemento</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {data.elementPerformance.map((element, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium">
                         {index + 1}
@@ -394,14 +415,16 @@ export const PeotramAnalyticsPanel: React.FC = () => {
                     <div className="flex items-center gap-4">
                       <div className="text-right">
                         <div className="text-lg font-bold">{element.score}%</div>
-                        <div className={`text-sm flex items-center gap-1 ${getTrendColor(element.trend)}`}>
+                        <div
+                          className={`text-sm flex items-center gap-1 ${getTrendColor(element.trend)}`}
+                        >
                           {getTrendIcon(element.trend)}
                           {Math.abs(element.trend).toFixed(1)}%
                         </div>
                       </div>
                       <div className="w-24">
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="h-full bg-primary rounded-full transition-all duration-500"
                             style={{ width: `${element.score}%` }}
                           />
@@ -430,27 +453,27 @@ export const PeotramAnalyticsPanel: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
                   <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'hsl(var(--card))', 
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px'
-                    }} 
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "8px",
+                    }}
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="planned" 
-                    stackId="1" 
-                    stroke="hsl(var(--muted))" 
-                    fill="hsl(var(--muted))" 
+                  <Area
+                    type="monotone"
+                    dataKey="planned"
+                    stackId="1"
+                    stroke="hsl(var(--muted))"
+                    fill="hsl(var(--muted))"
                     fillOpacity={0.6}
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="completed" 
-                    stackId="2" 
-                    stroke="hsl(var(--primary))" 
-                    fill="hsl(var(--primary))" 
+                  <Area
+                    type="monotone"
+                    dataKey="completed"
+                    stackId="2"
+                    stroke="hsl(var(--primary))"
+                    fill="hsl(var(--primary))"
                     fillOpacity={0.8}
                   />
                 </AreaChart>
@@ -473,7 +496,7 @@ export const PeotramAnalyticsPanel: React.FC = () => {
               <CardContent>
                 <div className="text-3xl font-bold text-info mb-2">{data.kpis.tasoScore}</div>
                 <div className="w-full bg-muted rounded-full h-2">
-                  <div 
+                  <div
                     className="bg-info h-2 rounded-full transition-all duration-500"
                     style={{ width: `${data.kpis.tasoScore}%` }}
                   />
@@ -492,7 +515,7 @@ export const PeotramAnalyticsPanel: React.FC = () => {
               <CardContent>
                 <div className="text-3xl font-bold text-warning mb-2">{data.kpis.idembScore}</div>
                 <div className="w-full bg-muted rounded-full h-2">
-                  <div 
+                  <div
                     className="bg-warning h-2 rounded-full transition-all duration-500"
                     style={{ width: `${data.kpis.idembScore}%` }}
                   />
@@ -509,9 +532,11 @@ export const PeotramAnalyticsPanel: React.FC = () => {
                 <CardDescription>Índice de Práticas Inovadoras</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-success mb-2">{data.kpis.innovationIndex}</div>
+                <div className="text-3xl font-bold text-success mb-2">
+                  {data.kpis.innovationIndex}
+                </div>
                 <div className="w-full bg-muted rounded-full h-2">
-                  <div 
+                  <div
                     className="bg-success h-2 rounded-full transition-all duration-500"
                     style={{ width: `${data.kpis.innovationIndex}%` }}
                   />

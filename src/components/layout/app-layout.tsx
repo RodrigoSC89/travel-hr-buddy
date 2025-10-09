@@ -1,18 +1,18 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import { Header } from '@/components/layout/header';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import { Header } from "@/components/layout/header";
 
-import { useSystemActions } from '@/hooks/use-system-actions';
-import { Toaster } from '@/components/ui/sonner';
-import { ThemeProvider } from '@/components/layout/theme-provider';
-import { SEOWrapper } from '@/components/layout/seo-wrapper';
-import { OfflineIndicator } from '@/components/ui/offline-indicator';
-import GlobalSearch from '@/components/ui/global-search';
+import { useSystemActions } from "@/hooks/use-system-actions";
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/layout/theme-provider";
+import { SEOWrapper } from "@/components/layout/seo-wrapper";
+import { OfflineIndicator } from "@/components/ui/offline-indicator";
+import GlobalSearch from "@/components/ui/global-search";
 
-import EnhancedNotifications from '@/components/ui/enhanced-notifications';
-import { FloatingActionButton } from '@/components/ui/floating-action-button';
+import EnhancedNotifications from "@/components/ui/enhanced-notifications";
+import { FloatingActionButton } from "@/components/ui/floating-action-button";
 
 export const AppLayout: React.FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
@@ -32,20 +32,17 @@ export const AppLayout: React.FC = () => {
                 <Outlet />
               </main>
             </div>
-            
+
             {/* Enhanced Global Features */}
-            <GlobalSearch 
-              isOpen={isSearchOpen} 
-              onOpenChange={setIsSearchOpen} 
-            />
-            <EnhancedNotifications 
+            <GlobalSearch isOpen={isSearchOpen} onOpenChange={setIsSearchOpen} />
+            <EnhancedNotifications
               isOpen={isNotificationsOpen}
               onClose={() => setIsNotificationsOpen(false)}
             />
-            
+
             {/* Floating Action Button */}
             <FloatingActionButton />
-            
+
             {/* Toast Notifications */}
             <Toaster />
           </div>

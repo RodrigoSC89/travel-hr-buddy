@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
   ChevronDown,
   ChevronUp,
   Zap,
@@ -13,12 +13,12 @@ import {
   Plus,
   FileText,
   Users,
-  TrendingUp
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
-import DraggableFloating from '@/components/ui/draggable-floating';
-import { FloatingShortcutButton } from '@/components/ui/floating-shortcut-button';
+  TrendingUp,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import DraggableFloating from "@/components/ui/draggable-floating";
+import { FloatingShortcutButton } from "@/components/ui/floating-shortcut-button";
 
 interface ModuleAction {
   id: string;
@@ -26,7 +26,7 @@ interface ModuleAction {
   icon: React.ReactNode;
   action: () => void;
   shortcut?: string;
-  variant?: 'default' | 'outline' | 'ghost';
+  variant?: "default" | "outline" | "ghost";
 }
 
 interface ModuleActionButtonProps {
@@ -44,7 +44,7 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
   moduleIcon = <Zap className="h-4 w-4" />,
   actions,
   quickActions = [],
-  storageKey
+  storageKey,
 }) => {
   const [isMinimized, setIsMinimized] = useState(true);
   const navigate = useNavigate();
@@ -100,14 +100,14 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
             <ChevronDown className="h-3 w-3" />
           </Button>
         </div>
-      
+
         <div className="space-y-4">
           {/* Main Actions */}
           {actions.length > 0 && (
             <div className="space-y-2">
               <div className="text-xs text-muted-foreground font-medium">Ações Principais</div>
               <div className="grid grid-cols-2 gap-2">
-                {actions.map((action) => (
+                {actions.map(action => (
                   <Button
                     key={action.id}
                     variant={action.variant || "outline"}
@@ -129,7 +129,7 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
             <div className="space-y-2 border-t pt-3">
               <div className="text-xs text-muted-foreground font-medium">Ações Rápidas</div>
               <div className="flex flex-wrap gap-1">
-                {quickActions.map((action) => (
+                {quickActions.map(action => (
                   <Button
                     key={action.id}
                     variant={action.variant || "ghost"}
@@ -149,7 +149,11 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
           {/* Info */}
           <div className="border-t pt-3">
             <div className="text-xs text-muted-foreground">
-              Arraste para reposicionar • <Badge variant="outline" className="text-xs">ESC</Badge> para minimizar
+              Arraste para reposicionar •{" "}
+              <Badge variant="outline" className="text-xs">
+                ESC
+              </Badge>{" "}
+              para minimizar
             </div>
           </div>
         </div>

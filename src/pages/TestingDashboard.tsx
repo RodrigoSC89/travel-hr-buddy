@@ -1,10 +1,10 @@
-import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { SystemHealthCheck } from '@/components/testing/system-health-check';
-import { TestEnvironmentConfig } from '@/components/testing/test-environment-config';
-import { PerformanceMonitor } from '@/components/performance/performance-monitor';
-import { PWAStatus } from '@/components/mobile/pwa-status';
-import { FinalHomologationReport } from '@/components/testing/final-homologation-report';
+import React from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SystemHealthCheck } from "@/components/testing/system-health-check";
+import { TestEnvironmentConfig } from "@/components/testing/test-environment-config";
+import { PerformanceMonitor } from "@/components/performance/performance-monitor";
+import { PWAStatus } from "@/components/mobile/pwa-status";
+import { FinalHomologationReport } from "@/components/testing/final-homologation-report";
 
 const TestingDashboard = () => {
   return (

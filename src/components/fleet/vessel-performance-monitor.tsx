@@ -1,21 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { 
-  Activity, 
-  Fuel, 
-  Gauge, 
-  TrendingUp, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import {
+  Activity,
+  Fuel,
+  Gauge,
+  TrendingUp,
   TrendingDown,
   AlertCircle,
   CheckCircle,
   Clock,
-  BarChart3
-} from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+  BarChart3,
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+} from "recharts";
 
 interface VesselPerformanceData {
   id: string;
@@ -31,7 +41,7 @@ interface VesselPerformanceData {
 
 interface Alert {
   id: string;
-  type: 'warning' | 'critical' | 'info';
+  type: "warning" | "critical" | "info";
   message: string;
   timestamp: string;
 }
@@ -45,7 +55,7 @@ interface PerformancePoint {
 
 const VesselPerformanceMonitor = () => {
   const [vessels, setVessels] = useState<VesselPerformanceData[]>([]);
-  const [selectedVessel, setSelectedVessel] = useState<string>('');
+  const [selectedVessel, setSelectedVessel] = useState<string>("");
 
   useEffect(() => {
     loadPerformanceData();
@@ -57,8 +67,8 @@ const VesselPerformanceMonitor = () => {
     // Simulate real-time performance data
     const mockData: VesselPerformanceData[] = [
       {
-        id: '1',
-        name: 'Nautilus Explorer',
+        id: "1",
+        name: "Nautilus Explorer",
         fuelConsumption: 12.5,
         speed: 18.2,
         engineTemp: 82,
@@ -66,17 +76,17 @@ const VesselPerformanceMonitor = () => {
         maintenanceScore: 92,
         alerts: [
           {
-            id: '1',
-            type: 'warning',
-            message: 'Consumo de combustível acima da média',
-            timestamp: new Date().toISOString()
-          }
+            id: "1",
+            type: "warning",
+            message: "Consumo de combustível acima da média",
+            timestamp: new Date().toISOString(),
+          },
         ],
-        performanceHistory: generateMockHistory()
+        performanceHistory: generateMockHistory(),
       },
       {
-        id: '2',
-        name: 'Atlantic Pioneer',
+        id: "2",
+        name: "Atlantic Pioneer",
         fuelConsumption: 15.8,
         speed: 14.5,
         engineTemp: 75,
@@ -84,25 +94,25 @@ const VesselPerformanceMonitor = () => {
         maintenanceScore: 88,
         alerts: [
           {
-            id: '2',
-            type: 'info',
-            message: 'Manutenção preventiva agendada para próxima semana',
-            timestamp: new Date().toISOString()
-          }
+            id: "2",
+            type: "info",
+            message: "Manutenção preventiva agendada para próxima semana",
+            timestamp: new Date().toISOString(),
+          },
         ],
-        performanceHistory: generateMockHistory()
+        performanceHistory: generateMockHistory(),
       },
       {
-        id: '3',
-        name: 'Pacific Star',
+        id: "3",
+        name: "Pacific Star",
         fuelConsumption: 11.2,
         speed: 20.1,
         engineTemp: 78,
         efficiency: 91,
         maintenanceScore: 95,
         alerts: [],
-        performanceHistory: generateMockHistory()
-      }
+        performanceHistory: generateMockHistory(),
+      },
     ];
 
     setVessels(mockData);
@@ -114,17 +124,17 @@ const VesselPerformanceMonitor = () => {
   const generateMockHistory = (): PerformancePoint[] => {
     const points: PerformancePoint[] = [];
     const now = new Date();
-    
+
     for (let i = 23; i >= 0; i--) {
       const time = new Date(now.getTime() - i * 60 * 60 * 1000);
       points.push({
-        time: time.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        time: time.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
         speed: 15 + Math.random() * 8,
         fuel: 10 + Math.random() * 8,
-        efficiency: 85 + Math.random() * 10
+        efficiency: 85 + Math.random() * 10,
       });
     }
-    
+
     return points;
   };
 
@@ -132,9 +142,9 @@ const VesselPerformanceMonitor = () => {
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case 'critical':
+      case "critical":
         return <AlertCircle className="h-4 w-4 text-red-500" />;
-      case 'warning':
+      case "warning":
         return <AlertCircle className="h-4 w-4 text-yellow-500" />;
       default:
         return <CheckCircle className="h-4 w-4 text-blue-500" />;
@@ -142,9 +152,9 @@ const VesselPerformanceMonitor = () => {
   };
 
   const getPerformanceColor = (value: number, threshold: number = 90) => {
-    if (value >= threshold) return 'text-green-600';
-    if (value >= threshold - 20) return 'text-yellow-600';
-    return 'text-red-600';
+    if (value >= threshold) return "text-green-600";
+    if (value >= threshold - 20) return "text-yellow-600";
+    return "text-red-600";
   };
 
   return (
@@ -162,7 +172,7 @@ const VesselPerformanceMonitor = () => {
             {vessels.map(vessel => (
               <Button
                 key={vessel.id}
-                variant={selectedVessel === vessel.id ? 'default' : 'outline'}
+                variant={selectedVessel === vessel.id ? "default" : "outline"}
                 onClick={() => setSelectedVessel(vessel.id)}
                 className="mb-2"
               >
@@ -219,7 +229,9 @@ const VesselPerformanceMonitor = () => {
                 <CardTitle className="text-sm font-medium">Eficiência Operacional</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className={`text-2xl font-bold ${getPerformanceColor(selectedVesselData.efficiency)}`}>
+                <div
+                  className={`text-2xl font-bold ${getPerformanceColor(selectedVesselData.efficiency)}`}
+                >
                   {selectedVesselData.efficiency}%
                 </div>
                 <Progress value={selectedVesselData.efficiency} className="mt-2" />
@@ -231,7 +243,9 @@ const VesselPerformanceMonitor = () => {
                 <CardTitle className="text-sm font-medium">Score de Manutenção</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className={`text-2xl font-bold ${getPerformanceColor(selectedVesselData.maintenanceScore)}`}>
+                <div
+                  className={`text-2xl font-bold ${getPerformanceColor(selectedVesselData.maintenanceScore)}`}
+                >
                   {selectedVesselData.maintenanceScore}%
                 </div>
                 <Progress value={selectedVesselData.maintenanceScore} className="mt-2" />
@@ -269,17 +283,17 @@ const VesselPerformanceMonitor = () => {
                         <XAxis dataKey="time" />
                         <YAxis />
                         <Tooltip />
-                        <Line 
-                          type="monotone" 
-                          dataKey="speed" 
-                          stroke="hsl(var(--primary))" 
+                        <Line
+                          type="monotone"
+                          dataKey="speed"
+                          stroke="hsl(var(--primary))"
                           strokeWidth={2}
                           name="Velocidade (nós)"
                         />
-                        <Line 
-                          type="monotone" 
-                          dataKey="fuel" 
-                          stroke="hsl(var(--destructive))" 
+                        <Line
+                          type="monotone"
+                          dataKey="fuel"
+                          stroke="hsl(var(--destructive))"
                           strokeWidth={2}
                           name="Combustível (L/h)"
                         />
@@ -299,10 +313,10 @@ const VesselPerformanceMonitor = () => {
                         <XAxis dataKey="time" />
                         <YAxis />
                         <Tooltip />
-                        <Area 
-                          type="monotone" 
-                          dataKey="efficiency" 
-                          stroke="hsl(var(--primary))" 
+                        <Area
+                          type="monotone"
+                          dataKey="efficiency"
+                          stroke="hsl(var(--primary))"
                           fill="hsl(var(--primary))"
                           fillOpacity={0.3}
                           name="Eficiência (%)"
@@ -328,12 +342,15 @@ const VesselPerformanceMonitor = () => {
                   ) : (
                     <div className="space-y-3">
                       {selectedVesselData.alerts.map(alert => (
-                        <div key={alert.id} className="flex items-start gap-3 p-3 border rounded-lg">
+                        <div
+                          key={alert.id}
+                          className="flex items-start gap-3 p-3 border rounded-lg"
+                        >
                           {getAlertIcon(alert.type)}
                           <div className="flex-1">
                             <p className="font-medium">{alert.message}</p>
                             <p className="text-sm text-muted-foreground">
-                              {new Date(alert.timestamp).toLocaleString('pt-BR')}
+                              {new Date(alert.timestamp).toLocaleString("pt-BR")}
                             </p>
                           </div>
                           <Button size="sm" variant="outline">
@@ -361,7 +378,9 @@ const VesselPerformanceMonitor = () => {
                       </div>
                       <div className="text-center p-4 border rounded-lg">
                         <div className="text-2xl font-bold text-blue-600">12</div>
-                        <div className="text-sm text-muted-foreground">Dias até próxima manutenção</div>
+                        <div className="text-sm text-muted-foreground">
+                          Dias até próxima manutenção
+                        </div>
                       </div>
                       <div className="text-center p-4 border rounded-lg">
                         <div className="text-2xl font-bold text-yellow-600">3</div>
@@ -375,14 +394,18 @@ const VesselPerformanceMonitor = () => {
                         <div className="flex items-center justify-between p-3 border rounded-lg">
                           <div>
                             <p className="font-medium">Inspeção do Motor</p>
-                            <p className="text-sm text-muted-foreground">Agendada para 15/01/2025</p>
+                            <p className="text-sm text-muted-foreground">
+                              Agendada para 15/01/2025
+                            </p>
                           </div>
                           <Badge variant="secondary">Preventiva</Badge>
                         </div>
                         <div className="flex items-center justify-between p-3 border rounded-lg">
                           <div>
                             <p className="font-medium">Troca de Filtros</p>
-                            <p className="text-sm text-muted-foreground">Agendada para 20/01/2025</p>
+                            <p className="text-sm text-muted-foreground">
+                              Agendada para 20/01/2025
+                            </p>
                           </div>
                           <Badge variant="secondary">Rotina</Badge>
                         </div>

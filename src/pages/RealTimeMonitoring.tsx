@@ -1,9 +1,8 @@
-import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import { RealTimeSystemMonitor } from '@/components/monitoring/real-time-system-monitor';
-import { Activity } from 'lucide-react';
-
+import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import { RealTimeSystemMonitor } from "@/components/monitoring/real-time-system-monitor";
+import { Activity } from "lucide-react";
 
 const RealTimeMonitoring = () => {
   return (
@@ -17,14 +16,11 @@ const RealTimeMonitoring = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold">Monitoramento Tempo Real</h1>
-              <p className="text-muted-foreground">
-                Dashboard completo de sistema
-              </p>
+              <p className="text-muted-foreground">Dashboard completo de sistema</p>
             </div>
           </div>
           <RealTimeSystemMonitor />
         </main>
-        
       </div>
     </SidebarProvider>
   );

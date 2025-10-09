@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { 
-  Database, 
-  HardDrive, 
+import React, { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import {
+  Database,
+  HardDrive,
   RotateCcw,
   Clock,
   MapPin,
@@ -17,116 +17,124 @@ import {
   Archive,
   Zap,
   Globe,
-  Shield
-} from 'lucide-react';
+  Shield,
+} from "lucide-react";
 
 export const BackupRecoverySystem: React.FC = () => {
   const [backupStatus] = useState({
-    lastFullBackup: '2024-01-15 03:00:00',
-    lastIncrementalBackup: '2024-01-15 15:30:00',
-    nextScheduledBackup: '2024-01-16 03:00:00',
-    totalBackupSize: '2.4 TB',
-    retentionPeriod: '90 dias',
-    encryptionStatus: 'AES-256 Ativo'
+    lastFullBackup: "2024-01-15 03:00:00",
+    lastIncrementalBackup: "2024-01-15 15:30:00",
+    nextScheduledBackup: "2024-01-16 03:00:00",
+    totalBackupSize: "2.4 TB",
+    retentionPeriod: "90 dias",
+    encryptionStatus: "AES-256 Ativo",
   });
 
   const [backupLocations] = useState([
     {
-      id: '1',
-      name: 'Zona Primária - São Paulo',
-      status: 'healthy',
-      lastSync: '2024-01-15 15:30:00',
-      storage: '850 GB',
-      maxStorage: '1 TB',
-      type: 'primary'
+      id: "1",
+      name: "Zona Primária - São Paulo",
+      status: "healthy",
+      lastSync: "2024-01-15 15:30:00",
+      storage: "850 GB",
+      maxStorage: "1 TB",
+      type: "primary",
     },
     {
-      id: '2',
-      name: 'Zona Secundária - Rio de Janeiro',
-      status: 'healthy',
-      lastSync: '2024-01-15 15:32:00',
-      storage: '850 GB',
-      maxStorage: '1 TB',
-      type: 'secondary'
+      id: "2",
+      name: "Zona Secundária - Rio de Janeiro",
+      status: "healthy",
+      lastSync: "2024-01-15 15:32:00",
+      storage: "850 GB",
+      maxStorage: "1 TB",
+      type: "secondary",
     },
     {
-      id: '3',
-      name: 'Zona Terciária - AWS US-East',
-      status: 'syncing',
-      lastSync: '2024-01-15 15:25:00',
-      storage: '847 GB',
-      maxStorage: '1 TB',
-      type: 'tertiary'
-    }
+      id: "3",
+      name: "Zona Terciária - AWS US-East",
+      status: "syncing",
+      lastSync: "2024-01-15 15:25:00",
+      storage: "847 GB",
+      maxStorage: "1 TB",
+      type: "tertiary",
+    },
   ]);
 
   const [recoveryHistory] = useState([
     {
-      id: '1',
-      timestamp: '2024-01-14 10:30:00',
-      type: 'Recuperação Parcial',
-      description: 'Restauração de dados do cliente Navegação Atlântica',
-      status: 'success',
-      duration: '23 min',
-      dataSize: '1.2 GB',
-      requestedBy: 'admin@nautilus.com'
+      id: "1",
+      timestamp: "2024-01-14 10:30:00",
+      type: "Recuperação Parcial",
+      description: "Restauração de dados do cliente Navegação Atlântica",
+      status: "success",
+      duration: "23 min",
+      dataSize: "1.2 GB",
+      requestedBy: "admin@nautilus.com",
     },
     {
-      id: '2',
-      timestamp: '2024-01-12 14:15:00',
-      type: 'Teste de Integridade',
-      description: 'Verificação automática de backup semanal',
-      status: 'success',
-      duration: '2h 15min',
-      dataSize: '2.4 TB',
-      requestedBy: 'Sistema Automático'
+      id: "2",
+      timestamp: "2024-01-12 14:15:00",
+      type: "Teste de Integridade",
+      description: "Verificação automática de backup semanal",
+      status: "success",
+      duration: "2h 15min",
+      dataSize: "2.4 TB",
+      requestedBy: "Sistema Automático",
     },
     {
-      id: '3',
-      timestamp: '2024-01-10 09:45:00',
-      type: 'Recuperação de Emergência',
-      description: 'Restauração completa após falha de servidor',
-      status: 'success',
-      duration: '45 min',
-      dataSize: '2.1 TB',
-      requestedBy: 'devops@nautilus.com'
-    }
+      id: "3",
+      timestamp: "2024-01-10 09:45:00",
+      type: "Recuperação de Emergência",
+      description: "Restauração completa após falha de servidor",
+      status: "success",
+      duration: "45 min",
+      dataSize: "2.1 TB",
+      requestedBy: "devops@nautilus.com",
+    },
   ]);
 
   const [redundancyStatus] = useState({
-    loadBalancer: 'active',
-    primaryServer: 'healthy',
-    secondaryServer: 'healthy',
-    databaseReplication: 'synced',
-    failoverTime: '< 30s',
-    uptime: '99.98%'
+    loadBalancer: "active",
+    primaryServer: "healthy",
+    secondaryServer: "healthy",
+    databaseReplication: "synced",
+    failoverTime: "< 30s",
+    uptime: "99.98%",
   });
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy': 
-      case 'success': 
-      case 'active':
-      case 'synced': return 'text-green-500';
-      case 'syncing': 
-      case 'warning': return 'text-yellow-500';
-      case 'error': 
-      case 'failed': return 'text-red-500';
-      default: return 'text-muted-foreground';
+      case "healthy":
+      case "success":
+      case "active":
+      case "synced":
+        return "text-green-500";
+      case "syncing":
+      case "warning":
+        return "text-yellow-500";
+      case "error":
+      case "failed":
+        return "text-red-500";
+      default:
+        return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'healthy': 
-      case 'success': 
-      case 'active':
-      case 'synced': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-      case 'syncing': 
-      case 'warning': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      case 'error': 
-      case 'failed': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300';
+      case "healthy":
+      case "success":
+      case "active":
+      case "synced":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      case "syncing":
+      case "warning":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "error":
+      case "failed":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
@@ -252,11 +260,15 @@ export const BackupRecoverySystem: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Último Incremental:</span>
-                      <span className="text-sm font-medium">{backupStatus.lastIncrementalBackup}</span>
+                      <span className="text-sm font-medium">
+                        {backupStatus.lastIncrementalBackup}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Próximo Agendado:</span>
-                      <span className="text-sm font-medium">{backupStatus.nextScheduledBackup}</span>
+                      <span className="text-sm font-medium">
+                        {backupStatus.nextScheduledBackup}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Retenção:</span>
@@ -292,23 +304,30 @@ export const BackupRecoverySystem: React.FC = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {backupLocations.map((location) => (
+                  {backupLocations.map(location => (
                     <div key={location.id} className="p-4 border rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium">{location.name}</h4>
                         <Badge className={getStatusBadge(location.status)}>
-                          {location.status === 'healthy' ? 'Saudável' : 
-                           location.status === 'syncing' ? 'Sincronizando' : location.status}
+                          {location.status === "healthy"
+                            ? "Saudável"
+                            : location.status === "syncing"
+                              ? "Sincronizando"
+                              : location.status}
                         </Badge>
                       </div>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
                           <span>Armazenamento:</span>
-                          <span>{location.storage} / {location.maxStorage}</span>
+                          <span>
+                            {location.storage} / {location.maxStorage}
+                          </span>
                         </div>
-                        <Progress 
-                          value={(parseFloat(location.storage) / parseFloat(location.maxStorage)) * 100} 
-                          className="h-2" 
+                        <Progress
+                          value={
+                            (parseFloat(location.storage) / parseFloat(location.maxStorage)) * 100
+                          }
+                          className="h-2"
                         />
                         <div className="flex justify-between text-sm text-muted-foreground">
                           <span>Último Sync:</span>
@@ -342,7 +361,9 @@ export const BackupRecoverySystem: React.FC = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     Restaurar dados específicos em minutos
                   </p>
-                  <Button size="sm" className="w-full">Iniciar</Button>
+                  <Button size="sm" className="w-full">
+                    Iniciar
+                  </Button>
                 </CardContent>
               </Card>
 
@@ -350,10 +371,10 @@ export const BackupRecoverySystem: React.FC = () => {
                 <CardContent className="p-4 text-center">
                   <Database className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
                   <h4 className="font-semibold mb-2">Recuperação Completa</h4>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Restaurar sistema completo
-                  </p>
-                  <Button size="sm" variant="outline" className="w-full">Configurar</Button>
+                  <p className="text-sm text-muted-foreground mb-4">Restaurar sistema completo</p>
+                  <Button size="sm" variant="outline" className="w-full">
+                    Configurar
+                  </Button>
                 </CardContent>
               </Card>
 
@@ -364,7 +385,9 @@ export const BackupRecoverySystem: React.FC = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     Verificar integridade dos backups
                   </p>
-                  <Button size="sm" variant="outline" className="w-full">Testar</Button>
+                  <Button size="sm" variant="outline" className="w-full">
+                    Testar
+                  </Button>
                 </CardContent>
               </Card>
             </div>
@@ -376,8 +399,11 @@ export const BackupRecoverySystem: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {recoveryHistory.map((recovery) => (
-                    <div key={recovery.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  {recoveryHistory.map(recovery => (
+                    <div
+                      key={recovery.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="flex items-center gap-4">
                         <CheckCircle className={`w-6 h-6 ${getStatusColor(recovery.status)}`} />
                         <div>
@@ -392,7 +418,7 @@ export const BackupRecoverySystem: React.FC = () => {
                         <p className="text-sm font-medium">{recovery.duration}</p>
                         <p className="text-xs text-muted-foreground">{recovery.dataSize}</p>
                         <Badge className={getStatusBadge(recovery.status)}>
-                          {recovery.status === 'success' ? 'Sucesso' : recovery.status}
+                          {recovery.status === "success" ? "Sucesso" : recovery.status}
                         </Badge>
                       </div>
                     </div>
@@ -406,7 +432,7 @@ export const BackupRecoverySystem: React.FC = () => {
         <TabsContent value="redundancy">
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Sistema de Redundância e Alta Disponibilidade</h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Server Status */}
               <Card>
@@ -546,7 +572,9 @@ export const BackupRecoverySystem: React.FC = () => {
                         <span className="font-medium">Backup Completo</span>
                         <CheckCircle className="w-5 h-5 text-green-500" />
                       </div>
-                      <p className="text-sm text-muted-foreground">14/01/2024 - Sucesso em 2h 15min</p>
+                      <p className="text-sm text-muted-foreground">
+                        14/01/2024 - Sucesso em 2h 15min
+                      </p>
                     </div>
                     <div className="p-3 border rounded-lg bg-green-50 dark:bg-green-900/20">
                       <div className="flex justify-between items-center mb-2">
@@ -560,7 +588,9 @@ export const BackupRecoverySystem: React.FC = () => {
                         <span className="font-medium">Failover Automático</span>
                         <AlertTriangle className="w-5 h-5 text-yellow-500" />
                       </div>
-                      <p className="text-sm text-muted-foreground">10/01/2024 - Sucesso com atraso (45s)</p>
+                      <p className="text-sm text-muted-foreground">
+                        10/01/2024 - Sucesso com atraso (45s)
+                      </p>
                     </div>
                   </div>
                 </CardContent>

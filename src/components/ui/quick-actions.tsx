@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ExternalLink, Download, FileText, Printer } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useSystemActions } from '@/hooks/use-system-actions';
+import React from "react";
+import { Link } from "react-router-dom";
+import { ExternalLink, Download, FileText, Printer } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useSystemActions } from "@/hooks/use-system-actions";
 
 // Componente para ações rápidas
 export const QuickActions: React.FC = () => {
@@ -13,13 +13,13 @@ export const QuickActions: React.FC = () => {
       <Button
         variant="outline"
         size="sm"
-        onClick={() => handleExportData('pdf')}
+        onClick={() => handleExportData("pdf")}
         className="flex items-center gap-2"
       >
         <Download className="h-4 w-4" />
         Export PDF
       </Button>
-      
+
       <Button
         variant="outline"
         size="sm"
@@ -29,7 +29,7 @@ export const QuickActions: React.FC = () => {
         <Printer className="h-4 w-4" />
         Imprimir
       </Button>
-      
+
       <Button
         variant="outline"
         size="sm"

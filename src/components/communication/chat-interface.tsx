@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { 
-  Send, 
-  Plus, 
-  Search, 
-  MoreVertical, 
-  Phone, 
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  Send,
+  Plus,
+  Search,
+  MoreVertical,
+  Phone,
   Video,
   Paperclip,
   Smile,
@@ -21,10 +21,10 @@ import {
   MessageSquare,
   Clock,
   Check,
-  CheckCheck
-} from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+  CheckCheck,
+} from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface Message {
   id: string;
@@ -41,7 +41,7 @@ interface Message {
 interface Conversation {
   id: string;
   title?: string;
-  type: 'direct' | 'group';
+  type: "direct" | "group";
   last_message_at: string;
   participants: Array<{
     user_id: string;
@@ -59,8 +59,8 @@ export const ChatInterface = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [newMessage, setNewMessage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [allUsers, setAllUsers] = useState<any[]>([]);
@@ -69,7 +69,9 @@ export const ChatInterface = () => {
 
   useEffect(() => {
     const getCurrentUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (user) {
         setCurrentUser(user);
         await loadConversations();
@@ -92,20 +94,20 @@ export const ChatInterface = () => {
   }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const loadAllUsers = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('id, full_name, email')
-        .neq('id', currentUser?.id);
+        .from("profiles")
+        .select("id, full_name, email")
+        .neq("id", currentUser?.id);
 
       if (error) throw error;
       setAllUsers(data || []);
     } catch (error) {
-      console.error('Erro ao carregar usuários:', error);
+      console.error("Erro ao carregar usuários:", error);
     }
   }, [currentUser?.id]);
 
@@ -113,8 +115,9 @@ export const ChatInterface = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('conversations')
-        .select(`
+        .from("conversations")
+        .select(
+          `
           id,
           title,
           type,
@@ -126,8 +129,9 @@ export const ChatInterface = () => {
               email
             )
           )
-        `)
-        .order('last_message_at', { ascending: false });
+        `
+        )
+        .order("last_message_at", { ascending: false });
 
       if (error) throw error;
 
@@ -135,8 +139,9 @@ export const ChatInterface = () => {
         (data || []).map(async (conv: any) => {
           // Carregar última mensagem
           const { data: lastMessage } = await supabase
-            .from('messages')
-            .select(`
+            .from("messages")
+            .select(
+              `
               id,
               content,
               sender_id,
@@ -145,42 +150,49 @@ export const ChatInterface = () => {
                 full_name,
                 email
               )
-            `)
-            .eq('conversation_id', conv.id)
-            .order('created_at', { ascending: false })
+            `
+            )
+            .eq("conversation_id", conv.id)
+            .order("created_at", { ascending: false })
             .limit(1)
             .single();
 
           // Calcular mensagens não lidas
           const { count } = await supabase
-            .from('messages')
-            .select('id', { count: 'exact' })
-            .eq('conversation_id', conv.id)
-            .neq('sender_id', currentUser?.id)
-            .not('id', 'in', `(
+            .from("messages")
+            .select("id", { count: "exact" })
+            .eq("conversation_id", conv.id)
+            .neq("sender_id", currentUser?.id)
+            .not(
+              "id",
+              "in",
+              `(
               SELECT message_id 
               FROM message_read_status 
               WHERE user_id = '${currentUser?.id}'
-            )`);
+            )`
+            );
 
           return {
             ...conv,
             participants: conv.conversation_participants.map((p: any) => ({
               user_id: p.user_id,
-              user: p.profiles
+              user: p.profiles,
             })),
-            last_message: lastMessage ? {
-              ...lastMessage,
-              sender: lastMessage.profiles
-            } : undefined,
-            unread_count: count || 0
+            last_message: lastMessage
+              ? {
+                  ...lastMessage,
+                  sender: lastMessage.profiles,
+                }
+              : undefined,
+            unread_count: count || 0,
           };
         })
       );
 
       setConversations(conversationsWithDetails);
     } catch (error) {
-      console.error('Erro ao carregar conversas:', error);
+      console.error("Erro ao carregar conversas:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as conversas",
@@ -191,11 +203,13 @@ export const ChatInterface = () => {
     }
   }, [currentUser?.id, toast]);
 
-  const loadMessages = useCallback(async (conversationId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('messages')
-        .select(`
+  const loadMessages = useCallback(
+    async (conversationId: string) => {
+      try {
+        const { data, error } = await supabase
+          .from("messages")
+          .select(
+            `
           id,
           content,
           sender_id,
@@ -204,29 +218,34 @@ export const ChatInterface = () => {
             full_name,
             email
           )
-        `)
-        .eq('conversation_id', conversationId)
-        .order('created_at', { ascending: true });
+        `
+          )
+          .eq("conversation_id", conversationId)
+          .order("created_at", { ascending: true });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      const messagesWithSender = (data || []).map((msg: any) => ({
-        ...msg,
-        sender: msg.profiles
-      }));
+        const messagesWithSender = (data || []).map((msg: any) => ({
+          ...msg,
+          sender: msg.profiles,
+        }));
 
-      setMessages(messagesWithSender);
+        setMessages(messagesWithSender);
 
-      // Marcar mensagens como lidas
-      await markMessagesAsRead(conversationId);
-    } catch (error) {
-      console.error('Erro ao carregar mensagens:', error);
-    }
-  }, [currentUser?.id]);
+        // Marcar mensagens como lidas
+        await markMessagesAsRead(conversationId);
+      } catch (error) {
+        console.error("Erro ao carregar mensagens:", error);
+      }
+    },
+    [currentUser?.id]
+  );
 
   useEffect(() => {
     const getCurrentUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (user) {
         setCurrentUser(user);
         await loadConversations();
@@ -248,28 +267,30 @@ export const ChatInterface = () => {
     try {
       // Buscar mensagens não lidas
       const { data: unreadMessages } = await supabase
-        .from('messages')
-        .select('id')
-        .eq('conversation_id', conversationId)
-        .neq('sender_id', currentUser?.id)
-        .not('id', 'in', `(
+        .from("messages")
+        .select("id")
+        .eq("conversation_id", conversationId)
+        .neq("sender_id", currentUser?.id)
+        .not(
+          "id",
+          "in",
+          `(
           SELECT message_id 
           FROM message_read_status 
           WHERE user_id = '${currentUser?.id}'
-        )`);
+        )`
+        );
 
       if (unreadMessages && unreadMessages.length > 0) {
         const readStatuses = unreadMessages.map(msg => ({
           message_id: msg.id,
-          user_id: currentUser?.id
+          user_id: currentUser?.id,
         }));
 
-        await supabase
-          .from('message_read_status')
-          .insert(readStatuses);
+        await supabase.from("message_read_status").insert(readStatuses);
       }
     } catch (error) {
-      console.error('Erro ao marcar mensagens como lidas:', error);
+      console.error("Erro ao marcar mensagens como lidas:", error);
     }
   };
 
@@ -277,18 +298,19 @@ export const ChatInterface = () => {
     const channel = supabase
       .channel(`messages-${conversationId}`)
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `conversation_id=eq.${conversationId}`
+          event: "INSERT",
+          schema: "public",
+          table: "messages",
+          filter: `conversation_id=eq.${conversationId}`,
         },
-        async (payload) => {
+        async payload => {
           // Carregar dados completos da mensagem
           const { data: newMessage } = await supabase
-            .from('messages')
-            .select(`
+            .from("messages")
+            .select(
+              `
               id,
               content,
               sender_id,
@@ -297,8 +319,9 @@ export const ChatInterface = () => {
                 full_name,
                 email
               )
-            `)
-            .eq('id', payload.new.id)
+            `
+            )
+            .eq("id", payload.new.id)
             .single();
 
           if (newMessage) {
@@ -308,9 +331,9 @@ export const ChatInterface = () => {
               sender_id: newMessage.sender_id,
               created_at: newMessage.created_at,
               sender: {
-                full_name: (newMessage as any).profiles?.full_name || '',
-                email: (newMessage as any).profiles?.email || ''
-              }
+                full_name: (newMessage as any).profiles?.full_name || "",
+                email: (newMessage as any).profiles?.email || "",
+              },
             };
             setMessages(prev => [...prev, messageWithSender]);
           }
@@ -327,19 +350,17 @@ export const ChatInterface = () => {
     if (!newMessage.trim() || !selectedConversation) return;
 
     try {
-      const { error } = await supabase
-        .from('messages')
-        .insert({
-          conversation_id: selectedConversation,
-          sender_id: currentUser?.id,
-          content: newMessage.trim()
-        });
+      const { error } = await supabase.from("messages").insert({
+        conversation_id: selectedConversation,
+        sender_id: currentUser?.id,
+        content: newMessage.trim(),
+      });
 
       if (error) throw error;
 
-      setNewMessage('');
+      setNewMessage("");
     } catch (error) {
-      console.error('Erro ao enviar mensagem:', error);
+      console.error("Erro ao enviar mensagem:", error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar a mensagem",
@@ -352,24 +373,26 @@ export const ChatInterface = () => {
     try {
       // Verificar se já existe conversa direta
       const { data: existingConv } = await supabase
-        .from('conversation_participants')
-        .select(`
+        .from("conversation_participants")
+        .select(
+          `
           conversation_id,
           conversations!inner (
             id,
             type
           )
-        `)
-        .eq('user_id', currentUser?.id)
-        .eq('conversations.type', 'direct');
+        `
+        )
+        .eq("user_id", currentUser?.id)
+        .eq("conversations.type", "direct");
 
       if (existingConv) {
         for (const conv of existingConv) {
           const { data: otherParticipant } = await supabase
-            .from('conversation_participants')
-            .select('user_id')
-            .eq('conversation_id', conv.conversation_id)
-            .neq('user_id', currentUser?.id)
+            .from("conversation_participants")
+            .select("user_id")
+            .eq("conversation_id", conv.conversation_id)
+            .neq("user_id", currentUser?.id)
             .single();
 
           if (otherParticipant?.user_id === userId) {
@@ -382,10 +405,10 @@ export const ChatInterface = () => {
 
       // Criar nova conversa
       const { data: newConv, error: convError } = await supabase
-        .from('conversations')
+        .from("conversations")
         .insert({
-          type: 'direct',
-          created_by: currentUser?.id
+          type: "direct",
+          created_by: currentUser?.id,
         })
         .select()
         .single();
@@ -393,12 +416,10 @@ export const ChatInterface = () => {
       if (convError) throw convError;
 
       // Adicionar participantes
-      const { error: participantsError } = await supabase
-        .from('conversation_participants')
-        .insert([
-          { conversation_id: newConv.id, user_id: currentUser?.id },
-          { conversation_id: newConv.id, user_id: userId }
-        ]);
+      const { error: participantsError } = await supabase.from("conversation_participants").insert([
+        { conversation_id: newConv.id, user_id: currentUser?.id },
+        { conversation_id: newConv.id, user_id: userId },
+      ]);
 
       if (participantsError) throw participantsError;
 
@@ -411,7 +432,7 @@ export const ChatInterface = () => {
         description: "Nova conversa criada",
       });
     } catch (error) {
-      console.error('Erro ao criar conversa:', error);
+      console.error("Erro ao criar conversa:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar a conversa",
@@ -422,12 +443,12 @@ export const ChatInterface = () => {
 
   const getConversationTitle = (conversation: Conversation) => {
     if (conversation.title) return conversation.title;
-    
-    if (conversation.type === 'direct') {
+
+    if (conversation.type === "direct") {
       const otherUser = conversation.participants.find(p => p.user_id !== currentUser?.id);
-      return otherUser?.user.full_name || otherUser?.user.email || 'Usuário';
+      return otherUser?.user.full_name || otherUser?.user.email || "Usuário";
     }
-    
+
     return `Grupo (${conversation.participants.length} membros)`;
   };
 
@@ -451,21 +472,17 @@ export const ChatInterface = () => {
         <div className="p-4 border-b">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold">Mensagens</h2>
-            <Button
-              size="sm"
-              onClick={() => setShowNewChat(!showNewChat)}
-              className="rounded-full"
-            >
+            <Button size="sm" onClick={() => setShowNewChat(!showNewChat)} className="rounded-full">
               <Plus className="h-4 w-4" />
             </Button>
           </div>
-          
+
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Buscar conversas..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={e => setSearchQuery(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -476,7 +493,7 @@ export const ChatInterface = () => {
           <div className="p-4 border-b bg-muted/50">
             <h3 className="text-sm font-medium mb-2">Iniciar nova conversa</h3>
             <ScrollArea className="h-32">
-              {allUsers.map((user) => (
+              {allUsers.map(user => (
                 <div
                   key={user.id}
                   className="flex items-center gap-3 p-2 hover:bg-muted rounded-lg cursor-pointer"
@@ -488,9 +505,7 @@ export const ChatInterface = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {user.full_name || user.email}
-                    </p>
+                    <p className="text-sm font-medium truncate">{user.full_name || user.email}</p>
                   </div>
                 </div>
               ))}
@@ -500,25 +515,25 @@ export const ChatInterface = () => {
 
         {/* Lista de Conversas */}
         <ScrollArea className="flex-1">
-          {filteredConversations.map((conversation) => (
+          {filteredConversations.map(conversation => (
             <div
               key={conversation.id}
               className={`p-4 border-b cursor-pointer hover:bg-muted/50 transition-colors ${
-                selectedConversation === conversation.id ? 'bg-muted' : ''
+                selectedConversation === conversation.id ? "bg-muted" : ""
               }`}
               onClick={() => setSelectedConversation(conversation.id)}
             >
               <div className="flex items-center gap-3">
                 <Avatar>
                   <AvatarFallback>
-                    {conversation.type === 'group' ? (
+                    {conversation.type === "group" ? (
                       <Users className="h-4 w-4" />
                     ) : (
                       getConversationTitle(conversation).charAt(0)
                     )}
                   </AvatarFallback>
                 </Avatar>
-                
+
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium truncate">
@@ -533,15 +548,15 @@ export const ChatInterface = () => {
                       <span className="text-xs text-muted-foreground">
                         {formatDistanceToNow(new Date(conversation.last_message_at), {
                           addSuffix: true,
-                          locale: ptBR
+                          locale: ptBR,
                         })}
                       </span>
                     </div>
                   </div>
-                  
+
                   {conversation.last_message && (
                     <p className="text-sm text-muted-foreground truncate mt-1">
-                      {conversation.last_message.sender_id === currentUser?.id ? 'Você: ' : ''}
+                      {conversation.last_message.sender_id === currentUser?.id ? "Você: " : ""}
                       {conversation.last_message.content}
                     </p>
                   )}
@@ -561,9 +576,7 @@ export const ChatInterface = () => {
               <div className="flex items-center gap-3">
                 <Avatar>
                   <AvatarFallback>
-                    {conversations
-                      .find(c => c.id === selectedConversation)
-                      ?.type === 'group' ? (
+                    {conversations.find(c => c.id === selectedConversation)?.type === "group" ? (
                       <Users className="h-4 w-4" />
                     ) : (
                       getConversationTitle(
@@ -574,21 +587,16 @@ export const ChatInterface = () => {
                 </Avatar>
                 <div>
                   <h3 className="font-medium">
-                    {getConversationTitle(
-                      conversations.find(c => c.id === selectedConversation)!
-                    )}
+                    {getConversationTitle(conversations.find(c => c.id === selectedConversation)!)}
                   </h3>
                   <p className="text-xs text-muted-foreground">
-                    {conversations
-                      .find(c => c.id === selectedConversation)
-                      ?.type === 'group'
+                    {conversations.find(c => c.id === selectedConversation)?.type === "group"
                       ? `${conversations.find(c => c.id === selectedConversation)?.participants.length} membros`
-                      : 'Online'
-                    }
+                      : "Online"}
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm">
                   <Phone className="h-4 w-4" />
@@ -605,18 +613,18 @@ export const ChatInterface = () => {
             {/* Mensagens */}
             <ScrollArea className="flex-1 p-4">
               <div className="space-y-4">
-                {messages.map((message) => (
+                {messages.map(message => (
                   <div
                     key={message.id}
                     className={`flex ${
-                      message.sender_id === currentUser?.id ? 'justify-end' : 'justify-start'
+                      message.sender_id === currentUser?.id ? "justify-end" : "justify-start"
                     }`}
                   >
                     <div
                       className={`max-w-[70%] p-3 rounded-lg ${
                         message.sender_id === currentUser?.id
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted'
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted"
                       }`}
                     >
                       {message.sender_id !== currentUser?.id && (
@@ -627,9 +635,9 @@ export const ChatInterface = () => {
                       <p className="text-sm">{message.content}</p>
                       <div className="flex items-center justify-end gap-1 mt-1">
                         <span className="text-xs opacity-70">
-                          {new Date(message.created_at).toLocaleTimeString('pt-BR', {
-                            hour: '2-digit',
-                            minute: '2-digit'
+                          {new Date(message.created_at).toLocaleTimeString("pt-BR", {
+                            hour: "2-digit",
+                            minute: "2-digit",
                           })}
                         </span>
                         {message.sender_id === currentUser?.id && (
@@ -655,8 +663,8 @@ export const ChatInterface = () => {
                 <Input
                   placeholder="Digite uma mensagem..."
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                  onChange={e => setNewMessage(e.target.value)}
+                  onKeyPress={e => e.key === "Enter" && sendMessage()}
                   className="flex-1"
                 />
                 <Button onClick={sendMessage} size="sm">

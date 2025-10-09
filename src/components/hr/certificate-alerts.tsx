@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { supabase } from '@/integrations/supabase/client';
-import { format, differenceInDays } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { 
-  AlertTriangle, 
-  Clock, 
-  FileText, 
-  Calendar,
-  User,
-  X
-} from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { supabase } from "@/integrations/supabase/client";
+import { format, differenceInDays } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { AlertTriangle, Clock, FileText, Calendar, User, X } from "lucide-react";
 
 interface CertificateAlert {
   id: string;
@@ -22,7 +22,7 @@ interface CertificateAlert {
   certificate_name: string;
   certificate_type: string;
   expiry_date: string;
-  status: 'expiring_soon' | 'expired';
+  status: "expiring_soon" | "expired";
   days_until_expiry: number;
 }
 
@@ -40,17 +40,19 @@ export const CertificateAlerts: React.FC = () => {
     try {
       // Get certificates that are expired or expiring soon
       const { data, error } = await supabase
-        .from('employee_certificates')
-        .select(`
+        .from("employee_certificates")
+        .select(
+          `
           id,
           employee_id,
           certificate_name,
           certificate_type,
           expiry_date,
           status
-        `)
-        .in('status', ['expired', 'expiring_soon'])
-        .order('expiry_date', { ascending: true });
+        `
+        )
+        .in("status", ["expired", "expiring_soon"])
+        .order("expiry_date", { ascending: true });
 
       if (error) throw error;
 
@@ -60,17 +62,17 @@ export const CertificateAlerts: React.FC = () => {
         const today = new Date();
         const expiryDate = new Date(cert.expiry_date);
         const daysUntilExpiry = differenceInDays(expiryDate, today);
-        
+
         return {
           ...cert,
           employee_name: `Funcionário ${cert.employee_id.slice(-3)}`, // Simulated name
-          days_until_expiry: daysUntilExpiry
+          days_until_expiry: daysUntilExpiry,
         } as CertificateAlert;
       });
 
       setAlerts(alertsWithEmployeeNames);
     } catch (error) {
-      console.error('Error loading certificate alerts:', error);
+      console.error("Error loading certificate alerts:", error);
     } finally {
       setIsLoading(false);
     }
@@ -78,9 +80,9 @@ export const CertificateAlerts: React.FC = () => {
 
   const getAlertIcon = (status: string) => {
     switch (status) {
-      case 'expired':
+      case "expired":
         return <AlertTriangle className="h-5 w-5 text-destructive" />;
-      case 'expiring_soon':
+      case "expiring_soon":
         return <Clock className="h-5 w-5 text-warning" />;
       default:
         return <FileText className="h-5 w-5 text-muted-foreground" />;
@@ -88,13 +90,9 @@ export const CertificateAlerts: React.FC = () => {
   };
 
   const getAlertBadge = (status: string, daysUntilExpiry: number) => {
-    if (status === 'expired') {
-      return (
-        <Badge variant="destructive">
-          Expirado há {Math.abs(daysUntilExpiry)} dias
-        </Badge>
-      );
-    } else if (status === 'expiring_soon') {
+    if (status === "expired") {
+      return <Badge variant="destructive">Expirado há {Math.abs(daysUntilExpiry)} dias</Badge>;
+    } else if (status === "expiring_soon") {
       return (
         <Badge variant="secondary" className="bg-warning text-warning-foreground">
           Expira em {daysUntilExpiry} dias
@@ -104,8 +102,8 @@ export const CertificateAlerts: React.FC = () => {
     return null;
   };
 
-  const expiredCount = alerts.filter(alert => alert.status === 'expired').length;
-  const expiringSoonCount = alerts.filter(alert => alert.status === 'expiring_soon').length;
+  const expiredCount = alerts.filter(alert => alert.status === "expired").length;
+  const expiringSoonCount = alerts.filter(alert => alert.status === "expiring_soon").length;
 
   if (isLoading) {
     return (
@@ -117,9 +115,7 @@ export const CertificateAlerts: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center text-muted-foreground">
-            Carregando alertas...
-          </div>
+          <div className="text-center text-muted-foreground">Carregando alertas...</div>
         </CardContent>
       </Card>
     );
@@ -145,36 +141,31 @@ export const CertificateAlerts: React.FC = () => {
 
   return (
     <>
-      <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setShowAlertsDialog(true)}>
+      <Card
+        className="cursor-pointer hover:shadow-lg transition-shadow"
+        onClick={() => setShowAlertsDialog(true)}
+      >
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center">
               <AlertTriangle className="mr-2 h-5 w-5 text-warning" />
               Alertas de Certificados
             </div>
-            <Badge variant="destructive">
-              {alerts.length}
-            </Badge>
+            <Badge variant="destructive">{alerts.length}</Badge>
           </CardTitle>
-          <CardDescription>
-            Certificados que precisam de atenção
-          </CardDescription>
+          <CardDescription>Certificados que precisam de atenção</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
             {expiredCount > 0 && (
               <div className="flex items-center justify-between p-2 bg-destructive/10 rounded">
-                <span className="text-sm font-medium text-destructive">
-                  Certificados Expirados
-                </span>
+                <span className="text-sm font-medium text-destructive">Certificados Expirados</span>
                 <Badge variant="destructive">{expiredCount}</Badge>
               </div>
             )}
             {expiringSoonCount > 0 && (
               <div className="flex items-center justify-between p-2 bg-warning/10 rounded">
-                <span className="text-sm font-medium text-warning">
-                  Expirando em Breve
-                </span>
+                <span className="text-sm font-medium text-warning">Expirando em Breve</span>
                 <Badge variant="secondary" className="bg-warning text-warning-foreground">
                   {expiringSoonCount}
                 </Badge>
@@ -196,9 +187,9 @@ export const CertificateAlerts: React.FC = () => {
               Certificados que expiraram ou estão prestes a expirar
             </AlertDialogDescription>
           </AlertDialogHeader>
-          
+
           <div className="space-y-4">
-            {alerts.map((alert) => (
+            {alerts.map(alert => (
               <Card key={alert.id} className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start space-x-3">
@@ -219,7 +210,8 @@ export const CertificateAlerts: React.FC = () => {
                         </div>
                         <div className="flex items-center">
                           <Calendar className="mr-1 h-4 w-4" />
-                          Validade: {format(new Date(alert.expiry_date), 'dd/MM/yyyy', { locale: ptBR })}
+                          Validade:{" "}
+                          {format(new Date(alert.expiry_date), "dd/MM/yyyy", { locale: ptBR })}
                         </div>
                       </div>
                     </div>

@@ -1,18 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { EnhancedAlertManagement } from './enhanced-alert-management';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { AlertCircle, Plus, TrendingDown, TrendingUp, Bell, Loader2, RefreshCw, ArrowLeft } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase as supabaseClient } from '@/integrations/supabase/client';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EnhancedAlertManagement } from "./enhanced-alert-management";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertCircle,
+  Plus,
+  TrendingDown,
+  TrendingUp,
+  Bell,
+  Loader2,
+  RefreshCw,
+  ArrowLeft,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase as supabaseClient } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 const supabase: any = supabaseClient;
-
 
 interface PriceAlert {
   id: string;
@@ -57,9 +71,9 @@ export const PriceAlertDashboardLegacy = () => {
   const [isCreatingAlert, setIsCreatingAlert] = useState(false);
   const [isCheckingPrices, setIsCheckingPrices] = useState(false);
   const [newAlert, setNewAlert] = useState({
-    product_name: '',
-    target_price: '',
-    product_url: ''
+    product_name: "",
+    target_price: "",
+    product_url: "",
   });
   const { toast } = useToast();
   const { user } = useAuth();
@@ -76,19 +90,19 @@ export const PriceAlertDashboardLegacy = () => {
   const loadAlerts = async () => {
     try {
       const { data, error } = await supabase
-        .from('price_alerts')
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
+        .from("price_alerts")
+        .select("*")
+        .eq("user_id", user?.id)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setAlerts(data || []);
     } catch (error) {
-      console.error('Error loading alerts:', error);
+      console.error("Error loading alerts:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os alertas",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -98,34 +112,34 @@ export const PriceAlertDashboardLegacy = () => {
   const loadNotifications = async () => {
     try {
       const { data, error } = await supabase
-        .from('price_notifications')
-        .select('*')
-        .eq('user_id', user?.id)
-        .eq('is_read', false)
-        .order('created_at', { ascending: false })
+        .from("price_notifications")
+        .select("*")
+        .eq("user_id", user?.id)
+        .eq("is_read", false)
+        .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       setNotifications(data || []);
     } catch (error) {
-      console.error('Error loading notifications:', error);
+      console.error("Error loading notifications:", error);
     }
   };
 
   const checkPriceForAlert = async (alert: PriceAlert) => {
     try {
       // Call Supabase Edge Function for price checking
-      const { data, error } = await supabase.functions.invoke('check-price', {
+      const { data, error } = await supabase.functions.invoke("check-price", {
         body: {
           product_name: alert.product_name,
-          product_url: alert.product_url
-        }
+          product_url: alert.product_url,
+        },
       });
 
       if (error) throw error;
       return data?.price || 0;
     } catch (error) {
-      console.error('Error checking price:', error);
+      console.error("Error checking price:", error);
       // Improved fallback with more realistic price simulation
       return Math.random() * 2000 + 500; // More realistic price range
     }
@@ -136,59 +150,61 @@ export const PriceAlertDashboardLegacy = () => {
       toast({
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
     setIsCreatingAlert(true);
-    
+
     try {
       // Get initial price
       const currentPrice = await checkPriceForAlert({
         product_name: newAlert.product_name,
-        product_url: newAlert.product_url
+        product_url: newAlert.product_url,
       } as PriceAlert);
 
       // Create alert in Supabase
       const { data, error } = await supabase
-        .from('price_alerts')
-        .insert([{
-          user_id: user?.id,
-          product_name: newAlert.product_name,
-          target_price: parseFloat(newAlert.target_price),
-          product_url: newAlert.product_url,
-          current_price: currentPrice,
-          is_active: true
-        }])
+        .from("price_alerts")
+        .insert([
+          {
+            user_id: user?.id,
+            product_name: newAlert.product_name,
+            target_price: parseFloat(newAlert.target_price),
+            product_url: newAlert.product_url,
+            current_price: currentPrice,
+            is_active: true,
+          },
+        ])
         .select()
         .single();
 
       if (error) throw error;
 
       // Add to price history
-      await supabase
-        .from('price_history')
-        .insert([{
+      await supabase.from("price_history").insert([
+        {
           alert_id: data.id,
           price: currentPrice,
-          checked_at: new Date().toISOString()
-        }]);
+          checked_at: new Date().toISOString(),
+        },
+      ]);
 
-      setNewAlert({ product_name: '', target_price: '', product_url: '' });
+      setNewAlert({ product_name: "", target_price: "", product_url: "" });
       setIsAddingAlert(false);
       loadAlerts(); // Reload alerts
-      
+
       toast({
         title: "Alerta criado!",
-        description: `Alerta para ${newAlert.product_name} foi adicionado com sucesso.`
+        description: `Alerta para ${newAlert.product_name} foi adicionado com sucesso.`,
       });
     } catch (error) {
-      console.error('Error creating alert:', error);
+      console.error("Error creating alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o alerta",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsCreatingAlert(false);
@@ -201,45 +217,42 @@ export const PriceAlertDashboardLegacy = () => {
 
     try {
       const { error } = await supabase
-        .from('price_alerts')
+        .from("price_alerts")
         .update({ is_active: !alert.is_active })
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
-      
-      setAlerts(prev => prev.map(alert => 
-        alert.id === id ? { ...alert, is_active: !alert.is_active } : alert
-      ));
+
+      setAlerts(prev =>
+        prev.map(alert => (alert.id === id ? { ...alert, is_active: !alert.is_active } : alert))
+      );
     } catch (error) {
-      console.error('Error toggling alert:', error);
+      console.error("Error toggling alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o alerta",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const removeAlert = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('price_alerts')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from("price_alerts").delete().eq("id", id);
 
       if (error) throw error;
-      
+
       setAlerts(prev => prev.filter(alert => alert.id !== id));
       toast({
         title: "Alerta removido",
-        description: "O alerta de preço foi removido com sucesso."
+        description: "O alerta de preço foi removido com sucesso.",
       });
     } catch (error) {
-      console.error('Error removing alert:', error);
+      console.error("Error removing alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível remover o alerta",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -248,25 +261,25 @@ export const PriceAlertDashboardLegacy = () => {
     setIsCheckingPrices(true);
     try {
       // Use Supabase Edge Function instead of direct API call
-      const { data, error } = await supabase.functions.invoke('monitor-prices', {
-        body: { user_id: user?.id }
+      const { data, error } = await supabase.functions.invoke("monitor-prices", {
+        body: { user_id: user?.id },
       });
-      
+
       if (error) throw error;
-      
+
       if (data?.success) {
         loadAlerts(); // Reload alerts with updated prices
         toast({
           title: "Preços atualizados!",
-          description: `${data.checked_alerts} alertas verificados`
+          description: `${data.checked_alerts} alertas verificados`,
         });
       }
     } catch (error) {
-      console.error('Error refreshing prices:', error);
+      console.error("Error refreshing prices:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar os preços",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsCheckingPrices(false);
@@ -277,7 +290,6 @@ export const PriceAlertDashboardLegacy = () => {
   const getPriceChange = (alert: PriceAlert) => {
     return Math.random() * 200 - 100; // Random change for demo
   };
-
 
   if (isLoading) {
     return (
@@ -294,10 +306,10 @@ export const PriceAlertDashboardLegacy = () => {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-4">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -308,7 +320,7 @@ export const PriceAlertDashboardLegacy = () => {
             <p className="text-muted-foreground">Monitore os preços dos seus produtos favoritos</p>
           </div>
         </div>
-        
+
         <div className="flex gap-2">
           <Button variant="outline" onClick={refreshPrices} disabled={isCheckingPrices}>
             {isCheckingPrices ? (
@@ -318,7 +330,7 @@ export const PriceAlertDashboardLegacy = () => {
             )}
             Atualizar Preços
           </Button>
-      
+
           <Dialog open={isAddingAlert} onOpenChange={setIsAddingAlert}>
             <DialogTrigger asChild>
               <Button>
@@ -336,7 +348,7 @@ export const PriceAlertDashboardLegacy = () => {
                   <Input
                     id="product"
                     value={newAlert.product_name}
-                    onChange={(e) => setNewAlert(prev => ({ ...prev, product_name: e.target.value }))}
+                    onChange={e => setNewAlert(prev => ({ ...prev, product_name: e.target.value }))}
                     placeholder="Ex: iPhone 15 Pro"
                   />
                 </div>
@@ -346,7 +358,7 @@ export const PriceAlertDashboardLegacy = () => {
                     id="targetPrice"
                     type="number"
                     value={newAlert.target_price}
-                    onChange={(e) => setNewAlert(prev => ({ ...prev, target_price: e.target.value }))}
+                    onChange={e => setNewAlert(prev => ({ ...prev, target_price: e.target.value }))}
                     placeholder="Ex: 6500"
                   />
                 </div>
@@ -355,7 +367,7 @@ export const PriceAlertDashboardLegacy = () => {
                   <Input
                     id="url"
                     value={newAlert.product_url}
-                    onChange={(e) => setNewAlert(prev => ({ ...prev, product_url: e.target.value }))}
+                    onChange={e => setNewAlert(prev => ({ ...prev, product_url: e.target.value }))}
                     placeholder="https://exemplo.com/produto"
                   />
                 </div>
@@ -370,7 +382,7 @@ export const PriceAlertDashboardLegacy = () => {
                         Criando...
                       </>
                     ) : (
-                      'Criar Alerta'
+                      "Criar Alerta"
                     )}
                   </Button>
                 </div>
@@ -393,7 +405,7 @@ export const PriceAlertDashboardLegacy = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -405,7 +417,7 @@ export const PriceAlertDashboardLegacy = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -419,7 +431,7 @@ export const PriceAlertDashboardLegacy = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -452,10 +464,12 @@ export const PriceAlertDashboardLegacy = () => {
           </Card>
         ) : (
           <div className="grid gap-4">
-            {alerts.map((alert) => {
+            {alerts.map(alert => {
               const priceChange = getPriceChange(alert);
-              const targetMet = alert.current_price ? alert.current_price <= alert.target_price : false;
-              
+              const targetMet = alert.current_price
+                ? alert.current_price <= alert.target_price
+                : false;
+
               return (
                 <Card key={alert.id} className={targetMet ? "border-green-500" : ""}>
                   <CardHeader className="pb-3">
@@ -463,7 +477,7 @@ export const PriceAlertDashboardLegacy = () => {
                       <div>
                         <CardTitle className="text-lg">{alert.product_name}</CardTitle>
                         <p className="text-sm text-muted-foreground">
-                          Criado em {new Date(alert.created_at).toLocaleDateString('pt-BR')}
+                          Criado em {new Date(alert.created_at).toLocaleDateString("pt-BR")}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -483,12 +497,14 @@ export const PriceAlertDashboardLegacy = () => {
                       <div>
                         <p className="text-sm text-muted-foreground">Preço Atual</p>
                         <p className="text-2xl font-bold">
-                          R$ {alert.current_price ? alert.current_price.toFixed(2) : '---'}
+                          R$ {alert.current_price ? alert.current_price.toFixed(2) : "---"}
                         </p>
                         {priceChange !== 0 && (
-                          <div className={`flex items-center gap-1 text-sm ${
-                            priceChange < 0 ? 'text-green-500' : 'text-red-500'
-                          }`}>
+                          <div
+                            className={`flex items-center gap-1 text-sm ${
+                              priceChange < 0 ? "text-green-500" : "text-red-500"
+                            }`}
+                          >
                             {priceChange < 0 ? (
                               <TrendingDown className="w-4 h-4" />
                             ) : (
@@ -498,37 +514,31 @@ export const PriceAlertDashboardLegacy = () => {
                           </div>
                         )}
                       </div>
-                      
+
                       <div>
                         <p className="text-sm text-muted-foreground">Preço Alvo</p>
                         <p className="text-2xl font-bold text-primary">
                           R$ {alert.target_price.toFixed(2)}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {alert.current_price && alert.current_price > alert.target_price 
+                          {alert.current_price && alert.current_price > alert.target_price
                             ? `R$ ${(alert.current_price - alert.target_price).toFixed(2)} acima`
-                            : alert.current_price 
+                            : alert.current_price
                               ? `R$ ${(alert.target_price - alert.current_price).toFixed(2)} abaixo`
-                              : 'Aguardando verificação'
-                          }
+                              : "Aguardando verificação"}
                         </p>
                       </div>
-                      
+
                       <div>
                         <p className="text-sm text-muted-foreground">Última Verificação</p>
                         <p className="text-sm">
-                          {alert.last_checked_at 
-                            ? new Date(alert.last_checked_at).toLocaleString('pt-BR')
-                            : 'Nunca verificado'
-                          }
+                          {alert.last_checked_at
+                            ? new Date(alert.last_checked_at).toLocaleString("pt-BR")
+                            : "Nunca verificado"}
                         </p>
                         <div className="flex gap-2 mt-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => toggleAlert(alert.id)}
-                          >
-                            {alert.is_active ? 'Pausar' : 'Ativar'}
+                          <Button size="sm" variant="outline" onClick={() => toggleAlert(alert.id)}>
+                            {alert.is_active ? "Pausar" : "Ativar"}
                           </Button>
                           <Button
                             size="sm"

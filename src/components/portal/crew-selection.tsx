@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Search, User, Users } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Search, User, Users } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface CrewMember {
   id: string;
@@ -26,7 +26,7 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     loadCrewMembers();
@@ -34,10 +34,7 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
 
   const loadCrewMembers = async () => {
     try {
-      const { data, error } = await supabase
-        .from('crew_members')
-        .select('*')
-        .order('full_name');
+      const { data, error } = await supabase.from("crew_members").select("*").order("full_name");
 
       if (error) throw error;
       setCrewMembers(data || []);
@@ -45,28 +42,33 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
       toast({
         title: "Erro ao carregar tripulantes",
         description: error.message,
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredCrewMembers = crewMembers.filter(member =>
-    member.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.employee_id.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCrewMembers = crewMembers.filter(
+    member =>
+      member.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.employee_id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'available':
-        return <Badge variant="default" className="bg-success text-success-foreground">Disponível</Badge>;
-      case 'embarked':
+      case "available":
+        return (
+          <Badge variant="default" className="bg-success text-success-foreground">
+            Disponível
+          </Badge>
+        );
+      case "embarked":
         return <Badge variant="secondary">Embarcado</Badge>;
-      case 'leave':
+      case "leave":
         return <Badge variant="outline">Folga</Badge>;
-      case 'training':
+      case "training":
         return <Badge variant="secondary">Treinamento</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
@@ -107,28 +109,31 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
               <Input
                 placeholder="Buscar por nome, função ou matrícula..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredCrewMembers.map((member) => (
+              {filteredCrewMembers.map(member => (
                 <Card key={member.id} className="cursor-pointer hover:shadow-md transition-shadow">
                   <CardContent className="p-4">
                     <div className="flex items-center space-x-4">
                       <Avatar>
                         <AvatarImage src="" />
                         <AvatarFallback>
-                          {member.full_name.split(' ').map(n => n[0]).join('')}
+                          {member.full_name
+                            .split(" ")
+                            .map(n => n[0])
+                            .join("")}
                         </AvatarFallback>
                       </Avatar>
-                      
+
                       <div className="flex-1 min-w-0">
                         <h3 className="font-medium truncate">{member.full_name}</h3>
                         <p className="text-sm text-muted-foreground">{member.position}</p>
                         <p className="text-xs text-muted-foreground">ID: {member.employee_id}</p>
-                        
+
                         <div className="flex items-center gap-2 mt-2">
                           {getStatusBadge(member.status)}
                           {member.vessel_assignment && (
@@ -139,11 +144,8 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
                         </div>
                       </div>
                     </div>
-                    
-                    <Button 
-                      className="w-full mt-4" 
-                      onClick={() => onSelect(member.id)}
-                    >
+
+                    <Button className="w-full mt-4" onClick={() => onSelect(member.id)}>
                       <User className="h-4 w-4 mr-2" />
                       Ver Dossiê
                     </Button>
@@ -156,7 +158,9 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
               <div className="text-center py-8">
                 <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                 <p className="text-muted-foreground">
-                  {searchTerm ? 'Nenhum tripulante encontrado para a busca' : 'Nenhum tripulante cadastrado'}
+                  {searchTerm
+                    ? "Nenhum tripulante encontrado para a busca"
+                    : "Nenhum tripulante cadastrado"}
                 </p>
               </div>
             )}

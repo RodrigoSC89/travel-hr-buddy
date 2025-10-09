@@ -1,21 +1,13 @@
-import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
-import { ModuleHeader } from '@/components/ui/module-header';
-import { MaritimeGPT3 } from '@/components/intelligence/maritime-gpt-3';
-import { NeuralRouteOptimizer } from '@/components/maritime/neural-route-optimizer';
-import { CrewIntelligenceSystem } from '@/components/crew/crew-intelligence-system';
-import { PredictiveMaintenanceRevolution } from '@/components/maritime/predictive-maintenance-revolution';
-import { QuantumSecurityShield } from '@/components/security/quantum-security-shield';
-import { 
-  Brain, 
-  Navigation, 
-  Users,
-  Sparkles,
-  Wrench,
-  Shield,
-  Zap
-} from 'lucide-react';
+import React from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { MaritimeGPT3 } from "@/components/intelligence/maritime-gpt-3";
+import { NeuralRouteOptimizer } from "@/components/maritime/neural-route-optimizer";
+import { CrewIntelligenceSystem } from "@/components/crew/crew-intelligence-system";
+import { PredictiveMaintenanceRevolution } from "@/components/maritime/predictive-maintenance-revolution";
+import { QuantumSecurityShield } from "@/components/security/quantum-security-shield";
+import { Brain, Navigation, Users, Sparkles, Wrench, Shield, Zap } from "lucide-react";
 
 const MaritimeSupremo: React.FC = () => {
   return (
@@ -26,9 +18,9 @@ const MaritimeSupremo: React.FC = () => {
         description="Sistema Marítimo Mundial Definitivo - Superinteligência e Otimização Avançada"
         gradient="purple"
         badges={[
-          { icon: Brain, label: 'MaritimeGPT 3.0' },
-          { icon: Zap, label: 'IA Avançada' },
-          { icon: Shield, label: 'Segurança Quântica' }
+          { icon: Brain, label: "MaritimeGPT 3.0" },
+          { icon: Zap, label: "IA Avançada" },
+          { icon: Shield, label: "Segurança Quântica" },
         ]}
       />
 

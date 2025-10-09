@@ -1,35 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Activity, 
-  AlertTriangle, 
-  CheckCircle, 
-  TrendingUp, 
-  Star, 
-  Crown, 
-  Zap, 
-  Users, 
-  BarChart3, 
-  Target, 
-  Shield, 
-  Globe, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  TrendingUp,
+  Star,
+  Crown,
+  Zap,
+  Users,
+  BarChart3,
+  Target,
+  Shield,
+  Globe,
   Brain,
   Sparkles,
   Clock,
   Award,
   Rocket,
   Heart,
-  MessageCircle
-} from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+  MessageCircle,
+} from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface SystemStatus {
   module: string;
-  status: 'operational' | 'warning' | 'error' | 'maintenance';
+  status: "operational" | "warning" | "error" | "maintenance";
   uptime: number;
   performance: number;
   users: number;
@@ -39,7 +39,7 @@ interface SystemStatus {
 
 const SystemMonitoringDashboard: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedTimeframe, setSelectedTimeframe] = useState('24h');
+  const [selectedTimeframe, setSelectedTimeframe] = useState("24h");
 
   useEffect(() => {
     setIsLoaded(true);
@@ -47,116 +47,132 @@ const SystemMonitoringDashboard: React.FC = () => {
 
   const systemModules: SystemStatus[] = [
     {
-      module: 'Dashboard Principal',
-      status: 'operational',
+      module: "Dashboard Principal",
+      status: "operational",
       uptime: 99.8,
       performance: 95,
       users: 142,
-      lastUpdate: '2 min atrás',
-      description: 'Dashboard executivo funcionando perfeitamente'
+      lastUpdate: "2 min atrás",
+      description: "Dashboard executivo funcionando perfeitamente",
     },
     {
-      module: 'Sistema de Viagens',
-      status: 'operational',
+      module: "Sistema de Viagens",
+      status: "operational",
       uptime: 99.5,
       performance: 92,
       users: 89,
-      lastUpdate: '5 min atrás',
-      description: 'Reservas e planejamento de viagens operacional'
+      lastUpdate: "5 min atrás",
+      description: "Reservas e planejamento de viagens operacional",
     },
     {
-      module: 'Gestão Logística',
-      status: 'warning',
+      module: "Gestão Logística",
+      status: "warning",
       uptime: 98.2,
       performance: 87,
       users: 76,
-      lastUpdate: '1 min atrás',
-      description: 'Lentidão detectada no rastreamento de cargas'
+      lastUpdate: "1 min atrás",
+      description: "Lentidão detectada no rastreamento de cargas",
     },
     {
-      module: 'RH Marítimos',
-      status: 'operational',
+      module: "RH Marítimos",
+      status: "operational",
       uptime: 99.9,
       performance: 96,
       users: 54,
-      lastUpdate: '3 min atrás',
-      description: 'Gestão de certificados e conformidade ativa'
+      lastUpdate: "3 min atrás",
+      description: "Gestão de certificados e conformidade ativa",
     },
     {
-      module: 'Checklists Técnicos',
-      status: 'operational',
+      module: "Checklists Técnicos",
+      status: "operational",
       uptime: 99.7,
       performance: 94,
       users: 123,
-      lastUpdate: '1 min atrás',
-      description: 'Sistema de DP, Máquinas e Náutica funcional'
+      lastUpdate: "1 min atrás",
+      description: "Sistema de DP, Máquinas e Náutica funcional",
     },
     {
-      module: 'PEOTRAM',
-      status: 'operational',
+      module: "PEOTRAM",
+      status: "operational",
       uptime: 100,
       performance: 98,
       users: 34,
-      lastUpdate: 'agora',
-      description: 'Auditoria Petrobras completamente operacional'
+      lastUpdate: "agora",
+      description: "Auditoria Petrobras completamente operacional",
     },
     {
-      module: 'Assistente IA',
-      status: 'operational',
+      module: "Assistente IA",
+      status: "operational",
       uptime: 99.9,
       performance: 97,
       users: 167,
-      lastUpdate: 'tempo real',
-      description: 'Chatbot e comando de voz funcionando perfeitamente'
+      lastUpdate: "tempo real",
+      description: "Chatbot e comando de voz funcionando perfeitamente",
     },
     {
-      module: 'Sistema de Busca',
-      status: 'operational',
+      module: "Sistema de Busca",
+      status: "operational",
       uptime: 99.6,
       performance: 93,
       users: 145,
-      lastUpdate: '2 min atrás',
-      description: 'Busca avançada e filtros operacionais'
-    }
+      lastUpdate: "2 min atrás",
+      description: "Busca avançada e filtros operacionais",
+    },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'operational': return 'success';
-      case 'warning': return 'warning';
-      case 'error': return 'destructive';
-      case 'maintenance': return 'info';
-      default: return 'secondary';
+      case "operational":
+        return "success";
+      case "warning":
+        return "warning";
+      case "error":
+        return "destructive";
+      case "maintenance":
+        return "info";
+      default:
+        return "secondary";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'operational': return CheckCircle;
-      case 'warning': return AlertTriangle;
-      case 'error': return AlertTriangle;
-      case 'maintenance': return Clock;
-      default: return Activity;
+      case "operational":
+        return CheckCircle;
+      case "warning":
+        return AlertTriangle;
+      case "error":
+        return AlertTriangle;
+      case "maintenance":
+        return Clock;
+      default:
+        return Activity;
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'operational': return 'Operacional';
-      case 'warning': return 'Atenção';
-      case 'error': return 'Erro';
-      case 'maintenance': return 'Manutenção';
-      default: return 'Desconhecido';
+      case "operational":
+        return "Operacional";
+      case "warning":
+        return "Atenção";
+      case "error":
+        return "Erro";
+      case "maintenance":
+        return "Manutenção";
+      default:
+        return "Desconhecido";
     }
   };
 
   const overallStats = {
     totalUsers: systemModules.reduce((sum, module) => sum + module.users, 0),
     avgUptime: systemModules.reduce((sum, module) => sum + module.uptime, 0) / systemModules.length,
-    avgPerformance: systemModules.reduce((sum, module) => sum + module.performance, 0) / systemModules.length,
-    operationalModules: systemModules.filter(module => module.status === 'operational').length,
-    warningModules: systemModules.filter(module => module.status === 'warning').length,
-    errorModules: systemModules.filter(module => module.status === 'error').length
+    avgPerformance:
+      systemModules.reduce((sum, module) => sum + module.performance, 0) / systemModules.length,
+    operationalModules: systemModules.filter(module => module.status === "operational").length,
+    warningModules: systemModules.filter(module => module.status === "warning").length,
+    errorModules: systemModules.filter(module => module.status === "error").length,
   };
 
   return (
@@ -166,17 +182,21 @@ const SystemMonitoringDashboard: React.FC = () => {
         <div className="absolute inset-0 bg-dots opacity-20" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-success/10 to-transparent rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-primary/10 to-transparent rounded-full blur-3xl" />
-        
+
         <div className="relative z-10 container mx-auto p-6 space-y-8">
           {/* Enhanced Hero Section */}
-          <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-success via-success/90 to-success-glow p-8 text-success-foreground 
-            transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            
+          <div
+            className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-success via-success/90 to-success-glow p-8 text-success-foreground 
+            transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+          >
             {/* Animated Background Pattern */}
             <div className="absolute inset-0 bg-mesh opacity-20" />
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/15 to-transparent rounded-full blur-2xl animate-pulse" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-info/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
-            
+            <div
+              className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-info/20 to-transparent rounded-full blur-xl animate-pulse"
+              style={{ animationDelay: "1s" }}
+            />
+
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-6">
                 <div className="p-4 rounded-2xl bg-success/20 backdrop-blur-sm animate-pulse-glow">
@@ -192,12 +212,13 @@ const SystemMonitoringDashboard: React.FC = () => {
                   </p>
                 </div>
               </div>
-              
+
               <p className="text-lg opacity-95 mb-8 max-w-4xl drop-shadow-md font-medium">
-                🎉 <strong>AUDITORIA FINALIZADA COM SUCESSO!</strong> Sistema Nautilus One agora oferece experiência 
-                extraordinária com contraste perfeito, acessibilidade completa e funcionalidades revolucionárias.
+                🎉 <strong>AUDITORIA FINALIZADA COM SUCESSO!</strong> Sistema Nautilus One agora
+                oferece experiência extraordinária com contraste perfeito, acessibilidade completa e
+                funcionalidades revolucionárias.
               </p>
-              
+
               <div className="flex flex-wrap gap-4">
                 <div className="flex items-center gap-2 bg-primary/90 text-primary-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-primary shadow-lg border border-primary/30">
                   <Shield className="h-5 w-5 animate-pulse" />
@@ -223,7 +244,9 @@ const SystemMonitoringDashboard: React.FC = () => {
                   <CheckCircle className="w-8 h-8 text-success" />
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-success">{overallStats.operationalModules}/8</p>
+                  <p className="text-3xl font-bold text-success">
+                    {overallStats.operationalModules}/8
+                  </p>
                   <p className="text-sm text-muted-foreground">Módulos Operacionais</p>
                   <div className="flex items-center gap-1 mt-1">
                     <Star className="w-3 h-3 text-success" />
@@ -255,7 +278,9 @@ const SystemMonitoringDashboard: React.FC = () => {
                   <BarChart3 className="w-8 h-8 text-info" />
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-info">{overallStats.avgPerformance.toFixed(1)}%</p>
+                  <p className="text-3xl font-bold text-info">
+                    {overallStats.avgPerformance.toFixed(1)}%
+                  </p>
                   <p className="text-sm text-muted-foreground">Performance Média</p>
                   <div className="flex items-center gap-1 mt-1">
                     <Zap className="w-3 h-3 text-info" />
@@ -271,7 +296,9 @@ const SystemMonitoringDashboard: React.FC = () => {
                   <Award className="w-8 h-8 text-warning" />
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-warning">{overallStats.avgUptime.toFixed(1)}%</p>
+                  <p className="text-3xl font-bold text-warning">
+                    {overallStats.avgUptime.toFixed(1)}%
+                  </p>
                   <p className="text-sm text-muted-foreground">Uptime Médio</p>
                   <div className="flex items-center gap-1 mt-1">
                     <Crown className="w-3 h-3 text-warning" />
@@ -286,15 +313,24 @@ const SystemMonitoringDashboard: React.FC = () => {
           <Tabs defaultValue="modules" className="space-y-6">
             <div className="flex justify-center">
               <TabsList className="grid grid-cols-3 w-full max-w-2xl h-14 bg-card/50 backdrop-blur-sm border border-border/50">
-                <TabsTrigger value="modules" className="flex items-center gap-2 data-[state=active]:bg-success data-[state=active]:text-success-foreground">
+                <TabsTrigger
+                  value="modules"
+                  className="flex items-center gap-2 data-[state=active]:bg-success data-[state=active]:text-success-foreground"
+                >
                   <Activity className="h-5 w-5" />
                   <span className="hidden md:inline">Status dos Módulos</span>
                 </TabsTrigger>
-                <TabsTrigger value="audit" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <TabsTrigger
+                  value="audit"
+                  className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
                   <Shield className="h-5 w-5" />
                   <span className="hidden md:inline">Resultados da Auditoria</span>
                 </TabsTrigger>
-                <TabsTrigger value="performance" className="flex items-center gap-2 data-[state=active]:bg-info data-[state=active]:text-info-foreground">
+                <TabsTrigger
+                  value="performance"
+                  className="flex items-center gap-2 data-[state=active]:bg-info data-[state=active]:text-info-foreground"
+                >
                   <BarChart3 className="h-5 w-5" />
                   <span className="hidden md:inline">Performance</span>
                 </TabsTrigger>
@@ -313,7 +349,10 @@ const SystemMonitoringDashboard: React.FC = () => {
                   </CardTitle>
                   <CardDescription className="flex items-center gap-2">
                     Monitoramento em tempo real de todos os sistemas
-                    <Badge variant="outline" className="bg-success/10 text-success border-success/30">
+                    <Badge
+                      variant="outline"
+                      className="bg-success/10 text-success border-success/30"
+                    >
                       Tempo Real
                     </Badge>
                   </CardDescription>
@@ -323,19 +362,31 @@ const SystemMonitoringDashboard: React.FC = () => {
                     {systemModules.map((module, index) => {
                       const StatusIcon = getStatusIcon(module.status);
                       return (
-                        <Card key={index} className={`transition-all duration-300 hover:scale-[1.02] hover:shadow-lg border-${getStatusColor(module.status)}/20`}>
+                        <Card
+                          key={index}
+                          className={`transition-all duration-300 hover:scale-[1.02] hover:shadow-lg border-${getStatusColor(module.status)}/20`}
+                        >
                           <CardContent className="p-6">
                             <div className="flex items-start justify-between mb-4">
                               <div className="flex items-center gap-3">
-                                <div className={`p-2 rounded-lg bg-${getStatusColor(module.status)}/20`}>
-                                  <StatusIcon className={`w-5 h-5 text-${getStatusColor(module.status)}`} />
+                                <div
+                                  className={`p-2 rounded-lg bg-${getStatusColor(module.status)}/20`}
+                                >
+                                  <StatusIcon
+                                    className={`w-5 h-5 text-${getStatusColor(module.status)}`}
+                                  />
                                 </div>
                                 <div>
                                   <h3 className="font-semibold text-foreground">{module.module}</h3>
-                                  <p className="text-sm text-muted-foreground">{module.description}</p>
+                                  <p className="text-sm text-muted-foreground">
+                                    {module.description}
+                                  </p>
                                 </div>
                               </div>
-                              <Badge variant="outline" className={`bg-${getStatusColor(module.status)}/10 text-${getStatusColor(module.status)} border-${getStatusColor(module.status)}/30`}>
+                              <Badge
+                                variant="outline"
+                                className={`bg-${getStatusColor(module.status)}/10 text-${getStatusColor(module.status)} border-${getStatusColor(module.status)}/30`}
+                              >
                                 {getStatusText(module.status)}
                               </Badge>
                             </div>
@@ -377,7 +428,9 @@ const SystemMonitoringDashboard: React.FC = () => {
                     <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10">
                       <Shield className="w-6 h-6 text-primary" />
                     </div>
-                    <span className="text-gradient">✅ Auditoria Visual e Funcional - APROVADO</span>
+                    <span className="text-gradient">
+                      ✅ Auditoria Visual e Funcional - APROVADO
+                    </span>
                     <Crown className="w-6 h-6 text-warning animate-pulse" />
                   </CardTitle>
                 </CardHeader>
@@ -541,20 +594,33 @@ const SystemMonitoringDashboard: React.FC = () => {
                 </div>
                 <h2 className="text-3xl font-bold">🎉 Auditoria Concluída com Sucesso!</h2>
                 <p className="text-xl opacity-95 max-w-2xl mx-auto">
-                  O Sistema Nautilus One foi completamente auditado e otimizado. Todas as melhorias foram implementadas com sucesso, 
-                  resultando em uma experiência extraordinária para todos os usuários.
+                  O Sistema Nautilus One foi completamente auditado e otimizado. Todas as melhorias
+                  foram implementadas com sucesso, resultando em uma experiência extraordinária para
+                  todos os usuários.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4 mt-6">
-                  <Badge variant="outline" className="bg-success-foreground/20 text-success-foreground border-success-foreground/30 text-lg px-4 py-2">
+                  <Badge
+                    variant="outline"
+                    className="bg-success-foreground/20 text-success-foreground border-success-foreground/30 text-lg px-4 py-2"
+                  >
                     ✅ Visual Professional
                   </Badge>
-                  <Badge variant="outline" className="bg-success-foreground/20 text-success-foreground border-success-foreground/30 text-lg px-4 py-2">
+                  <Badge
+                    variant="outline"
+                    className="bg-success-foreground/20 text-success-foreground border-success-foreground/30 text-lg px-4 py-2"
+                  >
                     ✅ Acessibilidade WCAG AAA
                   </Badge>
-                  <Badge variant="outline" className="bg-success-foreground/20 text-success-foreground border-success-foreground/30 text-lg px-4 py-2">
+                  <Badge
+                    variant="outline"
+                    className="bg-success-foreground/20 text-success-foreground border-success-foreground/30 text-lg px-4 py-2"
+                  >
                     ✅ Performance Otimizada
                   </Badge>
-                  <Badge variant="outline" className="bg-success-foreground/20 text-success-foreground border-success-foreground/30 text-lg px-4 py-2">
+                  <Badge
+                    variant="outline"
+                    className="bg-success-foreground/20 text-success-foreground border-success-foreground/30 text-lg px-4 py-2"
+                  >
                     ✅ UX Extraordinária
                   </Badge>
                 </div>

@@ -1,26 +1,33 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useToast } from '@/hooks/use-toast';
-import { 
-  Database, 
-  Download, 
-  Upload, 
-  CheckCircle, 
-  AlertTriangle, 
-  Clock, 
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Database,
+  Download,
+  Upload,
+  CheckCircle,
+  AlertTriangle,
+  Clock,
   Shield,
   Server,
   HardDrive,
   FileText,
   Calendar,
   Activity,
-  RefreshCw
-} from 'lucide-react';
+  RefreshCw,
+} from "lucide-react";
 
 const SystemBackupAudit = () => {
   const [isCreatingBackup, setIsCreatingBackup] = useState(false);
@@ -30,55 +37,55 @@ const SystemBackupAudit = () => {
   const backupHistory = [
     {
       id: 1,
-      type: 'Automático',
-      date: '2024-01-15 02:00:00',
-      size: '2.4 GB',
-      status: 'Sucesso',
-      retention: '30 dias'
+      type: "Automático",
+      date: "2024-01-15 02:00:00",
+      size: "2.4 GB",
+      status: "Sucesso",
+      retention: "30 dias",
     },
     {
       id: 2,
-      type: 'Manual',
-      date: '2024-01-14 14:30:00',
-      size: '2.3 GB',
-      status: 'Sucesso',
-      retention: '90 dias'
+      type: "Manual",
+      date: "2024-01-14 14:30:00",
+      size: "2.3 GB",
+      status: "Sucesso",
+      retention: "90 dias",
     },
     {
       id: 3,
-      type: 'Automático',
-      date: '2024-01-14 02:00:00',
-      size: '2.2 GB',
-      status: 'Falha',
-      retention: '-'
-    }
+      type: "Automático",
+      date: "2024-01-14 02:00:00",
+      size: "2.2 GB",
+      status: "Falha",
+      retention: "-",
+    },
   ];
 
   const auditLogs = [
     {
       id: 1,
-      action: 'Login de usuário',
-      user: 'admin@nautilus.com',
-      timestamp: '2024-01-15 14:32:15',
-      ip: '192.168.1.100',
-      status: 'Sucesso'
+      action: "Login de usuário",
+      user: "admin@nautilus.com",
+      timestamp: "2024-01-15 14:32:15",
+      ip: "192.168.1.100",
+      status: "Sucesso",
     },
     {
       id: 2,
-      action: 'Modificação de certificado',
-      user: 'hr@nautilus.com',
-      timestamp: '2024-01-15 14:25:10',
-      ip: '192.168.1.101',
-      status: 'Sucesso'
+      action: "Modificação de certificado",
+      user: "hr@nautilus.com",
+      timestamp: "2024-01-15 14:25:10",
+      ip: "192.168.1.101",
+      status: "Sucesso",
     },
     {
       id: 3,
-      action: 'Tentativa de acesso negado',
-      user: 'user@domain.com',
-      timestamp: '2024-01-15 14:20:05',
-      ip: '203.0.113.45',
-      status: 'Falha'
-    }
+      action: "Tentativa de acesso negado",
+      user: "user@domain.com",
+      timestamp: "2024-01-15 14:20:05",
+      ip: "203.0.113.45",
+      status: "Falha",
+    },
   ];
 
   const systemMetrics = {
@@ -86,7 +93,7 @@ const SystemBackupAudit = () => {
     memoryUsage: 68,
     cpuUsage: 45,
     activeUsers: 127,
-    uptime: '15 dias, 8 horas'
+    uptime: "15 dias, 8 horas",
   };
 
   const createBackup = async () => {
@@ -101,7 +108,7 @@ const SystemBackupAudit = () => {
           setIsCreatingBackup(false);
           toast({
             title: "Backup Concluído",
-            description: "Backup do sistema criado com sucesso"
+            description: "Backup do sistema criado com sucesso",
           });
           return 100;
         }
@@ -112,9 +119,13 @@ const SystemBackupAudit = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'Sucesso':
-        return <Badge variant="default" className="bg-green-100 text-green-800">Sucesso</Badge>;
-      case 'Falha':
+      case "Sucesso":
+        return (
+          <Badge variant="default" className="bg-green-100 text-green-800">
+            Sucesso
+          </Badge>
+        );
+      case "Falha":
         return <Badge variant="destructive">Falha</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
@@ -245,9 +256,7 @@ const SystemBackupAudit = () => {
                 <Database className="w-5 h-5" />
                 Histórico de Backups
               </CardTitle>
-              <CardDescription>
-                Visualize e gerencie os backups do sistema
-              </CardDescription>
+              <CardDescription>Visualize e gerencie os backups do sistema</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -262,7 +271,7 @@ const SystemBackupAudit = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {backupHistory.map((backup) => (
+                  {backupHistory.map(backup => (
                     <TableRow key={backup.id}>
                       <TableCell>{backup.type}</TableCell>
                       <TableCell>{backup.date}</TableCell>
@@ -274,7 +283,7 @@ const SystemBackupAudit = () => {
                           <Button size="sm" variant="outline">
                             <Download className="w-4 h-4" />
                           </Button>
-                          {backup.status === 'Sucesso' && (
+                          {backup.status === "Sucesso" && (
                             <Button size="sm" variant="outline">
                               <Upload className="w-4 h-4" />
                             </Button>
@@ -296,9 +305,7 @@ const SystemBackupAudit = () => {
                 <FileText className="w-5 h-5" />
                 Logs de Auditoria
               </CardTitle>
-              <CardDescription>
-                Registro completo de atividades do sistema
-              </CardDescription>
+              <CardDescription>Registro completo de atividades do sistema</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -312,7 +319,7 @@ const SystemBackupAudit = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {auditLogs.map((log) => (
+                  {auditLogs.map(log => (
                     <TableRow key={log.id}>
                       <TableCell>{log.action}</TableCell>
                       <TableCell>{log.user}</TableCell>
@@ -380,7 +387,9 @@ const SystemBackupAudit = () => {
                   <AlertTriangle className="w-4 h-4 text-yellow-600" />
                   <div>
                     <p className="text-sm font-medium">Tentativas de login suspeitas</p>
-                    <p className="text-xs text-muted-foreground">3 tentativas falharam nas últimas 24h</p>
+                    <p className="text-xs text-muted-foreground">
+                      3 tentativas falharam nas últimas 24h
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">

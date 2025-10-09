@@ -1,27 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Ship, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  MapPin, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Ship,
+  Plus,
+  Edit,
+  Trash2,
+  MapPin,
   Calendar,
   Users,
   Anchor,
   AlertTriangle,
   CheckCircle,
-  Clock
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+  Clock,
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface Vessel {
   id: string;
@@ -54,16 +68,16 @@ interface VesselFormData {
 }
 
 const initialFormData: VesselFormData = {
-  name: '',
-  vessel_type: '',
-  imo_number: '',
-  flag_state: '',
+  name: "",
+  vessel_type: "",
+  imo_number: "",
+  flag_state: "",
   gross_tonnage: 0,
   built_year: new Date().getFullYear(),
-  classification_society: '',
-  status: 'active',
-  current_location: '',
-  crew_capacity: 0
+  classification_society: "",
+  status: "active",
+  current_location: "",
+  crew_capacity: 0,
 };
 
 export function VesselManagement() {
@@ -72,7 +86,7 @@ export function VesselManagement() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingVessel, setEditingVessel] = useState<Vessel | null>(null);
   const [formData, setFormData] = useState<VesselFormData>(initialFormData);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchVessels();
@@ -82,15 +96,15 @@ export function VesselManagement() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('vessels')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("vessels")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setVessels(data || []);
     } catch (error) {
-      console.error('Error fetching vessels:', error);
-      toast.error('Erro ao carregar navios');
+      console.error("Error fetching vessels:", error);
+      toast.error("Erro ao carregar navios");
     } finally {
       setLoading(false);
     }
@@ -102,24 +116,22 @@ export function VesselManagement() {
         ...formData,
         gross_tonnage: formData.gross_tonnage || null,
         built_year: formData.built_year || null,
-        crew_capacity: formData.crew_capacity || null
+        crew_capacity: formData.crew_capacity || null,
       };
 
       if (editingVessel) {
         const { error } = await supabase
-          .from('vessels')
+          .from("vessels")
           .update(vesselData)
-          .eq('id', editingVessel.id);
+          .eq("id", editingVessel.id);
 
         if (error) throw error;
-        toast.success('Navio atualizado com sucesso');
+        toast.success("Navio atualizado com sucesso");
       } else {
-        const { error } = await supabase
-          .from('vessels')
-          .insert([vesselData]);
+        const { error } = await supabase.from("vessels").insert([vesselData]);
 
         if (error) throw error;
-        toast.success('Navio cadastrado com sucesso');
+        toast.success("Navio cadastrado com sucesso");
       }
 
       setDialogOpen(false);
@@ -127,26 +139,23 @@ export function VesselManagement() {
       setFormData(initialFormData);
       fetchVessels();
     } catch (error) {
-      console.error('Error saving vessel:', error);
-      toast.error('Erro ao salvar navio');
+      console.error("Error saving vessel:", error);
+      toast.error("Erro ao salvar navio");
     }
   };
 
   const handleDeleteVessel = async (vesselId: string) => {
-    if (!confirm('Tem certeza que deseja excluir este navio?')) return;
+    if (!confirm("Tem certeza que deseja excluir este navio?")) return;
 
     try {
-      const { error } = await supabase
-        .from('vessels')
-        .delete()
-        .eq('id', vesselId);
+      const { error } = await supabase.from("vessels").delete().eq("id", vesselId);
 
       if (error) throw error;
-      toast.success('Navio excluído com sucesso');
+      toast.success("Navio excluído com sucesso");
       fetchVessels();
     } catch (error) {
-      console.error('Error deleting vessel:', error);
-      toast.error('Erro ao excluir navio');
+      console.error("Error deleting vessel:", error);
+      toast.error("Erro ao excluir navio");
     }
   };
 
@@ -155,41 +164,51 @@ export function VesselManagement() {
     setFormData({
       name: vessel.name,
       vessel_type: vessel.vessel_type,
-      imo_number: vessel.imo_number || '',
+      imo_number: vessel.imo_number || "",
       flag_state: vessel.flag_state,
       gross_tonnage: vessel.gross_tonnage || 0,
       built_year: vessel.built_year || new Date().getFullYear(),
-      classification_society: vessel.classification_society || '',
+      classification_society: vessel.classification_society || "",
       status: vessel.status,
-      current_location: vessel.current_location || '',
-      crew_capacity: vessel.crew_capacity || 0
+      current_location: vessel.current_location || "",
+      crew_capacity: vessel.crew_capacity || 0,
     });
     setDialogOpen(true);
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'maintenance': return 'bg-yellow-100 text-yellow-800';
-      case 'inactive': return 'bg-secondary text-secondary-foreground';
-      case 'dry_dock': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-secondary text-secondary-foreground';
+      case "active":
+        return "bg-green-100 text-green-800";
+      case "maintenance":
+        return "bg-yellow-100 text-yellow-800";
+      case "inactive":
+        return "bg-secondary text-secondary-foreground";
+      case "dry_dock":
+        return "bg-blue-100 text-blue-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active': return <CheckCircle className="w-4 h-4" />;
-      case 'maintenance': return <AlertTriangle className="w-4 h-4" />;
-      case 'inactive': return <Clock className="w-4 h-4" />;
-      default: return <Ship className="w-4 h-4" />;
+      case "active":
+        return <CheckCircle className="w-4 h-4" />;
+      case "maintenance":
+        return <AlertTriangle className="w-4 h-4" />;
+      case "inactive":
+        return <Clock className="w-4 h-4" />;
+      default:
+        return <Ship className="w-4 h-4" />;
     }
   };
 
-  const filteredVessels = vessels.filter(vessel =>
-    vessel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vessel.vessel_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vessel.flag_state.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredVessels = vessels.filter(
+    vessel =>
+      vessel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vessel.vessel_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vessel.flag_state.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -198,25 +217,24 @@ export function VesselManagement() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold">Gestão de Navios</h2>
-          <p className="text-muted-foreground">
-            Gerencie a frota de embarcações
-          </p>
+          <p className="text-muted-foreground">Gerencie a frota de embarcações</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => { setEditingVessel(null); setFormData(initialFormData); }}>
+            <Button
+              onClick={() => {
+                setEditingVessel(null);
+                setFormData(initialFormData);
+              }}
+            >
               <Plus className="w-4 h-4 mr-2" />
               Novo Navio
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>
-                {editingVessel ? 'Editar Navio' : 'Novo Navio'}
-              </DialogTitle>
-              <DialogDescription>
-                Preencha as informações do navio
-              </DialogDescription>
+              <DialogTitle>{editingVessel ? "Editar Navio" : "Novo Navio"}</DialogTitle>
+              <DialogDescription>Preencha as informações do navio</DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -224,13 +242,16 @@ export function VesselManagement() {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Ex: MV Atlantic Explorer"
                 />
               </div>
               <div>
                 <Label htmlFor="vessel_type">Tipo</Label>
-                <Select value={formData.vessel_type} onValueChange={(value) => setFormData({ ...formData, vessel_type: value })}>
+                <Select
+                  value={formData.vessel_type}
+                  onValueChange={value => setFormData({ ...formData, vessel_type: value })}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
@@ -251,7 +272,7 @@ export function VesselManagement() {
                 <Input
                   id="imo_number"
                   value={formData.imo_number}
-                  onChange={(e) => setFormData({ ...formData, imo_number: e.target.value })}
+                  onChange={e => setFormData({ ...formData, imo_number: e.target.value })}
                   placeholder="Ex: 1234567"
                 />
               </div>
@@ -260,7 +281,7 @@ export function VesselManagement() {
                 <Input
                   id="flag_state"
                   value={formData.flag_state}
-                  onChange={(e) => setFormData({ ...formData, flag_state: e.target.value })}
+                  onChange={e => setFormData({ ...formData, flag_state: e.target.value })}
                   placeholder="Ex: Brasil"
                 />
               </div>
@@ -270,7 +291,9 @@ export function VesselManagement() {
                   id="gross_tonnage"
                   type="number"
                   value={formData.gross_tonnage}
-                  onChange={(e) => setFormData({ ...formData, gross_tonnage: parseInt(e.target.value) || 0 })}
+                  onChange={e =>
+                    setFormData({ ...formData, gross_tonnage: parseInt(e.target.value) || 0 })
+                  }
                   placeholder="Ex: 50000"
                 />
               </div>
@@ -280,7 +303,12 @@ export function VesselManagement() {
                   id="built_year"
                   type="number"
                   value={formData.built_year}
-                  onChange={(e) => setFormData({ ...formData, built_year: parseInt(e.target.value) || new Date().getFullYear() })}
+                  onChange={e =>
+                    setFormData({
+                      ...formData,
+                      built_year: parseInt(e.target.value) || new Date().getFullYear(),
+                    })
+                  }
                   placeholder="Ex: 2020"
                 />
               </div>
@@ -289,7 +317,9 @@ export function VesselManagement() {
                 <Input
                   id="classification_society"
                   value={formData.classification_society}
-                  onChange={(e) => setFormData({ ...formData, classification_society: e.target.value })}
+                  onChange={e =>
+                    setFormData({ ...formData, classification_society: e.target.value })
+                  }
                   placeholder="Ex: DNV GL"
                 />
               </div>
@@ -299,13 +329,18 @@ export function VesselManagement() {
                   id="crew_capacity"
                   type="number"
                   value={formData.crew_capacity}
-                  onChange={(e) => setFormData({ ...formData, crew_capacity: parseInt(e.target.value) || 0 })}
+                  onChange={e =>
+                    setFormData({ ...formData, crew_capacity: parseInt(e.target.value) || 0 })
+                  }
                   placeholder="Ex: 25"
                 />
               </div>
               <div>
                 <Label htmlFor="status">Status</Label>
-                <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
+                <Select
+                  value={formData.status}
+                  onValueChange={value => setFormData({ ...formData, status: value })}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -322,7 +357,7 @@ export function VesselManagement() {
                 <Input
                   id="current_location"
                   value={formData.current_location}
-                  onChange={(e) => setFormData({ ...formData, current_location: e.target.value })}
+                  onChange={e => setFormData({ ...formData, current_location: e.target.value })}
                   placeholder="Ex: Porto de Santos"
                 />
               </div>
@@ -332,7 +367,7 @@ export function VesselManagement() {
                 Cancelar
               </Button>
               <Button onClick={handleSaveVessel}>
-                {editingVessel ? 'Atualizar' : 'Cadastrar'}
+                {editingVessel ? "Atualizar" : "Cadastrar"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -344,7 +379,7 @@ export function VesselManagement() {
         <Input
           placeholder="Buscar navios..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={e => setSearchTerm(e.target.value)}
           className="max-w-md"
         />
       </div>
@@ -359,7 +394,7 @@ export function VesselManagement() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredVessels.map((vessel) => (
+          {filteredVessels.map(vessel => (
             <Card key={vessel.id} className="hover:shadow-lg transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="flex items-center space-x-2">
@@ -370,9 +405,9 @@ export function VesselManagement() {
                   <Button variant="ghost" size="icon" onClick={() => handleEditVessel(vessel)}>
                     <Edit className="w-4 h-4" />
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => handleDeleteVessel(vessel.id)}
                     className="text-destructive hover:text-destructive"
                   >
@@ -386,15 +421,15 @@ export function VesselManagement() {
                     <Badge className={getStatusColor(vessel.status)}>
                       {getStatusIcon(vessel.status)}
                       <span className="ml-1">
-                        {vessel.status === 'active' && 'Ativo'}
-                        {vessel.status === 'maintenance' && 'Manutenção'}
-                        {vessel.status === 'inactive' && 'Inativo'}
-                        {vessel.status === 'dry_dock' && 'Dique Seco'}
+                        {vessel.status === "active" && "Ativo"}
+                        {vessel.status === "maintenance" && "Manutenção"}
+                        {vessel.status === "inactive" && "Inativo"}
+                        {vessel.status === "dry_dock" && "Dique Seco"}
                       </span>
                     </Badge>
                     <Badge variant="outline">{vessel.vessel_type}</Badge>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div className="flex items-center text-muted-foreground">
                       <Anchor className="w-3 h-3 mr-1" />
@@ -441,7 +476,9 @@ export function VesselManagement() {
           <Ship className="w-12 h-12 mx-auto text-muted-foreground" />
           <h3 className="mt-4 text-lg font-semibold">Nenhum navio encontrado</h3>
           <p className="text-muted-foreground">
-            {searchTerm ? 'Nenhum navio corresponde à sua busca.' : 'Comece cadastrando o primeiro navio.'}
+            {searchTerm
+              ? "Nenhum navio corresponde à sua busca."
+              : "Comece cadastrando o primeiro navio."}
           </p>
         </div>
       )}

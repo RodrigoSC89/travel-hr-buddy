@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { supabase } from '@/integrations/supabase/client';
-import { 
-  Brain, 
-  TrendingUp, 
-  AlertTriangle, 
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  Brain,
+  TrendingUp,
+  AlertTriangle,
   CheckCircle,
   Loader2,
   BarChart3,
   FileText,
-  Lightbulb
-} from 'lucide-react';
-import { toast } from 'sonner';
-import type { Checklist, ChecklistItem, ChecklistAIAnalysis, Anomaly } from './checklist-types';
+  Lightbulb,
+} from "lucide-react";
+import { toast } from "sonner";
+import type { Checklist, ChecklistItem, ChecklistAIAnalysis, Anomaly } from "./checklist-types";
 
 interface AIAnalysisProps {
   checklist: Checklist;
@@ -24,7 +24,7 @@ interface AIAnalysisProps {
 
 export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
   checklist,
-  onAnalysisComplete
+  onAnalysisComplete,
 }) => {
   const [analysis, setAnalysis] = useState<ChecklistAIAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
       setAnalyzing(true);
       setLoading(true);
 
-      const response = await supabase.functions.invoke('checklist-ai-analysis', {
+      const response = await supabase.functions.invoke("checklist-ai-analysis", {
         body: {
           checklistId: checklist.id,
           checklistData: {
@@ -44,9 +44,9 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
             items: checklist.items,
             vessel: checklist.vessel,
             status: checklist.status,
-            complianceScore: checklist.complianceScore
-          }
-        }
+            complianceScore: checklist.complianceScore,
+          },
+        },
       });
 
       if (response.error) {
@@ -58,29 +58,27 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
       onAnalysisComplete?.(aiAnalysis);
 
       // Save analysis to database
-      const { error: dbError } = await supabase
-        .from('checklist_ai_analysis')
-        .insert({
-          checklist_id: checklist.id,
-          overall_score: aiAnalysis.overallScore,
-          analysis_type: 'comprehensive',
-          analysis_data: aiAnalysis as any,
-          recommendations: aiAnalysis.suggestions,
-          issues_found: aiAnalysis.anomalies.length,
-          critical_issues: aiAnalysis.anomalies.filter(a => a.severity === 'critical').length,
-          confidence_level: 0.85,
-          inconsistencies: aiAnalysis.inconsistencies || [],
-          missing_fields: aiAnalysis.missingItems || []
-        });
+      const { error: dbError } = await supabase.from("checklist_ai_analysis").insert({
+        checklist_id: checklist.id,
+        overall_score: aiAnalysis.overallScore,
+        analysis_type: "comprehensive",
+        analysis_data: aiAnalysis as any,
+        recommendations: aiAnalysis.suggestions,
+        issues_found: aiAnalysis.anomalies.length,
+        critical_issues: aiAnalysis.anomalies.filter(a => a.severity === "critical").length,
+        confidence_level: 0.85,
+        inconsistencies: aiAnalysis.inconsistencies || [],
+        missing_fields: aiAnalysis.missingItems || [],
+      });
 
       if (dbError) {
-        console.error('Error saving analysis:', dbError);
+        console.error("Error saving analysis:", dbError);
       }
 
-      toast.success('Análise AI concluída com sucesso!');
+      toast.success("Análise AI concluída com sucesso!");
     } catch (error) {
-      console.error('Error running AI analysis:', error);
-      toast.error('Erro ao executar análise de IA');
+      console.error("Error running AI analysis:", error);
+      toast.error("Erro ao executar análise de IA");
     } finally {
       setAnalyzing(false);
       setLoading(false);
@@ -89,21 +87,31 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-600 bg-red-50 border-red-200';
-      case 'high': return 'text-orange-600 bg-orange-50 border-orange-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-blue-600 bg-blue-50 border-blue-200';
-      default: return 'text-muted-foreground bg-gray-50 border-gray-200';
+      case "critical":
+        return "text-red-600 bg-red-50 border-red-200";
+      case "high":
+        return "text-orange-600 bg-orange-50 border-orange-200";
+      case "medium":
+        return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      case "low":
+        return "text-blue-600 bg-blue-50 border-blue-200";
+      default:
+        return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getRiskLevelColor = (risk: string) => {
     switch (risk) {
-      case 'critical': return 'text-red-600';
-      case 'high': return 'text-orange-600';
-      case 'medium': return 'text-yellow-600';
-      case 'low': return 'text-green-600';
-      default: return 'text-muted-foreground';
+      case "critical":
+        return "text-red-600";
+      case "high":
+        return "text-orange-600";
+      case "medium":
+        return "text-yellow-600";
+      case "low":
+        return "text-green-600";
+      default:
+        return "text-muted-foreground";
     }
   };
 
@@ -117,7 +125,8 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
             Análise AI do Checklist
           </CardTitle>
           <CardDescription>
-            Análise inteligente baseada em machine learning para identificar anomalias e sugerir melhorias
+            Análise inteligente baseada em machine learning para identificar anomalias e sugerir
+            melhorias
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -126,7 +135,8 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
               <Brain className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">Análise AI Disponível</h3>
               <p className="text-muted-foreground mb-4">
-                Execute uma análise inteligente para identificar padrões, anomalias e sugestões de melhoria
+                Execute uma análise inteligente para identificar padrões, anomalias e sugestões de
+                melhoria
               </p>
               <Button onClick={runAIAnalysis} disabled={analyzing}>
                 {analyzing ? (
@@ -153,7 +163,9 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
                 <div className="text-sm text-muted-foreground">Anomalias</div>
               </div>
               <div className="text-center p-4 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">{analysis.suggestions.length}</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {analysis.suggestions.length}
+                </div>
                 <div className="text-sm text-muted-foreground">Sugestões</div>
               </div>
               <div className="text-center p-4 bg-purple-50 rounded-lg">
@@ -184,9 +196,14 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
               </CardHeader>
               <CardContent className="space-y-4">
                 {analysis.anomalies.map((anomaly, index) => (
-                  <div key={index} className={`p-4 rounded-lg border ${getSeverityColor(anomaly.severity)}`}>
+                  <div
+                    key={index}
+                    className={`p-4 rounded-lg border ${getSeverityColor(anomaly.severity)}`}
+                  >
                     <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-semibold">{anomaly.type.replace('_', ' ').toUpperCase()}</h4>
+                      <h4 className="font-semibold">
+                        {anomaly.type.replace("_", " ").toUpperCase()}
+                      </h4>
                       <Badge variant="outline" className={getSeverityColor(anomaly.severity)}>
                         {anomaly.severity}
                       </Badge>
@@ -221,7 +238,10 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
             <CardContent>
               <div className="space-y-3">
                 {analysis.suggestions.map((suggestion, index) => (
-                  <div key={index} className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <div
+                    key={index}
+                    className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200"
+                  >
                     <Lightbulb className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
                     <p className="text-sm">{suggestion}</p>
                   </div>
@@ -237,28 +257,37 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
                 <BarChart3 className="w-5 h-5 text-blue-600" />
                 Comparação Histórica
               </CardTitle>
-              <CardDescription>
-                Análise comparativa com checklists similares
-              </CardDescription>
+              <CardDescription>Análise comparativa com checklists similares</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="text-center p-4 border rounded-lg">
-                  <div className="text-xl font-bold">{analysis.comparisonWithHistory.similarChecklists}</div>
+                  <div className="text-xl font-bold">
+                    {analysis.comparisonWithHistory.similarChecklists}
+                  </div>
                   <div className="text-sm text-muted-foreground">Checklists Similares</div>
                 </div>
                 <div className="text-center p-4 border rounded-lg">
-                  <div className="text-xl font-bold">{analysis.comparisonWithHistory.averageScore}%</div>
+                  <div className="text-xl font-bold">
+                    {analysis.comparisonWithHistory.averageScore}%
+                  </div>
                   <div className="text-sm text-muted-foreground">Score Médio</div>
                 </div>
                 <div className="text-center p-4 border rounded-lg">
-                  <div className={`text-xl font-bold ${
-                    analysis.comparisonWithHistory.trendAnalysis === 'improving' ? 'text-green-600' :
-                    analysis.comparisonWithHistory.trendAnalysis === 'declining' ? 'text-red-600' :
-                    'text-yellow-600'
-                  }`}>
-                    {analysis.comparisonWithHistory.trendAnalysis === 'improving' ? '↗️' :
-                     analysis.comparisonWithHistory.trendAnalysis === 'declining' ? '↘️' : '→'}
+                  <div
+                    className={`text-xl font-bold ${
+                      analysis.comparisonWithHistory.trendAnalysis === "improving"
+                        ? "text-green-600"
+                        : analysis.comparisonWithHistory.trendAnalysis === "declining"
+                          ? "text-red-600"
+                          : "text-yellow-600"
+                    }`}
+                  >
+                    {analysis.comparisonWithHistory.trendAnalysis === "improving"
+                      ? "↗️"
+                      : analysis.comparisonWithHistory.trendAnalysis === "declining"
+                        ? "↘️"
+                        : "→"}
                   </div>
                   <div className="text-sm text-muted-foreground">Tendência</div>
                 </div>
@@ -281,7 +310,10 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
               <CardContent>
                 <div className="space-y-3">
                   {analysis.predictiveInsights.map((insight, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200"
+                    >
                       <TrendingUp className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
                       <p className="text-sm">{insight}</p>
                     </div>

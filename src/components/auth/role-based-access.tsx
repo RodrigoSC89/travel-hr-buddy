@@ -1,13 +1,13 @@
-import React from 'react';
-import { usePermissions, UserRole } from '@/hooks/use-permissions';
-import { Card, CardContent } from '@/components/ui/card';
-import { Shield, AlertTriangle } from 'lucide-react';
+import React from "react";
+import { usePermissions, UserRole } from "@/hooks/use-permissions";
+import { Card, CardContent } from "@/components/ui/card";
+import { Shield, AlertTriangle } from "lucide-react";
 
 interface RoleBasedAccessProps {
   roles?: UserRole[];
   permissions?: Array<{
-    permission: 'users' | 'certificates' | 'reports' | 'system_settings' | 'analytics';
-    action?: 'read' | 'write' | 'delete' | 'manage';
+    permission: "users" | "certificates" | "reports" | "system_settings" | "analytics";
+    action?: "read" | "write" | "delete" | "manage";
   }>;
   children: React.ReactNode;
   fallback?: React.ReactNode;
@@ -19,7 +19,7 @@ export const RoleBasedAccess: React.FC<RoleBasedAccessProps> = ({
   permissions,
   children,
   fallback,
-  showFallback = true
+  showFallback = true,
 }) => {
   const { userRole, hasPermission, isLoading } = usePermissions();
 
@@ -35,17 +35,17 @@ export const RoleBasedAccess: React.FC<RoleBasedAccessProps> = ({
   if (roles && userRole) {
     const hasRoleAccess = roles.includes(userRole);
     if (!hasRoleAccess) {
-      return showFallback ? (fallback || <AccessDeniedFallback />) : null;
+      return showFallback ? fallback || <AccessDeniedFallback /> : null;
     }
   }
 
   // Verificar acesso por permissões específicas
   if (permissions && permissions.length > 0) {
-    const hasPermissionAccess = permissions.some(({ permission, action = 'read' }) =>
+    const hasPermissionAccess = permissions.some(({ permission, action = "read" }) =>
       hasPermission(permission, action)
     );
     if (!hasPermissionAccess) {
-      return showFallback ? (fallback || <AccessDeniedFallback />) : null;
+      return showFallback ? fallback || <AccessDeniedFallback /> : null;
     }
   }
 

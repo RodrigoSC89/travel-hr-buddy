@@ -5,6 +5,7 @@
 The Otimização (Optimization) module focuses on **system performance optimization and efficiency improvements**. It provides tools and analytics to identify bottlenecks, optimize resource usage, and improve overall system performance.
 
 **Key Use Cases:**
+
 - Monitor application performance metrics
 - Identify performance bottlenecks
 - Optimize database queries and API calls

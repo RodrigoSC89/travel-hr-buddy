@@ -1,8 +1,8 @@
-import React from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -38,8 +38,8 @@ export class ErrorBoundaryWrapper extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
+
     this.setState({
       error,
       errorInfo,
@@ -92,13 +92,11 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, onRetry }) => {
           <p className="text-center text-muted-foreground">
             Ocorreu um erro inesperado. Você pode tentar recarregar a página ou voltar ao início.
           </p>
-          
-          {process.env.NODE_ENV === 'development' && error && (
+
+          {process.env.NODE_ENV === "development" && error && (
             <div className="mt-4 p-3 bg-muted rounded-md">
               <p className="text-sm font-medium mb-2">Detalhes do erro (desenvolvimento):</p>
-              <p className="text-xs text-muted-foreground font-mono break-all">
-                {error.message}
-              </p>
+              <p className="text-xs text-muted-foreground font-mono break-all">{error.message}</p>
             </div>
           )}
 
@@ -107,11 +105,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, onRetry }) => {
               <RefreshCw className="h-4 w-4 mr-2" />
               Tentar novamente
             </Button>
-            <Button 
-              variant="outline" 
-              onClick={() => navigate('/')}
-              className="w-full"
-            >
+            <Button variant="outline" onClick={() => navigate("/")} className="w-full">
               <Home className="h-4 w-4 mr-2" />
               Voltar ao início
             </Button>

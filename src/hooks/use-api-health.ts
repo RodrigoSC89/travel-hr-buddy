@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { apiHealthMonitor } from '@/utils/api-health-monitor';
+import { useState, useEffect } from "react";
+import { apiHealthMonitor } from "@/utils/api-health-monitor";
 
 interface APIHealthStatus {
   name: string;
-  status: 'healthy' | 'degraded' | 'down';
+  status: "healthy" | "degraded" | "down";
   lastCheck: Date;
   responseTime?: number;
   errorCount: number;
@@ -19,9 +19,9 @@ export const useAPIHealth = (apiName?: string) => {
 
   useEffect(() => {
     // Subscribe to health status updates
-    const unsubscribe = apiHealthMonitor.subscribe((status) => {
+    const unsubscribe = apiHealthMonitor.subscribe(status => {
       setHealthStatus(status);
-      
+
       if (apiName) {
         setSpecificStatus(status.get(apiName));
       }
@@ -44,8 +44,8 @@ export const useAPIHealth = (apiName?: string) => {
     specificStatus: apiName ? specificStatus : undefined,
     canMakeRequest,
     resetCircuitBreaker,
-    isHealthy: specificStatus?.status === 'healthy',
-    isDegraded: specificStatus?.status === 'degraded',
-    isDown: specificStatus?.status === 'down',
+    isHealthy: specificStatus?.status === "healthy",
+    isDegraded: specificStatus?.status === "degraded",
+    isDown: specificStatus?.status === "down",
   };
 };

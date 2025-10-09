@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -16,9 +16,7 @@ export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ childr
     <div
       className={cn(
         "transition-all duration-300 ease-in-out",
-        isVisible 
-          ? "opacity-100 translate-y-0" 
-          : "opacity-0 translate-y-2"
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
       )}
     >
       {children}

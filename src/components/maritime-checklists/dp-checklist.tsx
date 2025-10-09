@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { 
-  ArrowLeft, 
-  Save, 
-  Send, 
-  AlertTriangle, 
-  CheckCircle, 
-  Camera, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import {
+  ArrowLeft,
+  Save,
+  Send,
+  AlertTriangle,
+  CheckCircle,
+  Camera,
   Mic,
   MapPin,
   Ship,
   User,
   Clock,
-  Target
-} from 'lucide-react';
-import { toast } from 'sonner';
-import type { Checklist, ChecklistItem } from './checklist-types';
+  Target,
+} from "lucide-react";
+import { toast } from "sonner";
+import type { Checklist, ChecklistItem } from "./checklist-types";
 
 interface DPChecklistProps {
   checklist: Checklist;
@@ -34,121 +34,124 @@ interface DPChecklistProps {
 // Mock DP-specific checklist items
 const dpChecklistItems: ChecklistItem[] = [
   {
-    id: 'dp-1',
-    title: 'Verificação do Sistema de Posicionamento Dinâmico',
-    description: 'Verificar se todos os componentes do sistema DP estão operacionais',
-    type: 'boolean',
+    id: "dp-1",
+    title: "Verificação do Sistema de Posicionamento Dinâmico",
+    description: "Verificar se todos os componentes do sistema DP estão operacionais",
+    type: "boolean",
     required: true,
-    category: 'Sistema Principal',
+    category: "Sistema Principal",
     order: 1,
-    status: 'pending'
+    status: "pending",
   },
   {
-    id: 'dp-2',
-    title: 'Teste dos Propulsores',
-    description: 'Verificar funcionamento e resposta dos propulsores principais e de proa',
-    type: 'boolean',
+    id: "dp-2",
+    title: "Teste dos Propulsores",
+    description: "Verificar funcionamento e resposta dos propulsores principais e de proa",
+    type: "boolean",
     required: true,
-    category: 'Propulsão',
+    category: "Propulsão",
     order: 2,
-    status: 'pending'
+    status: "pending",
   },
   {
-    id: 'dp-3',
-    title: 'Calibração dos Sensores de Posição',
-    description: 'Verificar calibração dos sensores DGPS, RAW data e outros sistemas de referência',
-    type: 'boolean',
+    id: "dp-3",
+    title: "Calibração dos Sensores de Posição",
+    description: "Verificar calibração dos sensores DGPS, RAW data e outros sistemas de referência",
+    type: "boolean",
     required: true,
-    category: 'Sensores',
+    category: "Sensores",
     order: 3,
-    status: 'pending'
+    status: "pending",
   },
   {
-    id: 'dp-4',
-    title: 'Teste de Redundância do Sistema',
-    description: 'Verificar a redundância e backup dos sistemas críticos',
-    type: 'boolean',
+    id: "dp-4",
+    title: "Teste de Redundância do Sistema",
+    description: "Verificar a redundância e backup dos sistemas críticos",
+    type: "boolean",
     required: true,
-    category: 'Redundância',
+    category: "Redundância",
     order: 4,
-    status: 'pending'
+    status: "pending",
   },
   {
-    id: 'dp-5',
-    title: 'Pressão Hidráulica dos Propulsores',
-    description: 'Medir e registrar a pressão hidráulica dos sistemas de propulsão',
-    type: 'number',
+    id: "dp-5",
+    title: "Pressão Hidráulica dos Propulsores",
+    description: "Medir e registrar a pressão hidráulica dos sistemas de propulsão",
+    type: "number",
     required: true,
-    category: 'Medições',
+    category: "Medições",
     order: 5,
-    unit: 'bar',
+    unit: "bar",
     minValue: 150,
     maxValue: 200,
-    status: 'pending'
+    status: "pending",
   },
   {
-    id: 'dp-6',
-    title: 'Documentação e Certificados',
-    description: 'Verificar validade dos certificados DP e documentação técnica',
-    type: 'boolean',
+    id: "dp-6",
+    title: "Documentação e Certificados",
+    description: "Verificar validade dos certificados DP e documentação técnica",
+    type: "boolean",
     required: true,
-    category: 'Documentação',
+    category: "Documentação",
     order: 6,
-    status: 'pending'
-  }
+    status: "pending",
+  },
 ];
 
 export const DPChecklist: React.FC<DPChecklistProps> = ({
   checklist: initialChecklist,
   onSave,
   onSubmit,
-  onBack
+  onBack,
 }) => {
   const [checklist, setChecklist] = useState<Checklist>({
     ...initialChecklist,
-    items: dpChecklistItems
+    items: dpChecklistItems,
   });
 
-  const [activeTab, setActiveTab] = useState('items');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState("items");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const categories = Array.from(new Set(checklist.items.map(item => item.category)));
-  const filteredItems = selectedCategory === 'all' 
-    ? checklist.items 
-    : checklist.items.filter(item => item.category === selectedCategory);
+  const filteredItems =
+    selectedCategory === "all"
+      ? checklist.items
+      : checklist.items.filter(item => item.category === selectedCategory);
 
-  const completedItems = checklist.items.filter(item => item.status === 'completed').length;
+  const completedItems = checklist.items.filter(item => item.status === "completed").length;
   const totalItems = checklist.items.length;
   const progressPercentage = (completedItems / totalItems) * 100;
 
   const handleItemChange = (itemId: string, field: string, value: any) => {
     setChecklist(prev => ({
       ...prev,
-      items: prev.items.map(item => 
-        item.id === itemId 
-          ? { 
-              ...item, 
+      items: prev.items.map(item =>
+        item.id === itemId
+          ? {
+              ...item,
               [field]: value,
-              status: field === 'value' && value !== undefined ? 'completed' : item.status,
-              timestamp: field === 'value' ? new Date().toISOString() : item.timestamp
+              status: field === "value" && value !== undefined ? "completed" : item.status,
+              timestamp: field === "value" ? new Date().toISOString() : item.timestamp,
             }
           : item
-      )
+      ),
     }));
   };
 
   const handleSave = async () => {
     try {
       await onSave(checklist);
-      toast.success('Checklist salvo com sucesso!');
+      toast.success("Checklist salvo com sucesso!");
     } catch (error) {
-      toast.error('Erro ao salvar checklist');
+      toast.error("Erro ao salvar checklist");
     }
   };
 
   const handleSubmit = async () => {
-    const incompleteRequired = checklist.items.filter(item => item.required && item.status !== 'completed');
-    
+    const incompleteRequired = checklist.items.filter(
+      item => item.required && item.status !== "completed"
+    );
+
     if (incompleteRequired.length > 0) {
       toast.error(`Existem ${incompleteRequired.length} itens obrigatórios não concluídos`);
       return;
@@ -157,50 +160,50 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
     try {
       await onSubmit({
         ...checklist,
-        status: 'pending_review',
-        completedAt: new Date().toISOString()
+        status: "pending_review",
+        completedAt: new Date().toISOString(),
       });
-      toast.success('Checklist enviado para revisão!');
+      toast.success("Checklist enviado para revisão!");
     } catch (error) {
-      toast.error('Erro ao enviar checklist');
+      toast.error("Erro ao enviar checklist");
     }
   };
 
   const renderItemInput = (item: ChecklistItem) => {
     switch (item.type) {
-      case 'boolean':
+      case "boolean":
         return (
           <Checkbox
             checked={item.value === true}
-            onCheckedChange={(checked) => handleItemChange(item.id, 'value', checked)}
+            onCheckedChange={checked => handleItemChange(item.id, "value", checked)}
             className="mr-2"
           />
         );
-      
-      case 'number':
+
+      case "number":
         return (
           <div className="flex items-center gap-2">
             <Input
               type="number"
-              value={item.value || ''}
-              onChange={(e) => handleItemChange(item.id, 'value', parseFloat(e.target.value))}
+              value={item.value || ""}
+              onChange={e => handleItemChange(item.id, "value", parseFloat(e.target.value))}
               placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
               className="w-32"
             />
             {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
           </div>
         );
-      
-      case 'text':
+
+      case "text":
         return (
           <Input
-            value={item.value || ''}
-            onChange={(e) => handleItemChange(item.id, 'value', e.target.value)}
+            value={item.value || ""}
+            onChange={e => handleItemChange(item.id, "value", e.target.value)}
             placeholder="Digite sua resposta..."
             className="w-full"
           />
         );
-      
+
       default:
         return null;
     }
@@ -226,7 +229,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
               <Badge variant="outline" className="bg-blue-50">
                 Dynamic Positioning
               </Badge>
-              <Badge variant={checklist.priority === 'high' ? 'destructive' : 'default'}>
+              <Badge variant={checklist.priority === "high" ? "destructive" : "default"}>
                 {checklist.priority}
               </Badge>
             </div>
@@ -260,16 +263,16 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                 {/* Category Filter */}
                 <div className="flex flex-wrap gap-2">
                   <Button
-                    variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                    variant={selectedCategory === "all" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedCategory('all')}
+                    onClick={() => setSelectedCategory("all")}
                   >
                     Todas as Categorias
                   </Button>
                   {categories.map(category => (
                     <Button
                       key={category}
-                      variant={selectedCategory === category ? 'default' : 'outline'}
+                      variant={selectedCategory === category ? "default" : "outline"}
                       size="sm"
                       onClick={() => setSelectedCategory(category)}
                     >
@@ -280,10 +283,13 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
 
                 {/* Checklist Items */}
                 <div className="space-y-4">
-                  {filteredItems.map((item) => (
-                    <Card key={item.id} className={`transition-colors ${
-                      item.status === 'completed' ? 'bg-green-50 border-green-200' : ''
-                    }`}>
+                  {filteredItems.map(item => (
+                    <Card
+                      key={item.id}
+                      className={`transition-colors ${
+                        item.status === "completed" ? "bg-green-50 border-green-200" : ""
+                      }`}
+                    >
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -298,26 +304,24 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                                 )}
                               </div>
                             </div>
-                            <CardDescription className="mt-2">
-                              {item.description}
-                            </CardDescription>
+                            <CardDescription className="mt-2">{item.description}</CardDescription>
                           </div>
                           <div className="flex items-center gap-2">
-                            {item.status === 'completed' && (
+                            {item.status === "completed" && (
                               <CheckCircle className="w-5 h-5 text-green-500" />
                             )}
                             <Badge variant="outline">{item.category}</Badge>
                           </div>
                         </div>
                       </CardHeader>
-                      
+
                       <CardContent className="space-y-3">
                         {/* Notes */}
                         <div>
                           <label className="text-sm font-medium">Observações:</label>
                           <Textarea
-                            value={item.notes || ''}
-                            onChange={(e) => handleItemChange(item.id, 'notes', e.target.value)}
+                            value={item.notes || ""}
+                            onChange={e => handleItemChange(item.id, "notes", e.target.value)}
                             placeholder="Adicione observações sobre este item..."
                             className="mt-1"
                             rows={2}
@@ -345,16 +349,12 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                 <Card>
                   <CardHeader>
                     <CardTitle>Evidências Coletadas</CardTitle>
-                    <CardDescription>
-                      Documentos, fotos e registros da inspeção
-                    </CardDescription>
+                    <CardDescription>Documentos, fotos e registros da inspeção</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8">
                       <Camera className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">
-                        Nenhuma evidência coletada ainda
-                      </p>
+                      <p className="text-muted-foreground">Nenhuma evidência coletada ainda</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -364,9 +364,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                 <Card>
                   <CardHeader>
                     <CardTitle>Resumo da Inspeção</CardTitle>
-                    <CardDescription>
-                      Status geral e próximos passos
-                    </CardDescription>
+                    <CardDescription>Status geral e próximos passos</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
@@ -375,7 +373,9 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                         <div className="text-sm text-muted-foreground">Itens Concluídos</div>
                       </div>
                       <div className="text-center p-4 bg-orange-50 rounded-lg">
-                        <div className="text-2xl font-bold text-orange-600">{totalItems - completedItems}</div>
+                        <div className="text-2xl font-bold text-orange-600">
+                          {totalItems - completedItems}
+                        </div>
                         <div className="text-sm text-muted-foreground">Itens Pendentes</div>
                       </div>
                     </div>
@@ -405,11 +405,21 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
-                <div><strong>Nome:</strong> {checklist.vessel.name}</div>
-                <div><strong>Tipo:</strong> {checklist.vessel.type}</div>
-                <div><strong>IMO:</strong> {checklist.vessel.imo}</div>
-                <div><strong>Bandeira:</strong> {checklist.vessel.flag}</div>
-                <div><strong>Operador:</strong> {checklist.vessel.operator}</div>
+                <div>
+                  <strong>Nome:</strong> {checklist.vessel.name}
+                </div>
+                <div>
+                  <strong>Tipo:</strong> {checklist.vessel.type}
+                </div>
+                <div>
+                  <strong>IMO:</strong> {checklist.vessel.imo}
+                </div>
+                <div>
+                  <strong>Bandeira:</strong> {checklist.vessel.flag}
+                </div>
+                <div>
+                  <strong>Operador:</strong> {checklist.vessel.operator}
+                </div>
               </CardContent>
             </Card>
 
@@ -422,10 +432,18 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
-                <div><strong>Nome:</strong> {checklist.inspector.name}</div>
-                <div><strong>Licença:</strong> {checklist.inspector.license}</div>
-                <div><strong>Empresa:</strong> {checklist.inspector.company}</div>
-                <div><strong>Email:</strong> {checklist.inspector.email}</div>
+                <div>
+                  <strong>Nome:</strong> {checklist.inspector.name}
+                </div>
+                <div>
+                  <strong>Licença:</strong> {checklist.inspector.license}
+                </div>
+                <div>
+                  <strong>Empresa:</strong> {checklist.inspector.company}
+                </div>
+                <div>
+                  <strong>Email:</strong> {checklist.inspector.email}
+                </div>
               </CardContent>
             </Card>
 
@@ -448,7 +466,10 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                 </div>
                 <div className="flex justify-between">
                   <span>Prioridade:</span>
-                  <Badge variant={checklist.priority === 'high' ? 'destructive' : 'default'} className="text-xs">
+                  <Badge
+                    variant={checklist.priority === "high" ? "destructive" : "default"}
+                    className="text-xs"
+                  >
                     {checklist.priority}
                   </Badge>
                 </div>

@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Zap, 
-  Cloud, 
-  Database, 
-  Shield, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Zap,
+  Cloud,
+  Database,
+  Shield,
   Webhook,
   CheckCircle,
   AlertCircle,
   Settings,
   Plus,
   Trash2,
-  RefreshCw
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
+  RefreshCw,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Integration {
   id: string;
   name: string;
   description: string;
-  category: 'payment' | 'crm' | 'analytics' | 'security' | 'communication' | 'storage';
-  status: 'connected' | 'disconnected' | 'error';
+  category: "payment" | "crm" | "analytics" | "security" | "communication" | "storage";
+  status: "connected" | "disconnected" | "error";
   icon: React.ReactNode;
   configurable: boolean;
   webhookUrl?: string;
@@ -48,118 +48,125 @@ interface APIKey {
 export const APIIntegrationsHub: React.FC = () => {
   const { toast } = useToast();
   const { user } = useAuth();
-  
+
   const [integrations, setIntegrations] = useState<Integration[]>([
     {
-      id: '1',
-      name: 'Stripe',
-      description: 'Processamento de pagamentos',
-      category: 'payment',
-      status: 'connected',
+      id: "1",
+      name: "Stripe",
+      description: "Processamento de pagamentos",
+      category: "payment",
+      status: "connected",
       icon: <Zap className="h-5 w-5" />,
       configurable: true,
-      lastSync: new Date(Date.now() - 2 * 60000)
+      lastSync: new Date(Date.now() - 2 * 60000),
     },
     {
-      id: '2',
-      name: 'HubSpot',
-      description: 'CRM e automação de marketing',
-      category: 'crm',
-      status: 'disconnected',
+      id: "2",
+      name: "HubSpot",
+      description: "CRM e automação de marketing",
+      category: "crm",
+      status: "disconnected",
       icon: <Database className="h-5 w-5" />,
-      configurable: true
+      configurable: true,
     },
     {
-      id: '3',
-      name: 'Google Analytics',
-      description: 'Análise de dados e métricas',
-      category: 'analytics',
-      status: 'connected',
+      id: "3",
+      name: "Google Analytics",
+      description: "Análise de dados e métricas",
+      category: "analytics",
+      status: "connected",
       icon: <Cloud className="h-5 w-5" />,
       configurable: false,
-      lastSync: new Date(Date.now() - 5 * 60000)
+      lastSync: new Date(Date.now() - 5 * 60000),
     },
     {
-      id: '4',
-      name: 'Auth0',
-      description: 'Autenticação e segurança',
-      category: 'security',
-      status: 'error',
+      id: "4",
+      name: "Auth0",
+      description: "Autenticação e segurança",
+      category: "security",
+      status: "error",
       icon: <Shield className="h-5 w-5" />,
-      configurable: true
-    }
+      configurable: true,
+    },
   ]);
 
   const [apiKeys, setApiKeys] = useState<APIKey[]>([
     {
-      id: '1',
-      name: 'Production API',
-      key: 'naut_prod_' + Math.random().toString(36).substring(7),
-      permissions: ['read', 'write', 'admin'],
+      id: "1",
+      name: "Production API",
+      key: "naut_prod_" + Math.random().toString(36).substring(7),
+      permissions: ["read", "write", "admin"],
       createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       lastUsed: new Date(Date.now() - 30 * 60000),
-      active: true
+      active: true,
     },
     {
-      id: '2',
-      name: 'Development API',
-      key: 'naut_dev_' + Math.random().toString(36).substring(7),
-      permissions: ['read', 'write'],
+      id: "2",
+      name: "Development API",
+      key: "naut_dev_" + Math.random().toString(36).substring(7),
+      permissions: ["read", "write"],
       createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
       lastUsed: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      active: true
-    }
+      active: true,
+    },
   ]);
 
   const [webhooks, setWebhooks] = useState([
     {
-      id: '1',
-      url: 'https://api.nautilus.com/webhooks/stripe',
-      events: ['payment.completed', 'payment.failed'],
+      id: "1",
+      url: "https://api.nautilus.com/webhooks/stripe",
+      events: ["payment.completed", "payment.failed"],
       active: true,
-      lastTrigger: new Date(Date.now() - 15 * 60000)
+      lastTrigger: new Date(Date.now() - 15 * 60000),
     },
     {
-      id: '2',
-      url: 'https://api.nautilus.com/webhooks/notifications',
-      events: ['user.created', 'user.updated'],
+      id: "2",
+      url: "https://api.nautilus.com/webhooks/notifications",
+      events: ["user.created", "user.updated"],
       active: true,
-      lastTrigger: new Date(Date.now() - 45 * 60000)
-    }
+      lastTrigger: new Date(Date.now() - 45 * 60000),
+    },
   ]);
 
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [newKeyName, setNewKeyName] = useState('');
-  const [newWebhookUrl, setNewWebhookUrl] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [newKeyName, setNewKeyName] = useState("");
+  const [newWebhookUrl, setNewWebhookUrl] = useState("");
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected': return 'bg-green-500';
-      case 'disconnected': return 'bg-gray-500';
-      case 'error': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case "connected":
+        return "bg-green-500";
+      case "disconnected":
+        return "bg-gray-500";
+      case "error":
+        return "bg-red-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'error': return <AlertCircle className="h-4 w-4 text-red-500" />;
-      default: return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
+      case "connected":
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case "error":
+        return <AlertCircle className="h-4 w-4 text-red-500" />;
+      default:
+        return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
-  const filteredIntegrations = integrations.filter(integration => 
-    selectedCategory === 'all' || integration.category === selectedCategory
+  const filteredIntegrations = integrations.filter(
+    integration => selectedCategory === "all" || integration.category === selectedCategory
   );
 
   const handleConnect = (integration: Integration) => {
-    setIntegrations(prev => prev.map(int => 
-      int.id === integration.id 
-        ? { ...int, status: 'connected', lastSync: new Date() }
-        : int
-    ));
-    
+    setIntegrations(prev =>
+      prev.map(int =>
+        int.id === integration.id ? { ...int, status: "connected", lastSync: new Date() } : int
+      )
+    );
+
     toast({
       title: "Integração conectada",
       description: `${integration.name} foi conectado com sucesso.`,
@@ -167,12 +174,12 @@ export const APIIntegrationsHub: React.FC = () => {
   };
 
   const handleDisconnect = (integration: Integration) => {
-    setIntegrations(prev => prev.map(int => 
-      int.id === integration.id 
-        ? { ...int, status: 'disconnected', lastSync: undefined }
-        : int
-    ));
-    
+    setIntegrations(prev =>
+      prev.map(int =>
+        int.id === integration.id ? { ...int, status: "disconnected", lastSync: undefined } : int
+      )
+    );
+
     toast({
       title: "Integração desconectada",
       description: `${integration.name} foi desconectado.`,
@@ -180,12 +187,10 @@ export const APIIntegrationsHub: React.FC = () => {
   };
 
   const handleSync = (integration: Integration) => {
-    setIntegrations(prev => prev.map(int => 
-      int.id === integration.id 
-        ? { ...int, lastSync: new Date() }
-        : int
-    ));
-    
+    setIntegrations(prev =>
+      prev.map(int => (int.id === integration.id ? { ...int, lastSync: new Date() } : int))
+    );
+
     toast({
       title: "Sincronização concluída",
       description: `Dados do ${integration.name} foram sincronizados.`,
@@ -198,15 +203,15 @@ export const APIIntegrationsHub: React.FC = () => {
     const newKey: APIKey = {
       id: Date.now().toString(),
       name: newKeyName,
-      key: 'naut_' + Math.random().toString(36).substring(2, 15),
-      permissions: ['read'],
+      key: "naut_" + Math.random().toString(36).substring(2, 15),
+      permissions: ["read"],
       createdAt: new Date(),
-      active: true
+      active: true,
     };
 
     setApiKeys(prev => [...prev, newKey]);
-    setNewKeyName('');
-    
+    setNewKeyName("");
+
     toast({
       title: "Chave API criada",
       description: "Nova chave API foi gerada com sucesso.",
@@ -214,10 +219,8 @@ export const APIIntegrationsHub: React.FC = () => {
   };
 
   const revokeAPIKey = (keyId: string) => {
-    setApiKeys(prev => prev.map(key => 
-      key.id === keyId ? { ...key, active: false } : key
-    ));
-    
+    setApiKeys(prev => prev.map(key => (key.id === keyId ? { ...key, active: false } : key)));
+
     toast({
       title: "Chave revogada",
       description: "A chave API foi revogada com sucesso.",
@@ -230,14 +233,14 @@ export const APIIntegrationsHub: React.FC = () => {
     const newWebhook = {
       id: Date.now().toString(),
       url: newWebhookUrl,
-      events: ['user.created'],
+      events: ["user.created"],
       active: true,
-      lastTrigger: undefined
+      lastTrigger: undefined,
     };
 
     setWebhooks(prev => [...prev, newWebhook]);
-    setNewWebhookUrl('');
-    
+    setNewWebhookUrl("");
+
     toast({
       title: "Webhook criado",
       description: "Novo webhook foi configurado com sucesso.",
@@ -263,9 +266,9 @@ export const APIIntegrationsHub: React.FC = () => {
         <TabsContent value="integrations" className="space-y-4">
           <div className="flex items-center space-x-2">
             <Label>Filtrar por categoria:</Label>
-            <select 
+            <select
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              onChange={e => setSelectedCategory(e.target.value)}
               className="px-3 py-1 border border-border rounded-md bg-background"
             >
               <option value="all">Todas</option>
@@ -279,7 +282,7 @@ export const APIIntegrationsHub: React.FC = () => {
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filteredIntegrations.map((integration) => (
+            {filteredIntegrations.map(integration => (
               <Card key={integration.id}>
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -289,21 +292,26 @@ export const APIIntegrationsHub: React.FC = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       {getStatusIcon(integration.status)}
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor(integration.status)}`} />
+                      <div
+                        className={`w-2 h-2 rounded-full ${getStatusColor(integration.status)}`}
+                      />
                     </div>
                   </div>
                   <CardDescription>{integration.description}</CardDescription>
                 </CardHeader>
-                
+
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <Badge variant="outline" className="capitalize">
                         {integration.category}
                       </Badge>
-                      <Badge variant={integration.status === 'connected' ? 'default' : 'secondary'}>
-                        {integration.status === 'connected' ? 'Conectado' : 
-                         integration.status === 'error' ? 'Erro' : 'Desconectado'}
+                      <Badge variant={integration.status === "connected" ? "default" : "secondary"}>
+                        {integration.status === "connected"
+                          ? "Conectado"
+                          : integration.status === "error"
+                            ? "Erro"
+                            : "Desconectado"}
                       </Badge>
                     </div>
 
@@ -314,7 +322,7 @@ export const APIIntegrationsHub: React.FC = () => {
                     )}
 
                     <div className="flex space-x-2">
-                      {integration.status === 'connected' ? (
+                      {integration.status === "connected" ? (
                         <>
                           <Button
                             size="sm"
@@ -342,7 +350,7 @@ export const APIIntegrationsHub: React.FC = () => {
                           Conectar
                         </Button>
                       )}
-                      
+
                       {integration.configurable && (
                         <Button size="sm" variant="outline">
                           <Settings className="h-3 w-3" />
@@ -360,16 +368,14 @@ export const APIIntegrationsHub: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Gerenciar Chaves API</CardTitle>
-              <CardDescription>
-                Crie e gerencie chaves API para acesso ao sistema
-              </CardDescription>
+              <CardDescription>Crie e gerencie chaves API para acesso ao sistema</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex space-x-2 mb-4">
                 <Input
                   placeholder="Nome da chave API"
                   value={newKeyName}
-                  onChange={(e) => setNewKeyName(e.target.value)}
+                  onChange={e => setNewKeyName(e.target.value)}
                 />
                 <Button onClick={createAPIKey}>
                   <Plus className="h-4 w-4 mr-2" />
@@ -378,7 +384,7 @@ export const APIIntegrationsHub: React.FC = () => {
               </div>
 
               <div className="space-y-3">
-                {apiKeys.map((key) => (
+                {apiKeys.map(key => (
                   <div key={key.id} className="border border-border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div>
@@ -399,19 +405,19 @@ export const APIIntegrationsHub: React.FC = () => {
                         </Button>
                       </div>
                     </div>
-                    
+
                     <div className="bg-muted rounded p-2 mb-2">
                       <code className="text-sm">{key.key}</code>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
-                      {key.permissions.map((permission) => (
+                      {key.permissions.map(permission => (
                         <Badge key={permission} variant="outline" className="text-xs">
                           {permission}
                         </Badge>
                       ))}
                     </div>
-                    
+
                     {key.lastUsed && (
                       <p className="text-xs text-muted-foreground mt-2">
                         Último uso: {key.lastUsed.toLocaleString()}
@@ -428,16 +434,14 @@ export const APIIntegrationsHub: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Configurar Webhooks</CardTitle>
-              <CardDescription>
-                Configure endpoints para receber eventos do sistema
-              </CardDescription>
+              <CardDescription>Configure endpoints para receber eventos do sistema</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex space-x-2 mb-4">
                 <Input
                   placeholder="URL do webhook"
                   value={newWebhookUrl}
-                  onChange={(e) => setNewWebhookUrl(e.target.value)}
+                  onChange={e => setNewWebhookUrl(e.target.value)}
                 />
                 <Button onClick={createWebhook}>
                   <Plus className="h-4 w-4 mr-2" />
@@ -446,7 +450,7 @@ export const APIIntegrationsHub: React.FC = () => {
               </div>
 
               <div className="space-y-3">
-                {webhooks.map((webhook) => (
+                {webhooks.map(webhook => (
                   <div key={webhook.id} className="border border-border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div>
@@ -467,9 +471,9 @@ export const APIIntegrationsHub: React.FC = () => {
                         </Button>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
-                      {webhook.events.map((event) => (
+                      {webhook.events.map(event => (
                         <Badge key={event} variant="secondary" className="text-xs">
                           {event}
                         </Badge>
