@@ -4,10 +4,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 
@@ -51,12 +64,18 @@ export const ChecklistScheduler = () => {
 
   const getFrequencyColor = (frequency: string) => {
     switch (frequency) {
-    case "daily": return "bg-red-100 text-red-800";
-    case "weekly": return "bg-orange-100 text-orange-800";
-    case "monthly": return "bg-blue-100 text-blue-800";
-    case "quarterly": return "bg-purple-100 text-purple-800";
-    case "annually": return "bg-green-100 text-green-800";
-    default: return "bg-secondary text-secondary-foreground";
+      case "daily":
+        return "bg-red-100 text-red-800";
+      case "weekly":
+        return "bg-orange-100 text-orange-800";
+      case "monthly":
+        return "bg-blue-100 text-blue-800";
+      case "quarterly":
+        return "bg-purple-100 text-purple-800";
+      case "annually":
+        return "bg-green-100 text-green-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
@@ -73,11 +92,11 @@ export const ChecklistScheduler = () => {
   };
 
   const toggleSchedule = (id: string) => {
-    setSchedules(prev => prev.map(schedule => 
-      schedule.id === id 
-        ? { ...schedule, isActive: !schedule.isActive }
-        : schedule
-    ));
+    setSchedules(prev =>
+      prev.map(schedule =>
+        schedule.id === id ? { ...schedule, isActive: !schedule.isActive } : schedule
+      )
+    );
   };
 
   return (
@@ -147,9 +166,7 @@ export const ChecklistScheduler = () => {
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
                 Cancelar
               </Button>
-              <Button onClick={handleCreateSchedule}>
-                Criar Agenda
-              </Button>
+              <Button onClick={handleCreateSchedule}>Criar Agenda</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -164,89 +181,85 @@ export const ChecklistScheduler = () => {
 
         <TabsContent value="active" className="space-y-4">
           <div className="grid gap-4">
-            {schedules.filter(s => s.isActive).map((schedule) => (
-              <Card key={schedule.id}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-lg">{schedule.title}</CardTitle>
-                      <CardDescription>
-                        Próxima execução: {schedule.nextDue.toLocaleDateString("pt-BR")}
-                      </CardDescription>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Badge className={getFrequencyColor(schedule.frequency)}>
-                        {schedule.frequency}
-                      </Badge>
-                      <Badge className={getStatusColor(schedule.isActive)}>
-                        {schedule.isActive ? "Ativo" : "Inativo"}
-                      </Badge>
-                      {schedule.notifications && (
-                        <Bell className="h-4 w-4 text-orange-500" />
-                      )}
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                      <div className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        Tipo: {schedule.type}
+            {schedules
+              .filter(s => s.isActive)
+              .map(schedule => (
+                <Card key={schedule.id}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-lg">{schedule.title}</CardTitle>
+                        <CardDescription>
+                          Próxima execução: {schedule.nextDue.toLocaleDateString("pt-BR")}
+                        </CardDescription>
                       </div>
-                      {schedule.vesselId && (
+                      <div className="flex items-center space-x-2">
+                        <Badge className={getFrequencyColor(schedule.frequency)}>
+                          {schedule.frequency}
+                        </Badge>
+                        <Badge className={getStatusColor(schedule.isActive)}>
+                          {schedule.isActive ? "Ativo" : "Inativo"}
+                        </Badge>
+                        {schedule.notifications && <Bell className="h-4 w-4 text-orange-500" />}
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                         <div className="flex items-center">
-                          <Settings className="h-4 w-4 mr-1" />
-                          Navio: {schedule.vesselId}
+                          <Calendar className="h-4 w-4 mr-1" />
+                          Tipo: {schedule.type}
                         </div>
-                      )}
+                        {schedule.vesselId && (
+                          <div className="flex items-center">
+                            <Settings className="h-4 w-4 mr-1" />
+                            Navio: {schedule.vesselId}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button variant="outline" size="sm">
+                          <Settings className="h-4 w-4 mr-1" />
+                          Configurar
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => toggleSchedule(schedule.id)}
+                        >
+                          {schedule.isActive ? "Desativar" : "Ativar"}
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <Button variant="outline" size="sm">
-                        <Settings className="h-4 w-4 mr-1" />
-                        Configurar
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => toggleSchedule(schedule.id)}
-                      >
-                        {schedule.isActive ? "Desativar" : "Ativar"}
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))}
           </div>
         </TabsContent>
 
         <TabsContent value="inactive" className="space-y-4">
           <div className="grid gap-4">
-            {schedules.filter(s => !s.isActive).map((schedule) => (
-              <Card key={schedule.id} className="opacity-60">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-lg">{schedule.title}</CardTitle>
-                      <CardDescription>Agenda inativa</CardDescription>
+            {schedules
+              .filter(s => !s.isActive)
+              .map(schedule => (
+                <Card key={schedule.id} className="opacity-60">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-lg">{schedule.title}</CardTitle>
+                        <CardDescription>Agenda inativa</CardDescription>
+                      </div>
+                      <Badge className={getStatusColor(schedule.isActive)}>Inativo</Badge>
                     </div>
-                    <Badge className={getStatusColor(schedule.isActive)}>
-                      Inativo
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => toggleSchedule(schedule.id)}
-                  >
-                    Reativar
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardHeader>
+                  <CardContent>
+                    <Button variant="outline" size="sm" onClick={() => toggleSchedule(schedule.id)}>
+                      Reativar
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
           </div>
         </TabsContent>
 
@@ -270,7 +283,10 @@ export const ChecklistScheduler = () => {
               </div>
               <div className="grid grid-cols-7 gap-2 mt-2">
                 {Array.from({ length: 35 }, (_, i) => (
-                  <div key={i} className="aspect-square p-2 border rounded-lg flex items-center justify-center text-sm">
+                  <div
+                    key={i}
+                    className="aspect-square p-2 border rounded-lg flex items-center justify-center text-sm"
+                  >
                     {i + 1 <= 31 ? i + 1 : ""}
                   </div>
                 ))}

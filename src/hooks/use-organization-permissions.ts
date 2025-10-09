@@ -13,12 +13,12 @@ export const useOrganizationPermissions = () => {
   const hasFeature = (feature: string) => {
     // Para demo, sempre permitir recursos se a organização existe
     if (!currentOrganization) return false;
-    
+
     // Verificar nas features da organização
     if (currentOrganization.features && typeof currentOrganization.features === "object") {
       return currentOrganization.features[feature] === true;
     }
-    
+
     // Fallback para recursos padrão da demo
     const defaultFeatures = ["peotram", "fleet_management", "analytics", "ai_analysis"];
     return defaultFeatures.includes(feature);
@@ -26,16 +26,16 @@ export const useOrganizationPermissions = () => {
 
   const isWithinLimits = (type: "users" | "vessels" | "storage") => {
     if (!currentOrganization) return false;
-    
+
     switch (type) {
-    case "users":
-      return currentOrganization.max_users > 0;
-    case "vessels":
-      return currentOrganization.max_vessels > 0;
-    case "storage":
-      return currentOrganization.max_storage_gb > 0;
-    default:
-      return false;
+      case "users":
+        return currentOrganization.max_users > 0;
+      case "vessels":
+        return currentOrganization.max_vessels > 0;
+      case "storage":
+        return currentOrganization.max_storage_gb > 0;
+      default:
+        return false;
     }
   };
 
@@ -50,6 +50,6 @@ export const useOrganizationPermissions = () => {
     canManageData,
     hasFeature,
     isWithinLimits,
-    checkPermission
+    checkPermission,
   };
 };

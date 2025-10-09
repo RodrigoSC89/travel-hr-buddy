@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import {
   TrendingUp,
   Users,
   DollarSign,
@@ -15,7 +15,7 @@ import {
   Zap,
   RefreshCw,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -65,28 +65,28 @@ export const BusinessKPIDashboard: React.FC = () => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       const mockMetrics: BusinessMetrics = {
         revenue: {
           current: 2450000,
           target: 3000000,
-          growth: 15.3
+          growth: 15.3,
         },
         users: {
           active: 1847,
           new: 234,
-          retention: 89.2
+          retention: 89.2,
         },
         performance: {
           efficiency: 94.5,
           quality: 91.8,
-          satisfaction: 4.7
+          satisfaction: 4.7,
         },
         operational: {
           costs: 1450000,
           savings: 320000,
-          optimization: 22.1
-        }
+          optimization: 22.1,
+        },
       };
 
       const mockKPIs: KPIMetric[] = [
@@ -98,7 +98,7 @@ export const BusinessKPIDashboard: React.FC = () => {
           changeType: "increase",
           target: 80,
           period: "vs mês anterior",
-          category: "financial"
+          category: "financial",
         },
         {
           id: "2",
@@ -108,7 +108,7 @@ export const BusinessKPIDashboard: React.FC = () => {
           changeType: "increase",
           target: 92,
           period: "últimos 30 dias",
-          category: "users"
+          category: "users",
         },
         {
           id: "3",
@@ -118,7 +118,7 @@ export const BusinessKPIDashboard: React.FC = () => {
           changeType: "increase",
           target: 95,
           period: "vs trimestre anterior",
-          category: "operational"
+          category: "operational",
         },
         {
           id: "4",
@@ -128,7 +128,7 @@ export const BusinessKPIDashboard: React.FC = () => {
           changeType: "increase",
           target: 94,
           period: "média mensal",
-          category: "quality"
+          category: "quality",
         },
         {
           id: "5",
@@ -138,7 +138,7 @@ export const BusinessKPIDashboard: React.FC = () => {
           changeType: "increase",
           target: 85,
           period: "este trimestre",
-          category: "financial"
+          category: "financial",
         },
         {
           id: "6",
@@ -148,14 +148,14 @@ export const BusinessKPIDashboard: React.FC = () => {
           changeType: "decrease",
           target: 89,
           period: "últimos 6 meses",
-          category: "users"
-        }
+          category: "users",
+        },
       ];
 
       setMetrics(mockMetrics);
       setKpis(mockKPIs);
       setLastUpdated(new Date());
-      
+
       toast({
         title: "KPIs Atualizados",
         description: "Indicadores de performance carregados com sucesso",
@@ -252,8 +252,8 @@ export const BusinessKPIDashboard: React.FC = () => {
               <span className="text-muted-foreground">Meta:</span>
               <span>R$ {(metrics.revenue.target / 1000000).toFixed(1)}M</span>
             </div>
-            <Progress 
-              value={(metrics.revenue.current / metrics.revenue.target) * 100} 
+            <Progress
+              value={(metrics.revenue.current / metrics.revenue.target) * 100}
               className="mt-2"
             />
           </CardContent>
@@ -284,9 +284,7 @@ export const BusinessKPIDashboard: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-primary">
-              {metrics.performance.efficiency}%
-            </div>
+            <div className="text-2xl font-bold text-primary">{metrics.performance.efficiency}%</div>
             <Progress value={metrics.performance.efficiency} className="mt-2" />
           </CardContent>
         </Card>
@@ -318,7 +316,7 @@ export const BusinessKPIDashboard: React.FC = () => {
 
         <TabsContent value="all" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {kpis.map((kpi) => (
+            {kpis.map(kpi => (
               <Card key={kpi.id}>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -328,21 +326,18 @@ export const BusinessKPIDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-2">
                     <div className="text-2xl font-bold">{kpi.value}</div>
-                    
+
                     <div className="flex items-center gap-2">
                       {getChangeIcon(kpi.changeType)}
                       <span className={`text-sm font-medium ${getChangeColor(kpi.changeType)}`}>
-                        {kpi.changeType === "increase" ? "+" : ""}{kpi.change}%
+                        {kpi.changeType === "increase" ? "+" : ""}
+                        {kpi.change}%
                       </span>
-                      <span className="text-sm text-muted-foreground">
-                        {kpi.period}
-                      </span>
+                      <span className="text-sm text-muted-foreground">{kpi.period}</span>
                     </div>
-                    
+
                     <Progress value={kpi.target} className="mt-3" />
-                    <span className="text-xs text-muted-foreground">
-                      Meta: {kpi.target}%
-                    </span>
+                    <span className="text-xs text-muted-foreground">Meta: {kpi.target}%</span>
                   </div>
                 </CardContent>
               </Card>
@@ -352,7 +347,7 @@ export const BusinessKPIDashboard: React.FC = () => {
 
         <TabsContent value="financial" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {getCategoryKPIs("financial").map((kpi) => (
+            {getCategoryKPIs("financial").map(kpi => (
               <Card key={kpi.id}>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -364,11 +359,10 @@ export const BusinessKPIDashboard: React.FC = () => {
                   <div className="flex items-center gap-2 mt-2">
                     {getChangeIcon(kpi.changeType)}
                     <span className={`text-sm font-medium ${getChangeColor(kpi.changeType)}`}>
-                      {kpi.changeType === "increase" ? "+" : ""}{kpi.change}%
+                      {kpi.changeType === "increase" ? "+" : ""}
+                      {kpi.change}%
                     </span>
-                    <span className="text-sm text-muted-foreground">
-                      {kpi.period}
-                    </span>
+                    <span className="text-sm text-muted-foreground">{kpi.period}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -378,7 +372,7 @@ export const BusinessKPIDashboard: React.FC = () => {
 
         <TabsContent value="users" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {getCategoryKPIs("users").map((kpi) => (
+            {getCategoryKPIs("users").map(kpi => (
               <Card key={kpi.id}>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -390,11 +384,10 @@ export const BusinessKPIDashboard: React.FC = () => {
                   <div className="flex items-center gap-2 mt-2">
                     {getChangeIcon(kpi.changeType)}
                     <span className={`text-sm font-medium ${getChangeColor(kpi.changeType)}`}>
-                      {kpi.changeType === "increase" ? "+" : ""}{kpi.change}%
+                      {kpi.changeType === "increase" ? "+" : ""}
+                      {kpi.change}%
                     </span>
-                    <span className="text-sm text-muted-foreground">
-                      {kpi.period}
-                    </span>
+                    <span className="text-sm text-muted-foreground">{kpi.period}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -404,7 +397,7 @@ export const BusinessKPIDashboard: React.FC = () => {
 
         <TabsContent value="operational" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {getCategoryKPIs("operational").map((kpi) => (
+            {getCategoryKPIs("operational").map(kpi => (
               <Card key={kpi.id}>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -416,11 +409,10 @@ export const BusinessKPIDashboard: React.FC = () => {
                   <div className="flex items-center gap-2 mt-2">
                     {getChangeIcon(kpi.changeType)}
                     <span className={`text-sm font-medium ${getChangeColor(kpi.changeType)}`}>
-                      {kpi.changeType === "increase" ? "+" : ""}{kpi.change}%
+                      {kpi.changeType === "increase" ? "+" : ""}
+                      {kpi.change}%
                     </span>
-                    <span className="text-sm text-muted-foreground">
-                      {kpi.period}
-                    </span>
+                    <span className="text-sm text-muted-foreground">{kpi.period}</span>
                   </div>
                 </CardContent>
               </Card>

@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Brain, 
-  TrendingUp, 
-  Lightbulb, 
-  Target, 
+import {
+  Brain,
+  TrendingUp,
+  Lightbulb,
+  Target,
   AlertTriangle,
   CheckCircle,
   Zap,
@@ -23,9 +23,22 @@ import {
   Wifi,
   RefreshCw,
   Play,
-  Download
+  Download,
 } from "lucide-react";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+} from "recharts";
 import { useToast } from "@/hooks/use-toast";
 
 const AdvancedAIInsights = () => {
@@ -44,10 +57,10 @@ const AdvancedAIInsights = () => {
       recommendations: [
         "Automatizar aprovações de documentos",
         "Implementar notificações inteligentes",
-        "Otimizar roteamento de tarefas"
+        "Otimizar roteamento de tarefas",
       ],
       estimatedSavings: "25% tempo",
-      status: "new"
+      status: "new",
     },
     {
       id: 2,
@@ -59,10 +72,10 @@ const AdvancedAIInsights = () => {
       recommendations: [
         "Personalizar interface por usuário",
         "Melhorar onboarding",
-        "Criar dashboards específicos"
+        "Criar dashboards específicos",
       ],
       estimatedSavings: "15% engajamento",
-      status: "active"
+      status: "active",
     },
     {
       id: 3,
@@ -74,11 +87,11 @@ const AdvancedAIInsights = () => {
       recommendations: [
         "Escalar recursos automaticamente",
         "Preparar equipe para picos",
-        "Otimizar cache preditivo"
+        "Otimizar cache preditivo",
       ],
       estimatedSavings: "30% recursos",
-      status: "implemented"
-    }
+      status: "implemented",
+    },
   ]);
 
   const [performanceMetrics, setPerformanceMetrics] = useState({
@@ -86,7 +99,7 @@ const AdvancedAIInsights = () => {
     predictionReliability: 91.2,
     automationEfficiency: 87.8,
     insightValue: 89.5,
-    userAdoption: 76.3
+    userAdoption: 76.3,
   });
 
   const predictiveData = [
@@ -96,7 +109,7 @@ const AdvancedAIInsights = () => {
     { day: "Qui", atual: 61, previsto: 58, usuarios: 160 },
     { day: "Sex", atual: 55, previsto: 57, usuarios: 155 },
     { day: "Sab", atual: 33, previsto: 35, usuarios: 90 },
-    { day: "Dom", atual: 28, previsto: 30, usuarios: 75 }
+    { day: "Dom", atual: 28, previsto: 30, usuarios: 75 },
   ];
 
   const radarData = [
@@ -105,19 +118,19 @@ const AdvancedAIInsights = () => {
     { subject: "Velocidade", A: 86, fullMark: 150 },
     { subject: "Precisão", A: 99, fullMark: 150 },
     { subject: "Inovação", A: 85, fullMark: 150 },
-    { subject: "Custo", A: 65, fullMark: 150 }
+    { subject: "Custo", A: 65, fullMark: 150 },
   ];
 
   const runAIAnalysis = async () => {
     setIsAnalyzing(true);
-    
+
     toast({
       title: "Análise IA iniciada",
       description: "Processando dados e gerando insights...",
     });
 
     await new Promise(resolve => setTimeout(resolve, 4000));
-    
+
     // Simular novos insights
     const newInsight = {
       id: Date.now(),
@@ -126,18 +139,14 @@ const AdvancedAIInsights = () => {
       confidence: 88,
       impact: "medium",
       category: "emerging",
-      recommendations: [
-        "Implementar nova estratégia",
-        "Monitorar tendência",
-        "Ajustar parâmetros"
-      ],
+      recommendations: ["Implementar nova estratégia", "Monitorar tendência", "Ajustar parâmetros"],
       estimatedSavings: "18% melhoria",
-      status: "new"
+      status: "new",
     };
 
     setAiInsights(prev => [newInsight, ...prev]);
     setIsAnalyzing(false);
-    
+
     toast({
       title: "Análise concluída",
       description: "Novos insights foram gerados pela IA",
@@ -146,35 +155,47 @@ const AdvancedAIInsights = () => {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-    case "high": return "text-red-600 bg-red-50 border-red-200";
-    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    case "low": return "text-green-600 bg-green-50 border-green-200";
-    default: return "text-muted-foreground bg-gray-50 border-gray-200";
+      case "high":
+        return "text-red-600 bg-red-50 border-red-200";
+      case "medium":
+        return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      case "low":
+        return "text-green-600 bg-green-50 border-green-200";
+      default:
+        return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "implemented": return <CheckCircle className="w-4 h-4 text-green-600" />;
-    case "active": return <Activity className="w-4 h-4 text-blue-600" />;
-    case "new": return <Sparkles className="w-4 h-4 text-purple-600" />;
-    default: return <Clock className="w-4 h-4 text-muted-foreground" />;
+      case "implemented":
+        return <CheckCircle className="w-4 h-4 text-green-600" />;
+      case "active":
+        return <Activity className="w-4 h-4 text-blue-600" />;
+      case "new":
+        return <Sparkles className="w-4 h-4 text-purple-600" />;
+      default:
+        return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "efficiency": return <Zap className="w-4 h-4" />;
-    case "user_behavior": return <Users className="w-4 h-4" />;
-    case "prediction": return <TrendingUp className="w-4 h-4" />;
-    default: return <Brain className="w-4 h-4" />;
+      case "efficiency":
+        return <Zap className="w-4 h-4" />;
+      case "user_behavior":
+        return <Users className="w-4 h-4" />;
+      case "prediction":
+        return <TrendingUp className="w-4 h-4" />;
+      default:
+        return <Brain className="w-4 h-4" />;
     }
   };
 
   const handleImplementInsight = (insightTitle: string) => {
     toast({
       title: "✨ Implementar Insight",
-      description: `Iniciando implementação: ${insightTitle}`
+      description: `Iniciando implementação: ${insightTitle}`,
     });
     // TODO: Open implementation workflow dialog
   };
@@ -193,17 +214,14 @@ const AdvancedAIInsights = () => {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button 
+          <Button
             variant="outline"
             onClick={() => toast({ title: "Relatório", description: "Exportando insights..." })}
           >
             <Download className="w-4 h-4 mr-2" />
             Exportar
           </Button>
-          <Button 
-            onClick={runAIAnalysis}
-            disabled={isAnalyzing}
-          >
+          <Button onClick={runAIAnalysis} disabled={isAnalyzing}>
             {isAnalyzing ? (
               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
             ) : (
@@ -219,7 +237,9 @@ const AdvancedAIInsights = () => {
         <Card className="border-l-4 border-l-primary">
           <CardContent className="p-4">
             <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-primary">{performanceMetrics.aiAccuracy}%</div>
+              <div className="text-2xl font-bold text-primary">
+                {performanceMetrics.aiAccuracy}%
+              </div>
               <div className="text-sm text-muted-foreground">Precisão IA</div>
               <Progress value={performanceMetrics.aiAccuracy} className="h-2" />
             </div>
@@ -229,7 +249,9 @@ const AdvancedAIInsights = () => {
         <Card className="border-l-4 border-l-secondary">
           <CardContent className="p-4">
             <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-secondary">{performanceMetrics.predictionReliability}%</div>
+              <div className="text-2xl font-bold text-secondary">
+                {performanceMetrics.predictionReliability}%
+              </div>
               <div className="text-sm text-muted-foreground">Confiabilidade</div>
               <Progress value={performanceMetrics.predictionReliability} className="h-2" />
             </div>
@@ -239,7 +261,9 @@ const AdvancedAIInsights = () => {
         <Card className="border-l-4 border-l-accent">
           <CardContent className="p-4">
             <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-accent">{performanceMetrics.automationEfficiency}%</div>
+              <div className="text-2xl font-bold text-accent">
+                {performanceMetrics.automationEfficiency}%
+              </div>
               <div className="text-sm text-muted-foreground">Automação</div>
               <Progress value={performanceMetrics.automationEfficiency} className="h-2" />
             </div>
@@ -249,7 +273,9 @@ const AdvancedAIInsights = () => {
         <Card className="border-l-4 border-l-green-500">
           <CardContent className="p-4">
             <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-green-600">{performanceMetrics.insightValue}%</div>
+              <div className="text-2xl font-bold text-green-600">
+                {performanceMetrics.insightValue}%
+              </div>
               <div className="text-sm text-muted-foreground">Valor Insights</div>
               <Progress value={performanceMetrics.insightValue} className="h-2" />
             </div>
@@ -259,7 +285,9 @@ const AdvancedAIInsights = () => {
         <Card className="border-l-4 border-l-purple-500">
           <CardContent className="p-4">
             <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-purple-600">{performanceMetrics.userAdoption}%</div>
+              <div className="text-2xl font-bold text-purple-600">
+                {performanceMetrics.userAdoption}%
+              </div>
               <div className="text-sm text-muted-foreground">Adoção</div>
               <Progress value={performanceMetrics.userAdoption} className="h-2" />
             </div>
@@ -278,7 +306,7 @@ const AdvancedAIInsights = () => {
 
         <TabsContent value="insights" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {aiInsights.map((insight) => (
+            {aiInsights.map(insight => (
               <Card key={insight.id} className="hover-lift">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -290,10 +318,7 @@ const AdvancedAIInsights = () => {
                         <CardTitle className="text-lg">{insight.title}</CardTitle>
                         <div className="flex items-center gap-2 mt-1">
                           {getStatusIcon(insight.status)}
-                          <Badge 
-                            variant="outline" 
-                            className={getImpactColor(insight.impact)}
-                          >
+                          <Badge variant="outline" className={getImpactColor(insight.impact)}>
                             {insight.impact} impact
                           </Badge>
                         </div>
@@ -307,7 +332,7 @@ const AdvancedAIInsights = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-muted-foreground">{insight.description}</p>
-                  
+
                   <div className="space-y-2">
                     <h4 className="font-semibold flex items-center gap-2">
                       <Lightbulb className="w-4 h-4" />
@@ -315,7 +340,10 @@ const AdvancedAIInsights = () => {
                     </h4>
                     <ul className="space-y-1">
                       {insight.recommendations.map((rec, index) => (
-                        <li key={index} className="text-sm text-muted-foreground flex items-center gap-2">
+                        <li
+                          key={index}
+                          className="text-sm text-muted-foreground flex items-center gap-2"
+                        >
                           <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
                           {rec}
                         </li>
@@ -330,7 +358,11 @@ const AdvancedAIInsights = () => {
                         {insight.estimatedSavings}
                       </span>
                     </div>
-                    <Button size="sm" variant="outline" onClick={() => handleImplementInsight(insight.title)}>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleImplementInsight(insight.title)}
+                    >
                       Implementar
                     </Button>
                   </div>
@@ -354,17 +386,17 @@ const AdvancedAIInsights = () => {
                     <XAxis dataKey="day" />
                     <YAxis />
                     <Tooltip />
-                    <Line 
-                      type="monotone" 
-                      dataKey="atual" 
-                      stroke="hsl(var(--primary))" 
+                    <Line
+                      type="monotone"
+                      dataKey="atual"
+                      stroke="hsl(var(--primary))"
                       strokeWidth={3}
                       name="Atual"
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="previsto" 
-                      stroke="hsl(var(--accent))" 
+                    <Line
+                      type="monotone"
+                      dataKey="previsto"
+                      stroke="hsl(var(--accent))"
                       strokeWidth={2}
                       strokeDasharray="5 5"
                       name="Predito"
@@ -469,22 +501,22 @@ const AdvancedAIInsights = () => {
                 description: "IA sugere estratégia de cache baseada em padrões de uso",
                 priority: "high",
                 effort: "medium",
-                impact: "high"
+                impact: "high",
               },
               {
                 title: "Otimizar Fluxo de Trabalho",
                 description: "Reorganizar processos com base em análise de eficiência",
                 priority: "medium",
                 effort: "high",
-                impact: "high"
+                impact: "high",
               },
               {
                 title: "Personalizar Interface",
                 description: "Adaptar UI baseado no comportamento do usuário",
                 priority: "medium",
                 effort: "low",
-                impact: "medium"
-              }
+                impact: "medium",
+              },
             ].map((rec, index) => (
               <Card key={index} className="hover-lift">
                 <CardContent className="p-6">
@@ -496,9 +528,7 @@ const AdvancedAIInsights = () => {
                         <Badge variant={rec.priority === "high" ? "destructive" : "secondary"}>
                           {rec.priority} priority
                         </Badge>
-                        <Badge variant="outline">
-                          {rec.effort} effort
-                        </Badge>
+                        <Badge variant="outline">{rec.effort} effort</Badge>
                         <Badge variant={rec.impact === "high" ? "default" : "secondary"}>
                           {rec.impact} impact
                         </Badge>

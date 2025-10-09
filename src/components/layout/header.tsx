@@ -15,12 +15,12 @@ export const Header: React.FC = () => {
         <div className="mr-4 flex">
           <SidebarTrigger />
         </div>
-        
+
         <div className="flex flex-1 items-center justify-between space-x-2">
           <div className="flex-1 max-w-md mx-auto">
             <SimpleGlobalSearch />
           </div>
-          
+
           <nav className="flex items-center space-x-2">
             <OrganizationSelector />
             <RealTimeNotificationCenter />

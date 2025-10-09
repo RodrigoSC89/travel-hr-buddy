@@ -5,6 +5,7 @@
 The Assistente IA (AI Assistant) module provides an **intelligent conversational AI assistant** that helps users navigate the system, answer questions, and perform tasks through natural language interaction.
 
 **Key Use Cases:**
+
 - Natural language queries and commands
 - Context-aware assistance
 - Task automation via chat

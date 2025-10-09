@@ -5,10 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Search, 
-  Filter, 
-  Download, 
+import {
+  Search,
+  Filter,
+  Download,
   Calendar,
   Users,
   Ship,
@@ -17,7 +17,7 @@ import {
   Clock,
   ArrowUpDown,
   MoreVertical,
-  Eye
+  Eye,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -51,7 +51,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
   description,
   data,
   searchPlaceholder = "Buscar...",
-  onRowAction
+  onRowAction,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<keyof DataRow>("name");
@@ -63,53 +63,54 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
       active: {
         label: "Ativo",
         className: "bg-emerald-100 text-emerald-800 border-emerald-200",
-        icon: <CheckCircle2 className="w-3 h-3" />
+        icon: <CheckCircle2 className="w-3 h-3" />,
       },
       inactive: {
         label: "Inativo",
         className: "bg-slate-100 text-slate-800 border-slate-200",
-        icon: <Clock className="w-3 h-3" />
+        icon: <Clock className="w-3 h-3" />,
       },
       warning: {
         label: "Atenção",
         className: "bg-amber-100 text-amber-800 border-amber-200",
-        icon: <AlertTriangle className="w-3 h-3" />
+        icon: <AlertTriangle className="w-3 h-3" />,
       },
       expired: {
         label: "Expirado",
         className: "bg-red-100 text-red-800 border-red-200",
-        icon: <AlertTriangle className="w-3 h-3" />
-      }
+        icon: <AlertTriangle className="w-3 h-3" />,
+      },
     };
     return configs[status as keyof typeof configs] || configs.inactive;
   };
 
   const getPriorityConfig = (priority: string) => {
     const configs = {
-      high: { 
-        label: "Alta", 
+      high: {
+        label: "Alta",
         className: "bg-red-100 text-red-800 border-red-200",
-        sortOrder: 3 
+        sortOrder: 3,
       },
-      medium: { 
-        label: "Média", 
+      medium: {
+        label: "Média",
         className: "bg-amber-100 text-amber-800 border-amber-200",
-        sortOrder: 2 
+        sortOrder: 2,
       },
-      low: { 
-        label: "Baixa", 
+      low: {
+        label: "Baixa",
         className: "bg-green-100 text-green-800 border-green-200",
-        sortOrder: 1 
-      }
+        sortOrder: 1,
+      },
     };
     return configs[priority as keyof typeof configs] || configs.medium;
   };
 
   const filteredAndSortedData = data
     .filter(row => {
-      const matchesSearch = row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          row.responsible.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          row.type.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch =
+        row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.responsible.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.type.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = selectedStatus === "all" || row.status === selectedStatus;
       return matchesSearch && matchesStatus;
     })
@@ -117,13 +118,13 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
       const aValue = a[sortField];
       const bValue = b[sortField];
       const direction = sortDirection === "asc" ? 1 : -1;
-      
+
       if (sortField === "priority") {
         const aPriority = getPriorityConfig(a.priority).sortOrder;
         const bPriority = getPriorityConfig(b.priority).sortOrder;
         return (aPriority - bPriority) * direction;
       }
-      
+
       return aValue.toString().localeCompare(bValue.toString()) * direction;
     });
 
@@ -152,14 +153,9 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
               </CardDescription>
             )}
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="gap-2"
-              aria-label="Exportar dados"
-            >
+            <Button variant="outline" size="sm" className="gap-2" aria-label="Exportar dados">
               <Download className="w-4 h-4" />
               Exportar
             </Button>
@@ -169,7 +165,9 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
         {/* Controles de busca e filtro */}
         <div className="flex flex-col sm:flex-row gap-4 pt-4">
           <div className="flex-1">
-            <Label htmlFor="search" className="sr-only">Buscar registros</Label>
+            <Label htmlFor="search" className="sr-only">
+              Buscar registros
+            </Label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
@@ -177,21 +175,31 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                 type="text"
                 placeholder={searchPlaceholder}
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-10 bg-background text-foreground border-border focus:ring-2 focus:ring-primary/50"
                 aria-label="Campo de busca"
               />
             </div>
           </div>
-          
+
           <div className="flex gap-2">
             <Tabs value={selectedStatus} onValueChange={setSelectedStatus}>
               <TabsList className="grid grid-cols-5 bg-muted/50">
-                <TabsTrigger value="all" className="text-xs">Todos</TabsTrigger>
-                <TabsTrigger value="active" className="text-xs">Ativos</TabsTrigger>
-                <TabsTrigger value="warning" className="text-xs">Atenção</TabsTrigger>
-                <TabsTrigger value="inactive" className="text-xs">Inativos</TabsTrigger>
-                <TabsTrigger value="expired" className="text-xs">Expirados</TabsTrigger>
+                <TabsTrigger value="all" className="text-xs">
+                  Todos
+                </TabsTrigger>
+                <TabsTrigger value="active" className="text-xs">
+                  Ativos
+                </TabsTrigger>
+                <TabsTrigger value="warning" className="text-xs">
+                  Atenção
+                </TabsTrigger>
+                <TabsTrigger value="inactive" className="text-xs">
+                  Inativos
+                </TabsTrigger>
+                <TabsTrigger value="expired" className="text-xs">
+                  Expirados
+                </TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
@@ -201,11 +209,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
       <CardContent className="p-0">
         {/* Tabela */}
         <div className="overflow-x-auto">
-          <table 
-            className="w-full"
-            role="table"
-            aria-label={`Tabela de ${title.toLowerCase()}`}
-          >
+          <table className="w-full" role="table" aria-label={`Tabela de ${title.toLowerCase()}`}>
             <thead>
               <tr className="border-b border-border bg-muted/20">
                 <th className="text-left p-4 font-semibold text-foreground">
@@ -251,9 +255,9 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
               {filteredAndSortedData.map((row, index) => {
                 const statusConfig = getStatusConfig(row.status);
                 const priorityConfig = getPriorityConfig(row.priority);
-                
+
                 return (
-                  <tr 
+                  <tr
                     key={row.id}
                     className="border-b border-border/50 hover:bg-muted/30 transition-colors duration-200"
                     role="row"
@@ -278,8 +282,8 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                     <td className="p-4 text-center">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0"
                             aria-label={`Ações para ${row.name}`}
@@ -287,26 +291,28 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                             <MoreVertical className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent 
+                        <DropdownMenuContent
                           align="end"
                           className="bg-popover border-border shadow-lg"
                         >
-                          <DropdownMenuLabel className="text-popover-foreground">Ações</DropdownMenuLabel>
+                          <DropdownMenuLabel className="text-popover-foreground">
+                            Ações
+                          </DropdownMenuLabel>
                           <DropdownMenuSeparator className="bg-border" />
-                          <DropdownMenuItem 
+                          <DropdownMenuItem
                             onClick={() => handleRowAction("view", row)}
                             className="text-popover-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer"
                           >
                             <Eye className="w-4 h-4 mr-2" />
                             Visualizar
                           </DropdownMenuItem>
-                          <DropdownMenuItem 
+                          <DropdownMenuItem
                             onClick={() => handleRowAction("edit", row)}
                             className="text-popover-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer"
                           >
                             Editar
                           </DropdownMenuItem>
-                          <DropdownMenuItem 
+                          <DropdownMenuItem
                             onClick={() => handleRowAction("delete", row)}
                             className="text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer"
                           >
@@ -340,9 +346,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
               <span>
                 Mostrando {filteredAndSortedData.length} de {data.length} registros
               </span>
-              <span>
-                Última atualização: {new Date().toLocaleString("pt-BR")}
-              </span>
+              <span>Última atualização: {new Date().toLocaleString("pt-BR")}</span>
             </div>
           </div>
         )}

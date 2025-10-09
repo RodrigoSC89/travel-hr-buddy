@@ -4,15 +4,7 @@ import { cn } from "@/lib/utils";
 type SkeletonProps = React.HTMLAttributes<HTMLDivElement>;
 
 export const Skeleton: React.FC<SkeletonProps> = ({ className, ...props }) => {
-  return (
-    <div
-      className={cn(
-        "animate-pulse rounded-md bg-muted/60",
-        className
-      )}
-      {...props}
-    />
-  );
+  return <div className={cn("animate-pulse rounded-md bg-muted/60", className)} {...props} />;
 };
 
 // Skeleton específicos para diferentes componentes

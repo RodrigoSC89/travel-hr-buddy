@@ -15,7 +15,7 @@ const PredictiveAnalyticsPage: React.FC = () => {
         badges={[
           { icon: Sparkles, label: "Machine Learning" },
           { icon: TrendingUp, label: "247 Predições" },
-          { icon: Target, label: "Precisão Avançada" }
+          { icon: Target, label: "Precisão Avançada" },
         ]}
       />
       <PredictiveAnalytics />

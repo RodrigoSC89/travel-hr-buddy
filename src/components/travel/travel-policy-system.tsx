@@ -5,17 +5,29 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Shield, 
-  AlertTriangle, 
-  CheckCircle, 
-  Info, 
+import {
+  Shield,
+  AlertTriangle,
+  CheckCircle,
+  Info,
   DollarSign,
   Calendar,
   MapPin,
@@ -34,7 +46,7 @@ import {
   Clock,
   Target,
   Zap,
-  BookOpen
+  BookOpen,
 } from "lucide-react";
 
 interface TravelPolicy {
@@ -104,7 +116,7 @@ export const TravelPolicySystem: React.FC = () => {
           currency: "BRL",
           condition: "per_night",
           severity: "high",
-          isActive: true
+          isActive: true,
         },
         {
           id: "rule-002",
@@ -113,7 +125,7 @@ export const TravelPolicySystem: React.FC = () => {
           type: "requirement",
           condition: "7_days_advance",
           severity: "medium",
-          isActive: true
+          isActive: true,
         },
         {
           id: "rule-003",
@@ -122,14 +134,14 @@ export const TravelPolicySystem: React.FC = () => {
           type: "approval",
           condition: "luxury_hotels",
           severity: "high",
-          isActive: true
-        }
+          isActive: true,
+        },
       ],
       applicableRoles: ["employee", "manager", "director"],
       effectiveDate: new Date("2024-01-01"),
       lastUpdated: new Date("2024-02-15"),
       isActive: true,
-      createdBy: "Sistema de RH"
+      createdBy: "Sistema de RH",
     },
     {
       id: "policy-002",
@@ -144,7 +156,7 @@ export const TravelPolicySystem: React.FC = () => {
           type: "requirement",
           condition: "international_long_haul",
           severity: "medium",
-          isActive: true
+          isActive: true,
         },
         {
           id: "rule-005",
@@ -155,7 +167,7 @@ export const TravelPolicySystem: React.FC = () => {
           currency: "BRL",
           condition: "per_trip",
           severity: "medium",
-          isActive: true
+          isActive: true,
         },
         {
           id: "rule-006",
@@ -164,14 +176,14 @@ export const TravelPolicySystem: React.FC = () => {
           type: "approval",
           condition: "first_class",
           severity: "critical",
-          isActive: true
-        }
+          isActive: true,
+        },
       ],
       applicableRoles: ["employee", "manager", "director", "c_level"],
       effectiveDate: new Date("2024-01-15"),
       lastUpdated: new Date("2024-03-01"),
       isActive: true,
-      createdBy: "Diretor de Operações"
+      createdBy: "Diretor de Operações",
     },
     {
       id: "policy-003",
@@ -188,7 +200,7 @@ export const TravelPolicySystem: React.FC = () => {
           currency: "BRL",
           condition: "per_day",
           severity: "medium",
-          isActive: true
+          isActive: true,
         },
         {
           id: "rule-008",
@@ -197,15 +209,15 @@ export const TravelPolicySystem: React.FC = () => {
           type: "requirement",
           condition: "business_meals",
           severity: "low",
-          isActive: true
-        }
+          isActive: true,
+        },
       ],
       applicableRoles: ["employee", "manager"],
       effectiveDate: new Date("2024-02-01"),
       lastUpdated: new Date("2024-02-01"),
       isActive: true,
-      createdBy: "Gerente Financeiro"
-    }
+      createdBy: "Gerente Financeiro",
+    },
   ];
 
   const mockViolations: PolicyViolation[] = [
@@ -221,7 +233,7 @@ export const TravelPolicySystem: React.FC = () => {
       amount: 550,
       limit: 400,
       detectedAt: new Date("2024-03-16"),
-      status: "pending"
+      status: "pending",
     },
     {
       id: "violation-002",
@@ -234,7 +246,7 @@ export const TravelPolicySystem: React.FC = () => {
       severity: "critical",
       amount: 8500,
       detectedAt: new Date("2024-03-15"),
-      status: "escalated"
+      status: "escalated",
     },
     {
       id: "violation-003",
@@ -251,8 +263,8 @@ export const TravelPolicySystem: React.FC = () => {
       status: "resolved",
       resolvedBy: "Supervisor",
       resolvedAt: new Date("2024-03-18"),
-      resolution: "Aprovado como refeição de negócios"
-    }
+      resolution: "Aprovado como refeição de negócios",
+    },
   ];
 
   useEffect(() => {
@@ -270,7 +282,7 @@ export const TravelPolicySystem: React.FC = () => {
       toast({
         title: "Erro",
         description: "Erro ao carregar políticas",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -279,42 +291,61 @@ export const TravelPolicySystem: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "accommodation": return <Building className="h-4 w-4" />;
-    case "transport": return <Plane className="h-4 w-4" />;
-    case "meals": return <Utensils className="h-4 w-4" />;
-    case "general": return <FileText className="h-4 w-4" />;
-    case "approval": return <Shield className="h-4 w-4" />;
-    default: return <Settings className="h-4 w-4" />;
+      case "accommodation":
+        return <Building className="h-4 w-4" />;
+      case "transport":
+        return <Plane className="h-4 w-4" />;
+      case "meals":
+        return <Utensils className="h-4 w-4" />;
+      case "general":
+        return <FileText className="h-4 w-4" />;
+      case "approval":
+        return <Shield className="h-4 w-4" />;
+      default:
+        return <Settings className="h-4 w-4" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-100 text-red-800 border-red-300";
-    case "high": return "bg-orange-100 text-orange-800 border-orange-300";
-    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-300";
-    case "low": return "bg-green-100 text-green-800 border-green-300";
-    default: return "bg-secondary text-secondary-foreground border-border";
+      case "critical":
+        return "bg-red-100 text-red-800 border-red-300";
+      case "high":
+        return "bg-orange-100 text-orange-800 border-orange-300";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-300";
+      case "low":
+        return "bg-green-100 text-green-800 border-green-300";
+      default:
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getViolationStatusColor = (status: string) => {
     switch (status) {
-    case "resolved": return "bg-green-100 text-green-800 border-green-300";
-    case "escalated": return "bg-red-100 text-red-800 border-red-300";
-    case "ignored": return "bg-secondary text-secondary-foreground border-border";
-    default: return "bg-yellow-100 text-yellow-800 border-yellow-300";
+      case "resolved":
+        return "bg-green-100 text-green-800 border-green-300";
+      case "escalated":
+        return "bg-red-100 text-red-800 border-red-300";
+      case "ignored":
+        return "bg-secondary text-secondary-foreground border-border";
+      default:
+        return "bg-yellow-100 text-yellow-800 border-yellow-300";
     }
   };
 
-  const formatCurrency = (value: number) => 
-    new Intl.NumberFormat("pt-BR", { 
-      style: "currency", 
-      currency: "BRL" 
+  const formatCurrency = (value: number) =>
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
     }).format(value);
 
-  const activeViolations = violations.filter(v => v.status === "pending" || v.status === "escalated");
-  const criticalViolations = violations.filter(v => v.severity === "critical" && v.status !== "resolved");
+  const activeViolations = violations.filter(
+    v => v.status === "pending" || v.status === "escalated"
+  );
+  const criticalViolations = violations.filter(
+    v => v.severity === "critical" && v.status !== "resolved"
+  );
   const activePolicies = policies.filter(p => p.isActive);
 
   if (isLoading) {
@@ -346,7 +377,11 @@ export const TravelPolicySystem: React.FC = () => {
                 <p className="text-3xl font-bold text-primary">{activePolicies.length}</p>
                 <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
                   <CheckCircle className="h-3 w-3" />
-                  {policies.reduce((sum, p) => sum + p.rules.filter(r => r.isActive).length, 0)} regras
+                  {policies.reduce(
+                    (sum, p) => sum + p.rules.filter(r => r.isActive).length,
+                    0
+                  )}{" "}
+                  regras
                 </p>
               </div>
               <Shield className="h-8 w-8 text-primary" />
@@ -392,7 +427,12 @@ export const TravelPolicySystem: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Conformidade</p>
                 <p className="text-3xl font-bold text-success">
-                  {violations.length > 0 ? Math.round(((violations.length - activeViolations.length) / violations.length) * 100) : 100}%
+                  {violations.length > 0
+                    ? Math.round(
+                        ((violations.length - activeViolations.length) / violations.length) * 100
+                      )
+                    : 100}
+                  %
                 </p>
                 <p className="text-xs text-success flex items-center gap-1 mt-1">
                   <Target className="h-3 w-3" />
@@ -410,7 +450,8 @@ export const TravelPolicySystem: React.FC = () => {
         <Alert className="border-red-200 bg-red-50">
           <AlertTriangle className="h-4 w-4 text-red-600" />
           <AlertDescription className="text-red-800">
-            <strong>Atenção:</strong> Existem {criticalViolations.length} violação(ões) crítica(s) que requerem ação imediata.
+            <strong>Atenção:</strong> Existem {criticalViolations.length} violação(ões) crítica(s)
+            que requerem ação imediata.
           </AlertDescription>
         </Alert>
       )}
@@ -446,8 +487,11 @@ export const TravelPolicySystem: React.FC = () => {
           </div>
 
           <div className="grid gap-4">
-            {policies.map((policy) => (
-              <Card key={policy.id} className="travel-card hover:shadow-lg transition-all duration-300">
+            {policies.map(policy => (
+              <Card
+                key={policy.id}
+                className="travel-card hover:shadow-lg transition-all duration-300"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-4">
@@ -459,8 +503,18 @@ export const TravelPolicySystem: React.FC = () => {
                           <h4 className="font-semibold text-lg">{policy.name}</h4>
                           <p className="text-sm text-muted-foreground">{policy.description}</p>
                         </div>
-                        <Badge className={policy.isActive ? "bg-green-100 text-green-800" : "bg-secondary text-secondary-foreground"}>
-                          {policy.isActive ? <Unlock className="h-3 w-3 mr-1" /> : <Lock className="h-3 w-3 mr-1" />}
+                        <Badge
+                          className={
+                            policy.isActive
+                              ? "bg-green-100 text-green-800"
+                              : "bg-secondary text-secondary-foreground"
+                          }
+                        >
+                          {policy.isActive ? (
+                            <Unlock className="h-3 w-3 mr-1" />
+                          ) : (
+                            <Lock className="h-3 w-3 mr-1" />
+                          )}
                           {policy.isActive ? "Ativa" : "Inativa"}
                         </Badge>
                       </div>
@@ -484,22 +538,31 @@ export const TravelPolicySystem: React.FC = () => {
                       <div className="space-y-2">
                         <p className="font-medium text-sm">Principais Regras:</p>
                         <div className="space-y-2">
-                          {policy.rules.slice(0, 3).map((rule) => (
-                            <div key={rule.id} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                          {policy.rules.slice(0, 3).map(rule => (
+                            <div
+                              key={rule.id}
+                              className="flex items-center justify-between p-2 bg-muted/50 rounded"
+                            >
                               <div className="flex items-center gap-2">
-                                <Badge className={getSeverityColor(rule.severity)} variant="outline">
+                                <Badge
+                                  className={getSeverityColor(rule.severity)}
+                                  variant="outline"
+                                >
                                   {rule.severity}
                                 </Badge>
                                 <span className="text-sm">{rule.title}</span>
                               </div>
                               <div className="flex items-center gap-1">
                                 {rule.value && (
-                                  <span className="text-sm font-medium">{formatCurrency(rule.value)}</span>
+                                  <span className="text-sm font-medium">
+                                    {formatCurrency(rule.value)}
+                                  </span>
                                 )}
-                                {rule.isActive ? 
-                                  <CheckCircle className="h-4 w-4 text-green-600" /> : 
+                                {rule.isActive ? (
+                                  <CheckCircle className="h-4 w-4 text-green-600" />
+                                ) : (
                                   <Clock className="h-4 w-4 text-muted-foreground" />
-                                }
+                                )}
                               </div>
                             </div>
                           ))}
@@ -532,7 +595,7 @@ export const TravelPolicySystem: React.FC = () => {
                             <div>
                               <Label>Regras da Política</Label>
                               <div className="space-y-3 mt-2">
-                                {policy.rules.map((rule) => (
+                                {policy.rules.map(rule => (
                                   <div key={rule.id} className="p-4 border rounded-lg">
                                     <div className="flex items-center justify-between mb-2">
                                       <h5 className="font-medium">{rule.title}</h5>
@@ -540,15 +603,24 @@ export const TravelPolicySystem: React.FC = () => {
                                         <Badge className={getSeverityColor(rule.severity)}>
                                           {rule.severity}
                                         </Badge>
-                                        <Badge className={rule.isActive ? "bg-green-100 text-green-800" : "bg-secondary text-secondary-foreground"}>
+                                        <Badge
+                                          className={
+                                            rule.isActive
+                                              ? "bg-green-100 text-green-800"
+                                              : "bg-secondary text-secondary-foreground"
+                                          }
+                                        >
                                           {rule.isActive ? "Ativa" : "Inativa"}
                                         </Badge>
                                       </div>
                                     </div>
-                                    <p className="text-sm text-muted-foreground mb-2">{rule.description}</p>
+                                    <p className="text-sm text-muted-foreground mb-2">
+                                      {rule.description}
+                                    </p>
                                     {rule.value && (
                                       <p className="text-sm font-medium">
-                                        Limite: {formatCurrency(rule.value)} {rule.condition && `(${rule.condition})`}
+                                        Limite: {formatCurrency(rule.value)}{" "}
+                                        {rule.condition && `(${rule.condition})`}
                                       </p>
                                     )}
                                   </div>
@@ -560,7 +632,7 @@ export const TravelPolicySystem: React.FC = () => {
                               <div>
                                 <Label>Perfis Aplicáveis</Label>
                                 <div className="flex flex-wrap gap-1 mt-1">
-                                  {policy.applicableRoles.map((role) => (
+                                  {policy.applicableRoles.map(role => (
                                     <Badge key={role} variant="outline">
                                       {role}
                                     </Badge>
@@ -569,7 +641,9 @@ export const TravelPolicySystem: React.FC = () => {
                               </div>
                               <div>
                                 <Label>Data de Vigência</Label>
-                                <p className="text-sm mt-1">{policy.effectiveDate.toLocaleDateString("pt-BR")}</p>
+                                <p className="text-sm mt-1">
+                                  {policy.effectiveDate.toLocaleDateString("pt-BR")}
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -605,22 +679,37 @@ export const TravelPolicySystem: React.FC = () => {
           </div>
 
           <div className="grid gap-4">
-            {violations.map((violation) => (
-              <Card key={violation.id} className="travel-card hover:shadow-lg transition-all duration-300">
+            {violations.map(violation => (
+              <Card
+                key={violation.id}
+                className="travel-card hover:shadow-lg transition-all duration-300"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-3">
                       <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-lg ${
-                          violation.severity === "critical" ? "bg-red-100" :
-                            violation.severity === "high" ? "bg-orange-100" :
-                              violation.severity === "medium" ? "bg-yellow-100" : "bg-green-100"
-                        }`}>
-                          <AlertTriangle className={`h-4 w-4 ${
-                            violation.severity === "critical" ? "text-red-600" :
-                              violation.severity === "high" ? "text-orange-600" :
-                                violation.severity === "medium" ? "text-yellow-600" : "text-green-600"
-                          }`} />
+                        <div
+                          className={`p-2 rounded-lg ${
+                            violation.severity === "critical"
+                              ? "bg-red-100"
+                              : violation.severity === "high"
+                                ? "bg-orange-100"
+                                : violation.severity === "medium"
+                                  ? "bg-yellow-100"
+                                  : "bg-green-100"
+                          }`}
+                        >
+                          <AlertTriangle
+                            className={`h-4 w-4 ${
+                              violation.severity === "critical"
+                                ? "text-red-600"
+                                : violation.severity === "high"
+                                  ? "text-orange-600"
+                                  : violation.severity === "medium"
+                                    ? "text-yellow-600"
+                                    : "text-green-600"
+                            }`}
+                          />
                         </div>
                         <div>
                           <h4 className="font-semibold">{violation.description}</h4>
@@ -665,7 +754,8 @@ export const TravelPolicySystem: React.FC = () => {
                             <strong>Resolução:</strong> {violation.resolution}
                           </p>
                           <p className="text-xs text-green-600 mt-1">
-                            Resolvido por {violation.resolvedBy} em {violation.resolvedAt?.toLocaleDateString("pt-BR")}
+                            Resolvido por {violation.resolvedBy} em{" "}
+                            {violation.resolvedAt?.toLocaleDateString("pt-BR")}
                           </p>
                         </div>
                       )}
@@ -708,15 +798,22 @@ export const TravelPolicySystem: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <h4 className="font-semibold">Taxa de Conformidade por Categoria</h4>
-                  {["accommodation", "transport", "meals", "general"].map((category) => {
+                  {["accommodation", "transport", "meals", "general"].map(category => {
                     const categoryPolicies = policies.filter(p => p.category === category);
                     const categoryViolations = violations.filter(v => {
                       const policy = policies.find(p => p.id === v.policyId);
                       return policy?.category === category;
                     });
-                    const compliance = categoryViolations.length > 0 ? 
-                      ((categoryViolations.length - categoryViolations.filter(v => v.status === "pending" || v.status === "escalated").length) / categoryViolations.length) * 100 : 100;
-                    
+                    const compliance =
+                      categoryViolations.length > 0
+                        ? ((categoryViolations.length -
+                            categoryViolations.filter(
+                              v => v.status === "pending" || v.status === "escalated"
+                            ).length) /
+                            categoryViolations.length) *
+                          100
+                        : 100;
+
                     return (
                       <div key={category} className="space-y-2">
                         <div className="flex justify-between items-center">
@@ -727,7 +824,7 @@ export const TravelPolicySystem: React.FC = () => {
                           <span className="text-sm font-medium">{Math.round(compliance)}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
+                          <div
                             className={`h-2 rounded-full ${compliance >= 90 ? "bg-green-500" : compliance >= 70 ? "bg-yellow-500" : "bg-red-500"}`}
                             style={{ width: `${compliance}%` }}
                           />
@@ -766,7 +863,7 @@ export const TravelPolicySystem: React.FC = () => {
                     <p className="text-sm text-muted-foreground">Definir novas regras e limites</p>
                   </div>
                 </Button>
-                
+
                 <Button variant="outline" className="btn-travel p-6 h-auto">
                   <div className="text-center">
                     <BookOpen className="h-8 w-8 mx-auto mb-2" />
@@ -774,7 +871,7 @@ export const TravelPolicySystem: React.FC = () => {
                     <p className="text-sm text-muted-foreground">Manual de referência</p>
                   </div>
                 </Button>
-                
+
                 <Button variant="outline" className="btn-travel p-6 h-auto">
                   <div className="text-center">
                     <Users className="h-8 w-8 mx-auto mb-2" />
@@ -782,7 +879,7 @@ export const TravelPolicySystem: React.FC = () => {
                     <p className="text-sm text-muted-foreground">Definir aplicabilidade</p>
                   </div>
                 </Button>
-                
+
                 <Button variant="outline" className="btn-travel p-6 h-auto">
                   <div className="text-center">
                     <AlertTriangle className="h-8 w-8 mx-auto mb-2" />

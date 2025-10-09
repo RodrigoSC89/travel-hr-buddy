@@ -3,16 +3,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Wrench, 
-  Plus, 
-  Search, 
+import {
+  Wrench,
+  Plus,
+  Search,
   Calendar,
   CheckCircle,
   AlertTriangle,
@@ -26,7 +38,7 @@ import {
   TrendingUp,
   Zap,
   Shield,
-  Eye
+  Eye,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -76,7 +88,7 @@ const MaintenanceManagement: React.FC = () => {
     cost_estimate: "",
     assigned_technician: "",
     location: "",
-    parts_required: ""
+    parts_required: "",
   });
 
   useEffect(() => {
@@ -94,7 +106,8 @@ const MaintenanceManagement: React.FC = () => {
         priority: "medium",
         status: "scheduled",
         title: "Inspeção Anual do Motor Principal",
-        description: "Inspeção completa do motor principal incluindo filtros, válvulas e sistema de refrigeração",
+        description:
+          "Inspeção completa do motor principal incluindo filtros, válvulas e sistema de refrigeração",
         scheduled_date: "2024-02-15T09:00:00Z",
         estimated_duration: 48,
         cost_estimate: 25000,
@@ -102,7 +115,7 @@ const MaintenanceManagement: React.FC = () => {
         location: "Porto de Santos",
         parts_required: ["Filtro de óleo", "Junta do cabeçote", "Válvula de segurança"],
         created_at: "2024-01-10T00:00:00Z",
-        next_maintenance: "2025-02-15"
+        next_maintenance: "2025-02-15",
       },
       {
         id: "2",
@@ -120,7 +133,7 @@ const MaintenanceManagement: React.FC = () => {
         assigned_technician: "Maria Santos",
         location: "Porto de Paranaguá",
         parts_required: ["Módulo GPS", "Antena de comunicação"],
-        created_at: "2024-01-15T00:00:00Z"
+        created_at: "2024-01-15T00:00:00Z",
       },
       {
         id: "3",
@@ -140,7 +153,7 @@ const MaintenanceManagement: React.FC = () => {
         assigned_technician: "João Oliveira",
         location: "Estaleiro Suape",
         parts_required: ["Sistema hidráulico", "Bomba de direção", "Sensores"],
-        created_at: "2024-01-12T00:00:00Z"
+        created_at: "2024-01-12T00:00:00Z",
       },
       {
         id: "4",
@@ -157,8 +170,8 @@ const MaintenanceManagement: React.FC = () => {
         assigned_technician: "Ana Costa",
         location: "Porto de Vitória",
         parts_required: ["Botes salva-vidas", "Extintores"],
-        created_at: "2024-01-05T00:00:00Z"
-      }
+        created_at: "2024-01-05T00:00:00Z",
+      },
     ];
 
     setMaintenanceRecords(mockRecords);
@@ -181,12 +194,12 @@ const MaintenanceManagement: React.FC = () => {
       assigned_technician: newMaintenance.assigned_technician,
       location: newMaintenance.location,
       parts_required: newMaintenance.parts_required.split(",").map(p => p.trim()),
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
     setMaintenanceRecords([newRecord, ...maintenanceRecords]);
     setShowAddDialog(false);
-    
+
     // Reset form
     setNewMaintenance({
       vessel_name: "",
@@ -200,7 +213,7 @@ const MaintenanceManagement: React.FC = () => {
       cost_estimate: "",
       assigned_technician: "",
       location: "",
-      parts_required: ""
+      parts_required: "",
     });
 
     toast({
@@ -211,54 +224,77 @@ const MaintenanceManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "scheduled": return "bg-info text-info-foreground";
-    case "in_progress": return "bg-warning text-warning-foreground";
-    case "completed": return "bg-success text-success-foreground";
-    case "overdue": return "bg-destructive text-destructive-foreground";
-    case "cancelled": return "bg-muted text-muted-foreground";
-    default: return "bg-muted text-muted-foreground";
+      case "scheduled":
+        return "bg-info text-info-foreground";
+      case "in_progress":
+        return "bg-warning text-warning-foreground";
+      case "completed":
+        return "bg-success text-success-foreground";
+      case "overdue":
+        return "bg-destructive text-destructive-foreground";
+      case "cancelled":
+        return "bg-muted text-muted-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-    case "scheduled": return "Agendada";
-    case "in_progress": return "Em Andamento";
-    case "completed": return "Concluída";
-    case "overdue": return "Atrasada";
-    case "cancelled": return "Cancelada";
-    default: return "Desconhecido";
+      case "scheduled":
+        return "Agendada";
+      case "in_progress":
+        return "Em Andamento";
+      case "completed":
+        return "Concluída";
+      case "overdue":
+        return "Atrasada";
+      case "cancelled":
+        return "Cancelada";
+      default:
+        return "Desconhecido";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "low": return "text-success";
-    case "medium": return "text-warning";
-    case "high": return "text-orange-500";
-    case "critical": return "text-destructive";
-    default: return "text-muted-foreground";
+      case "low":
+        return "text-success";
+      case "medium":
+        return "text-warning";
+      case "high":
+        return "text-orange-500";
+      case "critical":
+        return "text-destructive";
+      default:
+        return "text-muted-foreground";
     }
   };
 
   const getMaintenanceTypeIcon = (type: string) => {
     switch (type) {
-    case "preventive": return <Shield className="h-4 w-4 text-success" />;
-    case "corrective": return <Wrench className="h-4 w-4 text-warning" />;
-    case "emergency": return <AlertTriangle className="h-4 w-4 text-destructive" />;
-    case "inspection": return <CheckCircle className="h-4 w-4 text-info" />;
-    default: return <Settings className="h-4 w-4 text-muted-foreground" />;
+      case "preventive":
+        return <Shield className="h-4 w-4 text-success" />;
+      case "corrective":
+        return <Wrench className="h-4 w-4 text-warning" />;
+      case "emergency":
+        return <AlertTriangle className="h-4 w-4 text-destructive" />;
+      case "inspection":
+        return <CheckCircle className="h-4 w-4 text-info" />;
+      default:
+        return <Settings className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const filteredRecords = maintenanceRecords.filter(record => {
-    const matchesSearch = record.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         record.vessel_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         record.assigned_technician.toLowerCase().includes(searchTerm.toLowerCase());
-    
+    const matchesSearch =
+      record.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      record.vessel_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      record.assigned_technician.toLowerCase().includes(searchTerm.toLowerCase());
+
     const matchesStatus = statusFilter === "all" || record.status === statusFilter;
     const matchesPriority = priorityFilter === "all" || record.priority === priorityFilter;
-    
+
     return matchesSearch && matchesStatus && matchesPriority;
   });
 
@@ -269,7 +305,7 @@ const MaintenanceManagement: React.FC = () => {
     inProgress: maintenanceRecords.filter(r => r.status === "in_progress").length,
     overdue: maintenanceRecords.filter(r => r.status === "overdue").length,
     completed: maintenanceRecords.filter(r => r.status === "completed").length,
-    totalCost: maintenanceRecords.reduce((sum, r) => sum + (r.actual_cost || r.cost_estimate), 0)
+    totalCost: maintenanceRecords.reduce((sum, r) => sum + (r.actual_cost || r.cost_estimate), 0),
   };
 
   return (
@@ -332,7 +368,7 @@ const MaintenanceManagement: React.FC = () => {
                 <p className="text-2xl font-bold text-success">
                   {new Intl.NumberFormat("pt-BR", {
                     style: "currency",
-                    currency: "BRL"
+                    currency: "BRL",
                   }).format(stats.totalCost)}
                 </p>
               </div>
@@ -353,7 +389,7 @@ const MaintenanceManagement: React.FC = () => {
             Controle completo de manutenções preventivas e corretivas
           </p>
         </div>
-        
+
         <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2">
@@ -371,15 +407,19 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="vessel_name"
                   value={newMaintenance.vessel_name}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, vessel_name: e.target.value })}
+                  onChange={e =>
+                    setNewMaintenance({ ...newMaintenance, vessel_name: e.target.value })
+                  }
                   placeholder="Nome da embarcação"
                 />
               </div>
               <div>
                 <Label htmlFor="maintenance_type">Tipo de Manutenção *</Label>
-                <Select 
-                  value={newMaintenance.maintenance_type} 
-                  onValueChange={(value) => setNewMaintenance({ ...newMaintenance, maintenance_type: value })}
+                <Select
+                  value={newMaintenance.maintenance_type}
+                  onValueChange={value =>
+                    setNewMaintenance({ ...newMaintenance, maintenance_type: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o tipo" />
@@ -394,9 +434,9 @@ const MaintenanceManagement: React.FC = () => {
               </div>
               <div>
                 <Label htmlFor="priority">Prioridade *</Label>
-                <Select 
-                  value={newMaintenance.priority} 
-                  onValueChange={(value) => setNewMaintenance({ ...newMaintenance, priority: value })}
+                <Select
+                  value={newMaintenance.priority}
+                  onValueChange={value => setNewMaintenance({ ...newMaintenance, priority: value })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione a prioridade" />
@@ -415,7 +455,9 @@ const MaintenanceManagement: React.FC = () => {
                   id="scheduled_date"
                   type="datetime-local"
                   value={newMaintenance.scheduled_date}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, scheduled_date: e.target.value })}
+                  onChange={e =>
+                    setNewMaintenance({ ...newMaintenance, scheduled_date: e.target.value })
+                  }
                 />
               </div>
               <div className="md:col-span-2">
@@ -423,7 +465,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="title"
                   value={newMaintenance.title}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, title: e.target.value })}
+                  onChange={e => setNewMaintenance({ ...newMaintenance, title: e.target.value })}
                   placeholder="Ex: Inspeção do Motor Principal"
                 />
               </div>
@@ -432,7 +474,9 @@ const MaintenanceManagement: React.FC = () => {
                 <Textarea
                   id="description"
                   value={newMaintenance.description}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, description: e.target.value })}
+                  onChange={e =>
+                    setNewMaintenance({ ...newMaintenance, description: e.target.value })
+                  }
                   placeholder="Descrição detalhada da manutenção..."
                   rows={3}
                 />
@@ -443,7 +487,9 @@ const MaintenanceManagement: React.FC = () => {
                   id="estimated_duration"
                   type="number"
                   value={newMaintenance.estimated_duration}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, estimated_duration: e.target.value })}
+                  onChange={e =>
+                    setNewMaintenance({ ...newMaintenance, estimated_duration: e.target.value })
+                  }
                   placeholder="Ex: 24"
                 />
               </div>
@@ -454,7 +500,9 @@ const MaintenanceManagement: React.FC = () => {
                   type="number"
                   step="0.01"
                   value={newMaintenance.cost_estimate}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, cost_estimate: e.target.value })}
+                  onChange={e =>
+                    setNewMaintenance({ ...newMaintenance, cost_estimate: e.target.value })
+                  }
                   placeholder="Ex: 15000.00"
                 />
               </div>
@@ -463,7 +511,9 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="assigned_technician"
                   value={newMaintenance.assigned_technician}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, assigned_technician: e.target.value })}
+                  onChange={e =>
+                    setNewMaintenance({ ...newMaintenance, assigned_technician: e.target.value })
+                  }
                   placeholder="Nome do técnico"
                 />
               </div>
@@ -472,7 +522,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="location"
                   value={newMaintenance.location}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, location: e.target.value })}
+                  onChange={e => setNewMaintenance({ ...newMaintenance, location: e.target.value })}
                   placeholder="Ex: Porto de Santos"
                 />
               </div>
@@ -481,7 +531,9 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="parts_required"
                   value={newMaintenance.parts_required}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, parts_required: e.target.value })}
+                  onChange={e =>
+                    setNewMaintenance({ ...newMaintenance, parts_required: e.target.value })
+                  }
                   placeholder="Ex: Filtro de óleo, Junta do cabeçote (separadas por vírgula)"
                 />
               </div>
@@ -507,11 +559,11 @@ const MaintenanceManagement: React.FC = () => {
               <Input
                 placeholder="Buscar por título, embarcação ou técnico..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
-            
+
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filtrar por status" />
@@ -525,7 +577,7 @@ const MaintenanceManagement: React.FC = () => {
                 <SelectItem value="cancelled">Cancelada</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={priorityFilter} onValueChange={setPriorityFilter}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filtrar por prioridade" />
@@ -557,8 +609,8 @@ const MaintenanceManagement: React.FC = () => {
               <Wrench className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <h3 className="text-lg font-medium mb-2">Nenhuma manutenção encontrada</h3>
               <p className="text-muted-foreground mb-4">
-                {searchTerm || statusFilter !== "all" || priorityFilter !== "all" 
-                  ? "Tente ajustar os filtros de busca" 
+                {searchTerm || statusFilter !== "all" || priorityFilter !== "all"
+                  ? "Tente ajustar os filtros de busca"
                   : "Agende a primeira manutenção para sua frota"}
               </p>
               {!searchTerm && statusFilter === "all" && priorityFilter === "all" && (
@@ -570,7 +622,7 @@ const MaintenanceManagement: React.FC = () => {
             </CardContent>
           </Card>
         ) : (
-          filteredRecords.map((record) => (
+          filteredRecords.map(record => (
             <Card key={record.id} className="hover:shadow-lg transition-all duration-300 group">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
@@ -581,20 +633,17 @@ const MaintenanceManagement: React.FC = () => {
                         {getStatusText(record.status)}
                       </Badge>
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="font-semibold text-lg">{record.title}</h3>
-                        <Badge 
-                          variant="outline" 
-                          className={getPriorityColor(record.priority)}
-                        >
+                        <Badge variant="outline" className={getPriorityColor(record.priority)}>
                           {record.priority}
                         </Badge>
                       </div>
-                      
+
                       <p className="text-sm text-muted-foreground mb-3">{record.description}</p>
-                      
+
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
                           <span className="font-medium">Embarcação:</span>
@@ -613,7 +662,7 @@ const MaintenanceManagement: React.FC = () => {
                           <p>{record.location}</p>
                         </div>
                       </div>
-                      
+
                       {record.status === "in_progress" && (
                         <div className="mt-4">
                           <div className="flex justify-between text-sm mb-1">
@@ -625,10 +674,10 @@ const MaintenanceManagement: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-col gap-2 ml-4">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       onClick={() => {
                         setSelectedRecord(record);
@@ -638,8 +687,8 @@ const MaintenanceManagement: React.FC = () => {
                       <Eye className="h-4 w-4 mr-2" />
                       Detalhes
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       className="opacity-0 group-hover:opacity-100 transition-opacity"
                     >
@@ -662,7 +711,7 @@ const MaintenanceManagement: React.FC = () => {
               {selectedRecord?.title}
             </DialogTitle>
           </DialogHeader>
-          
+
           {selectedRecord && (
             <Tabs defaultValue="details" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
@@ -670,7 +719,7 @@ const MaintenanceManagement: React.FC = () => {
                 <TabsTrigger value="parts">Peças e Custos</TabsTrigger>
                 <TabsTrigger value="history">Histórico</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="details" className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -683,7 +732,9 @@ const MaintenanceManagement: React.FC = () => {
                   </div>
                   <div>
                     <Label>Prioridade</Label>
-                    <p className={`mt-1 text-sm font-medium ${getPriorityColor(selectedRecord.priority)}`}>
+                    <p
+                      className={`mt-1 text-sm font-medium ${getPriorityColor(selectedRecord.priority)}`}
+                    >
                       {selectedRecord.priority}
                     </p>
                   </div>
@@ -711,7 +762,7 @@ const MaintenanceManagement: React.FC = () => {
                   <p className="mt-1 text-sm">{selectedRecord.description}</p>
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="parts" className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -719,7 +770,7 @@ const MaintenanceManagement: React.FC = () => {
                     <p className="mt-1 text-lg font-semibold text-success">
                       {new Intl.NumberFormat("pt-BR", {
                         style: "currency",
-                        currency: "BRL"
+                        currency: "BRL",
                       }).format(selectedRecord.cost_estimate)}
                     </p>
                   </div>
@@ -729,7 +780,7 @@ const MaintenanceManagement: React.FC = () => {
                       <p className="mt-1 text-lg font-semibold">
                         {new Intl.NumberFormat("pt-BR", {
                           style: "currency",
-                          currency: "BRL"
+                          currency: "BRL",
                         }).format(selectedRecord.actual_cost)}
                       </p>
                     </div>
@@ -747,7 +798,7 @@ const MaintenanceManagement: React.FC = () => {
                   </div>
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="history" className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 p-3 border rounded-lg">
@@ -759,7 +810,7 @@ const MaintenanceManagement: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   {selectedRecord.status === "in_progress" && (
                     <div className="flex items-center gap-3 p-3 border rounded-lg">
                       <Activity className="h-4 w-4 text-warning" />
@@ -771,7 +822,7 @@ const MaintenanceManagement: React.FC = () => {
                       </div>
                     </div>
                   )}
-                  
+
                   {selectedRecord.completed_date && (
                     <div className="flex items-center gap-3 p-3 border rounded-lg">
                       <CheckCircle className="h-4 w-4 text-success" />

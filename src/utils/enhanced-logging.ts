@@ -25,11 +25,11 @@ export const logUserAction = (action: string, details?: any): void => {
     action,
     details,
     userAgent: navigator.userAgent,
-    url: window.location.href
+    url: window.location.href,
   };
-  
+
   logger.log("🎯 User Action:", logEntry);
-  
+
   // Persist to localStorage for debugging (keep last 50)
   try {
     const logs = JSON.parse(localStorage.getItem("user-actions") || "[]");
@@ -74,14 +74,14 @@ export const exportUserActionLogs = (): void => {
     const logs = getUserActionLogs();
     const dataStr = JSON.stringify(logs, null, 2);
     const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
-    
+
     const exportFileDefaultName = `user-actions-${new Date().toISOString()}.json`;
-    
+
     const linkElement = document.createElement("a");
     linkElement.setAttribute("href", dataUri);
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
-    
+
     logger.log("✅ Logs exported successfully");
   } catch (error) {
     logger.error("Error exporting logs:", error);

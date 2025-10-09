@@ -4,34 +4,29 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Smartphone, 
-  Tablet, 
-  Monitor, 
-  Wifi, 
-  WifiOff, 
-  Download, 
-  RefreshCw, 
-  Database, 
+import {
+  Smartphone,
+  Tablet,
+  Monitor,
+  Wifi,
+  WifiOff,
+  Download,
+  RefreshCw,
+  Database,
   CheckCircle,
   AlertCircle,
-  Info
+  Info,
 } from "lucide-react";
 import { useOfflineStorage } from "@/hooks/use-offline-storage";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { useToast } from "@/hooks/use-toast";
 
 export const PWAStatus: React.FC = () => {
-  const { 
-    isOnline, 
-    cacheSize, 
-    syncPendingChanges, 
-    clearCache, 
-    getPendingChanges 
-  } = useOfflineStorage();
+  const { isOnline, cacheSize, syncPendingChanges, clearCache, getPendingChanges } =
+    useOfflineStorage();
   const onlineStatus = useOnlineStatus();
   const { toast } = useToast();
-  
+
   const [pendingCount, setPendingCount] = React.useState(0);
   const [isInstallable, setIsInstallable] = React.useState(false);
   const [deferredPrompt, setDeferredPrompt] = React.useState<any>(null);
@@ -45,7 +40,7 @@ export const PWAStatus: React.FC = () => {
     };
 
     window.addEventListener("beforeinstallprompt", handler);
-    
+
     // Check if app is already installed
     if (window.matchMedia("(display-mode: standalone)").matches) {
       setIsInstallable(false);
@@ -60,26 +55,26 @@ export const PWAStatus: React.FC = () => {
       const pending = await getPendingChanges();
       setPendingCount(pending.length);
     };
-    
+
     updatePendingCount();
     const interval = setInterval(updatePendingCount, 5000);
-    
+
     return () => clearInterval(interval);
   }, [getPendingChanges]);
 
   const handleInstallPWA = async () => {
     if (!deferredPrompt) return;
-    
+
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === "accepted") {
       toast({
         title: "App Instalado",
         description: "Nautilus One foi instalado com sucesso!",
       });
     }
-    
+
     setDeferredPrompt(null);
     setIsInstallable(false);
   };
@@ -89,9 +84,9 @@ export const PWAStatus: React.FC = () => {
       title: "Sincronizando",
       description: "Sincronizando dados offline...",
     });
-    
+
     await syncPendingChanges();
-    
+
     toast({
       title: "Sincronização Concluída",
       description: "Dados sincronizados com sucesso!",
@@ -144,10 +139,7 @@ export const PWAStatus: React.FC = () => {
                 {isOnline ? "Online" : "Offline"}
               </Badge>
               <p className="text-sm text-muted-foreground mt-1">
-                {isOnline 
-                  ? "Conectado à internet" 
-                  : "Funcionando offline com dados em cache"
-                }
+                {isOnline ? "Conectado à internet" : "Funcionando offline com dados em cache"}
               </p>
             </div>
             {!isOnline && pendingCount > 0 && (
@@ -187,10 +179,7 @@ export const PWAStatus: React.FC = () => {
                 )}
               </div>
               <p className="text-sm text-muted-foreground mt-1">
-                {isStandalone 
-                  ? "App instalado como PWA" 
-                  : "Executando no navegador"
-                }
+                {isStandalone ? "App instalado como PWA" : "Executando no navegador"}
               </p>
             </div>
             {isInstallable && (
@@ -263,8 +252,8 @@ export const PWAStatus: React.FC = () => {
           )}
 
           <div className="flex gap-2">
-            <Button 
-              onClick={handleSync} 
+            <Button
+              onClick={handleSync}
               disabled={!isOnline || pendingCount === 0}
               size="sm"
               variant="outline"
@@ -272,11 +261,7 @@ export const PWAStatus: React.FC = () => {
               <RefreshCw className="h-4 w-4 mr-2" />
               Sincronizar
             </Button>
-            <Button 
-              onClick={handleClearCache}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={handleClearCache} size="sm" variant="outline">
               <Database className="h-4 w-4 mr-2" />
               Limpar Cache
             </Button>
@@ -295,10 +280,14 @@ export const PWAStatus: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3 text-sm">
-              <p><strong>Para instalar no {deviceType === "mobile" ? "celular" : "tablet"}:</strong></p>
+              <p>
+                <strong>Para instalar no {deviceType === "mobile" ? "celular" : "tablet"}:</strong>
+              </p>
               <ul className="space-y-1 ml-4">
                 <li>• No Chrome/Edge: Toque no menu ⋮ → "Instalar app"</li>
-                <li>• No Safari (iOS): Toque no botão compartilhar → "Adicionar à Tela de Início"</li>
+                <li>
+                  • No Safari (iOS): Toque no botão compartilhar → "Adicionar à Tela de Início"
+                </li>
                 <li>• No Firefox: Toque no menu ⋮ → "Instalar"</li>
               </ul>
               <p className="text-muted-foreground">

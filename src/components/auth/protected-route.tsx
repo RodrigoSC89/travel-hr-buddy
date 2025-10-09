@@ -8,9 +8,9 @@ interface ProtectedRouteProps {
   requiredPermissions?: string[];
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
-  requiredPermissions = [] 
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  requiredPermissions = [],
 }) => {
   const { user, isLoading } = useAuth();
 

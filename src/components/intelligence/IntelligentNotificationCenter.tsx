@@ -5,17 +5,17 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { 
-  Bell, 
-  BellRing, 
-  Clock, 
-  CheckCircle, 
+import {
+  Bell,
+  BellRing,
+  Clock,
+  CheckCircle,
   AlertTriangle,
   Info,
   Zap,
   X,
   Filter,
-  CheckCircle2
+  CheckCircle2,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -39,7 +39,9 @@ interface IntelligentNotificationCenterProps {
   onNavigate?: (module: string) => void;
 }
 
-export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCenterProps> = ({ onNavigate }) => {
+export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCenterProps> = ({
+  onNavigate,
+}) => {
   const [notifications, setNotifications] = useState<IntelligentNotification[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<"all" | "unread" | "high">("all");
@@ -52,13 +54,14 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       // Set up real-time subscription for new notifications
       const channel = supabase
         .channel("intelligent_notifications")
-        .on("postgres_changes", 
-          { 
-            event: "INSERT", 
-            schema: "public", 
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
             table: "intelligent_notifications",
-            filter: `user_id=eq.${user.id}`
-          }, 
+            filter: `user_id=eq.${user.id}`,
+          },
           handleNewNotification
         )
         .subscribe();
@@ -81,57 +84,61 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
           type: "smart_alert",
           priority: "high",
           title: "Oportunidade de Economia Detectada",
-          message: "Identificamos uma oportunidade de economizar R$ 2.400 em viagens corporativas baseado no seu padrão de uso.",
+          message:
+            "Identificamos uma oportunidade de economizar R$ 2.400 em viagens corporativas baseado no seu padrão de uso.",
           actionText: "Ver Detalhes",
           actionType: "navigate",
           actionData: { module: "travel" },
           isRead: false,
           createdAt: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
           category: "Economia",
-          estimatedReadTime: "1min"
+          estimatedReadTime: "1min",
         },
         {
           id: "2",
           type: "system_insight",
           priority: "medium",
           title: "Certificados Expiram em Breve",
-          message: "Você tem 3 certificados que expiram nos próximos 30 dias. Renovar agora evitará problemas de compliance.",
+          message:
+            "Você tem 3 certificados que expiram nos próximos 30 dias. Renovar agora evitará problemas de compliance.",
           actionText: "Gerenciar Certificados",
           actionType: "navigate",
           actionData: { module: "hr" },
           isRead: false,
           createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
           category: "Compliance",
-          estimatedReadTime: "30s"
+          estimatedReadTime: "30s",
         },
         {
           id: "3",
           type: "recommendation_update",
           priority: "low",
           title: "Novas Recomendações Disponíveis",
-          message: "Baseado na sua atividade recente, temos 5 novas recomendações para otimizar seu fluxo de trabalho.",
+          message:
+            "Baseado na sua atividade recente, temos 5 novas recomendações para otimizar seu fluxo de trabalho.",
           actionText: "Ver Recomendações",
           actionType: "navigate",
           actionData: { module: "dashboard" },
           isRead: true,
           createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
           category: "Produtividade",
-          estimatedReadTime: "2min"
+          estimatedReadTime: "2min",
         },
         {
           id: "4",
           type: "performance_summary",
           priority: "medium",
           title: "Relatório Semanal de Performance",
-          message: "Sua eficiência aumentou 15% esta semana! Veja as métricas completas e continue melhorando.",
+          message:
+            "Sua eficiência aumentou 15% esta semana! Veja as métricas completas e continue melhorando.",
           actionText: "Ver Relatório",
           actionType: "navigate",
           actionData: { module: "analytics" },
           isRead: true,
           createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
           category: "Performance",
-          estimatedReadTime: "3min"
-        }
+          estimatedReadTime: "3min",
+        },
       ];
 
       setNotifications(mockNotifications);
@@ -150,7 +157,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
   const handleNewNotification = (payload: any) => {
     console.log("New notification received:", payload);
     loadNotifications(); // Reload notifications
-    
+
     toast({
       title: "Nova Notificação",
       description: payload.new.title,
@@ -168,9 +175,9 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
           priority: "medium",
           context: {
             currentModule: "dashboard",
-            timestamp: new Date().toISOString()
-          }
-        }
+            timestamp: new Date().toISOString(),
+          },
+        },
       });
 
       if (error) throw error;
@@ -193,17 +200,13 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
   };
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === id ? { ...notif, isRead: true } : notif
-      )
+    setNotifications(prev =>
+      prev.map(notif => (notif.id === id ? { ...notif, isRead: true } : notif))
     );
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(notif => ({ ...notif, isRead: true }))
-    );
+    setNotifications(prev => prev.map(notif => ({ ...notif, isRead: true })));
     toast({
       title: "Todas Marcadas como Lidas",
       description: "Todas as notificações foram marcadas como lidas",
@@ -231,30 +234,38 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-    case "critical": return <AlertTriangle className="w-4 h-4 text-red-500" />;
-    case "high": return <BellRing className="w-4 h-4 text-orange-500" />;
-    case "medium": return <Bell className="w-4 h-4 text-yellow-500" />;
-    default: return <Info className="w-4 h-4 text-blue-500" />;
+      case "critical":
+        return <AlertTriangle className="w-4 h-4 text-red-500" />;
+      case "high":
+        return <BellRing className="w-4 h-4 text-orange-500" />;
+      case "medium":
+        return <Bell className="w-4 h-4 text-yellow-500" />;
+      default:
+        return <Info className="w-4 h-4 text-blue-500" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-    case "high": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
-    case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
-    default: return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+      case "critical":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+      case "high":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+      default:
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
     }
   };
 
   const getFilteredNotifications = () => {
     switch (filter) {
-    case "unread":
-      return notifications.filter(n => !n.isRead);
-    case "high":
-      return notifications.filter(n => n.priority === "high" || n.priority === "critical");
-    default:
-      return notifications;
+      case "unread":
+        return notifications.filter(n => !n.isRead);
+      case "high":
+        return notifications.filter(n => n.priority === "high" || n.priority === "critical");
+      default:
+        return notifications;
     }
   };
 
@@ -288,19 +299,13 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs value={filter} onValueChange={(value) => setFilter(value as any)} className="w-full">
+        <Tabs value={filter} onValueChange={value => setFilter(value as any)} className="w-full">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="all">
-              Todas ({notifications.length})
-            </TabsTrigger>
-            <TabsTrigger value="unread">
-              Não Lidas ({unreadCount})
-            </TabsTrigger>
-            <TabsTrigger value="high">
-              Prioridade Alta
-            </TabsTrigger>
+            <TabsTrigger value="all">Todas ({notifications.length})</TabsTrigger>
+            <TabsTrigger value="unread">Não Lidas ({unreadCount})</TabsTrigger>
+            <TabsTrigger value="high">Prioridade Alta</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value={filter} className="mt-4">
             <ScrollArea className="h-96">
               {isLoading ? (
@@ -311,17 +316,19 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                 <div className="text-center py-8">
                   <Bell className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground">
-                    {filter === "unread" ? "Nenhuma notificação não lida" : "Nenhuma notificação encontrada"}
+                    {filter === "unread"
+                      ? "Nenhuma notificação não lida"
+                      : "Nenhuma notificação encontrada"}
                   </p>
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {filteredNotifications.map((notification) => (
-                    <Card 
-                      key={notification.id} 
+                  {filteredNotifications.map(notification => (
+                    <Card
+                      key={notification.id}
                       className={`transition-all duration-200 ${
-                        !notification.isRead 
-                          ? "border-l-4 border-l-primary bg-primary/5" 
+                        !notification.isRead
+                          ? "border-l-4 border-l-primary bg-primary/5"
                           : "border-l-4 border-l-transparent"
                       }`}
                     >
@@ -330,7 +337,9 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
                               {getPriorityIcon(notification.priority)}
-                              <h4 className={`font-medium ${!notification.isRead ? "font-semibold" : ""}`}>
+                              <h4
+                                className={`font-medium ${!notification.isRead ? "font-semibold" : ""}`}
+                              >
                                 {notification.title}
                               </h4>
                               <Badge className={getPriorityColor(notification.priority)}>
@@ -342,11 +351,11 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                                 </Badge>
                               )}
                             </div>
-                            
+
                             <p className="text-sm text-muted-foreground mb-3">
                               {notification.message}
                             </p>
-                            
+
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-4 text-xs text-muted-foreground">
                                 <div className="flex items-center gap-1">
@@ -357,7 +366,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                                   <span>Leitura: {notification.estimatedReadTime}</span>
                                 )}
                               </div>
-                              
+
                               <div className="flex items-center gap-2">
                                 {notification.actionText && (
                                   <Button
@@ -368,7 +377,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                                     {notification.actionText}
                                   </Button>
                                 )}
-                                
+
                                 {!notification.isRead && (
                                   <Button
                                     onClick={() => markAsRead(notification.id)}
@@ -378,7 +387,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                                     <CheckCircle className="w-4 h-4" />
                                   </Button>
                                 )}
-                                
+
                                 <Button
                                   onClick={() => dismissNotification(notification.id)}
                                   size="sm"

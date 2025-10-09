@@ -15,7 +15,7 @@ const AIAssistantPage = () => {
         badges={[
           { icon: Brain, label: "IA Avançada" },
           { icon: MessageSquare, label: "Conversacional" },
-          { icon: Sparkles, label: "98.7% Precisão" }
+          { icon: Sparkles, label: "98.7% Precisão" },
         ]}
       />
       <IntegratedAIAssistant />

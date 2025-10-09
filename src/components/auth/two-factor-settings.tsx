@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Shield, 
-  Smartphone, 
-  KeyRound, 
-  Copy, 
-  Check,
-  AlertTriangle,
-  Trash2
-} from "lucide-react";
+import { Shield, Smartphone, KeyRound, Copy, Check, AlertTriangle, Trash2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,7 +34,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     try {
       const { data, error } = await supabase.auth.mfa.listFactors();
       if (error) throw error;
-      
+
       if (data?.all && data.all.length > 0) {
         setFactors(data.all);
         const enabledFactor = data.all.find(f => f.status === "verified");
@@ -59,7 +51,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     setIsLoading(true);
     try {
       const { data, error } = await supabase.auth.mfa.enroll({
-        factorType: "totp"
+        factorType: "totp",
       });
 
       if (error) throw error;
@@ -68,7 +60,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       setSecret(data.totp.secret);
       setFactorId(data.id);
       setStep("verify");
-      
+
       toast({
         title: "2FA Configurado",
         description: "Escaneie o QR Code com seu app autenticador",
@@ -77,7 +69,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       toast({
         title: "Erro",
         description: error.message || "Falha ao configurar 2FA",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -89,7 +81,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       toast({
         title: "Código Inválido",
         description: "Por favor, digite um código de 6 dígitos",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -99,14 +91,14 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       const { data, error } = await supabase.auth.mfa.verify({
         factorId,
         challengeId: factorId,
-        code: verificationCode
+        code: verificationCode,
       });
 
       if (error) throw error;
 
       setStep("enabled");
       await checkExistingFactors();
-      
+
       toast({
         title: "2FA Ativado",
         description: "Autenticação de dois fatores foi ativada com sucesso!",
@@ -115,7 +107,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       toast({
         title: "Código Incorreto",
         description: "Verifique o código e tente novamente",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -130,7 +122,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
 
       await checkExistingFactors();
       setStep("setup");
-      
+
       toast({
         title: "2FA Desativado",
         description: "Autenticação de dois fatores foi desativada",
@@ -139,7 +131,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       toast({
         title: "Erro",
         description: error.message || "Falha ao desativar 2FA",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -173,7 +165,8 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       <Alert>
         <AlertTriangle className="h-4 w-4" />
         <AlertDescription>
-          Você precisará de um app autenticador como Google Authenticator, Authy ou Microsoft Authenticator.
+          Você precisará de um app autenticador como Google Authenticator, Authy ou Microsoft
+          Authenticator.
         </AlertDescription>
       </Alert>
 
@@ -190,11 +183,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         </ol>
       </div>
 
-      <Button 
-        onClick={setupTwoFactor} 
-        disabled={isLoading}
-        className="w-full"
-      >
+      <Button onClick={setupTwoFactor} disabled={isLoading} className="w-full">
         {isLoading ? "Configurando..." : "Configurar 2FA"}
       </Button>
     </div>
@@ -208,9 +197,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         </div>
         <div>
           <h3 className="text-lg font-semibold">Verificar Configuração</h3>
-          <p className="text-muted-foreground">
-            Escaneie o QR Code ou digite o código no seu app
-          </p>
+          <p className="text-muted-foreground">Escaneie o QR Code ou digite o código no seu app</p>
         </div>
       </div>
 
@@ -225,16 +212,8 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
           <div className="space-y-2">
             <Label>Ou digite este código manualmente:</Label>
             <div className="flex items-center gap-2">
-              <Input
-                value={secret}
-                readOnly
-                className="font-mono text-sm"
-              />
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => copyToClipboard(secret)}
-              >
+              <Input value={secret} readOnly className="font-mono text-sm" />
+              <Button variant="outline" size="icon" onClick={() => copyToClipboard(secret)}>
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </Button>
             </div>
@@ -247,7 +226,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         <Input
           id="code"
           value={verificationCode}
-          onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+          onChange={e => setVerificationCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
           placeholder="000000"
           className="text-center font-mono text-lg tracking-widest"
           maxLength={6}
@@ -255,11 +234,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       </div>
 
       <div className="flex gap-2">
-        <Button
-          variant="outline"
-          onClick={() => setStep("setup")}
-          className="flex-1"
-        >
+        <Button variant="outline" onClick={() => setStep("setup")} className="flex-1">
           Voltar
         </Button>
         <Button
@@ -297,8 +272,11 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       {factors.length > 0 && (
         <div className="space-y-3">
           <h4 className="font-medium">Fatores de Autenticação:</h4>
-          {factors.map((factor) => (
-            <div key={factor.id} className="flex items-center justify-between p-3 border rounded-lg">
+          {factors.map(factor => (
+            <div
+              key={factor.id}
+              className="flex items-center justify-between p-3 border rounded-lg"
+            >
               <div className="flex items-center gap-3">
                 <Smartphone className="h-4 w-4 text-muted-foreground" />
                 <div>
@@ -327,11 +305,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       )}
 
       {factors.length === 0 && (
-        <Button 
-          onClick={() => setStep("setup")} 
-          variant="outline"
-          className="w-full"
-        >
+        <Button onClick={() => setStep("setup")} variant="outline" className="w-full">
           Configurar Novo Fator
         </Button>
       )}
@@ -345,9 +319,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
           <Shield className="h-5 w-5" />
           Autenticação de Dois Fatores
         </CardTitle>
-        <CardDescription>
-          Proteja sua conta com uma camada adicional de segurança
-        </CardDescription>
+        <CardDescription>Proteja sua conta com uma camada adicional de segurança</CardDescription>
       </CardHeader>
       <CardContent>
         {step === "setup" && renderSetupStep()}

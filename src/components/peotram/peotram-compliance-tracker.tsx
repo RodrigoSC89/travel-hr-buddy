@@ -4,15 +4,27 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Shield, 
-  CheckCircle, 
-  AlertTriangle, 
-  Clock, 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Shield,
+  CheckCircle,
+  AlertTriangle,
+  Clock,
   Award,
   FileCheck,
   TrendingUp,
@@ -22,7 +34,7 @@ import {
   RefreshCw,
   Download,
   Plus,
-  Eye
+  Eye,
 } from "lucide-react";
 
 interface ComplianceRequirement {
@@ -73,12 +85,13 @@ export const PeotramComplianceTracker: React.FC = () => {
         lastAudit: "2024-01-15",
         nextAudit: "2024-07-15",
         responsible: "Capitão Silva",
-        description: "Implementação e manutenção do Sistema de Gestão de Segurança conforme Código ISM",
+        description:
+          "Implementação e manutenção do Sistema de Gestão de Segurança conforme Código ISM",
         actions: [
           "Revisão anual dos procedimentos",
           "Treinamento da tripulação",
-          "Auditoria interna semestral"
-        ]
+          "Auditoria interna semestral",
+        ],
       },
       {
         id: "REQ002",
@@ -96,8 +109,8 @@ export const PeotramComplianceTracker: React.FC = () => {
         actions: [
           "Atualização do plano de emergência",
           "Calibração de equipamentos",
-          "Treinamento específico"
-        ]
+          "Treinamento específico",
+        ],
       },
       {
         id: "REQ003",
@@ -115,9 +128,9 @@ export const PeotramComplianceTracker: React.FC = () => {
         actions: [
           "Revisão do plano de segurança",
           "Atualização de credenciais",
-          "Treinamento em segurança"
-        ]
-      }
+          "Treinamento em segurança",
+        ],
+      },
     ];
   }
 
@@ -132,7 +145,7 @@ export const PeotramComplianceTracker: React.FC = () => {
         expiryDate: "2025-01-01",
         status: "valid",
         scope: "Navegação em águas nacionais",
-        category: "Segurança"
+        category: "Segurança",
       },
       {
         id: "CERT002",
@@ -143,7 +156,7 @@ export const PeotramComplianceTracker: React.FC = () => {
         expiryDate: "2024-06-15",
         status: "expiring",
         scope: "Prevenção de poluição por óleo",
-        category: "Ambiental"
+        category: "Ambiental",
       },
       {
         id: "CERT003",
@@ -154,54 +167,74 @@ export const PeotramComplianceTracker: React.FC = () => {
         expiryDate: "2024-03-01",
         status: "expired",
         scope: "Sistema de Gestão da Qualidade ISO 9001",
-        category: "Qualidade"
-      }
+        category: "Qualidade",
+      },
     ];
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "compliant":
-    case "valid": return "bg-success/20 text-success border-success/30";
-    case "pending":
-    case "expiring": return "bg-warning/20 text-warning border-warning/30";
-    case "non-compliant":
-    case "expired": return "bg-destructive/20 text-destructive border-destructive/30";
-    case "suspended": return "bg-muted/20 text-muted-foreground border-muted/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "compliant":
+      case "valid":
+        return "bg-success/20 text-success border-success/30";
+      case "pending":
+      case "expiring":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "non-compliant":
+      case "expired":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      case "suspended":
+        return "bg-muted/20 text-muted-foreground border-muted/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
-    case "high": return "bg-warning/20 text-warning border-warning/30";
-    case "medium": return "bg-info/20 text-info border-info/30";
-    case "low": return "bg-success/20 text-success border-success/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "critical":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      case "high":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "medium":
+        return "bg-info/20 text-info border-info/30";
+      case "low":
+        return "bg-success/20 text-success border-success/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "safety": return <Shield className="w-4 h-4" />;
-    case "environmental": return <TrendingUp className="w-4 h-4" />;
-    case "quality": return <Award className="w-4 h-4" />;
-    case "security": return <AlertTriangle className="w-4 h-4" />;
-    case "operational": return <BarChart3 className="w-4 h-4" />;
-    default: return <FileCheck className="w-4 h-4" />;
+      case "safety":
+        return <Shield className="w-4 h-4" />;
+      case "environmental":
+        return <TrendingUp className="w-4 h-4" />;
+      case "quality":
+        return <Award className="w-4 h-4" />;
+      case "security":
+        return <AlertTriangle className="w-4 h-4" />;
+      case "operational":
+        return <BarChart3 className="w-4 h-4" />;
+      default:
+        return <FileCheck className="w-4 h-4" />;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "compliant":
-    case "valid": return <CheckCircle className="w-4 h-4 text-success" />;
-    case "pending":
-    case "expiring": return <Clock className="w-4 h-4 text-warning" />;
-    case "non-compliant":
-    case "expired": return <AlertCircle className="w-4 h-4 text-destructive" />;
-    default: return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
+      case "compliant":
+      case "valid":
+        return <CheckCircle className="w-4 h-4 text-success" />;
+      case "pending":
+      case "expiring":
+        return <Clock className="w-4 h-4 text-warning" />;
+      case "non-compliant":
+      case "expired":
+        return <AlertCircle className="w-4 h-4 text-destructive" />;
+      default:
+        return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -209,12 +242,12 @@ export const PeotramComplianceTracker: React.FC = () => {
     (requirements.filter(req => req.status === "compliant").length / requirements.length) * 100
   );
 
-  const criticalIssues = requirements.filter(req => 
-    req.priority === "critical" && req.status !== "compliant"
+  const criticalIssues = requirements.filter(
+    req => req.priority === "critical" && req.status !== "compliant"
   ).length;
 
-  const expiringCerts = certifications.filter(cert => 
-    cert.status === "expiring" || cert.status === "expired"
+  const expiringCerts = certifications.filter(
+    cert => cert.status === "expiring" || cert.status === "expired"
   ).length;
 
   return (
@@ -226,7 +259,7 @@ export const PeotramComplianceTracker: React.FC = () => {
             Acompanhamento de requisitos regulatórios e certificações
           </p>
         </div>
-        
+
         <div className="flex gap-2">
           <Button variant="outline">
             <Download className="w-4 h-4 mr-2" />
@@ -320,7 +353,7 @@ export const PeotramComplianceTracker: React.FC = () => {
                 <SelectItem value="operational">Operacional</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={selectedStatus} onValueChange={setSelectedStatus}>
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="Status" />
@@ -336,7 +369,7 @@ export const PeotramComplianceTracker: React.FC = () => {
           </div>
 
           <div className="space-y-4">
-            {requirements.map((requirement) => (
+            {requirements.map(requirement => (
               <Card key={requirement.id} className="border-l-4 border-l-primary">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -362,7 +395,7 @@ export const PeotramComplianceTracker: React.FC = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">{requirement.description}</p>
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
                       <p className="text-muted-foreground">Progresso</p>
@@ -373,15 +406,21 @@ export const PeotramComplianceTracker: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-muted-foreground">Vencimento</p>
-                      <p className="font-medium">{new Date(requirement.dueDate).toLocaleDateString()}</p>
+                      <p className="font-medium">
+                        {new Date(requirement.dueDate).toLocaleDateString()}
+                      </p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Última Auditoria</p>
-                      <p className="font-medium">{new Date(requirement.lastAudit).toLocaleDateString()}</p>
+                      <p className="font-medium">
+                        {new Date(requirement.lastAudit).toLocaleDateString()}
+                      </p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Próxima Auditoria</p>
-                      <p className="font-medium">{new Date(requirement.nextAudit).toLocaleDateString()}</p>
+                      <p className="font-medium">
+                        {new Date(requirement.nextAudit).toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
 
@@ -415,7 +454,7 @@ export const PeotramComplianceTracker: React.FC = () => {
 
         <TabsContent value="certifications" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {certifications.map((cert) => (
+            {certifications.map(cert => (
               <Card key={cert.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -445,10 +484,12 @@ export const PeotramComplianceTracker: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-muted-foreground">Validade</p>
-                      <p className="font-medium">{new Date(cert.expiryDate).toLocaleDateString()}</p>
+                      <p className="font-medium">
+                        {new Date(cert.expiryDate).toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
-                  
+
                   <div>
                     <p className="text-sm text-muted-foreground">Escopo</p>
                     <p className="text-sm">{cert.scope}</p>

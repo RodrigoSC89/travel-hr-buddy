@@ -10,68 +10,68 @@
 @layer base {
   :root {
     /* === NAUTILUS ONE - PALETA AZUL PROFISSIONAL === */
-    
+
     /* Azuis Base - Gradação Harmoniosa */
-    --azure-50: 214 100% 97%;     /* #F0F9FF - Azul glacial muito claro */
-    --azure-100: 214 95% 93%;     /* #E0F2FE - Azul gelo */
-    --azure-200: 214 87% 85%;     /* #BAE6FD - Azul céu claro */
-    --azure-300: 214 78% 73%;     /* #7DD3FC - Azul médio claro */
-    --azure-400: 214 71% 59%;     /* #38BDF8 - Azul vibrante */
-    --azure-500: 214 84% 46%;     /* #0EA5E9 - Azul principal */
-    --azure-600: 214 91% 40%;     /* #0284C7 - Azul forte */
-    --azure-700: 214 100% 32%;    /* #0369A1 - Azul profundo */
-    --azure-800: 214 100% 25%;    /* #075985 - Azul escuro */
-    --azure-900: 214 100% 18%;    /* #0C4A6E - Azul noturno */
-    
+    --azure-50: 214 100% 97%; /* #F0F9FF - Azul glacial muito claro */
+    --azure-100: 214 95% 93%; /* #E0F2FE - Azul gelo */
+    --azure-200: 214 87% 85%; /* #BAE6FD - Azul céu claro */
+    --azure-300: 214 78% 73%; /* #7DD3FC - Azul médio claro */
+    --azure-400: 214 71% 59%; /* #38BDF8 - Azul vibrante */
+    --azure-500: 214 84% 46%; /* #0EA5E9 - Azul principal */
+    --azure-600: 214 91% 40%; /* #0284C7 - Azul forte */
+    --azure-700: 214 100% 32%; /* #0369A1 - Azul profundo */
+    --azure-800: 214 100% 25%; /* #075985 - Azul escuro */
+    --azure-900: 214 100% 18%; /* #0C4A6E - Azul noturno */
+
     /* Sistema Base - CONTRASTE MÁXIMO PARA ACESSIBILIDADE WCAG AAA */
-    --background: 0 0% 100%;                 /* #FFFFFF - Branco puro para máximo contraste */
-    --foreground: 220 87% 8%;                /* #0A0E1A - Azul escuro para contraste 7:1+ */
+    --background: 0 0% 100%; /* #FFFFFF - Branco puro para máximo contraste */
+    --foreground: 220 87% 8%; /* #0A0E1A - Azul escuro para contraste 7:1+ */
 
-    --card: 0 0% 100%;                       /* #FFFFFF - Cards brancos */
-    --card-foreground: 220 87% 8%;           /* #0A0E1A - Texto escuro nos cards */
+    --card: 0 0% 100%; /* #FFFFFF - Cards brancos */
+    --card-foreground: 220 87% 8%; /* #0A0E1A - Texto escuro nos cards */
 
-    --popover: 0 0% 100%;                    /* #FFFFFF - Popovers brancos */
-    --popover-foreground: 220 87% 8%;        /* #0A0E1A - Texto escuro */
+    --popover: 0 0% 100%; /* #FFFFFF - Popovers brancos */
+    --popover-foreground: 220 87% 8%; /* #0A0E1A - Texto escuro */
 
     /* Paleta Principal Azul */
-    --primary: 214 84% 46%;                  /* #0EA5E9 - Azul oceânico */
-    --primary-foreground: 0 0% 98%;          /* #FAFAFA - Branco sobre azul */
-    --primary-light: var(--azure-500);       /* #0EA5E9 - Azul médio */
-    --primary-dark: var(--azure-700);        /* #0369A1 - Azul escuro */
-    --primary-glow: var(--azure-400);        /* #38BDF8 - Azul brilhante */
+    --primary: 214 84% 46%; /* #0EA5E9 - Azul oceânico */
+    --primary-foreground: 0 0% 98%; /* #FAFAFA - Branco sobre azul */
+    --primary-light: var(--azure-500); /* #0EA5E9 - Azul médio */
+    --primary-dark: var(--azure-700); /* #0369A1 - Azul escuro */
+    --primary-glow: var(--azure-400); /* #38BDF8 - Azul brilhante */
 
-    --secondary: 220 13% 91%;                /* #E2E8F0 - Cinza claro */
-    --secondary-foreground: 220 87% 8%;      /* #0A0E1A - Texto escuro */
+    --secondary: 220 13% 91%; /* #E2E8F0 - Cinza claro */
+    --secondary-foreground: 220 87% 8%; /* #0A0E1A - Texto escuro */
     --secondary-light: var(--azure-700);
 
-    --accent: 214 84% 46%;                   /* #0EA5E9 - Azul destaque */
-    --accent-foreground: 0 0% 98%;           /* #FAFAFA - Branco */
+    --accent: 214 84% 46%; /* #0EA5E9 - Azul destaque */
+    --accent-foreground: 0 0% 98%; /* #FAFAFA - Branco */
     --accent-light: var(--azure-400);
 
     /* Links com Azuis Harmoniosos */
-    --link: var(--azure-600);                /* #0284C7 - Azul para links */
-    --link-hover: var(--azure-800);          /* #075985 - Azul escuro no hover */
+    --link: var(--azure-600); /* #0284C7 - Azul para links */
+    --link-hover: var(--azure-800); /* #075985 - Azul escuro no hover */
 
     /* Cores Náuticas em Azul */
-    --nautical: var(--azure-700);            /* #0369A1 - Azul náutico */
+    --nautical: var(--azure-700); /* #0369A1 - Azul náutico */
     --nautical-foreground: var(--azure-50);
-    
+
     /* Status Colors em Tons de Azul */
-    --success: 200 100% 35%;                 /* #00A86B - Verde azulado */
+    --success: 200 100% 35%; /* #00A86B - Verde azulado */
     --success-foreground: var(--azure-50);
-    --warning: 45 100% 51%;                  /* #FFA500 - Laranja (complementar) */
-    --warning-foreground: 214 100% 11%;     /* Texto escuro */
-    --danger: 4 90% 45%;                     /* #E63946 - Vermelho azulado */
+    --warning: 45 100% 51%; /* #FFA500 - Laranja (complementar) */
+    --warning-foreground: 214 100% 11%; /* Texto escuro */
+    --danger: 4 90% 45%; /* #E63946 - Vermelho azulado */
     --danger-foreground: var(--azure-50);
-    --info: var(--azure-500);                /* #0EA5E9 - Azul informativo */
+    --info: var(--azure-500); /* #0EA5E9 - Azul informativo */
     --info-foreground: var(--azure-50);
 
-    --muted: 220 13% 95%;                    /* #F1F5F9 - Cinza muito claro */
-    --muted-foreground: 220 9% 46%;          /* #64748B - Cinza médio para contraste */
+    --muted: 220 13% 95%; /* #F1F5F9 - Cinza muito claro */
+    --muted-foreground: 220 9% 46%; /* #64748B - Cinza médio para contraste */
 
-    --destructive: 0 84% 60%;                /* #F56565 - Vermelho */
-    --destructive-foreground: 0 0% 98%;      /* #FAFAFA - Branco */
-    
+    --destructive: 0 84% 60%; /* #F56565 - Vermelho */
+    --destructive-foreground: 0 0% 98%; /* #FAFAFA - Branco */
+
     /* Cores de Status com Azuis */
     --status-active: 200 100% 35%;
     --status-active-foreground: var(--azure-50);
@@ -82,60 +82,65 @@
     --status-error: 4 90% 45%;
     --status-error-foreground: var(--azure-50);
 
-    --border: 220 13% 91%;                   /* #E2E8F0 - Bordas cinza claro */
-    --input: 220 13% 91%;                    /* #E2E8F0 - Inputs cinza claro */
-    --ring: 214 84% 46%;                     /* #0EA5E9 - Focus ring azul */
+    --border: 220 13% 91%; /* #E2E8F0 - Bordas cinza claro */
+    --input: 220 13% 91%; /* #E2E8F0 - Inputs cinza claro */
+    --ring: 214 84% 46%; /* #0EA5E9 - Focus ring azul */
 
     --radius: 0.75rem;
-    
+
     /* Popover Colors */
     --popover: var(--azure-100);
     --popover-foreground: 214 100% 15%;
-    
+
     /* Interactive Elements */
     --border: var(--azure-300);
     --input: var(--azure-200);
     --ring: var(--azure-500);
-    
+
     /* === MARITIME OFFSHORE HIGH CONTRAST (WCAG AAA) === */
     /* Cores específicas para uso marítimo offshore com alto contraste solar */
-    --maritime-peotram: 142 76% 36%;         /* #059669 - Verde ambiente */
-    --maritime-peotram-fg: 0 0% 100%;        /* Branco para contraste 7:1+ */
-    --maritime-peo-dp: 221 83% 38%;          /* #1e40af - Azul marinho DP */
-    --maritime-peo-dp-fg: 0 0% 100%;         /* Branco para contraste 7:1+ */
-    --maritime-sgso: 0 84% 45%;              /* #dc2626 - Vermelho segurança */
-    --maritime-sgso-fg: 0 0% 100%;           /* Branco para contraste 7:1+ */
-    
+    --maritime-peotram: 142 76% 36%; /* #059669 - Verde ambiente */
+    --maritime-peotram-fg: 0 0% 100%; /* Branco para contraste 7:1+ */
+    --maritime-peo-dp: 221 83% 38%; /* #1e40af - Azul marinho DP */
+    --maritime-peo-dp-fg: 0 0% 100%; /* Branco para contraste 7:1+ */
+    --maritime-sgso: 0 84% 45%; /* #dc2626 - Vermelho segurança */
+    --maritime-sgso-fg: 0 0% 100%; /* Branco para contraste 7:1+ */
+
     /* Text Colors - WCAG AAA Compliance (7:1 ratio) */
-    --text-primary: 0 0% 0%;                 /* #000000 - Preto puro */
-    --text-secondary: 0 0% 10%;              /* #1a1a1a - Quase preto */
-    --text-tertiary: 220 9% 30%;             /* Cinza escuro para contraste */
-    
+    --text-primary: 0 0% 0%; /* #000000 - Preto puro */
+    --text-secondary: 0 0% 10%; /* #1a1a1a - Quase preto */
+    --text-tertiary: 220 9% 30%; /* Cinza escuro para contraste */
+
     /* Background Colors - Maximum Contrast */
-    --bg-primary: 0 0% 100%;                 /* #ffffff - Branco puro */
-    --bg-secondary: 220 13% 98%;             /* #f8fafc - Branco azulado muito claro */
-    --bg-tertiary: 220 13% 95%;              /* #f1f5f9 - Cinza muito claro */
-    
+    --bg-primary: 0 0% 100%; /* #ffffff - Branco puro */
+    --bg-secondary: 220 13% 98%; /* #f8fafc - Branco azulado muito claro */
+    --bg-tertiary: 220 13% 95%; /* #f1f5f9 - Cinza muito claro */
+
     /* Button Minimum Heights - Touch Target Compliance */
-    --btn-min-height: 44px;                  /* WCAG AA+ mínimo para touch */
-    --btn-min-width: 44px;                   /* WCAG AA+ mínimo para touch */
-    
+    --btn-min-height: 44px; /* WCAG AA+ mínimo para touch */
+    --btn-min-width: 44px; /* WCAG AA+ mínimo para touch */
+
     /* Card and Container - Enhanced Visibility */
-    --card-border-width: 2px;                /* Bordas mais visíveis */
-    --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    
+    --card-border-width: 2px; /* Bordas mais visíveis */
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
     /* Gradients Azuis */
     --gradient-ocean: linear-gradient(135deg, hsl(var(--azure-500)), hsl(var(--azure-400)));
     --gradient-depth: linear-gradient(180deg, hsl(var(--azure-600)), hsl(var(--azure-800)));
-    --gradient-wave: linear-gradient(90deg, hsl(var(--azure-400)), hsl(var(--azure-500)), hsl(var(--azure-600)));
+    --gradient-wave: linear-gradient(
+      90deg,
+      hsl(var(--azure-400)),
+      hsl(var(--azure-500)),
+      hsl(var(--azure-600))
+    );
     --gradient-sky: linear-gradient(135deg, hsl(var(--azure-300)), hsl(var(--azure-500)));
     --gradient-deep: linear-gradient(180deg, hsl(var(--azure-700)), hsl(var(--azure-900)));
-    
+
     /* Shadows Azuis */
     --shadow-azure: 0 4px 20px hsl(var(--azure-500) / 0.15);
     --shadow-depth: 0 8px 30px hsl(var(--azure-800) / 0.2);
     --shadow-soft: 0 2px 15px hsl(var(--azure-400) / 0.1);
-    
+
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
@@ -148,15 +153,21 @@
 
     /* Advanced gradients */
     --gradient-radial: radial-gradient(circle at center, hsl(var(--azure-500) / 0.1), transparent);
-    --gradient-conic: conic-gradient(from 0deg, hsl(var(--azure-500)), hsl(var(--azure-700)), hsl(var(--azure-500)));
-    --gradient-mesh: 
+    --gradient-conic: conic-gradient(
+      from 0deg,
+      hsl(var(--azure-500)),
+      hsl(var(--azure-700)),
+      hsl(var(--azure-500))
+    );
+    --gradient-mesh:
       radial-gradient(circle at 20% 80%, hsl(var(--azure-400) / 0.1) 0%, transparent 50%),
       radial-gradient(circle at 80% 20%, hsl(var(--azure-600) / 0.1) 0%, transparent 50%),
       radial-gradient(circle at 40% 40%, hsl(var(--azure-500) / 0.1) 0%, transparent 50%);
 
     /* Shadows */
     --shadow-glass: 0 8px 32px 0 hsla(var(--azure-500), 0.37);
-    --shadow-elegant: 0 10px 25px -3px hsla(var(--azure-600), 0.1), 0 4px 6px -2px hsla(var(--azure-500), 0.05);
+    --shadow-elegant:
+      0 10px 25px -3px hsla(var(--azure-600), 0.1), 0 4px 6px -2px hsla(var(--azure-500), 0.05);
     --shadow-glow: 0 0 20px hsla(var(--azure-400), 0.3);
 
     /* Layout */
@@ -170,65 +181,65 @@
     --sidebar-accent-foreground: 214 100% 15%;
     --sidebar-border: var(--azure-300);
     --sidebar-ring: var(--azure-500);
-    
+
     /* Tokens Marítimos em Azul */
     --ocean-blue: var(--azure-600);
     --ocean-deep: var(--azure-800);
     --sea-foam: var(--azure-400);
     --nautical-gold: 45 100% 51%;
     --maritime-navy: var(--azure-800);
-    
+
     /* SGSO Module Colors - High Contrast for Offshore Use */
-    --sgso-primary: 4 90% 45%;              /* #DC2626 - Red for safety/critical */
-    --sgso-primary-dark: 4 90% 35%;         /* #B91C1C - Darker red */
-    --sgso-text: 0 0% 100%;                 /* White text on SGSO colors */
-    --sgso-border: 4 90% 35%;               /* Dark red borders */
-    --sgso-bg-light: 4 90% 97%;             /* Very light red background */
-    
+    --sgso-primary: 4 90% 45%; /* #DC2626 - Red for safety/critical */
+    --sgso-primary-dark: 4 90% 35%; /* #B91C1C - Darker red */
+    --sgso-text: 0 0% 100%; /* White text on SGSO colors */
+    --sgso-border: 4 90% 35%; /* Dark red borders */
+    --sgso-bg-light: 4 90% 97%; /* Very light red background */
+
     /* PEO-DP Module Colors - High Contrast Blue */
-    --peodp-primary: 214 100% 32%;          /* #0369A1 - Dark blue */
-    --peodp-primary-dark: 214 100% 25%;     /* #075985 - Darker blue */
-    --peodp-text: 0 0% 100%;                /* White text */
-    --peodp-border: 214 100% 25%;           /* Dark blue borders */
-    --peodp-bg-light: 214 100% 97%;         /* Very light blue background */
-    
+    --peodp-primary: 214 100% 32%; /* #0369A1 - Dark blue */
+    --peodp-primary-dark: 214 100% 25%; /* #075985 - Darker blue */
+    --peodp-text: 0 0% 100%; /* White text */
+    --peodp-border: 214 100% 25%; /* Dark blue borders */
+    --peodp-bg-light: 214 100% 97%; /* Very light blue background */
+
     /* PEOTRAM Module Colors - High Contrast Green */
-    --peotram-primary: 160 84% 35%;         /* #059669 - Dark green */
-    --peotram-primary-dark: 160 84% 28%;    /* #047857 - Darker green */
-    --peotram-text: 0 0% 100%;              /* White text */
-    --peotram-border: 160 84% 28%;          /* Dark green borders */
-    --peotram-bg-light: 160 84% 97%;        /* Very light green background */
+    --peotram-primary: 160 84% 35%; /* #059669 - Dark green */
+    --peotram-primary-dark: 160 84% 28%; /* #047857 - Darker green */
+    --peotram-text: 0 0% 100%; /* White text */
+    --peotram-border: 160 84% 28%; /* Dark green borders */
+    --peotram-bg-light: 160 84% 97%; /* Very light green background */
   }
 
   .dark {
     /* Dark Mode - WCAG AAA Compliant */
-    --background: 220 87% 8%;                /* #0A0E1A - Fundo escuro */
-    --foreground: 0 0% 98%;                  /* #FAFAFA - Texto claro */
+    --background: 220 87% 8%; /* #0A0E1A - Fundo escuro */
+    --foreground: 0 0% 98%; /* #FAFAFA - Texto claro */
 
-    --card: 220 84% 12%;                     /* #1E293B - Cards escuros */
-    --card-foreground: 0 0% 98%;             /* #FAFAFA - Texto claro */
-    
-    --primary: 214 84% 46%;                  /* #0EA5E9 - Azul oceânico */
-    --primary-foreground: 0 0% 98%;          /* #FAFAFA - Texto claro */
+    --card: 220 84% 12%; /* #1E293B - Cards escuros */
+    --card-foreground: 0 0% 98%; /* #FAFAFA - Texto claro */
+
+    --primary: 214 84% 46%; /* #0EA5E9 - Azul oceânico */
+    --primary-foreground: 0 0% 98%; /* #FAFAFA - Texto claro */
     --primary-light: var(--azure-300);
     --primary-dark: var(--azure-500);
-    
-    --secondary: 220 84% 12%;                /* #1E293B - Cinza escuro */
-    --secondary-foreground: 0 0% 98%;        /* #FAFAFA - Texto claro */
-    
-    --accent: 214 84% 46%;                   /* #0EA5E9 - Azul destaque */
-    --accent-foreground: 0 0% 98%;           /* #FAFAFA - Texto claro */
-    
+
+    --secondary: 220 84% 12%; /* #1E293B - Cinza escuro */
+    --secondary-foreground: 0 0% 98%; /* #FAFAFA - Texto claro */
+
+    --accent: 214 84% 46%; /* #0EA5E9 - Azul destaque */
+    --accent-foreground: 0 0% 98%; /* #FAFAFA - Texto claro */
+
     /* Links no modo escuro */
     --link: var(--azure-300);
     --link-hover: var(--azure-200);
-    
+
     --nautical: var(--azure-600);
     --nautical-foreground: var(--azure-100);
-    
-    --muted: 220 84% 12%;                    /* #1E293B - Fundos sutis */
-    --muted-foreground: 220 13% 63%;         /* #94A3B8 - Texto suave */
-    
+
+    --muted: 220 84% 12%; /* #1E293B - Fundos sutis */
+    --muted-foreground: 220 13% 63%; /* #94A3B8 - Texto suave */
+
     /* Status Colors Modo Escuro */
     --success: 200 100% 45%;
     --success-foreground: var(--azure-900);
@@ -238,10 +249,10 @@
     --danger-foreground: var(--azure-100);
     --info: var(--azure-400);
     --info-foreground: var(--azure-900);
-    
+
     --destructive: 4 90% 55%;
     --destructive-foreground: var(--azure-100);
-    
+
     --status-active: 200 100% 45%;
     --status-active-foreground: var(--azure-900);
     --status-inactive: var(--azure-600);
@@ -250,20 +261,25 @@
     --status-warning-foreground: var(--azure-900);
     --status-error: 4 90% 55%;
     --status-error-foreground: var(--azure-100);
-    
+
     /* Popover Colors */
     --popover: var(--azure-800);
     --popover-foreground: var(--azure-100);
-    
-    --border: 220 84% 12%;                   /* #1E293B - Bordas escuras */
-    --input: 220 84% 12%;                    /* #1E293B - Inputs escuros */
+
+    --border: 220 84% 12%; /* #1E293B - Bordas escuras */
+    --input: 220 84% 12%; /* #1E293B - Inputs escuros */
     --ring: var(--azure-400);
-    
+
     /* Gradients Modo Escuro */
     --gradient-ocean: linear-gradient(135deg, hsl(var(--azure-500)), hsl(var(--azure-400)));
     --gradient-depth: linear-gradient(180deg, hsl(var(--azure-600)), hsl(var(--azure-800)));
-    --gradient-wave: linear-gradient(90deg, hsl(var(--azure-400)), hsl(var(--azure-500)), hsl(var(--azure-600)));
-    
+    --gradient-wave: linear-gradient(
+      90deg,
+      hsl(var(--azure-400)),
+      hsl(var(--azure-500)),
+      hsl(var(--azure-600))
+    );
+
     /* Sidebar Modo Escuro */
     --sidebar-background: var(--azure-900);
     --sidebar-foreground: var(--azure-200);
@@ -288,7 +304,7 @@
       transform: translateY(0);
     }
   }
-  
+
   @keyframes slide-in-right {
     from {
       transform: translateX(100%);
@@ -299,7 +315,7 @@
       opacity: 1;
     }
   }
-  
+
   @keyframes slide-in-left {
     from {
       transform: translateX(-100%);
@@ -310,7 +326,7 @@
       opacity: 1;
     }
   }
-  
+
   @keyframes slide-in-up {
     from {
       transform: translateY(100%);
@@ -321,7 +337,7 @@
       opacity: 1;
     }
   }
-  
+
   @keyframes slide-in-down {
     from {
       transform: translateY(-100%);
@@ -333,10 +349,18 @@
     }
   }
 
-  .animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
-  .animate-slide-in-left { animation: slide-in-left 0.3s ease-out; }
-  .animate-slide-in-up { animation: slide-in-up 0.3s ease-out; }
-  .animate-slide-in-down { animation: slide-in-down 0.3s ease-out; }
+  .animate-slide-in-right {
+    animation: slide-in-right 0.3s ease-out;
+  }
+  .animate-slide-in-left {
+    animation: slide-in-left 0.3s ease-out;
+  }
+  .animate-slide-in-up {
+    animation: slide-in-up 0.3s ease-out;
+  }
+  .animate-slide-in-down {
+    animation: slide-in-down 0.3s ease-out;
+  }
 }
 
 /* Custom Utility Classes - Tons de Azul */
@@ -344,76 +368,82 @@
   .gradient-ocean {
     background: var(--gradient-ocean);
   }
-  
+
   .gradient-sky {
     background: var(--gradient-sky);
   }
-  
+
   .gradient-depth {
     background: var(--gradient-depth);
   }
-  
+
   .gradient-deep {
     background: var(--gradient-deep);
   }
-  
+
   .gradient-wave {
     background: var(--gradient-wave);
   }
-  
+
   .shadow-azure {
     box-shadow: var(--shadow-azure);
   }
-  
+
   .shadow-depth {
     box-shadow: var(--shadow-depth);
   }
-  
+
   .shadow-soft {
     box-shadow: var(--shadow-soft);
   }
-  
+
   .glass-effect {
     background: hsla(var(--azure-100), 0.6);
     backdrop-filter: blur(10px);
     border: 1px solid hsla(var(--azure-300), 0.3);
   }
-  
+
   .dark .glass-effect {
     background: hsla(var(--azure-800), 0.4);
     border: 1px solid hsla(var(--azure-600), 0.2);
   }
-  
+
   /* === MARITIME MODULES - HIGH CONTRAST BUTTONS === */
   .btn-maritime {
     min-height: var(--btn-min-height);
     min-width: var(--btn-min-width);
     font-weight: 600;
     border-width: 2px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
   }
-  
+
   .btn-maritime:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
-  
+
   .btn-maritime:active {
     transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   }
 
   /* Enhanced Button Standards - WCAG AA Compliance */
-  button, .btn, [role="button"] {
+  button,
+  .btn,
+  [role="button"] {
     min-height: 44px !important;
     font-weight: 600;
     transition: all 0.2s ease;
   }
 
   /* Focus Indicators - WCAG 2.1 Compliance */
-  button:focus-visible, .btn:focus-visible, [role="button"]:focus-visible,
-  input:focus-visible, select:focus-visible, textarea:focus-visible {
+  button:focus-visible,
+  .btn:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
     outline: 3px solid hsl(var(--primary)) !important;
     outline-offset: 2px !important;
     box-shadow: 0 0 0 4px hsla(var(--primary), 0.2) !important;
@@ -421,73 +451,81 @@
 
   /* Touch Target Enhancement for Mobile/Offshore */
   @media (max-width: 768px) {
-    button, .btn, [role="button"], 
-    input[type="checkbox"], input[type="radio"],
+    button,
+    .btn,
+    [role="button"],
+    input[type="checkbox"],
+    input[type="radio"],
     .touch-target {
       min-height: 48px !important;
       min-width: 48px !important;
     }
-    
+
     /* Increase spacing for better touch accuracy */
     .space-y-2 > * + * {
       margin-top: 0.75rem !important;
     }
-    
+
     .space-x-2 > * + * {
       margin-left: 0.75rem !important;
     }
   }
-  
+
   /* Industrial Tablet Touch Targets (769-1024px) */
   @media (min-width: 769px) and (max-width: 1024px) {
-    button, .btn, [role="button"],
-    input[type="checkbox"], input[type="radio"],
+    button,
+    .btn,
+    [role="button"],
+    input[type="checkbox"],
+    input[type="radio"],
     .touch-target {
       min-height: 48px !important;
       min-width: 48px !important;
     }
-    
+
     /* Optimize for landscape tablet use */
     .container {
       padding-left: 2rem;
       padding-right: 2rem;
     }
   }
-  
+
   /* Offshore XL Touch Targets (for gloves) */
-  .btn-offshore-xl, .touch-target-xl {
+  .btn-offshore-xl,
+  .touch-target-xl {
     min-height: 56px !important;
     min-width: 56px !important;
     font-size: 1.125rem !important;
     font-weight: 600 !important;
   }
-  
+
   @media (max-width: 768px) {
-    .btn-offshore-xl, .touch-target-xl {
+    .btn-offshore-xl,
+    .touch-target-xl {
       min-height: 64px !important;
       min-width: 64px !important;
     }
   }
-  
+
   /* Maritime System Colors */
   .btn-peotram {
     background-color: hsl(var(--maritime-peotram));
     color: hsl(var(--maritime-peotram-fg));
     border-color: hsl(142 76% 28%);
   }
-  
+
   .btn-peo-dp {
     background-color: hsl(var(--maritime-peo-dp));
     color: hsl(var(--maritime-peo-dp-fg));
     border-color: hsl(221 83% 30%);
   }
-  
+
   .btn-sgso {
     background-color: hsl(var(--maritime-sgso));
     color: hsl(var(--maritime-sgso-fg));
     border-color: hsl(0 84% 37%);
   }
-  
+
   /* Card Maritime - Enhanced Visibility */
   .card-maritime {
     border-width: var(--card-border-width);
@@ -503,14 +541,14 @@
 
   .text-maritime-primary {
     color: hsl(var(--text-primary));
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
   /* Enhanced Readability for Offshore Conditions */
   .offshore-text {
     color: #000000 !important;
     font-weight: 600 !important;
-    text-shadow: 0 0 1px rgba(255,255,255,0.5);
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
   }
 
   .offshore-bg {
@@ -528,7 +566,9 @@
   }
 
   /* Accessible Links */
-  a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible {
     outline: 3px solid hsl(var(--primary)) !important;
     outline-offset: 2px !important;
   }
@@ -557,26 +597,26 @@
     border-top-color: transparent;
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    }
+  }
 
   @keyframes spin {
     to {
       transform: rotate(360deg);
     }
   }
-  
+
   .card-maritime:hover {
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);
     transition: all 0.2s ease;
   }
-  
+
   /* Text Maritime - WCAG AAA */
   .text-maritime-primary {
     color: hsl(var(--text-primary));
     font-weight: 600;
   }
-  
+
   .text-maritime-secondary {
     color: hsl(var(--text-secondary));
     font-weight: 500;
@@ -590,10 +630,17 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-semibold tracking-tight;
   }
 
@@ -611,20 +658,20 @@
     outline: 2px solid hsl(var(--ring));
     outline-offset: 2px;
   }
-  
+
   /* Scrollbar Styling */
   ::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
     @apply bg-muted;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     @apply bg-primary/20 rounded-full;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-primary/30;
   }
@@ -634,34 +681,34 @@
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out;
   }
-  
+
   .animate-slide-up {
     animation: slideUp 0.3s ease-out;
   }
-  
+
   .animate-scale-in {
     animation: scaleIn 0.2s ease-out;
   }
-  
+
   .hover-scale-102:hover {
     transform: scale(1.02);
   }
-  
+
   .hover-scale-105:hover {
     transform: scale(1.05);
   }
-  
+
   .glass-effect {
     backdrop-filter: blur(10px);
     background: hsla(var(--azure-100), 0.1);
     border: 1px solid hsla(var(--azure-300), 0.2);
   }
-  
+
   .gradient-border {
     background: linear-gradient(45deg, transparent, hsla(var(--azure-300), 0.2), transparent);
     padding: 1px;
   }
-  
+
   .gradient-border > div {
     background: hsl(var(--background));
     border-radius: inherit;
@@ -702,7 +749,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -711,7 +759,8 @@
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(-25%);
     animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
@@ -723,7 +772,8 @@
 
 /* Enhanced keyframes for micro-interactions */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -741,7 +791,8 @@
 }
 
 @keyframes morphing {
-  0%, 100% {
+  0%,
+  100% {
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   }
   50% {
@@ -750,7 +801,10 @@
 }
 
 @keyframes wiggle {
-  0%, 7%, 14%, 21% {
+  0%,
+  7%,
+  14%,
+  21% {
     transform: translateX(0);
   }
   3.5% {
@@ -782,7 +836,8 @@
 }
 
 @keyframes gradient-shift {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -791,7 +846,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 5px hsl(var(--primary) / 0.5);
   }
   50% {
@@ -937,7 +993,8 @@
 
 /* Enhanced Travel Module Animations */
 @keyframes float-reverse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -968,7 +1025,7 @@
 }
 
 .btn-travel::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
@@ -996,7 +1053,7 @@
 
 .travel-card:hover {
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     0 20px 25px -5px hsl(var(--primary) / 0.1),
     0 10px 10px -5px hsl(var(--primary) / 0.04);
 }
@@ -1006,26 +1063,29 @@
   .travel-hero {
     padding: 1rem;
   }
-  
+
   .travel-stats {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .travel-tabs {
     grid-template-columns: repeat(3, 1fr);
   }
 
   /* Enhanced offshore mobile optimization */
-  h1, .text-4xl {
+  h1,
+  .text-4xl {
     font-size: 1.875rem !important; /* 30px */
   }
 
-  h2, .text-3xl {
+  h2,
+  .text-3xl {
     font-size: 1.5rem !important; /* 24px */
   }
 
-  h3, .text-2xl {
+  h3,
+  .text-2xl {
     font-size: 1.25rem !important; /* 20px */
   }
 
@@ -1040,23 +1100,30 @@
   }
 
   /* Stack columns on mobile */
-  .md\:grid-cols-2, .md\:grid-cols-3, .md\:grid-cols-4 {
+  .md\:grid-cols-2,
+  .md\:grid-cols-3,
+  .md\:grid-cols-4 {
     grid-template-columns: 1fr !important;
   }
-  
+
   /* Prevent text overflow on mobile */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
   }
-  
+
   /* Ensure images scale properly */
   img {
     max-width: 100%;
     height: auto;
   }
-  
+
   /* Make containers full width on mobile */
   .container {
     max-width: 100%;
@@ -1067,7 +1134,8 @@
 
 /* Tablet optimization for industrial tablets */
 @media (min-width: 769px) and (max-width: 1024px) {
-  button, .btn {
+  button,
+  .btn {
     min-height: 48px !important;
     font-size: 16px !important;
   }
@@ -1080,7 +1148,7 @@
   .md\:grid-cols-4 {
     grid-template-columns: repeat(2, 1fr) !important;
   }
-  
+
   /* Ensure readable text on tablets */
   .container {
     max-width: 100%;
@@ -1102,23 +1170,25 @@
   body {
     overflow-x: hidden;
   }
-  
+
   /* Make buttons more touch-friendly */
-  button, .btn, a.btn {
+  button,
+  .btn,
+  a.btn {
     min-height: 44px;
     padding: 0.75rem 1rem;
   }
-  
+
   /* Stack flex items on mobile by default */
   .flex-row-mobile-stack {
     flex-direction: column !important;
   }
-  
+
   /* Reduce gaps on mobile */
   .gap-6 {
     gap: 1rem !important;
   }
-  
+
   .gap-8 {
     gap: 1.5rem !important;
   }

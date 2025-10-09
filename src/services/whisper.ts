@@ -32,7 +32,7 @@ export async function testWhisperConnection(): Promise<WhisperTestResult> {
     const response = await fetch("https://api.openai.com/v1/models/whisper-1", {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
     });
 

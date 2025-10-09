@@ -17,7 +17,7 @@ const Admin = () => {
           badges={[
             { icon: Users, label: "Gestão de Usuários" },
             { icon: Lock, label: "Segurança" },
-            { icon: Settings, label: "Configurações" }
+            { icon: Settings, label: "Configurações" },
           ]}
         />
         <AdminPanel />

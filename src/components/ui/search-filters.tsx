@@ -32,7 +32,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
   sortOrder = "asc",
   onSortChange,
   placeholder = "Buscar...",
-  enabledFilters = ["categories", "status"]
+  enabledFilters = ["categories", "status"],
 }) => {
   const [localFilters, setLocalFilters] = useState(filters);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -64,7 +64,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
         <Input
           placeholder={placeholder}
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={e => onSearchChange(e.target.value)}
           className="pl-10"
         />
         {searchQuery && (
@@ -111,12 +111,12 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Categorias</Label>
                 <div className="space-y-2">
-                  {["RH", "Financeiro", "Vendas", "Marketing", "TI"].map((category) => (
+                  {["RH", "Financeiro", "Vendas", "Marketing", "TI"].map(category => (
                     <div key={category} className="flex items-center space-x-2">
                       <Checkbox
                         id={category}
                         checked={localFilters.categories?.includes(category) || false}
-                        onCheckedChange={(checked) => {
+                        onCheckedChange={checked => {
                           const current = localFilters.categories || [];
                           const updated = checked
                             ? [...current, category]
@@ -138,12 +138,12 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Status</Label>
                 <div className="space-y-2">
-                  {["Ativo", "Inativo", "Pendente", "Concluído"].map((status) => (
+                  {["Ativo", "Inativo", "Pendente", "Concluído"].map(status => (
                     <div key={status} className="flex items-center space-x-2">
                       <Checkbox
                         id={status}
                         checked={localFilters.status?.includes(status) || false}
-                        onCheckedChange={(checked) => {
+                        onCheckedChange={checked => {
                           const current = localFilters.status || [];
                           const updated = checked
                             ? [...current, status]
@@ -176,7 +176,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
       {/* Active Filters Display */}
       {activeFilterCount > 0 && (
         <div className="flex items-center gap-1 max-w-xs overflow-x-auto">
-          {localFilters.categories?.map((category) => (
+          {localFilters.categories?.map(category => (
             <Badge key={category} variant="secondary" className="text-xs">
               {category}
               <X
@@ -188,7 +188,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
               />
             </Badge>
           ))}
-          {localFilters.status?.map((status) => (
+          {localFilters.status?.map(status => (
             <Badge key={status} variant="outline" className="text-xs">
               {status}
               <X

@@ -7,12 +7,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { 
-  ArrowLeft, 
-  Save, 
-  Send, 
-  CheckCircle, 
-  Camera, 
+import {
+  ArrowLeft,
+  Save,
+  Send,
+  CheckCircle,
+  Camera,
   Mic,
   Ship,
   User,
@@ -22,7 +22,7 @@ import {
   Wind,
   Trash2,
   TreePine,
-  Waves
+  Waves,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { Checklist, ChecklistItem } from "./checklist-types";
@@ -44,7 +44,7 @@ const environmentalChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Água",
     order: 1,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "env-2",
@@ -54,7 +54,7 @@ const environmentalChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Emissões",
     order: 2,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "env-3",
@@ -64,7 +64,7 @@ const environmentalChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Resíduos",
     order: 3,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "env-4",
@@ -77,7 +77,7 @@ const environmentalChecklistItems: ChecklistItem[] = [
     unit: "ppm",
     minValue: 0,
     maxValue: 100,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "env-5",
@@ -87,7 +87,7 @@ const environmentalChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Vazamentos",
     order: 5,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "env-6",
@@ -100,7 +100,7 @@ const environmentalChecklistItems: ChecklistItem[] = [
     unit: "dB",
     minValue: 50,
     maxValue: 120,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "env-7",
@@ -110,7 +110,7 @@ const environmentalChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Biodiversidade",
     order: 7,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "env-8",
@@ -120,7 +120,7 @@ const environmentalChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Contenção",
     order: 8,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "env-9",
@@ -133,7 +133,7 @@ const environmentalChecklistItems: ChecklistItem[] = [
     unit: "°C",
     minValue: 10,
     maxValue: 35,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "env-10",
@@ -143,28 +143,29 @@ const environmentalChecklistItems: ChecklistItem[] = [
     required: false,
     category: "Observações",
     order: 10,
-    status: "pending"
-  }
+    status: "pending",
+  },
 ];
 
 export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
   checklist: initialChecklist,
   onSave,
   onSubmit,
-  onBack
+  onBack,
 }) => {
   const [checklist, setChecklist] = useState<Checklist>({
     ...initialChecklist,
-    items: environmentalChecklistItems
+    items: environmentalChecklistItems,
   });
 
   const [activeTab, setActiveTab] = useState("items");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const categories = Array.from(new Set(checklist.items.map(item => item.category)));
-  const filteredItems = selectedCategory === "all" 
-    ? checklist.items 
-    : checklist.items.filter(item => item.category === selectedCategory);
+  const filteredItems =
+    selectedCategory === "all"
+      ? checklist.items
+      : checklist.items.filter(item => item.category === selectedCategory);
 
   const completedItems = checklist.items.filter(item => item.status === "completed").length;
   const totalItems = checklist.items.length;
@@ -173,16 +174,16 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
   const handleItemChange = (itemId: string, field: string, value: any) => {
     setChecklist(prev => ({
       ...prev,
-      items: prev.items.map(item => 
-        item.id === itemId 
-          ? { 
-            ...item, 
-            [field]: value,
-            status: field === "value" && value !== undefined ? "completed" : item.status,
-            timestamp: field === "value" ? new Date().toISOString() : item.timestamp
-          }
+      items: prev.items.map(item =>
+        item.id === itemId
+          ? {
+              ...item,
+              [field]: value,
+              status: field === "value" && value !== undefined ? "completed" : item.status,
+              timestamp: field === "value" ? new Date().toISOString() : item.timestamp,
+            }
           : item
-      )
+      ),
     }));
   };
 
@@ -196,8 +197,10 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
   };
 
   const handleSubmit = async () => {
-    const incompleteRequired = checklist.items.filter(item => item.required && item.status !== "completed");
-    
+    const incompleteRequired = checklist.items.filter(
+      item => item.required && item.status !== "completed"
+    );
+
     if (incompleteRequired.length > 0) {
       toast.error(`Existem ${incompleteRequired.length} itens obrigatórios não concluídos`);
       return;
@@ -207,7 +210,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
       await onSubmit({
         ...checklist,
         status: "pending_review",
-        completedAt: new Date().toISOString()
+        completedAt: new Date().toISOString(),
       });
       toast.success("Checklist enviado para revisão!");
     } catch (error) {
@@ -217,69 +220,87 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
 
   const renderItemInput = (item: ChecklistItem) => {
     switch (item.type) {
-    case "boolean":
-      return (
-        <Checkbox
-          checked={item.value === true}
-          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked)}
-          className="mr-2"
-        />
-      );
-      
-    case "number":
-      return (
-        <div className="flex items-center gap-2">
-          <Input
-            type="number"
-            value={item.value || ""}
-            onChange={(e) => handleItemChange(item.id, "value", parseFloat(e.target.value))}
-            placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
-            className="w-32"
+      case "boolean":
+        return (
+          <Checkbox
+            checked={item.value === true}
+            onCheckedChange={checked => handleItemChange(item.id, "value", checked)}
+            className="mr-2"
           />
-          {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
-        </div>
-      );
-      
-    case "text":
-      return (
-        <Input
-          value={item.value || ""}
-          onChange={(e) => handleItemChange(item.id, "value", e.target.value)}
-          placeholder="Digite sua observação..."
-          className="w-full"
-        />
-      );
-      
-    default:
-      return null;
+        );
+
+      case "number":
+        return (
+          <div className="flex items-center gap-2">
+            <Input
+              type="number"
+              value={item.value || ""}
+              onChange={e => handleItemChange(item.id, "value", parseFloat(e.target.value))}
+              placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
+              className="w-32"
+            />
+            {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
+          </div>
+        );
+
+      case "text":
+        return (
+          <Input
+            value={item.value || ""}
+            onChange={e => handleItemChange(item.id, "value", e.target.value)}
+            placeholder="Digite sua observação..."
+            className="w-full"
+          />
+        );
+
+      default:
+        return null;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "Água": return <Droplets className="w-4 h-4" />;
-    case "Emissões": return <Wind className="w-4 h-4" />;
-    case "Resíduos": return <Trash2 className="w-4 h-4" />;
-    case "Vazamentos": return <Droplets className="w-4 h-4" />;
-    case "Ruído": return <Waves className="w-4 h-4" />;
-    case "Biodiversidade": return <TreePine className="w-4 h-4" />;
-    case "Contenção": return <Ship className="w-4 h-4" />;
-    case "Observações": return <Leaf className="w-4 h-4" />;
-    default: return <Leaf className="w-4 h-4" />;
+      case "Água":
+        return <Droplets className="w-4 h-4" />;
+      case "Emissões":
+        return <Wind className="w-4 h-4" />;
+      case "Resíduos":
+        return <Trash2 className="w-4 h-4" />;
+      case "Vazamentos":
+        return <Droplets className="w-4 h-4" />;
+      case "Ruído":
+        return <Waves className="w-4 h-4" />;
+      case "Biodiversidade":
+        return <TreePine className="w-4 h-4" />;
+      case "Contenção":
+        return <Ship className="w-4 h-4" />;
+      case "Observações":
+        return <Leaf className="w-4 h-4" />;
+      default:
+        return <Leaf className="w-4 h-4" />;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-    case "Água": return "text-blue-600 bg-blue-50";
-    case "Emissões": return "text-muted-foreground bg-gray-50";
-    case "Resíduos": return "text-orange-600 bg-orange-50";
-    case "Vazamentos": return "text-red-600 bg-red-50";
-    case "Ruído": return "text-purple-600 bg-purple-50";
-    case "Biodiversidade": return "text-green-600 bg-green-50";
-    case "Contenção": return "text-indigo-600 bg-indigo-50";
-    case "Observações": return "text-emerald-600 bg-emerald-50";
-    default: return "text-green-600 bg-green-50";
+      case "Água":
+        return "text-blue-600 bg-blue-50";
+      case "Emissões":
+        return "text-muted-foreground bg-gray-50";
+      case "Resíduos":
+        return "text-orange-600 bg-orange-50";
+      case "Vazamentos":
+        return "text-red-600 bg-red-50";
+      case "Ruído":
+        return "text-purple-600 bg-purple-50";
+      case "Biodiversidade":
+        return "text-green-600 bg-green-50";
+      case "Contenção":
+        return "text-indigo-600 bg-indigo-50";
+      case "Observações":
+        return "text-emerald-600 bg-emerald-50";
+      default:
+        return "text-green-600 bg-green-50";
     }
   };
 
@@ -360,10 +381,13 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
 
                 {/* Checklist Items */}
                 <div className="space-y-4">
-                  {filteredItems.map((item) => (
-                    <Card key={item.id} className={`transition-colors ${
-                      item.status === "completed" ? "bg-green-50 border-green-200" : ""
-                    }`}>
+                  {filteredItems.map(item => (
+                    <Card
+                      key={item.id}
+                      className={`transition-colors ${
+                        item.status === "completed" ? "bg-green-50 border-green-200" : ""
+                      }`}
+                    >
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -378,29 +402,30 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
                                 )}
                               </div>
                             </div>
-                            <CardDescription className="mt-2">
-                              {item.description}
-                            </CardDescription>
+                            <CardDescription className="mt-2">{item.description}</CardDescription>
                           </div>
                           <div className="flex items-center gap-2">
                             {item.status === "completed" && (
                               <CheckCircle className="w-5 h-5 text-green-500" />
                             )}
-                            <Badge variant="outline" className={`flex items-center gap-1 ${getCategoryColor(item.category)}`}>
+                            <Badge
+                              variant="outline"
+                              className={`flex items-center gap-1 ${getCategoryColor(item.category)}`}
+                            >
                               {getCategoryIcon(item.category)}
                               {item.category}
                             </Badge>
                           </div>
                         </div>
                       </CardHeader>
-                      
+
                       <CardContent className="space-y-3">
                         {/* Notes */}
                         <div>
                           <label className="text-sm font-medium">Observações:</label>
                           <Textarea
                             value={item.notes || ""}
-                            onChange={(e) => handleItemChange(item.id, "notes", e.target.value)}
+                            onChange={e => handleItemChange(item.id, "notes", e.target.value)}
                             placeholder="Adicione observações sobre este aspecto ambiental..."
                             className="mt-1"
                             rows={2}
@@ -435,9 +460,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
                   <CardContent>
                     <div className="text-center py-8">
                       <Camera className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">
-                        Nenhuma evidência coletada ainda
-                      </p>
+                      <p className="text-muted-foreground">Nenhuma evidência coletada ainda</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -447,9 +470,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
                 <Card>
                   <CardHeader>
                     <CardTitle>Resumo da Avaliação Ambiental</CardTitle>
-                    <CardDescription>
-                      Impactos identificados e ações recomendadas
-                    </CardDescription>
+                    <CardDescription>Impactos identificados e ações recomendadas</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
@@ -458,13 +479,17 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
                         <div className="text-sm text-muted-foreground">Itens Avaliados</div>
                       </div>
                       <div className="text-center p-4 bg-orange-50 rounded-lg">
-                        <div className="text-2xl font-bold text-orange-600">{totalItems - completedItems}</div>
+                        <div className="text-2xl font-bold text-orange-600">
+                          {totalItems - completedItems}
+                        </div>
                         <div className="text-sm text-muted-foreground">Itens Pendentes</div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="text-sm font-medium">Resumo da Conformidade Ambiental:</label>
+                      <label className="text-sm font-medium">
+                        Resumo da Conformidade Ambiental:
+                      </label>
                       <Textarea
                         placeholder="Descreva o status geral de conformidade ambiental e ações necessárias..."
                         className="mt-1"
@@ -488,11 +513,21 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
-                <div><strong>Nome:</strong> {checklist.vessel.name}</div>
-                <div><strong>Tipo:</strong> {checklist.vessel.type}</div>
-                <div><strong>IMO:</strong> {checklist.vessel.imo}</div>
-                <div><strong>Bandeira:</strong> {checklist.vessel.flag}</div>
-                <div><strong>Operador:</strong> {checklist.vessel.operator}</div>
+                <div>
+                  <strong>Nome:</strong> {checklist.vessel.name}
+                </div>
+                <div>
+                  <strong>Tipo:</strong> {checklist.vessel.type}
+                </div>
+                <div>
+                  <strong>IMO:</strong> {checklist.vessel.imo}
+                </div>
+                <div>
+                  <strong>Bandeira:</strong> {checklist.vessel.flag}
+                </div>
+                <div>
+                  <strong>Operador:</strong> {checklist.vessel.operator}
+                </div>
               </CardContent>
             </Card>
 
@@ -505,10 +540,18 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
-                <div><strong>Nome:</strong> {checklist.inspector.name}</div>
-                <div><strong>Licença:</strong> {checklist.inspector.license}</div>
-                <div><strong>Empresa:</strong> {checklist.inspector.company}</div>
-                <div><strong>Email:</strong> {checklist.inspector.email}</div>
+                <div>
+                  <strong>Nome:</strong> {checklist.inspector.name}
+                </div>
+                <div>
+                  <strong>Licença:</strong> {checklist.inspector.license}
+                </div>
+                <div>
+                  <strong>Empresa:</strong> {checklist.inspector.company}
+                </div>
+                <div>
+                  <strong>Email:</strong> {checklist.inspector.email}
+                </div>
               </CardContent>
             </Card>
 
@@ -531,7 +574,10 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
                 </div>
                 <div className="flex justify-between">
                   <span>Prioridade:</span>
-                  <Badge variant={checklist.priority === "high" ? "destructive" : "default"} className="text-xs">
+                  <Badge
+                    variant={checklist.priority === "high" ? "destructive" : "default"}
+                    className="text-xs"
+                  >
                     {checklist.priority}
                   </Badge>
                 </div>

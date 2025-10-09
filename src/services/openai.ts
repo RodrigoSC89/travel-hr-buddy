@@ -32,14 +32,14 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [
           {
             role: "user",
-            content: "Say \"API test successful\" if you can read this.",
+            content: 'Say "API test successful" if you can read this.',
           },
         ],
         max_tokens: 20,

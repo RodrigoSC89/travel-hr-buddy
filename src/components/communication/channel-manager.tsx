@@ -3,10 +3,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -30,7 +42,7 @@ import {
   Edit,
   Trash2,
   Eye,
-  EyeOff
+  EyeOff,
 } from "lucide-react";
 
 interface Channel {
@@ -63,7 +75,7 @@ interface ChannelManagerProps {
 
 export const ChannelManager: React.FC<ChannelManagerProps> = ({
   activeChannels,
-  onStatsUpdate
+  onStatsUpdate,
 }) => {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [filteredChannels, setFilteredChannels] = useState<Channel[]>([]);
@@ -80,13 +92,13 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     name: "",
     description: "",
     type: "group" as const,
-    is_public: true
+    is_public: true,
   });
 
   const loadChannels = useCallback(async () => {
     try {
       setLoading(true);
-      
+
       // Mock channels data - replace with real Supabase query
       const mockChannels: Channel[] = [
         {
@@ -100,7 +112,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
           member_count: 156,
           last_message_at: new Date().toISOString(),
           settings: { notifications: true },
-          created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+          created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
         },
         {
           id: "2",
@@ -113,7 +125,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
           member_count: 89,
           last_message_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
           settings: { notifications: true },
-          created_at: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString()
+          created_at: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(),
         },
         {
           id: "3",
@@ -126,7 +138,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
           member_count: 34,
           last_message_at: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
           settings: { notifications: true },
-          created_at: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
+          created_at: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
         },
         {
           id: "4",
@@ -139,7 +151,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
           member_count: 78,
           last_message_at: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
           settings: { notifications: true },
-          created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
+          created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
         },
         {
           id: "5",
@@ -152,7 +164,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
           member_count: 12,
           last_message_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
           settings: { notifications: true },
-          created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
+          created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
         },
         {
           id: "6",
@@ -165,8 +177,8 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
           member_count: 28,
           last_message_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
           settings: { notifications: true },
-          created_at: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString()
-        }
+          created_at: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
+        },
       ];
 
       setChannels(mockChannels);
@@ -175,7 +187,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       toast({
         title: "Erro",
         description: "Erro ao carregar canais",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -190,7 +202,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         {
           event: "*",
           schema: "public",
-          table: "communication_channels"
+          table: "communication_channels",
         },
         () => {
           loadChannels();
@@ -207,9 +219,10 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     let filtered = [...channels];
 
     if (searchTerm) {
-      filtered = filtered.filter(c => 
-        c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        c =>
+          c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          c.description?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -235,7 +248,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         toast({
           title: "Erro",
           description: "Nome do canal é obrigatório",
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
@@ -251,7 +264,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         created_by: "current-user",
         member_count: 1,
         settings: { notifications: true },
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
 
       setChannels(prev => [channel, ...prev]);
@@ -260,14 +273,14 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
       toast({
         title: "Sucesso",
-        description: "Canal criado com sucesso"
+        description: "Canal criado com sucesso",
       });
     } catch (error) {
       console.error("Error creating channel:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar canal",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -275,17 +288,13 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
   const joinChannel = async (channelId: string) => {
     try {
       // Mock join channel logic
-      setChannels(prev => 
-        prev.map(c => 
-          c.id === channelId 
-            ? { ...c, member_count: c.member_count + 1 }
-            : c
-        )
+      setChannels(prev =>
+        prev.map(c => (c.id === channelId ? { ...c, member_count: c.member_count + 1 } : c))
       );
 
       toast({
         title: "Sucesso",
-        description: "Você entrou no canal"
+        description: "Você entrou no canal",
       });
     } catch (error) {
       console.error("Error joining channel:", error);
@@ -294,41 +303,56 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
   const getChannelIcon = (type: string) => {
     switch (type) {
-    case "department": return Building;
-    case "broadcast": return Megaphone;
-    case "emergency": return AlertTriangle;
-    case "group": return Users;
-    default: return Hash;
+      case "department":
+        return Building;
+      case "broadcast":
+        return Megaphone;
+      case "emergency":
+        return AlertTriangle;
+      case "group":
+        return Users;
+      default:
+        return Hash;
     }
   };
 
   const getChannelTypeLabel = (type: string) => {
     switch (type) {
-    case "department": return "Departamento";
-    case "broadcast": return "Transmissão";
-    case "emergency": return "Emergência";
-    case "group": return "Grupo";
-    default: return "Canal";
+      case "department":
+        return "Departamento";
+      case "broadcast":
+        return "Transmissão";
+      case "emergency":
+        return "Emergência";
+      case "group":
+        return "Grupo";
+      default:
+        return "Canal";
     }
   };
 
   const getChannelTypeColor = (type: string) => {
     switch (type) {
-    case "emergency": return "bg-destructive text-destructive-foreground";
-    case "department": return "bg-info text-info-foreground";
-    case "broadcast": return "bg-warning text-warning-foreground";
-    case "group": return "bg-success text-success-foreground";
-    default: return "bg-muted text-muted-foreground";
+      case "emergency":
+        return "bg-destructive text-destructive-foreground";
+      case "department":
+        return "bg-info text-info-foreground";
+      case "broadcast":
+        return "bg-warning text-warning-foreground";
+      case "group":
+        return "bg-success text-success-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const formatTimeAgo = (dateString?: string) => {
     if (!dateString) return "Nunca";
-    
+
     const now = new Date();
     const date = new Date(dateString);
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 1) return "Agora mesmo";
     if (diffInHours < 24) return `${diffInHours}h atrás`;
     return `${Math.floor(diffInHours / 24)}d atrás`;
@@ -369,7 +393,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                     <Input
                       placeholder="Ex: Equipe de Deck"
                       value={newChannel.name}
-                      onChange={(e) => setNewChannel(prev => ({ ...prev, name: e.target.value }))}
+                      onChange={e => setNewChannel(prev => ({ ...prev, name: e.target.value }))}
                     />
                   </div>
                   <div>
@@ -377,12 +401,19 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                     <Textarea
                       placeholder="Descreva o propósito do canal..."
                       value={newChannel.description}
-                      onChange={(e) => setNewChannel(prev => ({ ...prev, description: e.target.value }))}
+                      onChange={e =>
+                        setNewChannel(prev => ({ ...prev, description: e.target.value }))
+                      }
                     />
                   </div>
                   <div>
                     <Label>Tipo do Canal</Label>
-                    <Select value={newChannel.type} onValueChange={(value: any) => setNewChannel(prev => ({ ...prev, type: value }))}>
+                    <Select
+                      value={newChannel.type}
+                      onValueChange={(value: any) =>
+                        setNewChannel(prev => ({ ...prev, type: value }))
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -398,16 +429,16 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                     <Label>Canal Público</Label>
                     <Switch
                       checked={newChannel.is_public}
-                      onCheckedChange={(checked) => setNewChannel(prev => ({ ...prev, is_public: checked }))}
+                      onCheckedChange={checked =>
+                        setNewChannel(prev => ({ ...prev, is_public: checked }))
+                      }
                     />
                   </div>
                   <div className="flex justify-end gap-2">
                     <Button variant="outline" onClick={() => setIsNewChannelOpen(false)}>
                       Cancelar
                     </Button>
-                    <Button onClick={createChannel}>
-                      Criar Canal
-                    </Button>
+                    <Button onClick={createChannel}>Criar Canal</Button>
                   </div>
                 </div>
               </DialogContent>
@@ -422,7 +453,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                 <Input
                   placeholder="Buscar canais..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -445,11 +476,11 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
       {/* Channels Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredChannels.map((channel) => {
+        {filteredChannels.map(channel => {
           const ChannelIcon = getChannelIcon(channel.type);
-          
+
           return (
-            <Card 
+            <Card
               key={channel.id}
               className="cursor-pointer transition-all hover:shadow-md"
               onClick={() => {
@@ -461,29 +492,35 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                 <div className="space-y-3">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${
-                        channel.type === "emergency" ? "bg-destructive/10" :
-                          channel.type === "department" ? "bg-info/10" :
-                            channel.type === "broadcast" ? "bg-warning/10" :
-                              "bg-success/10"
-                      }`}>
-                        <ChannelIcon className={`h-4 w-4 ${
-                          channel.type === "emergency" ? "text-destructive" :
-                            channel.type === "department" ? "text-info" :
-                              channel.type === "broadcast" ? "text-warning" :
-                                "text-success"
-                        }`} />
+                      <div
+                        className={`p-2 rounded-lg ${
+                          channel.type === "emergency"
+                            ? "bg-destructive/10"
+                            : channel.type === "department"
+                              ? "bg-info/10"
+                              : channel.type === "broadcast"
+                                ? "bg-warning/10"
+                                : "bg-success/10"
+                        }`}
+                      >
+                        <ChannelIcon
+                          className={`h-4 w-4 ${
+                            channel.type === "emergency"
+                              ? "text-destructive"
+                              : channel.type === "department"
+                                ? "text-info"
+                                : channel.type === "broadcast"
+                                  ? "text-warning"
+                                  : "text-success"
+                          }`}
+                        />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <h3 className="font-medium truncate">{channel.name}</h3>
-                          {!channel.is_public && (
-                            <Lock className="h-3 w-3 text-muted-foreground" />
-                          )}
+                          {!channel.is_public && <Lock className="h-3 w-3 text-muted-foreground" />}
                         </div>
-                        <Badge 
-                          className={`text-xs ${getChannelTypeColor(channel.type)}`}
-                        >
+                        <Badge className={`text-xs ${getChannelTypeColor(channel.type)}`}>
                           {getChannelTypeLabel(channel.type)}
                         </Badge>
                       </div>
@@ -492,13 +529,13 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </div>
-                  
+
                   {channel.description && (
                     <p className="text-sm text-muted-foreground line-clamp-2">
                       {channel.description}
                     </p>
                   )}
-                  
+
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Users className="h-3 w-3" />
@@ -509,12 +546,12 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                       {formatTimeAgo(channel.last_message_at)}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       className="flex-1"
-                      onClick={(e) => {
+                      onClick={e => {
                         e.stopPropagation();
                         joinChannel(channel.id);
                       }}
@@ -572,21 +609,19 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                   <p className="font-medium">{selectedChannel.member_count}</p>
                 </div>
               </div>
-              
+
               {selectedChannel.description && (
                 <div>
                   <Label>Descrição</Label>
-                  <p className="text-sm text-muted-foreground">
-                    {selectedChannel.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{selectedChannel.description}</p>
                 </div>
               )}
-              
+
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 Última mensagem: {formatTimeAgo(selectedChannel.last_message_at)}
               </div>
-              
+
               <div className="flex justify-end gap-2">
                 <Button variant="outline">
                   <Settings className="h-4 w-4 mr-2" />

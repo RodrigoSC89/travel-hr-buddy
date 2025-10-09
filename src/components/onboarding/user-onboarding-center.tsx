@@ -7,11 +7,11 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Users, 
-  Mail, 
-  FileText, 
-  CheckCircle, 
+import {
+  Users,
+  Mail,
+  FileText,
+  CheckCircle,
   Star,
   MessageSquare,
   TrendingUp,
@@ -19,7 +19,7 @@ import {
   BookOpen,
   Video,
   Download,
-  Send
+  Send,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -57,7 +57,7 @@ const UserOnboardingCenter: React.FC = () => {
       description: "Engenheiros e técnicos especialistas",
       userCount: 15,
       status: "active",
-      completedTraining: 12
+      completedTraining: 12,
     },
     {
       id: "2",
@@ -65,7 +65,7 @@ const UserOnboardingCenter: React.FC = () => {
       description: "Gerentes e supervisores de operações",
       userCount: 8,
       status: "invited",
-      completedTraining: 3
+      completedTraining: 3,
     },
     {
       id: "3",
@@ -73,8 +73,8 @@ const UserOnboardingCenter: React.FC = () => {
       description: "Equipe operacional e tripulação",
       userCount: 25,
       status: "pending",
-      completedTraining: 0
-    }
+      completedTraining: 0,
+    },
   ]);
 
   const [trainingMaterials] = useState<TrainingMaterial[]>([
@@ -83,36 +83,36 @@ const UserOnboardingCenter: React.FC = () => {
       title: "Introdução ao Nautilus One",
       type: "video",
       duration: "15 min",
-      completed: true
+      completed: true,
     },
     {
       id: "2",
       title: "Navegação e Interface",
       type: "interactive",
       duration: "20 min",
-      completed: true
+      completed: true,
     },
     {
       id: "3",
       title: "Gestão de Viagens e Reservas",
       type: "video",
       duration: "25 min",
-      completed: false
+      completed: false,
     },
     {
       id: "4",
       title: "Sistema Marítimo e PEOTRAM",
       type: "document",
       duration: "30 min",
-      completed: false
+      completed: false,
     },
     {
       id: "5",
       title: "Relatórios e Analytics",
       type: "interactive",
       duration: "18 min",
-      completed: false
-    }
+      completed: false,
+    },
   ]);
 
   const [feedbacks] = useState<Feedback[]>([
@@ -120,17 +120,19 @@ const UserOnboardingCenter: React.FC = () => {
       id: "1",
       user: "João Silva",
       rating: 5,
-      comment: "Interface muito intuitiva e funcional. O sistema atende perfeitamente nossas necessidades.",
+      comment:
+        "Interface muito intuitiva e funcional. O sistema atende perfeitamente nossas necessidades.",
       module: "Dashboard",
-      date: "2024-01-15"
+      date: "2024-01-15",
     },
     {
       id: "2",
       user: "Maria Santos",
       rating: 4,
-      comment: "Excelente para gestão de viagens. Poderia ter mais opções de filtros nos relatórios.",
+      comment:
+        "Excelente para gestão de viagens. Poderia ter mais opções de filtros nos relatórios.",
       module: "Viagens",
-      date: "2024-01-14"
+      date: "2024-01-14",
     },
     {
       id: "3",
@@ -138,15 +140,15 @@ const UserOnboardingCenter: React.FC = () => {
       rating: 5,
       comment: "O assistente IA é impressionante. Economiza muito tempo nas operações diárias.",
       module: "IA Assistant",
-      date: "2024-01-13"
-    }
+      date: "2024-01-13",
+    },
   ]);
 
   const [newInvite, setNewInvite] = useState({
     email: "",
     name: "",
     role: "",
-    message: ""
+    message: "",
   });
 
   const handleSendInvite = () => {
@@ -161,41 +163,50 @@ const UserOnboardingCenter: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active":
-      return "text-green-600 bg-green-50 border-green-200";
-    case "invited":
-      return "text-blue-600 bg-blue-50 border-blue-200";
-    case "pending":
-      return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    default:
-      return "text-muted-foreground bg-gray-50 border-gray-200";
+      case "active":
+        return "text-green-600 bg-green-50 border-green-200";
+      case "invited":
+        return "text-blue-600 bg-blue-50 border-blue-200";
+      case "pending":
+        return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      default:
+        return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-    case "active": return "Ativo";
-    case "invited": return "Convidado";
-    case "pending": return "Pendente";
-    default: return "Desconhecido";
+      case "active":
+        return "Ativo";
+      case "invited":
+        return "Convidado";
+      case "pending":
+        return "Pendente";
+      default:
+        return "Desconhecido";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "video": return <Video className="w-4 h-4" />;
-    case "document": return <FileText className="w-4 h-4" />;
-    case "interactive": return <Target className="w-4 h-4" />;
-    default: return <BookOpen className="w-4 h-4" />;
+      case "video":
+        return <Video className="w-4 h-4" />;
+      case "document":
+        return <FileText className="w-4 h-4" />;
+      case "interactive":
+        return <Target className="w-4 h-4" />;
+      default:
+        return <BookOpen className="w-4 h-4" />;
     }
   };
 
-  const averageRating = feedbacks.length > 0 
-    ? feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length 
-    : 0;
+  const averageRating =
+    feedbacks.length > 0 ? feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length : 0;
 
   const totalUsers = userGroups.reduce((sum, group) => sum + group.userCount, 0);
-  const activeUsers = userGroups.filter(g => g.status === "active").reduce((sum, group) => sum + group.userCount, 0);
+  const activeUsers = userGroups
+    .filter(g => g.status === "active")
+    .reduce((sum, group) => sum + group.userCount, 0);
   const completedTraining = userGroups.reduce((sum, group) => sum + group.completedTraining, 0);
 
   return (
@@ -213,7 +224,7 @@ const UserOnboardingCenter: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -225,7 +236,7 @@ const UserOnboardingCenter: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -237,7 +248,7 @@ const UserOnboardingCenter: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -266,13 +277,11 @@ const UserOnboardingCenter: React.FC = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>Grupos de Usuários</CardTitle>
-                  <CardDescription>
-                    Gestão de usuários por perfil e departamento
-                  </CardDescription>
+                  <CardDescription>Gestão de usuários por perfil e departamento</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {userGroups.map((group) => (
+                    {userGroups.map(group => (
                       <div key={group.id} className="border rounded-lg p-4">
                         <div className="flex items-start justify-between mb-3">
                           <div>
@@ -283,7 +292,7 @@ const UserOnboardingCenter: React.FC = () => {
                             {getStatusText(group.status)}
                           </Badge>
                         </div>
-                        
+
                         <div className="grid grid-cols-3 gap-4 text-sm">
                           <div>
                             <p className="text-muted-foreground">Usuários</p>
@@ -296,9 +305,9 @@ const UserOnboardingCenter: React.FC = () => {
                           <div>
                             <p className="text-muted-foreground">Progresso</p>
                             <div className="mt-1">
-                              <Progress 
-                                value={(group.completedTraining / group.userCount) * 100} 
-                                className="h-2" 
+                              <Progress
+                                value={(group.completedTraining / group.userCount) * 100}
+                                className="h-2"
                               />
                             </div>
                           </div>
@@ -315,9 +324,7 @@ const UserOnboardingCenter: React.FC = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>Convidar Novo Usuário</CardTitle>
-                  <CardDescription>
-                    Envie convites para novos usuários
-                  </CardDescription>
+                  <CardDescription>Envie convites para novos usuários</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
@@ -327,7 +334,7 @@ const UserOnboardingCenter: React.FC = () => {
                       type="email"
                       placeholder="usuario@empresa.com"
                       value={newInvite.email}
-                      onChange={(e) => setNewInvite(prev => ({ ...prev, email: e.target.value }))}
+                      onChange={e => setNewInvite(prev => ({ ...prev, email: e.target.value }))}
                     />
                   </div>
 
@@ -337,7 +344,7 @@ const UserOnboardingCenter: React.FC = () => {
                       id="name"
                       placeholder="João Silva"
                       value={newInvite.name}
-                      onChange={(e) => setNewInvite(prev => ({ ...prev, name: e.target.value }))}
+                      onChange={e => setNewInvite(prev => ({ ...prev, name: e.target.value }))}
                     />
                   </div>
 
@@ -347,7 +354,7 @@ const UserOnboardingCenter: React.FC = () => {
                       id="role"
                       placeholder="Engenheiro Senior"
                       value={newInvite.role}
-                      onChange={(e) => setNewInvite(prev => ({ ...prev, role: e.target.value }))}
+                      onChange={e => setNewInvite(prev => ({ ...prev, role: e.target.value }))}
                     />
                   </div>
 
@@ -357,7 +364,7 @@ const UserOnboardingCenter: React.FC = () => {
                       id="message"
                       placeholder="Bem-vindo ao Nautilus One..."
                       value={newInvite.message}
-                      onChange={(e) => setNewInvite(prev => ({ ...prev, message: e.target.value }))}
+                      onChange={e => setNewInvite(prev => ({ ...prev, message: e.target.value }))}
                       rows={3}
                     />
                   </div>
@@ -376,13 +383,11 @@ const UserOnboardingCenter: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Material de Treinamento</CardTitle>
-              <CardDescription>
-                Conteúdo educacional para onboarding de usuários
-              </CardDescription>
+              <CardDescription>Conteúdo educacional para onboarding de usuários</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {trainingMaterials.map((material) => (
+                {trainingMaterials.map(material => (
                   <div key={material.id} className="border rounded-lg p-4">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
@@ -391,14 +396,12 @@ const UserOnboardingCenter: React.FC = () => {
                           {material.type}
                         </span>
                       </div>
-                      {material.completed && (
-                        <CheckCircle className="w-4 h-4 text-green-500" />
-                      )}
+                      {material.completed && <CheckCircle className="w-4 h-4 text-green-500" />}
                     </div>
-                    
+
                     <h4 className="font-medium mb-1">{material.title}</h4>
                     <p className="text-sm text-muted-foreground mb-3">{material.duration}</p>
-                    
+
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" className="flex-1">
                         <Download className="w-3 h-3 mr-1" />
@@ -419,13 +422,11 @@ const UserOnboardingCenter: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Feedback dos Usuários</CardTitle>
-              <CardDescription>
-                Avaliações e sugestões da comunidade de usuários
-              </CardDescription>
+              <CardDescription>Avaliações e sugestões da comunidade de usuários</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {feedbacks.map((feedback) => (
+                {feedbacks.map(feedback => (
                   <div key={feedback.id} className="border rounded-lg p-4">
                     <div className="flex items-start justify-between mb-2">
                       <div>
@@ -437,13 +438,15 @@ const UserOnboardingCenter: React.FC = () => {
                           <Star
                             key={i}
                             className={`w-4 h-4 ${
-                              i < feedback.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
+                              i < feedback.rating
+                                ? "fill-yellow-400 text-yellow-400"
+                                : "text-muted-foreground"
                             }`}
                           />
                         ))}
                       </div>
                     </div>
-                    
+
                     <p className="text-sm mb-2">{feedback.comment}</p>
                     <p className="text-xs text-muted-foreground">{feedback.date}</p>
                   </div>
@@ -467,16 +470,45 @@ const UserOnboardingCenter: React.FC = () => {
                   <h4 className="font-medium">Fluxo de Onboarding</h4>
                   <div className="space-y-3">
                     {[
-                      { step: 1, title: "Envio de Convite", description: "Email automático com credenciais", completed: true },
-                      { step: 2, title: "Primeiro Acesso", description: "Tutorial interativo", completed: true },
-                      { step: 3, title: "Configuração de Perfil", description: "Personalização inicial", completed: true },
-                      { step: 4, title: "Treinamento Básico", description: "Módulos essenciais", completed: false },
-                      { step: 5, title: "Certificação", description: "Avaliação de conhecimento", completed: false }
-                    ].map((item) => (
+                      {
+                        step: 1,
+                        title: "Envio de Convite",
+                        description: "Email automático com credenciais",
+                        completed: true,
+                      },
+                      {
+                        step: 2,
+                        title: "Primeiro Acesso",
+                        description: "Tutorial interativo",
+                        completed: true,
+                      },
+                      {
+                        step: 3,
+                        title: "Configuração de Perfil",
+                        description: "Personalização inicial",
+                        completed: true,
+                      },
+                      {
+                        step: 4,
+                        title: "Treinamento Básico",
+                        description: "Módulos essenciais",
+                        completed: false,
+                      },
+                      {
+                        step: 5,
+                        title: "Certificação",
+                        description: "Avaliação de conhecimento",
+                        completed: false,
+                      },
+                    ].map(item => (
                       <div key={item.step} className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                          item.completed ? "bg-green-100 text-green-600" : "bg-gray-100 text-muted-foreground"
-                        }`}>
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                            item.completed
+                              ? "bg-green-100 text-green-600"
+                              : "bg-gray-100 text-muted-foreground"
+                          }`}
+                        >
                           {item.completed ? <CheckCircle className="w-4 h-4" /> : item.step}
                         </div>
                         <div>

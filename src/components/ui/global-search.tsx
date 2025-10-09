@@ -1,23 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Search, 
-  Filter, 
-  Clock, 
-  Hash, 
-  FileText, 
-  Users, 
-  Ship, 
+import {
+  Search,
+  Filter,
+  Clock,
+  Hash,
+  FileText,
+  Users,
+  Ship,
   Calculator,
   Zap,
   ArrowRight,
   Command,
   Star,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -66,8 +72,8 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
         module: "PEOTRAM",
         lastAccessed: "2h atrás",
         popular: true,
-        tags: ["auditoria", "ocean-explorer", "certificação"]
-      }
+        tags: ["auditoria", "ocean-explorer", "certificação"],
+      },
     },
     {
       id: "2",
@@ -80,8 +86,8 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
       metadata: {
         module: "Fleet",
         popular: true,
-        tags: ["frota", "embarcações", "monitoramento"]
-      }
+        tags: ["frota", "embarcações", "monitoramento"],
+      },
     },
     {
       id: "3",
@@ -93,8 +99,8 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
       relevance: 0.85,
       metadata: {
         module: "HR",
-        tags: ["certificados", "tripulação", "stcw"]
-      }
+        tags: ["certificados", "tripulação", "stcw"],
+      },
     },
     {
       id: "4",
@@ -106,8 +112,8 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
       relevance: 0.8,
       metadata: {
         module: "Analytics",
-        tags: ["relatórios", "bi", "métricas"]
-      }
+        tags: ["relatórios", "bi", "métricas"],
+      },
     },
     {
       id: "5",
@@ -119,24 +125,25 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
       relevance: 0.75,
       metadata: {
         module: "AI",
-        tags: ["ia", "automação", "insights"]
-      }
-    }
+        tags: ["ia", "automação", "insights"],
+      },
+    },
   ];
 
   // Busca inteligente com relevância
   useEffect(() => {
     if (query.trim()) {
       const filtered = searchData
-        .filter(item => 
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.description.toLowerCase().includes(query.toLowerCase()) ||
-          item.category.toLowerCase().includes(query.toLowerCase()) ||
-          item.metadata?.tags?.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
+        .filter(
+          item =>
+            item.title.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.toLowerCase().includes(query.toLowerCase()) ||
+            item.category.toLowerCase().includes(query.toLowerCase()) ||
+            item.metadata?.tags?.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
         )
         .sort((a, b) => b.relevance - a.relevance)
         .slice(0, 6);
-      
+
       setResults(filtered);
       setSelectedIndex(0);
     } else {
@@ -151,23 +158,23 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
       if (!isOpen) return;
 
       switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        setSelectedIndex(prev => Math.max(prev - 1, 0));
-        break;
-      case "Enter":
-        e.preventDefault();
-        if (results[selectedIndex]) {
-          handleResultClick(results[selectedIndex]);
-        }
-        break;
-      case "Escape":
-        onOpenChange(false);
-        break;
+        case "ArrowDown":
+          e.preventDefault();
+          setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          setSelectedIndex(prev => Math.max(prev - 1, 0));
+          break;
+        case "Enter":
+          e.preventDefault();
+          if (results[selectedIndex]) {
+            handleResultClick(results[selectedIndex]);
+          }
+          break;
+        case "Escape":
+          onOpenChange(false);
+          break;
       }
     };
 
@@ -197,29 +204,41 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
     toast({
       title: "Navegando",
       description: `Abrindo ${result.title}...`,
-      duration: 2000
+      duration: 2000,
     });
   };
 
   const getCategoryIcon = (category: string): React.ComponentType<{ className?: string }> => {
     switch (category.toLowerCase()) {
-    case "auditorias": return FileText;
-    case "módulos": return Hash;
-    case "rh": return Users;
-    case "relatórios": return Calculator;
-    case "ia": return Zap;
-    default: return FileText;
+      case "auditorias":
+        return FileText;
+      case "módulos":
+        return Hash;
+      case "rh":
+        return Users;
+      case "relatórios":
+        return Calculator;
+      case "ia":
+        return Zap;
+      default:
+        return FileText;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
-    case "auditorias": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-    case "módulos": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
-    case "rh": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-    case "relatórios": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
-    case "ia": return "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+      case "auditorias":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+      case "módulos":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
+      case "rh":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+      case "relatórios":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+      case "ia":
+        return "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
     }
   };
 
@@ -240,7 +259,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
             <Input
               ref={inputRef}
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={e => setQuery(e.target.value)}
               placeholder="Buscar módulos, auditorias, relatórios... (use / para ativar)"
               className="pl-10 pr-16 h-12 text-base bg-background border-2 border-primary/20 focus:border-primary/40 text-foreground placeholder:text-muted-foreground"
               autoComplete="off"
@@ -270,7 +289,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
               {results.map((result, index) => {
                 const IconComponent = result.icon;
                 const CategoryIcon = getCategoryIcon(result.category);
-                
+
                 return (
                   <Card
                     key={result.id}
@@ -283,14 +302,16 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">
-                        <div className={`p-2 rounded-lg ${
-                          index === selectedIndex 
-                            ? "bg-primary text-primary-foreground" 
-                            : "bg-primary/10 text-primary"
-                        }`}>
+                        <div
+                          className={`p-2 rounded-lg ${
+                            index === selectedIndex
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-primary/10 text-primary"
+                          }`}
+                        >
                           <IconComponent className="w-5 h-5" />
                         </div>
-                        
+
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <h3 className="font-semibold text-foreground truncate text-base">
@@ -300,26 +321,29 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
                               <Star className="w-4 h-4 text-yellow-500 fill-current" />
                             )}
                           </div>
-                          
+
                           <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
                             {result.description}
                           </p>
-                          
+
                           <div className="flex items-center gap-2 flex-wrap">
                             <Badge className={`text-xs ${getCategoryColor(result.category)}`}>
                               <CategoryIcon className="w-3 h-3 mr-1" />
                               {result.category}
                             </Badge>
-                            
+
                             {result.metadata?.lastAccessed && (
-                              <Badge variant="outline" className="text-xs border-muted-foreground/30 text-muted-foreground">
+                              <Badge
+                                variant="outline"
+                                className="text-xs border-muted-foreground/30 text-muted-foreground"
+                              >
                                 <Clock className="w-3 h-3 mr-1" />
                                 {result.metadata.lastAccessed}
                               </Badge>
                             )}
                           </div>
                         </div>
-                        
+
                         <div className="text-muted-foreground">
                           <ArrowRight className="w-4 h-4" />
                         </div>
@@ -345,16 +369,22 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1">
-                <Badge variant="outline" className="text-xs">↵</Badge>
+                <Badge variant="outline" className="text-xs">
+                  ↵
+                </Badge>
                 Selecionar
               </span>
               <span className="flex items-center gap-1">
-                <Badge variant="outline" className="text-xs">↑↓</Badge>
+                <Badge variant="outline" className="text-xs">
+                  ↑↓
+                </Badge>
                 Navegar
               </span>
             </div>
             <span className="flex items-center gap-1">
-              <Badge variant="outline" className="text-xs">Esc</Badge>
+              <Badge variant="outline" className="text-xs">
+                Esc
+              </Badge>
               Fechar
             </span>
           </div>

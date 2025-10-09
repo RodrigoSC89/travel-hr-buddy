@@ -6,11 +6,11 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Camera, 
-  Upload, 
-  FileText, 
-  Scan, 
+import {
+  Camera,
+  Upload,
+  FileText,
+  Scan,
   Eye,
   Download,
   Share2,
@@ -26,7 +26,7 @@ import {
   Maximize2,
   Crop,
   RotateCw,
-  Contrast
+  Contrast,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -74,17 +74,19 @@ export const EnhancedDocumentScanner: React.FC = () => {
     autoEnhance: true,
     multipage: false,
     ocrLanguage: "pt",
-    outputFormat: "pdf"
+    outputFormat: "pdf",
   });
-  const [currentStep, setCurrentStep] = useState<"capture" | "preview" | "enhance" | "ocr" | "analysis">("capture");
+  const [currentStep, setCurrentStep] = useState<
+    "capture" | "preview" | "enhance" | "ocr" | "analysis"
+  >("capture");
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  
+
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
@@ -98,28 +100,28 @@ export const EnhancedDocumentScanner: React.FC = () => {
         video: {
           facingMode: isMobile ? "environment" : "user",
           width: { ideal: 1920 },
-          height: { ideal: 1080 }
-        }
+          height: { ideal: 1080 },
+        },
       };
 
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
-      
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
       }
-      
+
       toast({
         title: "Câmera ativada",
-        description: "Posicione o documento e capture a imagem"
+        description: "Posicione o documento e capture a imagem",
       });
     } catch (error) {
       console.error("Erro ao acessar câmera:", error);
       toast({
         title: "Erro na câmera",
         description: "Não foi possível acessar a câmera. Use o upload de arquivo.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   }, [isMobile, toast]);
@@ -154,7 +156,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
 
     toast({
       title: "Imagem capturada",
-      description: "Revise a imagem antes de processar"
+      description: "Revise a imagem antes de processar",
     });
   }, [stopCamera, toast]);
 
@@ -171,7 +173,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
         { step: 40, message: "Aplicando melhorias..." },
         { step: 60, message: "Executando OCR..." },
         { step: 80, message: "Analisando conteúdo..." },
-        { step: 100, message: "Finalizando..." }
+        { step: 100, message: "Finalizando..." },
       ];
 
       for (const { step, message } of progressSteps) {
@@ -194,14 +196,14 @@ export const EnhancedDocumentScanner: React.FC = () => {
           entities: ["Data", "Número do documento", "Assinatura"],
           sentiment: "neutral",
           category: "documento_oficial",
-          confidence: 0.95
+          confidence: 0.95,
         },
         metadata: {
           pages: 1,
           language: "pt-BR",
           resolution: "1920x1080",
-          fileSize: typeof imageFile === "string" ? 256000 : imageFile.size
-        }
+          fileSize: typeof imageFile === "string" ? 256000 : imageFile.size,
+        },
       };
 
       setScanResults(prev => [mockResult, ...prev]);
@@ -210,15 +212,14 @@ export const EnhancedDocumentScanner: React.FC = () => {
 
       toast({
         title: "Processamento concluído",
-        description: `Documento processado com ${mockResult.confidence}% de confiança`
+        description: `Documento processado com ${mockResult.confidence}% de confiança`,
       });
-
     } catch (error) {
       console.error("Erro no processamento:", error);
       toast({
         title: "Erro no processamento",
         description: "Não foi possível processar o documento",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsProcessing(false);
@@ -236,7 +237,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
         toast({
           title: "Formato não suportado",
           description: "Selecione uma imagem (JPG, PNG) ou PDF",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }
@@ -253,13 +254,13 @@ export const EnhancedDocumentScanner: React.FC = () => {
       navigator.share({
         title: `Documento: ${result.fileName}`,
         text: result.extractedText,
-        url: result.imageUrl
+        url: result.imageUrl,
       });
     } else {
       navigator.clipboard.writeText(result.extractedText);
       toast({
         title: "Texto copiado",
-        description: "Texto extraído copiado para a área de transferência"
+        description: "Texto extraído copiado para a área de transferência",
       });
     }
   };
@@ -269,10 +270,10 @@ export const EnhancedDocumentScanner: React.FC = () => {
     element.href = result.imageUrl;
     element.download = result.fileName;
     element.click();
-    
+
     toast({
       title: "Download iniciado",
-      description: "Documento sendo baixado"
+      description: "Documento sendo baixado",
     });
   };
 
@@ -295,7 +296,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
               <Camera className="h-4 w-4" />
               {isMobile ? "Abrir Câmera" : "Usar Webcam"}
             </Button>
-            
+
             <input
               ref={fileInputRef}
               type="file"
@@ -303,10 +304,10 @@ export const EnhancedDocumentScanner: React.FC = () => {
               onChange={handleFileUpload}
               className="hidden"
             />
-            
-            <Button 
-              onClick={() => fileInputRef.current?.click()} 
-              variant="outline" 
+
+            <Button
+              onClick={() => fileInputRef.current?.click()}
+              variant="outline"
               className="gap-2"
             >
               <Upload className="h-4 w-4" />
@@ -329,11 +330,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                 muted
               />
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                <Button
-                  onClick={captureImage}
-                  size="lg"
-                  className="rounded-full w-16 h-16"
-                >
+                <Button onClick={captureImage} size="lg" className="rounded-full w-16 h-16">
                   <Camera className="h-6 w-6" />
                 </Button>
               </div>
@@ -357,16 +354,13 @@ export const EnhancedDocumentScanner: React.FC = () => {
                 className="w-full max-w-2xl mx-auto rounded-lg border"
               />
             </div>
-            
+
             <div className="flex justify-center gap-4">
               <Button onClick={retakePhoto} variant="outline" className="gap-2">
                 <RefreshCw className="h-4 w-4" />
                 Capturar Novamente
               </Button>
-              <Button 
-                onClick={() => processDocument(capturedImage)} 
-                className="gap-2"
-              >
+              <Button onClick={() => processDocument(capturedImage)} className="gap-2">
                 <Brain className="h-4 w-4" />
                 Processar Documento
               </Button>
@@ -385,9 +379,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                 <span className="font-medium">Processando documento...</span>
               </div>
               <Progress value={scanProgress} className="w-full" />
-              <p className="text-sm text-muted-foreground">
-                {scanProgress}% concluído
-              </p>
+              <p className="text-sm text-muted-foreground">{scanProgress}% concluído</p>
             </div>
           </CardContent>
         </Card>
@@ -404,7 +396,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {scanResults.map((result) => (
+              {scanResults.map(result => (
                 <Card key={result.id} className="border-2 hover:border-primary cursor-pointer">
                   <CardContent className="p-4 space-y-3">
                     <div className="aspect-video relative overflow-hidden rounded-lg">
@@ -414,19 +406,17 @@ export const EnhancedDocumentScanner: React.FC = () => {
                         className="object-cover w-full h-full"
                       />
                       <div className="absolute top-2 right-2">
-                        <Badge className="bg-green-500 text-azure-50">
-                          {result.confidence}%
-                        </Badge>
+                        <Badge className="bg-green-500 text-azure-50">{result.confidence}%</Badge>
                       </div>
                     </div>
-                    
+
                     <div>
                       <h3 className="font-medium truncate">{result.fileName}</h3>
                       <p className="text-xs text-muted-foreground">
                         {result.processedAt.toLocaleString("pt-BR")}
                       </p>
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
                       <Button
                         size="sm"
@@ -437,20 +427,12 @@ export const EnhancedDocumentScanner: React.FC = () => {
                         <Eye className="h-3 w-3" />
                         Ver
                       </Button>
-                      
+
                       <div className="flex gap-1">
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => shareResult(result)}
-                        >
+                        <Button size="sm" variant="ghost" onClick={() => shareResult(result)}>
                           <Share2 className="h-3 w-3" />
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => downloadResult(result)}
-                        >
+                        <Button size="sm" variant="ghost" onClick={() => downloadResult(result)}>
                           <Download className="h-3 w-3" />
                         </Button>
                       </div>
@@ -469,11 +451,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>Detalhes do Documento</span>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => setSelectedResult(null)}
-              >
+              <Button size="sm" variant="ghost" onClick={() => setSelectedResult(null)}>
                 <X className="h-4 w-4" />
               </Button>
             </CardTitle>
@@ -498,7 +476,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                   </Button>
                 </div>
               </div>
-              
+
               {/* Extracted Text */}
               <div className="space-y-4">
                 <div>
@@ -510,7 +488,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                     className="mt-2"
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <Label>Confiança</Label>
@@ -525,17 +503,17 @@ export const EnhancedDocumentScanner: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label>Idioma</Label>
                     <div className="mt-1">{selectedResult.metadata.language}</div>
                   </div>
-                  
+
                   <div>
                     <Label>Páginas</Label>
                     <div className="mt-1">{selectedResult.metadata.pages}</div>
                   </div>
-                  
+
                   <div>
                     <Label>Resolução</Label>
                     <div className="mt-1">{selectedResult.metadata.resolution}</div>
@@ -543,7 +521,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* AI Analysis */}
             {selectedResult.analysis && (
               <div className="border-t pt-6">
@@ -551,20 +529,20 @@ export const EnhancedDocumentScanner: React.FC = () => {
                   <Brain className="h-4 w-4" />
                   Análise IA
                 </h3>
-                
+
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
                   <div>
                     <Label>Resumo</Label>
                     <p className="mt-1">{selectedResult.analysis.summary}</p>
                   </div>
-                  
+
                   <div>
                     <Label>Categoria</Label>
                     <Badge variant="outline" className="mt-1">
                       {selectedResult.analysis.category}
                     </Badge>
                   </div>
-                  
+
                   <div>
                     <Label>Pontos Principais</Label>
                     <ul className="mt-1 space-y-1">
@@ -576,7 +554,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                       ))}
                     </ul>
                   </div>
-                  
+
                   <div>
                     <Label>Entidades Identificadas</Label>
                     <div className="mt-1 flex flex-wrap gap-1">

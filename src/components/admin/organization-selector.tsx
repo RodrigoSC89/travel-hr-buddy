@@ -28,10 +28,12 @@ export const OrganizationSelector: React.FC = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from("organization_users")
-        .select(`
+        .select(
+          `
           role,
           organization:organizations(id, name)
-        `)
+        `
+        )
         .eq("user_id", user?.id)
         .eq("status", "active");
 
@@ -40,7 +42,7 @@ export const OrganizationSelector: React.FC = () => {
       const orgs = (data || []).map((item: any) => ({
         id: item.organization.id,
         name: item.organization.name,
-        role: item.role
+        role: item.role,
       }));
 
       setOrganizations(orgs);
@@ -78,19 +80,17 @@ export const OrganizationSelector: React.FC = () => {
         disabled={isLoading}
       >
         <SelectTrigger className="w-[200px] border-border hover:border-ring">
-          <SelectValue 
-            placeholder="Selecionar organização" 
+          <SelectValue
+            placeholder="Selecionar organização"
             className="text-foreground placeholder:text-muted-foreground"
           />
         </SelectTrigger>
         <SelectContent align="start" className="min-w-[240px]">
-          {organizations.map((org) => (
+          {organizations.map(org => (
             <SelectItem key={org.id} value={org.id} className="cursor-pointer">
               <div className="flex flex-col py-1">
                 <span className="text-foreground font-medium">{org.name}</span>
-                <span className="text-xs text-muted-foreground capitalize">
-                  {org.role}
-                </span>
+                <span className="text-xs text-muted-foreground capitalize">{org.role}</span>
               </div>
             </SelectItem>
           ))}

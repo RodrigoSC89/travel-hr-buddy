@@ -5,17 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Users, 
-  DollarSign, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Users,
+  DollarSign,
   Activity,
   Calendar,
   Target,
   Zap,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 
 interface MetricCardProps {
@@ -39,14 +39,14 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, change, icon, tre
             ) : (
               <TrendingDown className="h-4 w-4 text-red-500" />
             )}
-            <span className={`text-sm font-medium ${trend === "up" ? "text-green-500" : "text-red-500"}`}>
+            <span
+              className={`text-sm font-medium ${trend === "up" ? "text-green-500" : "text-red-500"}`}
+            >
               {change}%
             </span>
           </div>
         </div>
-        <div className="text-muted-foreground">
-          {icon}
-        </div>
+        <div className="text-muted-foreground">{icon}</div>
       </div>
     </CardContent>
   </Card>
@@ -64,13 +64,13 @@ const TaskProgressCard: React.FC<{ task: TaskProgress }> = ({ task }) => {
   const statusColors = {
     pending: "bg-yellow-500",
     "in-progress": "bg-blue-500",
-    completed: "bg-green-500"
+    completed: "bg-green-500",
   };
 
   const priorityColors = {
     low: "border-l-green-500",
     medium: "border-l-yellow-500",
-    high: "border-l-red-500"
+    high: "border-l-red-500",
   };
 
   return (
@@ -80,9 +80,13 @@ const TaskProgressCard: React.FC<{ task: TaskProgress }> = ({ task }) => {
           <div className="flex items-center justify-between">
             <h4 className="font-medium">{task.title}</h4>
             <Badge variant={task.status === "completed" ? "default" : "secondary"}>
-              {task.status === "completed" ? <CheckCircle className="w-3 h-3 mr-1" /> : 
-                task.status === "in-progress" ? <Activity className="w-3 h-3 mr-1" /> :
-                  <AlertTriangle className="w-3 h-3 mr-1" />}
+              {task.status === "completed" ? (
+                <CheckCircle className="w-3 h-3 mr-1" />
+              ) : task.status === "in-progress" ? (
+                <Activity className="w-3 h-3 mr-1" />
+              ) : (
+                <AlertTriangle className="w-3 h-3 mr-1" />
+              )}
               {task.status}
             </Badge>
           </div>
@@ -101,30 +105,72 @@ const TaskProgressCard: React.FC<{ task: TaskProgress }> = ({ task }) => {
 
 export const InteractiveDashboard: React.FC = () => {
   const [tasks, setTasks] = useState<TaskProgress[]>([
-    { id: "1", title: "Implementar autenticação", progress: 100, status: "completed", priority: "high" },
-    { id: "2", title: "Dashboard interativo", progress: 85, status: "in-progress", priority: "high" },
-    { id: "3", title: "Integração Supabase", progress: 60, status: "in-progress", priority: "medium" },
+    {
+      id: "1",
+      title: "Implementar autenticação",
+      progress: 100,
+      status: "completed",
+      priority: "high",
+    },
+    {
+      id: "2",
+      title: "Dashboard interativo",
+      progress: 85,
+      status: "in-progress",
+      priority: "high",
+    },
+    {
+      id: "3",
+      title: "Integração Supabase",
+      progress: 60,
+      status: "in-progress",
+      priority: "medium",
+    },
     { id: "4", title: "Testes unitários", progress: 20, status: "pending", priority: "medium" },
-    { id: "5", title: "Documentação", progress: 0, status: "pending", priority: "low" }
+    { id: "5", title: "Documentação", progress: 0, status: "pending", priority: "low" },
   ]);
 
   const [metrics] = useState([
-    { title: "Usuários Ativos", value: "2,543", change: 12.5, icon: <Users className="h-8 w-8" />, trend: "up" as const },
-    { title: "Receita Mensal", value: "R$ 45.2k", change: 8.2, icon: <DollarSign className="h-8 w-8" />, trend: "up" as const },
-    { title: "Taxa de Conversão", value: "3.2%", change: -2.4, icon: <Target className="h-8 w-8" />, trend: "down" as const },
-    { title: "Performance", value: "94%", change: 5.1, icon: <Zap className="h-8 w-8" />, trend: "up" as const }
+    {
+      title: "Usuários Ativos",
+      value: "2,543",
+      change: 12.5,
+      icon: <Users className="h-8 w-8" />,
+      trend: "up" as const,
+    },
+    {
+      title: "Receita Mensal",
+      value: "R$ 45.2k",
+      change: 8.2,
+      icon: <DollarSign className="h-8 w-8" />,
+      trend: "up" as const,
+    },
+    {
+      title: "Taxa de Conversão",
+      value: "3.2%",
+      change: -2.4,
+      icon: <Target className="h-8 w-8" />,
+      trend: "down" as const,
+    },
+    {
+      title: "Performance",
+      value: "94%",
+      change: 5.1,
+      icon: <Zap className="h-8 w-8" />,
+      trend: "up" as const,
+    },
   ]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTasks(prevTasks => 
+      setTasks(prevTasks =>
         prevTasks.map(task => {
           if (task.status === "in-progress" && Math.random() > 0.7) {
             const newProgress = Math.min(task.progress + Math.floor(Math.random() * 5), 100);
             return {
               ...task,
               progress: newProgress,
-              status: newProgress === 100 ? "completed" : "in-progress"
+              status: newProgress === 100 ? "completed" : "in-progress",
             };
           }
           return task;
@@ -144,9 +190,7 @@ export const InteractiveDashboard: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard Principal</h1>
-          <p className="text-muted-foreground">
-            Acompanhe o progresso e métricas em tempo real
-          </p>
+          <p className="text-muted-foreground">Acompanhe o progresso e métricas em tempo real</p>
         </div>
         <QuickActions />
       </div>
@@ -207,9 +251,7 @@ export const InteractiveDashboard: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Atividade Recente</CardTitle>
-                <CardDescription>
-                  Últimas atualizações do sistema
-                </CardDescription>
+                <CardDescription>Últimas atualizações do sistema</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -217,12 +259,14 @@ export const InteractiveDashboard: React.FC = () => {
                     { time: "2 min", action: "Sistema de autenticação ativado", type: "success" },
                     { time: "15 min", action: "Dashboard atualizado", type: "info" },
                     { time: "1h", action: "Novo usuário registrado", type: "info" },
-                    { time: "2h", action: "Backup realizado", type: "success" }
+                    { time: "2h", action: "Backup realizado", type: "success" },
                   ].map((activity, index) => (
                     <div key={index} className="flex items-center space-x-3">
-                      <div className={`w-2 h-2 rounded-full ${
-                        activity.type === "success" ? "bg-green-500" : "bg-blue-500"
-                      }`} />
+                      <div
+                        className={`w-2 h-2 rounded-full ${
+                          activity.type === "success" ? "bg-green-500" : "bg-blue-500"
+                        }`}
+                      />
                       <div className="flex-1 space-y-1">
                         <p className="text-sm font-medium">{activity.action}</p>
                         <p className="text-xs text-muted-foreground">há {activity.time}</p>
@@ -237,7 +281,7 @@ export const InteractiveDashboard: React.FC = () => {
 
         <TabsContent value="tasks" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {tasks.map((task) => (
+            {tasks.map(task => (
               <TaskProgressCard key={task.id} task={task} />
             ))}
           </div>
@@ -247,16 +291,12 @@ export const InteractiveDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Analytics Avançados</CardTitle>
-              <CardDescription>
-                Métricas detalhadas e insights
-              </CardDescription>
+              <CardDescription>Métricas detalhadas e insights</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
                 <Activity className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">
-                  Analytics detalhados em desenvolvimento...
-                </p>
+                <p className="text-muted-foreground">Analytics detalhados em desenvolvimento...</p>
               </div>
             </CardContent>
           </Card>

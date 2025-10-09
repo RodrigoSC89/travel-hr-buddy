@@ -5,6 +5,7 @@
 The PEOTRAM module implements the **Operational Excellence and Procedures system** based on the PEOTRAM methodology. It manages operational procedures, performance metrics, and continuous improvement initiatives.
 
 **Key Use Cases:**
+
 - Manage operational procedures (POPs)
 - Track performance metrics and KPIs
 - Implement continuous improvement initiatives

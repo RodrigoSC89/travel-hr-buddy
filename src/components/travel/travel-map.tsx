@@ -22,21 +22,25 @@ export const TravelMap: React.FC<TravelMapProps> = ({ locations, className = "" 
     // Get token from Supabase Edge Function
     const initializeMap = async () => {
       try {
-        const response = await fetch("https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/mapbox-token", {
-          headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE"
+        const response = await fetch(
+          "https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/mapbox-token",
+          {
+            headers: {
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE",
+            },
           }
-        });
+        );
         const { token } = await response.json();
-        
+
         mapboxgl.accessToken = token;
-        
+
         map.current = new mapboxgl.Map({
           container: mapContainer.current!,
           style: "mapbox://styles/mapbox/streets-v12",
           center: locations.length > 0 ? locations[0].coordinates : [-74.5, 40],
           zoom: 10,
-          projection: "mercator"
+          projection: "mercator",
         });
 
         // Add navigation controls
@@ -59,8 +63,9 @@ export const TravelMap: React.FC<TravelMapProps> = ({ locations, className = "" 
           new mapboxgl.Marker(el)
             .setLngLat(location.coordinates)
             .setPopup(
-              new mapboxgl.Popup({ offset: 25 })
-                .setHTML(`<div class="font-semibold">${location.name}</div>`)
+              new mapboxgl.Popup({ offset: 25 }).setHTML(
+                `<div class="font-semibold">${location.name}</div>`
+              )
             )
             .addTo(map.current!);
         });
@@ -71,7 +76,6 @@ export const TravelMap: React.FC<TravelMapProps> = ({ locations, className = "" 
           locations.forEach(location => bounds.extend(location.coordinates));
           map.current.fitBounds(bounds, { padding: 50 });
         }
-
       } catch (error) {
         console.error("Error initializing map:", error);
         // Fallback without map

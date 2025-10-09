@@ -23,7 +23,7 @@ import {
   Navigation,
   Anchor,
   Radio,
-  Shield
+  Shield,
 } from "lucide-react";
 
 interface VesselStatus {
@@ -87,7 +87,7 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
         lat: -23.5505,
         lng: -46.6333,
         heading: 45,
-        speed: 12.5
+        speed: 12.5,
       },
       status: "navegando",
       connectionStatus: "online",
@@ -100,8 +100,8 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
           severity: "warning",
           message: "Temperatura do motor principal acima do normal",
           timestamp: "2024-12-28T10:25:00Z",
-          acknowledged: false
-        }
+          acknowledged: false,
+        },
       ],
       sensors: [
         {
@@ -110,7 +110,7 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
           value: 78,
           unit: "°C",
           status: "warning",
-          lastUpdate: "2024-12-28T10:30:00Z"
+          lastUpdate: "2024-12-28T10:30:00Z",
         },
         {
           id: "FUEL_001",
@@ -118,9 +118,9 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
           value: 65,
           unit: "%",
           status: "normal",
-          lastUpdate: "2024-12-28T10:30:00Z"
-        }
-      ]
+          lastUpdate: "2024-12-28T10:30:00Z",
+        },
+      ],
     },
     {
       id: "VESSEL_002",
@@ -130,7 +130,7 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
         lat: -22.9068,
         lng: -43.1729,
         heading: 180,
-        speed: 0
+        speed: 0,
       },
       status: "ancorado",
       connectionStatus: "online",
@@ -144,10 +144,10 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
           value: 145,
           unit: "bar",
           status: "normal",
-          lastUpdate: "2024-12-28T10:28:00Z"
-        }
-      ]
-    }
+          lastUpdate: "2024-12-28T10:28:00Z",
+        },
+      ],
+    },
   ];
 
   const [vessels, setVessels] = useState<VesselStatus[]>(getDemoVessels());
@@ -156,11 +156,14 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
     totalVessels: vessels.length,
     onlineVessels: vessels.filter(v => v.connectionStatus === "online").length,
     activeAlerts: vessels.reduce((acc, v) => acc + v.alerts.length, 0),
-    criticalAlerts: vessels.reduce((acc, v) => acc + v.alerts.filter(a => a.severity === "critical").length, 0),
+    criticalAlerts: vessels.reduce(
+      (acc, v) => acc + v.alerts.filter(a => a.severity === "critical").length,
+      0
+    ),
     averagePeotramScore: vessels.reduce((acc, v) => acc + v.peotramScore, 0) / vessels.length,
     fuelEfficiency: 89.2,
     emissionCompliance: 94.7,
-    safetyIncidents: 0
+    safetyIncidents: 0,
   });
 
   const metrics = getMetrics();
@@ -170,14 +173,16 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
 
     const interval = setInterval(() => {
       // Simular atualizações de dados em tempo real
-      setVessels(prev => prev.map(vessel => ({
-        ...vessel,
-        lastUpdate: new Date().toISOString(),
-        position: {
-          ...vessel.position,
-          speed: vessel.position.speed + (Math.random() - 0.5) * 2
-        }
-      })));
+      setVessels(prev =>
+        prev.map(vessel => ({
+          ...vessel,
+          lastUpdate: new Date().toISOString(),
+          position: {
+            ...vessel.position,
+            speed: vessel.position.speed + (Math.random() - 0.5) * 2,
+          },
+        }))
+      );
     }, 5000);
 
     return () => clearInterval(interval);
@@ -185,38 +190,55 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "navegando": return "bg-info/20 text-info border-info/30";
-    case "ancorado": return "bg-warning/20 text-warning border-warning/30";
-    case "no_porto": return "bg-success/20 text-success border-success/30";
-    case "manutencao": return "bg-destructive/20 text-destructive border-destructive/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "navegando":
+        return "bg-info/20 text-info border-info/30";
+      case "ancorado":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "no_porto":
+        return "bg-success/20 text-success border-success/30";
+      case "manutencao":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getConnectionIcon = (status: string) => {
     switch (status) {
-    case "online": return <Wifi className="w-4 h-4 text-success" />;
-    case "offline": return <WifiOff className="w-4 h-4 text-destructive" />;
-    case "intermitente": return <Radio className="w-4 h-4 text-warning" />;
-    default: return <WifiOff className="w-4 h-4 text-muted-foreground" />;
+      case "online":
+        return <Wifi className="w-4 h-4 text-success" />;
+      case "offline":
+        return <WifiOff className="w-4 h-4 text-destructive" />;
+      case "intermitente":
+        return <Radio className="w-4 h-4 text-warning" />;
+      default:
+        return <WifiOff className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
-    case "warning": return "bg-warning/20 text-warning border-warning/30";
-    case "info": return "bg-info/20 text-info border-info/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "critical":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      case "warning":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "info":
+        return "bg-info/20 text-info border-info/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getSensorStatusColor = (status: string) => {
     switch (status) {
-    case "normal": return "text-success";
-    case "warning": return "text-warning";
-    case "critical": return "text-destructive";
-    default: return "text-muted-foreground";
+      case "normal":
+        return "text-success";
+      case "warning":
+        return "text-warning";
+      case "critical":
+        return "text-destructive";
+      default:
+        return "text-muted-foreground";
     }
   };
 
@@ -291,9 +313,7 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
                 <div className="text-2xl font-bold text-primary">
                   {metrics.averagePeotramScore.toFixed(1)}%
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Acima da meta (85%)
-                </p>
+                <p className="text-xs text-muted-foreground">Acima da meta (85%)</p>
               </CardContent>
             </Card>
 
@@ -303,12 +323,8 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
                 <AlertTriangle className="h-4 w-4 text-warning" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-warning">
-                  {metrics.activeAlerts}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {metrics.criticalAlerts} críticos
-                </p>
+                <div className="text-2xl font-bold text-warning">{metrics.activeAlerts}</div>
+                <p className="text-xs text-muted-foreground">{metrics.criticalAlerts} críticos</p>
               </CardContent>
             </Card>
 
@@ -318,12 +334,8 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
                 <Droplets className="h-4 w-4 text-info" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-info">
-                  {metrics.fuelEfficiency}%
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  +2.1% este mês
-                </p>
+                <div className="text-2xl font-bold text-info">{metrics.fuelEfficiency}%</div>
+                <p className="text-xs text-muted-foreground">+2.1% este mês</p>
               </CardContent>
             </Card>
           </div>
@@ -339,8 +351,8 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
                   { status: "navegando", count: 2, label: "Navegando" },
                   { status: "ancorado", count: 1, label: "Ancorado" },
                   { status: "no_porto", count: 0, label: "No Porto" },
-                  { status: "manutencao", count: 0, label: "Manutenção" }
-                ].map((item) => (
+                  { status: "manutencao", count: 0, label: "Manutenção" },
+                ].map(item => (
                   <div key={item.status} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Badge variant="outline" className={getStatusColor(item.status)}>
@@ -348,9 +360,9 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
                       </Badge>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Progress 
-                        value={(item.count / metrics.totalVessels) * 100} 
-                        className="w-20 h-2" 
+                      <Progress
+                        value={(item.count / metrics.totalVessels) * 100}
+                        className="w-20 h-2"
                       />
                       <span className="text-sm font-medium w-8">{item.count}</span>
                     </div>
@@ -393,7 +405,7 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
 
         <TabsContent value="vessels" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {vessels.map((vessel) => (
+            {vessels.map(vessel => (
               <Card
                 key={vessel.id}
                 className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-accent/5"
@@ -434,7 +446,7 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
                   {vessel.alerts.length > 0 && (
                     <div className="space-y-2">
                       <div className="text-sm font-medium">Alertas Ativos:</div>
-                      {vessel.alerts.slice(0, 2).map((alert) => (
+                      {vessel.alerts.slice(0, 2).map(alert => (
                         <div
                           key={alert.id}
                           className={`p-2 rounded-lg border text-xs ${getSeverityColor(alert.severity)}`}
@@ -464,9 +476,12 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
 
         <TabsContent value="alerts" className="space-y-6">
           <div className="space-y-4">
-            {vessels.flatMap(vessel => 
+            {vessels.flatMap(vessel =>
               vessel.alerts.map(alert => (
-                <Card key={`${vessel.id}-${alert.id}`} className="bg-gradient-to-r from-card to-accent/5">
+                <Card
+                  key={`${vessel.id}-${alert.id}`}
+                  className="bg-gradient-to-r from-card to-accent/5"
+                >
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between">
                       <div className="space-y-2">
@@ -547,8 +562,8 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
                   { type: "operacional", count: 12, color: "bg-info/40" },
                   { type: "seguranca", count: 3, color: "bg-destructive/40" },
                   { type: "ambiental", count: 7, color: "bg-success/40" },
-                  { type: "manutencao", count: 5, color: "bg-warning/40" }
-                ].map((item) => (
+                  { type: "manutencao", count: 5, color: "bg-warning/40" },
+                ].map(item => (
                   <div key={item.type} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className={`w-3 h-3 rounded-full ${item.color}`}></div>

@@ -41,10 +41,7 @@ export const FocusTrapExample: React.FC = () => {
         <CardContent className="space-y-6">
           {/* Trigger Button */}
           <div className="space-y-4">
-            <Button 
-              onClick={() => setIsModalOpen(true)}
-              variant="default"
-            >
+            <Button onClick={() => setIsModalOpen(true)} variant="default">
               Open Modal with Focus Trap
             </Button>
 
@@ -54,9 +51,16 @@ export const FocusTrapExample: React.FC = () => {
               </h3>
               <div className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
                 <p>1. Click the button above to open the modal</p>
-                <p>2. Try to <Badge variant="outline">Tab</Badge> through elements - focus stays inside</p>
-                <p>3. Use <Badge variant="outline">Shift+Tab</Badge> to go backwards</p>
-                <p>4. Press <Badge variant="outline">Esc</Badge> to close</p>
+                <p>
+                  2. Try to <Badge variant="outline">Tab</Badge> through elements - focus stays
+                  inside
+                </p>
+                <p>
+                  3. Use <Badge variant="outline">Shift+Tab</Badge> to go backwards
+                </p>
+                <p>
+                  4. Press <Badge variant="outline">Esc</Badge> to close
+                </p>
                 <p>5. Notice focus returns to the trigger button when closed</p>
               </div>
             </div>
@@ -66,12 +70,12 @@ export const FocusTrapExample: React.FC = () => {
           {isModalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center">
               {/* Overlay */}
-              <div 
+              <div
                 className="fixed inset-0 bg-black/80 animate-in fade-in"
                 onClick={() => setIsModalOpen(false)}
                 aria-hidden="true"
               />
-              
+
               {/* Modal */}
               <div
                 ref={modalRef as React.RefObject<HTMLDivElement>}
@@ -114,7 +118,7 @@ export const FocusTrapExample: React.FC = () => {
                         <Input
                           id="name"
                           value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          onChange={e => setFormData({ ...formData, name: e.target.value })}
                           placeholder="Enter your name"
                           required
                         />
@@ -126,23 +130,21 @@ export const FocusTrapExample: React.FC = () => {
                           id="email"
                           type="email"
                           value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          onChange={e => setFormData({ ...formData, email: e.target.value })}
                           placeholder="Enter your email"
                           required
                         />
                       </div>
 
                       <div className="flex gap-2 justify-end">
-                        <Button 
-                          type="button" 
+                        <Button
+                          type="button"
                           variant="outline"
                           onClick={() => setIsModalOpen(false)}
                         >
                           Cancel
                         </Button>
-                        <Button type="submit">
-                          Submit
-                        </Button>
+                        <Button type="submit">Submit</Button>
                       </div>
                     </form>
                   )}
@@ -201,12 +203,24 @@ const MyModal = ({ isOpen, onClose }) => {
               <CardTitle className="text-base">Focus Trap Features</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
-              <p>✓ <strong>Automatic focus</strong> on first focusable element when activated</p>
-              <p>✓ <strong>Tab cycling</strong> - Tab goes from last to first element</p>
-              <p>✓ <strong>Shift+Tab cycling</strong> - Goes from first to last element</p>
-              <p>✓ <strong>Focus restoration</strong> - Returns focus to trigger element when closed</p>
-              <p>✓ <strong>Keyboard accessible</strong> - Works with all standard keyboard navigation</p>
-              <p>✓ <strong>Screen reader friendly</strong> - Uses proper ARIA attributes</p>
+              <p>
+                ✓ <strong>Automatic focus</strong> on first focusable element when activated
+              </p>
+              <p>
+                ✓ <strong>Tab cycling</strong> - Tab goes from last to first element
+              </p>
+              <p>
+                ✓ <strong>Shift+Tab cycling</strong> - Goes from first to last element
+              </p>
+              <p>
+                ✓ <strong>Focus restoration</strong> - Returns focus to trigger element when closed
+              </p>
+              <p>
+                ✓ <strong>Keyboard accessible</strong> - Works with all standard keyboard navigation
+              </p>
+              <p>
+                ✓ <strong>Screen reader friendly</strong> - Uses proper ARIA attributes
+              </p>
             </CardContent>
           </Card>
 
@@ -218,10 +232,34 @@ const MyModal = ({ isOpen, onClose }) => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm text-orange-800 dark:text-orange-200">
-              <p>• Always add <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">role=&quot;dialog&quot;</code> to modal containers</p>
-              <p>• Use <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">aria-modal=&quot;true&quot;</code> to indicate modal state</p>
-              <p>• Include <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">aria-labelledby</code> pointing to the title</p>
-              <p>• Add <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">aria-describedby</code> for descriptions</p>
+              <p>
+                • Always add{" "}
+                <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">
+                  role=&quot;dialog&quot;
+                </code>{" "}
+                to modal containers
+              </p>
+              <p>
+                • Use{" "}
+                <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">
+                  aria-modal=&quot;true&quot;
+                </code>{" "}
+                to indicate modal state
+              </p>
+              <p>
+                • Include{" "}
+                <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">
+                  aria-labelledby
+                </code>{" "}
+                pointing to the title
+              </p>
+              <p>
+                • Add{" "}
+                <code className="bg-orange-100 dark:bg-orange-950 px-1 rounded">
+                  aria-describedby
+                </code>{" "}
+                for descriptions
+              </p>
               <p>• Provide a clear way to close (X button, Cancel, Escape key)</p>
               <p>• Store and restore focus to the trigger element</p>
             </CardContent>

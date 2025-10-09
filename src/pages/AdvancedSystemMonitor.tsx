@@ -15,7 +15,7 @@ const AdvancedSystemMonitorPage = () => {
         badges={[
           { icon: Server, label: "Infraestrutura" },
           { icon: AlertTriangle, label: "Alertas Inteligentes" },
-          { icon: TrendingUp, label: "Performance" }
+          { icon: TrendingUp, label: "Performance" },
         ]}
       />
       <AdvancedSystemMonitor />

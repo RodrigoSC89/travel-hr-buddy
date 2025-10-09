@@ -4,18 +4,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Ship, 
-  FileText, 
-  Users, 
-  TrendingUp, 
+import {
+  Ship,
+  FileText,
+  Users,
+  TrendingUp,
   AlertTriangle,
   CheckCircle,
   Clock,
   Target,
   BarChart3,
   Calendar,
-  Activity
+  Activity,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -39,14 +39,14 @@ export default function MaritimeChecklists() {
     pendingChecklists: 0,
     activeVessels: 0,
     averageCompliance: 0,
-    criticalIssues: 0
+    criticalIssues: 0,
   });
   const [loading, setLoading] = useState(true);
 
   const fetchMaritimeStats = useCallback(async () => {
     try {
       setLoading(true);
-      
+
       // Fetch checklists stats
       const { data: checklists, error: checklistsError } = await supabase
         .from("operational_checklists")
@@ -65,10 +65,12 @@ export default function MaritimeChecklists() {
       // Calculate stats
       const total = checklists?.length || 0;
       const completed = checklists?.filter(c => c.status === "completed").length || 0;
-      const pending = checklists?.filter(c => c.status === "in_progress" || c.status === "draft").length || 0;
-      const avgCompliance = checklists?.length > 0 
-        ? checklists.reduce((sum, c) => sum + (c.compliance_score || 0), 0) / checklists.length 
-        : 0;
+      const pending =
+        checklists?.filter(c => c.status === "in_progress" || c.status === "draft").length || 0;
+      const avgCompliance =
+        checklists?.length > 0
+          ? checklists.reduce((sum, c) => sum + (c.compliance_score || 0), 0) / checklists.length
+          : 0;
 
       setStats({
         totalChecklists: total,
@@ -76,7 +78,7 @@ export default function MaritimeChecklists() {
         pendingChecklists: pending,
         activeVessels: vessels?.length || 0,
         averageCompliance: Math.round(avgCompliance),
-        criticalIssues: 0 // TODO: Calculate from checklist items
+        criticalIssues: 0, // TODO: Calculate from checklist items
       });
     } catch (error) {
       console.error("Error fetching maritime stats:", error);
@@ -94,11 +96,7 @@ export default function MaritimeChecklists() {
 
   if (view === "checklists") {
     return (
-      <MaritimeChecklistSystem
-        userId={user?.id || ""}
-        userRole="inspector"
-        vesselId={undefined}
-      />
+      <MaritimeChecklistSystem userId={user?.id || ""} userRole="inspector" vesselId={undefined} />
     );
   }
 
@@ -215,9 +213,7 @@ export default function MaritimeChecklists() {
                 <TrendingUp className="w-5 h-5" />
                 Conformidade Geral
               </CardTitle>
-              <CardDescription>
-                Percentual médio de conformidade dos checklists
-              </CardDescription>
+              <CardDescription>Percentual médio de conformidade dos checklists</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -230,14 +226,15 @@ export default function MaritimeChecklists() {
               <div className="grid grid-cols-2 gap-4 pt-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-green-600">
-                    {Math.round((stats.completedChecklists / Math.max(stats.totalChecklists, 1)) * 100)}%
+                    {Math.round(
+                      (stats.completedChecklists / Math.max(stats.totalChecklists, 1)) * 100
+                    )}
+                    %
                   </div>
                   <div className="text-sm text-muted-foreground">Taxa de Conclusão</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
-                    {stats.averageCompliance}%
-                  </div>
+                  <div className="text-2xl font-bold text-blue-600">{stats.averageCompliance}%</div>
                   <div className="text-sm text-muted-foreground">Qualidade Média</div>
                 </div>
               </div>
@@ -251,37 +248,35 @@ export default function MaritimeChecklists() {
                 <Target className="w-5 h-5" />
                 Ações Rápidas
               </CardTitle>
-              <CardDescription>
-                Acesso direto às principais funcionalidades
-              </CardDescription>
+              <CardDescription>Acesso direto às principais funcionalidades</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button 
-                className="w-full justify-start" 
+              <Button
+                className="w-full justify-start"
                 variant="outline"
                 onClick={() => setView("checklists")}
               >
                 <FileText className="w-4 h-4 mr-2" />
                 Novo Checklist
               </Button>
-              <Button 
-                className="w-full justify-start" 
+              <Button
+                className="w-full justify-start"
                 variant="outline"
                 onClick={() => setView("checklists")}
               >
                 <Users className="w-4 h-4 mr-2" />
                 Gerenciar Inspetores
               </Button>
-              <Button 
-                className="w-full justify-start" 
+              <Button
+                className="w-full justify-start"
                 variant="outline"
                 onClick={() => setView("checklists")}
               >
                 <Ship className="w-4 h-4 mr-2" />
                 Cadastrar Navio
               </Button>
-              <Button 
-                className="w-full justify-start" 
+              <Button
+                className="w-full justify-start"
                 variant="outline"
                 onClick={() => setView("checklists")}
               >
@@ -299,9 +294,7 @@ export default function MaritimeChecklists() {
               <Calendar className="w-5 h-5" />
               Atividade Recente
             </CardTitle>
-            <CardDescription>
-              Últimas ações realizadas no sistema
-            </CardDescription>
+            <CardDescription>Últimas ações realizadas no sistema</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -312,7 +305,7 @@ export default function MaritimeChecklists() {
                   description: "MV Ocean Explorer - Inspeção Dynamic Positioning",
                   time: "2 horas atrás",
                   icon: CheckCircle,
-                  color: "text-green-600"
+                  color: "text-green-600",
                 },
                 {
                   type: "started",
@@ -320,7 +313,7 @@ export default function MaritimeChecklists() {
                   description: "PSV Atlantic - Rotina de Máquinas",
                   time: "4 horas atrás",
                   icon: Clock,
-                  color: "text-blue-600"
+                  color: "text-blue-600",
                 },
                 {
                   type: "alert",
@@ -328,8 +321,8 @@ export default function MaritimeChecklists() {
                   description: "AHTS Pacific - Sistema de segurança",
                   time: "6 horas atrás",
                   icon: AlertTriangle,
-                  color: "text-orange-600"
-                }
+                  color: "text-orange-600",
+                },
               ].map((activity, index) => (
                 <div key={index} className="flex items-start gap-3 p-3 rounded-lg border">
                   <activity.icon className={`w-5 h-5 mt-0.5 ${activity.color}`} />

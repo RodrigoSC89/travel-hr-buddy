@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Copy, AlertTriangle } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  AlertTriangle,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface ReservationEvent {
@@ -25,7 +31,7 @@ const mockEvents: ReservationEvent[] = [
     startDate: new Date(2024, 0, 15),
     endDate: new Date(2024, 0, 20),
     status: "confirmed",
-    conflicts: false
+    conflicts: false,
   },
   {
     id: "RSV002",
@@ -35,7 +41,7 @@ const mockEvents: ReservationEvent[] = [
     startDate: new Date(2024, 0, 18),
     endDate: new Date(2024, 0, 22),
     status: "confirmed",
-    conflicts: false
+    conflicts: false,
   },
   {
     id: "RSV003",
@@ -45,7 +51,7 @@ const mockEvents: ReservationEvent[] = [
     startDate: new Date(2024, 1, 1),
     endDate: new Date(2024, 1, 8),
     status: "pending",
-    conflicts: true
+    conflicts: true,
   },
 ];
 
@@ -70,23 +76,23 @@ export const EnhancedReservationsCalendar: React.FC = () => {
     const startDay = firstDay.getDay();
 
     const days = [];
-    
+
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < startDay; i++) {
       days.push(null);
     }
-    
+
     // Add days of the month
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
-    
+
     return days;
   };
 
   const getEventsForDay = (date: Date | null) => {
     if (!date) return [];
-    
+
     return events.filter(event => {
       const eventStart = new Date(event.startDate);
       const eventEnd = new Date(event.endDate);
@@ -103,11 +109,16 @@ export const EnhancedReservationsCalendar: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "confirmed": return "bg-success text-azure-50";
-    case "pending": return "bg-warning text-azure-900";
-    case "cancelled": return "bg-destructive text-azure-50";
-    case "completed": return "bg-info text-azure-50";
-    default: return "bg-muted text-muted-foreground";
+      case "confirmed":
+        return "bg-success text-azure-50";
+      case "pending":
+        return "bg-warning text-azure-900";
+      case "cancelled":
+        return "bg-destructive text-azure-50";
+      case "completed":
+        return "bg-info text-azure-50";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -142,7 +153,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
         <CardContent>
           {/* Days of week */}
           <div className="grid grid-cols-7 gap-1 mb-4">
-            {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((day) => (
+            {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(day => (
               <div key={day} className="p-2 text-center text-sm font-medium text-muted-foreground">
                 {day}
               </div>
@@ -154,7 +165,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
             {days.map((day, index) => {
               const dayEvents = getEventsForDay(day);
               const hasConflicts = dayEvents.some(event => event.conflicts);
-              
+
               return (
                 <div
                   key={index}
@@ -166,12 +177,10 @@ export const EnhancedReservationsCalendar: React.FC = () => {
                     <>
                       <div className="text-sm font-medium mb-1 flex items-center justify-between">
                         {day.getDate()}
-                        {hasConflicts && (
-                          <AlertTriangle className="w-3 h-3 text-destructive" />
-                        )}
+                        {hasConflicts && <AlertTriangle className="w-3 h-3 text-destructive" />}
                       </div>
                       <div className="space-y-1">
-                        {dayEvents.slice(0, 2).map((event) => (
+                        {dayEvents.slice(0, 2).map(event => (
                           <div
                             key={event.id}
                             className={`text-xs p-1 rounded cursor-pointer hover:opacity-80 ${getTypeColor(event.type)}`}
@@ -244,7 +253,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
                   </Badge>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <div>
                   <label className="text-sm font-medium">Data de Início</label>
@@ -303,9 +312,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-primary">
-              {events.length}
-            </div>
+            <div className="text-2xl font-bold text-primary">{events.length}</div>
             <p className="text-sm text-muted-foreground">Total</p>
           </CardContent>
         </Card>

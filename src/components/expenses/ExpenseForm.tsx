@@ -68,9 +68,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
           Valor *
         </Label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-            R$
-          </span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">R$</span>
           <Input
             id="amount"
             type="number"
@@ -80,9 +78,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
             {...register("amount", { valueAsNumber: true })}
           />
         </div>
-        {errors.amount && (
-          <p className="text-sm text-danger">{errors.amount.message}</p>
-        )}
+        {errors.amount && <p className="text-sm text-danger">{errors.amount.message}</p>}
       </div>
 
       {/* Category */}
@@ -90,24 +86,23 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
         <Label htmlFor="category" className="text-sm font-semibold text-foreground">
           Categoria *
         </Label>
-        <Select
-          value={category}
-          onValueChange={(value) => setValue("category", value)}
-        >
+        <Select value={category} onValueChange={value => setValue("category", value)}>
           <SelectTrigger className="bg-card border-border text-foreground">
             <SelectValue placeholder="Selecione uma categoria" />
           </SelectTrigger>
           <SelectContent className="bg-popover border-border z-50">
             {Object.entries(categoryLabels).map(([value, label]) => (
-              <SelectItem key={value} value={value} className="text-popover-foreground hover:bg-muted">
+              <SelectItem
+                key={value}
+                value={value}
+                className="text-popover-foreground hover:bg-muted"
+              >
                 {label}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        {errors.category && (
-          <p className="text-sm text-danger">{errors.category.message}</p>
-        )}
+        {errors.category && <p className="text-sm text-danger">{errors.category.message}</p>}
       </div>
 
       {/* Description */}
@@ -121,9 +116,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
           className="bg-card border-border text-foreground"
           {...register("description")}
         />
-        {errors.description && (
-          <p className="text-sm text-danger">{errors.description.message}</p>
-        )}
+        {errors.description && <p className="text-sm text-danger">{errors.description.message}</p>}
       </div>
 
       {/* Date */}
@@ -137,9 +130,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
           className="bg-card border-border text-foreground"
           {...register("date")}
         />
-        {errors.date && (
-          <p className="text-sm text-danger">{errors.date.message}</p>
-        )}
+        {errors.date && <p className="text-sm text-danger">{errors.date.message}</p>}
       </div>
 
       {/* Notes */}
@@ -154,9 +145,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
           className="bg-card border-border text-foreground resize-none"
           {...register("notes")}
         />
-        {errors.notes && (
-          <p className="text-sm text-danger">{errors.notes.message}</p>
-        )}
+        {errors.notes && <p className="text-sm text-danger">{errors.notes.message}</p>}
       </div>
 
       {/* Actions */}

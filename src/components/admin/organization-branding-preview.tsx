@@ -45,17 +45,17 @@ export const OrganizationBrandingPreview: React.FC = () => {
               <span className="text-sm font-medium">Cores do Tema</span>
             </div>
             <div className="flex gap-2">
-              <div 
+              <div
                 className="w-6 h-6 rounded-full border"
                 style={{ backgroundColor: currentBranding.primary_color }}
                 title="Cor Primária"
               />
-              <div 
+              <div
                 className="w-6 h-6 rounded-full border"
                 style={{ backgroundColor: currentBranding.secondary_color }}
                 title="Cor Secundária"
               />
-              <div 
+              <div
                 className="w-6 h-6 rounded-full border"
                 style={{ backgroundColor: currentBranding.accent_color }}
                 title="Cor de Destaque"
@@ -93,10 +93,10 @@ export const OrganizationBrandingPreview: React.FC = () => {
           <div className="space-y-2">
             <span className="text-sm font-medium">Módulos Habilitados</span>
             <div className="flex flex-wrap gap-1">
-              {(Array.isArray(currentBranding.enabled_modules) 
-                ? currentBranding.enabled_modules 
+              {(Array.isArray(currentBranding.enabled_modules)
+                ? currentBranding.enabled_modules
                 : []
-              ).map((module) => (
+              ).map(module => (
                 <Badge key={module} variant="secondary" className="text-xs">
                   {module}
                 </Badge>

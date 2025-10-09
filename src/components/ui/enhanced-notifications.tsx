@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Bell, 
-  X, 
-  CheckCircle, 
-  AlertTriangle, 
-  Info, 
-  Clock, 
+import {
+  Bell,
+  X,
+  CheckCircle,
+  AlertTriangle,
+  Info,
+  Clock,
   Calendar,
   Users,
   Ship,
@@ -24,7 +24,7 @@ import {
   Filter,
   Settings,
   Volume2,
-  VolumeX
+  VolumeX,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -82,20 +82,20 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
         metadata: {
           module: "HR",
           vessel: "MV Ocean Explorer",
-          deadline: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
+          deadline: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
         },
         actions: [
           {
             label: "Renovar Certificado",
             action: () => navigate("/hr"),
-            variant: "default"
+            variant: "default",
           },
           {
             label: "Ver Detalhes",
             action: () => toast({ title: "Certificado", description: "Abrindo detalhes..." }),
-            variant: "outline"
-          }
-        ]
+            variant: "outline",
+          },
+        ],
       },
       {
         id: "2",
@@ -110,15 +110,15 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
         metadata: {
           module: "Analytics",
           progress: 94.2,
-          trend: "up"
+          trend: "up",
         },
         actions: [
           {
             label: "Ver Relatório",
             action: () => navigate("/advanced-analytics"),
-            variant: "default"
-          }
-        ]
+            variant: "default",
+          },
+        ],
       },
       {
         id: "3",
@@ -133,15 +133,15 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
         metadata: {
           module: "PEOTRAM",
           vessel: "MV Atlantic Dawn",
-          progress: 98.5
+          progress: 98.5,
         },
         actions: [
           {
             label: "Ver Auditoria",
             action: () => navigate("/peotram"),
-            variant: "outline"
-          }
-        ]
+            variant: "outline",
+          },
+        ],
       },
       {
         id: "4",
@@ -155,8 +155,8 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
         actionable: false,
         metadata: {
           module: "System",
-          value: 2.3
-        }
+          value: 2.3,
+        },
       },
       {
         id: "5",
@@ -171,28 +171,30 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
         metadata: {
           module: "Fleet",
           vessel: "MV Coastal Explorer",
-          trend: "down"
+          trend: "down",
         },
         actions: [
           {
             label: "Investigar",
             action: () => navigate("/fleet-dashboard"),
-            variant: "destructive"
+            variant: "destructive",
           },
           {
             label: "Contatar Engenharia",
-            action: () => toast({ title: "Contato", description: "Enviando alerta para engenharia..." }),
-            variant: "outline"
-          }
-        ]
-      }
+            action: () =>
+              toast({ title: "Contato", description: "Enviando alerta para engenharia..." }),
+            variant: "outline",
+          },
+        ],
+      },
     ];
 
     setNotifications(initialNotifications);
 
     // Simular notificações em tempo real
     const interval = setInterval(() => {
-      if (Math.random() > 0.8) { // 20% chance de nova notificação
+      if (Math.random() > 0.8) {
+        // 20% chance de nova notificação
         const newNotification: Notification = {
           id: Date.now().toString(),
           title: "Nova Atualização",
@@ -202,25 +204,25 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
           category: "Sistema",
           timestamp: new Date(),
           read: false,
-          actionable: false
+          actionable: false,
         };
 
         setNotifications(prev => [newNotification, ...prev]);
-        
+
         if (soundEnabled && "Audio" in window) {
           // Som de notificação simples
           const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
           const oscillator = audioContext.createOscillator();
           const gainNode = audioContext.createGain();
-          
+
           oscillator.connect(gainNode);
           gainNode.connect(audioContext.destination);
-          
+
           oscillator.frequency.value = 800;
           oscillator.type = "sine";
           gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
           gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-          
+
           oscillator.start(audioContext.currentTime);
           oscillator.stop(audioContext.currentTime + 0.3);
         }
@@ -232,54 +234,68 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "success": return <CheckCircle className="w-5 h-5 text-success" />;
-    case "warning": return <AlertTriangle className="w-5 h-5 text-warning" />;
-    case "error": return <AlertTriangle className="w-5 h-5 text-destructive" />;
-    case "info": return <Info className="w-5 h-5 text-info" />;
-    default: return <Bell className="w-5 h-5 text-muted-foreground" />;
+      case "success":
+        return <CheckCircle className="w-5 h-5 text-success" />;
+      case "warning":
+        return <AlertTriangle className="w-5 h-5 text-warning" />;
+      case "error":
+        return <AlertTriangle className="w-5 h-5 text-destructive" />;
+      case "info":
+        return <Info className="w-5 h-5 text-info" />;
+      default:
+        return <Bell className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string): React.ComponentType<{ className?: string }> => {
     switch (category.toLowerCase()) {
-    case "certificações": return Users;
-    case "performance": return TrendingUp;
-    case "auditorias": return FileText;
-    case "sistema": return Settings;
-    case "frota": return Ship;
-    case "segurança": return Shield;
-    case "financeiro": return DollarSign;
-    default: return Bell;
+      case "certificações":
+        return Users;
+      case "performance":
+        return TrendingUp;
+      case "auditorias":
+        return FileText;
+      case "sistema":
+        return Settings;
+      case "frota":
+        return Ship;
+      case "segurança":
+        return Shield;
+      case "financeiro":
+        return DollarSign;
+      default:
+        return Bell;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "urgent": return "bg-red-500 text-white";
-    case "high": return "bg-orange-500 text-white";
-    case "medium": return "bg-blue-500 text-white";
-    case "low": return "bg-gray-500 text-white";
-    default: return "bg-gray-500 text-white";
+      case "urgent":
+        return "bg-red-500 text-white";
+      case "high":
+        return "bg-orange-500 text-white";
+      case "medium":
+        return "bg-blue-500 text-white";
+      case "low":
+        return "bg-gray-500 text-white";
+      default:
+        return "bg-gray-500 text-white";
     }
   };
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(notification => 
-        notification.id === id 
-          ? { ...notification, read: true }
-          : notification
+    setNotifications(prev =>
+      prev.map(notification =>
+        notification.id === id ? { ...notification, read: true } : notification
       )
     );
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(notification => ({ ...notification, read: true }))
-    );
+    setNotifications(prev => prev.map(notification => ({ ...notification, read: true })));
     toast({
       title: "Notificações",
-      description: "Todas as notificações foram marcadas como lidas"
+      description: "Todas as notificações foram marcadas como lidas",
     });
   };
 
@@ -289,9 +305,12 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
 
   const filteredNotifications = notifications.filter(notification => {
     switch (filter) {
-    case "unread": return !notification.read;
-    case "urgent": return notification.priority === "urgent" || notification.priority === "high";
-    default: return true;
+      case "unread":
+        return !notification.read;
+      case "urgent":
+        return notification.priority === "urgent" || notification.priority === "high";
+      default:
+        return true;
     }
   });
 
@@ -322,7 +341,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
@@ -332,12 +351,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
               >
                 {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onClose}
-                className="w-8 h-8 p-0"
-              >
+              <Button variant="ghost" size="sm" onClick={onClose} className="w-8 h-8 p-0">
                 <X className="w-4 h-4" />
               </Button>
             </div>
@@ -375,12 +389,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
         {/* Actions */}
         {unreadCount > 0 && (
           <div className="p-4 border-b border-border/50 bg-muted/30">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={markAllAsRead}
-              className="w-full text-xs"
-            >
+            <Button variant="outline" size="sm" onClick={markAllAsRead} className="w-full text-xs">
               <Eye className="w-4 h-4 mr-2" />
               Marcar todas como lidas
             </Button>
@@ -392,41 +401,43 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
           <div className="p-2">
             {filteredNotifications.length > 0 ? (
               <div className="space-y-2">
-                {filteredNotifications.map((notification) => {
+                {filteredNotifications.map(notification => {
                   const CategoryIcon = getCategoryIcon(notification.category);
-                  
+
                   return (
                     <Card
                       key={notification.id}
                       className={`transition-all duration-200 cursor-pointer ${
-                        !notification.read 
-                          ? "bg-primary/5 border-primary/30 shadow-sm" 
+                        !notification.read
+                          ? "bg-primary/5 border-primary/30 shadow-sm"
                           : "bg-background border-border/30"
                       } hover:shadow-md hover:scale-[1.02]`}
                       onClick={() => markAsRead(notification.id)}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0">
-                            {getTypeIcon(notification.type)}
-                          </div>
-                          
+                          <div className="flex-shrink-0">{getTypeIcon(notification.type)}</div>
+
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2 mb-2">
-                              <h3 className={`font-semibold text-sm ${
-                                !notification.read ? "text-foreground" : "text-muted-foreground"
-                              } line-clamp-1`}>
+                              <h3
+                                className={`font-semibold text-sm ${
+                                  !notification.read ? "text-foreground" : "text-muted-foreground"
+                                } line-clamp-1`}
+                              >
                                 {notification.title}
                               </h3>
-                              
+
                               <div className="flex items-center gap-1">
-                                <Badge className={`text-xs px-2 py-1 ${getPriorityColor(notification.priority)}`}>
+                                <Badge
+                                  className={`text-xs px-2 py-1 ${getPriorityColor(notification.priority)}`}
+                                >
                                   {notification.priority}
                                 </Badge>
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  onClick={(e) => {
+                                  onClick={e => {
                                     e.stopPropagation();
                                     removeNotification(notification.id);
                                   }}
@@ -436,23 +447,23 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
                                 </Button>
                               </div>
                             </div>
-                            
+
                             <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                               {notification.description}
                             </p>
-                            
+
                             <div className="flex items-center gap-2 mb-3">
                               <Badge variant="outline" className="text-xs">
                                 <CategoryIcon className="w-3 h-3 mr-1" />
                                 <span>{notification.category}</span>
                               </Badge>
-                              
+
                               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                                 <Clock className="w-3 h-3" />
                                 {notification.timestamp.toLocaleTimeString()}
                               </div>
                             </div>
-                            
+
                             {notification.metadata?.progress && (
                               <div className="mb-3">
                                 <div className="flex items-center justify-between text-xs mb-1">
@@ -462,7 +473,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
                                 <Progress value={notification.metadata.progress} className="h-2" />
                               </div>
                             )}
-                            
+
                             {notification.actions && notification.actions.length > 0 && (
                               <div className="flex gap-2 flex-wrap">
                                 {notification.actions.map((action, index) => (
@@ -470,7 +481,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
                                     key={index}
                                     variant={action.variant || "outline"}
                                     size="sm"
-                                    onClick={(e) => {
+                                    onClick={e => {
                                       e.stopPropagation();
                                       action.action();
                                     }}
@@ -492,12 +503,11 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
               <div className="text-center py-12">
                 <Bell className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
                 <p className="text-muted-foreground">
-                  {filter === "unread" 
-                    ? "Nenhuma notificação não lida" 
+                  {filter === "unread"
+                    ? "Nenhuma notificação não lida"
                     : filter === "urgent"
                       ? "Nenhuma notificação urgente"
-                      : "Nenhuma notificação encontrada"
-                  }
+                      : "Nenhuma notificação encontrada"}
                 </p>
               </div>
             )}

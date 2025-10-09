@@ -13,14 +13,14 @@ interface ProgressBarProps {
 const sizeClasses = {
   sm: "h-2",
   md: "h-3",
-  lg: "h-4"
+  lg: "h-4",
 };
 
 const variantClasses = {
   default: "bg-primary",
   success: "bg-green-500",
   warning: "bg-yellow-500",
-  danger: "bg-red-500"
+  danger: "bg-red-500",
 };
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -29,7 +29,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   className,
   showLabel = false,
   size = "md",
-  variant = "default"
+  variant = "default",
 }) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
@@ -42,11 +42,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         </div>
       )}
       <div
-        className={cn(
-          "w-full bg-muted rounded-full overflow-hidden",
-          sizeClasses[size],
-          className
-        )}
+        className={cn("w-full bg-muted rounded-full overflow-hidden", sizeClasses[size], className)}
       >
         <div
           className={cn(

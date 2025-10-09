@@ -4,16 +4,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Brain, 
-  TrendingUp, 
-  AlertTriangle, 
+import {
+  Brain,
+  TrendingUp,
+  AlertTriangle,
   Lightbulb,
   Target,
   Activity,
   Zap,
   Shield,
-  Anchor
+  Anchor,
 } from "lucide-react";
 
 interface PredictiveInsight {
@@ -35,25 +35,27 @@ export const InsightEngine: React.FC = () => {
       id: "1",
       category: "maintenance",
       title: "Manutenção Preditiva - Motor Principal",
-      description: "Análise de vibração detectou anomalia no motor principal da embarcação MV-Atlas",
+      description:
+        "Análise de vibração detectou anomalia no motor principal da embarcação MV-Atlas",
       confidence: 94,
       impact: "high",
       timeframe: "5-7 dias",
       recommendation: "Agendar inspeção técnica e substituição preventiva de rolamentos",
       affectedVessels: ["MV-Atlas"],
-      estimatedSavings: 45000
+      estimatedSavings: 45000,
     },
     {
       id: "2",
       category: "efficiency",
       title: "Otimização de Consumo de Combustível",
-      description: "Padrão de navegação indica potencial de economia através de ajuste de velocidade",
+      description:
+        "Padrão de navegação indica potencial de economia através de ajuste de velocidade",
       confidence: 87,
       impact: "medium",
       timeframe: "Imediato",
       recommendation: "Reduzir velocidade média em 1.5 nós nas rotas Santos-Rio",
       affectedVessels: ["MV-Atlas", "MV-Neptune"],
-      estimatedSavings: 12500
+      estimatedSavings: 12500,
     },
     {
       id: "3",
@@ -64,7 +66,7 @@ export const InsightEngine: React.FC = () => {
       impact: "critical",
       timeframe: "30-60 dias",
       recommendation: "Iniciar processo de renovação imediatamente para evitar não-conformidade",
-      affectedVessels: ["MV-Atlas", "MV-Neptune", "MV-Poseidon"]
+      affectedVessels: ["MV-Atlas", "MV-Neptune", "MV-Poseidon"],
     },
     {
       id: "4",
@@ -75,7 +77,7 @@ export const InsightEngine: React.FC = () => {
       impact: "high",
       timeframe: "7-14 dias",
       recommendation: "Ajustar escalas de trabalho e considerar rodízio de funções",
-      affectedVessels: ["MV-Neptune"]
+      affectedVessels: ["MV-Neptune"],
     },
     {
       id: "5",
@@ -87,36 +89,46 @@ export const InsightEngine: React.FC = () => {
       timeframe: "Contínuo",
       recommendation: "Verificar limpeza do casco e sistema de propulsão",
       affectedVessels: ["MV-Poseidon"],
-      estimatedSavings: 8200
-    }
+      estimatedSavings: 8200,
+    },
   ]);
 
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "maintenance": return <Zap className="h-4 w-4" />;
-    case "performance": return <Activity className="h-4 w-4" />;
-    case "compliance": return <Shield className="h-4 w-4" />;
-    case "safety": return <AlertTriangle className="h-4 w-4" />;
-    case "efficiency": return <TrendingUp className="h-4 w-4" />;
-    default: return <Brain className="h-4 w-4" />;
+      case "maintenance":
+        return <Zap className="h-4 w-4" />;
+      case "performance":
+        return <Activity className="h-4 w-4" />;
+      case "compliance":
+        return <Shield className="h-4 w-4" />;
+      case "safety":
+        return <AlertTriangle className="h-4 w-4" />;
+      case "efficiency":
+        return <TrendingUp className="h-4 w-4" />;
+      default:
+        return <Brain className="h-4 w-4" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-    case "critical": return "destructive";
-    case "high": return "default";
-    case "medium": return "secondary";
-    case "low": return "outline";
-    default: return "outline";
+      case "critical":
+        return "destructive";
+      case "high":
+        return "default";
+      case "medium":
+        return "secondary";
+      case "low":
+        return "outline";
+      default:
+        return "outline";
     }
   };
 
-  const filteredInsights = activeCategory === "all" 
-    ? insights 
-    : insights.filter(i => i.category === activeCategory);
+  const filteredInsights =
+    activeCategory === "all" ? insights : insights.filter(i => i.category === activeCategory);
 
   const totalSavings = insights
     .filter(i => i.estimatedSavings)
@@ -135,7 +147,7 @@ export const InsightEngine: React.FC = () => {
             <p className="text-xs text-muted-foreground">Ativos no momento</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Economia Potencial</CardTitle>
@@ -145,7 +157,7 @@ export const InsightEngine: React.FC = () => {
             <p className="text-xs text-muted-foreground">Próximos 30 dias</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Confiança Média</CardTitle>
@@ -157,7 +169,7 @@ export const InsightEngine: React.FC = () => {
             <p className="text-xs text-muted-foreground">Precisão do modelo</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Alertas Críticos</CardTitle>
@@ -202,7 +214,7 @@ export const InsightEngine: React.FC = () => {
             </TabsList>
 
             <TabsContent value={activeCategory} className="space-y-4 mt-4">
-              {filteredInsights.map((insight) => (
+              {filteredInsights.map(insight => (
                 <Card key={insight.id} className="border-l-4 border-l-primary">
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -212,9 +224,7 @@ export const InsightEngine: React.FC = () => {
                         </div>
                         <div>
                           <CardTitle className="text-base">{insight.title}</CardTitle>
-                          <CardDescription className="mt-1">
-                            {insight.description}
-                          </CardDescription>
+                          <CardDescription className="mt-1">{insight.description}</CardDescription>
                         </div>
                       </div>
                       <Badge variant={getImpactColor(insight.impact) as any}>
@@ -228,7 +238,7 @@ export const InsightEngine: React.FC = () => {
                       <Progress value={insight.confidence} className="flex-1" />
                       <span className="text-sm font-medium">{insight.confidence}%</span>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <span className="text-muted-foreground">Prazo:</span>

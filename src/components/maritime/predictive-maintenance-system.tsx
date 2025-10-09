@@ -4,9 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Brain, 
-  TrendingUp, 
+import {
+  Brain,
+  TrendingUp,
   AlertTriangle,
   Wrench,
   Calendar,
@@ -14,7 +14,7 @@ import {
   Target,
   Clock,
   CheckCircle,
-  XCircle
+  XCircle,
 } from "lucide-react";
 
 interface MaintenancePrediction {
@@ -65,7 +65,7 @@ export const PredictiveMaintenanceSystem = () => {
         estimatedCost: 15000,
         lastMaintenance: new Date("2024-10-15"),
         nextScheduled: new Date("2024-12-20"),
-        riskFactors: ["Temperatura elevada", "Horas de operação", "Idade do componente"]
+        riskFactors: ["Temperatura elevada", "Horas de operação", "Idade do componente"],
       },
       {
         id: "2",
@@ -79,7 +79,7 @@ export const PredictiveMaintenanceSystem = () => {
         estimatedCost: 25000,
         lastMaintenance: new Date("2024-09-01"),
         nextScheduled: new Date("2025-01-15"),
-        riskFactors: ["Vibração anormal", "Análise de óleo"]
+        riskFactors: ["Vibração anormal", "Análise de óleo"],
       },
       {
         id: "3",
@@ -93,7 +93,7 @@ export const PredictiveMaintenanceSystem = () => {
         estimatedCost: 8000,
         lastMaintenance: new Date("2024-11-01"),
         nextScheduled: new Date("2025-02-01"),
-        riskFactors: ["Flutuação de tensão", "Tempo de operação"]
+        riskFactors: ["Flutuação de tensão", "Tempo de operação"],
       },
       {
         id: "4",
@@ -107,17 +107,23 @@ export const PredictiveMaintenanceSystem = () => {
         estimatedCost: 5000,
         lastMaintenance: new Date("2024-08-15"),
         nextScheduled: new Date("2025-03-01"),
-        riskFactors: ["Perda de pressão gradual"]
-      }
+        riskFactors: ["Perda de pressão gradual"],
+      },
     ];
 
     const mockMetrics: PerformanceMetric[] = [
       { metric: "Eficiência Energética", current: 87, target: 90, trend: "up", unit: "%" },
       { metric: "Disponibilidade", current: 94, target: 95, trend: "stable", unit: "%" },
       { metric: "MTBF", current: 720, target: 800, trend: "up", unit: "h" },
-      { metric: "Custos de Manutenção", current: 125000, target: 100000, trend: "down", unit: "R$" },
+      {
+        metric: "Custos de Manutenção",
+        current: 125000,
+        target: 100000,
+        trend: "down",
+        unit: "R$",
+      },
       { metric: "Consumo de Combustível", current: 18.5, target: 17.0, trend: "down", unit: "L/h" },
-      { metric: "Emissões CO2", current: 45, target: 40, trend: "down", unit: "kg/h" }
+      { metric: "Emissões CO2", current: 45, target: 40, trend: "down", unit: "kg/h" },
     ];
 
     setPredictions(mockPredictions);
@@ -127,11 +133,16 @@ export const PredictiveMaintenanceSystem = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical": return "bg-red-100 text-red-800 border-red-200";
-    case "high": return "bg-orange-100 text-orange-800 border-orange-200";
-    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    case "low": return "bg-green-100 text-green-800 border-green-200";
-    default: return "bg-secondary text-secondary-foreground border-border";
+      case "critical":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "high":
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "low":
+        return "bg-green-100 text-green-800 border-green-200";
+      default:
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
@@ -143,17 +154,22 @@ export const PredictiveMaintenanceSystem = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="h-4 w-4 text-green-500" />;
-    case "down": return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
-    case "stable": return <BarChart3 className="h-4 w-4 text-blue-500" />;
-    default: return <BarChart3 className="h-4 w-4 text-muted-foreground" />;
+      case "up":
+        return <TrendingUp className="h-4 w-4 text-green-500" />;
+      case "down":
+        return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
+      case "stable":
+        return <BarChart3 className="h-4 w-4 text-blue-500" />;
+      default:
+        return <BarChart3 className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getMetricStatus = (current: number, target: number, metric: string) => {
-    const isGood = metric.includes("Custos") || metric.includes("Consumo") || metric.includes("Emissões")
-      ? current <= target
-      : current >= target;
+    const isGood =
+      metric.includes("Custos") || metric.includes("Consumo") || metric.includes("Emissões")
+        ? current <= target
+        : current >= target;
     return isGood;
   };
 
@@ -187,7 +203,7 @@ export const PredictiveMaintenanceSystem = () => {
           </p>
         </div>
         <div className="flex space-x-2">
-          {(["7d", "30d", "90d"] as const).map((timeframe) => (
+          {(["7d", "30d", "90d"] as const).map(timeframe => (
             <Button
               key={timeframe}
               variant={selectedTimeframe === timeframe ? "default" : "outline"}
@@ -211,9 +227,7 @@ export const PredictiveMaintenanceSystem = () => {
             <div className="text-2xl font-bold text-red-600">
               {predictions.filter(p => p.priority === "critical" || p.priority === "high").length}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Requerem atenção imediata
-            </p>
+            <p className="text-xs text-muted-foreground">Requerem atenção imediata</p>
           </CardContent>
         </Card>
 
@@ -224,9 +238,7 @@ export const PredictiveMaintenanceSystem = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">R$ 180k</div>
-            <p className="text-xs text-muted-foreground">
-              Próximos 6 meses
-            </p>
+            <p className="text-xs text-muted-foreground">Próximos 6 meses</p>
           </CardContent>
         </Card>
 
@@ -237,9 +249,7 @@ export const PredictiveMaintenanceSystem = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-600">94%</div>
-            <p className="text-xs text-muted-foreground">
-              Precisão das previsões
-            </p>
+            <p className="text-xs text-muted-foreground">Precisão das previsões</p>
           </CardContent>
         </Card>
 
@@ -250,9 +260,7 @@ export const PredictiveMaintenanceSystem = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-purple-600">97.2%</div>
-            <p className="text-xs text-muted-foreground">
-              Uptime da frota
-            </p>
+            <p className="text-xs text-muted-foreground">Uptime da frota</p>
           </CardContent>
         </Card>
       </div>
@@ -267,7 +275,7 @@ export const PredictiveMaintenanceSystem = () => {
 
         <TabsContent value="predictions" className="space-y-4">
           <div className="space-y-4">
-            {predictions.map((prediction) => (
+            {predictions.map(prediction => (
               <Card key={prediction.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -277,14 +285,17 @@ export const PredictiveMaintenanceSystem = () => {
                         {prediction.component}
                       </CardTitle>
                       <CardDescription>
-                        {prediction.vesselName} • Última manutenção: {prediction.lastMaintenance.toLocaleDateString("pt-BR")}
+                        {prediction.vesselName} • Última manutenção:{" "}
+                        {prediction.lastMaintenance.toLocaleDateString("pt-BR")}
                       </CardDescription>
                     </div>
                     <div className="text-right">
                       <Badge className={getPriorityColor(prediction.priority)}>
                         {prediction.priority.toUpperCase()}
                       </Badge>
-                      <div className={`text-2xl font-bold mt-1 ${getProbabilityColor(prediction.probability)}`}>
+                      <div
+                        className={`text-2xl font-bold mt-1 ${getProbabilityColor(prediction.probability)}`}
+                      >
                         {prediction.probability}%
                       </div>
                     </div>
@@ -295,16 +306,18 @@ export const PredictiveMaintenanceSystem = () => {
                     <div>
                       <h4 className="font-medium mb-2">Prazo Estimado</h4>
                       <p className="text-sm text-muted-foreground">{prediction.timeframe}</p>
-                      
+
                       <h4 className="font-medium mt-3 mb-2">Custo Estimado</h4>
-                      <p className="text-sm font-semibold">R$ {prediction.estimatedCost.toLocaleString()}</p>
+                      <p className="text-sm font-semibold">
+                        R$ {prediction.estimatedCost.toLocaleString()}
+                      </p>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-medium mb-2">Recomendação</h4>
                       <p className="text-sm text-muted-foreground">{prediction.recommendation}</p>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-medium mb-2">Fatores de Risco</h4>
                       <div className="space-y-1">
@@ -316,15 +329,13 @@ export const PredictiveMaintenanceSystem = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex justify-end space-x-2 mt-4">
                     <Button variant="outline" size="sm">
                       <Calendar className="h-4 w-4 mr-1" />
                       Agendar
                     </Button>
-                    <Button size="sm">
-                      Criar Ordem de Trabalho
-                    </Button>
+                    <Button size="sm">Criar Ordem de Trabalho</Button>
                   </div>
                 </CardContent>
               </Card>
@@ -350,14 +361,14 @@ export const PredictiveMaintenanceSystem = () => {
                         {metric.current.toLocaleString()} {metric.unit}
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">Meta</span>
                       <span className="text-sm">
                         {metric.target.toLocaleString()} {metric.unit}
                       </span>
                     </div>
-                    
+
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
                         <span>Progresso</span>
@@ -369,13 +380,15 @@ export const PredictiveMaintenanceSystem = () => {
                           )}
                         </span>
                       </div>
-                      <Progress 
+                      <Progress
                         value={
-                          metric.metric.includes("Custos") || metric.metric.includes("Consumo") || metric.metric.includes("Emissões")
+                          metric.metric.includes("Custos") ||
+                          metric.metric.includes("Consumo") ||
+                          metric.metric.includes("Emissões")
                             ? Math.max(0, 100 - (metric.current / metric.target) * 100)
                             : (metric.current / metric.target) * 100
-                        } 
-                        className="h-2" 
+                        }
+                        className="h-2"
                       />
                     </div>
                   </div>
@@ -401,14 +414,14 @@ export const PredictiveMaintenanceSystem = () => {
                     Combine 3 serviços no MV Atlantic Explorer para economizar R$ 12.000
                   </p>
                 </div>
-                
+
                 <div className="p-4 bg-green-50 rounded-lg">
                   <h4 className="font-medium text-green-800">Pré-pedido de Peças</h4>
                   <p className="text-sm text-green-600 mt-1">
                     Solicite rolamentos antecipadamente para reduzir tempo de parada em 40%
                   </p>
                 </div>
-                
+
                 <div className="p-4 bg-purple-50 rounded-lg">
                   <h4 className="font-medium text-purple-800">Rota Otimizada</h4>
                   <p className="text-sm text-purple-600 mt-1">
@@ -434,7 +447,7 @@ export const PredictiveMaintenanceSystem = () => {
                     </div>
                     <Progress value={70} className="h-2" />
                   </div>
-                  
+
                   <div>
                     <div className="flex justify-between text-sm mb-1">
                       <span>Manutenção Corretiva</span>
@@ -442,7 +455,7 @@ export const PredictiveMaintenanceSystem = () => {
                     </div>
                     <Progress value={25} className="h-2" />
                   </div>
-                  
+
                   <div>
                     <div className="flex justify-between text-sm mb-1">
                       <span>Emergências</span>
@@ -450,11 +463,13 @@ export const PredictiveMaintenanceSystem = () => {
                     </div>
                     <Progress value={5} className="h-2" />
                   </div>
-                  
+
                   <div className="pt-3 border-t">
                     <div className="text-center">
                       <div className="text-2xl font-bold text-green-600">-23%</div>
-                      <div className="text-sm text-muted-foreground">Redução de custos vs ano anterior</div>
+                      <div className="text-sm text-muted-foreground">
+                        Redução de custos vs ano anterior
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -481,7 +496,9 @@ export const PredictiveMaintenanceSystem = () => {
                 <CardDescription>Validação das previsões</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" variant="outline">Ver Auditoria</Button>
+                <Button className="w-full" variant="outline">
+                  Ver Auditoria
+                </Button>
               </CardContent>
             </Card>
 
@@ -491,7 +508,9 @@ export const PredictiveMaintenanceSystem = () => {
                 <CardDescription>Comparação com indústria</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" variant="outline">Comparar</Button>
+                <Button className="w-full" variant="outline">
+                  Comparar
+                </Button>
               </CardContent>
             </Card>
           </div>

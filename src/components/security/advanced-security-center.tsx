@@ -5,13 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  Shield, 
-  AlertTriangle, 
-  CheckCircle, 
-  Eye, 
-  Lock, 
-  Key, 
+import {
+  Shield,
+  AlertTriangle,
+  CheckCircle,
+  Eye,
+  Lock,
+  Key,
   Activity,
   Users,
   Globe,
@@ -23,7 +23,7 @@ import {
   TrendingUp,
   RefreshCw,
   Download,
-  Settings
+  Settings,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -61,7 +61,7 @@ interface VulnerabilityReport {
 export const AdvancedSecurityCenter: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
   const [metrics, setMetrics] = useState<SecurityMetric[]>([]);
   const [vulnerabilities, setVulnerabilities] = useState<VulnerabilityReport[]>([]);
@@ -79,7 +79,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
         description: "Múltiplas tentativas de login falharam de IP desconhecido",
         timestamp: new Date(Date.now() - 15 * 60000),
         status: "active",
-        affectedAssets: ["Login System", "User Database"]
+        affectedAssets: ["Login System", "User Database"],
       },
       {
         id: "2",
@@ -89,7 +89,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
         description: "Nova versão do framework corrige vulnerabilidades conhecidas",
         timestamp: new Date(Date.now() - 2 * 60 * 60000),
         status: "investigating",
-        affectedAssets: ["Web Application"]
+        affectedAssets: ["Web Application"],
       },
       {
         id: "3",
@@ -99,17 +99,52 @@ export const AdvancedSecurityCenter: React.FC = () => {
         description: "Usuário utilizando senha fraca detectada",
         timestamp: new Date(Date.now() - 4 * 60 * 60000),
         status: "resolved",
-        affectedAssets: ["User Account"]
-      }
+        affectedAssets: ["User Account"],
+      },
     ];
 
     const mockMetrics: SecurityMetric[] = [
-      { name: "Score de Segurança", value: 87, target: 95, unit: "%", status: "warning", trend: "up" },
-      { name: "Vulnerabilidades Críticas", value: 2, target: 0, unit: "unidades", status: "critical", trend: "down" },
-      { name: "Tentativas de Ataque Bloqueadas", value: 147, target: 0, unit: "unidades", status: "good", trend: "stable" },
+      {
+        name: "Score de Segurança",
+        value: 87,
+        target: 95,
+        unit: "%",
+        status: "warning",
+        trend: "up",
+      },
+      {
+        name: "Vulnerabilidades Críticas",
+        value: 2,
+        target: 0,
+        unit: "unidades",
+        status: "critical",
+        trend: "down",
+      },
+      {
+        name: "Tentativas de Ataque Bloqueadas",
+        value: 147,
+        target: 0,
+        unit: "unidades",
+        status: "good",
+        trend: "stable",
+      },
       { name: "Compliance Rate", value: 94, target: 100, unit: "%", status: "good", trend: "up" },
-      { name: "Tempo Médio de Resposta", value: 12, target: 15, unit: "min", status: "good", trend: "down" },
-      { name: "Uptime de Segurança", value: 99.8, target: 99.9, unit: "%", status: "good", trend: "stable" }
+      {
+        name: "Tempo Médio de Resposta",
+        value: 12,
+        target: 15,
+        unit: "min",
+        status: "good",
+        trend: "down",
+      },
+      {
+        name: "Uptime de Segurança",
+        value: 99.8,
+        target: 99.9,
+        unit: "%",
+        status: "good",
+        trend: "stable",
+      },
     ];
 
     const mockVulnerabilities: VulnerabilityReport[] = [
@@ -120,7 +155,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
         cvss: 7.4,
         status: "open",
         discoveredAt: new Date(Date.now() - 3 * 24 * 60 * 60000),
-        priority: "high"
+        priority: "high",
       },
       {
         id: "2",
@@ -129,7 +164,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
         cvss: 8.1,
         status: "patched",
         discoveredAt: new Date(Date.now() - 7 * 24 * 60 * 60000),
-        priority: "critical"
+        priority: "critical",
       },
       {
         id: "3",
@@ -138,8 +173,8 @@ export const AdvancedSecurityCenter: React.FC = () => {
         cvss: 5.3,
         status: "mitigated",
         discoveredAt: new Date(Date.now() - 5 * 24 * 60 * 60000),
-        priority: "medium"
-      }
+        priority: "medium",
+      },
     ];
 
     setAlerts(mockAlerts);
@@ -155,42 +190,54 @@ export const AdvancedSecurityCenter: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-500";
-    case "high": return "bg-orange-500";
-    case "medium": return "bg-yellow-500";
-    case "low": return "bg-blue-500";
-    default: return "bg-gray-500";
+      case "critical":
+        return "bg-red-500";
+      case "high":
+        return "bg-orange-500";
+      case "medium":
+        return "bg-yellow-500";
+      case "low":
+        return "bg-blue-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-    case "critical":
-    case "high":
-      return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    case "medium":
-      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    case "low":
-      return <CheckCircle className="h-4 w-4 text-blue-500" />;
-    default:
-      return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+      case "critical":
+      case "high":
+        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case "medium":
+        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      case "low":
+        return <CheckCircle className="h-4 w-4 text-blue-500" />;
+      default:
+        return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "good": return "text-green-600";
-    case "warning": return "text-yellow-600";
-    case "critical": return "text-red-600";
-    default: return "text-muted-foreground";
+      case "good":
+        return "text-green-600";
+      case "warning":
+        return "text-yellow-600";
+      case "critical":
+        return "text-red-600";
+      default:
+        return "text-muted-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="h-3 w-3 text-green-600" />;
-    case "down": return <TrendingUp className="h-3 w-3 text-red-600 rotate-180" />;
-    default: return <div className="h-3 w-3" />;
+      case "up":
+        return <TrendingUp className="h-3 w-3 text-green-600" />;
+      case "down":
+        return <TrendingUp className="h-3 w-3 text-red-600 rotate-180" />;
+      default:
+        return <div className="h-3 w-3" />;
     }
   };
 
@@ -201,10 +248,10 @@ export const AdvancedSecurityCenter: React.FC = () => {
   };
 
   const handleResolveAlert = (alertId: string) => {
-    setAlerts(prev => prev.map(alert => 
-      alert.id === alertId ? { ...alert, status: "resolved" } : alert
-    ));
-    
+    setAlerts(prev =>
+      prev.map(alert => (alert.id === alertId ? { ...alert, status: "resolved" } : alert))
+    );
+
     toast({
       title: "Alerta resolvido",
       description: "O alerta de segurança foi marcado como resolvido.",
@@ -213,7 +260,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
 
   const handleRunScan = () => {
     setIsLoading(true);
-    
+
     setTimeout(() => {
       generateSecurityData();
       toast({
@@ -236,11 +283,9 @@ export const AdvancedSecurityCenter: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Central de Segurança</h2>
-          <p className="text-muted-foreground">
-            Monitoramento avançado e gestão de segurança
-          </p>
+          <p className="text-muted-foreground">Monitoramento avançado e gestão de segurança</p>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <Button variant="outline">
             <Download className="h-4 w-4 mr-2" />
@@ -272,8 +317,11 @@ export const AdvancedSecurityCenter: React.FC = () => {
             <div className="flex-1">
               <Progress value={securityScore} className="h-3" />
               <div className="mt-2 text-sm text-muted-foreground">
-                {securityScore >= 90 ? "Excelente" : 
-                  securityScore >= 70 ? "Bom" : "Necessita Atenção"}
+                {securityScore >= 90
+                  ? "Excelente"
+                  : securityScore >= 70
+                    ? "Bom"
+                    : "Necessita Atenção"}
               </div>
             </div>
             <div className="text-right">
@@ -290,26 +338,38 @@ export const AdvancedSecurityCenter: React.FC = () => {
           <Card key={index}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{metric.name}</CardTitle>
-              <div className="flex items-center space-x-1">
-                {getTrendIcon(metric.trend)}
-              </div>
+              <div className="flex items-center space-x-1">{getTrendIcon(metric.trend)}</div>
             </CardHeader>
             <CardContent>
               <div className={`text-2xl font-bold ${getStatusColor(metric.status)}`}>
-                {metric.value}{metric.unit === "%" ? "%" : metric.unit === "unidades" ? "" : metric.unit}
+                {metric.value}
+                {metric.unit === "%" ? "%" : metric.unit === "unidades" ? "" : metric.unit}
               </div>
               <div className="mt-2">
                 <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                  <span>Meta: {metric.target}{metric.unit === "%" ? "%" : ""}</span>
-                  <Badge variant={metric.status === "good" ? "default" : 
-                    metric.status === "warning" ? "secondary" : "destructive"}>
-                    {metric.status === "good" ? "OK" : 
-                      metric.status === "warning" ? "Atenção" : "Crítico"}
+                  <span>
+                    Meta: {metric.target}
+                    {metric.unit === "%" ? "%" : ""}
+                  </span>
+                  <Badge
+                    variant={
+                      metric.status === "good"
+                        ? "default"
+                        : metric.status === "warning"
+                          ? "secondary"
+                          : "destructive"
+                    }
+                  >
+                    {metric.status === "good"
+                      ? "OK"
+                      : metric.status === "warning"
+                        ? "Atenção"
+                        : "Crítico"}
                   </Badge>
                 </div>
                 {metric.target > 0 && (
-                  <Progress 
-                    value={Math.min((metric.value / metric.target) * 100, 100)} 
+                  <Progress
+                    value={Math.min((metric.value / metric.target) * 100, 100)}
                     className="h-2"
                   />
                 )}
@@ -331,19 +391,20 @@ export const AdvancedSecurityCenter: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Alertas de Segurança</CardTitle>
-              <CardDescription>
-                Alertas ativos e recentes do sistema
-              </CardDescription>
+              <CardDescription>Alertas ativos e recentes do sistema</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {alerts.map((alert) => (
-                  <div key={alert.id} className="flex items-start space-x-4 p-4 border border-border rounded-lg">
+                {alerts.map(alert => (
+                  <div
+                    key={alert.id}
+                    className="flex items-start space-x-4 p-4 border border-border rounded-lg"
+                  >
                     <div className="flex items-center space-x-2">
                       {getSeverityIcon(alert.severity)}
                       <div className={`w-2 h-2 rounded-full ${getSeverityColor(alert.severity)}`} />
                     </div>
-                    
+
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
                         <h4 className="font-medium">{alert.title}</h4>
@@ -351,18 +412,26 @@ export const AdvancedSecurityCenter: React.FC = () => {
                           <Badge variant="outline" className="capitalize">
                             {alert.type}
                           </Badge>
-                          <Badge variant={alert.status === "resolved" ? "default" : 
-                            alert.status === "investigating" ? "secondary" : "destructive"}>
-                            {alert.status === "resolved" ? "Resolvido" : 
-                              alert.status === "investigating" ? "Investigando" : "Ativo"}
+                          <Badge
+                            variant={
+                              alert.status === "resolved"
+                                ? "default"
+                                : alert.status === "investigating"
+                                  ? "secondary"
+                                  : "destructive"
+                            }
+                          >
+                            {alert.status === "resolved"
+                              ? "Resolvido"
+                              : alert.status === "investigating"
+                                ? "Investigando"
+                                : "Ativo"}
                           </Badge>
                         </div>
                       </div>
-                      
-                      <p className="text-sm text-muted-foreground mb-2">
-                        {alert.description}
-                      </p>
-                      
+
+                      <p className="text-sm text-muted-foreground mb-2">{alert.description}</p>
+
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4 text-xs text-muted-foreground">
                           <span className="flex items-center">
@@ -374,7 +443,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
                             {alert.affectedAssets.length} ativos afetados
                           </span>
                         </div>
-                        
+
                         {alert.status === "active" && (
                           <Button
                             size="sm"
@@ -397,37 +466,52 @@ export const AdvancedSecurityCenter: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Relatório de Vulnerabilidades</CardTitle>
-              <CardDescription>
-                Vulnerabilidades identificadas e seu status
-              </CardDescription>
+              <CardDescription>Vulnerabilidades identificadas e seu status</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {vulnerabilities.map((vuln) => (
-                  <div key={vuln.id} className="flex items-center space-x-4 p-4 border border-border rounded-lg">
+                {vulnerabilities.map(vuln => (
+                  <div
+                    key={vuln.id}
+                    className="flex items-center space-x-4 p-4 border border-border rounded-lg"
+                  >
                     <div className="flex items-center space-x-2">
-                      <div className={`w-3 h-3 rounded-full ${
-                        vuln.priority === "critical" ? "bg-red-500" :
-                          vuln.priority === "high" ? "bg-orange-500" :
-                            vuln.priority === "medium" ? "bg-yellow-500" : "bg-blue-500"
-                      }`} />
+                      <div
+                        className={`w-3 h-3 rounded-full ${
+                          vuln.priority === "critical"
+                            ? "bg-red-500"
+                            : vuln.priority === "high"
+                              ? "bg-orange-500"
+                              : vuln.priority === "medium"
+                                ? "bg-yellow-500"
+                                : "bg-blue-500"
+                        }`}
+                      />
                     </div>
-                    
+
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
                         <h4 className="font-medium">{vuln.vulnerability}</h4>
                         <div className="flex items-center space-x-2">
-                          <Badge variant="outline">
-                            CVSS: {vuln.cvss}
-                          </Badge>
-                          <Badge variant={vuln.status === "patched" ? "default" : 
-                            vuln.status === "mitigated" ? "secondary" : "destructive"}>
-                            {vuln.status === "patched" ? "Corrigido" : 
-                              vuln.status === "mitigated" ? "Mitigado" : "Aberto"}
+                          <Badge variant="outline">CVSS: {vuln.cvss}</Badge>
+                          <Badge
+                            variant={
+                              vuln.status === "patched"
+                                ? "default"
+                                : vuln.status === "mitigated"
+                                  ? "secondary"
+                                  : "destructive"
+                            }
+                          >
+                            {vuln.status === "patched"
+                              ? "Corrigido"
+                              : vuln.status === "mitigated"
+                                ? "Mitigado"
+                                : "Aberto"}
                           </Badge>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <span>Ativo: {vuln.asset}</span>
                         <span>Descoberto: {vuln.discoveredAt.toLocaleDateString()}</span>

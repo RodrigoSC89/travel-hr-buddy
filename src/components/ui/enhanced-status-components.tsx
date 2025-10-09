@@ -1,5 +1,5 @@
 /**
- * @deprecated This file contains multiple deprecated components. 
+ * @deprecated This file contains multiple deprecated components.
  * Import individual components from their new locations:
  * - StatusBadge, StatusIndicator from '@/components/ui/StatusBadge'
  * - LoadingState from '@/components/ui/Loading'
@@ -14,7 +14,12 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 // Re-export from new unified components
-export { StatusBadge, StatusIndicator, type StatusBadgeProps, type StatusIndicatorProps } from "./StatusBadge";
+export {
+  StatusBadge,
+  StatusIndicator,
+  type StatusBadgeProps,
+  type StatusIndicatorProps,
+} from "./StatusBadge";
 export { Loading as LoadingState, type LoadingProps as LoadingStateProps } from "./Loading";
 export { EmptyState, type EmptyStateProps } from "./EmptyState";
 export { InfoCard, type InfoCardProps } from "./InfoCard";
@@ -37,7 +42,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
   disabled = false,
   loading = false,
   className,
-  ariaLabel
+  ariaLabel,
 }) => {
   return (
     <Button

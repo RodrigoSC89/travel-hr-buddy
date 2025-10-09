@@ -11,9 +11,7 @@ const Academy = () => {
         </div>
         <div>
           <h1 className="text-3xl font-bold">Academia Nautilus</h1>
-          <p className="text-muted-foreground">
-                Centro de treinamento e certificação
-          </p>
+          <p className="text-muted-foreground">Centro de treinamento e certificação</p>
         </div>
       </div>
       <NautilusAcademy />

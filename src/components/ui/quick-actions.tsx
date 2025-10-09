@@ -19,7 +19,7 @@ export const QuickActions: React.FC = () => {
         <Download className="h-4 w-4" />
         Export PDF
       </Button>
-      
+
       <Button
         variant="outline"
         size="sm"
@@ -29,7 +29,7 @@ export const QuickActions: React.FC = () => {
         <Printer className="h-4 w-4" />
         Imprimir
       </Button>
-      
+
       <Button
         variant="outline"
         size="sm"

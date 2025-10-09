@@ -5,11 +5,28 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { 
-  Search, BookOpen, Video, FileText, Download, 
-  Play, CheckCircle, Clock, Users, Anchor,
-  Bot, Lightbulb, ArrowRight, Star, Filter
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Search,
+  BookOpen,
+  Video,
+  FileText,
+  Download,
+  Play,
+  CheckCircle,
+  Clock,
+  Users,
+  Anchor,
+  Bot,
+  Lightbulb,
+  ArrowRight,
+  Star,
+  Filter,
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -65,7 +82,7 @@ export const IntelligentHelpCenter: React.FC = () => {
     { id: "hr", name: "Recursos Humanos", icon: Users },
     { id: "travel", name: "Viagens", icon: Play },
     { id: "reservations", name: "Reservas", icon: Clock },
-    { id: "price-alerts", name: "Alertas de Preço", icon: FileText }
+    { id: "price-alerts", name: "Alertas de Preço", icon: FileText },
   ];
 
   // Dados de exemplo (em produção viria do Supabase)
@@ -80,12 +97,24 @@ export const IntelligentHelpCenter: React.FC = () => {
       difficulty: "beginner",
       tags: ["escala", "tripulação", "gestão"],
       content: [
-        { step: 1, title: "Acesse o módulo Marítimo", description: "Navegue até Sistema Marítimo > Gestão de Tripulação" },
-        { step: 2, title: "Clique em \"Nova Escala\"", description: "Localize o botão no canto superior direito" },
-        { step: 3, title: "Preencha os dados", description: "Defina embarcação, período e tripulantes" }
+        {
+          step: 1,
+          title: "Acesse o módulo Marítimo",
+          description: "Navegue até Sistema Marítimo > Gestão de Tripulação",
+        },
+        {
+          step: 2,
+          title: 'Clique em "Nova Escala"',
+          description: "Localize o botão no canto superior direito",
+        },
+        {
+          step: 3,
+          title: "Preencha os dados",
+          description: "Defina embarcação, período e tripulantes",
+        },
       ],
       views: 150,
-      rating: 4.8
+      rating: 4.8,
     },
     {
       id: "2",
@@ -98,27 +127,29 @@ export const IntelligentHelpCenter: React.FC = () => {
       tags: ["preços", "alertas", "notificações"],
       content: [],
       views: 89,
-      rating: 4.6
-    }
+      rating: 4.6,
+    },
   ];
 
   const sampleFAQs: FAQ[] = [
     {
       id: "1",
       question: "Como alterar o status de uma reserva?",
-      answer: "Para alterar o status de uma reserva, vá até o módulo Reservas, localize a reserva desejada e clique no menu de ações (três pontos). Selecione \"Alterar Status\" e escolha o novo status.",
+      answer:
+        'Para alterar o status de uma reserva, vá até o módulo Reservas, localize a reserva desejada e clique no menu de ações (três pontos). Selecione "Alterar Status" e escolha o novo status.',
       module: "reservations",
       tags: ["reserva", "status", "alteração"],
-      helpful: 45
+      helpful: 45,
     },
     {
       id: "2",
       question: "Posso exportar relatórios de viagens?",
-      answer: "Sim! No módulo Viagens, clique em \"Relatórios\" e selecione o período desejado. Você pode exportar em PDF, Excel ou CSV.",
+      answer:
+        'Sim! No módulo Viagens, clique em "Relatórios" e selecione o período desejado. Você pode exportar em PDF, Excel ou CSV.',
       module: "travel",
       tags: ["relatórios", "exportar", "viagens"],
-      helpful: 32
-    }
+      helpful: 32,
+    },
   ];
 
   const sampleTrainingPaths: TrainingPath[] = [
@@ -130,8 +161,8 @@ export const IntelligentHelpCenter: React.FC = () => {
       modules: ["hr", "maritime"],
       progress: 60,
       estimatedTime: "2h 30min",
-      tutorials: [sampleTutorials[0]]
-    }
+      tutorials: [sampleTutorials[0]],
+    },
   ];
 
   useEffect(() => {
@@ -147,7 +178,7 @@ export const IntelligentHelpCenter: React.FC = () => {
     }
 
     setIsLoading(true);
-    
+
     try {
       // Busca no banco de dados
       const { data: searchResults, error } = await supabase
@@ -160,30 +191,27 @@ export const IntelligentHelpCenter: React.FC = () => {
       if (error) throw error;
 
       // Registrar analytics da busca
-      await supabase
-        .from("help_center_analytics")
-        .insert({
-          action_type: "search",
-          session_data: { query, results_count: searchResults?.length || 0 },
-          user_id: null // Seria auth.uid() se autenticado
-        });
+      await supabase.from("help_center_analytics").insert({
+        action_type: "search",
+        session_data: { query, results_count: searchResults?.length || 0 },
+        user_id: null, // Seria auth.uid() se autenticado
+      });
 
       // Busca inteligente usando IA para sugestões
       const { data: aiResponse, error: aiError } = await supabase.functions.invoke("ai-chat", {
         body: {
           message: `Buscar ajuda sobre: ${query}`,
           context: "help_search",
-          modules: modules.map(m => m.id)
-        }
+          modules: modules.map(m => m.id),
+        },
       });
 
       setSearchResults(searchResults || []);
-      
+
       toast({
         title: "Busca realizada",
         description: `Encontrados ${searchResults?.length || 0} resultados para "${query}"`,
       });
-
     } catch (error) {
       console.error("Error in smart search:", error);
       toast({
@@ -198,14 +226,12 @@ export const IntelligentHelpCenter: React.FC = () => {
 
   const trackAnalytics = async (action: string, itemId?: string, data?: any) => {
     try {
-      await supabase
-        .from("help_center_analytics")
-        .insert({
-          knowledge_item_id: itemId || null,
-          action_type: action,
-          session_data: data || {},
-          user_id: null // Seria auth.uid() se autenticado
-        });
+      await supabase.from("help_center_analytics").insert({
+        knowledge_item_id: itemId || null,
+        action_type: action,
+        session_data: data || {},
+        user_id: null, // Seria auth.uid() se autenticado
+      });
     } catch (error) {
       console.error("Error tracking analytics:", error);
     }
@@ -216,7 +242,7 @@ export const IntelligentHelpCenter: React.FC = () => {
       title: "Exportando material",
       description: `Preparando ${type.toUpperCase()} para download...`,
     });
-    
+
     // Implementar exportação real
     setTimeout(() => {
       toast({
@@ -245,7 +271,8 @@ export const IntelligentHelpCenter: React.FC = () => {
             </h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Encontre respostas, aprenda funcionalidades e domine o Nautilus One com nossa IA especializada
+            Encontre respostas, aprenda funcionalidades e domine o Nautilus One com nossa IA
+            especializada
           </p>
         </div>
 
@@ -258,17 +285,21 @@ export const IntelligentHelpCenter: React.FC = () => {
                 <Input
                   placeholder="Digite sua dúvida ou o que deseja aprender (ex: 'como criar escala?')"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSmartSearch(searchQuery)}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  onKeyPress={e => e.key === "Enter" && handleSmartSearch(searchQuery)}
                   className="pl-12 text-lg h-14"
                 />
               </div>
-              <Button 
+              <Button
                 onClick={() => handleSmartSearch(searchQuery)}
                 disabled={isLoading}
                 className="h-14 px-8"
               >
-                {isLoading ? <Clock className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />}
+                {isLoading ? (
+                  <Clock className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Search className="w-5 h-5" />
+                )}
                 Buscar
               </Button>
             </div>
@@ -278,7 +309,7 @@ export const IntelligentHelpCenter: React.FC = () => {
               <div className="mt-6 space-y-4">
                 <h3 className="text-lg font-semibold">Resultados da Busca</h3>
                 <div className="grid gap-4">
-                  {searchResults.map((result) => (
+                  {searchResults.map(result => (
                     <Card key={result.id} className="border border-primary/30">
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between">
@@ -329,7 +360,7 @@ export const IntelligentHelpCenter: React.FC = () => {
 
         {/* Filtro por Módulo */}
         <div className="flex flex-wrap gap-2">
-          {modules.map((module) => {
+          {modules.map(module => {
             const Icon = module.icon;
             return (
               <Button
@@ -369,7 +400,9 @@ export const IntelligentHelpCenter: React.FC = () => {
                     <p className="text-sm">💡 Use atalhos de teclado Ctrl+K para busca rápida</p>
                   </div>
                   <div className="p-3 bg-green-50 rounded-lg border-l-4 border-green-400">
-                    <p className="text-sm">⚡ Clique duas vezes em qualquer card para ação rápida</p>
+                    <p className="text-sm">
+                      ⚡ Clique duas vezes em qualquer card para ação rápida
+                    </p>
                   </div>
                   <div className="p-3 bg-purple-50 rounded-lg border-l-4 border-purple-400">
                     <p className="text-sm">🎯 Use filtros para encontrar conteúdo específico</p>
@@ -410,15 +443,19 @@ export const IntelligentHelpCenter: React.FC = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {filteredContent(tutorials).slice(0, 3).map((tutorial) => (
-                    <div key={tutorial.id} className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-sm">{tutorial.title}</p>
-                        <p className="text-xs text-muted-foreground">{tutorial.views} visualizações</p>
+                  {filteredContent(tutorials)
+                    .slice(0, 3)
+                    .map(tutorial => (
+                      <div key={tutorial.id} className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-sm">{tutorial.title}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {tutorial.views} visualizações
+                          </p>
+                        </div>
+                        <Badge variant="secondary">{tutorial.rating}</Badge>
                       </div>
-                      <Badge variant="secondary">{tutorial.rating}</Badge>
-                    </div>
-                  ))}
+                    ))}
                 </CardContent>
               </Card>
             </div>
@@ -426,7 +463,7 @@ export const IntelligentHelpCenter: React.FC = () => {
 
           <TabsContent value="tutorials" className="space-y-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredContent(tutorials).map((tutorial) => (
+              {filteredContent(tutorials).map(tutorial => (
                 <Card key={tutorial.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -441,7 +478,7 @@ export const IntelligentHelpCenter: React.FC = () => {
                     <p className="text-muted-foreground text-sm line-clamp-3">
                       {tutorial.description}
                     </p>
-                    
+
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
@@ -454,7 +491,7 @@ export const IntelligentHelpCenter: React.FC = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-1">
-                      {tutorial.tags.slice(0, 3).map((tag) => (
+                      {tutorial.tags.slice(0, 3).map(tag => (
                         <Badge key={tag} variant="outline" className="text-xs">
                           {tag}
                         </Badge>
@@ -466,8 +503,8 @@ export const IntelligentHelpCenter: React.FC = () => {
                         <Play className="w-4 h-4 mr-2" />
                         Iniciar
                       </Button>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         onClick={() => handleExportMaterial("pdf", tutorial)}
                       >
@@ -482,7 +519,7 @@ export const IntelligentHelpCenter: React.FC = () => {
 
           <TabsContent value="faq" className="space-y-6">
             <Accordion type="single" collapsible className="space-y-4">
-              {filteredContent(faqs).map((faq) => (
+              {filteredContent(faqs).map(faq => (
                 <AccordionItem key={faq.id} value={faq.id} className="border rounded-lg px-4">
                   <AccordionTrigger className="text-left">
                     <div className="flex items-start gap-3">
@@ -493,16 +530,16 @@ export const IntelligentHelpCenter: React.FC = () => {
                   <AccordionContent className="pt-4">
                     <div className="space-y-4">
                       <p className="text-muted-foreground leading-relaxed">{faq.answer}</p>
-                      
+
                       <div className="flex items-center justify-between">
                         <div className="flex flex-wrap gap-1">
-                          {faq.tags.map((tag) => (
+                          {faq.tags.map(tag => (
                             <Badge key={tag} variant="secondary" className="text-xs">
                               {tag}
                             </Badge>
                           ))}
                         </div>
-                        
+
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <CheckCircle className="w-4 h-4" />
                           <span>{faq.helpful} pessoas acharam útil</span>
@@ -530,7 +567,7 @@ export const IntelligentHelpCenter: React.FC = () => {
 
           <TabsContent value="training" className="space-y-6">
             <div className="grid lg:grid-cols-2 gap-6">
-              {trainingPaths.map((path) => (
+              {trainingPaths.map(path => (
                 <Card key={path.id} className="border-2 border-primary/20">
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -566,8 +603,11 @@ export const IntelligentHelpCenter: React.FC = () => {
 
                     <div className="space-y-2">
                       <p className="font-medium">Próximos passos:</p>
-                      {path.tutorials.slice(0, 2).map((tutorial) => (
-                        <div key={tutorial.id} className="flex items-center gap-2 p-2 bg-muted/50 rounded">
+                      {path.tutorials.slice(0, 2).map(tutorial => (
+                        <div
+                          key={tutorial.id}
+                          className="flex items-center gap-2 p-2 bg-muted/50 rounded"
+                        >
                           <CheckCircle className="w-4 h-4 text-green-500" />
                           <span className="text-sm">{tutorial.title}</span>
                         </div>

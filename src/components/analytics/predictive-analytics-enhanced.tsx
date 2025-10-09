@@ -3,16 +3,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  AlertTriangle, 
-  Clock, 
-  Wrench, 
+import {
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
+  Clock,
+  Wrench,
   DollarSign,
   Ship,
   Users,
@@ -24,9 +30,23 @@ import {
   BarChart3,
   LineChart,
   PieChart,
-  Activity
+  Activity,
 } from "lucide-react";
-import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar, PieChart as RechartsPieChart, Cell } from "recharts";
+import {
+  LineChart as RechartsLineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  PieChart as RechartsPieChart,
+  Cell,
+} from "recharts";
 
 interface Prediction {
   id: string;
@@ -63,7 +83,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
     fuel: true,
     market: true,
     safety: true,
-    crew: false
+    crew: false,
   });
 
   const predictions: Prediction[] = [
@@ -77,7 +97,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
       timeframe: "45-60 days",
       value: "$125,000",
       trend: "up",
-      actionRequired: true
+      actionRequired: true,
     },
     {
       id: "2",
@@ -89,7 +109,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
       timeframe: "2-3 months",
       value: "+15%",
       trend: "up",
-      actionRequired: false
+      actionRequired: false,
     },
     {
       id: "3",
@@ -101,7 +121,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
       timeframe: "1-2 months",
       value: "+22%",
       trend: "up",
-      actionRequired: true
+      actionRequired: true,
     },
     {
       id: "4",
@@ -113,8 +133,8 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
       timeframe: "7-10 days",
       value: "3-day delay",
       trend: "stable",
-      actionRequired: true
-    }
+      actionRequired: true,
+    },
   ];
 
   const marketData: MarketForecast[] = [
@@ -135,28 +155,40 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
 
   const getImpactColor = (impact: Prediction["impact"]) => {
     switch (impact) {
-    case "high": return "bg-destructive text-destructive-foreground";
-    case "medium": return "bg-warning text-warning-foreground";
-    case "low": return "bg-success text-success-foreground";
-    default: return "bg-muted text-muted-foreground";
+      case "high":
+        return "bg-destructive text-destructive-foreground";
+      case "medium":
+        return "bg-warning text-warning-foreground";
+      case "low":
+        return "bg-success text-success-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getTrendIcon = (trend: Prediction["trend"]) => {
     switch (trend) {
-    case "up": return <TrendingUp className="h-4 w-4 text-success" />;
-    case "down": return <TrendingDown className="h-4 w-4 text-destructive" />;
-    case "stable": return <Activity className="h-4 w-4 text-muted-foreground" />;
+      case "up":
+        return <TrendingUp className="h-4 w-4 text-success" />;
+      case "down":
+        return <TrendingDown className="h-4 w-4 text-destructive" />;
+      case "stable":
+        return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getTypeIcon = (type: Prediction["type"]) => {
     switch (type) {
-    case "maintenance": return <Wrench className="h-4 w-4" />;
-    case "fuel": return <Fuel className="h-4 w-4" />;
-    case "market": return <DollarSign className="h-4 w-4" />;
-    case "safety": return <AlertTriangle className="h-4 w-4" />;
-    case "crew": return <Users className="h-4 w-4" />;
+      case "maintenance":
+        return <Wrench className="h-4 w-4" />;
+      case "fuel":
+        return <Fuel className="h-4 w-4" />;
+      case "market":
+        return <DollarSign className="h-4 w-4" />;
+      case "safety":
+        return <AlertTriangle className="h-4 w-4" />;
+      case "crew":
+        return <Users className="h-4 w-4" />;
     }
   };
 
@@ -221,11 +253,12 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-nautical">
-                  {Math.round(predictions.reduce((acc, p) => acc + p.confidence, 0) / predictions.length)}%
+                  {Math.round(
+                    predictions.reduce((acc, p) => acc + p.confidence, 0) / predictions.length
+                  )}
+                  %
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Across all models
-                </p>
+                <p className="text-xs text-muted-foreground">Across all models</p>
               </CardContent>
             </Card>
 
@@ -236,9 +269,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-nautical">$2.3M</div>
-                <p className="text-xs text-muted-foreground">
-                  Through proactive actions
-                </p>
+                <p className="text-xs text-muted-foreground">Through proactive actions</p>
               </CardContent>
             </Card>
 
@@ -249,9 +280,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-nautical">94.2%</div>
-                <p className="text-xs text-muted-foreground">
-                  Last 30 days
-                </p>
+                <p className="text-xs text-muted-foreground">Last 30 days</p>
               </CardContent>
             </Card>
           </div>
@@ -263,39 +292,47 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
                   <BarChart3 className="h-5 w-5" />
                   Key Predictions
                 </CardTitle>
-                <CardDescription>
-                  High-priority insights requiring attention
-                </CardDescription>
+                <CardDescription>High-priority insights requiring attention</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {predictions.filter(p => p.actionRequired).map((prediction) => (
-                  <div key={prediction.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-full bg-muted">
-                        {getTypeIcon(prediction.type)}
-                      </div>
-                      <div>
-                        <h4 className="font-semibold">{prediction.title}</h4>
-                        <p className="text-sm text-muted-foreground">{prediction.description}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge className={getImpactColor(prediction.impact)} variant="secondary">
-                            {prediction.impact} impact
-                          </Badge>
-                          <span className="text-xs text-muted-foreground">
-                            {prediction.confidence}% confidence
-                          </span>
+                {predictions
+                  .filter(p => p.actionRequired)
+                  .map(prediction => (
+                    <div
+                      key={prediction.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-full bg-muted">
+                          {getTypeIcon(prediction.type)}
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">{prediction.title}</h4>
+                          <p className="text-sm text-muted-foreground">{prediction.description}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <Badge
+                              className={getImpactColor(prediction.impact)}
+                              variant="secondary"
+                            >
+                              {prediction.impact} impact
+                            </Badge>
+                            <span className="text-xs text-muted-foreground">
+                              {prediction.confidence}% confidence
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="flex items-center gap-1">
-                        {getTrendIcon(prediction.trend)}
-                        <span className="font-semibold">{prediction.value}</span>
+                      <div className="text-right">
+                        <div className="flex items-center gap-1">
+                          {getTrendIcon(prediction.trend)}
+                          <span className="font-semibold">{prediction.value}</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground">
+                          {prediction.timeframe}
+                        </span>
                       </div>
-                      <span className="text-xs text-muted-foreground">{prediction.timeframe}</span>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </CardContent>
             </Card>
 
@@ -305,9 +342,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
                   <LineChart className="h-5 w-5" />
                   Market Forecast
                 </CardTitle>
-                <CardDescription>
-                  Freight rates and fuel cost predictions
-                </CardDescription>
+                <CardDescription>Freight rates and fuel cost predictions</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
@@ -316,19 +351,19 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
                     <XAxis dataKey="month" />
                     <YAxis />
                     <Tooltip />
-                    <Area 
-                      type="monotone" 
-                      dataKey="freightRates" 
-                      stackId="1" 
-                      stroke="hsl(var(--primary))" 
-                      fill="hsl(var(--primary) / 0.3)" 
+                    <Area
+                      type="monotone"
+                      dataKey="freightRates"
+                      stackId="1"
+                      stroke="hsl(var(--primary))"
+                      fill="hsl(var(--primary) / 0.3)"
                     />
-                    <Area 
-                      type="monotone" 
-                      dataKey="predicted" 
-                      stackId="2" 
-                      stroke="hsl(var(--ocean-blue))" 
-                      fill="hsl(var(--ocean-blue) / 0.3)" 
+                    <Area
+                      type="monotone"
+                      dataKey="predicted"
+                      stackId="2"
+                      stroke="hsl(var(--ocean-blue))"
+                      fill="hsl(var(--ocean-blue) / 0.3)"
                     />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -351,7 +386,10 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
             <CardContent>
               <div className="space-y-4">
                 {maintenancePredictions.map((prediction, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="space-y-2">
                       <div className="flex items-center gap-3">
                         <Ship className="h-4 w-4 text-muted-foreground" />
@@ -404,8 +442,19 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
                     <XAxis dataKey="month" />
                     <YAxis />
                     <Tooltip />
-                    <Line type="monotone" dataKey="freightRates" stroke="hsl(var(--primary))" strokeWidth="2" />
-                    <Line type="monotone" dataKey="predicted" stroke="hsl(var(--ocean-blue))" strokeDasharray="5 5" strokeWidth="2" />
+                    <Line
+                      type="monotone"
+                      dataKey="freightRates"
+                      stroke="hsl(var(--primary))"
+                      strokeWidth="2"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="predicted"
+                      stroke="hsl(var(--ocean-blue))"
+                      strokeDasharray="5 5"
+                      strokeWidth="2"
+                    />
                   </RechartsLineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -437,9 +486,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
                 <AlertTriangle className="h-5 w-5" />
                 Safety Risk Analysis
               </CardTitle>
-              <CardDescription>
-                Predictive safety insights and risk assessments
-              </CardDescription>
+              <CardDescription>Predictive safety insights and risk assessments</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-3">
@@ -500,7 +547,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
                     </div>
                     <Switch
                       checked={enabled}
-                      onCheckedChange={(checked) =>
+                      onCheckedChange={checked =>
                         setEnabledPredictions(prev => ({ ...prev, [key]: checked }))
                       }
                     />

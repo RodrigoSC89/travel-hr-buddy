@@ -28,7 +28,7 @@ export const TestEnvironmentConfig: React.FC = () => {
     analyticsEnabled: true,
     errorReporting: true,
     performanceMonitoring: true,
-    securityScanning: true
+    securityScanning: true,
   });
 
   const { toast } = useToast();
@@ -40,7 +40,7 @@ export const TestEnvironmentConfig: React.FC = () => {
   const applyConfiguration = () => {
     // Simulate applying configuration
     localStorage.setItem("nautilus-test-config", JSON.stringify(config));
-    
+
     toast({
       title: "Configuração Aplicada",
       description: `Ambiente configurado para ${config.environment}`,
@@ -56,9 +56,9 @@ export const TestEnvironmentConfig: React.FC = () => {
       analyticsEnabled: true,
       errorReporting: true,
       performanceMonitoring: true,
-      securityScanning: true
+      securityScanning: true,
     });
-    
+
     toast({
       title: "Configuração Resetada",
       description: "Voltou às configurações padrão",
@@ -67,15 +67,15 @@ export const TestEnvironmentConfig: React.FC = () => {
 
   const exportConfig = () => {
     const dataStr = JSON.stringify(config, null, 2);
-    const dataUri = "data:application/json;charset=utf-8,"+ encodeURIComponent(dataStr);
-    
+    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
     const exportFileDefaultName = "nautilus-test-config.json";
-    
+
     const linkElement = document.createElement("a");
     linkElement.setAttribute("href", dataUri);
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
-    
+
     toast({
       title: "Configuração Exportada",
       description: "Arquivo de configuração baixado",
@@ -84,14 +84,26 @@ export const TestEnvironmentConfig: React.FC = () => {
 
   const getEnvironmentBadge = (env: string) => {
     switch (env) {
-    case "development":
-      return <Badge variant="outline" className="bg-blue-100 text-blue-800">Desenvolvimento</Badge>;
-    case "staging":
-      return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Homologação</Badge>;
-    case "production":
-      return <Badge variant="destructive" className="bg-red-100 text-red-800">Produção</Badge>;
-    default:
-      return <Badge variant="outline">Desconhecido</Badge>;
+      case "development":
+        return (
+          <Badge variant="outline" className="bg-blue-100 text-blue-800">
+            Desenvolvimento
+          </Badge>
+        );
+      case "staging":
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            Homologação
+          </Badge>
+        );
+      case "production":
+        return (
+          <Badge variant="destructive" className="bg-red-100 text-red-800">
+            Produção
+          </Badge>
+        );
+      default:
+        return <Badge variant="outline">Desconhecido</Badge>;
     }
   };
 
@@ -112,9 +124,7 @@ export const TestEnvironmentConfig: React.FC = () => {
           <Button variant="outline" onClick={resetToDefaults}>
             Resetar
           </Button>
-          <Button onClick={applyConfiguration}>
-            Aplicar
-          </Button>
+          <Button onClick={applyConfiguration}>Aplicar</Button>
         </div>
       </div>
 
@@ -178,20 +188,18 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.debugMode}
-                  onCheckedChange={(checked) => handleConfigChange("debugMode", checked)}
+                  onCheckedChange={checked => handleConfigChange("debugMode", checked)}
                 />
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Dados Mock</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Usa dados simulados para testes
-                  </p>
+                  <p className="text-sm text-muted-foreground">Usa dados simulados para testes</p>
                 </div>
                 <Switch
                   checked={config.mockData}
-                  onCheckedChange={(checked) => handleConfigChange("mockData", checked)}
+                  onCheckedChange={checked => handleConfigChange("mockData", checked)}
                 />
               </div>
 
@@ -204,7 +212,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.cacheEnabled}
-                  onCheckedChange={(checked) => handleConfigChange("cacheEnabled", checked)}
+                  onCheckedChange={checked => handleConfigChange("cacheEnabled", checked)}
                 />
               </div>
             </CardContent>
@@ -221,8 +229,8 @@ export const TestEnvironmentConfig: React.FC = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Configurações do banco de dados estão sendo gerenciadas automaticamente
-                através do Supabase. Verifique o status na aba de monitoramento.
+                Configurações do banco de dados estão sendo gerenciadas automaticamente através do
+                Supabase. Verifique o status na aba de monitoramento.
               </p>
             </CardContent>
           </Card>
@@ -246,7 +254,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.securityScanning}
-                  onCheckedChange={(checked) => handleConfigChange("securityScanning", checked)}
+                  onCheckedChange={checked => handleConfigChange("securityScanning", checked)}
                 />
               </div>
             </CardContent>
@@ -265,13 +273,11 @@ export const TestEnvironmentConfig: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Analytics</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Coleta dados de uso e performance
-                  </p>
+                  <p className="text-sm text-muted-foreground">Coleta dados de uso e performance</p>
                 </div>
                 <Switch
                   checked={config.analyticsEnabled}
-                  onCheckedChange={(checked) => handleConfigChange("analyticsEnabled", checked)}
+                  onCheckedChange={checked => handleConfigChange("analyticsEnabled", checked)}
                 />
               </div>
 
@@ -284,7 +290,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.errorReporting}
-                  onCheckedChange={(checked) => handleConfigChange("errorReporting", checked)}
+                  onCheckedChange={checked => handleConfigChange("errorReporting", checked)}
                 />
               </div>
 
@@ -297,7 +303,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.performanceMonitoring}
-                  onCheckedChange={(checked) => handleConfigChange("performanceMonitoring", checked)}
+                  onCheckedChange={checked => handleConfigChange("performanceMonitoring", checked)}
                 />
               </div>
             </CardContent>

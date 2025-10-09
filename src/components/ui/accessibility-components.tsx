@@ -5,28 +5,28 @@ import React from "react";
  * Visually hidden but accessible to screen readers
  */
 export const SrOnly: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <span className="sr-only">
-      {children}
-    </span>
-  );
+  return <span className="sr-only">{children}</span>;
 };
 
 /**
  * Loading State with Accessibility
  */
-export const AccessibleLoading: React.FC<{ 
+export const AccessibleLoading: React.FC<{
   message?: string;
   size?: "sm" | "md" | "lg";
 }> = ({ message = "Carregando...", size = "md" }) => {
   const sizeClasses = {
     sm: "w-8 h-8",
     md: "w-12 h-12",
-    lg: "w-16 h-16"
+    lg: "w-16 h-16",
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4" role="status" aria-live="polite">
+    <div
+      className="flex flex-col items-center justify-center gap-4"
+      role="status"
+      aria-live="polite"
+    >
       <div className={`offshore-loading ${sizeClasses[size]}`} aria-hidden="true" />
       <span className="text-sm font-semibold text-gray-700">{message}</span>
       <SrOnly>{message}</SrOnly>
@@ -92,12 +92,7 @@ export const LiveRegion: React.FC<{
   atomic?: boolean;
 }> = ({ children, politeness = "polite", atomic = true }) => {
   return (
-    <div 
-      role="status" 
-      aria-live={politeness}
-      aria-atomic={atomic}
-      className="sr-only"
-    >
+    <div role="status" aria-live={politeness} aria-atomic={atomic} className="sr-only">
       {children}
     </div>
   );
@@ -108,5 +103,5 @@ export default {
   AccessibleLoading,
   AccessibleButton,
   SkipToMain,
-  LiveRegion
+  LiveRegion,
 };

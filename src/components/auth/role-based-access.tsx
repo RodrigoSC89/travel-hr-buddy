@@ -19,7 +19,7 @@ export const RoleBasedAccess: React.FC<RoleBasedAccessProps> = ({
   permissions,
   children,
   fallback,
-  showFallback = true
+  showFallback = true,
 }) => {
   const { userRole, hasPermission, isLoading } = usePermissions();
 
@@ -35,7 +35,7 @@ export const RoleBasedAccess: React.FC<RoleBasedAccessProps> = ({
   if (roles && userRole) {
     const hasRoleAccess = roles.includes(userRole);
     if (!hasRoleAccess) {
-      return showFallback ? (fallback || <AccessDeniedFallback />) : null;
+      return showFallback ? fallback || <AccessDeniedFallback /> : null;
     }
   }
 
@@ -45,7 +45,7 @@ export const RoleBasedAccess: React.FC<RoleBasedAccessProps> = ({
       hasPermission(permission, action)
     );
     if (!hasPermissionAccess) {
-      return showFallback ? (fallback || <AccessDeniedFallback />) : null;
+      return showFallback ? fallback || <AccessDeniedFallback /> : null;
     }
   }
 

@@ -7,12 +7,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { 
-  ArrowLeft, 
-  Save, 
-  Send, 
-  CheckCircle, 
-  Camera, 
+import {
+  ArrowLeft,
+  Save,
+  Send,
+  CheckCircle,
+  Camera,
   Mic,
   Ship,
   User,
@@ -20,7 +20,7 @@ import {
   Shield,
   AlertTriangle,
   LifeBuoy,
-  Flame
+  Flame,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { Checklist, ChecklistItem } from "./checklist-types";
@@ -42,7 +42,7 @@ const safetyChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Combate a Incêndio",
     order: 1,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "safety-2",
@@ -52,7 +52,7 @@ const safetyChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Abandono",
     order: 2,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "safety-3",
@@ -62,7 +62,7 @@ const safetyChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Alarmes",
     order: 3,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "safety-4",
@@ -72,7 +72,7 @@ const safetyChecklistItems: ChecklistItem[] = [
     required: true,
     category: "EPI",
     order: 4,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "safety-5",
@@ -85,7 +85,7 @@ const safetyChecklistItems: ChecklistItem[] = [
     unit: "pessoas",
     minValue: 1,
     maxValue: 100,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "safety-6",
@@ -95,7 +95,7 @@ const safetyChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Resgate",
     order: 6,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "safety-7",
@@ -105,7 +105,7 @@ const safetyChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Escape",
     order: 7,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "safety-8",
@@ -115,7 +115,7 @@ const safetyChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Ventilação",
     order: 8,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "safety-9",
@@ -125,7 +125,7 @@ const safetyChecklistItems: ChecklistItem[] = [
     required: true,
     category: "Materiais Perigosos",
     order: 9,
-    status: "pending"
+    status: "pending",
   },
   {
     id: "safety-10",
@@ -135,28 +135,29 @@ const safetyChecklistItems: ChecklistItem[] = [
     required: false,
     category: "Observações",
     order: 10,
-    status: "pending"
-  }
+    status: "pending",
+  },
 ];
 
 export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
   checklist: initialChecklist,
   onSave,
   onSubmit,
-  onBack
+  onBack,
 }) => {
   const [checklist, setChecklist] = useState<Checklist>({
     ...initialChecklist,
-    items: safetyChecklistItems
+    items: safetyChecklistItems,
   });
 
   const [activeTab, setActiveTab] = useState("items");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const categories = Array.from(new Set(checklist.items.map(item => item.category)));
-  const filteredItems = selectedCategory === "all" 
-    ? checklist.items 
-    : checklist.items.filter(item => item.category === selectedCategory);
+  const filteredItems =
+    selectedCategory === "all"
+      ? checklist.items
+      : checklist.items.filter(item => item.category === selectedCategory);
 
   const completedItems = checklist.items.filter(item => item.status === "completed").length;
   const totalItems = checklist.items.length;
@@ -165,16 +166,16 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
   const handleItemChange = (itemId: string, field: string, value: any) => {
     setChecklist(prev => ({
       ...prev,
-      items: prev.items.map(item => 
-        item.id === itemId 
-          ? { 
-            ...item, 
-            [field]: value,
-            status: field === "value" && value !== undefined ? "completed" : item.status,
-            timestamp: field === "value" ? new Date().toISOString() : item.timestamp
-          }
+      items: prev.items.map(item =>
+        item.id === itemId
+          ? {
+              ...item,
+              [field]: value,
+              status: field === "value" && value !== undefined ? "completed" : item.status,
+              timestamp: field === "value" ? new Date().toISOString() : item.timestamp,
+            }
           : item
-      )
+      ),
     }));
   };
 
@@ -188,8 +189,10 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
   };
 
   const handleSubmit = async () => {
-    const incompleteRequired = checklist.items.filter(item => item.required && item.status !== "completed");
-    
+    const incompleteRequired = checklist.items.filter(
+      item => item.required && item.status !== "completed"
+    );
+
     if (incompleteRequired.length > 0) {
       toast.error(`Existem ${incompleteRequired.length} itens obrigatórios não concluídos`);
       return;
@@ -199,7 +202,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
       await onSubmit({
         ...checklist,
         status: "pending_review",
-        completedAt: new Date().toISOString()
+        completedAt: new Date().toISOString(),
       });
       toast.success("Checklist enviado para revisão!");
     } catch (error) {
@@ -209,73 +212,95 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
 
   const renderItemInput = (item: ChecklistItem) => {
     switch (item.type) {
-    case "boolean":
-      return (
-        <Checkbox
-          checked={item.value === true}
-          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked)}
-          className="mr-2"
-        />
-      );
-      
-    case "number":
-      return (
-        <div className="flex items-center gap-2">
-          <Input
-            type="number"
-            value={item.value || ""}
-            onChange={(e) => handleItemChange(item.id, "value", parseFloat(e.target.value))}
-            placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
-            className="w-32"
+      case "boolean":
+        return (
+          <Checkbox
+            checked={item.value === true}
+            onCheckedChange={checked => handleItemChange(item.id, "value", checked)}
+            className="mr-2"
           />
-          {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
-        </div>
-      );
-      
-    case "text":
-      return (
-        <Input
-          value={item.value || ""}
-          onChange={(e) => handleItemChange(item.id, "value", e.target.value)}
-          placeholder="Digite sua observação..."
-          className="w-full"
-        />
-      );
-      
-    default:
-      return null;
+        );
+
+      case "number":
+        return (
+          <div className="flex items-center gap-2">
+            <Input
+              type="number"
+              value={item.value || ""}
+              onChange={e => handleItemChange(item.id, "value", parseFloat(e.target.value))}
+              placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
+              className="w-32"
+            />
+            {item.unit && <span className="text-sm text-muted-foreground">{item.unit}</span>}
+          </div>
+        );
+
+      case "text":
+        return (
+          <Input
+            value={item.value || ""}
+            onChange={e => handleItemChange(item.id, "value", e.target.value)}
+            placeholder="Digite sua observação..."
+            className="w-full"
+          />
+        );
+
+      default:
+        return null;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "Combate a Incêndio": return <Flame className="w-4 h-4" />;
-    case "Abandono": return <LifeBuoy className="w-4 h-4" />;
-    case "Alarmes": return <AlertTriangle className="w-4 h-4" />;
-    case "EPI": return <Shield className="w-4 h-4" />;
-    case "Resgate": return <LifeBuoy className="w-4 h-4" />;
-    case "Escape": return <AlertTriangle className="w-4 h-4" />;
-    case "Ventilação": return <Ship className="w-4 h-4" />;
-    case "Materiais Perigosos": return <AlertTriangle className="w-4 h-4" />;
-    case "Controle": return <Target className="w-4 h-4" />;
-    case "Observações": return <User className="w-4 h-4" />;
-    default: return <Shield className="w-4 h-4" />;
+      case "Combate a Incêndio":
+        return <Flame className="w-4 h-4" />;
+      case "Abandono":
+        return <LifeBuoy className="w-4 h-4" />;
+      case "Alarmes":
+        return <AlertTriangle className="w-4 h-4" />;
+      case "EPI":
+        return <Shield className="w-4 h-4" />;
+      case "Resgate":
+        return <LifeBuoy className="w-4 h-4" />;
+      case "Escape":
+        return <AlertTriangle className="w-4 h-4" />;
+      case "Ventilação":
+        return <Ship className="w-4 h-4" />;
+      case "Materiais Perigosos":
+        return <AlertTriangle className="w-4 h-4" />;
+      case "Controle":
+        return <Target className="w-4 h-4" />;
+      case "Observações":
+        return <User className="w-4 h-4" />;
+      default:
+        return <Shield className="w-4 h-4" />;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-    case "Combate a Incêndio": return "text-red-600 bg-red-50";
-    case "Abandono": return "text-orange-600 bg-orange-50";
-    case "Alarmes": return "text-yellow-600 bg-yellow-50";
-    case "EPI": return "text-blue-600 bg-blue-50";
-    case "Resgate": return "text-purple-600 bg-purple-50";
-    case "Escape": return "text-green-600 bg-green-50";
-    case "Ventilação": return "text-cyan-600 bg-cyan-50";
-    case "Materiais Perigosos": return "text-red-600 bg-red-50";
-    case "Controle": return "text-muted-foreground bg-gray-50";
-    case "Observações": return "text-indigo-600 bg-indigo-50";
-    default: return "text-muted-foreground bg-gray-50";
+      case "Combate a Incêndio":
+        return "text-red-600 bg-red-50";
+      case "Abandono":
+        return "text-orange-600 bg-orange-50";
+      case "Alarmes":
+        return "text-yellow-600 bg-yellow-50";
+      case "EPI":
+        return "text-blue-600 bg-blue-50";
+      case "Resgate":
+        return "text-purple-600 bg-purple-50";
+      case "Escape":
+        return "text-green-600 bg-green-50";
+      case "Ventilação":
+        return "text-cyan-600 bg-cyan-50";
+      case "Materiais Perigosos":
+        return "text-red-600 bg-red-50";
+      case "Controle":
+        return "text-muted-foreground bg-gray-50";
+      case "Observações":
+        return "text-indigo-600 bg-indigo-50";
+      default:
+        return "text-muted-foreground bg-gray-50";
     }
   };
 
@@ -356,10 +381,13 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
 
                 {/* Checklist Items */}
                 <div className="space-y-4">
-                  {filteredItems.map((item) => (
-                    <Card key={item.id} className={`transition-colors ${
-                      item.status === "completed" ? "bg-green-50 border-green-200" : ""
-                    }`}>
+                  {filteredItems.map(item => (
+                    <Card
+                      key={item.id}
+                      className={`transition-colors ${
+                        item.status === "completed" ? "bg-green-50 border-green-200" : ""
+                      }`}
+                    >
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -374,29 +402,30 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                                 )}
                               </div>
                             </div>
-                            <CardDescription className="mt-2">
-                              {item.description}
-                            </CardDescription>
+                            <CardDescription className="mt-2">{item.description}</CardDescription>
                           </div>
                           <div className="flex items-center gap-2">
                             {item.status === "completed" && (
                               <CheckCircle className="w-5 h-5 text-green-500" />
                             )}
-                            <Badge variant="outline" className={`flex items-center gap-1 ${getCategoryColor(item.category)}`}>
+                            <Badge
+                              variant="outline"
+                              className={`flex items-center gap-1 ${getCategoryColor(item.category)}`}
+                            >
                               {getCategoryIcon(item.category)}
                               {item.category}
                             </Badge>
                           </div>
                         </div>
                       </CardHeader>
-                      
+
                       <CardContent className="space-y-3">
                         {/* Notes */}
                         <div>
                           <label className="text-sm font-medium">Observações:</label>
                           <Textarea
                             value={item.notes || ""}
-                            onChange={(e) => handleItemChange(item.id, "notes", e.target.value)}
+                            onChange={e => handleItemChange(item.id, "notes", e.target.value)}
                             placeholder="Adicione observações sobre este item de segurança..."
                             className="mt-1"
                             rows={2}
@@ -431,9 +460,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                   <CardContent>
                     <div className="text-center py-8">
                       <Camera className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">
-                        Nenhuma evidência coletada ainda
-                      </p>
+                      <p className="text-muted-foreground">Nenhuma evidência coletada ainda</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -443,9 +470,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                 <Card>
                   <CardHeader>
                     <CardTitle>Resumo da Inspeção de Segurança</CardTitle>
-                    <CardDescription>
-                      Status geral e ações necessárias
-                    </CardDescription>
+                    <CardDescription>Status geral e ações necessárias</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
@@ -454,13 +479,17 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                         <div className="text-sm text-muted-foreground">Itens Concluídos</div>
                       </div>
                       <div className="text-center p-4 bg-orange-50 rounded-lg">
-                        <div className="text-2xl font-bold text-orange-600">{totalItems - completedItems}</div>
+                        <div className="text-2xl font-bold text-orange-600">
+                          {totalItems - completedItems}
+                        </div>
                         <div className="text-sm text-muted-foreground">Itens Pendentes</div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="text-sm font-medium">Observações Gerais de Segurança:</label>
+                      <label className="text-sm font-medium">
+                        Observações Gerais de Segurança:
+                      </label>
                       <Textarea
                         placeholder="Adicione comentários sobre o estado geral de segurança do navio..."
                         className="mt-1"
@@ -484,11 +513,21 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
-                <div><strong>Nome:</strong> {checklist.vessel.name}</div>
-                <div><strong>Tipo:</strong> {checklist.vessel.type}</div>
-                <div><strong>IMO:</strong> {checklist.vessel.imo}</div>
-                <div><strong>Bandeira:</strong> {checklist.vessel.flag}</div>
-                <div><strong>Operador:</strong> {checklist.vessel.operator}</div>
+                <div>
+                  <strong>Nome:</strong> {checklist.vessel.name}
+                </div>
+                <div>
+                  <strong>Tipo:</strong> {checklist.vessel.type}
+                </div>
+                <div>
+                  <strong>IMO:</strong> {checklist.vessel.imo}
+                </div>
+                <div>
+                  <strong>Bandeira:</strong> {checklist.vessel.flag}
+                </div>
+                <div>
+                  <strong>Operador:</strong> {checklist.vessel.operator}
+                </div>
               </CardContent>
             </Card>
 
@@ -501,10 +540,18 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
-                <div><strong>Nome:</strong> {checklist.inspector.name}</div>
-                <div><strong>Licença:</strong> {checklist.inspector.license}</div>
-                <div><strong>Empresa:</strong> {checklist.inspector.company}</div>
-                <div><strong>Email:</strong> {checklist.inspector.email}</div>
+                <div>
+                  <strong>Nome:</strong> {checklist.inspector.name}
+                </div>
+                <div>
+                  <strong>Licença:</strong> {checklist.inspector.license}
+                </div>
+                <div>
+                  <strong>Empresa:</strong> {checklist.inspector.company}
+                </div>
+                <div>
+                  <strong>Email:</strong> {checklist.inspector.email}
+                </div>
               </CardContent>
             </Card>
 
@@ -527,7 +574,10 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                 </div>
                 <div className="flex justify-between">
                   <span>Prioridade:</span>
-                  <Badge variant={checklist.priority === "high" ? "destructive" : "default"} className="text-xs">
+                  <Badge
+                    variant={checklist.priority === "high" ? "destructive" : "default"}
+                    className="text-xs"
+                  >
                     {checklist.priority}
                   </Badge>
                 </div>

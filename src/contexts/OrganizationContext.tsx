@@ -41,7 +41,7 @@ interface OrganizationContextType {
   userRole: string | null;
   isLoading: boolean;
   error: string | null;
-  
+
   // Funções
   switchOrganization: (orgId: string) => Promise<void>;
   updateBranding: (branding: Partial<OrganizationBranding>) => Promise<void>;
@@ -93,12 +93,12 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         features: { peotram: true, fleet_management: true, analytics: true, ai_analysis: true },
         trial_ends_at: null,
         subscription_ends_at: null,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
-      
+
       setCurrentOrganization(demoOrg);
       setUserRole("admin");
-      
+
       // Carregar branding da organização
       try {
         const { data: branding, error: brandingError } = await supabase
@@ -127,9 +127,11 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
             custom_fields: {},
             business_rules: {},
             enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"],
-            module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
+            module_settings: {
+              peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true },
+            },
           };
-          
+
           setCurrentBranding(demoBranding);
           applyBrandingTheme(demoBranding);
         }
@@ -151,9 +153,11 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
           custom_fields: {},
           business_rules: {},
           enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"],
-          module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
+          module_settings: {
+            peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true },
+          },
         };
-        
+
         setCurrentBranding(demoBranding);
         applyBrandingTheme(demoBranding);
       }
@@ -167,17 +171,17 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const applyBrandingTheme = (branding: OrganizationBranding) => {
     const root = document.documentElement;
-    
+
     // Aplicar cores personalizadas
     root.style.setProperty("--primary", branding.primary_color);
     root.style.setProperty("--secondary", branding.secondary_color);
     root.style.setProperty("--accent", branding.accent_color);
-    
+
     // Atualizar título da página
     if (branding.company_name) {
       document.title = `${branding.company_name} - Nautilus One`;
     }
-    
+
     // Aplicar tema escuro/claro se especificado
     if (branding.theme_mode !== "auto") {
       document.documentElement.classList.toggle("dark", branding.theme_mode === "dark");
@@ -213,7 +217,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const checkPermission = (permission: string): boolean => {
     // Para demo, admin tem todas as permissões
     if (userRole === "admin") return true;
-    
+
     // Hierarquia de permissões simplificada
     const roleHierarchy = {
       owner: ["all"],
@@ -221,7 +225,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       manager: ["manage_data", "view_analytics", "manage_team"],
       operator: ["manage_data", "view_data"],
       member: ["view_data"],
-      viewer: ["view_data"]
+      viewer: ["view_data"],
     };
 
     const userPermissions = roleHierarchy[userRole as keyof typeof roleHierarchy] || [];
@@ -238,19 +242,19 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         status: "active",
         full_name: "Administrador",
         joined_at: new Date().toISOString(),
-        last_active_at: new Date().toISOString()
+        last_active_at: new Date().toISOString(),
       },
       {
-        id: "2", 
+        id: "2",
         email: "user@nautilus.com",
         role: "member",
         status: "active",
         full_name: "Usuário Demo",
         joined_at: new Date().toISOString(),
-        last_active_at: new Date().toISOString()
-      }
+        last_active_at: new Date().toISOString(),
+      },
     ];
-    
+
     return mockUsers;
   };
 
@@ -279,12 +283,8 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     getCurrentOrganizationUsers,
     inviteUser,
     removeUser,
-    updateUserRole
+    updateUserRole,
   };
 
-  return (
-    <OrganizationContext.Provider value={value}>
-      {children}
-    </OrganizationContext.Provider>
-  );
+  return <OrganizationContext.Provider value={value}>{children}</OrganizationContext.Provider>;
 };

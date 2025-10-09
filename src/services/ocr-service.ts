@@ -33,7 +33,7 @@ export class OCRService {
     }
 
     this.worker = await Tesseract.createWorker(language, 1, {
-      logger: (m) => console.log("OCR:", m),
+      logger: m => console.log("OCR:", m),
     });
   }
 
@@ -52,11 +52,12 @@ export class OCRService {
     const processingTime = Date.now() - startTime;
 
     // Extract blocks with bounding boxes
-    const blocks: OCRBlock[] = data.blocks?.map(block => ({
-      text: block.text,
-      confidence: block.confidence,
-      bbox: block.bbox,
-    })) || [];
+    const blocks: OCRBlock[] =
+      data.blocks?.map(block => ({
+        text: block.text,
+        confidence: block.confidence,
+        bbox: block.bbox,
+      })) || [];
 
     return {
       text: data.text,
@@ -74,7 +75,7 @@ export class OCRService {
     const results: OCRResult[] = [];
 
     for (let i = 0; i < images.length; i++) {
-      const result = await this.processImage(images[i], (progress) => {
+      const result = await this.processImage(images[i], progress => {
         if (onProgress) {
           onProgress(i, images.length, progress);
         }
@@ -91,7 +92,7 @@ export class OCRService {
 
     // Parse text to extract form fields (basic implementation)
     const lines = result.text.split("\n");
-    
+
     for (const line of lines) {
       // Look for key-value patterns like "Field Name: Value"
       const match = line.match(/^([^:]+):\s*(.+)$/);
@@ -125,8 +126,8 @@ export class OCRService {
       // Increase contrast
       const contrast = (gray - 128) * 1.5 + 128;
       const pixel = Math.max(0, Math.min(255, contrast));
-      
-      data[i] = pixel;     // R
+
+      data[i] = pixel; // R
       data[i + 1] = pixel; // G
       data[i + 2] = pixel; // B
     }

@@ -1,14 +1,14 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  CalendarIcon, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
+import {
+  CalendarIcon,
+  Clock,
+  CheckCircle,
+  XCircle,
   AlertTriangle,
   TrendingUp,
   DollarSign,
-  Users
+  Users,
 } from "lucide-react";
 import { EnhancedReservation } from "./enhanced-reservations-dashboard";
 
@@ -23,18 +23,16 @@ export const ReservationStats: React.FC<ReservationStatsProps> = ({ reservations
   const cancelledReservations = reservations.filter(r => r.status === "cancelled").length;
   const completedReservations = reservations.filter(r => r.status === "completed").length;
   const conflictedReservations = reservations.filter(r => r.conflict_detected).length;
-  
+
   const totalAmount = reservations
     .filter(r => r.total_amount && r.status !== "cancelled")
     .reduce((sum, r) => sum + (r.total_amount || 0), 0);
 
-  const upcomingReservations = reservations.filter(r => 
-    new Date(r.start_date) > new Date() && r.status === "confirmed"
+  const upcomingReservations = reservations.filter(
+    r => new Date(r.start_date) > new Date() && r.status === "confirmed"
   ).length;
 
-  const uniqueCrewMembers = new Set(
-    reservations.map(r => r.crew_member_name).filter(Boolean)
-  ).size;
+  const uniqueCrewMembers = new Set(reservations.map(r => r.crew_member_name).filter(Boolean)).size;
 
   const stats = [
     {
@@ -42,28 +40,28 @@ export const ReservationStats: React.FC<ReservationStatsProps> = ({ reservations
       value: totalReservations,
       icon: CalendarIcon,
       color: "text-blue-600",
-      bgColor: "bg-blue-100 dark:bg-blue-900/30"
+      bgColor: "bg-blue-100 dark:bg-blue-900/30",
     },
     {
       title: "Confirmadas",
       value: confirmedReservations,
       icon: CheckCircle,
       color: "text-green-600",
-      bgColor: "bg-green-100 dark:bg-green-900/30"
+      bgColor: "bg-green-100 dark:bg-green-900/30",
     },
     {
       title: "Pendentes",
       value: pendingReservations,
       icon: Clock,
       color: "text-yellow-600",
-      bgColor: "bg-yellow-100 dark:bg-yellow-900/30"
+      bgColor: "bg-yellow-100 dark:bg-yellow-900/30",
     },
     {
       title: "Próximas",
       value: upcomingReservations,
       icon: TrendingUp,
       color: "text-purple-600",
-      bgColor: "bg-purple-100 dark:bg-purple-900/30"
+      bgColor: "bg-purple-100 dark:bg-purple-900/30",
     },
     {
       title: "Valor Total",
@@ -71,33 +69,33 @@ export const ReservationStats: React.FC<ReservationStatsProps> = ({ reservations
         style: "currency",
         currency: "BRL",
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0
+        maximumFractionDigits: 0,
       }).format(totalAmount),
       icon: DollarSign,
       color: "text-emerald-600",
-      bgColor: "bg-emerald-100 dark:bg-emerald-900/30"
+      bgColor: "bg-emerald-100 dark:bg-emerald-900/30",
     },
     {
       title: "Tripulantes",
       value: uniqueCrewMembers,
       icon: Users,
       color: "text-indigo-600",
-      bgColor: "bg-indigo-100 dark:bg-indigo-900/30"
+      bgColor: "bg-indigo-100 dark:bg-indigo-900/30",
     },
     {
       title: "Canceladas",
       value: cancelledReservations,
       icon: XCircle,
       color: "text-red-600",
-      bgColor: "bg-red-100 dark:bg-red-900/30"
+      bgColor: "bg-red-100 dark:bg-red-900/30",
     },
     {
       title: "Conflitos",
       value: conflictedReservations,
       icon: AlertTriangle,
       color: "text-orange-600",
-      bgColor: "bg-orange-100 dark:bg-orange-900/30"
-    }
+      bgColor: "bg-orange-100 dark:bg-orange-900/30",
+    },
   ];
 
   return (

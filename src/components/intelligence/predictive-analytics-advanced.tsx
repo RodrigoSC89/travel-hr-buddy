@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Brain, 
-  TrendingUp, 
-  TrendingDown, 
-  AlertTriangle, 
+import {
+  Brain,
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
   CheckCircle,
   BarChart3,
   Target,
@@ -19,9 +19,25 @@ import {
   Ship,
   Fuel,
   Timer,
-  Lightbulb
+  Lightbulb,
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell, BarChart, Bar } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+} from "recharts";
 import { useToast } from "@/hooks/use-toast";
 
 interface Prediction {
@@ -66,7 +82,7 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
       value: 150000,
       trend: "up",
       recommendation: "Considere contratos de hedge para mitigar o risco",
-      priority: 1
+      priority: 1,
     },
     {
       id: "2",
@@ -79,7 +95,7 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
       value: 75000,
       trend: "stable",
       recommendation: "Agendar manutenção imediatamente para evitar falha",
-      priority: 1
+      priority: 1,
     },
     {
       id: "3",
@@ -92,8 +108,8 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
       value: 200000,
       trend: "up",
       recommendation: "Aumentar capacidade operacional na rota",
-      priority: 2
-    }
+      priority: 2,
+    },
   ]);
 
   const [aiInsights] = useState<AIInsight[]>([
@@ -101,11 +117,12 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
       id: "1",
       category: "operational",
       title: "Otimização de Rotas",
-      description: "IA identificou oportunidade de reduzir 12% do tempo de viagem otimizando rotas atuais",
+      description:
+        "IA identificou oportunidade de reduzir 12% do tempo de viagem otimizando rotas atuais",
       action: "Implementar novo algoritmo de roteamento",
       expectedBenefit: "Economia de R$ 80.000/mês em combustível",
       complexity: "medium",
-      urgency: "high"
+      urgency: "high",
     },
     {
       id: "2",
@@ -115,7 +132,7 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
       action: "Renegociar contratos identificados",
       expectedBenefit: "Redução de R$ 45.000/mês",
       complexity: "low",
-      urgency: "medium"
+      urgency: "medium",
     },
     {
       id: "3",
@@ -125,8 +142,8 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
       action: "Realizar estudo de viabilidade detalhado",
       expectedBenefit: "Potencial receita adicional de R$ 2M/ano",
       complexity: "high",
-      urgency: "low"
-    }
+      urgency: "low",
+    },
   ]);
 
   // Dados simulados para gráficos
@@ -136,7 +153,7 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
     { month: "Mar", efficiency: 85, cost: 110000, revenue: 520000 },
     { month: "Abr", efficiency: 79, cost: 125000, revenue: 470000 },
     { month: "Mai", efficiency: 88, cost: 105000, revenue: 550000 },
-    { month: "Jun", efficiency: 91, cost: 98000, revenue: 580000 }
+    { month: "Jun", efficiency: 91, cost: 98000, revenue: 580000 },
   ];
 
   const riskData = [
@@ -144,7 +161,7 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
     { name: "Financeiro", value: 25, color: "#f97316" },
     { name: "Regulatório", value: 20, color: "#eab308" },
     { name: "Ambiental", value: 15, color: "#22c55e" },
-    { name: "Outros", value: 5, color: "#6b7280" }
+    { name: "Outros", value: 5, color: "#6b7280" },
   ];
 
   const demandForecast = [
@@ -153,15 +170,15 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
     { date: "2024-03", actual: 120, predicted: 125 },
     { date: "2024-04", predicted: 135 },
     { date: "2024-05", predicted: 140 },
-    { date: "2024-06", predicted: 150 }
+    { date: "2024-06", predicted: 150 },
   ];
 
   const runAnalysis = async () => {
     setIsAnalyzing(true);
-    
+
     // Simular análise IA
     await new Promise(resolve => setTimeout(resolve, 3000));
-    
+
     setIsAnalyzing(false);
     toast({
       title: "Análise Concluída",
@@ -171,20 +188,29 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-    case "low": return "text-green-600 bg-green-100";
-    case "medium": return "text-yellow-600 bg-yellow-100";
-    case "high": return "text-orange-600 bg-orange-100";
-    case "critical": return "text-red-600 bg-red-100";
-    default: return "text-muted-foreground bg-gray-100";
+      case "low":
+        return "text-green-600 bg-green-100";
+      case "medium":
+        return "text-yellow-600 bg-yellow-100";
+      case "high":
+        return "text-orange-600 bg-orange-100";
+      case "critical":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-    case "low": return "text-green-600";
-    case "medium": return "text-yellow-600";
-    case "high": return "text-red-600";
-    default: return "text-muted-foreground";
+      case "low":
+        return "text-green-600";
+      case "medium":
+        return "text-yellow-600";
+      case "high":
+        return "text-red-600";
+      default:
+        return "text-muted-foreground";
     }
   };
 
@@ -196,26 +222,20 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
             <Brain className="h-8 w-8 text-purple-500" />
             Análise Preditiva Avançada
           </h1>
-          <p className="text-muted-foreground">
-            IA e Machine Learning para insights estratégicos
-          </p>
+          <p className="text-muted-foreground">IA e Machine Learning para insights estratégicos</p>
         </div>
         <div className="flex items-center gap-4">
-          <select 
+          <select
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm max-w-32"
             value={selectedTimeframe}
-            onChange={(e) => setSelectedTimeframe(e.target.value)}
+            onChange={e => setSelectedTimeframe(e.target.value)}
           >
             <option value="7d">7 dias</option>
             <option value="30d">30 dias</option>
             <option value="90d">90 dias</option>
             <option value="1y">1 ano</option>
           </select>
-          <Button 
-            onClick={runAnalysis} 
-            disabled={isAnalyzing}
-            className="flex items-center gap-2"
-          >
+          <Button onClick={runAnalysis} disabled={isAnalyzing} className="flex items-center gap-2">
             {isAnalyzing ? (
               <>
                 <Timer className="h-4 w-4 animate-spin" />
@@ -301,7 +321,7 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
 
         <TabsContent value="predictions" className="space-y-4">
           <div className="space-y-4">
-            {predictions.map((prediction) => (
+            {predictions.map(prediction => (
               <Card key={prediction.id}>
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
@@ -309,9 +329,13 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="text-lg font-semibold">{prediction.title}</h3>
                         <Badge className={getImpactColor(prediction.impact)}>
-                          {prediction.impact === "low" ? "Baixo" :
-                            prediction.impact === "medium" ? "Médio" :
-                              prediction.impact === "high" ? "Alto" : "Crítico"}
+                          {prediction.impact === "low"
+                            ? "Baixo"
+                            : prediction.impact === "medium"
+                              ? "Médio"
+                              : prediction.impact === "high"
+                                ? "Alto"
+                                : "Crítico"}
                         </Badge>
                         {prediction.trend === "up" ? (
                           <TrendingUp className="h-4 w-4 text-red-500" />
@@ -362,15 +386,19 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
 
         <TabsContent value="insights" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {aiInsights.map((insight) => (
+            {aiInsights.map(insight => (
               <Card key={insight.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{insight.title}</CardTitle>
                     <Badge variant="outline">
-                      {insight.category === "operational" ? "Operacional" :
-                        insight.category === "financial" ? "Financeiro" :
-                          insight.category === "strategic" ? "Estratégico" : "Risco"}
+                      {insight.category === "operational"
+                        ? "Operacional"
+                        : insight.category === "financial"
+                          ? "Financeiro"
+                          : insight.category === "strategic"
+                            ? "Estratégico"
+                            : "Risco"}
                     </Badge>
                   </div>
                   <CardDescription>{insight.description}</CardDescription>
@@ -383,7 +411,9 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-sm font-medium">Benefício Esperado:</span>
-                      <p className="text-sm text-green-600 font-medium">{insight.expectedBenefit}</p>
+                      <p className="text-sm text-green-600 font-medium">
+                        {insight.expectedBenefit}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between text-sm">
@@ -391,15 +421,21 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
                       <div>
                         <span className="text-muted-foreground">Complexidade: </span>
                         <span className={getComplexityColor(insight.complexity)}>
-                          {insight.complexity === "low" ? "Baixa" :
-                            insight.complexity === "medium" ? "Média" : "Alta"}
+                          {insight.complexity === "low"
+                            ? "Baixa"
+                            : insight.complexity === "medium"
+                              ? "Média"
+                              : "Alta"}
                         </span>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Urgência: </span>
                         <span className={getComplexityColor(insight.urgency)}>
-                          {insight.urgency === "low" ? "Baixa" :
-                            insight.urgency === "medium" ? "Média" : "Alta"}
+                          {insight.urgency === "low"
+                            ? "Baixa"
+                            : insight.urgency === "medium"
+                              ? "Média"
+                              : "Alta"}
                         </span>
                       </div>
                     </div>
@@ -528,21 +564,21 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Area 
-                    type="monotone" 
-                    dataKey="actual" 
-                    stroke="#8884d8" 
-                    fill="#8884d8" 
+                  <Area
+                    type="monotone"
+                    dataKey="actual"
+                    stroke="#8884d8"
+                    fill="#8884d8"
                     fillOpacity={0.3}
-                    name="Dados Reais" 
+                    name="Dados Reais"
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="predicted" 
-                    stroke="#82ca9d" 
-                    fill="#82ca9d" 
+                  <Area
+                    type="monotone"
+                    dataKey="predicted"
+                    stroke="#82ca9d"
+                    fill="#82ca9d"
                     fillOpacity={0.3}
-                    name="Previsão IA" 
+                    name="Previsão IA"
                   />
                 </AreaChart>
               </ResponsiveContainer>

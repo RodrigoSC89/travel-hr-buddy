@@ -4,17 +4,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Send, 
-  Paperclip, 
-  Mic, 
-  MicOff, 
-  Users, 
+import {
+  Send,
+  Paperclip,
+  Mic,
+  MicOff,
+  Users,
   Search,
   Settings,
   Phone,
   Video,
-  MoreVertical
+  MoreVertical,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -48,7 +48,7 @@ interface IntegratedCommunicationProps {
 
 export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProps> = ({
   currentUserId,
-  crewMemberId
+  crewMemberId,
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -94,7 +94,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       const formattedContacts: Contact[] = (data || []).map(contact => ({
         ...contact,
         status: "available" as const, // This would be dynamic in a real implementation
-        avatar_url: undefined
+        avatar_url: undefined,
       }));
 
       setContacts(formattedContacts);
@@ -108,12 +108,16 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     try {
       const { data, error } = await supabase
         .from("crew_communications")
-        .select(`
+        .select(
+          `
           *,
           sender:sender_id(full_name),
           recipient:recipient_id(full_name)
-        `)
-        .or(`and(sender_id.eq.${currentUserId},recipient_id.eq.${contactId}),and(sender_id.eq.${contactId},recipient_id.eq.${currentUserId})`)
+        `
+        )
+        .or(
+          `and(sender_id.eq.${currentUserId},recipient_id.eq.${contactId}),and(sender_id.eq.${contactId},recipient_id.eq.${currentUserId})`
+        )
         .order("created_at", { ascending: true });
 
       if (error) throw error;
@@ -121,7 +125,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       const formattedMessages: Message[] = (data || []).map((msg: any) => ({
         ...msg,
         message_type: msg.message_type as "text" | "voice" | "file" | "alert",
-        sender_name: msg.sender?.full_name || "Unknown"
+        sender_name: msg.sender?.full_name || "Unknown",
       }));
 
       setMessages(formattedMessages);
@@ -139,9 +143,9 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     try {
       await supabase
         .from("crew_communications")
-        .update({ 
-          is_read: true, 
-          read_at: new Date().toISOString() 
+        .update({
+          is_read: true,
+          read_at: new Date().toISOString(),
         })
         .eq("sender_id", senderId)
         .eq("recipient_id", currentUserId)
@@ -161,7 +165,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         content: newMessage.trim(),
         message_type: "text" as const,
         is_urgent: false,
-        conversation_id: conversationId
+        conversation_id: conversationId,
       };
 
       const { data, error } = await supabase
@@ -173,11 +177,14 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       if (error) throw error;
 
       // Add message to local state
-      setMessages(prev => [...prev, {
-        ...data,
-        message_type: data.message_type as "text" | "voice" | "file" | "alert",
-        sender_name: "Você"
-      }]);
+      setMessages(prev => [
+        ...prev,
+        {
+          ...data,
+          message_type: data.message_type as "text" | "voice" | "file" | "alert",
+          sender_name: "Você",
+        },
+      ]);
 
       setNewMessage("");
 
@@ -190,7 +197,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       toast({
         title: "Erro ao enviar mensagem",
         description: "Não foi possível enviar a mensagem. Tente novamente.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -209,9 +216,9 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       if (uploadError) throw uploadError;
 
       // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from("crew-documents")
-        .getPublicUrl(fileName);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("crew-documents").getPublicUrl(fileName);
 
       // Send file message
       const messageData = {
@@ -221,7 +228,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         message_type: "file" as const,
         file_url: publicUrl,
         is_urgent: false,
-        conversation_id: conversationId
+        conversation_id: conversationId,
       };
 
       const { data, error } = await supabase
@@ -232,11 +239,14 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
       if (error) throw error;
 
-      setMessages(prev => [...prev, {
-        ...data,
-        message_type: data.message_type as "text" | "voice" | "file" | "alert",
-        sender_name: "Você"
-      }]);
+      setMessages(prev => [
+        ...prev,
+        {
+          ...data,
+          message_type: data.message_type as "text" | "voice" | "file" | "alert",
+          sender_name: "Você",
+        },
+      ]);
 
       toast({
         title: "Arquivo enviado",
@@ -247,7 +257,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       toast({
         title: "Erro ao enviar arquivo",
         description: "Não foi possível enviar o arquivo. Tente novamente.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -266,17 +276,22 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     // Implement stop recording and send logic here
   };
 
-  const filteredContacts = contacts.filter(contact =>
-    contact.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    contact.position.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredContacts = contacts.filter(
+    contact =>
+      contact.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      contact.position.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "available": return "bg-green-500";
-    case "busy": return "bg-yellow-500";
-    case "offline": return "bg-gray-500";
-    default: return "bg-gray-500";
+      case "available":
+        return "bg-green-500";
+      case "busy":
+        return "bg-yellow-500";
+      case "offline":
+        return "bg-gray-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
@@ -284,7 +299,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     const date = new Date(timestamp);
     const now = new Date();
     const isToday = date.toDateString() === now.toDateString();
-    
+
     if (isToday) {
       return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     } else {
@@ -303,7 +318,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
             <Input
               placeholder="Buscar contatos..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={e => setSearchQuery(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -311,13 +326,13 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
         <ScrollArea className="flex-1">
           <div className="p-2">
-            {filteredContacts.map((contact) => (
+            {filteredContacts.map(contact => (
               <div
                 key={contact.id}
                 onClick={() => setSelectedContact(contact)}
                 className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
-                  selectedContact?.id === contact.id 
-                    ? "bg-primary/10 border border-primary/20" 
+                  selectedContact?.id === contact.id
+                    ? "bg-primary/10 border border-primary/20"
                     : "hover:bg-muted"
                 }`}
               >
@@ -325,7 +340,9 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                   <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
                     <Users className="h-5 w-5" />
                   </div>
-                  <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(contact.status)}`} />
+                  <div
+                    className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(contact.status)}`}
+                  />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium truncate">{contact.full_name}</p>
@@ -348,7 +365,9 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                   <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
                     <Users className="h-5 w-5" />
                   </div>
-                  <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(selectedContact.status)}`} />
+                  <div
+                    className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(selectedContact.status)}`}
+                  />
                 </div>
                 <div>
                   <h4 className="font-semibold">{selectedContact.full_name}</h4>
@@ -371,7 +390,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
             {/* Messages */}
             <ScrollArea className="flex-1 p-4">
               <div className="space-y-4">
-                {messages.map((message) => {
+                {messages.map(message => {
                   const isOwn = message.sender_id === (crewMemberId || currentUserId);
                   return (
                     <div
@@ -381,9 +400,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                       <div className={`max-w-[70%] ${isOwn ? "order-2" : "order-1"}`}>
                         <div
                           className={`p-3 rounded-lg ${
-                            isOwn
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-muted"
+                            isOwn ? "bg-primary text-primary-foreground" : "bg-muted"
                           }`}
                         >
                           {message.is_urgent && (
@@ -405,7 +422,9 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                             </div>
                           )}
                         </div>
-                        <p className={`text-xs text-muted-foreground mt-1 ${isOwn ? "text-right" : "text-left"}`}>
+                        <p
+                          className={`text-xs text-muted-foreground mt-1 ${isOwn ? "text-right" : "text-left"}`}
+                        >
                           {formatMessageTime(message.created_at)}
                         </p>
                       </div>
@@ -419,11 +438,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
             {/* Message Input */}
             <div className="p-4 border-t">
               <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
-                >
+                <Button size="sm" variant="outline" onClick={() => fileInputRef.current?.click()}>
                   <Paperclip className="h-4 w-4" />
                 </Button>
                 <Button
@@ -438,8 +453,8 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                 <Input
                   placeholder="Digite sua mensagem..."
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+                  onChange={e => setNewMessage(e.target.value)}
+                  onKeyPress={e => e.key === "Enter" && sendMessage()}
                   className="flex-1"
                 />
                 <Button onClick={sendMessage} disabled={!newMessage.trim()}>

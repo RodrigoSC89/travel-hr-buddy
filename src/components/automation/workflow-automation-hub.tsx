@@ -5,13 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  CheckCircle, 
-  Clock, 
-  AlertTriangle, 
-  RefreshCw, 
-  Play, 
-  Pause, 
+import {
+  CheckCircle,
+  Clock,
+  AlertTriangle,
+  RefreshCw,
+  Play,
+  Pause,
   SkipForward,
   User,
   FileText,
@@ -27,12 +27,18 @@ import {
   Filter,
   Search,
   Download,
-  Plus
+  Plus,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface WorkflowStep {
   id: string;
@@ -77,7 +83,7 @@ interface AutomationRule {
 export const WorkflowAutomationHub: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [automationRules, setAutomationRules] = useState<AutomationRule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -108,7 +114,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             description: "Criar conta no sistema",
             status: "completed",
             assignee: "TI",
-            duration: 30
+            duration: 30,
           },
           {
             id: "s2",
@@ -116,7 +122,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             description: "Coleta de documentos pessoais",
             status: "completed",
             assignee: "RH",
-            duration: 120
+            duration: 120,
           },
           {
             id: "s3",
@@ -124,7 +130,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             description: "Curso de integração",
             status: "in_progress",
             assignee: "Supervisor",
-            dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
+            dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
           },
           {
             id: "s4",
@@ -132,9 +138,9 @@ export const WorkflowAutomationHub: React.FC = () => {
             description: "Primeira avaliação de desempenho",
             status: "pending",
             assignee: "Gerente",
-            dependencies: ["s3"]
-          }
-        ]
+            dependencies: ["s3"],
+          },
+        ],
       },
       {
         id: "2",
@@ -154,23 +160,23 @@ export const WorkflowAutomationHub: React.FC = () => {
             name: "Submissão",
             description: "Funcionário submete despesa",
             status: "completed",
-            assignee: "Funcionário"
+            assignee: "Funcionário",
           },
           {
             id: "s6",
             name: "Revisão Supervisor",
             description: "Aprovação do supervisor direto",
             status: "completed",
-            assignee: "Supervisor"
+            assignee: "Supervisor",
           },
           {
             id: "s7",
             name: "Aprovação Financeira",
             description: "Validação do departamento financeiro",
             status: "in_progress",
-            assignee: "Financeiro"
-          }
-        ]
+            assignee: "Financeiro",
+          },
+        ],
       },
       {
         id: "3",
@@ -190,17 +196,17 @@ export const WorkflowAutomationHub: React.FC = () => {
             name: "Inspeção Visual",
             description: "Verificação inicial dos equipamentos",
             status: "completed",
-            assignee: "Técnico"
+            assignee: "Técnico",
           },
           {
             id: "s9",
             name: "Testes Funcionais",
             description: "Execução de testes operacionais",
             status: "failed",
-            assignee: "Especialista"
-          }
-        ]
-      }
+            assignee: "Especialista",
+          },
+        ],
+      },
     ];
 
     const mockAutomationRules: AutomationRule[] = [
@@ -214,7 +220,7 @@ export const WorkflowAutomationHub: React.FC = () => {
         isActive: true,
         executionCount: 47,
         lastExecuted: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        category: "finance"
+        category: "finance",
       },
       {
         id: "r2",
@@ -226,7 +232,7 @@ export const WorkflowAutomationHub: React.FC = () => {
         isActive: true,
         executionCount: 12,
         lastExecuted: new Date(Date.now() - 24 * 60 * 60 * 1000),
-        category: "hr"
+        category: "hr",
       },
       {
         id: "r3",
@@ -237,8 +243,8 @@ export const WorkflowAutomationHub: React.FC = () => {
         action: "escalate_to_manager",
         isActive: false,
         executionCount: 8,
-        category: "operations"
-      }
+        category: "operations",
+      },
     ];
 
     setWorkflows(mockWorkflows);
@@ -252,65 +258,91 @@ export const WorkflowAutomationHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "text-green-600 bg-green-100";
-    case "in_progress": return "text-blue-600 bg-blue-100";
-    case "pending": return "text-yellow-600 bg-yellow-100";
-    case "failed": return "text-red-600 bg-red-100";
-    case "active": return "text-green-600 bg-green-100";
-    case "paused": return "text-orange-600 bg-orange-100";
-    case "draft": return "text-muted-foreground bg-gray-100";
-    default: return "text-muted-foreground bg-gray-100";
+      case "completed":
+        return "text-green-600 bg-green-100";
+      case "in_progress":
+        return "text-blue-600 bg-blue-100";
+      case "pending":
+        return "text-yellow-600 bg-yellow-100";
+      case "failed":
+        return "text-red-600 bg-red-100";
+      case "active":
+        return "text-green-600 bg-green-100";
+      case "paused":
+        return "text-orange-600 bg-orange-100";
+      case "draft":
+        return "text-muted-foreground bg-gray-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "completed": return <CheckCircle className="h-4 w-4" />;
-    case "in_progress": return <RefreshCw className="h-4 w-4 animate-spin" />;
-    case "pending": return <Clock className="h-4 w-4" />;
-    case "failed": return <AlertTriangle className="h-4 w-4" />;
-    case "active": return <Play className="h-4 w-4" />;
-    case "paused": return <Pause className="h-4 w-4" />;
-    default: return <Clock className="h-4 w-4" />;
+      case "completed":
+        return <CheckCircle className="h-4 w-4" />;
+      case "in_progress":
+        return <RefreshCw className="h-4 w-4 animate-spin" />;
+      case "pending":
+        return <Clock className="h-4 w-4" />;
+      case "failed":
+        return <AlertTriangle className="h-4 w-4" />;
+      case "active":
+        return <Play className="h-4 w-4" />;
+      case "paused":
+        return <Pause className="h-4 w-4" />;
+      default:
+        return <Clock className="h-4 w-4" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "urgent": return "text-red-600 bg-red-100";
-    case "high": return "text-orange-600 bg-orange-100";
-    case "medium": return "text-yellow-600 bg-yellow-100";
-    case "low": return "text-green-600 bg-green-100";
-    default: return "text-muted-foreground bg-gray-100";
+      case "urgent":
+        return "text-red-600 bg-red-100";
+      case "high":
+        return "text-orange-600 bg-orange-100";
+      case "medium":
+        return "text-yellow-600 bg-yellow-100";
+      case "low":
+        return "text-green-600 bg-green-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "hr": return <Users className="h-4 w-4" />;
-    case "finance": return <TrendingUp className="h-4 w-4" />;
-    case "operations": return <Settings className="h-4 w-4" />;
-    case "marketing": return <Target className="h-4 w-4" />;
-    default: return <Workflow className="h-4 w-4" />;
+      case "hr":
+        return <Users className="h-4 w-4" />;
+      case "finance":
+        return <TrendingUp className="h-4 w-4" />;
+      case "operations":
+        return <Settings className="h-4 w-4" />;
+      case "marketing":
+        return <Target className="h-4 w-4" />;
+      default:
+        return <Workflow className="h-4 w-4" />;
     }
   };
 
   const filteredWorkflows = workflows.filter(workflow => {
-    const matchesSearch = workflow.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         workflow.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      workflow.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      workflow.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || workflow.status === statusFilter;
     const matchesCategory = categoryFilter === "all" || workflow.category === categoryFilter;
-    
+
     return matchesSearch && matchesStatus && matchesCategory;
   });
 
   const handleStartWorkflow = (workflowId: string) => {
-    setWorkflows(prev => prev.map(wf => 
-      wf.id === workflowId 
-        ? { ...wf, status: "active" as const, updatedAt: new Date() }
-        : wf
-    ));
-    
+    setWorkflows(prev =>
+      prev.map(wf =>
+        wf.id === workflowId ? { ...wf, status: "active" as const, updatedAt: new Date() } : wf
+      )
+    );
+
     toast({
       title: "Workflow iniciado",
       description: "O workflow foi ativado com sucesso.",
@@ -318,12 +350,12 @@ export const WorkflowAutomationHub: React.FC = () => {
   };
 
   const handlePauseWorkflow = (workflowId: string) => {
-    setWorkflows(prev => prev.map(wf => 
-      wf.id === workflowId 
-        ? { ...wf, status: "paused" as const, updatedAt: new Date() }
-        : wf
-    ));
-    
+    setWorkflows(prev =>
+      prev.map(wf =>
+        wf.id === workflowId ? { ...wf, status: "paused" as const, updatedAt: new Date() } : wf
+      )
+    );
+
     toast({
       title: "Workflow pausado",
       description: "O workflow foi pausado com sucesso.",
@@ -331,12 +363,10 @@ export const WorkflowAutomationHub: React.FC = () => {
   };
 
   const toggleAutomationRule = (ruleId: string) => {
-    setAutomationRules(prev => prev.map(rule => 
-      rule.id === ruleId 
-        ? { ...rule, isActive: !rule.isActive }
-        : rule
-    ));
-    
+    setAutomationRules(prev =>
+      prev.map(rule => (rule.id === ruleId ? { ...rule, isActive: !rule.isActive } : rule))
+    );
+
     toast({
       title: "Regra atualizada",
       description: "O status da regra de automação foi alterado.",
@@ -360,7 +390,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             Gerencie processos automatizados e fluxos de trabalho
           </p>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <Button variant="outline">
             <Download className="h-4 w-4 mr-2" />
@@ -384,9 +414,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             <div className="text-2xl font-bold">
               {workflows.filter(w => w.status === "active").length}
             </div>
-            <p className="text-xs text-muted-foreground">
-              de {workflows.length} workflows
-            </p>
+            <p className="text-xs text-muted-foreground">de {workflows.length} workflows</p>
           </CardContent>
         </Card>
 
@@ -399,9 +427,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             <div className="text-2xl font-bold">
               {automationRules.filter(r => r.isActive).length}
             </div>
-            <p className="text-xs text-muted-foreground">
-              regras configuradas
-            </p>
+            <p className="text-xs text-muted-foreground">regras configuradas</p>
           </CardContent>
         </Card>
 
@@ -414,9 +440,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             <div className="text-2xl font-bold">
               {Math.round(workflows.reduce((acc, w) => acc + w.progress, 0) / workflows.length)}%
             </div>
-            <p className="text-xs text-muted-foreground">
-              dos workflows
-            </p>
+            <p className="text-xs text-muted-foreground">dos workflows</p>
           </CardContent>
         </Card>
 
@@ -427,9 +451,7 @@ export const WorkflowAutomationHub: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">247</div>
-            <p className="text-xs text-muted-foreground">
-              +12% vs ontem
-            </p>
+            <p className="text-xs text-muted-foreground">+12% vs ontem</p>
           </CardContent>
         </Card>
       </div>
@@ -450,11 +472,11 @@ export const WorkflowAutomationHub: React.FC = () => {
               <Input
                 placeholder="Buscar workflows..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-8"
               />
             </div>
-            
+
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-32">
                 <SelectValue placeholder="Status" />
@@ -467,7 +489,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                 <SelectItem value="draft">Rascunho</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-32">
                 <SelectValue placeholder="Categoria" />
@@ -484,7 +506,7 @@ export const WorkflowAutomationHub: React.FC = () => {
 
           {/* Lista de Workflows */}
           <div className="grid gap-4">
-            {filteredWorkflows.map((workflow) => (
+            {filteredWorkflows.map(workflow => (
               <Card key={workflow.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -495,7 +517,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                         <CardDescription>{workflow.description}</CardDescription>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Badge className={getPriorityColor(workflow.priority)}>
                         {workflow.priority}
@@ -507,7 +529,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                     </div>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent>
                   <div className="space-y-4">
                     {/* Progresso */}
@@ -518,13 +540,16 @@ export const WorkflowAutomationHub: React.FC = () => {
                       </div>
                       <Progress value={workflow.progress} className="h-2" />
                     </div>
-                    
+
                     {/* Etapas */}
                     <div className="grid gap-2">
                       <h4 className="font-medium text-sm">Etapas ({workflow.steps.length})</h4>
                       <div className="grid gap-2 max-h-32 overflow-y-auto">
                         {workflow.steps.map((step, index) => (
-                          <div key={step.id} className="flex items-center justify-between p-2 border border-border rounded-md">
+                          <div
+                            key={step.id}
+                            className="flex items-center justify-between p-2 border border-border rounded-md"
+                          >
                             <div className="flex items-center space-x-2">
                               {getStatusIcon(step.status)}
                               <span className="text-sm">{step.name}</span>
@@ -534,14 +559,12 @@ export const WorkflowAutomationHub: React.FC = () => {
                                 </Badge>
                               )}
                             </div>
-                            <Badge className={getStatusColor(step.status)}>
-                              {step.status}
-                            </Badge>
+                            <Badge className={getStatusColor(step.status)}>{step.status}</Badge>
                           </div>
                         ))}
                       </div>
                     </div>
-                    
+
                     {/* Informações e Ações */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4 text-sm text-muted-foreground">
@@ -560,24 +583,21 @@ export const WorkflowAutomationHub: React.FC = () => {
                           </span>
                         )}
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
                         <Button size="sm" variant="outline">
                           <FileText className="h-3 w-3 mr-1" />
                           Detalhes
                         </Button>
-                        
+
                         {workflow.status === "draft" || workflow.status === "paused" ? (
-                          <Button 
-                            size="sm" 
-                            onClick={() => handleStartWorkflow(workflow.id)}
-                          >
+                          <Button size="sm" onClick={() => handleStartWorkflow(workflow.id)}>
                             <Play className="h-3 w-3 mr-1" />
                             Iniciar
                           </Button>
                         ) : workflow.status === "active" ? (
-                          <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             variant="outline"
                             onClick={() => handlePauseWorkflow(workflow.id)}
                           >
@@ -598,19 +618,26 @@ export const WorkflowAutomationHub: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Regras de Automação</CardTitle>
-              <CardDescription>
-                Configure regras para automatizar processos
-              </CardDescription>
+              <CardDescription>Configure regras para automatizar processos</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {automationRules.map((rule) => (
-                  <div key={rule.id} className="flex items-center justify-between p-4 border border-border rounded-lg">
+                {automationRules.map(rule => (
+                  <div
+                    key={rule.id}
+                    className="flex items-center justify-between p-4 border border-border rounded-lg"
+                  >
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <h4 className="font-medium">{rule.name}</h4>
                         <Badge variant="outline">{rule.category}</Badge>
-                        <Badge className={rule.isActive ? "bg-green-100 text-green-600" : "bg-gray-100 text-muted-foreground"}>
+                        <Badge
+                          className={
+                            rule.isActive
+                              ? "bg-green-100 text-green-600"
+                              : "bg-gray-100 text-muted-foreground"
+                          }
+                        >
                           {rule.isActive ? "Ativa" : "Inativa"}
                         </Badge>
                       </div>
@@ -622,13 +649,13 @@ export const WorkflowAutomationHub: React.FC = () => {
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Button size="sm" variant="outline">
                         <Settings className="h-3 w-3" />
                       </Button>
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         variant={rule.isActive ? "destructive" : "default"}
                         onClick={() => toggleAutomationRule(rule.id)}
                       >
@@ -646,9 +673,7 @@ export const WorkflowAutomationHub: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Templates de Workflow</CardTitle>
-              <CardDescription>
-                Modelos pré-configurados para processos comuns
-              </CardDescription>
+              <CardDescription>Modelos pré-configurados para processos comuns</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -658,7 +683,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                   { name: "Processo de Compras", category: "Operações", steps: 6 },
                   { name: "Campanha de Marketing", category: "Marketing", steps: 10 },
                   { name: "Manutenção Preventiva", category: "Operações", steps: 5 },
-                  { name: "Avaliação de Desempenho", category: "RH", steps: 7 }
+                  { name: "Avaliação de Desempenho", category: "RH", steps: 7 },
                 ].map((template, index) => (
                   <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow">
                     <CardHeader>
@@ -670,9 +695,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                         <span className="text-sm text-muted-foreground">
                           {template.steps} etapas
                         </span>
-                        <Button size="sm">
-                          Usar Template
-                        </Button>
+                        <Button size="sm">Usar Template</Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -695,7 +718,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                     { category: "RH", avgTime: "2.3 dias", efficiency: 87 },
                     { category: "Financeiro", avgTime: "4.1 horas", efficiency: 94 },
                     { category: "Operações", avgTime: "1.8 dias", efficiency: 76 },
-                    { category: "Marketing", avgTime: "5.2 dias", efficiency: 82 }
+                    { category: "Marketing", avgTime: "5.2 dias", efficiency: 82 },
                   ].map((item, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <div>
@@ -723,13 +746,15 @@ export const WorkflowAutomationHub: React.FC = () => {
                     { category: "RH", executions: 156, trend: "+12%" },
                     { category: "Financeiro", executions: 289, trend: "+8%" },
                     { category: "Operações", executions: 97, trend: "-3%" },
-                    { category: "Marketing", executions: 43, trend: "+25%" }
+                    { category: "Marketing", executions: 43, trend: "+25%" },
                   ].map((item, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <p className="font-medium">{item.category}</p>
                       <div className="text-right">
                         <p className="font-bold">{item.executions}</p>
-                        <p className={`text-sm ${item.trend.startsWith("+") ? "text-green-600" : "text-red-600"}`}>
+                        <p
+                          className={`text-sm ${item.trend.startsWith("+") ? "text-green-600" : "text-red-600"}`}
+                        >
                           {item.trend}
                         </p>
                       </div>

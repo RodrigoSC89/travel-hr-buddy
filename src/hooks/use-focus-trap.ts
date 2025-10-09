@@ -20,14 +20,14 @@ export const useFocusTrap = (isActive: boolean) => {
     // Get all focusable elements within the container
     const getFocusableElements = (): HTMLElement[] => {
       if (!container) return [];
-      
+
       const focusableSelectors = [
         "a[href]",
         "button:not([disabled])",
         "textarea:not([disabled])",
         "input:not([disabled])",
         "select:not([disabled])",
-        "[tabindex]:not([tabindex=\"-1\"])",
+        '[tabindex]:not([tabindex="-1"])',
       ].join(", ");
 
       return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors));
@@ -64,7 +64,7 @@ export const useFocusTrap = (isActive: boolean) => {
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      
+
       // Restore focus to the previously focused element
       if (previousActiveElement.current) {
         previousActiveElement.current.focus();

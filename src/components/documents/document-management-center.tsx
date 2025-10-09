@@ -4,16 +4,28 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  FileText, 
-  Upload, 
-  Download, 
+import {
+  FileText,
+  Upload,
+  Download,
   Search,
   Plus,
   Eye,
@@ -23,7 +35,7 @@ import {
   User,
   Building,
   AlertTriangle,
-  Award
+  Award,
 } from "lucide-react";
 
 interface Document {
@@ -72,7 +84,7 @@ export const DocumentManagementCenter = () => {
   const loadDocuments = async () => {
     try {
       setLoading(true);
-      
+
       // Mock documents data
       const mockDocuments: Document[] = [
         {
@@ -90,7 +102,7 @@ export const DocumentManagementCenter = () => {
           confidential: false,
           version: "2.1",
           description: "Manual completo de procedimentos de segurança para operações marítimas",
-          tags: ["segurança", "procedimentos", "treinamento"]
+          tags: ["segurança", "procedimentos", "treinamento"],
         },
         {
           id: "2",
@@ -107,7 +119,7 @@ export const DocumentManagementCenter = () => {
           confidential: true,
           version: "1.0",
           description: "Contrato de afretamento para embarcação MV Atlantic",
-          tags: ["contrato", "afretamento", "legal"]
+          tags: ["contrato", "afretamento", "legal"],
         },
         {
           id: "3",
@@ -124,7 +136,7 @@ export const DocumentManagementCenter = () => {
           confidential: false,
           version: "1.0",
           description: "Certificado ISPS para operações no Porto de Santos",
-          tags: ["certificado", "ISPS", "porto"]
+          tags: ["certificado", "ISPS", "porto"],
         },
         {
           id: "4",
@@ -141,7 +153,7 @@ export const DocumentManagementCenter = () => {
           confidential: false,
           version: "1.0",
           description: "Relatório trimestral de inspeções de segurança",
-          tags: ["relatório", "inspeção", "trimestral"]
+          tags: ["relatório", "inspeção", "trimestral"],
         },
         {
           id: "5",
@@ -158,8 +170,8 @@ export const DocumentManagementCenter = () => {
           confidential: false,
           version: "3.2",
           description: "Procedimentos para resposta a emergências de derramamento",
-          tags: ["emergência", "derramamento", "procedimento"]
-        }
+          tags: ["emergência", "derramamento", "procedimento"],
+        },
       ];
 
       setDocuments(mockDocuments);
@@ -168,7 +180,7 @@ export const DocumentManagementCenter = () => {
       toast({
         title: "Erro",
         description: "Erro ao carregar documentos",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -178,15 +190,21 @@ export const DocumentManagementCenter = () => {
   const calculateStats = () => {
     if (documents.length === 0) return;
 
-    const typeCount = documents.reduce((acc, doc) => {
-      acc[doc.type] = (acc[doc.type] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const typeCount = documents.reduce(
+      (acc, doc) => {
+        acc[doc.type] = (acc[doc.type] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
-    const statusCount = documents.reduce((acc, doc) => {
-      acc[doc.status] = (acc[doc.status] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const statusCount = documents.reduce(
+      (acc, doc) => {
+        acc[doc.status] = (acc[doc.status] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     const recentUploads = documents.filter(doc => {
       const uploadDate = new Date(doc.upload_date);
@@ -202,7 +220,7 @@ export const DocumentManagementCenter = () => {
       by_type: typeCount,
       by_status: statusCount,
       recent_uploads: recentUploads,
-      expiring_soon: expiringSoon
+      expiring_soon: expiringSoon,
     });
   };
 
@@ -212,54 +230,81 @@ export const DocumentManagementCenter = () => {
 
   const getTypeIcon = (type: Document["type"]) => {
     switch (type) {
-    case "contract": return Building;
-    case "certificate": return Award;
-    case "manual": return FileText;
-    case "procedure": return AlertTriangle;
-    case "report": return Calendar;
-    case "legal": return Building;
-    case "safety": return AlertTriangle;
-    default: return FileText;
+      case "contract":
+        return Building;
+      case "certificate":
+        return Award;
+      case "manual":
+        return FileText;
+      case "procedure":
+        return AlertTriangle;
+      case "report":
+        return Calendar;
+      case "legal":
+        return Building;
+      case "safety":
+        return AlertTriangle;
+      default:
+        return FileText;
     }
   };
 
   const getTypeText = (type: Document["type"]) => {
     switch (type) {
-    case "contract": return "Contrato";
-    case "certificate": return "Certificado";
-    case "manual": return "Manual";
-    case "procedure": return "Procedimento";
-    case "report": return "Relatório";
-    case "legal": return "Legal";
-    case "safety": return "Segurança";
-    default: return "Documento";
+      case "contract":
+        return "Contrato";
+      case "certificate":
+        return "Certificado";
+      case "manual":
+        return "Manual";
+      case "procedure":
+        return "Procedimento";
+      case "report":
+        return "Relatório";
+      case "legal":
+        return "Legal";
+      case "safety":
+        return "Segurança";
+      default:
+        return "Documento";
     }
   };
 
   const getStatusColor = (status: Document["status"]) => {
     switch (status) {
-    case "active": return "bg-green-500";
-    case "archived": return "bg-gray-500";
-    case "under_review": return "bg-yellow-500";
-    case "expired": return "bg-red-500";
-    default: return "bg-gray-500";
+      case "active":
+        return "bg-green-500";
+      case "archived":
+        return "bg-gray-500";
+      case "under_review":
+        return "bg-yellow-500";
+      case "expired":
+        return "bg-red-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
   const getStatusText = (status: Document["status"]) => {
     switch (status) {
-    case "active": return "Ativo";
-    case "archived": return "Arquivado";
-    case "under_review": return "Em Revisão";
-    case "expired": return "Expirado";
-    default: return "Desconhecido";
+      case "active":
+        return "Ativo";
+      case "archived":
+        return "Arquivado";
+      case "under_review":
+        return "Em Revisão";
+      case "expired":
+        return "Expirado";
+      default:
+        return "Desconhecido";
     }
   };
 
   const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSearch =
+      doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesType = typeFilter === "all" || doc.type === typeFilter;
     const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
     return matchesSearch && matchesType && matchesStatus;
@@ -283,13 +328,13 @@ export const DocumentManagementCenter = () => {
             Gerencie documentos, contratos e certificações da organização
           </p>
         </div>
-        
+
         <div className="flex gap-2">
           <Button variant="outline" className="flex items-center gap-2">
             <Download className="h-4 w-4" />
             Exportar Lista
           </Button>
-          
+
           <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
             <DialogTrigger asChild>
               <Button className="flex items-center gap-2">
@@ -306,7 +351,7 @@ export const DocumentManagementCenter = () => {
                   <Label>Título do Documento</Label>
                   <Input placeholder="Ex: Manual de Procedimentos..." />
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label>Tipo</Label>
@@ -325,37 +370,35 @@ export const DocumentManagementCenter = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div>
                     <Label>Categoria</Label>
                     <Input placeholder="Ex: Operações" />
                   </div>
                 </div>
-                
+
                 <div>
                   <Label>Descrição</Label>
                   <Textarea placeholder="Descrição do documento..." />
                 </div>
-                
+
                 <div>
                   <Label>Tags (separadas por vírgula)</Label>
                   <Input placeholder="Ex: segurança, procedimento, treinamento" />
                 </div>
-                
+
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                   <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                   <p className="text-foreground">Arraste arquivos aqui ou clique para selecionar</p>
                   <p className="text-sm text-muted-foreground">PDF, DOC, DOCX até 10MB</p>
                 </div>
               </div>
-              
+
               <div className="flex justify-end gap-2 mt-6">
                 <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button onClick={() => setIsUploadDialogOpen(false)}>
-                  Fazer Upload
-                </Button>
+                <Button onClick={() => setIsUploadDialogOpen(false)}>Fazer Upload</Button>
               </div>
             </DialogContent>
           </Dialog>
@@ -372,7 +415,7 @@ export const DocumentManagementCenter = () => {
               <div className="text-sm text-muted-foreground">Total de Documentos</div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4 text-center">
               <Upload className="h-8 w-8 mx-auto mb-2 text-green-600" />
@@ -380,7 +423,7 @@ export const DocumentManagementCenter = () => {
               <div className="text-sm text-muted-foreground">Uploads Recentes</div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4 text-center">
               <Eye className="h-8 w-8 mx-auto mb-2 text-blue-600" />
@@ -388,7 +431,7 @@ export const DocumentManagementCenter = () => {
               <div className="text-sm text-muted-foreground">Em Revisão</div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4 text-center">
               <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-red-600" />
@@ -421,12 +464,12 @@ export const DocumentManagementCenter = () => {
                     <Input
                       placeholder="Buscar documentos, tags ou descrições..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={e => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>
                 </div>
-                
+
                 <Select value={typeFilter} onValueChange={setTypeFilter}>
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Tipo" />
@@ -442,7 +485,7 @@ export const DocumentManagementCenter = () => {
                     <SelectItem value="safety">Segurança</SelectItem>
                   </SelectContent>
                 </Select>
-                
+
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Status" />
@@ -466,16 +509,19 @@ export const DocumentManagementCenter = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {filteredDocuments.map((doc) => {
+                {filteredDocuments.map(doc => {
                   const TypeIcon = getTypeIcon(doc.type);
                   return (
-                    <div key={doc.id} className="border rounded-lg p-4 hover:bg-accent transition-colors">
+                    <div
+                      key={doc.id}
+                      className="border rounded-lg p-4 hover:bg-accent transition-colors"
+                    >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                             <TypeIcon className="h-6 w-6 text-primary" />
                           </div>
-                          
+
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
                               <h3 className="font-semibold">{doc.title}</h3>
@@ -489,21 +535,20 @@ export const DocumentManagementCenter = () => {
                               {getTypeText(doc.type)} • {doc.category} • v{doc.version}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              {doc.owner} • {doc.file_size} • {new Date(doc.upload_date).toLocaleDateString()}
+                              {doc.owner} • {doc.file_size} •{" "}
+                              {new Date(doc.upload_date).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-center gap-4">
                           <div className="text-right">
                             <Badge className={`${getStatusColor(doc.status)} text-azure-50 mb-1`}>
                               {getStatusText(doc.status)}
                             </Badge>
-                            <div className="text-xs text-muted-foreground">
-                              {doc.file_format}
-                            </div>
+                            <div className="text-xs text-muted-foreground">{doc.file_format}</div>
                           </div>
-                          
+
                           <div className="flex gap-2">
                             <Button variant="outline" size="sm">
                               <Eye className="h-3 w-3 mr-1" />
@@ -516,13 +561,13 @@ export const DocumentManagementCenter = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       {doc.description && (
                         <div className="mt-3 pt-3 border-t">
                           <p className="text-sm text-muted-foreground">{doc.description}</p>
                         </div>
                       )}
-                      
+
                       {doc.tags.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           {doc.tags.map((tag, index) => (
@@ -546,9 +591,7 @@ export const DocumentManagementCenter = () => {
               <CardTitle>Documentos Recentes</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">
-                Documentos adicionados nos últimos 7 dias
-              </p>
+              <p className="text-muted-foreground">Documentos adicionados nos últimos 7 dias</p>
             </CardContent>
           </Card>
         </TabsContent>
@@ -559,9 +602,7 @@ export const DocumentManagementCenter = () => {
               <CardTitle>Documentos em Revisão</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">
-                Documentos aguardando aprovação ou revisão
-              </p>
+              <p className="text-muted-foreground">Documentos aguardando aprovação ou revisão</p>
             </CardContent>
           </Card>
         </TabsContent>
@@ -573,21 +614,21 @@ export const DocumentManagementCenter = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {documents.filter(d => d.status === "expired").map((doc) => (
-                  <div key={doc.id} className="border-l-4 border-red-500 bg-red-50 p-4 rounded">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-semibold">{doc.title}</h3>
-                        <p className="text-sm text-red-700">
-                          {getTypeText(doc.type)} • Requer renovação
-                        </p>
+                {documents
+                  .filter(d => d.status === "expired")
+                  .map(doc => (
+                    <div key={doc.id} className="border-l-4 border-red-500 bg-red-50 p-4 rounded">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-semibold">{doc.title}</h3>
+                          <p className="text-sm text-red-700">
+                            {getTypeText(doc.type)} • Requer renovação
+                          </p>
+                        </div>
+                        <Button variant="destructive">Renovar Agora</Button>
                       </div>
-                      <Button variant="destructive">
-                        Renovar Agora
-                      </Button>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </Card>

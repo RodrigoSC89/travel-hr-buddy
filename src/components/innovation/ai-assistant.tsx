@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  MessageSquare, 
-  Send, 
-  Mic, 
-  MicOff, 
-  Bot, 
-  User, 
+import {
+  MessageSquare,
+  Send,
+  Mic,
+  MicOff,
+  Bot,
+  User,
   Brain,
   Lightbulb,
   TrendingUp,
@@ -18,7 +18,7 @@ import {
   CheckCircle,
   Clock,
   Sparkles,
-  Zap
+  Zap,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -51,21 +51,22 @@ const AIAssistant: React.FC = () => {
     {
       id: "1",
       type: "assistant",
-      content: "Olá! Sou seu assistente de IA para o sistema Nautilus One. Como posso ajudá-lo hoje?",
+      content:
+        "Olá! Sou seu assistente de IA para o sistema Nautilus One. Como posso ajudá-lo hoje?",
       timestamp: new Date(),
       suggestions: [
         "Analisar compliance das embarcações",
         "Gerar relatório de manutenção",
         "Verificar alertas críticos",
-        "Otimizar rotas de navegação"
-      ]
-    }
+        "Otimizar rotas de navegação",
+      ],
+    },
   ]);
-  
+
   const [currentMessage, setCurrentMessage] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  
+
   const [insights, setInsights] = useState<Insight[]>([
     {
       id: "1",
@@ -75,7 +76,7 @@ const AIAssistant: React.FC = () => {
       confidence: 92,
       priority: "high",
       module: "Frota",
-      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000)
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
     },
     {
       id: "2",
@@ -85,7 +86,7 @@ const AIAssistant: React.FC = () => {
       confidence: 87,
       priority: "medium",
       module: "Navegação",
-      createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000)
+      createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
     },
     {
       id: "3",
@@ -95,8 +96,8 @@ const AIAssistant: React.FC = () => {
       confidence: 100,
       priority: "high",
       module: "Certificações",
-      createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000)
-    }
+      createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
+    },
   ]);
 
   const handleSendMessage = async () => {
@@ -106,7 +107,7 @@ const AIAssistant: React.FC = () => {
       id: Date.now().toString(),
       type: "user",
       content: currentMessage,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -117,21 +118,24 @@ const AIAssistant: React.FC = () => {
     setTimeout(() => {
       const responses = [
         {
-          content: "Analisando seus dados... Encontrei algumas recomendações importantes para otimização da frota.",
-          suggestions: ["Ver detalhes da análise", "Aplicar otimizações", "Agendar manutenções"]
+          content:
+            "Analisando seus dados... Encontrei algumas recomendações importantes para otimização da frota.",
+          suggestions: ["Ver detalhes da análise", "Aplicar otimizações", "Agendar manutenções"],
         },
         {
-          content: "Com base no histórico de navegação, posso sugerir rotas mais eficientes que reduzirão o consumo de combustível em até 15%.",
-          suggestions: ["Calcular economia", "Aplicar nova rota", "Comparar alternativas"]
+          content:
+            "Com base no histórico de navegação, posso sugerir rotas mais eficientes que reduzirão o consumo de combustível em até 15%.",
+          suggestions: ["Calcular economia", "Aplicar nova rota", "Comparar alternativas"],
         },
         {
-          content: "Identifiquei padrões nos dados de manutenção que indicam possíveis falhas futuras. Recomendo ação preventiva.",
-          suggestions: ["Ver predições", "Agendar manutenção", "Configurar alertas"]
-        }
+          content:
+            "Identifiquei padrões nos dados de manutenção que indicam possíveis falhas futuras. Recomendo ação preventiva.",
+          suggestions: ["Ver predições", "Agendar manutenção", "Configurar alertas"],
+        },
       ];
 
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      
+
       const assistantMessage: Message = {
         id: Date.now().toString(),
         type: "assistant",
@@ -140,8 +144,8 @@ const AIAssistant: React.FC = () => {
         suggestions: randomResponse.suggestions,
         actions: [
           { label: "Implementar", action: "implement" },
-          { label: "Mais detalhes", action: "details" }
-        ]
+          { label: "Mais detalhes", action: "details" },
+        ],
       };
 
       setMessages(prev => [...prev, assistantMessage]);
@@ -165,20 +169,29 @@ const AIAssistant: React.FC = () => {
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-    case "prediction": return <TrendingUp className="h-4 w-4" />;
-    case "recommendation": return <Lightbulb className="h-4 w-4" />;
-    case "alert": return <AlertCircle className="h-4 w-4" />;
-    case "optimization": return <Zap className="h-4 w-4" />;
-    default: return <Brain className="h-4 w-4" />;
+      case "prediction":
+        return <TrendingUp className="h-4 w-4" />;
+      case "recommendation":
+        return <Lightbulb className="h-4 w-4" />;
+      case "alert":
+        return <AlertCircle className="h-4 w-4" />;
+      case "optimization":
+        return <Zap className="h-4 w-4" />;
+      default:
+        return <Brain className="h-4 w-4" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "high": return "text-red-600 bg-red-100";
-    case "medium": return "text-yellow-600 bg-yellow-100";
-    case "low": return "text-green-600 bg-green-100";
-    default: return "text-muted-foreground bg-gray-100";
+      case "high":
+        return "text-red-600 bg-red-100";
+      case "medium":
+        return "text-yellow-600 bg-yellow-100";
+      case "low":
+        return "text-green-600 bg-green-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
@@ -221,12 +234,14 @@ const AIAssistant: React.FC = () => {
             <CardContent className="flex-1 flex flex-col">
               <ScrollArea className="flex-1 pr-4">
                 <div className="space-y-4">
-                  {messages.map((message) => (
+                  {messages.map(message => (
                     <div
                       key={message.id}
                       className={`flex gap-3 ${message.type === "user" ? "justify-end" : "justify-start"}`}
                     >
-                      <div className={`flex gap-3 max-w-[80%] ${message.type === "user" ? "flex-row-reverse" : "flex-row"}`}>
+                      <div
+                        className={`flex gap-3 max-w-[80%] ${message.type === "user" ? "flex-row-reverse" : "flex-row"}`}
+                      >
                         <div className="flex-shrink-0">
                           {message.type === "user" ? (
                             <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
@@ -238,12 +253,12 @@ const AIAssistant: React.FC = () => {
                             </div>
                           )}
                         </div>
-                        <div className={`space-y-2 ${message.type === "user" ? "text-right" : "text-left"}`}>
+                        <div
+                          className={`space-y-2 ${message.type === "user" ? "text-right" : "text-left"}`}
+                        >
                           <div
                             className={`p-3 rounded-lg ${
-                              message.type === "user"
-                                ? "bg-blue-500 text-white"
-                                : "bg-muted"
+                              message.type === "user" ? "bg-blue-500 text-white" : "bg-muted"
                             }`}
                           >
                             {message.content}
@@ -279,8 +294,14 @@ const AIAssistant: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <div className="flex gap-1">
                             <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: "0.1s"}}></div>
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: "0.2s"}}></div>
+                            <div
+                              className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                              style={{ animationDelay: "0.1s" }}
+                            ></div>
+                            <div
+                              className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                              style={{ animationDelay: "0.2s" }}
+                            ></div>
                           </div>
                           <span className="text-sm text-muted-foreground">Processando...</span>
                         </div>
@@ -289,13 +310,13 @@ const AIAssistant: React.FC = () => {
                   )}
                 </div>
               </ScrollArea>
-              
+
               <div className="mt-4 flex gap-2">
                 <Input
                   value={currentMessage}
-                  onChange={(e) => setCurrentMessage(e.target.value)}
+                  onChange={e => setCurrentMessage(e.target.value)}
                   placeholder="Digite sua mensagem..."
-                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                  onKeyPress={e => e.key === "Enter" && handleSendMessage()}
                   className="flex-1"
                 />
                 <Button
@@ -306,7 +327,10 @@ const AIAssistant: React.FC = () => {
                 >
                   {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                 </Button>
-                <Button onClick={handleSendMessage} disabled={!currentMessage.trim() || isProcessing}>
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={!currentMessage.trim() || isProcessing}
+                >
                   <Send className="h-4 w-4" />
                 </Button>
               </div>
@@ -325,7 +349,7 @@ const AIAssistant: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {insights.map((insight) => (
+                {insights.map(insight => (
                   <div key={insight.id} className="p-3 border rounded-lg space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -333,8 +357,11 @@ const AIAssistant: React.FC = () => {
                         <span className="font-medium text-sm">{insight.title}</span>
                       </div>
                       <Badge className={getPriorityColor(insight.priority)}>
-                        {insight.priority === "high" ? "Alta" : 
-                          insight.priority === "medium" ? "Média" : "Baixa"}
+                        {insight.priority === "high"
+                          ? "Alta"
+                          : insight.priority === "medium"
+                            ? "Média"
+                            : "Baixa"}
                       </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground">{insight.description}</p>
@@ -347,7 +374,8 @@ const AIAssistant: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Clock className="h-3 w-3" />
-                      {insight.createdAt.toLocaleDateString()} às {insight.createdAt.toLocaleTimeString()}
+                      {insight.createdAt.toLocaleDateString()} às{" "}
+                      {insight.createdAt.toLocaleTimeString()}
                     </div>
                   </div>
                 ))}

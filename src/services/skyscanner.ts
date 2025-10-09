@@ -23,7 +23,8 @@ export async function testSkyscannerConnection(): Promise<SkyscannerTestResult> 
     return {
       success: false,
       message: "Skyscanner API key not configured",
-      error: "Missing VITE_RAPIDAPI_KEY or VITE_SKYSCANNER_API_KEY. Note: Skyscanner typically requires RapidAPI subscription.",
+      error:
+        "Missing VITE_RAPIDAPI_KEY or VITE_SKYSCANNER_API_KEY. Note: Skyscanner typically requires RapidAPI subscription.",
     };
   }
 

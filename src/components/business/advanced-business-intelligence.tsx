@@ -28,14 +28,14 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  ComposedChart
+  ComposedChart,
 } from "recharts";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Users, 
-  ShoppingCart, 
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Users,
+  ShoppingCart,
   Target,
   Filter,
   Calendar,
@@ -47,7 +47,7 @@ import {
   Brain,
   Zap,
   Eye,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -98,7 +98,7 @@ const AdvancedBusinessIntelligence = () => {
       icon: <DollarSign className="w-5 h-5" />,
       target: "R$ 9.000.000",
       progress: 94,
-      description: "Receita bruta do período selecionado"
+      description: "Receita bruta do período selecionado",
     },
     {
       title: "Clientes Ativos",
@@ -108,7 +108,7 @@ const AdvancedBusinessIntelligence = () => {
       icon: <Users className="w-5 h-5" />,
       target: "15.000",
       progress: 86,
-      description: "Clientes que fizeram ao menos uma compra"
+      description: "Clientes que fizeram ao menos uma compra",
     },
     {
       title: "Taxa de Conversão",
@@ -118,7 +118,7 @@ const AdvancedBusinessIntelligence = () => {
       icon: <Target className="w-5 h-5" />,
       target: "5.5%",
       progress: 87,
-      description: "Visitantes que se tornaram clientes"
+      description: "Visitantes que se tornaram clientes",
     },
     {
       title: "Ticket Médio",
@@ -128,8 +128,8 @@ const AdvancedBusinessIntelligence = () => {
       icon: <ShoppingCart className="w-5 h-5" />,
       target: "R$ 750",
       progress: 88,
-      description: "Valor médio por transação"
-    }
+      description: "Valor médio por transação",
+    },
   ]);
 
   // AI-driven insights
@@ -137,12 +137,13 @@ const AdvancedBusinessIntelligence = () => {
     {
       id: "1",
       title: "Oportunidade de Cross-selling",
-      description: "Clientes que compraram produtos da categoria A têm 67% mais probabilidade de comprar categoria B",
+      description:
+        "Clientes que compraram produtos da categoria A têm 67% mais probabilidade de comprar categoria B",
       impact: "high",
       category: "Vendas",
       recommendation: "Implementar campanha de cross-selling automatizada",
       confidence: 89,
-      estimatedValue: "+R$ 234.000/mês"
+      estimatedValue: "+R$ 234.000/mês",
     },
     {
       id: "2",
@@ -152,7 +153,7 @@ const AdvancedBusinessIntelligence = () => {
       category: "Operações",
       recommendation: "Reduzir pedidos e criar promoções direcionadas",
       confidence: 92,
-      estimatedValue: "-R$ 45.000 custos"
+      estimatedValue: "-R$ 45.000 custos",
     },
     {
       id: "3",
@@ -162,8 +163,8 @@ const AdvancedBusinessIntelligence = () => {
       category: "Retenção",
       recommendation: "Ativar campanha de retenção personalizada",
       confidence: 84,
-      estimatedValue: "R$ 156.000 em risco"
-    }
+      estimatedValue: "R$ 156.000 em risco",
+    },
   ]);
 
   // Predictive models
@@ -174,7 +175,7 @@ const AdvancedBusinessIntelligence = () => {
       prediction: "R$ 9.2M nos próximos 30 dias",
       confidence: 91,
       trend: "positive",
-      timeframe: "30 dias"
+      timeframe: "30 dias",
     },
     {
       name: "Demanda de Produtos",
@@ -182,7 +183,7 @@ const AdvancedBusinessIntelligence = () => {
       prediction: "Aumento de 15% na categoria Tech",
       confidence: 88,
       trend: "positive",
-      timeframe: "15 dias"
+      timeframe: "15 dias",
     },
     {
       name: "Comportamento do Cliente",
@@ -190,8 +191,8 @@ const AdvancedBusinessIntelligence = () => {
       prediction: "Churn reduzirá para 2.3%",
       confidence: 85,
       trend: "positive",
-      timeframe: "60 dias"
-    }
+      timeframe: "60 dias",
+    },
   ]);
 
   // Sample data for charts
@@ -203,14 +204,14 @@ const AdvancedBusinessIntelligence = () => {
     { month: "Mai", revenue: 6400000, target: 6000000, costs: 3900000 },
     { month: "Jun", revenue: 7100000, target: 6500000, costs: 4200000 },
     { month: "Jul", revenue: 7800000, target: 7000000, costs: 4500000 },
-    { month: "Ago", revenue: 8400000, target: 7500000, costs: 4800000 }
+    { month: "Ago", revenue: 8400000, target: 7500000, costs: 4800000 },
   ];
 
   const customerSegments = [
     { name: "Premium", value: 3247, percentage: 25.3, revenue: 2800000 },
     { name: "Regular", value: 5892, percentage: 45.8, revenue: 3200000 },
     { name: "Novos", value: 2156, percentage: 16.8, revenue: 1100000 },
-    { name: "Inativos", value: 1552, percentage: 12.1, revenue: 300000 }
+    { name: "Inativos", value: 1552, percentage: 12.1, revenue: 300000 },
   ];
 
   const productPerformance = [
@@ -218,7 +219,7 @@ const AdvancedBusinessIntelligence = () => {
     { category: "Casa & Jardim", sales: 1900000, margin: 28, growth: 12 },
     { category: "Moda", sales: 1600000, margin: 45, growth: -3 },
     { category: "Esportes", sales: 1200000, margin: 38, growth: 22 },
-    { category: "Livros", sales: 900000, margin: 25, growth: 8 }
+    { category: "Livros", sales: 900000, margin: 25, growth: 8 },
   ];
 
   // Auto-refresh functionality
@@ -228,11 +229,13 @@ const AdvancedBusinessIntelligence = () => {
     const interval = setInterval(() => {
       setLastUpdate(new Date());
       // Simulate data updates
-      setKpis(prev => prev.map(kpi => ({
-        ...kpi,
-        value: updateValue(kpi.value),
-        change: generateRandomChange()
-      })));
+      setKpis(prev =>
+        prev.map(kpi => ({
+          ...kpi,
+          value: updateValue(kpi.value),
+          change: generateRandomChange(),
+        }))
+      );
     }, 30000); // Update every 30 seconds
 
     return () => clearInterval(interval);
@@ -256,30 +259,30 @@ const AdvancedBusinessIntelligence = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up":
-      return <TrendingUp className="w-4 h-4 text-green-500" />;
-    case "down":
-      return <TrendingDown className="w-4 h-4 text-red-500" />;
-    default:
-      return <div className="w-4 h-4 bg-gray-400 rounded-full" />;
+      case "up":
+        return <TrendingUp className="w-4 h-4 text-green-500" />;
+      case "down":
+        return <TrendingDown className="w-4 h-4 text-red-500" />;
+      default:
+        return <div className="w-4 h-4 bg-gray-400 rounded-full" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-    case "high":
-      return "bg-red-100 text-red-800 border-red-200";
-    case "medium":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    default:
-      return "bg-green-100 text-green-800 border-green-200";
+      case "high":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      default:
+        return "bg-green-100 text-green-800 border-green-200";
     }
   };
 
   const exportReport = () => {
     toast({
       title: "Relatório exportado",
-      description: "Relatório BI enviado para seu email"
+      description: "Relatório BI enviado para seu email",
     });
   };
 
@@ -287,7 +290,7 @@ const AdvancedBusinessIntelligence = () => {
     setLastUpdate(new Date());
     toast({
       title: "Dados atualizados",
-      description: "Dashboard sincronizado com sucesso"
+      description: "Dashboard sincronizado com sucesso",
     });
   };
 
@@ -299,17 +302,15 @@ const AdvancedBusinessIntelligence = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Business Intelligence Avançado</h1>
-          <p className="text-muted-foreground">
-            Analytics em tempo real com IA preditiva
-          </p>
+          <p className="text-muted-foreground">Analytics em tempo real com IA preditiva</p>
         </div>
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${autoRefresh ? "bg-green-500 animate-pulse" : "bg-gray-400"}`} />
-            <span className="text-sm">
-              {autoRefresh ? "Auto-refresh ativo" : "Manual"}
-            </span>
+            <div
+              className={`w-2 h-2 rounded-full ${autoRefresh ? "bg-green-500 animate-pulse" : "bg-gray-400"}`}
+            />
+            <span className="text-sm">{autoRefresh ? "Auto-refresh ativo" : "Manual"}</span>
           </div>
 
           <Badge variant="outline" className="gap-2">
@@ -353,8 +354,8 @@ const AdvancedBusinessIntelligence = () => {
           </SelectContent>
         </Select>
 
-        <Button 
-          variant={autoRefresh ? "default" : "outline"} 
+        <Button
+          variant={autoRefresh ? "default" : "outline"}
           size="sm"
           onClick={() => setAutoRefresh(!autoRefresh)}
         >
@@ -368,9 +369,7 @@ const AdvancedBusinessIntelligence = () => {
         {kpis.map((kpi, index) => (
           <Card key={index} className="border-border">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {kpi.title}
-              </CardTitle>
+              <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
               <div className="flex items-center gap-2">
                 {kpi.icon}
                 {getTrendIcon(kpi.trend)}
@@ -379,7 +378,9 @@ const AdvancedBusinessIntelligence = () => {
             <CardContent>
               <div className="text-2xl font-bold mb-2">{kpi.value}</div>
               <div className="flex items-center justify-between mb-3">
-                <span className={`text-sm ${kpi.trend === "up" ? "text-green-600" : "text-red-600"}`}>
+                <span
+                  className={`text-sm ${kpi.trend === "up" ? "text-green-600" : "text-red-600"}`}
+                >
                   {kpi.change} vs. período anterior
                 </span>
               </div>
@@ -390,9 +391,7 @@ const AdvancedBusinessIntelligence = () => {
                 </div>
                 <Progress value={kpi.progress} className="h-2" />
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                {kpi.description}
-              </p>
+              <p className="text-xs text-muted-foreground mt-2">{kpi.description}</p>
             </CardContent>
           </Card>
         ))}
@@ -405,42 +404,37 @@ const AdvancedBusinessIntelligence = () => {
             <Brain className="w-5 h-5 text-purple-500" />
             Insights de IA
           </CardTitle>
-          <CardDescription>
-            Recomendações inteligentes baseadas em análise de dados
-          </CardDescription>
+          <CardDescription>Recomendações inteligentes baseadas em análise de dados</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
-            {insights.map((insight) => (
+            {insights.map(insight => (
               <Card key={insight.id} className="border-border">
                 <CardContent className="p-4">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <Badge className={getImpactColor(insight.impact)}>
-                        {insight.impact === "high" ? "Alto Impacto" : 
-                          insight.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
+                        {insight.impact === "high"
+                          ? "Alto Impacto"
+                          : insight.impact === "medium"
+                            ? "Médio Impacto"
+                            : "Baixo Impacto"}
                       </Badge>
-                      <Badge variant="outline">
-                        {insight.confidence}% confiança
-                      </Badge>
+                      <Badge variant="outline">{insight.confidence}% confiança</Badge>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-semibold text-sm">{insight.title}</h4>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {insight.description}
-                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">{insight.description}</p>
                     </div>
-                    
+
                     <div className="p-3 bg-accent/50 rounded-lg">
                       <p className="text-xs font-medium mb-1">Recomendação:</p>
                       <p className="text-xs">{insight.recommendation}</p>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">
-                        {insight.category}
-                      </span>
+                      <span className="text-xs text-muted-foreground">{insight.category}</span>
                       <span className="text-xs font-medium text-green-600">
                         {insight.estimatedValue}
                       </span>
@@ -466,9 +460,7 @@ const AdvancedBusinessIntelligence = () => {
           <Card>
             <CardHeader>
               <CardTitle>Análise de Receita vs Custos</CardTitle>
-              <CardDescription>
-                Evolução mensal com metas e margem de lucro
-              </CardDescription>
+              <CardDescription>Evolução mensal com metas e margem de lucro</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
@@ -479,8 +471,20 @@ const AdvancedBusinessIntelligence = () => {
                   <Tooltip formatter={(value: number) => `R$ ${value.toLocaleString()}`} />
                   <Legend />
                   <Bar dataKey="costs" fill="#ff7300" name="Custos" />
-                  <Area type="monotone" dataKey="revenue" fill="#8884d8" stroke="#8884d8" name="Receita" />
-                  <Line type="monotone" dataKey="target" stroke="#82ca9d" strokeWidth={2} name="Meta" />
+                  <Area
+                    type="monotone"
+                    dataKey="revenue"
+                    fill="#8884d8"
+                    stroke="#8884d8"
+                    name="Receita"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="target"
+                    stroke="#82ca9d"
+                    strokeWidth={2}
+                    name="Meta"
+                  />
                 </ComposedChart>
               </ResponsiveContainer>
             </CardContent>
@@ -550,8 +554,20 @@ const AdvancedBusinessIntelligence = () => {
                   <Tooltip />
                   <Legend />
                   <Bar yAxisId="left" dataKey="sales" fill="#8884d8" name="Vendas (R$)" />
-                  <Line yAxisId="right" type="monotone" dataKey="margin" stroke="#82ca9d" name="Margem (%)" />
-                  <Line yAxisId="right" type="monotone" dataKey="growth" stroke="#ffc658" name="Crescimento (%)" />
+                  <Line
+                    yAxisId="right"
+                    type="monotone"
+                    dataKey="margin"
+                    stroke="#82ca9d"
+                    name="Margem (%)"
+                  />
+                  <Line
+                    yAxisId="right"
+                    type="monotone"
+                    dataKey="growth"
+                    stroke="#ffc658"
+                    name="Crescimento (%)"
+                  />
                 </ComposedChart>
               </ResponsiveContainer>
             </CardContent>
@@ -584,17 +600,14 @@ const AdvancedBusinessIntelligence = () => {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      {model.trend === "positive" ? 
-                        <TrendingUp className="w-4 h-4 text-green-500" /> :
+                      {model.trend === "positive" ? (
+                        <TrendingUp className="w-4 h-4 text-green-500" />
+                      ) : (
                         <TrendingDown className="w-4 h-4 text-red-500" />
-                      }
-                      <span className="text-sm font-medium">
-                        {model.confidence}% confiança
-                      </span>
+                      )}
+                      <span className="text-sm font-medium">{model.confidence}% confiança</span>
                     </div>
-                    <Badge variant="outline">
-                      {model.timeframe}
-                    </Badge>
+                    <Badge variant="outline">{model.timeframe}</Badge>
                   </div>
                 </CardContent>
               </Card>

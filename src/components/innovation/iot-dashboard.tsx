@@ -4,19 +4,19 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Wifi, 
-  WifiOff, 
-  Battery, 
-  Thermometer, 
-  Gauge, 
-  MapPin, 
+import {
+  Wifi,
+  WifiOff,
+  Battery,
+  Thermometer,
+  Gauge,
+  MapPin,
   AlertTriangle,
   CheckCircle,
   Activity,
   Zap,
   Droplets,
-  Wind
+  Wind,
 } from "lucide-react";
 
 interface SensorData {
@@ -52,7 +52,7 @@ export const IoTDashboard: React.FC = () => {
       status: "online",
       lastUpdate: "2 min ago",
       location: "Deck Principal",
-      battery: 85
+      battery: 85,
     },
     {
       id: "2",
@@ -63,7 +63,7 @@ export const IoTDashboard: React.FC = () => {
       status: "online",
       lastUpdate: "1 min ago",
       location: "Sala de Máquinas",
-      battery: 92
+      battery: 92,
     },
     {
       id: "3",
@@ -74,7 +74,7 @@ export const IoTDashboard: React.FC = () => {
       status: "warning",
       lastUpdate: "5 min ago",
       location: "Ponte de Comando",
-      battery: 45
+      battery: 45,
     },
     {
       id: "4",
@@ -85,8 +85,8 @@ export const IoTDashboard: React.FC = () => {
       status: "online",
       lastUpdate: "30 sec ago",
       location: "Deck Superior",
-      battery: 78
-    }
+      battery: 78,
+    },
   ]);
 
   const [devices, setDevices] = useState<DeviceStatus[]>([
@@ -97,7 +97,7 @@ export const IoTDashboard: React.FC = () => {
       status: "online",
       location: "Ponte de Comando",
       lastSeen: "30 sec ago",
-      signalStrength: 95
+      signalStrength: 95,
     },
     {
       id: "dev2",
@@ -106,7 +106,7 @@ export const IoTDashboard: React.FC = () => {
       status: "online",
       location: "Deck Principal",
       lastSeen: "1 min ago",
-      signalStrength: 87
+      signalStrength: 87,
     },
     {
       id: "dev3",
@@ -115,18 +115,20 @@ export const IoTDashboard: React.FC = () => {
       status: "maintenance",
       location: "Sala de Máquinas",
       lastSeen: "2 hours ago",
-      signalStrength: 0
-    }
+      signalStrength: 0,
+    },
   ]);
 
   // Simulate real-time updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setSensors(prev => prev.map(sensor => ({
-        ...sensor,
-        value: sensor.value + (Math.random() - 0.5) * 2,
-        lastUpdate: Math.random() > 0.7 ? "just now" : sensor.lastUpdate
-      })));
+      setSensors(prev =>
+        prev.map(sensor => ({
+          ...sensor,
+          value: sensor.value + (Math.random() - 0.5) * 2,
+          lastUpdate: Math.random() > 0.7 ? "just now" : sensor.lastUpdate,
+        }))
+      );
     }, 3000);
 
     return () => clearInterval(interval);
@@ -134,29 +136,29 @@ export const IoTDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "online":
-      return <CheckCircle className="h-4 w-4 text-success" />;
-    case "warning":
-      return <AlertTriangle className="h-4 w-4 text-warning" />;
-    case "offline":
-      return <WifiOff className="h-4 w-4 text-destructive" />;
-    default:
-      return <Activity className="h-4 w-4 text-muted-foreground" />;
+      case "online":
+        return <CheckCircle className="h-4 w-4 text-success" />;
+      case "warning":
+        return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case "offline":
+        return <WifiOff className="h-4 w-4 text-destructive" />;
+      default:
+        return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getSensorIcon = (type: string) => {
     switch (type) {
-    case "temperature":
-      return <Thermometer className="h-4 w-4" />;
-    case "pressure":
-      return <Gauge className="h-4 w-4" />;
-    case "humidity":
-      return <Droplets className="h-4 w-4" />;
-    case "wind":
-      return <Wind className="h-4 w-4" />;
-    default:
-      return <Activity className="h-4 w-4" />;
+      case "temperature":
+        return <Thermometer className="h-4 w-4" />;
+      case "pressure":
+        return <Gauge className="h-4 w-4" />;
+      case "humidity":
+        return <Droplets className="h-4 w-4" />;
+      case "wind":
+        return <Wind className="h-4 w-4" />;
+      default:
+        return <Activity className="h-4 w-4" />;
     }
   };
 
@@ -190,7 +192,9 @@ export const IoTDashboard: React.FC = () => {
             <Wifi className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{onlineSensors}/{totalSensors}</div>
+            <div className="text-2xl font-bold">
+              {onlineSensors}/{totalSensors}
+            </div>
             <Progress value={(onlineSensors / totalSensors) * 100} className="mt-2" />
           </CardContent>
         </Card>
@@ -201,7 +205,9 @@ export const IoTDashboard: React.FC = () => {
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{onlineDevices}/{totalDevices}</div>
+            <div className="text-2xl font-bold">
+              {onlineDevices}/{totalDevices}
+            </div>
             <Progress value={(onlineDevices / totalDevices) * 100} className="mt-2" />
           </CardContent>
         </Card>
@@ -213,9 +219,7 @@ export const IoTDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground">
-              1 crítico, 1 aviso
-            </p>
+            <p className="text-xs text-muted-foreground">1 crítico, 1 aviso</p>
           </CardContent>
         </Card>
 
@@ -226,9 +230,7 @@ export const IoTDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">99.8%</div>
-            <p className="text-xs text-muted-foreground">
-              Últimos 30 dias
-            </p>
+            <p className="text-xs text-muted-foreground">Últimos 30 dias</p>
           </CardContent>
         </Card>
       </div>
@@ -243,7 +245,7 @@ export const IoTDashboard: React.FC = () => {
 
         <TabsContent value="sensors" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {sensors.map((sensor) => (
+            {sensors.map(sensor => (
               <Card key={sensor.id} className="relative">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -260,7 +262,7 @@ export const IoTDashboard: React.FC = () => {
                       {sensor.value.toFixed(1)} {sensor.unit}
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2 text-xs text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <MapPin className="h-3 w-3" />
@@ -286,7 +288,7 @@ export const IoTDashboard: React.FC = () => {
 
         <TabsContent value="devices" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {devices.map((device) => (
+            {devices.map(device => (
               <Card key={device.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -318,7 +320,7 @@ export const IoTDashboard: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm">
                       Configurar
@@ -363,8 +365,12 @@ export const IoTDashboard: React.FC = () => {
                   Sensor de umidade com bateria em 45%. Recomenda-se substituição.
                 </p>
                 <div className="flex gap-2 mt-3">
-                  <Button variant="outline" size="sm">Marcar como Resolvido</Button>
-                  <Button variant="outline" size="sm">Ver Detalhes</Button>
+                  <Button variant="outline" size="sm">
+                    Marcar como Resolvido
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    Ver Detalhes
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -381,8 +387,12 @@ export const IoTDashboard: React.FC = () => {
                   Sensor Node A não responde há 2 horas. Verificar conectividade.
                 </p>
                 <div className="flex gap-2 mt-3">
-                  <Button variant="outline" size="sm">Reiniciar Dispositivo</Button>
-                  <Button variant="outline" size="sm">Diagnosticar</Button>
+                  <Button variant="outline" size="sm">
+                    Reiniciar Dispositivo
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    Diagnosticar
+                  </Button>
                 </div>
               </CardContent>
             </Card>

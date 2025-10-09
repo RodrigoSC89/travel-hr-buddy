@@ -5,14 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabaseManager } from "@/lib/supabase-manager";
 import { apiManager } from "@/lib/api-manager";
-import { 
-  CheckCircle2, 
-  XCircle, 
-  Loader2, 
-  Database, 
-  Globe, 
-  AlertCircle 
-} from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, Database, Globe, AlertCircle } from "lucide-react";
 
 interface TestResult {
   name: string;
@@ -30,17 +23,17 @@ export const ConnectionTestPanel: React.FC = () => {
     setIsTestingSupabase(true);
     try {
       const isHealthy = await supabaseManager.healthCheck();
-      
+
       const result: TestResult = {
         name: "Supabase",
         success: isHealthy,
-        message: isHealthy 
+        message: isHealthy
           ? "Conexão com Supabase estabelecida com sucesso"
           : "Falha na conexão com Supabase",
         timestamp: new Date(),
       };
-      
-      setResults((prev) => [result, ...prev]);
+
+      setResults(prev => [result, ...prev]);
     } catch (error) {
       const result: TestResult = {
         name: "Supabase",
@@ -48,7 +41,7 @@ export const ConnectionTestPanel: React.FC = () => {
         message: error instanceof Error ? error.message : "Erro desconhecido",
         timestamp: new Date(),
       };
-      setResults((prev) => [result, ...prev]);
+      setResults(prev => [result, ...prev]);
     } finally {
       setIsTestingSupabase(false);
     }
@@ -58,17 +51,17 @@ export const ConnectionTestPanel: React.FC = () => {
     setIsTestingAPI(true);
     try {
       const isHealthy = await apiManager.healthCheck();
-      
+
       const result: TestResult = {
         name: "API Externa",
         success: isHealthy,
-        message: isHealthy 
+        message: isHealthy
           ? "API externa respondendo normalmente"
           : "API externa não está respondendo",
         timestamp: new Date(),
       };
-      
-      setResults((prev) => [result, ...prev]);
+
+      setResults(prev => [result, ...prev]);
     } catch (error) {
       const result: TestResult = {
         name: "API Externa",
@@ -76,7 +69,7 @@ export const ConnectionTestPanel: React.FC = () => {
         message: error instanceof Error ? error.message : "Erro desconhecido",
         timestamp: new Date(),
       };
-      setResults((prev) => [result, ...prev]);
+      setResults(prev => [result, ...prev]);
     } finally {
       setIsTestingAPI(false);
     }
@@ -91,19 +84,19 @@ export const ConnectionTestPanel: React.FC = () => {
           .from("profiles")
           .select("id")
           .limit(1);
-        
+
         if (error) throw error;
         return data;
       });
-      
+
       const result: TestResult = {
         name: "Supabase com Retry",
         success: true,
         message: "Operação com retry executada com sucesso",
         timestamp: new Date(),
       };
-      
-      setResults((prev) => [result, ...prev]);
+
+      setResults(prev => [result, ...prev]);
     } catch (error) {
       const result: TestResult = {
         name: "Supabase com Retry",
@@ -111,7 +104,7 @@ export const ConnectionTestPanel: React.FC = () => {
         message: error instanceof Error ? error.message : "Erro desconhecido",
         timestamp: new Date(),
       };
-      setResults((prev) => [result, ...prev]);
+      setResults(prev => [result, ...prev]);
     } finally {
       setIsTestingSupabase(false);
     }

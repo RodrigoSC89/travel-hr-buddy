@@ -5,6 +5,7 @@
 The Portal do Funcionário (Employee Portal) module provides a **self-service platform for employees** to manage their HR-related tasks, access company information, and interact with various systems without requiring administrative intervention.
 
 **Key Use Cases:**
+
 - View and update personal information
 - Request time off and manage vacation days
 - Access pay stubs and tax documents

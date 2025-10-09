@@ -10,42 +10,37 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Building2, 
-  ChevronDown, 
-  Plus, 
-  Crown,
-  Zap,
-  Users,
-  Check
-} from "lucide-react";
+import { Building2, ChevronDown, Plus, Crown, Zap, Users, Check } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
 
 export const TenantSwitcher: React.FC = () => {
-  const { 
-    currentTenant, 
-    currentBranding,
-    availableTenants, 
-    switchTenant,
-    isLoading 
-  } = useTenant();
+  const { currentTenant, currentBranding, availableTenants, switchTenant, isLoading } = useTenant();
 
   const getPlanBadgeVariant = (planType: string) => {
     switch (planType) {
-    case "enterprise": return "default";
-    case "professional": return "secondary";
-    case "starter": return "outline";
-    case "trial": return "destructive";
-    default: return "outline";
+      case "enterprise":
+        return "default";
+      case "professional":
+        return "secondary";
+      case "starter":
+        return "outline";
+      case "trial":
+        return "destructive";
+      default:
+        return "outline";
     }
   };
 
   const getPlanIcon = (planType: string) => {
     switch (planType) {
-    case "enterprise": return Crown;
-    case "professional": return Zap;
-    case "starter": return Users;
-    default: return Building2;
+      case "enterprise":
+        return Crown;
+      case "professional":
+        return Zap;
+      case "starter":
+        return Users;
+      default:
+        return Building2;
     }
   };
 
@@ -85,18 +80,18 @@ export const TenantSwitcher: React.FC = () => {
           <ChevronDown className="h-4 w-4 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
-      
+
       <DropdownMenuContent align="start" className="w-80">
         <DropdownMenuLabel className="flex items-center gap-2">
           <Building2 className="h-4 w-4" />
           Suas Organizações
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        
-        {availableTenants.map((tenant) => {
+
+        {availableTenants.map(tenant => {
           const TenantPlanIcon = getPlanIcon(tenant.plan_type);
           const isSelected = tenant.id === currentTenant.id;
-          
+
           return (
             <DropdownMenuItem
               key={tenant.id}
@@ -113,7 +108,7 @@ export const TenantSwitcher: React.FC = () => {
                   <div className="flex flex-col">
                     <span className="font-medium text-sm">{tenant.name}</span>
                     <div className="flex items-center space-x-2">
-                      <Badge 
+                      <Badge
                         variant={getPlanBadgeVariant(tenant.plan_type)}
                         className="h-5 px-2 text-xs"
                       >
@@ -126,16 +121,14 @@ export const TenantSwitcher: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {isSelected && (
-                  <Check className="h-4 w-4 text-primary" />
-                )}
+                {isSelected && <Check className="h-4 w-4 text-primary" />}
               </div>
             </DropdownMenuItem>
           );
         })}
-        
+
         <DropdownMenuSeparator />
-        
+
         <DropdownMenuItem className="p-3 cursor-pointer">
           <div className="flex items-center space-x-3 w-full">
             <div className="h-8 w-8 rounded-md border-2 border-dashed border-muted-foreground/25 flex items-center justify-center">
@@ -143,9 +136,7 @@ export const TenantSwitcher: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <span className="font-medium text-sm">Criar Nova Organização</span>
-              <span className="text-xs text-muted-foreground">
-                Configure uma nova empresa
-              </span>
+              <span className="text-xs text-muted-foreground">Configure uma nova empresa</span>
             </div>
           </div>
         </DropdownMenuItem>

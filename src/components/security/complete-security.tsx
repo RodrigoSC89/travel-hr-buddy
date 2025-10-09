@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Shield, 
-  Lock, 
-  Eye, 
+import {
+  Shield,
+  Lock,
+  Eye,
   AlertTriangle,
   CheckCircle,
   Users,
@@ -18,7 +18,7 @@ import {
   Key,
   Scan,
   UserCheck,
-  Activity
+  Activity,
 } from "lucide-react";
 
 export const CompleteSecurity: React.FC = () => {
@@ -30,15 +30,15 @@ export const CompleteSecurity: React.FC = () => {
       severity: "high",
       description: "Login attempt from unusual location",
       timestamp: "2 minutos atrás",
-      status: "investigating"
+      status: "investigating",
     },
     {
-      id: "2", 
+      id: "2",
       type: "Brute Force",
       severity: "critical",
       description: "Multiple failed login attempts detected",
       timestamp: "15 minutos atrás",
-      status: "blocked"
+      status: "blocked",
     },
     {
       id: "3",
@@ -46,8 +46,8 @@ export const CompleteSecurity: React.FC = () => {
       severity: "medium",
       description: "Unusual data access pattern detected",
       timestamp: "1 hora atrás",
-      status: "resolved"
-    }
+      status: "resolved",
+    },
   ]);
 
   const [vulnerabilities] = useState([
@@ -56,22 +56,22 @@ export const CompleteSecurity: React.FC = () => {
       component: "API Gateway",
       issue: "Missing rate limiting",
       severity: "medium",
-      status: "open"
+      status: "open",
     },
     {
       id: "2",
       component: "Database",
       issue: "Weak password policy",
       severity: "high",
-      status: "patched"
+      status: "patched",
     },
     {
       id: "3",
       component: "Frontend",
       issue: "Outdated dependencies",
       severity: "low",
-      status: "open"
-    }
+      status: "open",
+    },
   ]);
 
   const [accessLogs] = useState([
@@ -81,15 +81,15 @@ export const CompleteSecurity: React.FC = () => {
       action: "Admin panel access",
       resource: "User Management",
       timestamp: "2024-01-15 14:30:15",
-      result: "success"
+      result: "success",
     },
     {
       id: "2",
-      user: "user@example.com", 
+      user: "user@example.com",
       action: "Data export",
       resource: "Fleet Reports",
       timestamp: "2024-01-15 14:25:10",
-      result: "success"
+      result: "success",
     },
     {
       id: "3",
@@ -97,8 +97,8 @@ export const CompleteSecurity: React.FC = () => {
       action: "Login attempt",
       resource: "Authentication",
       timestamp: "2024-01-15 14:20:05",
-      result: "failed"
-    }
+      result: "failed",
+    },
   ]);
 
   const [permissions] = useState([
@@ -106,45 +106,55 @@ export const CompleteSecurity: React.FC = () => {
       role: "Super Admin",
       users: 2,
       permissions: ["all_access", "user_management", "system_config"],
-      description: "Acesso total ao sistema"
+      description: "Acesso total ao sistema",
     },
     {
       role: "Admin",
       users: 5,
       permissions: ["user_management", "reports", "fleet_management"],
-      description: "Administração geral"
+      description: "Administração geral",
     },
     {
       role: "Manager",
       users: 23,
       permissions: ["reports", "fleet_view", "user_view"],
-      description: "Gestão operacional"
+      description: "Gestão operacional",
     },
     {
       role: "User",
       users: 187,
       permissions: ["basic_access", "own_data"],
-      description: "Acesso básico"
-    }
+      description: "Acesso básico",
+    },
   ]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    case "high": return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
-    case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "low": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+      case "critical":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      case "high":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "low":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "resolved": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "investigating": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "blocked": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    case "patched": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+      case "resolved":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      case "investigating":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "blocked":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      case "patched":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
@@ -227,16 +237,20 @@ export const CompleteSecurity: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              {threats.map((threat) => (
+              {threats.map(threat => (
                 <Card key={threat.id}>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
-                        <AlertTriangle className={`w-5 h-5 ${
-                          threat.severity === "critical" ? "text-red-500" :
-                            threat.severity === "high" ? "text-orange-500" :
-                              "text-yellow-500"
-                        }`} />
+                        <AlertTriangle
+                          className={`w-5 h-5 ${
+                            threat.severity === "critical"
+                              ? "text-red-500"
+                              : threat.severity === "high"
+                                ? "text-orange-500"
+                                : "text-yellow-500"
+                          }`}
+                        />
                         <div>
                           <h4 className="font-medium">{threat.type}</h4>
                           <p className="text-sm text-muted-foreground">{threat.description}</p>
@@ -254,8 +268,12 @@ export const CompleteSecurity: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <p className="text-sm text-muted-foreground">{threat.timestamp}</p>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm">Investigar</Button>
-                        <Button variant="outline" size="sm">Bloquear</Button>
+                        <Button variant="outline" size="sm">
+                          Investigar
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          Bloquear
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -276,7 +294,7 @@ export const CompleteSecurity: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              {vulnerabilities.map((vuln) => (
+              {vulnerabilities.map(vuln => (
                 <Card key={vuln.id}>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
@@ -353,7 +371,7 @@ export const CompleteSecurity: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              {accessLogs.map((log) => (
+              {accessLogs.map(log => (
                 <Card key={log.id}>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
@@ -365,12 +383,14 @@ export const CompleteSecurity: React.FC = () => {
                         )}
                         <div>
                           <p className="font-medium">{log.user}</p>
-                          <p className="text-sm text-muted-foreground">{log.action} - {log.resource}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {log.action} - {log.resource}
+                          </p>
                         </div>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium">{log.timestamp}</p>
-                        <Badge 
+                        <Badge
                           variant={log.result === "success" ? "default" : "destructive"}
                           className="text-xs"
                         >
@@ -388,7 +408,7 @@ export const CompleteSecurity: React.FC = () => {
         <TabsContent value="compliance">
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Compliance e Regulamentações</h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>

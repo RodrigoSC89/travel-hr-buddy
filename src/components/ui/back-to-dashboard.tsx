@@ -8,9 +8,9 @@ interface BackToDashboardProps {
   variant?: "default" | "outline" | "ghost";
 }
 
-export const BackToDashboard: React.FC<BackToDashboardProps> = ({ 
-  className = "", 
-  variant = "outline" 
+export const BackToDashboard: React.FC<BackToDashboardProps> = ({
+  className = "",
+  variant = "outline",
 }) => {
   const navigate = useNavigate();
 

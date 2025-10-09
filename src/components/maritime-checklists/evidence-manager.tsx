@@ -4,16 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Camera, 
-  Mic, 
-  File, 
-  Upload, 
-  X, 
-  CheckCircle,
-  AlertTriangle,
-  Download
-} from "lucide-react";
+import { Camera, Mic, File, Upload, X, CheckCircle, AlertTriangle, Download } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -35,7 +26,7 @@ interface EvidenceManagerProps {
 export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
   checklistItemId,
   existingEvidence = [],
-  onEvidenceUpdate
+  onEvidenceUpdate,
 }) => {
   const [evidence, setEvidence] = useState<EvidenceItem[]>(existingEvidence);
   const [uploading, setUploading] = useState(false);
@@ -68,9 +59,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       if (error) throw error;
 
       // Get public URL
-      const { data: urlData } = supabase.storage
-        .from("checklist-evidence")
-        .getPublicUrl(fileName);
+      const { data: urlData } = supabase.storage.from("checklist-evidence").getPublicUrl(fileName);
 
       const newEvidence: EvidenceItem = {
         id: Date.now().toString(),
@@ -78,19 +67,17 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
         name: file.name,
         url: urlData.publicUrl,
         size: file.size,
-        uploadedAt: new Date().toISOString()
+        uploadedAt: new Date().toISOString(),
       };
 
       // Save to database
-      const { error: dbError } = await supabase
-        .from("checklist_evidence")
-        .insert({
-          checklist_item_id: checklistItemId,
-          file_type: type,
-          file_url: urlData.publicUrl,
-          description: file.name,
-          file_size: file.size
-        });
+      const { error: dbError } = await supabase.from("checklist_evidence").insert({
+        checklist_item_id: checklistItemId,
+        file_type: type,
+        file_url: urlData.publicUrl,
+        description: file.name,
+        file_size: file.size,
+      });
 
       if (dbError) throw dbError;
 
@@ -113,7 +100,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       const recorder = new MediaRecorder(stream);
       const chunks: Blob[] = [];
 
-      recorder.ondataavailable = (e) => chunks.push(e.data);
+      recorder.ondataavailable = e => chunks.push(e.data);
       recorder.onstop = async () => {
         const blob = new Blob(chunks, { type: "audio/wav" });
         await uploadAudioBlob(blob);
@@ -144,16 +131,14 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       setUploading(true);
 
       const fileName = `${checklistItemId}/audio_${Date.now()}.wav`;
-      
+
       const { data, error } = await supabase.storage
         .from("checklist-evidence")
         .upload(fileName, blob);
 
       if (error) throw error;
 
-      const { data: urlData } = supabase.storage
-        .from("checklist-evidence")
-        .getPublicUrl(fileName);
+      const { data: urlData } = supabase.storage.from("checklist-evidence").getPublicUrl(fileName);
 
       const newEvidence: EvidenceItem = {
         id: Date.now().toString(),
@@ -161,19 +146,17 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
         name: `Audio_${new Date().toLocaleTimeString()}.wav`,
         url: urlData.publicUrl,
         size: blob.size,
-        uploadedAt: new Date().toISOString()
+        uploadedAt: new Date().toISOString(),
       };
 
       // Save to database
-      const { error: dbError } = await supabase
-        .from("checklist_evidence")
-        .insert({
-          checklist_item_id: checklistItemId,
-          file_type: "audio",
-          file_url: urlData.publicUrl,
-          description: `Audio recording ${new Date().toLocaleTimeString()}`,
-          file_size: blob.size
-        });
+      const { error: dbError } = await supabase.from("checklist_evidence").insert({
+        checklist_item_id: checklistItemId,
+        file_type: "audio",
+        file_url: urlData.publicUrl,
+        description: `Audio recording ${new Date().toLocaleTimeString()}`,
+        file_size: blob.size,
+      });
 
       if (dbError) throw dbError;
 
@@ -202,10 +185,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       }
 
       // Remove from database
-      await supabase
-        .from("checklist_evidence")
-        .delete()
-        .eq("file_url", item.url);
+      await supabase.from("checklist_evidence").delete().eq("file_url", item.url);
 
       const updatedEvidence = evidence.filter(e => e.id !== evidenceId);
       setEvidence(updatedEvidence);
@@ -228,10 +208,14 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
 
   const getEvidenceIcon = (type: string) => {
     switch (type) {
-    case "photo": return <Camera className="w-4 h-4" />;
-    case "audio": return <Mic className="w-4 h-4" />;
-    case "document": return <File className="w-4 h-4" />;
-    default: return <File className="w-4 h-4" />;
+      case "photo":
+        return <Camera className="w-4 h-4" />;
+      case "audio":
+        return <Mic className="w-4 h-4" />;
+      case "document":
+        return <File className="w-4 h-4" />;
+      default:
+        return <File className="w-4 h-4" />;
     }
   };
 
@@ -239,9 +223,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
     <Card>
       <CardHeader>
         <CardTitle className="text-base">Evidências</CardTitle>
-        <CardDescription>
-          Adicione fotos, áudios ou documentos como evidência
-        </CardDescription>
+        <CardDescription>Adicione fotos, áudios ou documentos como evidência</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Upload Actions */}
@@ -250,7 +232,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => e.target.files && handleFileUpload(e.target.files, "photo")}
+              onChange={e => e.target.files && handleFileUpload(e.target.files, "photo")}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={uploading}
             />
@@ -275,7 +257,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
             <input
               type="file"
               accept=".pdf,.doc,.docx,.txt"
-              onChange={(e) => e.target.files && handleFileUpload(e.target.files, "document")}
+              onChange={e => e.target.files && handleFileUpload(e.target.files, "document")}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={uploading}
             />
@@ -297,7 +279,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
         {evidence.length > 0 && (
           <div className="space-y-2">
             <h4 className="text-sm font-medium">Evidências anexadas:</h4>
-            {evidence.map((item) => (
+            {evidence.map(item => (
               <div
                 key={item.id}
                 className="flex items-center justify-between p-3 border rounded-lg"
@@ -312,18 +294,10 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => window.open(item.url, "_blank")}
-                  >
+                  <Button variant="ghost" size="sm" onClick={() => window.open(item.url, "_blank")}>
                     <Download className="w-4 h-4" />
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeEvidence(item.id)}
-                  >
+                  <Button variant="ghost" size="sm" onClick={() => removeEvidence(item.id)}>
                     <X className="w-4 h-4" />
                   </Button>
                 </div>

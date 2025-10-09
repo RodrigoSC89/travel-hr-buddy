@@ -4,28 +4,34 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { 
-  Bell, 
-  BellRing, 
-  Mail, 
-  MessageSquare, 
-  Smartphone, 
-  Brain, 
-  Filter, 
-  Settings, 
-  Clock, 
-  AlertTriangle, 
-  CheckCircle, 
-  Info, 
+import {
+  Bell,
+  BellRing,
+  Mail,
+  MessageSquare,
+  Smartphone,
+  Brain,
+  Filter,
+  Settings,
+  Clock,
+  AlertTriangle,
+  CheckCircle,
+  Info,
   TrendingUp,
   Users,
   Calendar,
   Star,
   Archive,
-  Trash2
+  Trash2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -59,8 +65,8 @@ const IntelligentNotificationSystem = () => {
       financial: true,
       hr: true,
       operational: true,
-      system: true
-    }
+      system: true,
+    },
   });
   const { toast } = useToast();
 
@@ -70,7 +76,8 @@ const IntelligentNotificationSystem = () => {
       {
         id: "1",
         title: "Análise IA: Anomalia Detectada",
-        message: "Sistema detectou padrão anômalo nos gastos do departamento de TI (+45% acima da média)",
+        message:
+          "Sistema detectou padrão anômalo nos gastos do departamento de TI (+45% acima da média)",
         type: "ai_insight",
         priority: "high",
         category: "Financial",
@@ -78,7 +85,7 @@ const IntelligentNotificationSystem = () => {
         read: false,
         actionRequired: true,
         source: "AI Analytics Engine",
-        metadata: { department: "TI", variance: 45 }
+        metadata: { department: "TI", variance: 45 },
       },
       {
         id: "2",
@@ -90,7 +97,7 @@ const IntelligentNotificationSystem = () => {
         timestamp: new Date(Date.now() - 15 * 60 * 1000),
         read: false,
         actionRequired: true,
-        source: "Security Monitor"
+        source: "Security Monitor",
       },
       {
         id: "3",
@@ -102,7 +109,7 @@ const IntelligentNotificationSystem = () => {
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
         read: true,
         actionRequired: true,
-        source: "HR System"
+        source: "HR System",
       },
       {
         id: "4",
@@ -114,7 +121,7 @@ const IntelligentNotificationSystem = () => {
         timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
         read: true,
         actionRequired: false,
-        source: "Performance Tracker"
+        source: "Performance Tracker",
       },
       {
         id: "5",
@@ -126,61 +133,72 @@ const IntelligentNotificationSystem = () => {
         timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
         read: false,
         actionRequired: false,
-        source: "Strategic AI"
-      }
+        source: "Strategic AI",
+      },
     ];
     setNotifications(mockNotifications);
   }, []);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "warning": return AlertTriangle;
-    case "success": return CheckCircle;
-    case "error": return AlertTriangle;
-    case "ai_insight": return Brain;
-    default: return Info;
+      case "warning":
+        return AlertTriangle;
+      case "success":
+        return CheckCircle;
+      case "error":
+        return AlertTriangle;
+      case "ai_insight":
+        return Brain;
+      default:
+        return Info;
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-    case "warning": return "text-orange-600";
-    case "error": return "text-red-600";
-    case "success": return "text-green-600";
-    case "ai_insight": return "text-purple-600";
-    default: return "text-blue-600";
+      case "warning":
+        return "text-orange-600";
+      case "error":
+        return "text-red-600";
+      case "success":
+        return "text-green-600";
+      case "ai_insight":
+        return "text-purple-600";
+      default:
+        return "text-blue-600";
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-    case "urgent": return <Badge variant="destructive">Urgente</Badge>;
-    case "high": return <Badge variant="default">Alta</Badge>;
-    case "medium": return <Badge variant="secondary">Média</Badge>;
-    default: return <Badge variant="outline">Baixa</Badge>;
+      case "urgent":
+        return <Badge variant="destructive">Urgente</Badge>;
+      case "high":
+        return <Badge variant="default">Alta</Badge>;
+      case "medium":
+        return <Badge variant="secondary">Média</Badge>;
+      default:
+        return <Badge variant="outline">Baixa</Badge>;
     }
   };
 
   const filteredNotifications = notifications.filter(notification => {
     const matchesType = filterType === "all" || notification.type === filterType;
     const matchesPriority = filterPriority === "all" || notification.priority === filterPriority;
-    const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         notification.message.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      notification.message.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesType && matchesPriority && matchesSearch;
   });
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === id ? { ...notif, read: true } : notif
-      )
+    setNotifications(prev =>
+      prev.map(notif => (notif.id === id ? { ...notif, read: true } : notif))
     );
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(notif => ({ ...notif, read: true }))
-    );
+    setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
     toast({
       title: "Sucesso",
       description: "Todas as notificações foram marcadas como lidas",
@@ -203,7 +221,7 @@ const IntelligentNotificationSystem = () => {
   const updateSettings = (key: string, value: any) => {
     setSettings(prev => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
     toast({
       title: "Configurações atualizadas",
@@ -214,7 +232,7 @@ const IntelligentNotificationSystem = () => {
   const getRelativeTime = (timestamp: Date) => {
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60));
-    
+
     if (diffInMinutes < 1) return "Agora";
     if (diffInMinutes < 60) return `${diffInMinutes}m atrás`;
     if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h atrás`;
@@ -282,7 +300,7 @@ const IntelligentNotificationSystem = () => {
             <Input
               placeholder="Buscar notificações..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="md:max-w-xs"
             />
             <Select value={filterType} onValueChange={setFilterType}>
@@ -313,11 +331,11 @@ const IntelligentNotificationSystem = () => {
           </div>
 
           <div className="space-y-4">
-            {filteredNotifications.map((notification) => {
+            {filteredNotifications.map(notification => {
               const TypeIcon = getTypeIcon(notification.type);
               return (
-                <Card 
-                  key={notification.id} 
+                <Card
+                  key={notification.id}
                   className={`transition-all hover:shadow-md ${
                     !notification.read ? "border-l-4 border-l-primary bg-muted/20" : ""
                   }`}
@@ -325,12 +343,16 @@ const IntelligentNotificationSystem = () => {
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-4">
-                        <div className={`p-2 rounded-full bg-muted ${getTypeColor(notification.type)}`}>
+                        <div
+                          className={`p-2 rounded-full bg-muted ${getTypeColor(notification.type)}`}
+                        >
                           <TypeIcon className="w-5 h-5" />
                         </div>
                         <div className="flex-1 space-y-2">
                           <div className="flex items-center gap-2">
-                            <h3 className={`font-semibold ${!notification.read ? "text-primary" : ""}`}>
+                            <h3
+                              className={`font-semibold ${!notification.read ? "text-primary" : ""}`}
+                            >
                               {notification.title}
                             </h3>
                             {getPriorityBadge(notification.priority)}
@@ -341,9 +363,7 @@ const IntelligentNotificationSystem = () => {
                               </Badge>
                             )}
                           </div>
-                          <p className="text-sm text-muted-foreground">
-                            {notification.message}
-                          </p>
+                          <p className="text-sm text-muted-foreground">{notification.message}</p>
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1">
                               <Clock className="w-3 h-3" />
@@ -356,23 +376,23 @@ const IntelligentNotificationSystem = () => {
                       </div>
                       <div className="flex items-center gap-2">
                         {!notification.read && (
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="sm"
                             onClick={() => markAsRead(notification.id)}
                           >
                             <CheckCircle className="w-4 h-4" />
                           </Button>
                         )}
-                        <Button 
-                          variant="ghost" 
+                        <Button
+                          variant="ghost"
                           size="sm"
                           onClick={() => archiveNotification(notification.id)}
                         >
                           <Archive className="w-4 h-4" />
                         </Button>
-                        <Button 
-                          variant="ghost" 
+                        <Button
+                          variant="ghost"
                           size="sm"
                           onClick={() => deleteNotification(notification.id)}
                         >
@@ -401,8 +421,11 @@ const IntelligentNotificationSystem = () => {
             <CardContent className="space-y-4">
               {notifications
                 .filter(n => n.type === "ai_insight")
-                .map((insight) => (
-                  <div key={insight.id} className="p-4 border rounded-lg bg-purple-50 dark:bg-purple-950/20">
+                .map(insight => (
+                  <div
+                    key={insight.id}
+                    className="p-4 border rounded-lg bg-purple-50 dark:bg-purple-950/20"
+                  >
                     <div className="flex items-start gap-3">
                       <Brain className="w-5 h-5 text-purple-600 mt-1" />
                       <div className="flex-1">
@@ -416,9 +439,7 @@ const IntelligentNotificationSystem = () => {
                           <Button size="sm" variant="outline">
                             Ver Detalhes
                           </Button>
-                          <Button size="sm">
-                            Implementar Sugestão
-                          </Button>
+                          <Button size="sm">Implementar Sugestão</Button>
                         </div>
                       </div>
                     </div>
@@ -441,9 +462,9 @@ const IntelligentNotificationSystem = () => {
                     <Mail className="w-4 h-4" />
                     <Label>Email</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.emailEnabled}
-                    onCheckedChange={(checked) => updateSettings("emailEnabled", checked)}
+                    onCheckedChange={checked => updateSettings("emailEnabled", checked)}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -451,9 +472,9 @@ const IntelligentNotificationSystem = () => {
                     <Bell className="w-4 h-4" />
                     <Label>Push Notifications</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.pushEnabled}
-                    onCheckedChange={(checked) => updateSettings("pushEnabled", checked)}
+                    onCheckedChange={checked => updateSettings("pushEnabled", checked)}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -461,9 +482,9 @@ const IntelligentNotificationSystem = () => {
                     <Smartphone className="w-4 h-4" />
                     <Label>SMS</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.smsEnabled}
-                    onCheckedChange={(checked) => updateSettings("smsEnabled", checked)}
+                    onCheckedChange={checked => updateSettings("smsEnabled", checked)}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -471,9 +492,9 @@ const IntelligentNotificationSystem = () => {
                     <Brain className="w-4 h-4" />
                     <Label>Insights IA</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.aiInsights}
-                    onCheckedChange={(checked) => updateSettings("aiInsights", checked)}
+                    onCheckedChange={checked => updateSettings("aiInsights", checked)}
                   />
                 </div>
               </CardContent>
@@ -482,16 +503,21 @@ const IntelligentNotificationSystem = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Categorias</CardTitle>
-                <CardDescription>Escolha quais tipos de notificação você quer receber</CardDescription>
+                <CardDescription>
+                  Escolha quais tipos de notificação você quer receber
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {Object.entries(settings.categories).map(([category, enabled]) => (
                   <div key={category} className="flex items-center justify-between">
                     <Label className="capitalize">{category}</Label>
-                    <Switch 
+                    <Switch
                       checked={enabled}
-                      onCheckedChange={(checked) => 
-                        updateSettings("categories", { ...settings.categories, [category]: checked })
+                      onCheckedChange={checked =>
+                        updateSettings("categories", {
+                          ...settings.categories,
+                          [category]: checked,
+                        })
                       }
                     />
                   </div>
@@ -503,26 +529,31 @@ const IntelligentNotificationSystem = () => {
           <Card>
             <CardHeader>
               <CardTitle>Horário Silencioso</CardTitle>
-              <CardDescription>Defina um período em que não receberá notificações (exceto urgentes)</CardDescription>
+              <CardDescription>
+                Defina um período em que não receberá notificações (exceto urgentes)
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>Início</Label>
-                  <Input 
-                    type="time" 
+                  <Input
+                    type="time"
                     value={settings.quietHours.start}
-                    onChange={(e) => 
-                      updateSettings("quietHours", { ...settings.quietHours, start: e.target.value })
+                    onChange={e =>
+                      updateSettings("quietHours", {
+                        ...settings.quietHours,
+                        start: e.target.value,
+                      })
                     }
                   />
                 </div>
                 <div>
                   <Label>Fim</Label>
-                  <Input 
-                    type="time" 
+                  <Input
+                    type="time"
                     value={settings.quietHours.end}
-                    onChange={(e) => 
+                    onChange={e =>
                       updateSettings("quietHours", { ...settings.quietHours, end: e.target.value })
                     }
                   />

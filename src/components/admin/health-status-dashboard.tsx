@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { 
+import {
   Activity,
   AlertCircle,
   CheckCircle2,
@@ -14,7 +14,7 @@ import {
   Zap,
   AlertTriangle,
   Database,
-  Cloud
+  Cloud,
 } from "lucide-react";
 import { useAPIHealth } from "@/hooks/use-api-health";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -32,7 +32,7 @@ export const HealthStatusDashboard: React.FC = () => {
     uptime: "0d 0h 0m",
     memoryUsage: 0,
     requestCount: 0,
-    avgResponseTime: 0
+    avgResponseTime: 0,
   });
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
@@ -44,10 +44,10 @@ export const HealthStatusDashboard: React.FC = () => {
       const days = Math.floor(uptime / (1000 * 60 * 60 * 24));
       const hours = Math.floor((uptime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((uptime % (1000 * 60 * 60)) / (1000 * 60));
-      
+
       setSystemMetrics(prev => ({
         ...prev,
-        uptime: `${days}d ${hours}h ${minutes}m`
+        uptime: `${days}d ${hours}h ${minutes}m`,
       }));
     }, 60000); // Update every minute
 
@@ -61,7 +61,7 @@ export const HealthStatusDashboard: React.FC = () => {
       let totalResponseTime = 0;
       let responseTimeCount = 0;
 
-      healthStatus.forEach((status) => {
+      healthStatus.forEach(status => {
         totalRequests += status.successCount + status.errorCount;
         if (status.responseTime) {
           totalResponseTime += status.responseTime;
@@ -72,33 +72,34 @@ export const HealthStatusDashboard: React.FC = () => {
       setSystemMetrics(prev => ({
         ...prev,
         requestCount: totalRequests,
-        avgResponseTime: responseTimeCount > 0 ? Math.round(totalResponseTime / responseTimeCount) : 0,
-        memoryUsage: Math.min(95, 45 + Math.random() * 15) // Simulated for now
+        avgResponseTime:
+          responseTimeCount > 0 ? Math.round(totalResponseTime / responseTimeCount) : 0,
+        memoryUsage: Math.min(95, 45 + Math.random() * 15), // Simulated for now
       }));
-      
+
       setLastUpdate(new Date());
     }
   }, [healthStatus]);
 
   const getStatusIcon = (status: "healthy" | "degraded" | "down") => {
     switch (status) {
-    case "healthy":
-      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-    case "degraded":
-      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-    case "down":
-      return <AlertCircle className="h-5 w-5 text-red-500" />;
+      case "healthy":
+        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+      case "degraded":
+        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+      case "down":
+        return <AlertCircle className="h-5 w-5 text-red-500" />;
     }
   };
 
   const getStatusColor = (status: "healthy" | "degraded" | "down") => {
     switch (status) {
-    case "healthy":
-      return "bg-green-500";
-    case "degraded":
-      return "bg-yellow-500";
-    case "down":
-      return "bg-red-500";
+      case "healthy":
+        return "bg-green-500";
+      case "degraded":
+        return "bg-yellow-500";
+      case "down":
+        return "bg-red-500";
     }
   };
 
@@ -106,9 +107,9 @@ export const HealthStatusDashboard: React.FC = () => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       healthy: "default",
       degraded: "secondary",
-      down: "destructive"
+      down: "destructive",
     };
-    
+
     return (
       <Badge variant={variants[status]}>
         {status === "healthy" ? "Saudável" : status === "degraded" ? "Degradado" : "Fora do Ar"}
@@ -129,11 +130,12 @@ export const HealthStatusDashboard: React.FC = () => {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Sistema com Problemas Críticos</AlertTitle>
           <AlertDescription>
-            Um ou mais serviços estão indisponíveis. Verifique os detalhes abaixo e tome as ações necessárias.
+            Um ou mais serviços estão indisponíveis. Verifique os detalhes abaixo e tome as ações
+            necessárias.
           </AlertDescription>
         </Alert>
       )}
-      
+
       {hasWarnings && !hasCritical && (
         <Alert>
           <AlertTriangle className="h-4 w-4" />
@@ -177,9 +179,7 @@ export const HealthStatusDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{systemMetrics.uptime}</div>
-            <p className="text-xs text-muted-foreground">
-              Desde o último carregamento
-            </p>
+            <p className="text-xs text-muted-foreground">Desde o último carregamento</p>
           </CardContent>
         </Card>
 
@@ -190,9 +190,7 @@ export const HealthStatusDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{systemMetrics.requestCount}</div>
-            <p className="text-xs text-muted-foreground">
-              Total processadas
-            </p>
+            <p className="text-xs text-muted-foreground">Total processadas</p>
           </CardContent>
         </Card>
 
@@ -203,9 +201,7 @@ export const HealthStatusDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{systemMetrics.avgResponseTime}ms</div>
-            <p className="text-xs text-muted-foreground">
-              Média atual
-            </p>
+            <p className="text-xs text-muted-foreground">Média atual</p>
           </CardContent>
         </Card>
       </div>
@@ -220,11 +216,7 @@ export const HealthStatusDashboard: React.FC = () => {
                 Status em tempo real das APIs e integrações externas
               </CardDescription>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => window.location.reload()}
-            >
+            <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
               <RefreshCw className="h-4 w-4 mr-2" />
               Atualizar
             </Button>
@@ -233,20 +225,23 @@ export const HealthStatusDashboard: React.FC = () => {
         <CardContent>
           <div className="space-y-4">
             {healthStatusArray.map(([name, status]) => {
-              const successRate = status.successCount + status.errorCount > 0
-                ? Math.round((status.successCount / (status.successCount + status.errorCount)) * 100)
-                : 100;
+              const successRate =
+                status.successCount + status.errorCount > 0
+                  ? Math.round(
+                      (status.successCount / (status.successCount + status.errorCount)) * 100
+                    )
+                  : 100;
 
               const getServiceIcon = (serviceName: string) => {
                 switch (serviceName.toLowerCase()) {
-                case "openai":
-                  return <Cloud className="h-5 w-5" />;
-                case "supabase":
-                  return <Database className="h-5 w-5" />;
-                case "realtime":
-                  return <Activity className="h-5 w-5" />;
-                default:
-                  return <Server className="h-5 w-5" />;
+                  case "openai":
+                    return <Cloud className="h-5 w-5" />;
+                  case "supabase":
+                    return <Database className="h-5 w-5" />;
+                  case "realtime":
+                    return <Activity className="h-5 w-5" />;
+                  default:
+                    return <Server className="h-5 w-5" />;
                 }
               };
 
@@ -258,7 +253,8 @@ export const HealthStatusDashboard: React.FC = () => {
                       <div>
                         <h4 className="font-semibold capitalize">{name}</h4>
                         <p className="text-sm text-muted-foreground">
-                          Última verificação: {new Date(status.lastCheck).toLocaleTimeString("pt-BR")}
+                          Última verificação:{" "}
+                          {new Date(status.lastCheck).toLocaleTimeString("pt-BR")}
                         </p>
                       </div>
                     </div>
@@ -295,15 +291,11 @@ export const HealthStatusDashboard: React.FC = () => {
                   {status.status !== "healthy" && (
                     <div className="flex items-center justify-between pt-2 border-t">
                       <p className="text-sm text-muted-foreground">
-                        {status.status === "down" 
+                        {status.status === "down"
                           ? "Circuit breaker pode estar ativo. Tentativas automáticas em andamento."
                           : "Performance degradada detectada. Monitore atentamente."}
                       </p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => resetCircuitBreaker(name)}
-                      >
+                      <Button variant="outline" size="sm" onClick={() => resetCircuitBreaker(name)}>
                         Resetar Circuit Breaker
                       </Button>
                     </div>
@@ -329,9 +321,7 @@ export const HealthStatusDashboard: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle>Recursos do Sistema</CardTitle>
-          <CardDescription>
-            Monitoramento de uso de recursos do navegador
-          </CardDescription>
+          <CardDescription>Monitoramento de uso de recursos do navegador</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -344,7 +334,7 @@ export const HealthStatusDashboard: React.FC = () => {
               </div>
               <Progress value={systemMetrics.memoryUsage} />
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
               <div className="border rounded-lg p-3">
                 <p className="text-sm text-muted-foreground mb-1">Cache Status</p>
@@ -353,18 +343,18 @@ export const HealthStatusDashboard: React.FC = () => {
                   <span className="font-medium">Ativo</span>
                 </div>
               </div>
-              
+
               <div className="border rounded-lg p-3">
                 <p className="text-sm text-muted-foreground mb-1">Última Atualização</p>
-                <span className="font-medium">
-                  {lastUpdate.toLocaleTimeString("pt-BR")}
-                </span>
+                <span className="font-medium">{lastUpdate.toLocaleTimeString("pt-BR")}</span>
               </div>
-              
+
               <div className="border rounded-lg p-3">
                 <p className="text-sm text-muted-foreground mb-1">Connection</p>
                 <div className="flex items-center gap-2">
-                  <div className={`h-2 w-2 rounded-full ${overallHealthy ? "bg-green-500" : "bg-red-500"} animate-pulse`}></div>
+                  <div
+                    className={`h-2 w-2 rounded-full ${overallHealthy ? "bg-green-500" : "bg-red-500"} animate-pulse`}
+                  ></div>
                   <span className="font-medium">Online</span>
                 </div>
               </div>

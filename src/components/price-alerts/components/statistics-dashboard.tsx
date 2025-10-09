@@ -85,29 +85,34 @@ export const StatisticsDashboard = () => {
         const discounts = alerts
           .filter(alert => alert.discount_percentage > 0)
           .map(alert => alert.discount_percentage);
-        
-        const average_discount = discounts.length > 0 
-          ? discounts.reduce((a, b) => a + b, 0) / discounts.length 
-          : 0;
 
-        const best_deal = alerts
-          .filter(alert => alert.discount_percentage > 0)
-          .sort((a, b) => (b.discount_percentage || 0) - (a.discount_percentage || 0))[0] || null;
+        const average_discount =
+          discounts.length > 0 ? discounts.reduce((a, b) => a + b, 0) / discounts.length : 0;
+
+        const best_deal =
+          alerts
+            .filter(alert => alert.discount_percentage > 0)
+            .sort((a, b) => (b.discount_percentage || 0) - (a.discount_percentage || 0))[0] || null;
 
         // Agrupar por categorias
-        const categories = alerts.reduce((acc, alert) => {
-          const category = alert.category || "Outros";
-          acc[category] = (acc[category] || 0) + 1;
-          return acc;
-        }, {} as { [key: string]: number });
+        const categories = alerts.reduce(
+          (acc, alert) => {
+            const category = alert.category || "Outros";
+            acc[category] = (acc[category] || 0) + 1;
+            return acc;
+          },
+          {} as { [key: string]: number }
+        );
 
         setMetrics({
           total_products,
           average_discount,
-          best_deal: best_deal ? {
-            product_name: best_deal.product_name,
-            discount_percentage: best_deal.discount_percentage || 0,
-          } : null,
+          best_deal: best_deal
+            ? {
+                product_name: best_deal.product_name,
+                discount_percentage: best_deal.discount_percentage || 0,
+              }
+            : null,
           categories,
         });
       }
@@ -149,9 +154,7 @@ export const StatisticsDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{statistics.total_alerts}</div>
-            <p className="text-xs text-muted-foreground">
-              {statistics.active_alerts} ativos
-            </p>
+            <p className="text-xs text-muted-foreground">{statistics.active_alerts} ativos</p>
           </CardContent>
         </Card>
 
@@ -161,9 +164,7 @@ export const StatisticsDashboard = () => {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              R$ {statistics.total_savings.toFixed(2)}
-            </div>
+            <div className="text-2xl font-bold">R$ {statistics.total_savings.toFixed(2)}</div>
             <p className="text-xs text-muted-foreground">
               {statistics.alerts_triggered} alertas acionados
             </p>
@@ -188,9 +189,7 @@ export const StatisticsDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{metrics.average_discount.toFixed(1)}%</div>
-            <p className="text-xs text-muted-foreground">
-              Em {metrics.total_products} produtos
-            </p>
+            <p className="text-xs text-muted-foreground">Em {metrics.total_products} produtos</p>
           </CardContent>
         </Card>
       </div>
@@ -233,10 +232,10 @@ export const StatisticsDashboard = () => {
                 <div className="flex items-center gap-2">
                   <Badge variant="outline">{count}</Badge>
                   <div className="w-24 h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className="h-full bg-primary rounded-full transition-all duration-300"
-                      style={{ 
-                        width: `${(count / metrics.total_products) * 100}%` 
+                      style={{
+                        width: `${(count / metrics.total_products) * 100}%`,
                       }}
                     />
                   </div>

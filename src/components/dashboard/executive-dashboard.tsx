@@ -4,21 +4,34 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Users, 
-  DollarSign, 
-  Ship, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Users,
+  DollarSign,
+  Ship,
   BarChart3,
   Calendar,
   Clock,
   Target,
   Award,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 interface ExecutiveKPI {
   id: string;
@@ -45,7 +58,9 @@ interface StrategicMetric {
 const ExecutiveDashboard = () => {
   const [kpis, setKpis] = useState<ExecutiveKPI[]>([]);
   const [strategicMetrics, setStrategicMetrics] = useState<StrategicMetric[]>([]);
-  const [selectedPeriod, setSelectedPeriod] = useState<"week" | "month" | "quarter" | "year">("month");
+  const [selectedPeriod, setSelectedPeriod] = useState<"week" | "month" | "quarter" | "year">(
+    "month"
+  );
 
   useEffect(() => {
     loadExecutiveData();
@@ -63,7 +78,7 @@ const ExecutiveDashboard = () => {
         trend: "up",
         change: 15.2,
         changeType: "percentage",
-        status: "good"
+        status: "good",
       },
       {
         id: "2",
@@ -74,7 +89,7 @@ const ExecutiveDashboard = () => {
         trend: "up",
         change: 3.2,
         changeType: "percentage",
-        status: "warning"
+        status: "warning",
       },
       {
         id: "3",
@@ -85,7 +100,7 @@ const ExecutiveDashboard = () => {
         trend: "stable",
         change: 0.8,
         changeType: "percentage",
-        status: "excellent"
+        status: "excellent",
       },
       {
         id: "4",
@@ -96,7 +111,7 @@ const ExecutiveDashboard = () => {
         trend: "up",
         change: 2.1,
         changeType: "percentage",
-        status: "good"
+        status: "good",
       },
       {
         id: "5",
@@ -107,7 +122,7 @@ const ExecutiveDashboard = () => {
         trend: "down",
         change: -1.3,
         changeType: "absolute",
-        status: "warning"
+        status: "warning",
       },
       {
         id: "6",
@@ -118,8 +133,8 @@ const ExecutiveDashboard = () => {
         trend: "down",
         change: -3,
         changeType: "absolute",
-        status: "critical"
-      }
+        status: "critical",
+      },
     ];
 
     // Simular métricas estratégicas
@@ -129,25 +144,25 @@ const ExecutiveDashboard = () => {
         metrics: [
           { name: "Utilização da Frota", current: 87.5, target: 95, trend: 3.2 },
           { name: "Pontualidade das Entregas", current: 92.1, target: 98, trend: 1.8 },
-          { name: "Consumo de Combustível", current: 12.5, target: 10.8, trend: -2.1 }
-        ]
+          { name: "Consumo de Combustível", current: 12.5, target: 10.8, trend: -2.1 },
+        ],
       },
       {
         category: "Financeiro",
         metrics: [
           { name: "Margem Operacional", current: 23.4, target: 28, trend: 2.1 },
           { name: "ROI de Investimentos", current: 18.7, target: 22, trend: 1.5 },
-          { name: "Custo por Viagem", current: 45600, target: 42000, trend: -3.2 }
-        ]
+          { name: "Custo por Viagem", current: 45600, target: 42000, trend: -3.2 },
+        ],
       },
       {
         category: "Recursos Humanos",
         metrics: [
           { name: "Retenção de Talentos", current: 89.3, target: 95, trend: 2.8 },
           { name: "Satisfação dos Funcionários", current: 8.4, target: 9.2, trend: 0.6 },
-          { name: "Produtividade da Equipe", current: 94.2, target: 100, trend: 1.9 }
-        ]
-      }
+          { name: "Produtividade da Equipe", current: 94.2, target: 100, trend: 1.9 },
+        ],
+      },
     ];
 
     setKpis(mockKPIs);
@@ -163,21 +178,31 @@ const ExecutiveDashboard = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "excellent": return "text-success-foreground bg-success/20 border-success/30";
-    case "good": return "text-info-foreground bg-info/20 border-info/30";
-    case "warning": return "text-warning-foreground bg-warning/20 border-warning/30";
-    case "critical": return "text-destructive-foreground bg-destructive/20 border-destructive/30";
-    default: return "text-muted-foreground bg-muted/20 border-muted/30";
+      case "excellent":
+        return "text-success-foreground bg-success/20 border-success/30";
+      case "good":
+        return "text-info-foreground bg-info/20 border-info/30";
+      case "warning":
+        return "text-warning-foreground bg-warning/20 border-warning/30";
+      case "critical":
+        return "text-destructive-foreground bg-destructive/20 border-destructive/30";
+      default:
+        return "text-muted-foreground bg-muted/20 border-muted/30";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "excellent": return <Award className="h-4 w-4 text-success" />;
-    case "good": return <CheckCircle className="h-4 w-4 text-info" />;
-    case "warning": return <AlertTriangle className="h-4 w-4 text-warning" />;
-    case "critical": return <AlertTriangle className="h-4 w-4 text-destructive" />;
-    default: return <BarChart3 className="h-4 w-4" />;
+      case "excellent":
+        return <Award className="h-4 w-4 text-success" />;
+      case "good":
+        return <CheckCircle className="h-4 w-4 text-info" />;
+      case "warning":
+        return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case "critical":
+        return <AlertTriangle className="h-4 w-4 text-destructive" />;
+      default:
+        return <BarChart3 className="h-4 w-4" />;
     }
   };
 
@@ -216,9 +241,7 @@ const ExecutiveDashboard = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Dashboard Executivo</h1>
-          <p className="text-muted-foreground">
-            Visão estratégica e KPIs críticos do negócio
-          </p>
+          <p className="text-muted-foreground">Visão estratégica e KPIs críticos do negócio</p>
         </div>
         <div className="flex gap-2">
           <Button
@@ -247,7 +270,7 @@ const ExecutiveDashboard = () => {
 
       {/* KPIs Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {kpis.map((kpi) => (
+        {kpis.map(kpi => (
           <Card key={kpi.id} className={`border ${getStatusColor(kpi.status)}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
@@ -262,21 +285,22 @@ const ExecutiveDashboard = () => {
                   <div className="flex items-center gap-1 text-sm">
                     {getTrendIcon(kpi.trend, kpi.change)}
                     <span className={kpi.change >= 0 ? "text-success" : "text-destructive"}>
-                      {kpi.change >= 0 ? "+" : ""}{kpi.change}
+                      {kpi.change >= 0 ? "+" : ""}
+                      {kpi.change}
                       {kpi.changeType === "percentage" ? "%" : ""}
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="space-y-1">
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>Meta: {kpi.target}{kpi.unit}</span>
+                    <span>
+                      Meta: {kpi.target}
+                      {kpi.unit}
+                    </span>
                     <span>{((kpi.value / kpi.target) * 100).toFixed(1)}%</span>
                   </div>
-                  <Progress 
-                    value={(kpi.value / kpi.target) * 100} 
-                    className="h-2"
-                  />
+                  <Progress value={(kpi.value / kpi.target) * 100} className="h-2" />
                 </div>
               </div>
             </CardContent>
@@ -304,21 +328,21 @@ const ExecutiveDashboard = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
                     <YAxis />
-                    <Tooltip 
+                    <Tooltip
                       formatter={(value: number) => [`R$ ${(value / 1000000).toFixed(1)}M`, ""]}
                     />
-                    <Area 
-                      type="monotone" 
-                      dataKey="revenue" 
-                      stroke="hsl(var(--primary))" 
+                    <Area
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke="hsl(var(--primary))"
                       fill="hsl(var(--primary))"
                       fillOpacity={0.3}
                       name="Receita"
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="target" 
-                      stroke="hsl(var(--destructive))" 
+                    <Line
+                      type="monotone"
+                      dataKey="target"
+                      stroke="hsl(var(--destructive))"
                       strokeDasharray="5 5"
                       name="Meta"
                     />
@@ -357,20 +381,23 @@ const ExecutiveDashboard = () => {
 
         <TabsContent value="strategic" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {strategicMetrics.map((category) => (
+            {strategicMetrics.map(category => (
               <Card key={category.category}>
                 <CardHeader>
                   <CardTitle>{category.category}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {category.metrics.map((metric) => (
+                  {category.metrics.map(metric => (
                     <div key={metric.name} className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-medium">{metric.name}</span>
                         <div className="flex items-center gap-1">
                           {getTrendIcon("", metric.trend)}
-                          <span className={`text-xs ${metric.trend >= 0 ? "text-success" : "text-destructive"}`}>
-                            {metric.trend >= 0 ? "+" : ""}{metric.trend}%
+                          <span
+                            className={`text-xs ${metric.trend >= 0 ? "text-success" : "text-destructive"}`}
+                          >
+                            {metric.trend >= 0 ? "+" : ""}
+                            {metric.trend}%
                           </span>
                         </div>
                       </div>
@@ -378,10 +405,7 @@ const ExecutiveDashboard = () => {
                         <span>Atual: {metric.current}%</span>
                         <span>Meta: {metric.target}%</span>
                       </div>
-                      <Progress 
-                        value={(metric.current / metric.target) * 100} 
-                        className="h-2"
-                      />
+                      <Progress value={(metric.current / metric.target) * 100} className="h-2" />
                     </div>
                   ))}
                 </CardContent>

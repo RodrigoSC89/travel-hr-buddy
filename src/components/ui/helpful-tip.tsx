@@ -13,12 +13,7 @@ interface TipProps {
   onDismiss?: () => void;
 }
 
-export const HelpfulTip: React.FC<TipProps> = ({
-  title,
-  description,
-  action,
-  onDismiss
-}) => {
+export const HelpfulTip: React.FC<TipProps> = ({ title, description, action, onDismiss }) => {
   return (
     <Card className="border-blue-200 bg-blue-50 animate-slide-in-down">
       <CardContent className="p-4">

@@ -4,7 +4,6 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import ProductionDeployCenter from "@/components/deploy/production-deploy-center";
 import { Rocket } from "lucide-react";
 
-
 const ProductionDeployPage = () => {
   return (
     <SidebarProvider>
@@ -24,7 +23,6 @@ const ProductionDeployPage = () => {
           </div>
           <ProductionDeployCenter />
         </main>
-        
       </div>
     </SidebarProvider>
   );

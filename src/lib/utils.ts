@@ -12,17 +12,14 @@ export function formatCurrency(value: number): string {
   }).format(value);
 }
 
-export function formatDate(
-  date: string | Date,
-  options?: Intl.DateTimeFormatOptions
-): string {
+export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOptions): string {
   const dateObj = typeof date === "string" ? new Date(date) : date;
-  
+
   const defaultOptions: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
     day: "numeric",
   };
-  
+
   return new Intl.DateTimeFormat("pt-BR", options || defaultOptions).format(dateObj);
 }

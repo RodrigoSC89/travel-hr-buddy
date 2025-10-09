@@ -19,7 +19,7 @@ const sizeClasses = {
 const iconSizes = {
   sm: 16,
   md: 24,
-  lg: 32
+  lg: 32,
 };
 
 /**
@@ -35,49 +35,43 @@ export const Loading: React.FC<LoadingProps> = ({
 }) => {
   const renderIcon = () => {
     switch (variant) {
-    case "maritime":
-      return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
-    case "offshore":
-      return (
-        <div className="relative">
-          <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
-          <Waves 
-            className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse" 
-            size={iconSizes[size] / 2} 
+      case "maritime":
+        return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
+      case "offshore":
+        return (
+          <div className="relative">
+            <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
+            <Waves
+              className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse"
+              size={iconSizes[size] / 2}
+            />
+          </div>
+        );
+      case "spinner":
+        return (
+          <div
+            className={cn("animate-spin rounded-full border-b-2 border-primary", sizeClasses[size])}
+            role="status"
+            aria-label="Carregando"
           />
-        </div>
-      );
-    case "spinner":
-      return (
-        <div 
-          className={cn(
-            "animate-spin rounded-full border-b-2 border-primary",
-            sizeClasses[size]
-          )}
-          role="status"
-          aria-label="Carregando"
-        />
-      );
-    default:
-      return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />;
+        );
+      default:
+        return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />;
     }
   };
 
   const content = (
     <div className={cn("flex flex-col items-center justify-center gap-3", className)}>
       {renderIcon()}
-      {message && (
-        <p className="text-sm text-muted-foreground font-medium">
-          {message}
-        </p>
-      )}
+      {message && <p className="text-sm text-muted-foreground font-medium">{message}</p>}
       {variant === "offshore" && (
         <>
-          <p className="text-xs text-muted-foreground mt-1">
-            Otimizado para uso offshore
-          </p>
+          <p className="text-xs text-muted-foreground mt-1">Otimizado para uso offshore</p>
           <div className="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-600 rounded-full animate-pulse" style={{ width: "100%" }} />
+            <div
+              className="h-full bg-blue-600 rounded-full animate-pulse"
+              style={{ width: "100%" }}
+            />
           </div>
         </>
       )}
@@ -87,7 +81,7 @@ export const Loading: React.FC<LoadingProps> = ({
 
   if (fullScreen) {
     return (
-      <div 
+      <div
         className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm"
         role="status"
         aria-live="polite"
@@ -138,15 +132,7 @@ export interface LoadingSkeletonProps {
  * Basic skeleton loading component for content placeholders
  */
 export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ className }) => {
-  return (
-    <div
-      className={cn(
-        "animate-pulse rounded-md bg-muted",
-        className
-      )}
-      aria-hidden="true"
-    />
-  );
+  return <div className={cn("animate-pulse rounded-md bg-muted", className)} aria-hidden="true" />;
 };
 
 export interface LoadingCardProps {
@@ -208,7 +194,7 @@ export const LoadingDashboard: React.FC = () => {
 
         {/* Stats Cards skeleton */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {[1, 2, 3, 4].map((i) => (
+          {[1, 2, 3, 4].map(i => (
             <div key={i} className="bg-card rounded-lg border border-border p-6 space-y-4">
               <LoadingSkeleton className="h-4 w-1/2" />
               <LoadingSkeleton className="h-8 w-3/4" />
@@ -222,7 +208,7 @@ export const LoadingDashboard: React.FC = () => {
           <div className="space-y-4">
             <LoadingSkeleton className="h-6 w-1/3" />
             <LoadingSkeleton className="h-4 w-1/2 mb-6" />
-            {[1, 2, 3].map((i) => (
+            {[1, 2, 3].map(i => (
               <div key={i} className="py-4 border-b border-border last:border-0">
                 <div className="flex items-center justify-between">
                   <div className="space-y-2 flex-1">

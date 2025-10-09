@@ -6,14 +6,7 @@ import { HealthStatusDashboard } from "@/components/admin/health-status-dashboar
 import { RoleBasedAccess } from "./role-based-access";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Settings, 
-  Users, 
-  Shield, 
-  Database, 
-  Activity,
-  RefreshCw
-} from "lucide-react";
+import { Settings, Users, Shield, Database, Activity, RefreshCw } from "lucide-react";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useUsers } from "@/hooks/use-users";
 
@@ -69,9 +62,7 @@ export const AdminPanel: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.byRole.admin || 0}</div>
-              <p className="text-xs text-muted-foreground">
-                Acesso total ao sistema
-              </p>
+              <p className="text-xs text-muted-foreground">Acesso total ao sistema</p>
             </CardContent>
           </Card>
 
@@ -82,9 +73,7 @@ export const AdminPanel: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.byRole.hr_manager || 0}</div>
-              <p className="text-xs text-muted-foreground">
-                Gestão de pessoas
-              </p>
+              <p className="text-xs text-muted-foreground">Gestão de pessoas</p>
             </CardContent>
           </Card>
 
@@ -95,9 +84,7 @@ export const AdminPanel: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.byRole.employee || 0}</div>
-              <p className="text-xs text-muted-foreground">
-                Usuários padrão
-              </p>
+              <p className="text-xs text-muted-foreground">Usuários padrão</p>
             </CardContent>
           </Card>
         </div>
@@ -127,9 +114,7 @@ export const AdminPanel: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Gerenciamento de Permissões</CardTitle>
-                <CardDescription>
-                  Configure permissões por role e módulo do sistema
-                </CardDescription>
+                <CardDescription>Configure permissões por role e módulo do sistema</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-8">
@@ -145,13 +130,11 @@ export const AdminPanel: React.FC = () => {
 
           <TabsContent value="system" className="space-y-4">
             <HealthStatusDashboard />
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Configurações do Sistema</CardTitle>
-                <CardDescription>
-                  Configurações gerais e manutenção do sistema
-                </CardDescription>
+                <CardDescription>Configurações gerais e manutenção do sistema</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -174,9 +157,7 @@ export const AdminPanel: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="font-medium">Backup de Dados</h4>
-                        <p className="text-sm text-muted-foreground">
-                          Exportar dados do sistema
-                        </p>
+                        <p className="text-sm text-muted-foreground">Exportar dados do sistema</p>
                       </div>
                       <Button variant="outline" size="sm">
                         <Database className="h-4 w-4 mr-2" />

@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
+import {
   Settings,
   Building2,
   Shield,
@@ -39,7 +39,7 @@ import {
   Globe2,
   Cpu,
   Database,
-  Server
+  Server,
 } from "lucide-react";
 
 // Import category components
@@ -124,7 +124,7 @@ interface SettingsData {
 export const EnhancedSettingsHub: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   const [settings, setSettings] = useState<SettingsData>({
     general: {
       companyName: "Nautilus One",
@@ -136,8 +136,8 @@ export const EnhancedSettingsHub: React.FC = () => {
       brandColors: {
         primary: "#2563eb",
         secondary: "#64748b",
-        accent: "#f59e0b"
-      }
+        accent: "#f59e0b",
+      },
     },
     security: {
       passwordRules: {
@@ -146,7 +146,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         requireSymbols: true,
         requireUppercase: true,
         enablePasswordHistory: false,
-        passwordExpirationDays: 90
+        passwordExpirationDays: 90,
       },
       sessionExpiry: 30,
       twoFactorRequired: false,
@@ -154,7 +154,7 @@ export const EnhancedSettingsHub: React.FC = () => {
       enableAuditLogging: true,
       enableIpWhitelist: false,
       allowedIps: [],
-      enableSingleSignOn: false
+      enableSingleSignOn: false,
     },
     notifications: {
       emailAlerts: true,
@@ -166,17 +166,17 @@ export const EnhancedSettingsHub: React.FC = () => {
         communication: true,
         crew: true,
         vessels: true,
-        certificates: true
+        certificates: true,
       },
       escalationMatrix: [],
-      customTemplates: {}
+      customTemplates: {},
     },
     integrations: {
       apiKeys: {},
       webhooks: [],
       externalServices: {},
       rateLimits: {},
-      enableApiVersioning: true
+      enableApiVersioning: true,
     },
     advanced: {
       enableFeatureFlags: false,
@@ -185,7 +185,7 @@ export const EnhancedSettingsHub: React.FC = () => {
       errorTracking: true,
       customFields: {},
       workflowAutomation: false,
-      enableBetaFeatures: false
+      enableBetaFeatures: false,
     },
     monitoring: {
       enableMetrics: true,
@@ -193,11 +193,11 @@ export const EnhancedSettingsHub: React.FC = () => {
         cpu: 80,
         memory: 85,
         disk: 90,
-        responseTime: 2000
+        responseTime: 2000,
       },
       retentionDays: 90,
-      enableHealthChecks: true
-    }
+      enableHealthChecks: true,
+    },
   });
 
   const [hasChanges, setHasChanges] = useState(false);
@@ -208,12 +208,14 @@ export const EnhancedSettingsHub: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [settingsHealth, setSettingsHealth] = useState(85);
   const [autoSave, setAutoSave] = useState(false);
-  const [changeHistory, setChangeHistory] = useState<Array<{
-    timestamp: Date;
-    action: string;
-    user: string;
-    details: string;
-  }>>([]);
+  const [changeHistory, setChangeHistory] = useState<
+    Array<{
+      timestamp: Date;
+      action: string;
+      user: string;
+      details: string;
+    }>
+  >([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [collaborationEnabled, setCollaborationEnabled] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
@@ -232,23 +234,23 @@ export const EnhancedSettingsHub: React.FC = () => {
   useEffect(() => {
     const calculateHealth = () => {
       let score = 100;
-      
+
       // Security checks
       if (!settings.security.twoFactorRequired) score -= 10;
       if (settings.security.sessionExpiry > 60) score -= 5;
       if (!settings.security.enableAuditLogging) score -= 8;
-      
+
       // General checks
       if (!settings.general.companyName) score -= 5;
       if (!settings.general.companyLogo) score -= 3;
-      
+
       // Integration checks
       if (Object.keys(settings.integrations.apiKeys).length === 0) score -= 10;
-      
+
       // Monitoring checks
       if (!settings.monitoring.enableMetrics) score -= 5;
       if (!settings.monitoring.enableHealthChecks) score -= 5;
-      
+
       setSettingsHealth(Math.max(score, 0));
     };
 
@@ -260,23 +262,26 @@ export const EnhancedSettingsHub: React.FC = () => {
       ...prev,
       [category]: {
         ...prev[category],
-        ...updates
-      }
+        ...updates,
+      },
     }));
     setHasChanges(true);
-    
+
     // Add to change history
-    setChangeHistory(prev => [{
-      timestamp: new Date(),
-      action: `Updated ${category}`,
-      user: user?.email || "sistema",
-      details: `Modified ${Object.keys(updates).join(", ")}`
-    }, ...prev.slice(0, 49)]); // Keep last 50 changes
+    setChangeHistory(prev => [
+      {
+        timestamp: new Date(),
+        action: `Updated ${category}`,
+        user: user?.email || "sistema",
+        details: `Modified ${Object.keys(updates).join(", ")}`,
+      },
+      ...prev.slice(0, 49),
+    ]); // Keep last 50 changes
   };
 
   const saveSettings = async () => {
     if (!hasChanges) return;
-    
+
     setIsSaving(true);
     try {
       // Validate settings before saving
@@ -293,13 +298,13 @@ export const EnhancedSettingsHub: React.FC = () => {
 
       // Simulate API call to save settings
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // Log the action for audit trail
       await logSettingsChange("save", settings);
-      
+
       setHasChanges(false);
       setLastSaved(new Date());
-      
+
       toast({
         title: "✅ Configurações Salvas",
         description: "Todas as alterações foram aplicadas com sucesso.",
@@ -317,19 +322,19 @@ export const EnhancedSettingsHub: React.FC = () => {
 
   const validateSettings = (settings: SettingsData): string[] => {
     const errors: string[] = [];
-    
+
     if (!settings.general.companyName.trim()) {
       errors.push("Nome da empresa é obrigatório");
     }
-    
+
     if (settings.security.passwordRules.minLength < 6) {
       errors.push("Comprimento mínimo da senha deve ser pelo menos 6");
     }
-    
+
     if (settings.security.sessionExpiry < 5) {
       errors.push("Tempo de expiração da sessão deve ser pelo menos 5 minutos");
     }
-    
+
     return errors;
   };
 
@@ -345,8 +350,8 @@ export const EnhancedSettingsHub: React.FC = () => {
         brandColors: {
           primary: "#2563eb",
           secondary: "#64748b",
-          accent: "#f59e0b"
-        }
+          accent: "#f59e0b",
+        },
       },
       security: {
         passwordRules: {
@@ -355,7 +360,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           requireSymbols: true,
           requireUppercase: true,
           enablePasswordHistory: false,
-          passwordExpirationDays: 90
+          passwordExpirationDays: 90,
         },
         sessionExpiry: 30,
         twoFactorRequired: false,
@@ -363,7 +368,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         enableAuditLogging: true,
         enableIpWhitelist: false,
         allowedIps: [],
-        enableSingleSignOn: false
+        enableSingleSignOn: false,
       },
       notifications: {
         emailAlerts: true,
@@ -375,17 +380,17 @@ export const EnhancedSettingsHub: React.FC = () => {
           communication: true,
           crew: true,
           vessels: true,
-          certificates: true
+          certificates: true,
         },
         escalationMatrix: [],
-        customTemplates: {}
+        customTemplates: {},
       },
       integrations: {
         apiKeys: {},
         webhooks: [],
         externalServices: {},
         rateLimits: {},
-        enableApiVersioning: true
+        enableApiVersioning: true,
       },
       advanced: {
         enableFeatureFlags: false,
@@ -394,7 +399,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         errorTracking: true,
         customFields: {},
         workflowAutomation: false,
-        enableBetaFeatures: false
+        enableBetaFeatures: false,
       },
       monitoring: {
         enableMetrics: true,
@@ -402,18 +407,18 @@ export const EnhancedSettingsHub: React.FC = () => {
           cpu: 80,
           memory: 85,
           disk: 90,
-          responseTime: 2000
+          responseTime: 2000,
         },
         retentionDays: 90,
-        enableHealthChecks: true
-      }
+        enableHealthChecks: true,
+      },
     };
 
     setSettings(defaultSettings);
     setHasChanges(true);
-    
+
     await logSettingsChange("reset", defaultSettings);
-    
+
     toast({
       title: "🔄 Configurações Restauradas",
       description: "Todas as configurações foram restauradas aos valores padrão.",
@@ -427,10 +432,10 @@ export const EnhancedSettingsHub: React.FC = () => {
         exportedAt: new Date().toISOString(),
         exportedBy: user?.email,
         version: "2.1.4",
-        health: settingsHealth
-      }
+        health: settingsHealth,
+      },
     };
-    
+
     const dataStr = JSON.stringify(exportData, null, 2);
     const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
@@ -438,7 +443,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     link.href = url;
     link.download = `nautilus-settings-${new Date().toISOString().split("T")[0]}.json`;
     link.click();
-    
+
     toast({
       title: "📥 Configurações Exportadas",
       description: "Arquivo de backup baixado com sucesso.",
@@ -450,18 +455,18 @@ export const EnhancedSettingsHub: React.FC = () => {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = e => {
       try {
         const importedData = JSON.parse(e.target?.result as string);
-        
+
         // Validate imported data structure
         if (!importedData.settings || !importedData.metadata) {
           throw new Error("Formato de arquivo inválido");
         }
-        
+
         setSettings(importedData.settings);
         setHasChanges(true);
-        
+
         toast({
           title: "📤 Configurações Importadas",
           description: `Configurações de ${importedData.metadata.exportedBy || "usuário desconhecido"} carregadas. Clique em 'Salvar' para aplicar.`,
@@ -486,23 +491,23 @@ export const EnhancedSettingsHub: React.FC = () => {
     // Simulate AI analysis
     setTimeout(() => {
       const recommendations = [];
-      
+
       if (!settings.security.twoFactorRequired) {
         recommendations.push("Ativar 2FA obrigatório para maior segurança");
       }
-      
+
       if (settings.security.sessionExpiry > 60) {
         recommendations.push("Reduzir tempo de expiração de sessão");
       }
-      
+
       if (Object.keys(settings.integrations.webhooks).length === 0) {
         recommendations.push("Configurar webhooks para automação");
       }
-      
+
       if (!settings.monitoring.enableMetrics) {
         recommendations.push("Ativar monitoramento de métricas");
       }
-      
+
       toast({
         title: "✨ Recomendações da IA",
         description: `${recommendations.length} sugestões de otimização encontradas. Verifique a aba 'Recursos Avançados'.`,
@@ -511,10 +516,8 @@ export const EnhancedSettingsHub: React.FC = () => {
   };
 
   const toggleFavorite = (tabId: string) => {
-    setFavorites(prev => 
-      prev.includes(tabId) 
-        ? prev.filter(id => id !== tabId)
-        : [...prev, tabId]
+    setFavorites(prev =>
+      prev.includes(tabId) ? prev.filter(id => id !== tabId) : [...prev, tabId]
     );
   };
 
@@ -523,9 +526,9 @@ export const EnhancedSettingsHub: React.FC = () => {
       const shareData = {
         title: "Configurações Nautilus One",
         text: "Compartilhando configurações do sistema",
-        url: window.location.href
+        url: window.location.href,
       };
-      
+
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
@@ -533,7 +536,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         await navigator.clipboard.writeText(window.location.href);
         toast({
           title: "📋 Link Copiado",
-          description: "Link das configurações copiado para área de transferência."
+          description: "Link das configurações copiado para área de transferência.",
         });
       }
     } catch (error) {
@@ -548,9 +551,9 @@ export const EnhancedSettingsHub: React.FC = () => {
       action,
       module: "settings",
       details: data,
-      ipAddress: "auto-detect" // In real app, get actual IP
+      ipAddress: "auto-detect", // In real app, get actual IP
     };
-    
+
     console.log("Settings audit log:", logEntry);
     // In real app, save to audit_logs table
   };
@@ -559,7 +562,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     setTestMode(!testMode);
     toast({
       title: testMode ? "🔧 Modo Produção" : "🧪 Modo Teste",
-      description: testMode 
+      description: testMode
         ? "Voltando ao modo produção. Alterações afetarão o sistema."
         : "Modo teste ativado. Alterações não afetarão outros usuários.",
     });
@@ -569,7 +572,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     setPreviewMode(!previewMode);
     toast({
       title: previewMode ? "💾 Modo Normal" : "👁️ Modo Prévia",
-      description: previewMode 
+      description: previewMode
         ? "Voltando ao modo normal."
         : "Modo prévia ativado. Veja como as alterações afetarão o sistema.",
     });
@@ -591,11 +594,16 @@ export const EnhancedSettingsHub: React.FC = () => {
     { id: "general", label: "Geral", icon: Building2, description: "Configurações básicas" },
     { id: "security", label: "Segurança", icon: Shield, description: "Políticas de segurança" },
     { id: "users", label: "Usuários", icon: Users, description: "Gestão de usuários" },
-    { id: "notifications", label: "Notificações", icon: Bell, description: "Alertas e notificações" },
+    {
+      id: "notifications",
+      label: "Notificações",
+      icon: Bell,
+      description: "Alertas e notificações",
+    },
     { id: "integrations", label: "Integrações", icon: Link2, description: "APIs e webhooks" },
     { id: "advanced", label: "Avançado", icon: Zap, description: "Recursos avançados" },
     { id: "monitoring", label: "Monitoramento", icon: Activity, description: "Métricas e logs" },
-    { id: "documentation", label: "Docs", icon: FileText, description: "Documentação" }
+    { id: "documentation", label: "Docs", icon: FileText, description: "Documentação" },
   ];
 
   return (
@@ -622,7 +630,8 @@ export const EnhancedSettingsHub: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Target className="w-4 h-4 text-green-600" />
                     <span className="text-sm font-medium">
-                      Saúde: <span className={getHealthColor(settingsHealth)}>{settingsHealth}%</span>
+                      Saúde:{" "}
+                      <span className={getHealthColor(settingsHealth)}>{settingsHealth}%</span>
                     </span>
                     <Badge className={getHealthBadge(settingsHealth).className}>
                       {getHealthBadge(settingsHealth).text}
@@ -632,7 +641,7 @@ export const EnhancedSettingsHub: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
               {/* Quick Search */}
               <div className="relative hidden md:block">
@@ -641,7 +650,7 @@ export const EnhancedSettingsHub: React.FC = () => {
                   type="text"
                   placeholder="Buscar configurações..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={e => setSearchQuery(e.target.value)}
                   className="pl-10 pr-4 py-2 border rounded-lg bg-background/80 backdrop-blur-sm min-w-[200px] focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -655,19 +664,28 @@ export const EnhancedSettingsHub: React.FC = () => {
                   </Badge>
                 )}
                 {previewMode && (
-                  <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                  <Badge
+                    variant="outline"
+                    className="bg-purple-50 text-purple-700 border-purple-200"
+                  >
                     <Eye className="w-3 h-3 mr-1" />
                     Prévia
                   </Badge>
                 )}
                 {testMode && (
-                  <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+                  <Badge
+                    variant="outline"
+                    className="bg-orange-50 text-orange-700 border-orange-200"
+                  >
                     <TestTube className="w-3 h-3 mr-1" />
                     Teste
                   </Badge>
                 )}
                 {hasChanges && (
-                  <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 animate-pulse">
+                  <Badge
+                    variant="outline"
+                    className="bg-yellow-50 text-yellow-700 border-yellow-200 animate-pulse"
+                  >
                     <Clock className="w-3 h-3 mr-1" />
                     {autoSave ? "Auto-salvando..." : "Alterações Pendentes"}
                   </Badge>
@@ -686,32 +704,32 @@ export const EnhancedSettingsHub: React.FC = () => {
                   <Zap className={`w-4 h-4 mr-2 ${autoSave ? "text-yellow-500" : ""}`} />
                   {autoSave ? "Auto-Save ON" : "Auto-Save OFF"}
                 </Button>
-                
+
                 <Button variant="outline" size="sm" onClick={togglePreviewMode}>
                   <Eye className="w-4 h-4 mr-2" />
                   {previewMode ? "Sair Prévia" : "Prévia"}
                 </Button>
-                
+
                 <Button variant="outline" size="sm" onClick={toggleTestMode}>
                   <TestTube className="w-4 h-4 mr-2" />
                   {testMode ? "Sair Teste" : "Modo Teste"}
                 </Button>
-                
+
                 <Button variant="outline" size="sm" onClick={shareSettings}>
                   <Share2 className="w-4 h-4 mr-2" />
                   Compartilhar
                 </Button>
-                
+
                 <Button variant="outline" size="sm" onClick={generateAIRecommendations}>
                   <Sparkles className="w-4 h-4 mr-2" />
                   IA Sugestões
                 </Button>
-                
+
                 <Button variant="outline" size="sm" onClick={exportSettings}>
                   <Download className="w-4 h-4 mr-2" />
                   Exportar
                 </Button>
-                
+
                 <div className="relative">
                   <input
                     type="file"
@@ -724,14 +742,14 @@ export const EnhancedSettingsHub: React.FC = () => {
                     Importar
                   </Button>
                 </div>
-                
+
                 <Button variant="outline" size="sm" onClick={resetToDefaults}>
                   <RotateCcw className="w-4 h-4 mr-2" />
                   Restaurar
                 </Button>
-                
-                <Button 
-                  onClick={saveSettings} 
+
+                <Button
+                  onClick={saveSettings}
                   disabled={!hasChanges || isSaving}
                   className="min-w-[140px] bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
                 >
@@ -750,7 +768,7 @@ export const EnhancedSettingsHub: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Additional Info Bar */}
           {(changeHistory.length > 0 || hasChanges) && (
             <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
@@ -765,9 +783,14 @@ export const EnhancedSettingsHub: React.FC = () => {
                   {hasChanges && (
                     <span className="text-amber-700 dark:text-amber-300">
                       <AlertTriangle className="w-4 h-4 inline mr-1" />
-                      {Object.keys(settings).filter(key => 
-                        JSON.stringify((settings as any)[key]) !== JSON.stringify(settings[key as keyof SettingsData])
-                      ).length} seções com alterações pendentes
+                      {
+                        Object.keys(settings).filter(
+                          key =>
+                            JSON.stringify((settings as any)[key]) !==
+                            JSON.stringify(settings[key as keyof SettingsData])
+                        ).length
+                      }{" "}
+                      seções com alterações pendentes
                     </span>
                   )}
                 </div>
@@ -788,31 +811,33 @@ export const EnhancedSettingsHub: React.FC = () => {
           {/* Enhanced Tab Navigation */}
           <div className="bg-card/50 backdrop-blur-sm rounded-xl border p-2">
             <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 h-auto p-1 bg-transparent">
-              {tabsData.map((tab) => {
+              {tabsData.map(tab => {
                 const Icon = tab.icon;
                 const isFavorite = favorites.includes(tab.id);
                 return (
-                  <TabsTrigger 
+                  <TabsTrigger
                     key={tab.id}
-                    value={tab.id} 
+                    value={tab.id}
                     className="flex flex-col items-center gap-2 py-4 px-2 relative group data-[state=active]:bg-primary/10 data-[state=active]:shadow-lg transition-all duration-200"
                   >
                     <div className="flex items-center gap-2">
                       <Icon className="w-5 h-5" />
                       <span className="text-xs font-medium hidden sm:block">{tab.label}</span>
                       <button
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           toggleFavorite(tab.id);
                         }}
                         className="opacity-0 group-hover:opacity-100 transition-opacity"
                       >
-                        <Bookmark 
-                          className={`w-3 h-3 ${isFavorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`} 
+                        <Bookmark
+                          className={`w-3 h-3 ${isFavorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`}
                         />
                       </button>
                     </div>
-                    <span className="text-xs text-muted-foreground hidden lg:block">{tab.description}</span>
+                    <span className="text-xs text-muted-foreground hidden lg:block">
+                      {tab.description}
+                    </span>
                     {hasChanges && (
                       <div className="absolute top-1 right-1 w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
                     )}
@@ -827,7 +852,7 @@ export const EnhancedSettingsHub: React.FC = () => {
             <Alert className="border-amber-200 bg-amber-50 dark:bg-amber-900/20">
               <AlertTriangle className="h-4 w-4 text-amber-600" />
               <AlertDescription className="text-amber-800 dark:text-amber-200">
-                <strong>Atenção:</strong> Sua configuração de segurança precisa de melhorias. 
+                <strong>Atenção:</strong> Sua configuração de segurança precisa de melhorias.
                 Considere ativar 2FA e revisar políticas de senha.
               </AlertDescription>
             </Alert>
@@ -837,24 +862,25 @@ export const EnhancedSettingsHub: React.FC = () => {
             <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-900/20">
               <Zap className="h-4 w-4 text-blue-600" />
               <AlertDescription className="text-blue-800 dark:text-blue-200">
-                <strong>Auto-save ativo:</strong> Suas alterações serão salvas automaticamente em alguns segundos.
+                <strong>Auto-save ativo:</strong> Suas alterações serão salvas automaticamente em
+                alguns segundos.
               </AlertDescription>
             </Alert>
           )}
 
           {/* Tab Content with Enhanced Features */}
           <TabsContent value="general" className="space-y-6">
-            <GeneralSettingsTab 
+            <GeneralSettingsTab
               settings={settings.general}
-              onUpdate={(updates) => updateSettings("general", updates)}
+              onUpdate={updates => updateSettings("general", updates)}
               testMode={testMode}
             />
           </TabsContent>
 
           <TabsContent value="security" className="space-y-6">
-            <SecurityAccessTab 
+            <SecurityAccessTab
               settings={settings.security}
-              onUpdate={(updates) => updateSettings("security", updates)}
+              onUpdate={updates => updateSettings("security", updates)}
               testMode={testMode}
             />
           </TabsContent>
@@ -864,33 +890,33 @@ export const EnhancedSettingsHub: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="notifications" className="space-y-6">
-            <NotificationsAlertsTab 
+            <NotificationsAlertsTab
               settings={settings.notifications}
-              onUpdate={(updates) => updateSettings("notifications", updates)}
+              onUpdate={updates => updateSettings("notifications", updates)}
               testMode={testMode}
             />
           </TabsContent>
 
           <TabsContent value="integrations" className="space-y-6">
-            <IntegrationsTab 
+            <IntegrationsTab
               settings={settings.integrations}
-              onUpdate={(updates) => updateSettings("integrations", updates)}
+              onUpdate={updates => updateSettings("integrations", updates)}
               testMode={testMode}
             />
           </TabsContent>
 
           <TabsContent value="advanced" className="space-y-6">
-            <AdvancedFeaturesTab 
+            <AdvancedFeaturesTab
               settings={settings.advanced}
-              onUpdate={(updates) => updateSettings("advanced", updates)}
+              onUpdate={updates => updateSettings("advanced", updates)}
               testMode={testMode}
             />
           </TabsContent>
 
           <TabsContent value="monitoring" className="space-y-6">
-            <SystemMonitoringTab 
+            <SystemMonitoringTab
               settings={settings.monitoring}
-              onUpdate={(updates) => updateSettings("monitoring", updates)}
+              onUpdate={updates => updateSettings("monitoring", updates)}
               testMode={testMode}
             />
           </TabsContent>

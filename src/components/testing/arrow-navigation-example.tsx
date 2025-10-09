@@ -23,7 +23,7 @@ export const ArrowNavigationExample: React.FC = () => {
   const { focusedIndex, getItemProps } = useArrowNavigation({
     isOpen: isMenuOpen,
     itemCount: menuItems.length,
-    onSelect: (index) => {
+    onSelect: index => {
       setSelectedItem(menuItems[index].label);
       setIsMenuOpen(false);
     },
@@ -48,17 +48,10 @@ export const ArrowNavigationExample: React.FC = () => {
           {/* Demo Menu */}
           <div className="space-y-4">
             <div className="flex items-center gap-4">
-              <Button 
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                variant="outline"
-              >
+              <Button onClick={() => setIsMenuOpen(!isMenuOpen)} variant="outline">
                 {isMenuOpen ? "Close Menu" : "Open Menu"}
               </Button>
-              {selectedItem && (
-                <Badge variant="default">
-                  Selected: {selectedItem}
-                </Badge>
-              )}
+              {selectedItem && <Badge variant="default">Selected: {selectedItem}</Badge>}
             </div>
 
             {isMenuOpen && (
@@ -76,10 +69,11 @@ export const ArrowNavigationExample: React.FC = () => {
                         className={`
                           w-full text-left px-4 py-3 rounded-md transition-colors
                           flex items-center gap-3
-                          ${focusedIndex === index 
-                        ? "bg-primary text-primary-foreground ring-2 ring-primary/50" 
-                        : "hover:bg-accent hover:text-accent-foreground"
-                      }
+                          ${
+                            focusedIndex === index
+                              ? "bg-primary text-primary-foreground ring-2 ring-primary/50"
+                              : "hover:bg-accent hover:text-accent-foreground"
+                          }
                           focus:outline-none
                         `}
                         role="menuitem"

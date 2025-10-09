@@ -4,11 +4,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  GraduationCap, 
-  Play, 
-  BookOpen, 
-  Users, 
+import {
+  GraduationCap,
+  Play,
+  BookOpen,
+  Users,
   Trophy,
   Clock,
   Star,
@@ -18,7 +18,7 @@ import {
   Video,
   Headphones,
   Monitor,
-  User
+  User,
 } from "lucide-react";
 
 interface Course {
@@ -54,7 +54,7 @@ export const NautilusAcademy: React.FC = () => {
       category: "basics",
       progress: 0,
       type: "video",
-      certificate: true
+      certificate: true,
     },
     {
       id: "2",
@@ -69,7 +69,7 @@ export const NautilusAcademy: React.FC = () => {
       category: "fleet",
       progress: 65,
       type: "interactive",
-      certificate: true
+      certificate: true,
     },
     {
       id: "3",
@@ -84,7 +84,7 @@ export const NautilusAcademy: React.FC = () => {
       category: "compliance",
       progress: 25,
       type: "text",
-      certificate: true
+      certificate: true,
     },
     {
       id: "4",
@@ -99,7 +99,7 @@ export const NautilusAcademy: React.FC = () => {
       category: "analytics",
       progress: 0,
       type: "video",
-      certificate: true
+      certificate: true,
     },
     {
       id: "5",
@@ -114,7 +114,7 @@ export const NautilusAcademy: React.FC = () => {
       category: "security",
       progress: 0,
       type: "live",
-      certificate: true
+      certificate: true,
     },
     {
       id: "6",
@@ -129,42 +129,59 @@ export const NautilusAcademy: React.FC = () => {
       category: "ai",
       progress: 0,
       type: "interactive",
-      certificate: true
-    }
+      certificate: true,
+    },
   ];
 
   const achievements = [
     { title: "Primeira Certificação", description: "Complete seu primeiro curso", earned: true },
-    { title: "Especialista em Frotas", description: "Complete 3 cursos de gestão de frotas", earned: true },
+    {
+      title: "Especialista em Frotas",
+      description: "Complete 3 cursos de gestão de frotas",
+      earned: true,
+    },
     { title: "Mentor da Comunidade", description: "Ajude 10 outros estudantes", earned: false },
-    { title: "Inovador Marítimo", description: "Complete curso avançado de IA", earned: false }
+    { title: "Inovador Marítimo", description: "Complete curso avançado de IA", earned: false },
   ];
 
   const getLevelColor = (level: string) => {
     switch (level) {
-    case "beginner": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "intermediate": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "advanced": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+      case "beginner":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      case "intermediate":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "advanced":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getLevelText = (level: string) => {
     switch (level) {
-    case "beginner": return "Iniciante";
-    case "intermediate": return "Intermediário";
-    case "advanced": return "Avançado";
-    default: return level;
+      case "beginner":
+        return "Iniciante";
+      case "intermediate":
+        return "Intermediário";
+      case "advanced":
+        return "Avançado";
+      default:
+        return level;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "video": return Video;
-    case "text": return FileText;
-    case "interactive": return Monitor;
-    case "live": return Headphones;
-    default: return BookOpen;
+      case "video":
+        return Video;
+      case "text":
+        return FileText;
+      case "interactive":
+        return Monitor;
+      case "live":
+        return Headphones;
+      default:
+        return BookOpen;
     }
   };
 
@@ -245,47 +262,49 @@ export const NautilusAcademy: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Cursos em Andamento</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {courses.filter(course => course.progress && course.progress > 0).map((course) => {
-                const TypeIcon = getTypeIcon(course.type);
-                return (
-                  <Card key={course.id}>
-                    <CardHeader className="space-y-3">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
-                          <TypeIcon className="w-5 h-5 text-primary" />
-                          <div>
-                            <CardTitle className="text-base">{course.title}</CardTitle>
-                            <p className="text-sm text-muted-foreground">{course.instructor}</p>
+              {courses
+                .filter(course => course.progress && course.progress > 0)
+                .map(course => {
+                  const TypeIcon = getTypeIcon(course.type);
+                  return (
+                    <Card key={course.id}>
+                      <CardHeader className="space-y-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center gap-3">
+                            <TypeIcon className="w-5 h-5 text-primary" />
+                            <div>
+                              <CardTitle className="text-base">{course.title}</CardTitle>
+                              <p className="text-sm text-muted-foreground">{course.instructor}</p>
+                            </div>
                           </div>
+                          <Badge className={getLevelColor(course.level)}>
+                            {getLevelText(course.level)}
+                          </Badge>
                         </div>
-                        <Badge className={getLevelColor(course.level)}>
-                          {getLevelText(course.level)}
-                        </Badge>
-                      </div>
-                    </CardHeader>
+                      </CardHeader>
 
-                    <CardContent className="space-y-4">
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>Progresso</span>
-                          <span>{course.progress}%</span>
+                      <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span>Progresso</span>
+                            <span>{course.progress}%</span>
+                          </div>
+                          <Progress value={course.progress} />
                         </div>
-                        <Progress value={course.progress} />
-                      </div>
 
-                      <div className="flex items-center justify-between text-sm text-muted-foreground">
-                        <span>{course.duration}</span>
-                        <span>{course.lessons} aulas</span>
-                      </div>
+                        <div className="flex items-center justify-between text-sm text-muted-foreground">
+                          <span>{course.duration}</span>
+                          <span>{course.lessons} aulas</span>
+                        </div>
 
-                      <Button className="w-full" size="sm">
-                        <Play className="w-4 h-4 mr-2" />
-                        Continuar
-                      </Button>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+                        <Button className="w-full" size="sm">
+                          <Play className="w-4 h-4 mr-2" />
+                          Continuar
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
             </div>
           </div>
         </TabsContent>
@@ -294,7 +313,7 @@ export const NautilusAcademy: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Todos os Cursos</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {courses.map((course) => {
+              {courses.map(course => {
                 const TypeIcon = getTypeIcon(course.type);
                 return (
                   <Card key={course.id} className="hover:shadow-lg transition-shadow">
@@ -311,7 +330,7 @@ export const NautilusAcademy: React.FC = () => {
                           {getLevelText(course.level)}
                         </Badge>
                       </div>
-                      
+
                       <p className="text-sm text-muted-foreground line-clamp-2">
                         {course.description}
                       </p>
@@ -358,7 +377,12 @@ export const NautilusAcademy: React.FC = () => {
             <h3 className="text-lg font-semibold">Suas Conquistas</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {achievements.map((achievement, index) => (
-                <Card key={index} className={achievement.earned ? "border-green-200 bg-green-50/50 dark:bg-green-900/10" : ""}>
+                <Card
+                  key={index}
+                  className={
+                    achievement.earned ? "border-green-200 bg-green-50/50 dark:bg-green-900/10" : ""
+                  }
+                >
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3">
                       {achievement.earned ? (
@@ -382,38 +406,49 @@ export const NautilusAcademy: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Seus Certificados</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {courses.filter(course => course.progress === 100 || course.id === "1").map((course) => (
-                <Card key={course.id} className="border-green-200 bg-green-50/50 dark:bg-green-900/10">
-                  <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <Award className="w-8 h-8 text-green-500" />
-                      <div>
-                        <CardTitle className="text-base">{course.title}</CardTitle>
-                        <p className="text-sm text-muted-foreground">Certificado de Conclusão</p>
+              {courses
+                .filter(course => course.progress === 100 || course.id === "1")
+                .map(course => (
+                  <Card
+                    key={course.id}
+                    className="border-green-200 bg-green-50/50 dark:bg-green-900/10"
+                  >
+                    <CardHeader>
+                      <div className="flex items-center gap-3">
+                        <Award className="w-8 h-8 text-green-500" />
+                        <div>
+                          <CardTitle className="text-base">{course.title}</CardTitle>
+                          <p className="text-sm text-muted-foreground">Certificado de Conclusão</p>
+                        </div>
                       </div>
-                    </div>
-                  </CardHeader>
+                    </CardHeader>
 
-                  <CardContent className="space-y-4">
-                    <div className="text-sm">
-                      <p><strong>Instrutor:</strong> {course.instructor}</p>
-                      <p><strong>Data de Conclusão:</strong> 15/01/2024</p>
-                      <p><strong>Validade:</strong> 2 anos</p>
-                    </div>
+                    <CardContent className="space-y-4">
+                      <div className="text-sm">
+                        <p>
+                          <strong>Instrutor:</strong> {course.instructor}
+                        </p>
+                        <p>
+                          <strong>Data de Conclusão:</strong> 15/01/2024
+                        </p>
+                        <p>
+                          <strong>Validade:</strong> 2 anos
+                        </p>
+                      </div>
 
-                    <div className="flex gap-2">
-                      <Button size="sm" className="flex-1">
-                        <FileText className="w-4 h-4 mr-2" />
-                        Download PDF
-                      </Button>
-                      <Button variant="outline" size="sm" className="flex-1">
-                        <User className="w-4 h-4 mr-2" />
-                        Verificar
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                      <div className="flex gap-2">
+                        <Button size="sm" className="flex-1">
+                          <FileText className="w-4 h-4 mr-2" />
+                          Download PDF
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex-1">
+                          <User className="w-4 h-4 mr-2" />
+                          Verificar
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
             </div>
           </div>
         </TabsContent>

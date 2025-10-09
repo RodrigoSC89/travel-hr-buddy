@@ -15,10 +15,10 @@ export default function Automation() {
         badges={[
           { icon: Workflow, label: "24 Workflows" },
           { icon: Bot, label: "Automação IA" },
-          { icon: TrendingUp, label: "89% Eficiência" }
+          { icon: TrendingUp, label: "89% Eficiência" },
         ]}
       />
       <AutomationHub />
     </ModulePageWrapper>
   );
-};
+}

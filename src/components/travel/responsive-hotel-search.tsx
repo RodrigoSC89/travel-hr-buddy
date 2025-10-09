@@ -37,10 +37,11 @@ export const ResponsiveHotelSearch: React.FC = () => {
       location: "Rio de Janeiro, RJ",
       rating: 4.8,
       price: 450,
-      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image:
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       amenities: ["WiFi", "Piscina", "Spa", "Restaurante"],
       distance: "200m da praia",
-      bookingUrl: "https://www.booking.com/hotel/br/copacabana-palace.html"
+      bookingUrl: "https://www.booking.com/hotel/br/copacabana-palace.html",
     },
     {
       id: "2",
@@ -48,10 +49,11 @@ export const ResponsiveHotelSearch: React.FC = () => {
       location: "São Paulo, SP",
       rating: 4.6,
       price: 320,
-      image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image:
+        "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       amenities: ["WiFi", "Academia", "Business Center"],
       distance: "5km do centro",
-      bookingUrl: "https://www.booking.com/hotel/br/unique-garden.html"
+      bookingUrl: "https://www.booking.com/hotel/br/unique-garden.html",
     },
     {
       id: "3",
@@ -59,11 +61,12 @@ export const ResponsiveHotelSearch: React.FC = () => {
       location: "Salvador, BA",
       rating: 4.4,
       price: 180,
-      image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image:
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       amenities: ["WiFi", "Café da manhã", "Vista para o mar"],
       distance: "100m do centro histórico",
-      bookingUrl: "https://www.booking.com/hotel/br/villa-bahia.html"
-    }
+      bookingUrl: "https://www.booking.com/hotel/br/villa-bahia.html",
+    },
   ]);
 
   const handleSearch = async () => {
@@ -77,7 +80,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
     }
 
     setIsLoading(true);
-    
+
     try {
       const { data, error } = await supabase.functions.invoke("amadeus-search", {
         body: {
@@ -86,14 +89,14 @@ export const ResponsiveHotelSearch: React.FC = () => {
           checkIn: checkin,
           checkOut: checkout,
           adults: parseInt(guests),
-        }
+        },
       });
 
       if (error) {
         console.error("Amadeus hotel search error:", error);
         throw error;
       }
-      
+
       if (data.success && data.data?.data) {
         // Transform Amadeus hotel data to our format
         const transformedHotels = data.data.data.map((offer: any, index: number) => ({
@@ -102,7 +105,8 @@ export const ResponsiveHotelSearch: React.FC = () => {
           location: offer.hotel?.address?.cityName || destination,
           rating: Math.random() * 1 + 4, // Amadeus doesn't always provide ratings
           price: Math.round(parseFloat(offer.offers?.[0]?.price?.total || "200")),
-          image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+          image:
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
           amenities: ["WiFi", "Café da manhã"],
           distance: offer.hotel?.address?.lines?.[0] || "Centro da cidade",
           bookingUrl: `https://www.amadeus.com/hotel/${offer.hotel?.hotelId}`,
@@ -139,7 +143,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
       title: "Reserva iniciada",
       description: `Processando reserva no ${hotel.name}`,
     });
-    
+
     setTimeout(() => {
       setSelectedHotel(null);
       toast({
@@ -156,7 +160,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
     const checkinFormatted = searchParams.checkin;
     const checkoutFormatted = searchParams.checkout;
     const guests = searchParams.guests;
-    
+
     // URL específica do Booking.com com parâmetros do hotel
     return `https://www.booking.com/hotel/br/${hotelId.toLowerCase()}.html?checkin=${checkinFormatted}&checkout=${checkoutFormatted}&group_adults=${guests}&group_children=0&selected_currency=BRL&changed_currency=1&top_ufis=1`;
   };
@@ -167,7 +171,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
     const checkinFormatted = searchParams.checkin;
     const checkoutFormatted = searchParams.checkout;
     const guests = searchParams.guests;
-    
+
     // Gerar URLs específicas baseadas no nome do hotel
     if (hotel.name.includes("Copacabana")) {
       return `https://www.booking.com/hotel/br/copacabana-palace.html?checkin=${checkinFormatted}&checkout=${checkoutFormatted}&group_adults=${guests}&group_children=0&selected_currency=BRL`;
@@ -176,26 +180,26 @@ export const ResponsiveHotelSearch: React.FC = () => {
     } else if (hotel.name.includes("Villa Bahia")) {
       return `https://www.booking.com/hotel/br/villa-bahia.html?checkin=${checkinFormatted}&checkout=${checkoutFormatted}&group_adults=${guests}&group_children=0&selected_currency=BRL`;
     }
-    
+
     return `https://www.booking.com/searchresults.html?ss=${cityName}&checkin=${checkinFormatted}&checkout=${checkoutFormatted}&group_adults=${guests}&group_children=0&selected_currency=BRL&order=popularity`;
   };
 
   const getAmenityIcon = (amenity: string) => {
     switch (amenity.toLowerCase()) {
-    case "wifi":
-      return <Wifi className="h-4 w-4" />;
-    case "piscina":
-      return <span className="text-blue-500">🏊</span>;
-    case "spa":
-      return <span className="text-purple-500">💆</span>;
-    case "restaurante":
-      return <Utensils className="h-4 w-4" />;
-    case "academia":
-      return <span className="text-green-500">🏋️</span>;
-    case "estacionamento":
-      return <Car className="h-4 w-4" />;
-    default:
-      return <Plus className="h-4 w-4" />;
+      case "wifi":
+        return <Wifi className="h-4 w-4" />;
+      case "piscina":
+        return <span className="text-blue-500">🏊</span>;
+      case "spa":
+        return <span className="text-purple-500">💆</span>;
+      case "restaurante":
+        return <Utensils className="h-4 w-4" />;
+      case "academia":
+        return <span className="text-green-500">🏋️</span>;
+      case "estacionamento":
+        return <Car className="h-4 w-4" />;
+      default:
+        return <Plus className="h-4 w-4" />;
     }
   };
 
@@ -216,9 +220,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
       <Card>
         <CardHeader className="pb-4">
           <CardTitle className="text-lg sm:text-xl">Encontre seu hotel ideal</CardTitle>
-          <CardDescription>
-            Preencha os dados abaixo para buscar hospedagens
-          </CardDescription>
+          <CardDescription>Preencha os dados abaixo para buscar hospedagens</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -229,7 +231,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
                 <Input
                   placeholder="Cidade ou hotel"
                   value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
+                  onChange={e => setDestination(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -242,7 +244,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
                 <Input
                   type="date"
                   value={checkin}
-                  onChange={(e) => setCheckin(e.target.value)}
+                  onChange={e => setCheckin(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -255,7 +257,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
                 <Input
                   type="date"
                   value={checkout}
-                  onChange={(e) => setCheckout(e.target.value)}
+                  onChange={e => setCheckout(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -268,16 +270,12 @@ export const ResponsiveHotelSearch: React.FC = () => {
                 min="1"
                 max="10"
                 value={guests}
-                onChange={(e) => setGuests(e.target.value)}
+                onChange={e => setGuests(e.target.value)}
               />
             </div>
           </div>
 
-          <Button 
-            onClick={handleSearch} 
-            className="w-full mt-6 hover-scale"
-            size="lg"
-          >
+          <Button onClick={handleSearch} className="w-full mt-6 hover-scale" size="lg">
             <Search className="mr-2 h-4 w-4" />
             Buscar Hotéis
           </Button>
@@ -289,15 +287,15 @@ export const ResponsiveHotelSearch: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           <div>
             <h2 className="text-xl sm:text-2xl font-semibold mb-4">Hotéis Disponíveis</h2>
-            
+
             <div className="grid gap-4 sm:gap-6">
-              {hotels.map((hotel) => (
+              {hotels.map(hotel => (
                 <Card key={hotel.id} className="overflow-hidden hover-scale transition-all">
                   <div className="flex flex-col lg:flex-row">
                     {/* Hotel Image */}
                     <div className="lg:w-1/3">
-                      <img 
-                        src={hotel.image} 
+                      <img
+                        src={hotel.image}
                         alt={hotel.name}
                         className="w-full h-48 lg:h-full object-cover"
                       />
@@ -313,9 +311,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
                               <MapPin className="h-4 w-4 mr-1" />
                               {hotel.location}
                             </p>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {hotel.distance}
-                            </p>
+                            <p className="text-sm text-muted-foreground mt-1">{hotel.distance}</p>
                           </div>
 
                           <div className="text-right">
@@ -323,9 +319,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
                               <Star className="h-4 w-4 text-yellow-500 mr-1" />
                               <span className="font-medium">{hotel.rating}</span>
                             </div>
-                            <div className="text-2xl font-bold font-display">
-                          R$ {hotel.price}
-                            </div>
+                            <div className="text-2xl font-bold font-display">R$ {hotel.price}</div>
                             <p className="text-sm text-muted-foreground">por noite</p>
                           </div>
                         </div>
@@ -333,7 +327,11 @@ export const ResponsiveHotelSearch: React.FC = () => {
                         {/* Amenities */}
                         <div className="flex flex-wrap gap-2">
                           {hotel.amenities.map((amenity, index) => (
-                            <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                            <Badge
+                              key={index}
+                              variant="secondary"
+                              className="flex items-center gap-1"
+                            >
                               {getAmenityIcon(amenity)}
                               <span className="text-xs">{amenity}</span>
                             </Badge>
@@ -341,12 +339,20 @@ export const ResponsiveHotelSearch: React.FC = () => {
                         </div>
 
                         {/* Action Button */}
-                        <Button 
-                          onClick={() => hotel.bookingUrl ? window.open(hotel.bookingUrl, "_blank") : handleBooking(hotel)}
+                        <Button
+                          onClick={() =>
+                            hotel.bookingUrl
+                              ? window.open(hotel.bookingUrl, "_blank")
+                              : handleBooking(hotel)
+                          }
                           disabled={selectedHotel === hotel.id}
                           className="w-full sm:w-auto hover-scale"
                         >
-                          {hotel.bookingUrl ? "Reservar Hotel" : (selectedHotel === hotel.id ? "Processando..." : "Reservar Agora")}
+                          {hotel.bookingUrl
+                            ? "Reservar Hotel"
+                            : selectedHotel === hotel.id
+                              ? "Processando..."
+                              : "Reservar Agora"}
                         </Button>
                       </div>
                     </div>
@@ -363,16 +369,19 @@ export const ResponsiveHotelSearch: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="space-y-6">
           <Card className="p-4">
             <h3 className="text-lg font-semibold mb-4">Localização dos Hotéis</h3>
-            <TravelMap 
+            <TravelMap
               locations={hotels.map(hotel => ({
                 id: hotel.id,
                 name: hotel.name,
-                coordinates: [-43.2096 + Math.random() * 0.1, -22.9035 + Math.random() * 0.1] as [number, number],
-                type: "hotel" as const
+                coordinates: [-43.2096 + Math.random() * 0.1, -22.9035 + Math.random() * 0.1] as [
+                  number,
+                  number,
+                ],
+                type: "hotel" as const,
               }))}
               className="h-96"
             />

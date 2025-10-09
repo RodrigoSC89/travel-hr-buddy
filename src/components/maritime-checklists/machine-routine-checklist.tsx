@@ -6,15 +6,21 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Settings, 
-  Cog, 
-  Wrench, 
-  Gauge, 
+import {
+  Settings,
+  Cog,
+  Wrench,
+  Gauge,
   Thermometer,
   Fuel,
   Activity,
@@ -38,7 +44,7 @@ import {
   Droplets,
   Battery,
   Radio,
-  Shield
+  Shield,
 } from "lucide-react";
 import type { Checklist, ChecklistItem } from "./checklist-types";
 
@@ -55,7 +61,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
   onSave,
   onSubmit,
   onBack,
-  readOnly = false
+  readOnly = false,
 }) => {
   const { toast } = useToast();
   const [checklist, setChecklist] = useState<Checklist>(initialChecklist);
@@ -69,50 +75,50 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       id: "main_engine",
       title: "Motor Principal",
       icon: <Cog className="w-5 h-5" />,
-      description: "Verificações do motor principal e sistemas relacionados"
+      description: "Verificações do motor principal e sistemas relacionados",
     },
     {
       id: "auxiliary_engines",
       title: "Motores Auxiliares",
       icon: <Settings className="w-5 h-5" />,
-      description: "Verificação dos geradores e motores auxiliares"
+      description: "Verificação dos geradores e motores auxiliares",
     },
     {
       id: "fuel_systems",
       title: "Sistema de Combustível",
       icon: <Fuel className="w-5 h-5" />,
-      description: "Verificação do sistema de combustível e tanques"
+      description: "Verificação do sistema de combustível e tanques",
     },
     {
       id: "lubrication",
       title: "Sistema de Lubrificação",
       icon: <Droplets className="w-5 h-5" />,
-      description: "Verificação do sistema de óleo lubrificante"
+      description: "Verificação do sistema de óleo lubrificante",
     },
     {
       id: "cooling_system",
       title: "Sistema de Resfriamento",
       icon: <Thermometer className="w-5 h-5" />,
-      description: "Verificação do sistema de água de resfriamento"
+      description: "Verificação do sistema de água de resfriamento",
     },
     {
       id: "electrical",
       title: "Sistema Elétrico",
       icon: <Battery className="w-5 h-5" />,
-      description: "Verificação dos sistemas elétricos e baterias"
+      description: "Verificação dos sistemas elétricos e baterias",
     },
     {
       id: "hydraulic",
       title: "Sistema Hidráulico",
       icon: <Gauge className="w-5 h-5" />,
-      description: "Verificação do sistema hidráulico"
+      description: "Verificação do sistema hidráulico",
     },
     {
       id: "safety_systems",
       title: "Sistemas de Segurança",
       icon: <Shield className="w-5 h-5" />,
-      description: "Verificação dos sistemas de segurança da praça de máquinas"
-    }
+      description: "Verificação dos sistemas de segurança da praça de máquinas",
+    },
   ];
 
   useEffect(() => {
@@ -120,7 +126,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
     if (checklist.items.length === 0) {
       setChecklist(prev => ({
         ...prev,
-        items: getMachineRoutineItems()
+        items: getMachineRoutineItems(),
       }));
     }
   }, []);
@@ -157,9 +163,9 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
             type: "range",
             value: { min: 70, max: 85 },
             message: "Temperatura fora do range operacional normal",
-            severity: "warning"
-          }
-        ]
+            severity: "warning",
+          },
+        ],
       },
       {
         id: "me_002",
@@ -173,7 +179,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         unit: "bar",
         minValue: 3.5,
         maxValue: 6.0,
-        iotSensorId: "PRESS_OIL_ME_001"
+        iotSensorId: "PRESS_OIL_ME_001",
       },
       {
         id: "me_003",
@@ -185,7 +191,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         order: 3,
         status: "pending",
         unit: "RPM",
-        iotSensorId: "RPM_MAIN_ENGINE_001"
+        iotSensorId: "RPM_MAIN_ENGINE_001",
       },
       {
         id: "me_004",
@@ -196,7 +202,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         category: "main_engine",
         order: 4,
         status: "pending",
-        options: ["Normal", "Ligeiramente Elevada", "Elevada", "Crítica"]
+        options: ["Normal", "Ligeiramente Elevada", "Elevada", "Crítica"],
       },
       {
         id: "me_005",
@@ -206,7 +212,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         required: true,
         category: "main_engine",
         order: 5,
-        status: "pending"
+        status: "pending",
       },
 
       // Auxiliary Engines
@@ -219,7 +225,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         category: "auxiliary_engines",
         order: 1,
         status: "pending",
-        options: ["Operacional", "Standby", "Manutenção", "Falha"]
+        options: ["Operacional", "Standby", "Manutenção", "Falha"],
       },
       {
         id: "aux_002",
@@ -233,7 +239,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         unit: "V",
         minValue: 380,
         maxValue: 420,
-        iotSensorId: "VOLT_GEN1_001"
+        iotSensorId: "VOLT_GEN1_001",
       },
       {
         id: "aux_003",
@@ -247,7 +253,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         unit: "Hz",
         minValue: 58,
         maxValue: 62,
-        iotSensorId: "FREQ_GEN1_001"
+        iotSensorId: "FREQ_GEN1_001",
       },
       {
         id: "aux_004",
@@ -258,7 +264,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         category: "auxiliary_engines",
         order: 4,
         status: "pending",
-        options: ["Operacional", "Standby", "Manutenção", "Falha"]
+        options: ["Operacional", "Standby", "Manutenção", "Falha"],
       },
 
       // Fuel Systems
@@ -274,7 +280,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         unit: "%",
         minValue: 0,
         maxValue: 100,
-        iotSensorId: "LEVEL_FUEL_MAIN_001"
+        iotSensorId: "LEVEL_FUEL_MAIN_001",
       },
       {
         id: "fuel_002",
@@ -288,7 +294,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         unit: "bar",
         minValue: 2.0,
         maxValue: 8.0,
-        iotSensorId: "PRESS_FUEL_001"
+        iotSensorId: "PRESS_FUEL_001",
       },
       {
         id: "fuel_003",
@@ -299,7 +305,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         category: "fuel_systems",
         order: 3,
         status: "pending",
-        options: ["Limpo", "Sujo", "Precisa Troca", "Trocado"]
+        options: ["Limpo", "Sujo", "Precisa Troca", "Trocado"],
       },
       {
         id: "fuel_004",
@@ -309,7 +315,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         required: true,
         category: "fuel_systems",
         order: 4,
-        status: "pending"
+        status: "pending",
       },
 
       // Lubrication
@@ -322,7 +328,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         category: "lubrication",
         order: 1,
         status: "pending",
-        options: ["Mínimo", "Normal", "Máximo", "Acima do Máximo"]
+        options: ["Mínimo", "Normal", "Máximo", "Acima do Máximo"],
       },
       {
         id: "lub_002",
@@ -336,7 +342,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         unit: "°C",
         minValue: 60,
         maxValue: 90,
-        iotSensorId: "TEMP_OIL_001"
+        iotSensorId: "TEMP_OIL_001",
       },
       {
         id: "lub_003",
@@ -347,7 +353,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         category: "lubrication",
         order: 3,
         status: "pending",
-        options: ["Novo", "Bom", "Regular", "Precisa Troca"]
+        options: ["Novo", "Bom", "Regular", "Precisa Troca"],
       },
 
       // Cooling System
@@ -360,7 +366,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         category: "cooling_system",
         order: 1,
         status: "pending",
-        options: ["Baixo", "Normal", "Alto"]
+        options: ["Baixo", "Normal", "Alto"],
       },
       {
         id: "cool_002",
@@ -370,7 +376,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         required: true,
         category: "cooling_system",
         order: 2,
-        status: "pending"
+        status: "pending",
       },
       {
         id: "cool_003",
@@ -381,7 +387,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         category: "cooling_system",
         order: 3,
         status: "pending",
-        options: ["Limpo", "Sujo", "Obstruído", "Manutenção Necessária"]
+        options: ["Limpo", "Sujo", "Obstruído", "Manutenção Necessária"],
       },
 
       // Electrical
@@ -397,7 +403,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         unit: "V",
         minValue: 22,
         maxValue: 28,
-        iotSensorId: "VOLT_BATTERY_MAIN_001"
+        iotSensorId: "VOLT_BATTERY_MAIN_001",
       },
       {
         id: "elec_002",
@@ -407,7 +413,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         required: true,
         category: "electrical",
         order: 2,
-        status: "pending"
+        status: "pending",
       },
       {
         id: "elec_003",
@@ -417,7 +423,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         required: true,
         category: "electrical",
         order: 3,
-        status: "pending"
+        status: "pending",
       },
 
       // Hydraulic
@@ -433,7 +439,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         unit: "bar",
         minValue: 150,
         maxValue: 200,
-        iotSensorId: "PRESS_HYD_001"
+        iotSensorId: "PRESS_HYD_001",
       },
       {
         id: "hyd_002",
@@ -444,7 +450,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         category: "hydraulic",
         order: 2,
         status: "pending",
-        options: ["Baixo", "Normal", "Alto"]
+        options: ["Baixo", "Normal", "Alto"],
       },
       {
         id: "hyd_003",
@@ -454,7 +460,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         required: true,
         category: "hydraulic",
         order: 3,
-        status: "pending"
+        status: "pending",
       },
 
       // Safety Systems
@@ -466,7 +472,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         required: true,
         category: "safety_systems",
         order: 1,
-        status: "pending"
+        status: "pending",
       },
       {
         id: "safe_002",
@@ -476,7 +482,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         required: true,
         category: "safety_systems",
         order: 2,
-        status: "pending"
+        status: "pending",
       },
       {
         id: "safe_003",
@@ -486,7 +492,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         required: true,
         category: "safety_systems",
         order: 3,
-        status: "pending"
+        status: "pending",
       },
       {
         id: "safe_004",
@@ -496,8 +502,8 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         required: true,
         category: "safety_systems",
         order: 4,
-        status: "pending"
-      }
+        status: "pending",
+      },
     ];
   };
 
@@ -510,16 +516,16 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
 
   const getCompletionProgress = () => {
     const totalItems = checklist.items.length;
-    const completedItems = checklist.items.filter(item => 
-      item.status === "completed" || item.status === "failed" || item.status === "na"
+    const completedItems = checklist.items.filter(
+      item => item.status === "completed" || item.status === "failed" || item.status === "na"
     ).length;
     return totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
   };
 
   const getSectionProgress = (sectionId: string) => {
     const sectionItems = checklist.items.filter(item => item.category === sectionId);
-    const completedItems = sectionItems.filter(item => 
-      item.status === "completed" || item.status === "failed" || item.status === "na"
+    const completedItems = sectionItems.filter(
+      item => item.status === "completed" || item.status === "failed" || item.status === "na"
     ).length;
     return sectionItems.length > 0 ? (completedItems / sectionItems.length) * 100 : 0;
   };
@@ -527,18 +533,19 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
   const handleItemValueChange = (itemId: string, value: any) => {
     setChecklist(prev => ({
       ...prev,
-      items: prev.items.map(item => 
-        item.id === itemId 
-          ? { 
-            ...item, 
-            value, 
-            timestamp: new Date().toISOString(),
-            inspector: checklist.inspector.name,
-            status: value !== undefined && value !== null && value !== "" ? "completed" : "pending"
-          } 
+      items: prev.items.map(item =>
+        item.id === itemId
+          ? {
+              ...item,
+              value,
+              timestamp: new Date().toISOString(),
+              inspector: checklist.inspector.name,
+              status:
+                value !== undefined && value !== null && value !== "" ? "completed" : "pending",
+            }
           : item
       ),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     }));
   };
 
@@ -571,7 +578,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
             </p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {!readOnly && (
             <>
@@ -597,7 +604,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
               <span className="text-2xl font-bold text-primary">{Math.round(progress)}%</span>
             </div>
             <Progress value={progress} className="h-3" />
-            
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
                 <p className="text-muted-foreground">Total de Itens</p>
@@ -648,11 +655,9 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                   className="h-auto p-3 flex flex-col items-center gap-1"
                 >
                   {section.icon}
-                  <span className="text-xs text-center leading-tight">
-                    {section.title}
-                  </span>
+                  <span className="text-xs text-center leading-tight">{section.title}</span>
                   <div className="w-full bg-muted rounded-full h-1 mt-1">
-                    <div 
+                    <div
                       className="bg-primary h-1 rounded-full transition-all duration-300"
                       style={{ width: `${sectionProgress}%` }}
                     />
@@ -676,14 +681,16 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {getCurrentSectionItems().map((item) => (
+          {getCurrentSectionItems().map(item => (
             <div key={item.id} className="space-y-4 p-4 border rounded-lg">
               <div className="flex items-start justify-between">
                 <div className="flex-1 space-y-2">
                   <div className="flex items-center gap-2">
                     <h4 className="font-semibold">{item.title}</h4>
                     {item.required && (
-                      <Badge variant="destructive" className="text-xs">Obrigatório</Badge>
+                      <Badge variant="destructive" className="text-xs">
+                        Obrigatório
+                      </Badge>
                     )}
                     {item.iotSensorId && (
                       <Button variant="outline" size="sm">
@@ -695,7 +702,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                   {item.description && (
                     <p className="text-sm text-muted-foreground">{item.description}</p>
                   )}
-                  
+
                   <div className="space-y-3">
                     {/* Render different input types based on item.type */}
                     {item.type === "measurement" && (
@@ -703,7 +710,9 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                         <Input
                           type="number"
                           value={item.value || ""}
-                          onChange={(e) => handleItemValueChange(item.id, parseFloat(e.target.value) || 0)}
+                          onChange={e =>
+                            handleItemValueChange(item.id, parseFloat(e.target.value) || 0)
+                          }
                           placeholder={`Valor${item.unit ? ` (${item.unit})` : ""}`}
                           disabled={readOnly}
                           min={item.minValue}
@@ -722,7 +731,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                               // TODO: Fetch IoT sensor data
                               toast({
                                 title: "Dados do sensor",
-                                description: "Dados atualizados do sensor IoT"
+                                description: "Dados atualizados do sensor IoT",
                               });
                             }}
                             disabled={readOnly}
@@ -737,26 +746,24 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                       <div className="flex items-center space-x-2">
                         <Switch
                           checked={item.value === true}
-                          onCheckedChange={(checked) => handleItemValueChange(item.id, checked)}
+                          onCheckedChange={checked => handleItemValueChange(item.id, checked)}
                           disabled={readOnly}
                         />
-                        <Label>
-                          {item.value === true ? "Conforme" : "Não conforme"}
-                        </Label>
+                        <Label>{item.value === true ? "Conforme" : "Não conforme"}</Label>
                       </div>
                     )}
 
                     {item.type === "select" && (
                       <Select
                         value={item.value || ""}
-                        onValueChange={(value) => handleItemValueChange(item.id, value)}
+                        onValueChange={value => handleItemValueChange(item.id, value)}
                         disabled={readOnly}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione uma opção" />
                         </SelectTrigger>
                         <SelectContent>
-                          {item.options?.map((option) => (
+                          {item.options?.map(option => (
                             <SelectItem key={option} value={option}>
                               {option}
                             </SelectItem>

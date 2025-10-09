@@ -6,7 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -35,7 +41,7 @@ import {
   Globe,
   Users,
   Tag,
-  Edit3
+  Edit3,
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -102,7 +108,7 @@ export const TravelDocumentManager = () => {
         sharedWith: [],
         visibility: "private",
         url: "/documents/passport.pdf",
-        uploadedBy: "João Silva"
+        uploadedBy: "João Silva",
       },
       {
         id: "2",
@@ -121,7 +127,7 @@ export const TravelDocumentManager = () => {
         relatedTrip: "Viagem Rio - Fev 2024",
         url: "/documents/ticket-rio.pdf",
         uploadedBy: "João Silva",
-        description: "Passagem aérea de ida e volta para reunião no Rio de Janeiro"
+        description: "Passagem aérea de ida e volta para reunião no Rio de Janeiro",
       },
       {
         id: "3",
@@ -139,7 +145,7 @@ export const TravelDocumentManager = () => {
         visibility: "team",
         relatedTrip: "Viagem Rio - Fev 2024",
         url: "/documents/hotel-voucher.pdf",
-        uploadedBy: "Maria Santos"
+        uploadedBy: "Maria Santos",
       },
       {
         id: "4",
@@ -157,7 +163,7 @@ export const TravelDocumentManager = () => {
         sharedWith: [],
         visibility: "private",
         url: "/documents/travel-insurance.pdf",
-        uploadedBy: "João Silva"
+        uploadedBy: "João Silva",
       },
       {
         id: "5",
@@ -175,8 +181,8 @@ export const TravelDocumentManager = () => {
         visibility: "private",
         url: "/documents/taxi-receipt.jpg",
         thumbnailUrl: "/thumbnails/taxi-receipt-thumb.jpg",
-        uploadedBy: "Pedro Costa"
-      }
+        uploadedBy: "Pedro Costa",
+      },
     ];
     setDocuments(mockDocuments);
   });
@@ -187,29 +193,29 @@ export const TravelDocumentManager = () => {
       name: "Documentos Pessoais",
       documentsCount: documents.filter(d => d.category === "personal").length,
       color: "bg-blue-100 text-blue-700",
-      icon: <FileText className="h-5 w-5" />
+      icon: <FileText className="h-5 w-5" />,
     },
     {
       id: "booking",
       name: "Reservas",
       documentsCount: documents.filter(d => d.category === "booking").length,
       color: "bg-green-100 text-green-700",
-      icon: <Plane className="h-5 w-5" />
+      icon: <Plane className="h-5 w-5" />,
     },
     {
       id: "financial",
       name: "Financeiro",
       documentsCount: documents.filter(d => d.category === "financial").length,
       color: "bg-yellow-100 text-yellow-700",
-      icon: <CreditCard className="h-5 w-5" />
+      icon: <CreditCard className="h-5 w-5" />,
     },
     {
       id: "legal",
       name: "Documentos Legais",
       documentsCount: documents.filter(d => d.category === "legal").length,
       color: "bg-purple-100 text-purple-700",
-      icon: <Lock className="h-5 w-5" />
-    }
+      icon: <Lock className="h-5 w-5" />,
+    },
   ];
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -225,7 +231,7 @@ export const TravelDocumentManager = () => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsUploading(false);
-          
+
           // Add mock document
           const newDoc: TravelDocument = {
             id: Date.now().toString(),
@@ -242,15 +248,15 @@ export const TravelDocumentManager = () => {
             sharedWith: [],
             visibility: "private",
             url: URL.createObjectURL(files[0]),
-            uploadedBy: "Usuário Atual"
+            uploadedBy: "Usuário Atual",
           };
-          
+
           setDocuments(prev => [...prev, newDoc]);
           toast({
             title: "Documento enviado",
-            description: `${files[0].name} foi enviado com sucesso.`
+            description: `${files[0].name} foi enviado com sucesso.`,
           });
-          
+
           return 100;
         }
         return prev + 10;
@@ -259,53 +265,68 @@ export const TravelDocumentManager = () => {
   };
 
   const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         doc.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesSearch =
+      doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doc.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || doc.category === selectedCategory;
     const matchesStatus = selectedStatus === "all" || doc.status === selectedStatus;
-    
+
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "valid": return <CheckCircle className="h-4 w-4 text-green-500" />;
-    case "expiring": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    case "expired": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    case "pending": return <Clock className="h-4 w-4 text-blue-500" />;
-    default: return <FileText className="h-4 w-4" />;
+      case "valid":
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case "expiring":
+        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      case "expired":
+        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case "pending":
+        return <Clock className="h-4 w-4 text-blue-500" />;
+      default:
+        return <FileText className="h-4 w-4" />;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "passport": return <FileText className="h-5 w-5" />;
-    case "visa": return <FileText className="h-5 w-5" />;
-    case "ticket": return <Plane className="h-5 w-5" />;
-    case "hotel": return <Hotel className="h-5 w-5" />;
-    case "insurance": return <Lock className="h-5 w-5" />;
-    case "receipt": return <CreditCard className="h-5 w-5" />;
-    default: return <File className="h-5 w-5" />;
+      case "passport":
+        return <FileText className="h-5 w-5" />;
+      case "visa":
+        return <FileText className="h-5 w-5" />;
+      case "ticket":
+        return <Plane className="h-5 w-5" />;
+      case "hotel":
+        return <Hotel className="h-5 w-5" />;
+      case "insurance":
+        return <Lock className="h-5 w-5" />;
+      case "receipt":
+        return <CreditCard className="h-5 w-5" />;
+      default:
+        return <File className="h-5 w-5" />;
     }
   };
 
   const getFileIcon = (fileType: string) => {
     switch (fileType.toLowerCase()) {
-    case "pdf": return <FileText className="h-8 w-8 text-red-500" />;
-    case "jpg":
-    case "jpeg":
-    case "png": return <FileImage className="h-8 w-8 text-blue-500" />;
-    case "mp4":
-    case "avi": return <FileVideo className="h-8 w-8 text-purple-500" />;
-    default: return <File className="h-8 w-8 text-muted-foreground" />;
+      case "pdf":
+        return <FileText className="h-8 w-8 text-red-500" />;
+      case "jpg":
+      case "jpeg":
+      case "png":
+        return <FileImage className="h-8 w-8 text-blue-500" />;
+      case "mp4":
+      case "avi":
+        return <FileVideo className="h-8 w-8 text-purple-500" />;
+      default:
+        return <File className="h-8 w-8 text-muted-foreground" />;
     }
   };
 
   const toggleStar = (id: string) => {
-    setDocuments(prev => 
-      prev.map(doc => 
-        doc.id === id ? { ...doc, isStarred: !doc.isStarred } : doc
-      )
+    setDocuments(prev =>
+      prev.map(doc => (doc.id === id ? { ...doc, isStarred: !doc.isStarred } : doc))
     );
   };
 
@@ -313,13 +334,13 @@ export const TravelDocumentManager = () => {
     setDocuments(prev => prev.filter(doc => doc.id !== id));
     toast({
       title: "Documento removido",
-      description: "O documento foi removido com sucesso."
+      description: "O documento foi removido com sucesso.",
     });
   };
 
   const renderDocumentGrid = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {filteredDocuments.map((doc) => (
+      {filteredDocuments.map(doc => (
         <Card key={doc.id} className="hover:shadow-lg transition-shadow cursor-pointer group">
           <CardContent className="p-4">
             <div className="flex items-start justify-between mb-3">
@@ -334,20 +355,22 @@ export const TravelDocumentManager = () => {
                 <Button
                   size="sm"
                   variant="ghost"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     toggleStar(doc.id);
                   }}
                 >
-                  <Star className={cn(
-                    "h-4 w-4",
-                    doc.isStarred ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
-                  )} />
+                  <Star
+                    className={cn(
+                      "h-4 w-4",
+                      doc.isStarred ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
+                    )}
+                  />
                 </Button>
                 <Button
                   size="sm"
                   variant="ghost"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     setSelectedDocument(doc);
                   }}
@@ -357,7 +380,7 @@ export const TravelDocumentManager = () => {
                 <Button
                   size="sm"
                   variant="ghost"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     deleteDocument(doc.id);
                   }}
@@ -366,24 +389,24 @@ export const TravelDocumentManager = () => {
                 </Button>
               </div>
             </div>
-            
+
             <h4 className="font-medium text-sm mb-2 truncate">{doc.name}</h4>
-            
+
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span>{doc.fileType}</span>
                 <span>{doc.fileSize.toFixed(1)} MB</span>
               </div>
-              
+
               {doc.expiryDate && (
                 <div className="flex items-center gap-1 text-xs">
                   <Calendar className="h-3 w-3" />
                   <span>Expira em {format(doc.expiryDate, "dd/MM/yyyy", { locale: ptBR })}</span>
                 </div>
               )}
-              
+
               <div className="flex flex-wrap gap-1">
-                {doc.tags.slice(0, 2).map((tag) => (
+                {doc.tags.slice(0, 2).map(tag => (
                   <Badge key={tag} variant="secondary" className="text-xs">
                     {tag}
                   </Badge>
@@ -403,7 +426,7 @@ export const TravelDocumentManager = () => {
 
   const renderDocumentList = () => (
     <div className="space-y-2">
-      {filteredDocuments.map((doc) => (
+      {filteredDocuments.map(doc => (
         <Card key={doc.id} className="hover:shadow-md transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-4">
@@ -417,11 +440,15 @@ export const TravelDocumentManager = () => {
                     {doc.isShared && <Share2 className="h-4 w-4 text-muted-foreground" />}
                   </div>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span>{doc.fileType} • {doc.fileSize.toFixed(1)} MB</span>
+                    <span>
+                      {doc.fileType} • {doc.fileSize.toFixed(1)} MB
+                    </span>
                     <span>Enviado em {format(doc.uploadDate, "dd/MM/yyyy", { locale: ptBR })}</span>
                     <span>por {doc.uploadedBy}</span>
                     {doc.expiryDate && (
-                      <span>Expira em {format(doc.expiryDate, "dd/MM/yyyy", { locale: ptBR })}</span>
+                      <span>
+                        Expira em {format(doc.expiryDate, "dd/MM/yyyy", { locale: ptBR })}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -484,16 +511,16 @@ export const TravelDocumentManager = () => {
 
       {/* Folders Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {folders.map((folder) => (
+        {folders.map(folder => (
           <Card key={folder.id} className="hover:shadow-md transition-shadow cursor-pointer">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className={cn("p-2 rounded-lg", folder.color)}>
-                  {folder.icon}
-                </div>
+                <div className={cn("p-2 rounded-lg", folder.color)}>{folder.icon}</div>
                 <div>
                   <h3 className="font-medium text-sm">{folder.name}</h3>
-                  <p className="text-xs text-muted-foreground">{folder.documentsCount} documentos</p>
+                  <p className="text-xs text-muted-foreground">
+                    {folder.documentsCount} documentos
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -510,7 +537,7 @@ export const TravelDocumentManager = () => {
               <Input
                 placeholder="Buscar documentos..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -559,16 +586,16 @@ export const TravelDocumentManager = () => {
       </Card>
 
       {/* Documents Display */}
-      <div>
-        {viewMode === "grid" ? renderDocumentGrid() : renderDocumentList()}
-      </div>
+      <div>{viewMode === "grid" ? renderDocumentGrid() : renderDocumentList()}</div>
 
       {filteredDocuments.length === 0 && (
         <Card>
           <CardContent className="p-12 text-center">
             <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-medium mb-2">Nenhum documento encontrado</h3>
-            <p className="text-muted-foreground">Tente ajustar os filtros ou envie novos documentos.</p>
+            <p className="text-muted-foreground">
+              Tente ajustar os filtros ou envie novos documentos.
+            </p>
           </CardContent>
         </Card>
       )}

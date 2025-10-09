@@ -15,7 +15,9 @@ const Expenses = () => {
   const { expenses, loading, error, createExpense } = useExpenses();
   const [showForm, setShowForm] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "approved" | "rejected">("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "approved" | "rejected">(
+    "all"
+  );
 
   const handleCreateExpense = async (data: any) => {
     try {
@@ -36,9 +38,8 @@ const Expenses = () => {
   const rejectedCount = expenses.filter(exp => exp.status === "rejected").length;
 
   // Filter expenses
-  const filteredExpenses = filterStatus === "all" 
-    ? expenses 
-    : expenses.filter(exp => exp.status === filterStatus);
+  const filteredExpenses =
+    filterStatus === "all" ? expenses : expenses.filter(exp => exp.status === filterStatus);
 
   const statusColors = {
     pending: "bg-warning text-warning-foreground",
@@ -89,14 +90,7 @@ const Expenses = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Error Message */}
-        {error && (
-          <AlertMessage
-            type="error"
-            title="Erro"
-            message={error}
-            className="mb-6"
-          />
-        )}
+        {error && <AlertMessage type="error" title="Erro" message={error} className="mb-6" />}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -123,9 +117,7 @@ const Expenses = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-warning">
-                {pendingCount}
-              </div>
+              <div className="text-3xl font-bold text-warning">{pendingCount}</div>
               <p className="text-sm text-muted-foreground mt-1">Aguardando aprovação</p>
             </CardContent>
           </Card>
@@ -137,11 +129,11 @@ const Expenses = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-success">
-                {approvedCount}
-              </div>
+              <div className="text-3xl font-bold text-success">{approvedCount}</div>
               <p className="text-sm text-muted-foreground mt-1">
-                {formatCurrency(expenses.filter(e => e.status === "approved").reduce((s, e) => s + e.amount, 0))}
+                {formatCurrency(
+                  expenses.filter(e => e.status === "approved").reduce((s, e) => s + e.amount, 0)
+                )}
               </p>
             </CardContent>
           </Card>
@@ -153,9 +145,7 @@ const Expenses = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-danger">
-                {rejectedCount}
-              </div>
+              <div className="text-3xl font-bold text-danger">{rejectedCount}</div>
               <p className="text-sm text-muted-foreground mt-1">Requer revisão</p>
             </CardContent>
           </Card>
@@ -205,18 +195,19 @@ const Expenses = () => {
             {filteredExpenses.length === 0 ? (
               <EmptyState
                 icon={Receipt}
-                title={filterStatus === "all" ? "Nenhuma despesa registrada" : `Nenhuma despesa ${statusLabels[filterStatus as keyof typeof statusLabels]?.toLowerCase()}`}
+                title={
+                  filterStatus === "all"
+                    ? "Nenhuma despesa registrada"
+                    : `Nenhuma despesa ${statusLabels[filterStatus as keyof typeof statusLabels]?.toLowerCase()}`
+                }
                 description="Adicione uma nova despesa para começar a rastrear seus gastos"
                 actionLabel={filterStatus === "all" ? "Adicionar Despesa" : undefined}
                 onAction={filterStatus === "all" ? () => setShowForm(true) : undefined}
               />
             ) : (
               <div className="divide-y divide-border">
-                {filteredExpenses.map((expense) => (
-                  <div
-                    key={expense.id}
-                    className="p-6 hover:bg-muted/30 transition-colors"
-                  >
+                {filteredExpenses.map(expense => (
+                  <div key={expense.id} className="p-6 hover:bg-muted/30 transition-colors">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                       <div className="flex-1 min-w-0 space-y-2">
                         <div className="flex items-center gap-3 flex-wrap">
@@ -262,12 +253,8 @@ const Expenses = () => {
       <Dialog open={showForm} onOpenChange={setShowForm}>
         <DialogContent className="bg-card border-border max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader className="border-b border-border pb-4">
-            <DialogTitle className="text-xl font-bold text-foreground">
-              Nova Despesa
-            </DialogTitle>
-            <p className="text-sm text-muted-foreground mt-1">
-              Preencha os detalhes da despesa
-            </p>
+            <DialogTitle className="text-xl font-bold text-foreground">Nova Despesa</DialogTitle>
+            <p className="text-sm text-muted-foreground mt-1">Preencha os detalhes da despesa</p>
           </DialogHeader>
           <div className="pt-4">
             <ExpenseForm

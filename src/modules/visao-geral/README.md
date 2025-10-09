@@ -5,6 +5,7 @@
 The Visão Geral (Overview) module provides an **executive-level overview and strategic dashboard** that consolidates high-level insights from all system modules for leadership and decision makers.
 
 **Key Use Cases:**
+
 - Executive summary dashboard
 - Strategic KPI monitoring
 - Cross-module insights aggregation

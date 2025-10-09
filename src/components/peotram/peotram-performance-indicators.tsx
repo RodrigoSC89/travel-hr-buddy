@@ -4,10 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Shield, 
-  Ship, 
-  Zap, 
+import {
+  Shield,
+  Ship,
+  Zap,
   Award,
   TrendingUp,
   TrendingDown,
@@ -22,10 +22,28 @@ import {
   FileText,
   Download,
   Info,
-  Settings
+  Settings,
 } from "lucide-react";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import {
+  Tooltip as UITooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface PerformanceIndicator {
   id: string;
@@ -86,10 +104,10 @@ const PERFORMANCE_INDICATORS: PerformanceIndicator[] = [
       { period: "Jul", value: 0.11 },
       { period: "Ago", value: 0.13 },
       { period: "Set", value: 0.12 },
-      { period: "Out", value: 0.10 },
+      { period: "Out", value: 0.1 },
       { period: "Nov", value: 0.11 },
-      { period: "Dez", value: 0.12 }
-    ]
+      { period: "Dez", value: 0.12 },
+    ],
   },
   {
     id: "IDEMB",
@@ -116,8 +134,8 @@ const PERFORMANCE_INDICATORS: PerformanceIndicator[] = [
       { period: "Set", value: 94.3 },
       { period: "Out", value: 95.1 },
       { period: "Nov", value: 94.8 },
-      { period: "Dez", value: 94.7 }
-    ]
+      { period: "Dez", value: 94.7 },
+    ],
   },
   {
     id: "INNOVATION",
@@ -144,9 +162,9 @@ const PERFORMANCE_INDICATORS: PerformanceIndicator[] = [
       { period: "Set", value: 78.1 },
       { period: "Out", value: 78.9 },
       { period: "Nov", value: 78.2 },
-      { period: "Dez", value: 78.5 }
-    ]
-  }
+      { period: "Dez", value: 78.5 },
+    ],
+  },
 ];
 
 const SUPPLIER_PERFORMANCE: SupplierPerformance[] = [
@@ -160,13 +178,13 @@ const SUPPLIER_PERFORMANCE: SupplierPerformance[] = [
       quality: 88,
       delivery: 85,
       cost: 83,
-      innovation: 89
+      innovation: 89,
     },
     contractValue: 2500000,
     lastEvaluation: "2024-12-01",
     status: "good",
     improvements: ["Redução de 15% no tempo de manutenção", "Implementação de IoT"],
-    risks: ["Dependência excessiva", "Capacidade limitada para expansão"]
+    risks: ["Dependência excessiva", "Capacidade limitada para expansão"],
   },
   {
     id: "SUPP_002",
@@ -178,14 +196,14 @@ const SUPPLIER_PERFORMANCE: SupplierPerformance[] = [
       quality: 90,
       delivery: 94,
       cost: 88,
-      innovation: 92
+      innovation: 92,
     },
     contractValue: 1800000,
     lastEvaluation: "2024-11-28",
     status: "excellent",
     improvements: ["Sistema de rastreamento em tempo real", "Redução de 20% nos custos"],
-    risks: ["Exposição cambial", "Dependência de terceiros"]
-  }
+    risks: ["Exposição cambial", "Dependência de terceiros"],
+  },
 ];
 
 export const PeotramPerformanceIndicators: React.FC = () => {
@@ -196,40 +214,59 @@ export const PeotramPerformanceIndicators: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "excellent": return "hsl(var(--success))";
-    case "good": return "hsl(var(--info))";
-    case "warning": return "hsl(var(--warning))";
-    case "critical": return "hsl(var(--destructive))";
-    default: return "hsl(var(--muted))";
+      case "excellent":
+        return "hsl(var(--success))";
+      case "good":
+        return "hsl(var(--info))";
+      case "warning":
+        return "hsl(var(--warning))";
+      case "critical":
+        return "hsl(var(--destructive))";
+      default:
+        return "hsl(var(--muted))";
     }
   };
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-    case "excellent": return "bg-success/20 text-success border-success/30";
-    case "good": return "bg-info/20 text-info border-info/30";
-    case "warning": return "bg-warning/20 text-warning border-warning/30";
-    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "excellent":
+        return "bg-success/20 text-success border-success/30";
+      case "good":
+        return "bg-info/20 text-info border-info/30";
+      case "warning":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "critical":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="w-4 h-4 text-success" />;
-    case "down": return <TrendingDown className="w-4 h-4 text-destructive" />;
-    default: return <BarChart3 className="w-4 h-4 text-muted-foreground" />;
+      case "up":
+        return <TrendingUp className="w-4 h-4 text-success" />;
+      case "down":
+        return <TrendingDown className="w-4 h-4 text-destructive" />;
+      default:
+        return <BarChart3 className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "safety": return Shield;
-    case "availability": return Ship;
-    case "innovation": return Zap;
-    case "certification": return Award;
-    case "supplier": return Users;
-    default: return BarChart3;
+      case "safety":
+        return Shield;
+      case "availability":
+        return Ship;
+      case "innovation":
+        return Zap;
+      case "certification":
+        return Award;
+      case "supplier":
+        return Users;
+      default:
+        return BarChart3;
     }
   };
 
@@ -245,12 +282,12 @@ export const PeotramPerformanceIndicators: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Indicadores de Performance PEOTRAM</h2>
-            <p className="text-muted-foreground">
-              Monitoramento de KPIs e métricas de desempenho
-            </p>
+            <h2 className="text-2xl font-bold text-foreground">
+              Indicadores de Performance PEOTRAM
+            </h2>
+            <p className="text-muted-foreground">Monitoramento de KPIs e métricas de desempenho</p>
           </div>
-          
+
           <div className="flex gap-2">
             <Button variant="outline" size="sm">
               <Download className="w-4 h-4 mr-2" />
@@ -275,17 +312,23 @@ export const PeotramPerformanceIndicators: React.FC = () => {
           <TabsContent value="indicators" className="space-y-6">
             {/* Cards de indicadores principais */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {indicators.map((indicator) => {
+              {indicators.map(indicator => {
                 const CategoryIcon = getCategoryIcon(indicator.category);
                 const achievementRate = (indicator.currentValue / indicator.target) * 100;
-                
+
                 return (
                   <Card key={indicator.id} className="hover:shadow-lg transition-shadow">
                     <CardHeader className="pb-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg" style={{ backgroundColor: getStatusColor(indicator.status) + "20" }}>
-                            <CategoryIcon className="w-5 h-5" style={{ color: getStatusColor(indicator.status) }} />
+                          <div
+                            className="p-2 rounded-lg"
+                            style={{ backgroundColor: getStatusColor(indicator.status) + "20" }}
+                          >
+                            <CategoryIcon
+                              className="w-5 h-5"
+                              style={{ color: getStatusColor(indicator.status) }}
+                            />
                           </div>
                           <div>
                             <CardTitle className="text-lg">{indicator.name}</CardTitle>
@@ -295,13 +338,17 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                           </div>
                         </div>
                         <Badge variant="outline" className={getStatusBadgeColor(indicator.status)}>
-                          {indicator.status === "excellent" ? "Excelente" :
-                            indicator.status === "good" ? "Bom" :
-                              indicator.status === "warning" ? "Atenção" : "Crítico"}
+                          {indicator.status === "excellent"
+                            ? "Excelente"
+                            : indicator.status === "good"
+                              ? "Bom"
+                              : indicator.status === "warning"
+                                ? "Atenção"
+                                : "Crítico"}
                         </Badge>
                       </div>
                     </CardHeader>
-                    
+
                     <CardContent className="space-y-4">
                       <div className="flex items-center justify-between">
                         <div>
@@ -310,22 +357,30 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                           </div>
                           <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             {getTrendIcon(indicator.trend)}
-                            <span className={indicator.trend === "up" ? "text-success" : 
-                              indicator.trend === "down" ? "text-destructive" : "text-muted-foreground"}>
-                              {indicator.trend === "up" ? "+" : indicator.trend === "down" ? "" : ""}
+                            <span
+                              className={
+                                indicator.trend === "up"
+                                  ? "text-success"
+                                  : indicator.trend === "down"
+                                    ? "text-destructive"
+                                    : "text-muted-foreground"
+                              }
+                            >
+                              {indicator.trend === "up"
+                                ? "+"
+                                : indicator.trend === "down"
+                                  ? ""
+                                  : ""}
                               {indicator.trendValue.toFixed(1)}%
                             </span>
                           </div>
                         </div>
-                        
+
                         <div className="text-right">
                           <div className="text-sm text-muted-foreground mb-1">
                             Meta: {formatNumber(indicator.target, indicator.unit)}
                           </div>
-                          <Progress 
-                            value={Math.min(achievementRate, 100)} 
-                            className="w-20 h-2"
-                          />
+                          <Progress value={Math.min(achievementRate, 100)} className="w-20 h-2" />
                           <div className="text-xs text-muted-foreground mt-1">
                             {achievementRate.toFixed(0)}%
                           </div>
@@ -349,9 +404,9 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                       <div className="h-20">
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={indicator.historicalData.slice(-6)}>
-                            <Line 
-                              type="monotone" 
-                              dataKey="value" 
+                            <Line
+                              type="monotone"
+                              dataKey="value"
                               stroke={getStatusColor(indicator.status)}
                               strokeWidth={2}
                               dot={false}
@@ -403,9 +458,7 @@ export const PeotramPerformanceIndicators: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Análise de Tendências</CardTitle>
-                <CardDescription>
-                  Evolução dos indicadores ao longo do tempo
-                </CardDescription>
+                <CardDescription>Evolução dos indicadores ao longo do tempo</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-80">
@@ -414,18 +467,18 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis dataKey="period" stroke="hsl(var(--muted-foreground))" />
                       <YAxis stroke="hsl(var(--muted-foreground))" />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: "hsl(var(--card))", 
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
                           border: "1px solid hsl(var(--border))",
-                          borderRadius: "8px"
-                        }} 
+                          borderRadius: "8px",
+                        }}
                       />
                       {indicators.map((indicator, index) => (
-                        <Line 
+                        <Line
                           key={indicator.id}
-                          type="monotone" 
-                          dataKey="value" 
+                          type="monotone"
+                          dataKey="value"
                           stroke={getStatusColor(indicator.status)}
                           strokeWidth={2}
                           name={indicator.name}
@@ -441,7 +494,7 @@ export const PeotramPerformanceIndicators: React.FC = () => {
 
           <TabsContent value="suppliers" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {suppliers.map((supplier) => (
+              {suppliers.map(supplier => (
                 <Card key={supplier.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-center justify-between">
@@ -454,23 +507,32 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                           {supplier.overallScore.toFixed(1)}
                         </div>
                         <Badge variant="outline" className={getStatusBadgeColor(supplier.status)}>
-                          {supplier.status === "excellent" ? "Excelente" :
-                            supplier.status === "good" ? "Bom" :
-                              supplier.status === "warning" ? "Atenção" : "Crítico"}
+                          {supplier.status === "excellent"
+                            ? "Excelente"
+                            : supplier.status === "good"
+                              ? "Bom"
+                              : supplier.status === "warning"
+                                ? "Atenção"
+                                : "Crítico"}
                         </Badge>
                       </div>
                     </div>
                   </CardHeader>
-                  
+
                   <CardContent className="space-y-4">
                     <div className="space-y-3">
                       {Object.entries(supplier.indicators).map(([key, value]) => (
                         <div key={key} className="flex items-center justify-between">
                           <span className="text-sm capitalize">
-                            {key === "safety" ? "Segurança" :
-                              key === "quality" ? "Qualidade" :
-                                key === "delivery" ? "Entrega" :
-                                  key === "cost" ? "Custo" : "Inovação"}
+                            {key === "safety"
+                              ? "Segurança"
+                              : key === "quality"
+                                ? "Qualidade"
+                                : key === "delivery"
+                                  ? "Entrega"
+                                  : key === "cost"
+                                    ? "Custo"
+                                    : "Inovação"}
                           </span>
                           <div className="flex items-center gap-2">
                             <Progress value={value} className="w-16 h-2" />
@@ -498,7 +560,10 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                         <h4 className="text-sm font-medium text-success">Melhorias Recentes:</h4>
                         <ul className="space-y-1">
                           {supplier.improvements.map((improvement, index) => (
-                            <li key={index} className="text-xs text-muted-foreground flex items-start gap-1">
+                            <li
+                              key={index}
+                              className="text-xs text-muted-foreground flex items-start gap-1"
+                            >
                               <CheckCircle className="w-3 h-3 text-success mt-0.5 flex-shrink-0" />
                               {improvement}
                             </li>
@@ -512,7 +577,10 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                         <h4 className="text-sm font-medium text-warning">Riscos Identificados:</h4>
                         <ul className="space-y-1">
                           {supplier.risks.map((risk, index) => (
-                            <li key={index} className="text-xs text-muted-foreground flex items-start gap-1">
+                            <li
+                              key={index}
+                              className="text-xs text-muted-foreground flex items-start gap-1"
+                            >
                               <AlertTriangle className="w-3 h-3 text-warning mt-0.5 flex-shrink-0" />
                               {risk}
                             </li>
@@ -530,34 +598,48 @@ export const PeotramPerformanceIndicators: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Comparação com Benchmarks</CardTitle>
-                <CardDescription>
-                  Posicionamento em relação aos padrões do setor
-                </CardDescription>
+                <CardDescription>Posicionamento em relação aos padrões do setor</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {indicators.map((indicator) => (
+                  {indicators.map(indicator => (
                     <div key={indicator.id} className="space-y-2">
                       <div className="flex items-center justify-between">
                         <h4 className="font-medium">{indicator.name}</h4>
                         <div className="flex items-center gap-4 text-sm">
-                          <span>Atual: <strong>{formatNumber(indicator.currentValue, indicator.unit)}</strong></span>
-                          <span>Benchmark: <strong>{formatNumber(indicator.benchmark, indicator.unit)}</strong></span>
-                          <span>Meta: <strong>{formatNumber(indicator.target, indicator.unit)}</strong></span>
+                          <span>
+                            Atual:{" "}
+                            <strong>{formatNumber(indicator.currentValue, indicator.unit)}</strong>
+                          </span>
+                          <span>
+                            Benchmark:{" "}
+                            <strong>{formatNumber(indicator.benchmark, indicator.unit)}</strong>
+                          </span>
+                          <span>
+                            Meta: <strong>{formatNumber(indicator.target, indicator.unit)}</strong>
+                          </span>
                         </div>
                       </div>
                       <div className="relative">
-                        <Progress 
-                          value={(indicator.currentValue / Math.max(indicator.benchmark, indicator.target)) * 100} 
+                        <Progress
+                          value={
+                            (indicator.currentValue /
+                              Math.max(indicator.benchmark, indicator.target)) *
+                            100
+                          }
                           className="h-3"
                         />
-                        <div 
+                        <div
                           className="absolute top-0 h-3 w-1 bg-warning"
-                          style={{ left: `${(indicator.benchmark / Math.max(indicator.benchmark, indicator.target)) * 100}%` }}
+                          style={{
+                            left: `${(indicator.benchmark / Math.max(indicator.benchmark, indicator.target)) * 100}%`,
+                          }}
                         />
-                        <div 
+                        <div
                           className="absolute top-0 h-3 w-1 bg-success"
-                          style={{ left: `${(indicator.target / Math.max(indicator.benchmark, indicator.target)) * 100}%` }}
+                          style={{
+                            left: `${(indicator.target / Math.max(indicator.benchmark, indicator.target)) * 100}%`,
+                          }}
                         />
                       </div>
                     </div>

@@ -5,6 +5,7 @@
 The Otimização Mobile (Mobile Optimization) module focuses on **mobile-specific features and optimizations** to provide a seamless experience on smartphones and tablets using Capacitor and native capabilities.
 
 **Key Use Cases:**
+
 - Mobile-responsive UI components
 - Native device feature access (camera, GPS, notifications)
 - Offline functionality and sync

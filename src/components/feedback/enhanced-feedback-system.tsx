@@ -9,19 +9,25 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { 
-  MessageSquare, 
-  Star, 
-  TrendingUp, 
-  Users, 
+import {
+  MessageSquare,
+  Star,
+  TrendingUp,
+  Users,
   Send,
   CheckCircle,
   AlertTriangle,
   Clock,
   Filter,
-  Search
+  Search,
 } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Feedback {
   id: string;
@@ -58,28 +64,36 @@ export const EnhancedFeedbackSystem: React.FC = () => {
     module?: string;
     search?: string;
   }>({});
-  
+
   // Formulário para novo feedback
   const [newFeedback, setNewFeedback] = useState({
     module: "",
     type: "feature" as const,
     title: "",
     description: "",
-    rating: 5
+    rating: 5,
   });
 
   const { toast } = useToast();
 
   const modules = [
-    "dashboard", "hr", "maritime", "travel", "analytics", "reports", 
-    "notifications", "settings", "communication", "fleet"
+    "dashboard",
+    "hr",
+    "maritime",
+    "travel",
+    "analytics",
+    "reports",
+    "notifications",
+    "settings",
+    "communication",
+    "fleet",
   ];
 
   const feedbackTypes = [
     { value: "bug", label: "Bug Report", color: "bg-destructive" },
     { value: "feature", label: "Nova Funcionalidade", color: "bg-info" },
     { value: "improvement", label: "Melhoria", color: "bg-warning" },
-    { value: "praise", label: "Elogio", color: "bg-success" }
+    { value: "praise", label: "Elogio", color: "bg-success" },
   ];
 
   const statusOptions = [
@@ -87,7 +101,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
     { value: "in_review", label: "Em Análise", color: "bg-info" },
     { value: "in_progress", label: "Em Desenvolvimento", color: "bg-warning" },
     { value: "completed", label: "Concluído", color: "bg-success" },
-    { value: "rejected", label: "Rejeitado", color: "bg-destructive" }
+    { value: "rejected", label: "Rejeitado", color: "bg-destructive" },
   ];
 
   const loadFeedbacks = async () => {
@@ -109,7 +123,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
           created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
           updated_at: new Date().toISOString(),
           user_email: "usuario@empresa.com",
-          user_name: "João Silva"
+          user_name: "João Silva",
         },
         {
           id: "2",
@@ -125,7 +139,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
           updated_at: new Date().toISOString(),
           admin_response: "Bug corrigido na versão 1.2.3",
           user_email: "maria@empresa.com",
-          user_name: "Maria Santos"
+          user_name: "Maria Santos",
         },
         {
           id: "3",
@@ -140,8 +154,8 @@ export const EnhancedFeedbackSystem: React.FC = () => {
           created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
           updated_at: new Date().toISOString(),
           user_email: "carlos@empresa.com",
-          user_name: "Carlos Oliveira"
-        }
+          user_name: "Carlos Oliveira",
+        },
       ];
 
       // Calcular estatísticas
@@ -149,24 +163,29 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         total: mockFeedbacks.length,
         pending: mockFeedbacks.filter(f => f.status === "pending").length,
         averageRating: mockFeedbacks.reduce((acc, f) => acc + f.rating, 0) / mockFeedbacks.length,
-        byType: mockFeedbacks.reduce((acc, f) => {
-          acc[f.type] = (acc[f.type] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>),
-        byModule: mockFeedbacks.reduce((acc, f) => {
-          acc[f.module] = (acc[f.module] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>)
+        byType: mockFeedbacks.reduce(
+          (acc, f) => {
+            acc[f.type] = (acc[f.type] || 0) + 1;
+            return acc;
+          },
+          {} as Record<string, number>
+        ),
+        byModule: mockFeedbacks.reduce(
+          (acc, f) => {
+            acc[f.module] = (acc[f.module] || 0) + 1;
+            return acc;
+          },
+          {} as Record<string, number>
+        ),
       };
 
       setFeedbacks(mockFeedbacks);
       setStats(mockStats);
-
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao carregar feedbacks",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -179,7 +198,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         toast({
           title: "Campos obrigatórios",
           description: "Preencha todos os campos obrigatórios",
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
@@ -196,33 +215,32 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         type: "feature",
         title: "",
         description: "",
-        rating: 5
+        rating: 5,
       });
 
       // Recarregar feedbacks
       loadFeedbacks();
-
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao enviar feedback",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "bug":
-      return <AlertTriangle className="w-4 h-4" />;
-    case "feature":
-      return <TrendingUp className="w-4 h-4" />;
-    case "improvement":
-      return <Star className="w-4 h-4" />;
-    case "praise":
-      return <CheckCircle className="w-4 h-4" />;
-    default:
-      return <MessageSquare className="w-4 h-4" />;
+      case "bug":
+        return <AlertTriangle className="w-4 h-4" />;
+      case "feature":
+        return <TrendingUp className="w-4 h-4" />;
+      case "improvement":
+        return <Star className="w-4 h-4" />;
+      case "praise":
+        return <CheckCircle className="w-4 h-4" />;
+      default:
+        return <MessageSquare className="w-4 h-4" />;
     }
   };
 
@@ -351,7 +369,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                     <Input
                       placeholder="Título, descrição ou usuário..."
                       value={filter.search || ""}
-                      onChange={(e) => setFilter({...filter, search: e.target.value})}
+                      onChange={e => setFilter({ ...filter, search: e.target.value })}
                       className="pl-10"
                     />
                   </div>
@@ -359,7 +377,10 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Tipo</Label>
-                  <Select value={filter.type || ""} onValueChange={(value) => setFilter({...filter, type: value || undefined})}>
+                  <Select
+                    value={filter.type || ""}
+                    onValueChange={value => setFilter({ ...filter, type: value || undefined })}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os tipos" />
                     </SelectTrigger>
@@ -376,7 +397,10 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Status</Label>
-                  <Select value={filter.status || ""} onValueChange={(value) => setFilter({...filter, status: value || undefined})}>
+                  <Select
+                    value={filter.status || ""}
+                    onValueChange={value => setFilter({ ...filter, status: value || undefined })}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os status" />
                     </SelectTrigger>
@@ -393,7 +417,10 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Módulo</Label>
-                  <Select value={filter.module || ""} onValueChange={(value) => setFilter({...filter, module: value || undefined})}>
+                  <Select
+                    value={filter.module || ""}
+                    onValueChange={value => setFilter({ ...filter, module: value || undefined })}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os módulos" />
                     </SelectTrigger>
@@ -421,7 +448,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                 </CardContent>
               </Card>
             ) : (
-              filteredFeedbacks.map((feedback) => (
+              filteredFeedbacks.map(feedback => (
                 <Card key={feedback.id}>
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -436,7 +463,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                             {statusOptions.find(s => s.value === feedback.status)?.label}
                           </Badge>
                         </div>
-                        
+
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <span>Por: {feedback.user_name}</span>
                           <span>Módulo: {feedback.module}</span>
@@ -446,10 +473,10 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                       </div>
                     </div>
                   </CardHeader>
-                  
+
                   <CardContent>
                     <p className="text-sm mb-4">{feedback.description}</p>
-                    
+
                     {feedback.admin_response && (
                       <>
                         <Separator className="my-4" />
@@ -478,7 +505,10 @@ export const EnhancedFeedbackSystem: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="module">Módulo *</Label>
-                  <Select value={newFeedback.module} onValueChange={(value) => setNewFeedback({...newFeedback, module: value})}>
+                  <Select
+                    value={newFeedback.module}
+                    onValueChange={value => setNewFeedback({ ...newFeedback, module: value })}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o módulo" />
                     </SelectTrigger>
@@ -494,7 +524,10 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label htmlFor="type">Tipo de Feedback *</Label>
-                  <Select value={newFeedback.type} onValueChange={(value: any) => setNewFeedback({...newFeedback, type: value})}>
+                  <Select
+                    value={newFeedback.type}
+                    onValueChange={(value: any) => setNewFeedback({ ...newFeedback, type: value })}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -515,7 +548,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                   id="title"
                   placeholder="Resumo do seu feedback"
                   value={newFeedback.title}
-                  onChange={(e) => setNewFeedback({...newFeedback, title: e.target.value})}
+                  onChange={e => setNewFeedback({ ...newFeedback, title: e.target.value })}
                 />
               </div>
 
@@ -525,14 +558,17 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                   id="description"
                   placeholder="Descreva detalhadamente seu feedback, sugestão ou problema"
                   value={newFeedback.description}
-                  onChange={(e) => setNewFeedback({...newFeedback, description: e.target.value})}
+                  onChange={e => setNewFeedback({ ...newFeedback, description: e.target.value })}
                   rows={4}
                 />
               </div>
 
               <div>
                 <Label htmlFor="rating">Avaliação Geral (1-5)</Label>
-                <Select value={newFeedback.rating.toString()} onValueChange={(value) => setNewFeedback({...newFeedback, rating: Number(value)})}>
+                <Select
+                  value={newFeedback.rating.toString()}
+                  onValueChange={value => setNewFeedback({ ...newFeedback, rating: Number(value) })}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

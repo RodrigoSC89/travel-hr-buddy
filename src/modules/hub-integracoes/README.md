@@ -5,6 +5,7 @@
 The Hub de Integrações (Integration Hub) module serves as the **central integration point for all external APIs and third-party services**. It manages API connections, monitors health, handles authentication, and provides a unified interface for all integrations.
 
 **Key Use Cases:**
+
 - Configure and manage API connections
 - Monitor API health and performance
 - Handle authentication and API keys securely

@@ -5,17 +5,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Bell, 
-  Settings, 
-  Shield, 
-  Users, 
-  BarChart3, 
+import {
+  Bell,
+  Settings,
+  Shield,
+  Users,
+  BarChart3,
   AlertTriangle,
   CheckCircle,
   Clock,
   Trash2,
-  RotateCcw
+  RotateCcw,
 } from "lucide-react";
 
 interface SystemNotification {
@@ -47,17 +47,19 @@ export const EnhancedNotificationCenter: React.FC = () => {
         .limit(50);
 
       if (error) throw error;
-      setNotifications((data || []).map(item => ({
-        ...item,
-        type: (item.type as "info" | "warning" | "error" | "success") || "info",
-        priority: (item.priority as "low" | "medium" | "high" | "urgent") || "medium"
-      })));
+      setNotifications(
+        (data || []).map(item => ({
+          ...item,
+          type: (item.type as "info" | "warning" | "error" | "success") || "info",
+          priority: (item.priority as "low" | "medium" | "high" | "urgent") || "medium",
+        }))
+      );
     } catch (error) {
       console.error("Erro ao carregar notificações:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar notificações",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -74,20 +76,18 @@ export const EnhancedNotificationCenter: React.FC = () => {
       if (error) throw error;
 
       setNotifications(prev =>
-        prev.map(notif =>
-          notif.id === notificationId ? { ...notif, is_read: true } : notif
-        )
+        prev.map(notif => (notif.id === notificationId ? { ...notif, is_read: true } : notif))
       );
 
       toast({
         title: "Marcado como lido",
-        description: "Notificação marcada como lida"
+        description: "Notificação marcada como lida",
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao marcar como lida",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -102,16 +102,16 @@ export const EnhancedNotificationCenter: React.FC = () => {
       if (error) throw error;
 
       setNotifications(prev => prev.map(notif => ({ ...notif, is_read: true })));
-      
+
       toast({
         title: "Sucesso",
-        description: "Todas as notificações foram marcadas como lidas"
+        description: "Todas as notificações foram marcadas como lidas",
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao marcar todas como lidas",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -126,56 +126,56 @@ export const EnhancedNotificationCenter: React.FC = () => {
       if (error) throw error;
 
       setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
-      
+
       toast({
         title: "Removida",
-        description: "Notificação removida com sucesso"
+        description: "Notificação removida com sucesso",
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao remover notificação",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "error":
-      return <AlertTriangle className="w-4 h-4 text-destructive" />;
-    case "warning":
-      return <AlertTriangle className="w-4 h-4 text-warning" />;
-    case "success":
-      return <CheckCircle className="w-4 h-4 text-success" />;
-    default:
-      return <Bell className="w-4 h-4 text-info" />;
+      case "error":
+        return <AlertTriangle className="w-4 h-4 text-destructive" />;
+      case "warning":
+        return <AlertTriangle className="w-4 h-4 text-warning" />;
+      case "success":
+        return <CheckCircle className="w-4 h-4 text-success" />;
+      default:
+        return <Bell className="w-4 h-4 text-info" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "urgent":
-      return "bg-destructive text-destructive-foreground";
-    case "high":
-      return "bg-warning text-warning-foreground";
-    case "medium":
-      return "bg-info text-info-foreground";
-    default:
-      return "bg-muted text-muted-foreground";
+      case "urgent":
+        return "bg-destructive text-destructive-foreground";
+      case "high":
+        return "bg-warning text-warning-foreground";
+      case "medium":
+        return "bg-info text-info-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const filteredNotifications = notifications.filter(notif => {
     switch (filter) {
-    case "unread":
-      return !notif.is_read;
-    case "high":
-      return notif.priority === "high";
-    case "urgent":
-      return notif.priority === "urgent";
-    default:
-      return true;
+      case "unread":
+        return !notif.is_read;
+      case "high":
+        return notif.priority === "high";
+      case "urgent":
+        return notif.priority === "urgent";
+      default:
+        return true;
     }
   });
 
@@ -192,7 +192,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
         {
           event: "*",
           schema: "public",
-          table: "intelligent_notifications"
+          table: "intelligent_notifications",
         },
         () => {
           loadNotifications();
@@ -244,27 +244,19 @@ export const EnhancedNotificationCenter: React.FC = () => {
             </CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => loadNotifications()}
-            >
+            <Button variant="outline" size="sm" onClick={() => loadNotifications()}>
               <RotateCcw className="w-4 h-4 mr-2" />
               Atualizar
             </Button>
             {unreadCount > 0 && (
-              <Button 
-                variant="secondary" 
-                size="sm"
-                onClick={markAllAsRead}
-              >
+              <Button variant="secondary" size="sm" onClick={markAllAsRead}>
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Marcar todas como lidas
               </Button>
             )}
           </div>
         </div>
-        
+
         <div className="flex gap-2 mt-4">
           {["all", "unread", "high", "urgent"].map(filterType => (
             <Button
@@ -281,7 +273,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
           ))}
         </div>
       </CardHeader>
-      
+
       <CardContent>
         <div className="space-y-4">
           {filteredNotifications.length === 0 ? (
@@ -290,12 +282,12 @@ export const EnhancedNotificationCenter: React.FC = () => {
               <p>Nenhuma notificação encontrada</p>
             </div>
           ) : (
-            filteredNotifications.map((notification) => (
+            filteredNotifications.map(notification => (
               <div
                 key={notification.id}
                 className={`p-4 rounded-lg border transition-all hover:shadow-md ${
-                  !notification.is_read 
-                    ? "bg-primary/5 border-primary/20" 
+                  !notification.is_read
+                    ? "bg-primary/5 border-primary/20"
                     : "bg-background border-border"
                 }`}
               >
@@ -303,23 +295,15 @@ export const EnhancedNotificationCenter: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       {getTypeIcon(notification.type)}
-                      <h3 className="font-semibold text-sm">
-                        {notification.title}
-                      </h3>
-                      <Badge 
-                        className={getPriorityColor(notification.priority)}
-                      >
+                      <h3 className="font-semibold text-sm">{notification.title}</h3>
+                      <Badge className={getPriorityColor(notification.priority)}>
                         {notification.priority}
                       </Badge>
-                      {!notification.is_read && (
-                        <div className="w-2 h-2 bg-primary rounded-full" />
-                      )}
+                      {!notification.is_read && <div className="w-2 h-2 bg-primary rounded-full" />}
                     </div>
-                    
-                    <p className="text-sm text-muted-foreground mb-2">
-                      {notification.message}
-                    </p>
-                    
+
+                    <p className="text-sm text-muted-foreground mb-2">{notification.message}</p>
+
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
@@ -333,14 +317,10 @@ export const EnhancedNotificationCenter: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-1 ml-4">
                     {!notification.is_read && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => markAsRead(notification.id)}
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => markAsRead(notification.id)}>
                         <CheckCircle className="w-4 h-4" />
                       </Button>
                     )}

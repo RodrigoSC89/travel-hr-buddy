@@ -3,23 +3,35 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { 
-  Ship, 
-  Plus, 
-  Search, 
-  MapPin, 
+import {
+  Ship,
+  Plus,
+  Search,
+  MapPin,
   Calendar,
   Users,
   Settings,
   Activity,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 
 interface Vessel {
@@ -51,7 +63,7 @@ const VesselManagement: React.FC = () => {
     vessel_type: "",
     flag_state: "",
     next_port: "",
-    eta: ""
+    eta: "",
   });
 
   useEffect(() => {
@@ -61,13 +73,13 @@ const VesselManagement: React.FC = () => {
   const loadVessels = async () => {
     try {
       setIsLoading(true);
-      
+
       // Try to load from database, fallback to mock data
       const { data: vessels, error } = await supabase
         .from("vessels")
         .select("*")
         .order("created_at", { ascending: false });
-      
+
       if (error) {
         // Database fallback to mock data
         // Fallback mock data
@@ -82,7 +94,7 @@ const VesselManagement: React.FC = () => {
             current_location: "Santos, Brasil",
             next_port: "Rio de Janeiro",
             eta: "2024-01-15T10:00:00Z",
-            created_at: "2024-01-01T00:00:00Z"
+            created_at: "2024-01-01T00:00:00Z",
           },
           {
             id: "2",
@@ -94,7 +106,7 @@ const VesselManagement: React.FC = () => {
             current_location: "Paranaguá, Brasil",
             next_port: "Salvador",
             eta: "2024-01-18T14:30:00Z",
-            created_at: "2024-01-01T00:00:00Z"
+            created_at: "2024-01-01T00:00:00Z",
           },
           {
             id: "3",
@@ -106,10 +118,10 @@ const VesselManagement: React.FC = () => {
             current_location: "Suape, Brasil",
             next_port: "Fortaleza",
             eta: "2024-01-22T08:00:00Z",
-            created_at: "2024-01-01T00:00:00Z"
-          }
+            created_at: "2024-01-01T00:00:00Z",
+          },
         ];
-      
+
         setVessels(mockVessels);
       } else {
         setVessels(vessels || []);
@@ -119,7 +131,7 @@ const VesselManagement: React.FC = () => {
       toast({
         title: "Erro",
         description: "Não foi possível carregar as embarcações",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -137,14 +149,10 @@ const VesselManagement: React.FC = () => {
         next_port: newVessel.next_port,
         eta: newVessel.eta ? new Date(newVessel.eta).toISOString() : null,
         status: "active",
-        current_location: "Unknown Location"
+        current_location: "Unknown Location",
       };
 
-      const { data, error } = await supabase
-        .from("vessels")
-        .insert([vesselData])
-        .select()
-        .single();
+      const { data, error } = await supabase.from("vessels").insert([vesselData]).select().single();
 
       if (error) {
         // Local addition fallback
@@ -153,59 +161,68 @@ const VesselManagement: React.FC = () => {
           id: Math.random().toString(),
           ...newVessel,
           status: "active",
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
         };
         setVessels([...vessels, vessel]);
       } else {
         // Successfully added to database
         setVessels([...vessels, data]);
       }
-      
+
       setNewVessel({
         name: "",
         imo_number: "",
         vessel_type: "",
         flag_state: "",
         next_port: "",
-        eta: ""
+        eta: "",
       });
       setShowAddDialog(false);
-      
+
       toast({
         title: "Embarcação Adicionada",
-        description: `${newVessel.name} foi adicionada com sucesso`
+        description: `${newVessel.name} foi adicionada com sucesso`,
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível adicionar a embarcação",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "bg-green-500 text-azure-50";
-    case "maintenance": return "bg-yellow-500 text-azure-900";
-    case "inactive": return "bg-red-500 text-azure-50";
-    default: return "bg-gray-500 text-azure-50";
+      case "active":
+        return "bg-green-500 text-azure-50";
+      case "maintenance":
+        return "bg-yellow-500 text-azure-900";
+      case "inactive":
+        return "bg-red-500 text-azure-50";
+      default:
+        return "bg-gray-500 text-azure-50";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-    case "active": return "Ativa";
-    case "maintenance": return "Manutenção";
-    case "inactive": return "Inativa";
-    default: return "Desconhecido";
+      case "active":
+        return "Ativa";
+      case "maintenance":
+        return "Manutenção";
+      case "inactive":
+        return "Inativa";
+      default:
+        return "Desconhecido";
     }
   };
 
-  const filteredVessels = vessels.filter(vessel =>
-    vessel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vessel.vessel_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vessel.imo_number?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredVessels = vessels.filter(
+    vessel =>
+      vessel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vessel.vessel_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vessel.imo_number?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -217,11 +234,9 @@ const VesselManagement: React.FC = () => {
             <Ship className="h-6 w-6 text-primary" />
             Gestão de Frota
           </h2>
-          <p className="text-muted-foreground">
-            Controle e monitoramento de embarcações da frota
-          </p>
+          <p className="text-muted-foreground">Controle e monitoramento de embarcações da frota</p>
         </div>
-        
+
         <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2">
@@ -239,7 +254,7 @@ const VesselManagement: React.FC = () => {
                 <Input
                   id="name"
                   value={newVessel.name}
-                  onChange={(e) => setNewVessel({ ...newVessel, name: e.target.value })}
+                  onChange={e => setNewVessel({ ...newVessel, name: e.target.value })}
                   placeholder="Ex: MV Atlântico"
                 />
               </div>
@@ -248,15 +263,15 @@ const VesselManagement: React.FC = () => {
                 <Input
                   id="imo"
                   value={newVessel.imo_number}
-                  onChange={(e) => setNewVessel({ ...newVessel, imo_number: e.target.value })}
+                  onChange={e => setNewVessel({ ...newVessel, imo_number: e.target.value })}
                   placeholder="Ex: 1234567"
                 />
               </div>
               <div>
                 <Label htmlFor="type">Tipo de Embarcação</Label>
-                <Select 
-                  value={newVessel.vessel_type} 
-                  onValueChange={(value) => setNewVessel({ ...newVessel, vessel_type: value })}
+                <Select
+                  value={newVessel.vessel_type}
+                  onValueChange={value => setNewVessel({ ...newVessel, vessel_type: value })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o tipo" />
@@ -275,7 +290,7 @@ const VesselManagement: React.FC = () => {
                 <Input
                   id="flag"
                   value={newVessel.flag_state}
-                  onChange={(e) => setNewVessel({ ...newVessel, flag_state: e.target.value })}
+                  onChange={e => setNewVessel({ ...newVessel, flag_state: e.target.value })}
                   placeholder="Ex: Brasil"
                 />
               </div>
@@ -284,7 +299,7 @@ const VesselManagement: React.FC = () => {
                 <Input
                   id="port"
                   value={newVessel.next_port}
-                  onChange={(e) => setNewVessel({ ...newVessel, next_port: e.target.value })}
+                  onChange={e => setNewVessel({ ...newVessel, next_port: e.target.value })}
                   placeholder="Ex: Santos"
                 />
               </div>
@@ -294,7 +309,7 @@ const VesselManagement: React.FC = () => {
                   id="eta"
                   type="datetime-local"
                   value={newVessel.eta}
-                  onChange={(e) => setNewVessel({ ...newVessel, eta: e.target.value })}
+                  onChange={e => setNewVessel({ ...newVessel, eta: e.target.value })}
                 />
               </div>
             </div>
@@ -378,7 +393,7 @@ const VesselManagement: React.FC = () => {
                   <Input
                     placeholder="Buscar embarcação..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={e => setSearchTerm(e.target.value)}
                     className="w-64"
                   />
                 </div>
@@ -389,8 +404,8 @@ const VesselManagement: React.FC = () => {
                 <div className="text-center py-8">Carregando embarcações...</div>
               ) : (
                 <div className="space-y-4">
-                  {filteredVessels.map((vessel) => (
-                    <div 
+                  {filteredVessels.map(vessel => (
+                    <div
                       key={vessel.id}
                       className={`p-4 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${
                         selectedVessel?.id === vessel.id ? "border-primary bg-primary/5" : ""
@@ -411,18 +426,17 @@ const VesselManagement: React.FC = () => {
                           {getStatusText(vessel.status)}
                         </Badge>
                       </div>
-                      
+
                       <div className="mt-3 grid grid-cols-2 gap-4 text-sm">
                         <div className="flex items-center gap-1">
                           <MapPin className="h-4 w-4 text-muted-foreground" />
-                          <span>
-                            {vessel.current_location || "Localização não informada"}
-                          </span>
+                          <span>{vessel.current_location || "Localização não informada"}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
                           <span>
-                            ETA: {vessel.eta ? new Date(vessel.eta).toLocaleDateString("pt-BR") : "N/A"}
+                            ETA:{" "}
+                            {vessel.eta ? new Date(vessel.eta).toLocaleDateString("pt-BR") : "N/A"}
                           </span>
                         </div>
                       </div>

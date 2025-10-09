@@ -15,7 +15,7 @@ const Communication = () => {
         badges={[
           { icon: Users, label: "Chat em Equipe" },
           { icon: Zap, label: "Tempo Real" },
-          { icon: Globe, label: "Alcance Global" }
+          { icon: Globe, label: "Alcance Global" },
         ]}
       />
       <EnhancedCommunicationCenter />

@@ -4,15 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import VesselManagement from "@/components/fleet/vessel-management";
 import { VesselTracking } from "@/components/fleet/vessel-tracking";
 import { FleetAnalytics } from "@/components/analytics/fleet-analytics";
-import { 
-  Ship, 
-  Navigation, 
-  BarChart3, 
-  Settings,
-  Calendar,
-  Users,
-  Wrench
-} from "lucide-react";
+import { Ship, Navigation, BarChart3, Settings, Calendar, Users, Wrench } from "lucide-react";
 
 export default function FleetDashboard() {
   const [activeTab, setActiveTab] = useState("management");
@@ -61,9 +53,7 @@ export default function FleetDashboard() {
           <div className="text-center py-12">
             <Wrench className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">Gestão de Manutenção</h3>
-            <p className="text-muted-foreground">
-              Módulo de manutenção em desenvolvimento
-            </p>
+            <p className="text-muted-foreground">Módulo de manutenção em desenvolvimento</p>
           </div>
         </TabsContent>
       </Tabs>

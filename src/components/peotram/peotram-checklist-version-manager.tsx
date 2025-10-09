@@ -22,7 +22,7 @@ import {
   FileJson,
   FileSpreadsheet,
   FileText,
-  Settings2
+  Settings2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -57,8 +57,16 @@ interface ChecklistTemplate {
 
 const VESSEL_TYPES = [
   { value: "PSV", label: "PSV - Platform Supply Vessel", color: "bg-blue-100 text-blue-800" },
-  { value: "OSRV", label: "OSRV - Oil Spill Response Vessel", color: "bg-green-100 text-green-800" },
-  { value: "AHTS", label: "AHTS - Anchor Handling Tug Supply", color: "bg-purple-100 text-purple-800" },
+  {
+    value: "OSRV",
+    label: "OSRV - Oil Spill Response Vessel",
+    color: "bg-green-100 text-green-800",
+  },
+  {
+    value: "AHTS",
+    label: "AHTS - Anchor Handling Tug Supply",
+    color: "bg-purple-100 text-purple-800",
+  },
   { value: "ALL", label: "Todos os Tipos", color: "bg-secondary text-secondary-foreground" },
 ];
 
@@ -123,10 +131,12 @@ export const PeotramChecklistVersionManager: React.FC = () => {
   };
 
   const activateTemplate = (templateId: string) => {
-    setTemplates(templates.map(t => ({
-      ...t,
-      isActive: t.id === templateId,
-    })));
+    setTemplates(
+      templates.map(t => ({
+        ...t,
+        isActive: t.id === templateId,
+      }))
+    );
     toast.success("Template ativado!");
   };
 
@@ -166,17 +176,21 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       elements: selectedTemplate.elements.map(elem =>
         elem.id === elementId
           ? {
-            ...elem,
-            requirements: [...elem.requirements, newRequirement],
-            totalWeight: elem.totalWeight + newRequirement.weight,
-          }
+              ...elem,
+              requirements: [...elem.requirements, newRequirement],
+              totalWeight: elem.totalWeight + newRequirement.weight,
+            }
           : elem
       ),
       updatedAt: new Date(),
     });
   };
 
-  const updateRequirement = (elementId: string, reqId: string, updates: Partial<ChecklistRequirement>) => {
+  const updateRequirement = (
+    elementId: string,
+    reqId: string,
+    updates: Partial<ChecklistRequirement>
+  ) => {
     if (!selectedTemplate) return;
 
     setSelectedTemplate({
@@ -184,14 +198,15 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       elements: selectedTemplate.elements.map(elem =>
         elem.id === elementId
           ? {
-            ...elem,
-            requirements: elem.requirements.map(req =>
-              req.id === reqId ? { ...req, ...updates } : req
-            ),
-            totalWeight: elem.requirements.reduce((sum, req) =>
-              sum + (req.id === reqId ? (updates.weight || req.weight) : req.weight), 0
-            ),
-          }
+              ...elem,
+              requirements: elem.requirements.map(req =>
+                req.id === reqId ? { ...req, ...updates } : req
+              ),
+              totalWeight: elem.requirements.reduce(
+                (sum, req) => sum + (req.id === reqId ? updates.weight || req.weight : req.weight),
+                0
+              ),
+            }
           : elem
       ),
       updatedAt: new Date(),
@@ -206,12 +221,12 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       elements: selectedTemplate.elements.map(elem =>
         elem.id === elementId
           ? {
-            ...elem,
-            requirements: elem.requirements.filter(req => req.id !== reqId),
-            totalWeight: elem.requirements
-              .filter(req => req.id !== reqId)
-              .reduce((sum, req) => sum + req.weight, 0),
-          }
+              ...elem,
+              requirements: elem.requirements.filter(req => req.id !== reqId),
+              totalWeight: elem.requirements
+                .filter(req => req.id !== reqId)
+                .reduce((sum, req) => sum + req.weight, 0),
+            }
           : elem
       ),
       updatedAt: new Date(),
@@ -221,9 +236,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
   const saveTemplate = () => {
     if (!selectedTemplate) return;
 
-    setTemplates(templates.map(t =>
-      t.id === selectedTemplate.id ? selectedTemplate : t
-    ));
+    setTemplates(templates.map(t => (t.id === selectedTemplate.id ? selectedTemplate : t)));
 
     setIsEditing(false);
     toast.success("Template salvo com sucesso!");
@@ -233,25 +246,25 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     if (!selectedTemplate) return;
 
     switch (format) {
-    case "json": {
-      const blob = new Blob([JSON.stringify(selectedTemplate, null, 2)], {
-        type: "application/json",
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `peotram-template-${selectedTemplate.version}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-      toast.success("Template exportado como JSON!");
-      break;
-    }
-    case "excel":
-      toast.info("Exportação Excel em desenvolvimento");
-      break;
-    case "pdf":
-      toast.info("Exportação PDF em desenvolvimento");
-      break;
+      case "json": {
+        const blob = new Blob([JSON.stringify(selectedTemplate, null, 2)], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `peotram-template-${selectedTemplate.version}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        toast.success("Template exportado como JSON!");
+        break;
+      }
+      case "excel":
+        toast.info("Exportação Excel em desenvolvimento");
+        break;
+      case "pdf":
+        toast.info("Exportação PDF em desenvolvimento");
+        break;
     }
   };
 
@@ -316,7 +329,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
             <CardTitle className="text-lg">Templates Disponíveis</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {templates.map((template) => (
+            {templates.map(template => (
               <div
                 key={template.id}
                 className={`p-3 border rounded-lg cursor-pointer transition-colors ${
@@ -350,7 +363,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                   <Button
                     size="sm"
                     variant="ghost"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       duplicateTemplate(template);
                     }}
@@ -362,7 +375,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           activateTemplate(template.id);
                         }}
@@ -372,7 +385,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           deleteTemplate(template.id);
                         }}
@@ -395,27 +408,15 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <CardTitle>Editor de Template: {selectedTemplate.version}</CardTitle>
                   <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => exportTemplate("json")}
-                    >
+                    <Button size="sm" variant="outline" onClick={() => exportTemplate("json")}>
                       <FileJson className="h-4 w-4 mr-2" />
                       JSON
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => exportTemplate("excel")}
-                    >
+                    <Button size="sm" variant="outline" onClick={() => exportTemplate("excel")}>
                       <FileSpreadsheet className="h-4 w-4 mr-2" />
                       Excel
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => exportTemplate("pdf")}
-                    >
+                    <Button size="sm" variant="outline" onClick={() => exportTemplate("pdf")}>
                       <FileText className="h-4 w-4 mr-2" />
                       PDF
                     </Button>
@@ -441,7 +442,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <Input
                       type="number"
                       value={selectedTemplate.year}
-                      onChange={(e) =>
+                      onChange={e =>
                         setSelectedTemplate({
                           ...selectedTemplate,
                           year: parseInt(e.target.value),
@@ -454,7 +455,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <Label>Versão</Label>
                     <Input
                       value={selectedTemplate.version}
-                      onChange={(e) =>
+                      onChange={e =>
                         setSelectedTemplate({
                           ...selectedTemplate,
                           version: e.target.value,
@@ -468,7 +469,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <select
                       className="w-full px-3 py-2 border rounded-md"
                       value={selectedTemplate.vesselType}
-                      onChange={(e) =>
+                      onChange={e =>
                         setSelectedTemplate({
                           ...selectedTemplate,
                           vesselType: e.target.value as any,
@@ -476,7 +477,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                       }
                       disabled={!isEditing}
                     >
-                      {VESSEL_TYPES.map((type) => (
+                      {VESSEL_TYPES.map(type => (
                         <option key={type.value} value={type.value}>
                           {type.label}
                         </option>
@@ -497,7 +498,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     )}
                   </div>
 
-                  {selectedTemplate.elements.map((element) => (
+                  {selectedTemplate.elements.map(element => (
                     <div
                       key={element.id}
                       draggable={isEditing}
@@ -513,13 +514,11 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                         <div className="flex-1">
                           <Input
                             value={element.name}
-                            onChange={(e) =>
+                            onChange={e =>
                               setSelectedTemplate({
                                 ...selectedTemplate,
                                 elements: selectedTemplate.elements.map(elem =>
-                                  elem.id === element.id
-                                    ? { ...elem, name: e.target.value }
-                                    : elem
+                                  elem.id === element.id ? { ...elem, name: e.target.value } : elem
                                 ),
                               })
                             }
@@ -527,18 +526,19 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                             className="font-medium"
                           />
                         </div>
-                        <Badge variant="secondary">
-                          Peso Total: {element.totalWeight}
-                        </Badge>
+                        <Badge variant="secondary">Peso Total: {element.totalWeight}</Badge>
                       </div>
 
                       {/* Requirements */}
                       <div className="pl-8 space-y-2">
-                        {element.requirements.map((req) => (
-                          <div key={req.id} className="flex items-center gap-2 p-2 bg-muted/30 rounded">
+                        {element.requirements.map(req => (
+                          <div
+                            key={req.id}
+                            className="flex items-center gap-2 p-2 bg-muted/30 rounded"
+                          >
                             <Input
                               value={req.description}
-                              onChange={(e) =>
+                              onChange={e =>
                                 updateRequirement(element.id, req.id, {
                                   description: e.target.value,
                                 })
@@ -550,7 +550,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                             <Input
                               type="number"
                               value={req.weight}
-                              onChange={(e) =>
+                              onChange={e =>
                                 updateRequirement(element.id, req.id, {
                                   weight: parseInt(e.target.value) || 1,
                                 })
@@ -562,7 +562,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                             <input
                               type="checkbox"
                               checked={req.mandatory}
-                              onChange={(e) =>
+                              onChange={e =>
                                 updateRequirement(element.id, req.id, {
                                   mandatory: e.target.checked,
                                 })

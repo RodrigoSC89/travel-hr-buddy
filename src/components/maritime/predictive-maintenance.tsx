@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Wrench, 
+import {
+  Wrench,
   AlertTriangle,
   CheckCircle,
   Clock,
@@ -17,7 +17,7 @@ import {
   Settings,
   AlertCircle,
   Battery,
-  Gauge
+  Gauge,
 } from "lucide-react";
 
 interface MaintenanceItem {
@@ -54,14 +54,15 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
       predictedFailure: {
         probability: 87,
         daysUntil: 6,
-        confidence: 92
+        confidence: 92,
       },
       healthScore: 68,
       lastService: "2025-03-10",
       nextService: "2025-05-18",
       hoursOperation: 2450,
       estimatedCost: 35000,
-      aiRecommendation: "Análise de vibração detectou anomalia crescente. Substituição preventiva de rolamentos recomendada para evitar falha catastrófica."
+      aiRecommendation:
+        "Análise de vibração detectou anomalia crescente. Substituição preventiva de rolamentos recomendada para evitar falha catastrófica.",
     },
     {
       id: "2",
@@ -76,7 +77,8 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
       nextService: "2025-05-25",
       hoursOperation: 1850,
       estimatedCost: 18500,
-      aiRecommendation: "Manutenção preventiva de rotina. Pressão do sistema estável. Trocar filtros e verificar vedações."
+      aiRecommendation:
+        "Manutenção preventiva de rotina. Pressão do sistema estável. Trocar filtros e verificar vedações.",
     },
     {
       id: "3",
@@ -89,14 +91,15 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
       predictedFailure: {
         probability: 94,
         daysUntil: -2,
-        confidence: 96
+        confidence: 96,
       },
       healthScore: 45,
       lastService: "2025-02-15",
       nextService: "2025-05-10",
       hoursOperation: 3200,
       estimatedCost: 42000,
-      aiRecommendation: "URGENTE: Temperatura de operação 15% acima do normal. Provável falha de sistema de resfriamento. Intervenção imediata necessária."
+      aiRecommendation:
+        "URGENTE: Temperatura de operação 15% acima do normal. Provável falha de sistema de resfriamento. Intervenção imediata necessária.",
     },
     {
       id: "4",
@@ -111,7 +114,8 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
       nextService: "2025-08-20",
       hoursOperation: 1200,
       estimatedCost: 28000,
-      aiRecommendation: "Calibração de sensores em andamento. Performance dentro da especificação. Concluir testes de redundância."
+      aiRecommendation:
+        "Calibração de sensores em andamento. Performance dentro da especificação. Concluir testes de redundância.",
     },
     {
       id: "5",
@@ -126,7 +130,8 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
       nextService: "2025-08-05",
       hoursOperation: 450,
       estimatedCost: 8500,
-      aiRecommendation: "Manutenção concluída com sucesso. Sistema operando em condições ótimas. Próxima verificação em 90 dias."
+      aiRecommendation:
+        "Manutenção concluída com sucesso. Sistema operando em condições ótimas. Próxima verificação em 90 dias.",
     },
     {
       id: "6",
@@ -139,34 +144,45 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
       predictedFailure: {
         probability: 65,
         daysUntil: 18,
-        confidence: 78
+        confidence: 78,
       },
       healthScore: 75,
       lastService: "2025-03-15",
       nextService: "2025-05-30",
       hoursOperation: 1980,
       estimatedCost: 15000,
-      aiRecommendation: "Consumo elétrico 8% acima do padrão. Possível desgaste de válvulas. Agendar inspeção e manutenção preventiva."
-    }
+      aiRecommendation:
+        "Consumo elétrico 8% acima do padrão. Possível desgaste de válvulas. Agendar inspeção e manutenção preventiva.",
+    },
   ]);
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical": return "destructive";
-    case "high": return "default";
-    case "medium": return "secondary";
-    case "low": return "outline";
-    default: return "outline";
+      case "critical":
+        return "destructive";
+      case "high":
+        return "default";
+      case "medium":
+        return "secondary";
+      case "low":
+        return "outline";
+      default:
+        return "outline";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "text-green-600";
-    case "inprogress": return "text-blue-600";
-    case "scheduled": return "text-yellow-600";
-    case "overdue": return "text-red-600";
-    default: return "text-muted-foreground";
+      case "completed":
+        return "text-green-600";
+      case "inprogress":
+        return "text-blue-600";
+      case "scheduled":
+        return "text-yellow-600";
+      case "overdue":
+        return "text-red-600";
+      default:
+        return "text-muted-foreground";
     }
   };
 
@@ -178,11 +194,16 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "predictive": return <Zap className="h-5 w-5 text-purple-600" />;
-    case "preventive": return <CheckCircle className="h-5 w-5 text-blue-600" />;
-    case "corrective": return <Settings className="h-5 w-5 text-orange-600" />;
-    case "emergency": return <AlertTriangle className="h-5 w-5 text-red-600" />;
-    default: return <Wrench className="h-5 w-5" />;
+      case "predictive":
+        return <Zap className="h-5 w-5 text-purple-600" />;
+      case "preventive":
+        return <CheckCircle className="h-5 w-5 text-blue-600" />;
+      case "corrective":
+        return <Settings className="h-5 w-5 text-orange-600" />;
+      case "emergency":
+        return <AlertTriangle className="h-5 w-5 text-red-600" />;
+      default:
+        return <Wrench className="h-5 w-5" />;
     }
   };
 
@@ -206,7 +227,7 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
             <p className="text-xs text-muted-foreground">Sob monitoramento</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Itens Críticos</CardTitle>
@@ -216,7 +237,7 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
             <p className="text-xs text-muted-foreground">Ação urgente</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Saúde Média</CardTitle>
@@ -228,14 +249,15 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
             <p className="text-xs text-muted-foreground">Score da frota</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Custo Estimado</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              R$ {(maintenanceItems.reduce((sum, i) => sum + i.estimatedCost, 0) / 1000).toFixed(0)}k
+              R$ {(maintenanceItems.reduce((sum, i) => sum + i.estimatedCost, 0) / 1000).toFixed(0)}
+              k
             </div>
             <p className="text-xs text-muted-foreground">Próximos 30 dias</p>
           </CardContent>
@@ -251,9 +273,7 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
                 <Wrench className="h-5 w-5" />
                 Sistema de Manutenção Preditiva
               </CardTitle>
-              <CardDescription>
-                IA analisa padrões e prevê falhas antes que ocorram
-              </CardDescription>
+              <CardDescription>IA analisa padrões e prevê falhas antes que ocorram</CardDescription>
             </div>
             <Badge variant="secondary" className="gap-1">
               <Activity className="h-3 w-3" />
@@ -271,7 +291,7 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
               <TabsTrigger value="overdue">Atrasados</TabsTrigger>
             </TabsList>
 
-            {["all", "predictive", "preventive", "critical", "overdue"].map((tab) => (
+            {["all", "predictive", "preventive", "critical", "overdue"].map(tab => (
               <TabsContent key={tab} value={tab} className="space-y-4 mt-4">
                 {maintenanceItems
                   .filter(item => {
@@ -282,19 +302,23 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
                     if (tab === "overdue") return item.status === "overdue";
                     return true;
                   })
-                  .map((item) => (
-                    <Card key={item.id} className={`border-l-4 ${
-                      item.priority === "critical" || item.status === "overdue" ? "border-l-red-600" :
-                        item.priority === "high" ? "border-l-orange-600" :
-                          item.priority === "medium" ? "border-l-yellow-600" :
-                            "border-l-green-600"
-                    }`}>
+                  .map(item => (
+                    <Card
+                      key={item.id}
+                      className={`border-l-4 ${
+                        item.priority === "critical" || item.status === "overdue"
+                          ? "border-l-red-600"
+                          : item.priority === "high"
+                            ? "border-l-orange-600"
+                            : item.priority === "medium"
+                              ? "border-l-yellow-600"
+                              : "border-l-green-600"
+                      }`}
+                    >
                       <CardHeader>
                         <div className="flex items-start justify-between">
                           <div className="flex items-start gap-3">
-                            <div className="p-2 bg-muted rounded-lg">
-                              {getTypeIcon(item.type)}
-                            </div>
+                            <div className="p-2 bg-muted rounded-lg">{getTypeIcon(item.type)}</div>
                             <div>
                               <div className="flex items-center gap-2">
                                 <CardTitle className="text-base">{item.equipment}</CardTitle>
@@ -303,15 +327,22 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
                                 </Badge>
                               </div>
                               <CardDescription className="mt-1">
-                                {item.vessel} • {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+                                {item.vessel} •{" "}
+                                {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
                               </CardDescription>
                             </div>
                           </div>
                           <div className="text-right">
                             <div className={`text-sm font-medium ${getStatusColor(item.status)}`}>
-                              {item.status === "completed" && <CheckCircle className="h-4 w-4 inline mr-1" />}
-                              {item.status === "inprogress" && <Activity className="h-4 w-4 inline mr-1" />}
-                              {item.status === "overdue" && <AlertTriangle className="h-4 w-4 inline mr-1" />}
+                              {item.status === "completed" && (
+                                <CheckCircle className="h-4 w-4 inline mr-1" />
+                              )}
+                              {item.status === "inprogress" && (
+                                <Activity className="h-4 w-4 inline mr-1" />
+                              )}
+                              {item.status === "overdue" && (
+                                <AlertTriangle className="h-4 w-4 inline mr-1" />
+                              )}
                               {item.status.toUpperCase()}
                             </div>
                           </div>
@@ -334,29 +365,44 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
 
                         {/* Predictive Failure Alert */}
                         {item.predictedFailure && (
-                          <div className={`p-3 rounded-lg ${
-                            item.predictedFailure.probability >= 90 ? "bg-red-50 dark:bg-red-950" :
-                              item.predictedFailure.probability >= 75 ? "bg-orange-50 dark:bg-orange-950" :
-                                "bg-yellow-50 dark:bg-yellow-950"
-                          }`}>
+                          <div
+                            className={`p-3 rounded-lg ${
+                              item.predictedFailure.probability >= 90
+                                ? "bg-red-50 dark:bg-red-950"
+                                : item.predictedFailure.probability >= 75
+                                  ? "bg-orange-50 dark:bg-orange-950"
+                                  : "bg-yellow-50 dark:bg-yellow-950"
+                            }`}
+                          >
                             <div className="flex items-start gap-2">
-                              <AlertCircle className={`h-5 w-5 mt-0.5 ${
-                                item.predictedFailure.probability >= 90 ? "text-red-600" :
-                                  item.predictedFailure.probability >= 75 ? "text-orange-600" :
-                                    "text-yellow-600"
-                              }`} />
+                              <AlertCircle
+                                className={`h-5 w-5 mt-0.5 ${
+                                  item.predictedFailure.probability >= 90
+                                    ? "text-red-600"
+                                    : item.predictedFailure.probability >= 75
+                                      ? "text-orange-600"
+                                      : "text-yellow-600"
+                                }`}
+                              />
                               <div className="flex-1">
                                 <div className="font-medium text-sm">Previsão de Falha</div>
                                 <div className="text-sm mt-1">
-                                  Probabilidade: <span className="font-bold">{item.predictedFailure.probability}%</span>
+                                  Probabilidade:{" "}
+                                  <span className="font-bold">
+                                    {item.predictedFailure.probability}%
+                                  </span>
                                   {" • "}
-                                  Tempo: <span className="font-bold">
-                                    {item.predictedFailure.daysUntil > 0 
-                                      ? `${item.predictedFailure.daysUntil} dias` 
+                                  Tempo:{" "}
+                                  <span className="font-bold">
+                                    {item.predictedFailure.daysUntil > 0
+                                      ? `${item.predictedFailure.daysUntil} dias`
                                       : `${Math.abs(item.predictedFailure.daysUntil)} dias atrás`}
                                   </span>
                                   {" • "}
-                                  Confiança IA: <span className="font-bold">{item.predictedFailure.confidence}%</span>
+                                  Confiança IA:{" "}
+                                  <span className="font-bold">
+                                    {item.predictedFailure.confidence}%
+                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -372,18 +418,26 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
                           <div className="bg-muted/50 p-3 rounded-lg text-center">
                             <div className="text-xs text-muted-foreground mb-1">Último</div>
                             <div className="text-xs font-medium">
-                              {new Date(item.lastService).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}
+                              {new Date(item.lastService).toLocaleDateString("pt-BR", {
+                                day: "2-digit",
+                                month: "2-digit",
+                              })}
                             </div>
                           </div>
                           <div className="bg-muted/50 p-3 rounded-lg text-center">
                             <div className="text-xs text-muted-foreground mb-1">Próximo</div>
                             <div className="text-xs font-medium">
-                              {new Date(item.nextService).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}
+                              {new Date(item.nextService).toLocaleDateString("pt-BR", {
+                                day: "2-digit",
+                                month: "2-digit",
+                              })}
                             </div>
                           </div>
                           <div className="bg-muted/50 p-3 rounded-lg text-center">
                             <div className="text-xs text-muted-foreground mb-1">Custo</div>
-                            <div className="font-bold text-xs">R$ {(item.estimatedCost / 1000).toFixed(0)}k</div>
+                            <div className="font-bold text-xs">
+                              R$ {(item.estimatedCost / 1000).toFixed(0)}k
+                            </div>
                           </div>
                         </div>
 

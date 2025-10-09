@@ -5,11 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Anchor, 
-  Compass, 
-  Ship, 
-  Waves, 
+import {
+  Anchor,
+  Compass,
+  Ship,
+  Waves,
   Navigation,
   MessageSquare,
   Zap,
@@ -27,7 +27,7 @@ import {
   Brain,
   Sparkles,
   Globe,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 
 interface CopilotMessage {
@@ -65,16 +65,16 @@ const NauticalCopilot: React.FC = () => {
       action: "Ver Rota Sugerida",
       category: "optimization",
       priority: "high",
-      icon: Navigation
+      icon: Navigation,
     },
     {
-      id: "2", 
+      id: "2",
       title: "Certificados Expirando",
       description: "3 tripulantes com certificações vencendo em 30 dias",
       action: "Gerenciar Certificados",
       category: "alert",
       priority: "high",
-      icon: FileText
+      icon: FileText,
     },
     {
       id: "3",
@@ -83,7 +83,7 @@ const NauticalCopilot: React.FC = () => {
       action: "Ver Relatório",
       category: "insight",
       priority: "medium",
-      icon: TrendingUp
+      icon: TrendingUp,
     },
     {
       id: "4",
@@ -92,8 +92,8 @@ const NauticalCopilot: React.FC = () => {
       action: "Revisar Escala",
       category: "task",
       priority: "medium",
-      icon: Users
-    }
+      icon: Users,
+    },
   ];
 
   const quickActions = [
@@ -102,18 +102,21 @@ const NauticalCopilot: React.FC = () => {
     { icon: BarChart3, label: "Relatórios", action: "reports" },
     { icon: Calendar, label: "Cronograma", action: "schedule" },
     { icon: Waves, label: "Condições Marítimas", action: "maritime_conditions" },
-    { icon: Target, label: "Metas", action: "goals" }
+    { icon: Target, label: "Metas", action: "goals" },
   ];
 
   useEffect(() => {
     // Mensagem de boas-vindas
-    setMessages([{
-      id: "1",
-      content: "Olá! Sou o Nautilus Copilot, seu assistente marítimo inteligente. Como posso ajudá-lo hoje? 🚢",
-      type: "assistant",
-      timestamp: new Date(),
-      category: "navigation"
-    }]);
+    setMessages([
+      {
+        id: "1",
+        content:
+          "Olá! Sou o Nautilus Copilot, seu assistente marítimo inteligente. Como posso ajudá-lo hoje? 🚢",
+        type: "assistant",
+        timestamp: new Date(),
+        category: "navigation",
+      },
+    ]);
   }, []);
 
   useEffect(() => {
@@ -127,7 +130,7 @@ const NauticalCopilot: React.FC = () => {
       id: Date.now().toString(),
       content: inputMessage,
       type: "user",
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -142,7 +145,7 @@ const NauticalCopilot: React.FC = () => {
         content: response.content,
         type: "assistant",
         timestamp: new Date(),
-        category: response.category
+        category: response.category,
       };
 
       setMessages(prev => [...prev, assistantMessage]);
@@ -150,53 +153,64 @@ const NauticalCopilot: React.FC = () => {
     }, 1500);
   };
 
-  const generateIntelligentResponse = (message: string): { content: string; category: CopilotMessage["category"] } => {
+  const generateIntelligentResponse = (
+    message: string
+  ): { content: string; category: CopilotMessage["category"] } => {
     const lowerMessage = message.toLowerCase();
-    
+
     if (lowerMessage.includes("frota") || lowerMessage.includes("navio")) {
       return {
-        content: "Analisando sua frota... Temos 8 embarcações ativas. A eficiência média está em 94%. Posso gerar um relatório detalhado ou sugerir otimizações específicas?",
-        category: "operations"
+        content:
+          "Analisando sua frota... Temos 8 embarcações ativas. A eficiência média está em 94%. Posso gerar um relatório detalhado ou sugerir otimizações específicas?",
+        category: "operations",
       };
     } else if (lowerMessage.includes("tripula") || lowerMessage.includes("crew")) {
       return {
-        content: "Verificando dados da tripulação... 47 tripulantes ativos, 3 certificações expirando em breve. Deseja que eu prepare automaticamente os renewals ou ajude com o planejamento de escalas?",
-        category: "hr"
+        content:
+          "Verificando dados da tripulação... 47 tripulantes ativos, 3 certificações expirando em breve. Deseja que eu prepare automaticamente os renewals ou ajude com o planejamento de escalas?",
+        category: "hr",
       };
     } else if (lowerMessage.includes("rota") || lowerMessage.includes("viagem")) {
       return {
-        content: "Processando dados de rota... Com base nas condições atuais e histórico, identifiquei uma rota 12% mais eficiente. Também posso considerar fatores climáticos em tempo real.",
-        category: "navigation"
+        content:
+          "Processando dados de rota... Com base nas condições atuais e histórico, identifiquei uma rota 12% mais eficiente. Também posso considerar fatores climáticos em tempo real.",
+        category: "navigation",
       };
     } else if (lowerMessage.includes("relatório") || lowerMessage.includes("análise")) {
       return {
-        content: "Gerando insights analíticos... Performance geral subiu 15% este mês. Os principais KPIs mostram tendência positiva. Posso criar relatórios personalizados por categoria.",
-        category: "analytics"
+        content:
+          "Gerando insights analíticos... Performance geral subiu 15% este mês. Os principais KPIs mostram tendência positiva. Posso criar relatórios personalizados por categoria.",
+        category: "analytics",
       };
     } else {
       return {
-        content: "Entendi sua solicitação. Como especialista marítimo, posso ajudar com gestão de frota, planejamento de tripulação, otimização de rotas e análise de performance. Em que área posso ser mais útil?",
-        category: "navigation"
+        content:
+          "Entendi sua solicitação. Como especialista marítimo, posso ajudar com gestão de frota, planejamento de tripulação, otimização de rotas e análise de performance. Em que área posso ser mais útil?",
+        category: "navigation",
       };
     }
   };
 
   const handleQuickAction = (action: string) => {
     const actionMessages = {
-      fleet_status: "Mostrando status da frota: 8 embarcações ativas, 2 em manutenção, eficiência média 94%",
-      crew_management: "Acessando gestão de tripulação: 47 tripulantes ativos, próxima rotação em 5 dias",
+      fleet_status:
+        "Mostrando status da frota: 8 embarcações ativas, 2 em manutenção, eficiência média 94%",
+      crew_management:
+        "Acessando gestão de tripulação: 47 tripulantes ativos, próxima rotação em 5 dias",
       reports: "Gerando relatórios inteligentes com IA: Performance mensal, otimizações sugeridas",
       schedule: "Verificando cronograma: 3 viagens agendadas, 1 em preparação",
-      maritime_conditions: "Condições marítimas atuais: Mar calmo, visibilidade boa, ventos favoráveis",
-      goals: "Status das metas: 87% das metas mensais atingidas, tendência positiva"
+      maritime_conditions:
+        "Condições marítimas atuais: Mar calmo, visibilidade boa, ventos favoráveis",
+      goals: "Status das metas: 87% das metas mensais atingidas, tendência positiva",
     };
 
     const message: CopilotMessage = {
       id: Date.now().toString(),
-      content: actionMessages[action as keyof typeof actionMessages] || "Ação executada com sucesso!",
+      content:
+        actionMessages[action as keyof typeof actionMessages] || "Ação executada com sucesso!",
       type: "assistant",
       timestamp: new Date(),
-      category: "operations"
+      category: "operations",
     };
 
     setMessages(prev => [...prev, message]);
@@ -216,22 +230,33 @@ const NauticalCopilot: React.FC = () => {
 
   const getCategoryIcon = (category?: CopilotMessage["category"]) => {
     switch (category) {
-    case "navigation": return <Compass className="w-4 h-4 text-blue-500" />;
-    case "operations": return <Ship className="w-4 h-4 text-green-500" />;
-    case "hr": return <Users className="w-4 h-4 text-purple-500" />;
-    case "analytics": return <BarChart3 className="w-4 h-4 text-orange-500" />;
-    case "logistics": return <Navigation className="w-4 h-4 text-cyan-500" />;
-    default: return <Brain className="w-4 h-4 text-primary" />;
+      case "navigation":
+        return <Compass className="w-4 h-4 text-blue-500" />;
+      case "operations":
+        return <Ship className="w-4 h-4 text-green-500" />;
+      case "hr":
+        return <Users className="w-4 h-4 text-purple-500" />;
+      case "analytics":
+        return <BarChart3 className="w-4 h-4 text-orange-500" />;
+      case "logistics":
+        return <Navigation className="w-4 h-4 text-cyan-500" />;
+      default:
+        return <Brain className="w-4 h-4 text-primary" />;
     }
   };
 
   const getSuggestionColor = (category: SmartSuggestion["category"]) => {
     switch (category) {
-    case "optimization": return "border-l-blue-500 bg-blue-50/50 dark:bg-blue-900/20";
-    case "alert": return "border-l-red-500 bg-red-50/50 dark:bg-red-900/20";
-    case "insight": return "border-l-green-500 bg-green-50/50 dark:bg-green-900/20";
-    case "task": return "border-l-purple-500 bg-purple-50/50 dark:bg-purple-900/20";
-    default: return "border-l-gray-500 bg-gray-50/50 dark:bg-gray-900/20";
+      case "optimization":
+        return "border-l-blue-500 bg-blue-50/50 dark:bg-blue-900/20";
+      case "alert":
+        return "border-l-red-500 bg-red-50/50 dark:bg-red-900/20";
+      case "insight":
+        return "border-l-green-500 bg-green-50/50 dark:bg-green-900/20";
+      case "task":
+        return "border-l-purple-500 bg-purple-50/50 dark:bg-purple-900/20";
+      default:
+        return "border-l-gray-500 bg-gray-50/50 dark:bg-gray-900/20";
     }
   };
 
@@ -252,7 +277,7 @@ const NauticalCopilot: React.FC = () => {
                   IA Maritime
                 </Badge>
               </CardTitle>
-              
+
               <div className="flex gap-2">
                 <Button
                   variant="outline"
@@ -264,9 +289,9 @@ const NauticalCopilot: React.FC = () => {
                 </Button>
               </div>
             </div>
-            
+
             <div className="flex gap-2 mt-4">
-              {["chat", "suggestions", "insights"].map((mode) => (
+              {["chat", "suggestions", "insights"].map(mode => (
                 <Button
                   key={mode}
                   variant={activeMode === mode ? "default" : "outline"}
@@ -288,29 +313,35 @@ const NauticalCopilot: React.FC = () => {
               <>
                 <ScrollArea className="flex-1 px-6">
                   <div className="space-y-4 pb-4">
-                    {messages.map((message) => (
+                    {messages.map(message => (
                       <div
                         key={message.id}
                         className={`flex gap-3 ${message.type === "user" ? "justify-end" : "justify-start"}`}
                       >
-                        <div className={`flex gap-2 max-w-[80%] ${message.type === "user" ? "flex-row-reverse" : "flex-row"}`}>
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                            message.type === "user" 
-                              ? "bg-primary text-primary-foreground" 
-                              : "bg-gradient-to-br from-nautical/20 to-primary/20"
-                          }`}>
+                        <div
+                          className={`flex gap-2 max-w-[80%] ${message.type === "user" ? "flex-row-reverse" : "flex-row"}`}
+                        >
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                              message.type === "user"
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-gradient-to-br from-nautical/20 to-primary/20"
+                            }`}
+                          >
                             {message.type === "user" ? (
                               <Users className="w-4 h-4" />
                             ) : (
                               getCategoryIcon(message.category)
                             )}
                           </div>
-                          
-                          <div className={`rounded-2xl p-4 ${
-                            message.type === "user"
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-muted/50 backdrop-blur-sm"
-                          }`}>
+
+                          <div
+                            className={`rounded-2xl p-4 ${
+                              message.type === "user"
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted/50 backdrop-blur-sm"
+                            }`}
+                          >
                             <p className="text-sm leading-relaxed">{message.content}</p>
                             <span className="text-xs opacity-70 mt-2 block">
                               {message.timestamp.toLocaleTimeString()}
@@ -319,7 +350,7 @@ const NauticalCopilot: React.FC = () => {
                         </div>
                       </div>
                     ))}
-                    
+
                     {isTyping && (
                       <div className="flex gap-3">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-nautical/20 to-primary/20 flex items-center justify-center">
@@ -329,8 +360,14 @@ const NauticalCopilot: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <div className="flex gap-1">
                               <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
-                              <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
-                              <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+                              <div
+                                className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                                style={{ animationDelay: "0.1s" }}
+                              />
+                              <div
+                                className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                                style={{ animationDelay: "0.2s" }}
+                              />
                             </div>
                             <span className="text-sm text-muted-foreground">Analisando...</span>
                           </div>
@@ -345,8 +382,8 @@ const NauticalCopilot: React.FC = () => {
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
-                      onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                      onChange={e => setInputMessage(e.target.value)}
+                      onKeyPress={e => e.key === "Enter" && handleSendMessage()}
                       placeholder="Digite sua pergunta sobre operações marítimas..."
                       className="flex-1"
                       disabled={isTyping}
@@ -370,8 +407,8 @@ const NauticalCopilot: React.FC = () => {
                     <Sparkles className="w-5 h-5 text-primary" />
                     Sugestões Inteligentes
                   </h3>
-                  
-                  {smartSuggestions.map((suggestion) => {
+
+                  {smartSuggestions.map(suggestion => {
                     const Icon = suggestion.icon;
                     return (
                       <div
@@ -386,13 +423,17 @@ const NauticalCopilot: React.FC = () => {
                             </div>
                             <div className="flex-1">
                               <h4 className="font-medium mb-1">{suggestion.title}</h4>
-                              <p className="text-sm text-muted-foreground mb-3">{suggestion.description}</p>
+                              <p className="text-sm text-muted-foreground mb-3">
+                                {suggestion.description}
+                              </p>
                               <Button size="sm" variant="outline">
                                 {suggestion.action}
                               </Button>
                             </div>
                           </div>
-                          <Badge variant={suggestion.priority === "high" ? "destructive" : "secondary"}>
+                          <Badge
+                            variant={suggestion.priority === "high" ? "destructive" : "secondary"}
+                          >
                             {suggestion.priority}
                           </Badge>
                         </div>
@@ -446,7 +487,9 @@ const NauticalCopilot: React.FC = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm">Condições do Mar</span>
-                <Badge variant="secondary" className="text-green-600">Favorável</Badge>
+                <Badge variant="secondary" className="text-green-600">
+                  Favorável
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Frota Ativa</span>

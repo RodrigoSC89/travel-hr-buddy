@@ -3,6 +3,7 @@
 ## 📊 Total de Módulos: 32
 
 ### 🎛️ Módulos Principais (1-10)
+
 1. **dashboard** - Painel principal de controle
 2. **sistema-maritimo** - Gestão de frotas e embarcações
 3. **ia-inovacao** - Centro de IA e inovação
@@ -15,6 +16,7 @@
 10. **configuracoes** - Configurações do sistema
 
 ### 🚀 Módulos Avançados (11-20)
+
 11. **otimizacao** - Otimização de performance
 12. **assistente-voz** - Assistente de voz
 13. **centro-notificacoes** - Centro de notificações
@@ -27,6 +29,7 @@
 20. **peo-dp** - Gestão de RH e pessoal
 
 ### 🔧 Módulos de Suporte (21-32)
+
 21. **sgso** - Sistema de gestão de saúde e segurança
 22. **templates** - Gestão de templates
 23. **analytics-avancado** - Analytics avançado

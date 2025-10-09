@@ -4,11 +4,11 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Shield, 
-  Lock, 
-  Database, 
-  Activity, 
+import {
+  Shield,
+  Lock,
+  Database,
+  Activity,
   AlertTriangle,
   CheckCircle,
   Server,
@@ -19,7 +19,7 @@ import {
   Clock,
   TrendingUp,
   TrendingDown,
-  Zap
+  Zap,
 } from "lucide-react";
 
 interface SystemMetric {
@@ -50,9 +50,30 @@ export const SystemHealthDashboard = () => {
       { name: "CPU Usage", current: 45, target: 80, unit: "%", status: "healthy", trend: "stable" },
       { name: "Memory Usage", current: 72, target: 85, unit: "%", status: "healthy", trend: "up" },
       { name: "Disk Usage", current: 83, target: 90, unit: "%", status: "warning", trend: "up" },
-      { name: "Network I/O", current: 234, target: 1000, unit: "MB/s", status: "healthy", trend: "down" },
-      { name: "Active Sessions", current: 1247, target: 2000, unit: "", status: "healthy", trend: "up" },
-      { name: "Response Time", current: 127, target: 200, unit: "ms", status: "healthy", trend: "stable" }
+      {
+        name: "Network I/O",
+        current: 234,
+        target: 1000,
+        unit: "MB/s",
+        status: "healthy",
+        trend: "down",
+      },
+      {
+        name: "Active Sessions",
+        current: 1247,
+        target: 2000,
+        unit: "",
+        status: "healthy",
+        trend: "up",
+      },
+      {
+        name: "Response Time",
+        current: 127,
+        target: 200,
+        unit: "ms",
+        status: "healthy",
+        trend: "stable",
+      },
     ]);
 
     setSecurityEvents([
@@ -62,7 +83,7 @@ export const SystemHealthDashboard = () => {
         severity: "medium",
         message: "Tentativa de login com credenciais inválidas detectada",
         timestamp: "2 min atrás",
-        resolved: false
+        resolved: false,
       },
       {
         id: "2",
@@ -70,7 +91,7 @@ export const SystemHealthDashboard = () => {
         severity: "low",
         message: "Novo dispositivo conectado ao sistema",
         timestamp: "15 min atrás",
-        resolved: true
+        resolved: true,
       },
       {
         id: "3",
@@ -78,7 +99,7 @@ export const SystemHealthDashboard = () => {
         severity: "high",
         message: "Uso elevado de CPU detectado no servidor web",
         timestamp: "1 hora atrás",
-        resolved: true
+        resolved: true,
       },
       {
         id: "4",
@@ -86,8 +107,8 @@ export const SystemHealthDashboard = () => {
         severity: "low",
         message: "Login bem-sucedido de administrador",
         timestamp: "2 horas atrás",
-        resolved: true
-      }
+        resolved: true,
+      },
     ]);
 
     // Simulate real-time updates
@@ -100,49 +121,72 @@ export const SystemHealthDashboard = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "healthy": return "text-success";
-    case "warning": return "text-warning";
-    case "critical": return "text-destructive";
-    default: return "text-muted-foreground";
+      case "healthy":
+        return "text-success";
+      case "warning":
+        return "text-warning";
+      case "critical":
+        return "text-destructive";
+      default:
+        return "text-muted-foreground";
     }
   };
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-    case "healthy": return "bg-success/10 text-success border-success/20";
-    case "warning": return "bg-warning/10 text-warning border-warning/20";
-    case "critical": return "bg-destructive/10 text-destructive border-destructive/20";
-    default: return "bg-muted/10 text-muted-foreground border-muted/20";
+      case "healthy":
+        return "bg-success/10 text-success border-success/20";
+      case "warning":
+        return "bg-warning/10 text-warning border-warning/20";
+      case "critical":
+        return "bg-destructive/10 text-destructive border-destructive/20";
+      default:
+        return "bg-muted/10 text-muted-foreground border-muted/20";
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "low": return "bg-blue-100 text-blue-700";
-    case "medium": return "bg-yellow-100 text-yellow-700";
-    case "high": return "bg-orange-100 text-orange-700";
-    case "critical": return "bg-red-100 text-red-700";
-    default: return "bg-secondary text-secondary-foreground";
+      case "low":
+        return "bg-blue-100 text-blue-700";
+      case "medium":
+        return "bg-yellow-100 text-yellow-700";
+      case "high":
+        return "bg-orange-100 text-orange-700";
+      case "critical":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="h-3 w-3 text-green-500" />;
-    case "down": return <TrendingDown className="h-3 w-3 text-red-500" />;
-    default: return <Activity className="h-3 w-3 text-muted-foreground" />;
+      case "up":
+        return <TrendingUp className="h-3 w-3 text-green-500" />;
+      case "down":
+        return <TrendingDown className="h-3 w-3 text-red-500" />;
+      default:
+        return <Activity className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
   const getMetricIcon = (name: string) => {
     switch (name.toLowerCase()) {
-    case "cpu usage": return <Cpu className="h-4 w-4" />;
-    case "memory usage": return <MemoryStick className="h-4 w-4" />;
-    case "disk usage": return <HardDrive className="h-4 w-4" />;
-    case "network i/o": return <Network className="h-4 w-4" />;
-    case "active sessions": return <Activity className="h-4 w-4" />;
-    case "response time": return <Clock className="h-4 w-4" />;
-    default: return <Server className="h-4 w-4" />;
+      case "cpu usage":
+        return <Cpu className="h-4 w-4" />;
+      case "memory usage":
+        return <MemoryStick className="h-4 w-4" />;
+      case "disk usage":
+        return <HardDrive className="h-4 w-4" />;
+      case "network i/o":
+        return <Network className="h-4 w-4" />;
+      case "active sessions":
+        return <Activity className="h-4 w-4" />;
+      case "response time":
+        return <Clock className="h-4 w-4" />;
+      default:
+        return <Server className="h-4 w-4" />;
     }
   };
 
@@ -235,9 +279,7 @@ export const SystemHealthDashboard = () => {
                     </div>
                     <div className="flex items-center gap-1">
                       {getTrendIcon(metric.trend)}
-                      <Badge className={getStatusBadgeColor(metric.status)}>
-                        {metric.status}
-                      </Badge>
+                      <Badge className={getStatusBadgeColor(metric.status)}>{metric.status}</Badge>
                     </div>
                   </CardTitle>
                 </CardHeader>
@@ -246,20 +288,18 @@ export const SystemHealthDashboard = () => {
                     <span className={`text-2xl font-bold ${getStatusColor(metric.status)}`}>
                       {metric.current}
                     </span>
-                    <span className="text-sm text-muted-foreground">
-                      {metric.unit}
-                    </span>
+                    <span className="text-sm text-muted-foreground">{metric.unit}</span>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
                       <span>Atual</span>
-                      <span>Meta: {metric.target}{metric.unit}</span>
+                      <span>
+                        Meta: {metric.target}
+                        {metric.unit}
+                      </span>
                     </div>
-                    <Progress 
-                      value={(metric.current / metric.target) * 100} 
-                      className="h-2" 
-                    />
+                    <Progress value={(metric.current / metric.target) * 100} className="h-2" />
                   </div>
                 </CardContent>
               </Card>
@@ -269,21 +309,23 @@ export const SystemHealthDashboard = () => {
 
         <TabsContent value="security" className="space-y-4">
           <div className="space-y-3">
-            {securityEvents.map((event) => (
+            {securityEvents.map(event => (
               <Card key={event.id}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
-                      <div className={`p-2 rounded-lg ${
-                        event.resolved ? "bg-success/10" : "bg-warning/10"
-                      }`}>
+                      <div
+                        className={`p-2 rounded-lg ${
+                          event.resolved ? "bg-success/10" : "bg-warning/10"
+                        }`}
+                      >
                         {event.resolved ? (
                           <CheckCircle className="h-4 w-4 text-success" />
                         ) : (
                           <AlertTriangle className="h-4 w-4 text-warning" />
                         )}
                       </div>
-                      
+
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <p className="font-medium">{event.message}</p>
@@ -296,7 +338,7 @@ export const SystemHealthDashboard = () => {
                         </p>
                       </div>
                     </div>
-                    
+
                     {!event.resolved && (
                       <Button variant="outline" size="sm">
                         Resolver
@@ -319,9 +361,7 @@ export const SystemHealthDashboard = () => {
                 <div className="text-center space-y-2">
                   <div className="text-4xl font-bold">{systemLoad}%</div>
                   <Progress value={systemLoad} className="h-3" />
-                  <p className="text-sm text-muted-foreground">
-                    Carga média dos últimos 5 minutos
-                  </p>
+                  <p className="text-sm text-muted-foreground">Carga média dos últimos 5 minutos</p>
                 </div>
               </CardContent>
             </Card>

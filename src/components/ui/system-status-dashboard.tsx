@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { 
+import {
   Server,
   Database,
   Cloud,
@@ -18,7 +18,7 @@ import {
   Eye,
   AlertCircle,
   CheckCircle,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 
 const SystemStatusDashboard = () => {
@@ -29,15 +29,15 @@ const SystemStatusDashboard = () => {
       status: "excellent",
       icon: Cpu,
       color: "green",
-      details: "CPU: 45% | RAM: 68%"
+      details: "CPU: 45% | RAM: 68%",
     },
     {
       name: "Disponibilidade",
       value: 99.95,
-      status: "excellent", 
+      status: "excellent",
       icon: Network,
       color: "green",
-      details: "Uptime: 99.95%"
+      details: "Uptime: 99.95%",
     },
     {
       name: "Usuários Ativos",
@@ -45,7 +45,7 @@ const SystemStatusDashboard = () => {
       status: "good",
       icon: Users,
       color: "blue",
-      details: "42 sessões ativas"
+      details: "42 sessões ativas",
     },
     {
       name: "API Response",
@@ -54,7 +54,7 @@ const SystemStatusDashboard = () => {
       icon: Zap,
       color: "orange",
       details: "180ms média",
-      unit: "ms"
+      unit: "ms",
     },
     {
       name: "Armazenamento",
@@ -64,7 +64,7 @@ const SystemStatusDashboard = () => {
       color: "cyan",
       details: "2.3GB / 50GB usado",
       max: 50,
-      unit: "GB"
+      unit: "GB",
     },
     {
       name: "Segurança",
@@ -72,16 +72,16 @@ const SystemStatusDashboard = () => {
       status: "excellent",
       icon: Shield,
       color: "purple",
-      details: "0 incidentes hoje"
-    }
+      details: "0 incidentes hoje",
+    },
   ];
 
   const getStatusColor = (status: string) => {
     const statusColors = {
       excellent: "text-green-600 bg-green-100",
-      good: "text-blue-600 bg-blue-100", 
+      good: "text-blue-600 bg-blue-100",
       warning: "text-orange-600 bg-orange-100",
-      critical: "text-red-600 bg-red-100"
+      critical: "text-red-600 bg-red-100",
     };
     return statusColors[status as keyof typeof statusColors] || statusColors.good;
   };
@@ -92,7 +92,7 @@ const SystemStatusDashboard = () => {
       blue: "bg-blue-100 text-blue-600",
       orange: "bg-orange-100 text-orange-600",
       cyan: "bg-cyan-100 text-cyan-600",
-      purple: "bg-purple-100 text-purple-600"
+      purple: "bg-purple-100 text-purple-600",
     };
     return iconColors[color as keyof typeof iconColors] || iconColors.blue;
   };
@@ -101,7 +101,7 @@ const SystemStatusDashboard = () => {
     score: 96.8,
     status: "excellent",
     issues: 0,
-    warnings: 2
+    warnings: 2,
   };
 
   return (
@@ -120,16 +120,12 @@ const SystemStatusDashboard = () => {
             </CardDescription>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-bold text-green-600">
-              {overallHealth.score}%
-            </div>
-            <Badge className={getStatusColor(overallHealth.status)}>
-              Sistema Saudável
-            </Badge>
+            <div className="text-3xl font-bold text-green-600">{overallHealth.score}%</div>
+            <Badge className={getStatusColor(overallHealth.status)}>Sistema Saudável</Badge>
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent className="p-6">
         {/* Overall Status */}
         <div className="flex items-center justify-between mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
@@ -146,40 +142,51 @@ const SystemStatusDashboard = () => {
             <div className="text-sm text-green-600">
               {overallHealth.issues} problemas | {overallHealth.warnings} avisos
             </div>
-            <div className="text-xs text-muted-foreground">
-              Última verificação: há 2 minutos
-            </div>
+            <div className="text-xs text-muted-foreground">Última verificação: há 2 minutos</div>
           </div>
         </div>
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {systemMetrics.map((metric, index) => (
-            <div key={index} className="text-center space-y-3 p-4 rounded-xl border border-border/50 hover:border-border transition-colors">
+            <div
+              key={index}
+              className="text-center space-y-3 p-4 rounded-xl border border-border/50 hover:border-border transition-colors"
+            >
               <div className={`p-3 rounded-full mx-auto w-fit ${getIconColor(metric.color)}`}>
                 <metric.icon className="w-6 h-6" />
               </div>
-              
+
               <div>
-                <div className={`text-2xl font-bold ${
-                  metric.color === "green" ? "text-green-600" :
-                    metric.color === "blue" ? "text-blue-600" :
-                      metric.color === "orange" ? "text-orange-600" :
-                        metric.color === "cyan" ? "text-cyan-600" :
-                          "text-purple-600"
-                }`}>
-                  {metric.value}{metric.unit || (metric.name.includes("Perform") || metric.name.includes("Disp") || metric.name.includes("Seg") ? "%" : "")}
+                <div
+                  className={`text-2xl font-bold ${
+                    metric.color === "green"
+                      ? "text-green-600"
+                      : metric.color === "blue"
+                        ? "text-blue-600"
+                        : metric.color === "orange"
+                          ? "text-orange-600"
+                          : metric.color === "cyan"
+                            ? "text-cyan-600"
+                            : "text-purple-600"
+                  }`}
+                >
+                  {metric.value}
+                  {metric.unit ||
+                    (metric.name.includes("Perform") ||
+                    metric.name.includes("Disp") ||
+                    metric.name.includes("Seg")
+                      ? "%"
+                      : "")}
                 </div>
-                <div className="text-sm font-medium text-foreground">
-                  {metric.name}
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {metric.details}
-                </div>
+                <div className="text-sm font-medium text-foreground">{metric.name}</div>
+                <div className="text-xs text-muted-foreground">{metric.details}</div>
               </div>
 
               {/* Progress bar for percentage metrics */}
-              {(metric.name.includes("Performance") || metric.name.includes("Disponibilidade") || metric.name.includes("Segurança")) && (
+              {(metric.name.includes("Performance") ||
+                metric.name.includes("Disponibilidade") ||
+                metric.name.includes("Segurança")) && (
                 <div className="space-y-1">
                   <Progress value={metric.value} className="h-2" />
                 </div>
@@ -202,11 +209,9 @@ const SystemStatusDashboard = () => {
         <div className="flex items-center justify-between mt-6 pt-4 border-t border-border/30">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span className="text-sm text-muted-foreground">
-              Sistema monitorado em tempo real
-            </span>
+            <span className="text-sm text-muted-foreground">Sistema monitorado em tempo real</span>
           </div>
-          
+
           <div className="flex gap-2">
             <Button variant="outline" size="sm">
               <Eye className="w-4 h-4 mr-2" />

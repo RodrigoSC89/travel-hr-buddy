@@ -18,7 +18,7 @@ const Reports = () => {
         badges={[
           { icon: BarChart3, label: "Analytics Avançado" },
           { icon: Brain, label: "IA Reports" },
-          { icon: Sparkles, label: "Insights Automáticos" }
+          { icon: Sparkles, label: "Insights Automáticos" },
         ]}
       />
 
@@ -50,16 +50,14 @@ const Reports = () => {
           <Card>
             <CardHeader>
               <CardTitle>Analytics Avançado</CardTitle>
-              <CardDescription>
-                    Análises detalhadas de performance e tendências
-              </CardDescription>
+              <CardDescription>Análises detalhadas de performance e tendências</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-12">
                 <TrendingUp className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-semibold mb-2">Analytics em desenvolvimento</h3>
                 <p className="text-muted-foreground">
-                      Módulo de analytics avançado será disponibilizado em breve
+                  Módulo de analytics avançado será disponibilizado em breve
                 </p>
               </div>
             </CardContent>

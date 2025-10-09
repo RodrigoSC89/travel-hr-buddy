@@ -15,7 +15,7 @@ export default function Dashboard() {
         badges={[
           { icon: TrendingUp, label: "Analytics em Tempo Real" },
           { icon: Activity, label: "Métricas Avançadas" },
-          { icon: Zap, label: "Insights IA" }
+          { icon: Zap, label: "Insights IA" },
         ]}
       />
       <StrategicDashboard />

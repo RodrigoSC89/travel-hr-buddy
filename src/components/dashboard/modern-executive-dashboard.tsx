@@ -2,17 +2,17 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Shield, 
-  CheckCircle2, 
-  Activity, 
-  Users, 
-  TrendingUp, 
+import {
+  Shield,
+  CheckCircle2,
+  Activity,
+  Users,
+  TrendingUp,
   Clock,
   BarChart3,
   Anchor,
   ChevronRight,
-  AlertTriangle
+  AlertTriangle,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -35,39 +35,39 @@ const ModernKPICard: React.FC<KPICardProps> = ({
   icon,
   color = "blue",
   onClick,
-  actionLabel
+  actionLabel,
 }) => {
   const colorClasses = {
     blue: {
       bg: "bg-gradient-to-br from-azure-500 to-azure-600",
       icon: "bg-azure-100 text-azure-700",
       text: "text-azure-600",
-      badge: "bg-azure-100 text-azure-700 border-azure-200"
+      badge: "bg-azure-100 text-azure-700 border-azure-200",
     },
     green: {
       bg: "bg-gradient-to-br from-emerald-500 to-emerald-600",
       icon: "bg-emerald-100 text-emerald-700",
       text: "text-emerald-600",
-      badge: "bg-emerald-100 text-emerald-700 border-emerald-200"
+      badge: "bg-emerald-100 text-emerald-700 border-emerald-200",
     },
     yellow: {
       bg: "bg-gradient-to-br from-amber-500 to-orange-500",
       icon: "bg-amber-100 text-amber-700",
       text: "text-amber-600",
-      badge: "bg-amber-100 text-amber-700 border-amber-200"
+      badge: "bg-amber-100 text-amber-700 border-amber-200",
     },
     red: {
       bg: "bg-gradient-to-br from-red-500 to-red-600",
       icon: "bg-red-100 text-red-700",
       text: "text-red-600",
-      badge: "bg-red-100 text-red-700 border-red-200"
+      badge: "bg-red-100 text-red-700 border-red-200",
     },
     purple: {
       bg: "bg-gradient-to-br from-purple-500 to-purple-600",
       icon: "bg-purple-100 text-purple-700",
       text: "text-purple-600",
-      badge: "bg-purple-100 text-purple-700 border-purple-200"
-    }
+      badge: "bg-purple-100 text-purple-700 border-purple-200",
+    },
   };
 
   const classes = colorClasses[color];
@@ -80,15 +80,11 @@ const ModernKPICard: React.FC<KPICardProps> = ({
           <div className="flex-1">
             <h3 className="text-sm font-medium text-white/90">{title}</h3>
             <div className="text-2xl font-bold text-white mt-1">{value}</div>
-            {subtitle && (
-              <p className="text-xs text-white/80 mt-1">{subtitle}</p>
-            )}
+            {subtitle && <p className="text-xs text-white/80 mt-1">{subtitle}</p>}
           </div>
-          <div className="p-3 bg-white/10 rounded-full backdrop-blur-sm">
-            {icon}
-          </div>
+          <div className="p-3 bg-white/10 rounded-full backdrop-blur-sm">{icon}</div>
         </div>
-        
+
         {/* Pattern decorativo */}
         <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
           <div className="w-full h-full bg-white rounded-full transform translate-x-12 -translate-y-12"></div>
@@ -103,7 +99,7 @@ const ModernKPICard: React.FC<KPICardProps> = ({
               {trend}
             </Badge>
           )}
-          
+
           {onClick && (
             <Button
               variant="ghost"
@@ -138,7 +134,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       icon: <Shield className="w-6 h-6 text-white" />,
       color: "green" as const,
       onClick: () => navigate("/peotram"),
-      actionLabel: "Ver PEOTRAM"
+      actionLabel: "Ver PEOTRAM",
     },
     {
       title: "Tripulação Ativa",
@@ -148,7 +144,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       icon: <Users className="w-6 h-6 text-white" />,
       color: "blue" as const,
       onClick: () => navigate("/maritime"),
-      actionLabel: "Ver Frota"
+      actionLabel: "Ver Frota",
     },
     {
       title: "Certificações",
@@ -158,7 +154,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       icon: <AlertTriangle className="w-6 h-6 text-white" />,
       color: "yellow" as const,
       onClick: () => navigate("/maritime-certifications"),
-      actionLabel: "Verificar"
+      actionLabel: "Verificar",
     },
     {
       title: "Eficiência Operacional",
@@ -168,7 +164,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       icon: <TrendingUp className="w-6 h-6 text-white" />,
       color: "purple" as const,
       onClick: () => navigate("/analytics"),
-      actionLabel: "Analytics"
+      actionLabel: "Analytics",
     },
     {
       title: "Tempo Médio de Resposta",
@@ -178,7 +174,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       icon: <Clock className="w-6 h-6 text-white" />,
       color: "green" as const,
       onClick: () => navigate("/system-monitor"),
-      actionLabel: "Monitor"
+      actionLabel: "Monitor",
     },
     {
       title: "Disponibilidade da Frota",
@@ -188,8 +184,8 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       icon: <Anchor className="w-6 h-6 text-white" />,
       color: "blue" as const,
       onClick: () => navigate("/fleet-dashboard"),
-      actionLabel: "Frota"
-    }
+      actionLabel: "Frota",
+    },
   ];
 
   return (

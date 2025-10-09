@@ -12,7 +12,7 @@ import {
   Clock,
   Activity,
   CheckCircle,
-  Shield
+  Shield,
 } from "lucide-react";
 
 interface EmergencyPlan {
@@ -37,7 +37,7 @@ const EMERGENCY_PLANS: EmergencyPlan[] = [
     next_drill: "2024-12-15",
     drill_frequency_days: 90,
     responsible: "Capitão Silva",
-    contacts: 8
+    contacts: 8,
   },
   {
     id: "2",
@@ -48,7 +48,7 @@ const EMERGENCY_PLANS: EmergencyPlan[] = [
     next_drill: "2025-02-20",
     drill_frequency_days: 180,
     responsible: "Eng. Ambiental Costa",
-    contacts: 12
+    contacts: 12,
   },
   {
     id: "3",
@@ -59,7 +59,7 @@ const EMERGENCY_PLANS: EmergencyPlan[] = [
     next_drill: "2024-10-30",
     drill_frequency_days: 30,
     responsible: "Imediato Santos",
-    contacts: 6
+    contacts: 6,
   },
   {
     id: "4",
@@ -70,7 +70,7 @@ const EMERGENCY_PLANS: EmergencyPlan[] = [
     next_drill: "2024-12-10",
     drill_frequency_days: 90,
     responsible: "Enfermeiro Bordo",
-    contacts: 5
+    contacts: 5,
   },
   {
     id: "5",
@@ -81,8 +81,8 @@ const EMERGENCY_PLANS: EmergencyPlan[] = [
     next_drill: "2025-01-01",
     drill_frequency_days: 180,
     responsible: "Capitão Silva",
-    contacts: 10
-  }
+    contacts: 10,
+  },
 ];
 
 const getTypeConfig = (type: string) => {
@@ -91,38 +91,38 @@ const getTypeConfig = (type: string) => {
       icon: AlertTriangle,
       color: "bg-red-600 text-white",
       label: "Incêndio",
-      badgeColor: "bg-red-600"
+      badgeColor: "bg-red-600",
     },
     oil_spill: {
       icon: Activity,
       color: "bg-green-600 text-white",
       label: "Derramamento",
-      badgeColor: "bg-green-600"
+      badgeColor: "bg-green-600",
     },
     man_overboard: {
       icon: Users,
       color: "bg-blue-600 text-white",
       label: "Homem ao Mar",
-      badgeColor: "bg-blue-600"
+      badgeColor: "bg-blue-600",
     },
     collision: {
       icon: AlertTriangle,
       color: "bg-orange-600 text-white",
       label: "Colisão",
-      badgeColor: "bg-orange-600"
+      badgeColor: "bg-orange-600",
     },
     medical: {
       icon: Shield,
       color: "bg-purple-600 text-white",
       label: "Médica",
-      badgeColor: "bg-purple-600"
+      badgeColor: "bg-purple-600",
     },
     abandon_ship: {
       icon: AlertTriangle,
       color: "bg-red-700 text-white",
       label: "Abandono",
-      badgeColor: "bg-red-700"
-    }
+      badgeColor: "bg-red-700",
+    },
   };
   return configs[type as keyof typeof configs] || configs.fire;
 };
@@ -131,16 +131,16 @@ const getStatusConfig = (status: string) => {
   const configs = {
     active: {
       color: "bg-green-600 text-white",
-      label: "Ativo"
+      label: "Ativo",
     },
     under_review: {
       color: "bg-yellow-600 text-white",
-      label: "Em Revisão"
+      label: "Em Revisão",
     },
     expired: {
       color: "bg-red-600 text-white",
-      label: "Expirado"
-    }
+      label: "Expirado",
+    },
   };
   return configs[status as keyof typeof configs] || configs.active;
 };
@@ -158,9 +158,8 @@ export const EmergencyResponse: React.FC = () => {
     return planDate < nextDate ? plan.next_drill : next;
   }, "2099-12-31");
 
-  const filteredPlans = selectedType === "all"
-    ? EMERGENCY_PLANS
-    : EMERGENCY_PLANS.filter(p => p.type === selectedType);
+  const filteredPlans =
+    selectedType === "all" ? EMERGENCY_PLANS : EMERGENCY_PLANS.filter(p => p.type === selectedType);
 
   const handleViewPlan = (planId: string, planTitle: string) => {
     handleViewDetails(`plano ${planTitle}`, planId);
@@ -283,13 +282,11 @@ export const EmergencyResponse: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle>Planos de Resposta a Emergências</CardTitle>
-          <CardDescription>
-            Gestão de planos de emergência e simulados SGSO
-          </CardDescription>
+          <CardDescription>Gestão de planos de emergência e simulados SGSO</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {filteredPlans.map((plan) => {
+            {filteredPlans.map(plan => {
               const typeConfig = getTypeConfig(plan.type);
               const statusConfig = getStatusConfig(plan.status);
               const TypeIcon = typeConfig.icon;
@@ -308,25 +305,29 @@ export const EmergencyResponse: React.FC = () => {
                             <Badge className={typeConfig.badgeColor + " text-white"}>
                               {typeConfig.label}
                             </Badge>
-                            <Badge className={statusConfig.color}>
-                              {statusConfig.label}
-                            </Badge>
+                            <Badge className={statusConfig.color}>{statusConfig.label}</Badge>
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-3">
                             <div>
-                              <p className="text-xs text-muted-foreground font-medium">Último Simulado</p>
+                              <p className="text-xs text-muted-foreground font-medium">
+                                Último Simulado
+                              </p>
                               <p className="text-sm font-bold text-gray-900">
                                 {new Date(plan.last_drill).toLocaleDateString("pt-BR")}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-muted-foreground font-medium">Próximo Simulado</p>
+                              <p className="text-xs text-muted-foreground font-medium">
+                                Próximo Simulado
+                              </p>
                               <p className="text-sm font-bold text-gray-900">
                                 {new Date(plan.next_drill).toLocaleDateString("pt-BR")}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-muted-foreground font-medium">Responsável</p>
+                              <p className="text-xs text-muted-foreground font-medium">
+                                Responsável
+                              </p>
                               <p className="text-sm font-bold text-gray-900">
                                 <Users className="h-3 w-3 inline mr-1" />
                                 {plan.responsible}
@@ -434,7 +435,9 @@ export const EmergencyResponse: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-red-600 hover:bg-red-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo("Novo Plano", "Abrindo formulário para criar novo plano de emergência")}
+              onClick={() =>
+                showInfo("Novo Plano", "Abrindo formulário para criar novo plano de emergência")
+              }
               disabled={isLoading}
             >
               <AlertTriangle className="h-6 w-6" />

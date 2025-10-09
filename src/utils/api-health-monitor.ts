@@ -37,21 +37,21 @@ export class APIHealthMonitor {
 
   private initializeAPIs() {
     const apis = ["openai", "supabase", "realtime"];
-    
+
     apis.forEach(api => {
       this.healthStatus.set(api, {
         name: api,
         status: "healthy",
         lastCheck: new Date(),
         errorCount: 0,
-        successCount: 0
+        successCount: 0,
       });
-      
+
       this.circuitBreakers.set(api, {
         state: "closed",
         failures: 0,
         lastFailureTime: 0,
-        nextRetryTime: 0
+        nextRetryTime: 0,
       });
     });
   }
@@ -66,25 +66,25 @@ export class APIHealthMonitor {
     const now = Date.now();
 
     switch (breaker.state) {
-    case "closed":
-      return true;
-      
-    case "open":
-      // Check if we should transition to half-open
-      if (now >= breaker.nextRetryTime) {
-        breaker.state = "half-open";
-        logger.log(`Circuit breaker for ${apiName} transitioned to half-open`);
+      case "closed":
         return true;
-      }
-      logger.warn(`Circuit breaker for ${apiName} is open, blocking request`);
-      return false;
-      
-    case "half-open":
-      // Allow one request to test if service recovered
-      return true;
-      
-    default:
-      return true;
+
+      case "open":
+        // Check if we should transition to half-open
+        if (now >= breaker.nextRetryTime) {
+          breaker.state = "half-open";
+          logger.log(`Circuit breaker for ${apiName} transitioned to half-open`);
+          return true;
+        }
+        logger.warn(`Circuit breaker for ${apiName} is open, blocking request`);
+        return false;
+
+      case "half-open":
+        // Allow one request to test if service recovered
+        return true;
+
+      default:
+        return true;
     }
   }
 
@@ -94,13 +94,13 @@ export class APIHealthMonitor {
   public recordSuccess(apiName: string, responseTime?: number) {
     const status = this.healthStatus.get(apiName);
     const breaker = this.circuitBreakers.get(apiName);
-    
+
     if (status) {
       status.successCount++;
       status.errorCount = Math.max(0, status.errorCount - 1); // Reduce error count
       status.lastCheck = new Date();
       status.responseTime = responseTime;
-      
+
       // Update status based on response time
       if (responseTime && responseTime > 5000) {
         status.status = "degraded";
@@ -108,7 +108,7 @@ export class APIHealthMonitor {
         status.status = "healthy";
       }
     }
-    
+
     if (breaker) {
       // Reset circuit breaker on success
       if (breaker.state === "half-open") {
@@ -119,7 +119,7 @@ export class APIHealthMonitor {
         breaker.failures = Math.max(0, breaker.failures - 1);
       }
     }
-    
+
     this.notifyListeners();
   }
 
@@ -129,11 +129,11 @@ export class APIHealthMonitor {
   public recordFailure(apiName: string, error?: Error) {
     const status = this.healthStatus.get(apiName);
     const breaker = this.circuitBreakers.get(apiName);
-    
+
     if (status) {
       status.errorCount++;
       status.lastCheck = new Date();
-      
+
       // Update status based on error count
       if (status.errorCount >= 10) {
         status.status = "down";
@@ -141,18 +141,18 @@ export class APIHealthMonitor {
         status.status = "degraded";
       }
     }
-    
+
     if (breaker) {
       breaker.failures++;
       breaker.lastFailureTime = Date.now();
-      
+
       // Open circuit breaker if threshold exceeded
       if (breaker.failures >= this.failureThreshold && breaker.state === "closed") {
         breaker.state = "open";
         breaker.nextRetryTime = Date.now() + this.timeoutThreshold;
         logger.error(`Circuit breaker for ${apiName} opened after ${breaker.failures} failures`);
       }
-      
+
       // If already half-open and still failing, go back to open
       if (breaker.state === "half-open") {
         breaker.state = "open";
@@ -160,7 +160,7 @@ export class APIHealthMonitor {
         logger.error(`Circuit breaker for ${apiName} reopened after failed retry`);
       }
     }
-    
+
     logger.error(`API failure recorded for ${apiName}:`, error?.message);
     this.notifyListeners();
   }
@@ -193,7 +193,7 @@ export class APIHealthMonitor {
     this.listeners.add(callback);
     // Immediately notify with current status
     callback(this.getAllStatuses());
-    
+
     // Return unsubscribe function
     return () => {
       this.listeners.delete(callback);
@@ -220,7 +220,7 @@ export class APIHealthMonitor {
           }
         }
       });
-      
+
       this.notifyListeners();
     }, this.checkInterval);
   }

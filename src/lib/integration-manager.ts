@@ -73,7 +73,7 @@ export class IntegrationManager {
     config: ServiceConfig
   ): Promise<ServiceTestResponse> {
     try {
-      const url = config.healthCheckUrl 
+      const url = config.healthCheckUrl
         ? `${config.baseUrl}${config.healthCheckUrl}`
         : `${config.baseUrl}/health`;
 
@@ -86,20 +86,20 @@ export class IntegrationManager {
 
       if (response.ok || response.status === 401) {
         // 401 means the service is up but needs auth
-        return { 
-          success: true, 
-          message: `${serviceName} is reachable` 
+        return {
+          success: true,
+          message: `${serviceName} is reachable`,
         };
       }
 
-      return { 
-        success: false, 
-        error: `Service returned status ${response.status}` 
+      return {
+        success: false,
+        error: `Service returned status ${response.status}`,
       };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : "Unknown error" 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -130,9 +130,9 @@ export class IntegrationManager {
           lastCheck: new Date(),
         });
 
-        return { 
-          success: true, 
-          message: `${serviceName} conectado com sucesso` 
+        return {
+          success: true,
+          message: `${serviceName} conectado com sucesso`,
         };
       } else {
         this.services.set(serviceName, {
@@ -141,15 +141,15 @@ export class IntegrationManager {
           lastCheck: new Date(),
         });
 
-        return { 
-          success: false, 
-          error: testResponse.error 
+        return {
+          success: false,
+          error: testResponse.error,
         };
       }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : "Unknown error" 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }

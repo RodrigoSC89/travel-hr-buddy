@@ -3,17 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Shield, 
-  Zap, 
-  CheckCircle, 
-  Monitor, 
-  Smartphone, 
+import {
+  Shield,
+  Zap,
+  CheckCircle,
+  Monitor,
+  Smartphone,
   Tablet,
   Users,
   Database,
   Lock,
-  Activity
+  Activity,
 } from "lucide-react";
 
 interface TestResult {
@@ -36,10 +36,14 @@ export const ProductionReadinessValidator: React.FC = () => {
       tests: [
         { name: "Autenticação", status: "passed", description: "Login/logout funcionando" },
         { name: "Navegação", status: "passed", description: "Todas as rotas acessíveis" },
-        { name: "CRUD Operations", status: "passed", description: "Criar, ler, atualizar, deletar" },
+        {
+          name: "CRUD Operations",
+          status: "passed",
+          description: "Criar, ler, atualizar, deletar",
+        },
         { name: "Formulários", status: "passed", description: "Validação e submissão" },
-        { name: "Upload de Arquivos", status: "passed", description: "Upload e visualização" }
-      ]
+        { name: "Upload de Arquivos", status: "passed", description: "Upload e visualização" },
+      ],
     },
     {
       category: "Performance",
@@ -48,8 +52,8 @@ export const ProductionReadinessValidator: React.FC = () => {
         { name: "First Paint", status: "passed", description: "< 1.5s" },
         { name: "Lighthouse Score", status: "passed", description: "95+ pontos" },
         { name: "Core Web Vitals", status: "passed", description: "Todos verdes" },
-        { name: "Memory Usage", status: "passed", description: "Sem vazamentos" }
-      ]
+        { name: "Memory Usage", status: "passed", description: "Sem vazamentos" },
+      ],
     },
     {
       category: "Segurança",
@@ -58,8 +62,8 @@ export const ProductionReadinessValidator: React.FC = () => {
         { name: "Input Validation", status: "passed", description: "Sanitização implementada" },
         { name: "HTTPS Headers", status: "passed", description: "CSP e security headers" },
         { name: "Secrets Management", status: "passed", description: "API keys seguras" },
-        { name: "Authentication", status: "passed", description: "JWT e sessões seguras" }
-      ]
+        { name: "Authentication", status: "passed", description: "JWT e sessões seguras" },
+      ],
     },
     {
       category: "Acessibilidade",
@@ -68,8 +72,8 @@ export const ProductionReadinessValidator: React.FC = () => {
         { name: "Navegação por Teclado", status: "passed", description: "Tab e Enter funcionam" },
         { name: "Screen Readers", status: "passed", description: "ARIA labels completos" },
         { name: "Foco Visível", status: "passed", description: "Focus rings implementados" },
-        { name: "Semântica HTML", status: "passed", description: "Markup semântico" }
-      ]
+        { name: "Semântica HTML", status: "passed", description: "Markup semântico" },
+      ],
     },
     {
       category: "Responsividade",
@@ -78,9 +82,9 @@ export const ProductionReadinessValidator: React.FC = () => {
         { name: "Tablet (768px+)", status: "passed", description: "Tablets" },
         { name: "Desktop (1024px+)", status: "passed", description: "Desktops" },
         { name: "4K (1920px+)", status: "passed", description: "Monitores grandes" },
-        { name: "Touch Targets", status: "passed", description: "Mínimo 44px" }
-      ]
-    }
+        { name: "Touch Targets", status: "passed", description: "Mínimo 44px" },
+      ],
+    },
   ];
 
   const runValidation = async () => {
@@ -91,7 +95,7 @@ export const ProductionReadinessValidator: React.FC = () => {
     // Simular testes progressivos
     for (let i = 0; i < testCategories.length; i++) {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      setProgress((i + 1) / testCategories.length * 100);
+      setProgress(((i + 1) / testCategories.length) * 100);
       setResults(prev => [...prev, testCategories[i]]);
     }
 
@@ -100,33 +104,34 @@ export const ProductionReadinessValidator: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "passed":
-      return <CheckCircle className="w-4 h-4 text-success" />;
-    case "failed":
-      return <span className="w-4 h-4 text-danger">❌</span>;
-    case "warning":
-      return <span className="w-4 h-4 text-warning">⚠️</span>;
-    default:
-      return null;
+      case "passed":
+        return <CheckCircle className="w-4 h-4 text-success" />;
+      case "failed":
+        return <span className="w-4 h-4 text-danger">❌</span>;
+      case "warning":
+        return <span className="w-4 h-4 text-warning">⚠️</span>;
+      default:
+        return null;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "passed":
-      return "bg-success text-success-foreground";
-    case "failed":
-      return "bg-danger text-danger-foreground";
-    case "warning":
-      return "bg-warning text-warning-foreground";
-    default:
-      return "bg-muted text-muted-foreground";
+      case "passed":
+        return "bg-success text-success-foreground";
+      case "failed":
+        return "bg-danger text-danger-foreground";
+      case "warning":
+        return "bg-warning text-warning-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const totalTests = testCategories.reduce((acc, cat) => acc + cat.tests.length, 0);
-  const passedTests = results.reduce((acc, cat) => 
-    acc + cat.tests.filter(test => test.status === "passed").length, 0
+  const passedTests = results.reduce(
+    (acc, cat) => acc + cat.tests.filter(test => test.status === "passed").length,
+    0
   );
 
   return (
@@ -147,11 +152,7 @@ export const ProductionReadinessValidator: React.FC = () => {
                   Verificação completa de funcionalidade, segurança e performance
                 </p>
               </div>
-              <Button 
-                onClick={runValidation} 
-                disabled={isRunning}
-                className="gap-2"
-              >
+              <Button onClick={runValidation} disabled={isRunning} className="gap-2">
                 <Activity className="w-4 h-4" />
                 {isRunning ? "Validando..." : "Executar Validação"}
               </Button>
@@ -173,9 +174,7 @@ export const ProductionReadinessValidator: React.FC = () => {
                   <div className="flex items-center gap-4 p-4 bg-success/10 rounded-lg border border-success/20">
                     <CheckCircle className="w-8 h-8 text-success" />
                     <div>
-                      <h3 className="font-semibold text-success">
-                        Sistema Validado para Produção
-                      </h3>
+                      <h3 className="font-semibold text-success">Sistema Validado para Produção</h3>
                       <p className="text-sm text-success/80">
                         {passedTests}/{totalTests} testes aprovados
                       </p>
@@ -191,13 +190,18 @@ export const ProductionReadinessValidator: React.FC = () => {
                         {category.category === "Performance" && <Zap className="w-4 h-4" />}
                         {category.category === "Segurança" && <Lock className="w-4 h-4" />}
                         {category.category === "Acessibilidade" && <Users className="w-4 h-4" />}
-                        {category.category === "Responsividade" && <Smartphone className="w-4 h-4" />}
+                        {category.category === "Responsividade" && (
+                          <Smartphone className="w-4 h-4" />
+                        )}
                         {category.category}
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
                       {category.tests.map((test, testIndex) => (
-                        <div key={testIndex} className="flex items-center gap-2 p-2 rounded border border-border/30">
+                        <div
+                          key={testIndex}
+                          className="flex items-center gap-2 p-2 rounded border border-border/30"
+                        >
                           {getStatusIcon(test.status)}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
@@ -227,16 +231,14 @@ export const ProductionReadinessValidator: React.FC = () => {
                       Sistema Certificado para Deploy!
                     </h3>
                     <p className="text-muted-foreground max-w-md mx-auto">
-                      Todos os testes passaram. O Nautilus One está pronto para 
-                      homologação e deploy em ambiente de produção.
+                      Todos os testes passaram. O Nautilus One está pronto para homologação e deploy
+                      em ambiente de produção.
                     </p>
                     <div className="flex justify-center gap-4 pt-4">
                       <Badge className="bg-success text-success-foreground">
                         ✅ Zero Bugs Críticos
                       </Badge>
-                      <Badge className="bg-info text-info-foreground">
-                        🔒 Segurança Validada
-                      </Badge>
+                      <Badge className="bg-info text-info-foreground">🔒 Segurança Validada</Badge>
                       <Badge className="bg-accent text-accent-foreground">
                         ⚡ Performance Otimizada
                       </Badge>

@@ -7,12 +7,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
 import { useOrganization } from "@/contexts/OrganizationContext";
 import { supabase } from "@/integrations/supabase/client";
-import { 
-  Search, 
-  Ship, 
-  Users, 
-  FileText, 
-  Settings, 
+import {
+  Search,
+  Ship,
+  Users,
+  FileText,
+  Settings,
   BarChart3,
   MapPin,
   Calendar,
@@ -20,7 +20,7 @@ import {
   MessageSquare,
   ArrowRight,
   Clock,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 
 interface SearchResult {
@@ -42,7 +42,7 @@ interface IntelligentGlobalSearchProps {
 
 export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = ({
   isOpen,
-  onClose
+  onClose,
 }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -61,7 +61,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Dashboard",
       url: "/",
       icon: BarChart3,
-      priority: 10
+      priority: 10,
     },
     {
       id: "fleet-management",
@@ -71,7 +71,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Marítimo",
       url: "/fleet-management",
       icon: Ship,
-      priority: 9
+      priority: 9,
     },
     {
       id: "fleet-tracking",
@@ -81,7 +81,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Marítimo",
       url: "/fleet-tracking",
       icon: MapPin,
-      priority: 9
+      priority: 9,
     },
     {
       id: "crew-management",
@@ -91,7 +91,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Marítimo",
       url: "/crew-management",
       icon: Users,
-      priority: 8
+      priority: 8,
     },
     {
       id: "maritime-certifications",
@@ -101,7 +101,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Marítimo",
       url: "/maritime-certifications",
       icon: Award,
-      priority: 8
+      priority: 8,
     },
     {
       id: "analytics",
@@ -111,7 +111,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Analytics",
       url: "/analytics",
       icon: BarChart3,
-      priority: 7
+      priority: 7,
     },
     {
       id: "travel",
@@ -121,7 +121,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Viagens",
       url: "/travel",
       icon: MapPin,
-      priority: 7
+      priority: 7,
     },
     {
       id: "price-alerts",
@@ -131,7 +131,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Viagens",
       url: "/price-alerts",
       icon: Clock,
-      priority: 6
+      priority: 6,
     },
     {
       id: "communication",
@@ -141,7 +141,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Colaboração",
       url: "/communication",
       icon: MessageSquare,
-      priority: 6
+      priority: 6,
     },
     {
       id: "hr",
@@ -151,7 +151,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "RH",
       url: "/hr",
       icon: Users,
-      priority: 6
+      priority: 6,
     },
     {
       id: "reports",
@@ -161,7 +161,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Relatórios",
       url: "/reports",
       icon: FileText,
-      priority: 5
+      priority: 5,
     },
     {
       id: "checklists-inteligentes",
@@ -171,7 +171,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Operações",
       url: "/checklists-inteligentes",
       icon: FileText,
-      priority: 5
+      priority: 5,
     },
     {
       id: "peotram",
@@ -181,7 +181,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Auditoria",
       url: "/peotram",
       icon: FileText,
-      priority: 5
+      priority: 5,
     },
     {
       id: "settings",
@@ -191,7 +191,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Sistema",
       url: "/settings",
       icon: Settings,
-      priority: 4
+      priority: 4,
     },
     {
       id: "organization-settings",
@@ -201,7 +201,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Admin",
       url: "/organization-settings",
       icon: Settings,
-      priority: 4
+      priority: 4,
     },
     {
       id: "users",
@@ -211,8 +211,8 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       category: "Admin",
       url: "/users",
       icon: Users,
-      priority: 4
-    }
+      priority: 4,
+    },
   ];
 
   useEffect(() => {
@@ -286,7 +286,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
             url: "/crew-management",
             icon: Users,
             priority: 6,
-            metadata: { id: crew.id, type: "crew" }
+            metadata: { id: crew.id, type: "crew" },
           });
         });
       }
@@ -334,11 +334,10 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
             url: "/checklists-inteligentes",
             icon: FileText,
             priority: 5,
-            metadata: { id: checklist.id, type: "checklist" }
+            metadata: { id: checklist.id, type: "checklist" },
           });
         });
       }
-
     } catch (error) {
       console.error("Database search error:", error);
     }
@@ -346,7 +345,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
   const saveRecentSearch = (searchTerm: string) => {
     if (searchTerm.length < 2) return;
-    
+
     const updated = [searchTerm, ...recentSearches.filter(s => s !== searchTerm)].slice(0, 5);
     setRecentSearches(updated);
     localStorage.setItem("nautilus-recent-searches", JSON.stringify(updated));
@@ -370,26 +369,41 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "Marítimo": return Ship;
-    case "Tripulação": return Users;
-    case "Analytics": return BarChart3;
-    case "Viagens": return MapPin;
-    case "RH": return Users;
-    case "Operações": return FileText;
-    case "Auditoria": return FileText;
-    case "Admin": return Settings;
-    default: return Sparkles;
+      case "Marítimo":
+        return Ship;
+      case "Tripulação":
+        return Users;
+      case "Analytics":
+        return BarChart3;
+      case "Viagens":
+        return MapPin;
+      case "RH":
+        return Users;
+      case "Operações":
+        return FileText;
+      case "Auditoria":
+        return FileText;
+      case "Admin":
+        return Settings;
+      default:
+        return Sparkles;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-    case "Marítimo": return "bg-blue-100 text-blue-800";
-    case "Analytics": return "bg-purple-100 text-purple-800";
-    case "Viagens": return "bg-green-100 text-green-800";
-    case "RH": return "bg-orange-100 text-orange-800";
-    case "Admin": return "bg-red-100 text-red-800";
-    default: return "bg-secondary text-secondary-foreground";
+      case "Marítimo":
+        return "bg-blue-100 text-blue-800";
+      case "Analytics":
+        return "bg-purple-100 text-purple-800";
+      case "Viagens":
+        return "bg-green-100 text-green-800";
+      case "RH":
+        return "bg-orange-100 text-orange-800";
+      case "Admin":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
@@ -409,7 +423,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
             <Input
               placeholder="Buscar módulos, dados, ações..."
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={e => setQuery(e.target.value)}
               className="pl-10"
               autoFocus
             />
@@ -452,10 +466,10 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
                     <p className="text-sm text-muted-foreground mt-2">Buscando...</p>
                   </div>
                 ) : results.length > 0 ? (
-                  results.map((result) => {
+                  results.map(result => {
                     const ResultIcon = result.icon;
                     const CategoryIcon = getCategoryIcon(result.category);
-                    
+
                     return (
                       <div
                         key={result.id}
@@ -465,12 +479,12 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
                         <div className="p-2 rounded-lg bg-primary/10">
                           <ResultIcon className="w-4 h-4 text-primary" />
                         </div>
-                        
+
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center space-x-2">
                             <h4 className="font-medium truncate">{result.title}</h4>
-                            <Badge 
-                              variant="secondary" 
+                            <Badge
+                              variant="secondary"
                               className={`text-xs ${getCategoryColor(result.category)}`}
                             >
                               {result.category}
@@ -499,7 +513,8 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
           <div className="border-t pt-4">
             <p className="text-xs text-muted-foreground text-center">
-              Use <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl+K</kbd> para abrir a busca rapidamente
+              Use <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl+K</kbd> para abrir a
+              busca rapidamente
             </p>
           </div>
         </div>

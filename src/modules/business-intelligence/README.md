@@ -5,6 +5,7 @@
 The Business Intelligence module provides **strategic business intelligence and executive decision support** with comprehensive analytics, KPIs, and data-driven insights for leadership.
 
 **Key Use Cases:**
+
 - Executive dashboards and KPIs
 - Strategic planning and forecasting
 - Business performance analysis

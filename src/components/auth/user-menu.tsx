@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -28,7 +28,10 @@ export const UserMenu: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full hover:bg-accent transition-colors">
+        <Button
+          variant="ghost"
+          className="relative h-8 w-8 rounded-full hover:bg-accent transition-colors"
+        >
           <Avatar className="h-8 w-8 border-2 border-border">
             <AvatarImage src={user.user_metadata?.avatar_url} alt="Avatar" />
             <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
@@ -43,9 +46,7 @@ export const UserMenu: React.FC = () => {
             <p className="text-sm font-medium leading-none text-foreground">
               {user.user_metadata?.full_name || user.email?.split("@")[0]}
             </p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user.email}
-            </p>
+            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -58,7 +59,10 @@ export const UserMenu: React.FC = () => {
           <span className="text-foreground">Configurações</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive focus:text-destructive">
+        <DropdownMenuItem
+          onClick={handleSignOut}
+          className="cursor-pointer text-destructive focus:text-destructive"
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sair</span>
         </DropdownMenuItem>

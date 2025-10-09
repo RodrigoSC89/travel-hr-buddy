@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { 
-  Monitor, 
-  Globe, 
-  Rocket, 
-  Users, 
-  Activity, 
-  CheckCircle, 
+import {
+  Monitor,
+  Globe,
+  Rocket,
+  Users,
+  Activity,
+  CheckCircle,
   AlertTriangle,
   Server,
   Database,
@@ -22,7 +22,7 @@ import {
   BarChart3,
   Settings,
   Play,
-  User
+  User,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -54,7 +54,7 @@ const ProductionDeployCenter: React.FC = () => {
     databaseStatus: "healthy",
     apiStatus: "online",
     memoryUsage: 45,
-    cpuUsage: 23
+    cpuUsage: 23,
   });
 
   const [deployConfig, setDeployConfig] = useState<DeploymentConfig>({
@@ -63,7 +63,7 @@ const ProductionDeployCenter: React.FC = () => {
     sslEnabled: true,
     cdnEnabled: true,
     environment: "production",
-    monitoringEnabled: true
+    monitoringEnabled: true,
   });
 
   const [isDeploying, setIsDeploying] = useState(false);
@@ -78,7 +78,7 @@ const ProductionDeployCenter: React.FC = () => {
         responseTime: 200 + Math.random() * 100,
         activeUsers: 8 + Math.floor(Math.random() * 20),
         memoryUsage: 40 + Math.random() * 20,
-        cpuUsage: 15 + Math.random() * 25
+        cpuUsage: 15 + Math.random() * 25,
       }));
     }, 3000);
 
@@ -99,7 +99,7 @@ const ProductionDeployCenter: React.FC = () => {
         "Ativando monitoramento...",
         "Executando testes finais...",
         "Publicando aplicação...",
-        "Verificando saúde do sistema..."
+        "Verificando saúde do sistema...",
       ];
 
       for (let i = 0; i < steps.length; i++) {
@@ -110,7 +110,6 @@ const ProductionDeployCenter: React.FC = () => {
 
       setIsLive(true);
       toast.success("🚀 Deploy concluído! Sistema Nautilus One está live em produção!");
-      
     } catch (error) {
       toast.error("Erro durante o deploy");
     } finally {
@@ -120,30 +119,30 @@ const ProductionDeployCenter: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "healthy":
-    case "online":
-      return "text-green-600 bg-green-50 border-green-200";
-    case "warning":
-    case "degraded":
-      return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    case "critical":
-    case "offline":
-      return "text-red-600 bg-red-50 border-red-200";
-    default:
-      return "text-muted-foreground bg-gray-50 border-gray-200";
+      case "healthy":
+      case "online":
+        return "text-green-600 bg-green-50 border-green-200";
+      case "warning":
+      case "degraded":
+        return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      case "critical":
+      case "offline":
+        return "text-red-600 bg-red-50 border-red-200";
+      default:
+        return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "healthy":
-    case "online":
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
-    case "warning":
-    case "degraded":
-      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-    default:
-      return <Activity className="w-4 h-4 text-muted-foreground" />;
+      case "healthy":
+      case "online":
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case "warning":
+      case "degraded":
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      default:
+        return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -162,7 +161,7 @@ const ProductionDeployCenter: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -174,7 +173,7 @@ const ProductionDeployCenter: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -186,7 +185,7 @@ const ProductionDeployCenter: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -218,9 +217,7 @@ const ProductionDeployCenter: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Monitoramento em Tempo Real</CardTitle>
-              <CardDescription>
-                Métricas de performance e saúde do sistema
-              </CardDescription>
+              <CardDescription>Métricas de performance e saúde do sistema</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -276,7 +273,9 @@ const ProductionDeployCenter: React.FC = () => {
                     <div>
                       <div className="flex justify-between mb-2">
                         <span className="text-sm">Uso de Memória</span>
-                        <span className="text-sm text-muted-foreground">{Math.round(metrics.memoryUsage)}%</span>
+                        <span className="text-sm text-muted-foreground">
+                          {Math.round(metrics.memoryUsage)}%
+                        </span>
                       </div>
                       <Progress value={metrics.memoryUsage} className="h-2" />
                     </div>
@@ -284,7 +283,9 @@ const ProductionDeployCenter: React.FC = () => {
                     <div>
                       <div className="flex justify-between mb-2">
                         <span className="text-sm">Uso de CPU</span>
-                        <span className="text-sm text-muted-foreground">{Math.round(metrics.cpuUsage)}%</span>
+                        <span className="text-sm text-muted-foreground">
+                          {Math.round(metrics.cpuUsage)}%
+                        </span>
                       </div>
                       <Progress value={metrics.cpuUsage} className="h-2" />
                     </div>
@@ -307,8 +308,12 @@ const ProductionDeployCenter: React.FC = () => {
                   <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
                     <CheckCircle className="w-4 h-4 text-green-500" />
                     <div>
-                      <p className="text-sm font-medium text-green-800">Sistema operando normalmente</p>
-                      <p className="text-xs text-green-600">Todos os serviços estão funcionando perfeitamente</p>
+                      <p className="text-sm font-medium text-green-800">
+                        Sistema operando normalmente
+                      </p>
+                      <p className="text-xs text-green-600">
+                        Todos os serviços estão funcionando perfeitamente
+                      </p>
                     </div>
                     <span className="text-xs text-green-500 ml-auto">2 min atrás</span>
                   </div>
@@ -322,9 +327,7 @@ const ProductionDeployCenter: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Configuração de Domínio</CardTitle>
-              <CardDescription>
-                Configure seu domínio personalizado para produção
-              </CardDescription>
+              <CardDescription>Configure seu domínio personalizado para produção</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -335,7 +338,7 @@ const ProductionDeployCenter: React.FC = () => {
                       id="domain"
                       placeholder="exemplo.com.br"
                       value={deployConfig.domain}
-                      onChange={(e) => setDeployConfig(prev => ({ ...prev, domain: e.target.value }))}
+                      onChange={e => setDeployConfig(prev => ({ ...prev, domain: e.target.value }))}
                     />
                   </div>
 
@@ -345,16 +348,16 @@ const ProductionDeployCenter: React.FC = () => {
                       id="subdomain"
                       placeholder="nautilus"
                       value={deployConfig.subdomain}
-                      onChange={(e) => setDeployConfig(prev => ({ ...prev, subdomain: e.target.value }))}
+                      onChange={e =>
+                        setDeployConfig(prev => ({ ...prev, subdomain: e.target.value }))
+                      }
                     />
                   </div>
 
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">SSL/HTTPS</span>
-                      <Badge className="text-green-600 bg-green-50 border-green-200">
-                        Ativo
-                      </Badge>
+                      <Badge className="text-green-600 bg-green-50 border-green-200">Ativo</Badge>
                     </div>
 
                     <div className="flex items-center justify-between">
@@ -373,10 +376,9 @@ const ProductionDeployCenter: React.FC = () => {
                       <div className="flex items-center gap-2">
                         <Globe className="w-4 h-4 text-primary" />
                         <span className="font-mono text-sm">
-                          {deployConfig.domain ? 
-                            `https://${deployConfig.subdomain}.${deployConfig.domain}` :
-                            "https://nautilus.exemplo.com.br"
-                          }
+                          {deployConfig.domain
+                            ? `https://${deployConfig.subdomain}.${deployConfig.domain}`
+                            : "https://nautilus.exemplo.com.br"}
                         </span>
                       </div>
                       <div className="text-xs text-muted-foreground">
@@ -437,7 +439,7 @@ const ProductionDeployCenter: React.FC = () => {
                           "Configurações de segurança validadas",
                           "Domínio configurado",
                           "SSL ativo",
-                          "Monitoramento configurado"
+                          "Monitoramento configurado",
                         ].map((item, index) => (
                           <div key={index} className="flex items-center gap-2">
                             <CheckCircle className="w-4 h-4 text-green-500" />
@@ -467,7 +469,7 @@ const ProductionDeployCenter: React.FC = () => {
                   </div>
 
                   <div className="flex justify-center">
-                    <Button 
+                    <Button
                       size="lg"
                       onClick={handleDeploy}
                       disabled={isDeploying}
@@ -492,7 +494,7 @@ const ProductionDeployCenter: React.FC = () => {
                   <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full">
                     <Rocket className="w-10 h-10 text-green-600" />
                   </div>
-                  
+
                   <div>
                     <h3 className="text-2xl font-bold text-green-800 mb-2">
                       🚀 Deploy Concluído com Sucesso!
@@ -528,9 +530,7 @@ const ProductionDeployCenter: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Go-to-Market</CardTitle>
-              <CardDescription>
-                Estratégia de lançamento e primeiros usuários
-              </CardDescription>
+              <CardDescription>Estratégia de lançamento e primeiros usuários</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -543,18 +543,25 @@ const ProductionDeployCenter: React.FC = () => {
                     {[
                       { name: "Equipe Técnica Petrobras", status: "Ativo", users: 5 },
                       { name: "Gestores Marítimos", status: "Convite Enviado", users: 8 },
-                      { name: "Operadores de Campo", status: "Aguardando", users: 12 }
+                      { name: "Operadores de Campo", status: "Aguardando", users: 12 },
                     ].map((group, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 border rounded-lg"
+                      >
                         <div>
                           <p className="text-sm font-medium">{group.name}</p>
                           <p className="text-xs text-muted-foreground">{group.users} usuários</p>
                         </div>
-                        <Badge className={
-                          group.status === "Ativo" ? "text-green-600 bg-green-50 border-green-200" :
-                            group.status === "Convite Enviado" ? "text-blue-600 bg-blue-50 border-blue-200" :
-                              "text-yellow-600 bg-yellow-50 border-yellow-200"
-                        }>
+                        <Badge
+                          className={
+                            group.status === "Ativo"
+                              ? "text-green-600 bg-green-50 border-green-200"
+                              : group.status === "Convite Enviado"
+                                ? "text-blue-600 bg-blue-50 border-blue-200"
+                                : "text-yellow-600 bg-yellow-50 border-yellow-200"
+                          }
+                        >
                           {group.status}
                         </Badge>
                       </div>

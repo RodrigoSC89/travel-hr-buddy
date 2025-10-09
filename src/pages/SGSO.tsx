@@ -18,11 +18,12 @@ import {
   Activity,
   Plus,
   RefreshCw,
-  Download
+  Download,
 } from "lucide-react";
 
 const SGSO = () => {
-  const { handleCreate, handleGenerateReport, handleExport, handleRefresh, showInfo } = useMaritimeActions();
+  const { handleCreate, handleGenerateReport, handleExport, handleRefresh, showInfo } =
+    useMaritimeActions();
   return (
     <ModulePageWrapper gradient="orange">
       <ModuleHeader
@@ -33,7 +34,7 @@ const SGSO = () => {
         badges={[
           { icon: FileCheck, label: "Compliance ANP" },
           { icon: Target, label: "17 Práticas" },
-          { icon: Shield, label: "Segurança Total" }
+          { icon: Shield, label: "Segurança Total" },
         ]}
       />
 
@@ -49,59 +50,61 @@ const SGSO = () => {
             id: "practices",
             label: "17 Práticas ANP",
             icon: <Shield className="h-3 w-3" />,
-            action: () => showInfo("17 Práticas ANP", "Abrindo gestão das 17 práticas obrigatórias")
+            action: () =>
+              showInfo("17 Práticas ANP", "Abrindo gestão das 17 práticas obrigatórias"),
           },
           {
             id: "risks",
             label: "Matriz de Riscos",
             icon: <AlertTriangle className="h-3 w-3" />,
-            action: () => showInfo("Matriz de Riscos", "Abrindo matriz de riscos 5x5")
+            action: () => showInfo("Matriz de Riscos", "Abrindo matriz de riscos 5x5"),
           },
           {
             id: "incidents",
             label: "Gestão Incidentes",
             icon: <Bell className="h-3 w-3" />,
-            action: () => showInfo("Gestão de Incidentes", "Abrindo sistema de gestão de incidentes")
+            action: () =>
+              showInfo("Gestão de Incidentes", "Abrindo sistema de gestão de incidentes"),
           },
           {
             id: "audits",
             label: "Auditorias",
             icon: <FileCheck className="h-3 w-3" />,
-            action: () => showInfo("Auditorias", "Abrindo planejamento de auditorias")
+            action: () => showInfo("Auditorias", "Abrindo planejamento de auditorias"),
           },
           {
             id: "training",
             label: "Treinamentos",
             icon: <Users className="h-3 w-3" />,
-            action: () => showInfo("Treinamentos", "Abrindo gestão de treinamentos")
+            action: () => showInfo("Treinamentos", "Abrindo gestão de treinamentos"),
           },
           {
             id: "reports",
             label: "Relatórios ANP",
             icon: <BookOpen className="h-3 w-3" />,
-            action: () => handleGenerateReport("Relatórios ANP")
-          }
+            action: () => handleGenerateReport("Relatórios ANP"),
+          },
         ]}
         quickActions={[
           {
             id: "new-incident",
             label: "Novo Incidente",
             icon: <Plus className="h-3 w-3" />,
-            action: () => handleCreate("Incidente")
+            action: () => handleCreate("Incidente"),
           },
           {
             id: "refresh",
             label: "Atualizar",
             icon: <RefreshCw className="h-3 w-3" />,
             action: () => handleRefresh("SGSO", async () => window.location.reload()),
-            shortcut: "F5"
+            shortcut: "F5",
           },
           {
             id: "export",
             label: "Exportar",
             icon: <Download className="h-3 w-3" />,
-            action: () => handleExport("SGSO")
-          }
+            action: () => handleExport("SGSO"),
+          },
         ]}
       />
     </ModulePageWrapper>

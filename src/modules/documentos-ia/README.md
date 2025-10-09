@@ -5,6 +5,7 @@
 The Documentos IA (AI Documents) module provides **AI-powered document processing and intelligence** including OCR, data extraction, classification, and intelligent document analysis.
 
 **Key Use Cases:**
+
 - Optical Character Recognition (OCR)
 - Intelligent data extraction from documents
 - Automatic document classification

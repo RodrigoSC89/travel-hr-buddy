@@ -3,23 +3,35 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { 
-  CheckSquare, 
-  Plus, 
-  Search, 
+import {
+  CheckSquare,
+  Plus,
+  Search,
   Calendar,
   User,
   AlertTriangle,
   Clock,
   CheckCircle2,
-  Settings
+  Settings,
 } from "lucide-react";
 
 interface Task {
@@ -56,7 +68,7 @@ export const TaskManagement: React.FC = () => {
     due_date: "",
     tags: [] as string[],
     related_vessel: "",
-    related_crew: ""
+    related_crew: "",
   });
 
   useEffect(() => {
@@ -66,7 +78,7 @@ export const TaskManagement: React.FC = () => {
   const loadTasks = async () => {
     try {
       setIsLoading(true);
-      
+
       // Using mock data for now - database integration will be added later
       console.log("Loading tasks with mock data");
       // Mock data
@@ -82,7 +94,7 @@ export const TaskManagement: React.FC = () => {
           due_date: "2024-01-20T10:00:00Z",
           tags: ["segurança", "inspeção"],
           related_vessel: "MV Atlântico",
-          created_at: "2024-01-10T09:00:00Z"
+          created_at: "2024-01-10T09:00:00Z",
         },
         {
           id: "2",
@@ -95,7 +107,7 @@ export const TaskManagement: React.FC = () => {
           due_date: "2024-01-18T14:00:00Z",
           tags: ["manutenção", "motor"],
           related_vessel: "MV Pacífico",
-          created_at: "2024-01-08T11:00:00Z"
+          created_at: "2024-01-08T11:00:00Z",
         },
         {
           id: "3",
@@ -108,7 +120,7 @@ export const TaskManagement: React.FC = () => {
           due_date: "2024-01-25T16:00:00Z",
           tags: ["certificação", "rh"],
           related_crew: "Ana Costa",
-          created_at: "2024-01-05T08:00:00Z"
+          created_at: "2024-01-05T08:00:00Z",
         },
         {
           id: "4",
@@ -122,17 +134,17 @@ export const TaskManagement: React.FC = () => {
           completed_at: "2024-01-15T11:30:00Z",
           tags: ["abastecimento", "porto"],
           related_vessel: "MV Atlântico",
-          created_at: "2024-01-12T07:00:00Z"
-        }
+          created_at: "2024-01-12T07:00:00Z",
+        },
       ];
-        
+
       setTasks(mockTasks);
     } catch (error) {
       console.error("Erro ao carregar tarefas:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as tarefas",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -146,9 +158,9 @@ export const TaskManagement: React.FC = () => {
         ...newTask,
         status: "pending",
         created_by: "Current User",
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
-      
+
       setTasks([...tasks, task]);
       setNewTask({
         title: "",
@@ -158,92 +170,118 @@ export const TaskManagement: React.FC = () => {
         due_date: "",
         tags: [],
         related_vessel: "",
-        related_crew: ""
+        related_crew: "",
       });
       setShowAddDialog(false);
-      
+
       toast({
         title: "Tarefa Criada",
-        description: `${task.title} foi criada com sucesso`
+        description: `${task.title} foi criada com sucesso`,
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a tarefa",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const updateTaskStatus = (taskId: string, newStatus: Task["status"]) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId 
-        ? { 
-          ...task, 
-          status: newStatus,
-          completed_at: newStatus === "completed" ? new Date().toISOString() : undefined
-        }
-        : task
-    ));
-    
+    setTasks(
+      tasks.map(task =>
+        task.id === taskId
+          ? {
+              ...task,
+              status: newStatus,
+              completed_at: newStatus === "completed" ? new Date().toISOString() : undefined,
+            }
+          : task
+      )
+    );
+
     toast({
       title: "Status Atualizado",
-      description: "Status da tarefa foi atualizado com sucesso"
+      description: "Status da tarefa foi atualizado com sucesso",
     });
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "high": return "bg-red-500 text-azure-50";
-    case "medium": return "bg-yellow-500 text-azure-50";
-    case "low": return "bg-green-500 text-azure-50";
-    default: return "bg-gray-500 text-azure-50";
+      case "high":
+        return "bg-red-500 text-azure-50";
+      case "medium":
+        return "bg-yellow-500 text-azure-50";
+      case "low":
+        return "bg-green-500 text-azure-50";
+      default:
+        return "bg-gray-500 text-azure-50";
     }
   };
 
   const getPriorityText = (priority: string) => {
     switch (priority) {
-    case "high": return "Alta";
-    case "medium": return "Média";
-    case "low": return "Baixa";
-    default: return "Normal";
+      case "high":
+        return "Alta";
+      case "medium":
+        return "Média";
+      case "low":
+        return "Baixa";
+      default:
+        return "Normal";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "pending": return "bg-gray-500 text-azure-50";
-    case "in_progress": return "bg-blue-500 text-azure-50";
-    case "completed": return "bg-green-500 text-azure-50";
-    case "cancelled": return "bg-red-500 text-azure-50";
-    default: return "bg-gray-500 text-azure-50";
+      case "pending":
+        return "bg-gray-500 text-azure-50";
+      case "in_progress":
+        return "bg-blue-500 text-azure-50";
+      case "completed":
+        return "bg-green-500 text-azure-50";
+      case "cancelled":
+        return "bg-red-500 text-azure-50";
+      default:
+        return "bg-gray-500 text-azure-50";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-    case "pending": return "Pendente";
-    case "in_progress": return "Em Andamento";
-    case "completed": return "Concluída";
-    case "cancelled": return "Cancelada";
-    default: return "Desconhecido";
+      case "pending":
+        return "Pendente";
+      case "in_progress":
+        return "Em Andamento";
+      case "completed":
+        return "Concluída";
+      case "cancelled":
+        return "Cancelada";
+      default:
+        return "Desconhecido";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "pending": return <Clock className="h-4 w-4" />;
-    case "in_progress": return <Settings className="h-4 w-4" />;
-    case "completed": return <CheckCircle2 className="h-4 w-4" />;
-    case "cancelled": return <AlertTriangle className="h-4 w-4" />;
-    default: return <Clock className="h-4 w-4" />;
+      case "pending":
+        return <Clock className="h-4 w-4" />;
+      case "in_progress":
+        return <Settings className="h-4 w-4" />;
+      case "completed":
+        return <CheckCircle2 className="h-4 w-4" />;
+      case "cancelled":
+        return <AlertTriangle className="h-4 w-4" />;
+      default:
+        return <Clock className="h-4 w-4" />;
     }
   };
 
   const filteredTasks = tasks.filter(task => {
-    const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         task.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         task.assigned_to?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.assigned_to?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === "all" || task.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
@@ -252,11 +290,9 @@ export const TaskManagement: React.FC = () => {
     pending: tasks.filter(t => t.status === "pending").length,
     in_progress: tasks.filter(t => t.status === "in_progress").length,
     completed: tasks.filter(t => t.status === "completed").length,
-    overdue: tasks.filter(t => 
-      t.status !== "completed" && 
-      t.due_date && 
-      new Date(t.due_date) < new Date()
-    ).length
+    overdue: tasks.filter(
+      t => t.status !== "completed" && t.due_date && new Date(t.due_date) < new Date()
+    ).length,
   };
 
   return (
@@ -268,11 +304,9 @@ export const TaskManagement: React.FC = () => {
             <CheckSquare className="h-6 w-6 text-primary" />
             Gestão de Tarefas
           </h2>
-          <p className="text-muted-foreground">
-            Organize e acompanhe todas as tarefas da operação
-          </p>
+          <p className="text-muted-foreground">Organize e acompanhe todas as tarefas da operação</p>
         </div>
-        
+
         <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2">
@@ -290,7 +324,7 @@ export const TaskManagement: React.FC = () => {
                 <Input
                   id="title"
                   value={newTask.title}
-                  onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+                  onChange={e => setNewTask({ ...newTask, title: e.target.value })}
                   placeholder="Ex: Inspeção de Segurança"
                 />
               </div>
@@ -299,7 +333,7 @@ export const TaskManagement: React.FC = () => {
                 <Textarea
                   id="description"
                   value={newTask.description}
-                  onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+                  onChange={e => setNewTask({ ...newTask, description: e.target.value })}
                   placeholder="Descreva os detalhes da tarefa..."
                   rows={3}
                 />
@@ -307,9 +341,11 @@ export const TaskManagement: React.FC = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="priority">Prioridade</Label>
-                  <Select 
-                    value={newTask.priority} 
-                    onValueChange={(value: "low" | "medium" | "high") => setNewTask({ ...newTask, priority: value })}
+                  <Select
+                    value={newTask.priority}
+                    onValueChange={(value: "low" | "medium" | "high") =>
+                      setNewTask({ ...newTask, priority: value })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -326,7 +362,7 @@ export const TaskManagement: React.FC = () => {
                   <Input
                     id="assigned"
                     value={newTask.assigned_to}
-                    onChange={(e) => setNewTask({ ...newTask, assigned_to: e.target.value })}
+                    onChange={e => setNewTask({ ...newTask, assigned_to: e.target.value })}
                     placeholder="Nome do responsável"
                   />
                 </div>
@@ -337,15 +373,15 @@ export const TaskManagement: React.FC = () => {
                   id="due_date"
                   type="datetime-local"
                   value={newTask.due_date}
-                  onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
+                  onChange={e => setNewTask({ ...newTask, due_date: e.target.value })}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="vessel">Embarcação Relacionada</Label>
-                  <Select 
-                    value={newTask.related_vessel} 
-                    onValueChange={(value) => setNewTask({ ...newTask, related_vessel: value })}
+                  <Select
+                    value={newTask.related_vessel}
+                    onValueChange={value => setNewTask({ ...newTask, related_vessel: value })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione a embarcação" />
@@ -359,9 +395,9 @@ export const TaskManagement: React.FC = () => {
                 </div>
                 <div>
                   <Label htmlFor="crew">Tripulante Relacionado</Label>
-                  <Select 
-                    value={newTask.related_crew} 
-                    onValueChange={(value) => setNewTask({ ...newTask, related_crew: value })}
+                  <Select
+                    value={newTask.related_crew}
+                    onValueChange={value => setNewTask({ ...newTask, related_crew: value })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o tripulante" />
@@ -446,14 +482,14 @@ export const TaskManagement: React.FC = () => {
             <TabsTrigger value="kanban">Kanban</TabsTrigger>
             <TabsTrigger value="calendar">Calendário</TabsTrigger>
           </TabsList>
-          
+
           <div className="flex gap-2">
             <div className="flex items-center gap-2">
               <Search className="h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar tarefas..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="w-64"
               />
             </div>
@@ -482,8 +518,8 @@ export const TaskManagement: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {filteredTasks.map((task) => (
-                      <div 
+                    {filteredTasks.map(task => (
+                      <div
                         key={task.id}
                         className={`p-4 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${
                           selectedTask?.id === task.id ? "border-primary bg-primary/5" : ""
@@ -494,13 +530,14 @@ export const TaskManagement: React.FC = () => {
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
                               <h3 className="font-semibold">{task.title}</h3>
-                              <Badge className={getPriorityColor(task.priority)} variant="secondary">
+                              <Badge
+                                className={getPriorityColor(task.priority)}
+                                variant="secondary"
+                              >
                                 {getPriorityText(task.priority)}
                               </Badge>
                             </div>
-                            <p className="text-sm text-muted-foreground mb-2">
-                              {task.description}
-                            </p>
+                            <p className="text-sm text-muted-foreground mb-2">{task.description}</p>
                             <div className="flex items-center gap-4 text-xs text-muted-foreground">
                               <div className="flex items-center gap-1">
                                 <User className="h-3 w-3" />
@@ -508,7 +545,9 @@ export const TaskManagement: React.FC = () => {
                               </div>
                               <div className="flex items-center gap-1">
                                 <Calendar className="h-3 w-3" />
-                                {task.due_date ? new Date(task.due_date).toLocaleDateString("pt-BR") : "Sem prazo"}
+                                {task.due_date
+                                  ? new Date(task.due_date).toLocaleDateString("pt-BR")
+                                  : "Sem prazo"}
                               </div>
                             </div>
                           </div>
@@ -521,12 +560,15 @@ export const TaskManagement: React.FC = () => {
                             </Badge>
                             {task.status !== "completed" && task.status !== "cancelled" && (
                               <div className="flex gap-1">
-                                <Button 
-                                  size="sm" 
+                                <Button
+                                  size="sm"
                                   variant="outline"
-                                  onClick={(e) => {
+                                  onClick={e => {
                                     e.stopPropagation();
-                                    updateTaskStatus(task.id, task.status === "pending" ? "in_progress" : "completed");
+                                    updateTaskStatus(
+                                      task.id,
+                                      task.status === "pending" ? "in_progress" : "completed"
+                                    );
                                   }}
                                 >
                                   {task.status === "pending" ? "Iniciar" : "Concluir"}
@@ -570,7 +612,9 @@ export const TaskManagement: React.FC = () => {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-sm">Responsável:</span>
-                        <span className="text-sm font-medium">{selectedTask.assigned_to || "Não atribuído"}</span>
+                        <span className="text-sm font-medium">
+                          {selectedTask.assigned_to || "Não atribuído"}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm">Criado por:</span>
@@ -579,7 +623,9 @@ export const TaskManagement: React.FC = () => {
                       <div className="flex justify-between">
                         <span className="text-sm">Vencimento:</span>
                         <span className="text-sm font-medium">
-                          {selectedTask.due_date ? new Date(selectedTask.due_date).toLocaleDateString("pt-BR") : "Sem prazo"}
+                          {selectedTask.due_date
+                            ? new Date(selectedTask.due_date).toLocaleDateString("pt-BR")
+                            : "Sem prazo"}
                         </span>
                       </div>
                       {selectedTask.related_vessel && (
@@ -611,7 +657,7 @@ export const TaskManagement: React.FC = () => {
 
                     <div className="pt-4 space-y-2">
                       {selectedTask.status === "pending" && (
-                        <Button 
+                        <Button
                           className="w-full"
                           onClick={() => updateTaskStatus(selectedTask.id, "in_progress")}
                         >
@@ -619,7 +665,7 @@ export const TaskManagement: React.FC = () => {
                         </Button>
                       )}
                       {selectedTask.status === "in_progress" && (
-                        <Button 
+                        <Button
                           className="w-full"
                           onClick={() => updateTaskStatus(selectedTask.id, "completed")}
                         >

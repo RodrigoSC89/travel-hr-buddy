@@ -20,7 +20,7 @@ import {
   RefreshCw,
   Calendar,
   Users,
-  Ship
+  Ship,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -71,15 +71,45 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
     criticalNonConformities: 8,
     pendingActions: 23,
     trend: "up",
-    trendPercentage: 5.2
+    trendPercentage: 5.2,
   });
 
   const [complianceByElement, setComplianceByElement] = useState<ComplianceByElement[]>([
-    { elementNumber: "ELEM_01", elementName: "Liderança e Gerenciamento", complianceScore: 92, trend: "up", auditCount: 45 },
-    { elementNumber: "ELEM_02", elementName: "Conformidade Legal", complianceScore: 88, trend: "stable", auditCount: 45 },
-    { elementNumber: "ELEM_03", elementName: "Gestão de Riscos", complianceScore: 85, trend: "down", auditCount: 45 },
-    { elementNumber: "ELEM_04", elementName: "Treinamento", complianceScore: 90, trend: "up", auditCount: 45 },
-    { elementNumber: "ELEM_05", elementName: "Operações", complianceScore: 83, trend: "stable", auditCount: 45 },
+    {
+      elementNumber: "ELEM_01",
+      elementName: "Liderança e Gerenciamento",
+      complianceScore: 92,
+      trend: "up",
+      auditCount: 45,
+    },
+    {
+      elementNumber: "ELEM_02",
+      elementName: "Conformidade Legal",
+      complianceScore: 88,
+      trend: "stable",
+      auditCount: 45,
+    },
+    {
+      elementNumber: "ELEM_03",
+      elementName: "Gestão de Riscos",
+      complianceScore: 85,
+      trend: "down",
+      auditCount: 45,
+    },
+    {
+      elementNumber: "ELEM_04",
+      elementName: "Treinamento",
+      complianceScore: 90,
+      trend: "up",
+      auditCount: 45,
+    },
+    {
+      elementNumber: "ELEM_05",
+      elementName: "Operações",
+      complianceScore: 83,
+      trend: "stable",
+      auditCount: 45,
+    },
   ]);
 
   const [benchmarks, setBenchmarks] = useState<CompanyBenchmark[]>([
@@ -99,7 +129,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
       description: "Não conformidade NC_001 vence em 3 dias",
       dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       createdAt: new Date(),
-      isRead: false
+      isRead: false,
     },
     {
       id: "alert-2",
@@ -109,7 +139,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
       description: "5 tripulantes com certificação vencendo em 30 dias",
       dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       createdAt: new Date(),
-      isRead: false
+      isRead: false,
     },
     {
       id: "alert-3",
@@ -119,7 +149,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
       description: "Auditoria PEOTRAM agendada para próxima semana",
       dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       createdAt: new Date(),
-      isRead: false
+      isRead: false,
     },
     {
       id: "alert-4",
@@ -128,8 +158,8 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
       title: "Nova Não Conformidade",
       description: "Não conformidade menor registrada em ELEM_05",
       createdAt: new Date(),
-      isRead: true
-    }
+      isRead: true,
+    },
   ]);
 
   const getScoreColor = (score: number) => {
@@ -143,7 +173,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
     const variants = {
       high: "bg-red-100 text-red-800",
       medium: "bg-yellow-100 text-yellow-800",
-      low: "bg-blue-100 text-blue-800"
+      low: "bg-blue-100 text-blue-800",
     };
     return variants[severity];
   };
@@ -155,9 +185,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
   };
 
   const markAlertAsRead = (alertId: string) => {
-    setAlerts(alerts.map(alert => 
-      alert.id === alertId ? { ...alert, isRead: true } : alert
-    ));
+    setAlerts(alerts.map(alert => (alert.id === alertId ? { ...alert, isRead: true } : alert)));
   };
 
   const exportAnalytics = () => {
@@ -165,7 +193,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
       metrics,
       complianceByElement,
       benchmarks,
-      generatedAt: new Date().toISOString()
+      generatedAt: new Date().toISOString(),
     };
 
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -190,9 +218,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
               </div>
               <div>
                 <CardTitle className="text-2xl">Analytics Avançado PEOTRAM</CardTitle>
-                <CardDescription>
-                  KPIs, tendências e benchmarking em tempo real
-                </CardDescription>
+                <CardDescription>KPIs, tendências e benchmarking em tempo real</CardDescription>
               </div>
             </div>
             <div className="flex gap-2">
@@ -242,11 +268,9 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{metrics.completedAudits}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              de {metrics.totalAudits} total
-            </p>
-            <Progress 
-              value={(metrics.completedAudits / metrics.totalAudits) * 100} 
+            <p className="text-xs text-muted-foreground mt-1">de {metrics.totalAudits} total</p>
+            <Progress
+              value={(metrics.completedAudits / metrics.totalAudits) * 100}
               className="h-1 mt-2"
             />
           </CardContent>
@@ -262,12 +286,8 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-red-600">
-              {metrics.criticalNonConformities}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Requerem ação imediata
-            </p>
+            <div className="text-3xl font-bold text-red-600">{metrics.criticalNonConformities}</div>
+            <p className="text-xs text-muted-foreground mt-1">Requerem ação imediata</p>
           </CardContent>
         </Card>
 
@@ -281,12 +301,8 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-yellow-600">
-              {metrics.pendingActions}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Aguardando conclusão
-            </p>
+            <div className="text-3xl font-bold text-yellow-600">{metrics.pendingActions}</div>
+            <p className="text-xs text-muted-foreground mt-1">Aguardando conclusão</p>
           </CardContent>
         </Card>
       </div>
@@ -319,7 +335,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {complianceByElement.map((element) => (
+                {complianceByElement.map(element => (
                   <div key={element.elementNumber} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -328,7 +344,9 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-3">
                         {getTrendIcon(element.trend)}
-                        <span className={`text-lg font-bold ${getScoreColor(element.complianceScore)}`}>
+                        <span
+                          className={`text-lg font-bold ${getScoreColor(element.complianceScore)}`}
+                        >
                           {element.complianceScore}%
                         </span>
                       </div>
@@ -366,12 +384,17 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
-                          index === 0 ? "bg-yellow-100 text-yellow-800" :
-                            index === 1 ? "bg-secondary text-secondary-foreground" :
-                              index === 2 ? "bg-orange-100 text-orange-800" :
-                                "bg-muted text-muted-foreground"
-                        }`}>
+                        <div
+                          className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                            index === 0
+                              ? "bg-yellow-100 text-yellow-800"
+                              : index === 1
+                                ? "bg-secondary text-secondary-foreground"
+                                : index === 2
+                                  ? "bg-orange-100 text-orange-800"
+                                  : "bg-muted text-muted-foreground"
+                          }`}
+                        >
                           {company.rank}
                         </div>
                         <div>
@@ -411,31 +434,40 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {alerts.map((alert) => (
+                {alerts.map(alert => (
                   <div
                     key={alert.id}
                     className={`p-4 rounded-lg border transition-opacity ${
                       alert.isRead ? "opacity-50" : ""
                     } ${
-                      alert.severity === "high" ? "border-red-200 bg-red-50/50" :
-                        alert.severity === "medium" ? "border-yellow-200 bg-yellow-50/50" :
-                          "border-blue-200 bg-blue-50/50"
+                      alert.severity === "high"
+                        ? "border-red-200 bg-red-50/50"
+                        : alert.severity === "medium"
+                          ? "border-yellow-200 bg-yellow-50/50"
+                          : "border-blue-200 bg-blue-50/50"
                     }`}
                     onClick={() => !alert.isRead && markAlertAsRead(alert.id)}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3 flex-1">
-                        <AlertTriangle className={`h-5 w-5 mt-0.5 ${
-                          alert.severity === "high" ? "text-red-600" :
-                            alert.severity === "medium" ? "text-yellow-600" :
-                              "text-blue-600"
-                        }`} />
+                        <AlertTriangle
+                          className={`h-5 w-5 mt-0.5 ${
+                            alert.severity === "high"
+                              ? "text-red-600"
+                              : alert.severity === "medium"
+                                ? "text-yellow-600"
+                                : "text-blue-600"
+                          }`}
+                        />
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <p className="font-medium">{alert.title}</p>
                             <Badge className={getSeverityBadge(alert.severity)}>
-                              {alert.severity === "high" ? "Alta" :
-                                alert.severity === "medium" ? "Média" : "Baixa"}
+                              {alert.severity === "high"
+                                ? "Alta"
+                                : alert.severity === "medium"
+                                  ? "Média"
+                                  : "Baixa"}
                             </Badge>
                           </div>
                           <p className="text-sm text-muted-foreground">{alert.description}</p>
@@ -447,9 +479,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
                           )}
                         </div>
                       </div>
-                      {!alert.isRead && (
-                        <div className="w-2 h-2 rounded-full bg-primary" />
-                      )}
+                      {!alert.isRead && <div className="w-2 h-2 rounded-full bg-primary" />}
                     </div>
                   </div>
                 ))}

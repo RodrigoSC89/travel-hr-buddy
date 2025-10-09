@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { 
+import {
   Search,
   Calendar,
   MessageSquare,
@@ -17,7 +17,7 @@ import {
   Clock,
   CheckCircle,
   ArrowRight,
-  Filter
+  Filter,
 } from "lucide-react";
 
 interface IntegrationTemplate {
@@ -49,11 +49,16 @@ export const IntegrationTemplates: React.FC = () => {
       icon: <Calendar className="w-6 h-6" />,
       difficulty: "easy",
       estimatedTime: "10 min",
-      features: ["Sync automático de eventos", "Criação de reuniões", "Lembretes personalizados", "Calendários compartilhados"],
+      features: [
+        "Sync automático de eventos",
+        "Criação de reuniões",
+        "Lembretes personalizados",
+        "Calendários compartilhados",
+      ],
       requirements: ["Conta Google", "API Key do Google Calendar", "OAuth 2.0 configurado"],
       rating: 4.8,
       installs: 2543,
-      isPopular: true
+      isPopular: true,
     },
     {
       id: "slack-notifications",
@@ -63,11 +68,16 @@ export const IntegrationTemplates: React.FC = () => {
       icon: <MessageSquare className="w-6 h-6" />,
       difficulty: "easy",
       estimatedTime: "5 min",
-      features: ["Notificações em tempo real", "Canais personalizados", "Mensagens formatadas", "Anexos e arquivos"],
+      features: [
+        "Notificações em tempo real",
+        "Canais personalizados",
+        "Mensagens formatadas",
+        "Anexos e arquivos",
+      ],
       requirements: ["Slack App", "Webhook URL", "Permissões de canal"],
       rating: 4.7,
       installs: 1876,
-      isPopular: true
+      isPopular: true,
     },
     {
       id: "outlook-integration",
@@ -77,7 +87,12 @@ export const IntegrationTemplates: React.FC = () => {
       icon: <Mail className="w-6 h-6" />,
       difficulty: "medium",
       estimatedTime: "15 min",
-      features: ["Sincronização de emails", "Calendário corporativo", "Contatos", "Tasks integradas"],
+      features: [
+        "Sincronização de emails",
+        "Calendário corporativo",
+        "Contatos",
+        "Tasks integradas",
+      ],
       requirements: ["Office 365", "Azure AD App", "Graph API permissions"],
       rating: 4.5,
       installs: 1234,
@@ -90,11 +105,16 @@ export const IntegrationTemplates: React.FC = () => {
       icon: <BarChart3 className="w-6 h-6" />,
       difficulty: "advanced",
       estimatedTime: "45 min",
-      features: ["Dashboards em tempo real", "Relatórios automáticos", "Análise avançada", "Exportação de dados"],
+      features: [
+        "Dashboards em tempo real",
+        "Relatórios automáticos",
+        "Análise avançada",
+        "Exportação de dados",
+      ],
       requirements: ["Power BI Pro", "Power BI Gateway", "Connector personalizado"],
       rating: 4.6,
       installs: 567,
-      isNew: true
+      isNew: true,
     },
     {
       id: "whatsapp-business",
@@ -104,7 +124,12 @@ export const IntegrationTemplates: React.FC = () => {
       icon: <MessageSquare className="w-6 h-6" />,
       difficulty: "medium",
       estimatedTime: "20 min",
-      features: ["Mensagens automáticas", "Templates aprovados", "Números verificados", "Analytics de entrega"],
+      features: [
+        "Mensagens automáticas",
+        "Templates aprovados",
+        "Números verificados",
+        "Analytics de entrega",
+      ],
       requirements: ["WhatsApp Business API", "Número verificado", "Meta Business Account"],
       rating: 4.4,
       installs: 987,
@@ -117,11 +142,16 @@ export const IntegrationTemplates: React.FC = () => {
       icon: <CreditCard className="w-6 h-6" />,
       difficulty: "advanced",
       estimatedTime: "60 min",
-      features: ["Processamento de pagamentos", "Assinaturas recorrentes", "Webhooks", "Relatórios financeiros"],
+      features: [
+        "Processamento de pagamentos",
+        "Assinaturas recorrentes",
+        "Webhooks",
+        "Relatórios financeiros",
+      ],
       requirements: ["Conta Stripe", "Webhook endpoints", "SSL certificado"],
       rating: 4.9,
       installs: 432,
-      isPopular: true
+      isPopular: true,
     },
     {
       id: "azure-ad",
@@ -144,55 +174,93 @@ export const IntegrationTemplates: React.FC = () => {
       icon: <Zap className="w-6 h-6" />,
       difficulty: "easy",
       estimatedTime: "15 min",
-      features: ["5000+ integrações", "Workflows automáticos", "Triggers personalizados", "Multi-step zaps"],
+      features: [
+        "5000+ integrações",
+        "Workflows automáticos",
+        "Triggers personalizados",
+        "Multi-step zaps",
+      ],
       requirements: ["Conta Zapier", "Webhook endpoints", "API documentation"],
       rating: 4.7,
       installs: 1654,
-      isNew: true
-    }
+      isNew: true,
+    },
   ];
 
   const categories = [
     { id: "all", name: "Todos", count: templates.length },
-    { id: "productivity", name: "Produtividade", count: templates.filter(t => t.category === "productivity").length },
-    { id: "communication", name: "Comunicação", count: templates.filter(t => t.category === "communication").length },
-    { id: "analytics", name: "Analytics", count: templates.filter(t => t.category === "analytics").length },
-    { id: "payment", name: "Pagamentos", count: templates.filter(t => t.category === "payment").length },
+    {
+      id: "productivity",
+      name: "Produtividade",
+      count: templates.filter(t => t.category === "productivity").length,
+    },
+    {
+      id: "communication",
+      name: "Comunicação",
+      count: templates.filter(t => t.category === "communication").length,
+    },
+    {
+      id: "analytics",
+      name: "Analytics",
+      count: templates.filter(t => t.category === "analytics").length,
+    },
+    {
+      id: "payment",
+      name: "Pagamentos",
+      count: templates.filter(t => t.category === "payment").length,
+    },
     { id: "hr", name: "RH", count: templates.filter(t => t.category === "hr").length },
-    { id: "automation", name: "Automação", count: templates.filter(t => t.category === "automation").length }
+    {
+      id: "automation",
+      name: "Automação",
+      count: templates.filter(t => t.category === "automation").length,
+    },
   ];
 
   const filteredTemplates = templates.filter(template => {
-    const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         template.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      template.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "all" || template.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   const getDifficultyColor = (difficulty: IntegrationTemplate["difficulty"]) => {
     switch (difficulty) {
-    case "easy": return "bg-success/20 text-success border-success/30";
-    case "medium": return "bg-warning/20 text-warning border-warning/30";
-    case "advanced": return "bg-destructive/20 text-destructive border-destructive/30";
+      case "easy":
+        return "bg-success/20 text-success border-success/30";
+      case "medium":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "advanced":
+        return "bg-destructive/20 text-destructive border-destructive/30";
     }
   };
 
   const getDifficultyText = (difficulty: IntegrationTemplate["difficulty"]) => {
     switch (difficulty) {
-    case "easy": return "Fácil";
-    case "medium": return "Médio";
-    case "advanced": return "Avançado";
+      case "easy":
+        return "Fácil";
+      case "medium":
+        return "Médio";
+      case "advanced":
+        return "Avançado";
     }
   };
 
   const getCategoryIcon = (category: IntegrationTemplate["category"]) => {
     switch (category) {
-    case "productivity": return <Calendar className="w-4 h-4" />;
-    case "communication": return <MessageSquare className="w-4 h-4" />;
-    case "analytics": return <BarChart3 className="w-4 h-4" />;
-    case "payment": return <CreditCard className="w-4 h-4" />;
-    case "hr": return <Users className="w-4 h-4" />;
-    case "automation": return <Zap className="w-4 h-4" />;
+      case "productivity":
+        return <Calendar className="w-4 h-4" />;
+      case "communication":
+        return <MessageSquare className="w-4 h-4" />;
+      case "analytics":
+        return <BarChart3 className="w-4 h-4" />;
+      case "payment":
+        return <CreditCard className="w-4 h-4" />;
+      case "hr":
+        return <Users className="w-4 h-4" />;
+      case "automation":
+        return <Zap className="w-4 h-4" />;
     }
   };
 
@@ -206,9 +274,7 @@ export const IntegrationTemplates: React.FC = () => {
               <FileText className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-2xl text-foreground">
-                Templates de Integração
-              </CardTitle>
+              <CardTitle className="text-2xl text-foreground">Templates de Integração</CardTitle>
               <CardDescription>
                 Templates pré-configurados para conectar rapidamente com sistemas populares
               </CardDescription>
@@ -227,13 +293,13 @@ export const IntegrationTemplates: React.FC = () => {
                 <Input
                   placeholder="Buscar templates..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
             </div>
             <div className="flex gap-2 overflow-x-auto">
-              {categories.map((category) => (
+              {categories.map(category => (
                 <Button
                   key={category.id}
                   variant={selectedCategory === category.id ? "default" : "outline"}
@@ -241,7 +307,8 @@ export const IntegrationTemplates: React.FC = () => {
                   onClick={() => setSelectedCategory(category.id)}
                   className="whitespace-nowrap"
                 >
-                  {category.id !== "all" && getCategoryIcon(category.id as IntegrationTemplate["category"])}
+                  {category.id !== "all" &&
+                    getCategoryIcon(category.id as IntegrationTemplate["category"])}
                   {category.name} ({category.count})
                 </Button>
               ))}
@@ -252,8 +319,11 @@ export const IntegrationTemplates: React.FC = () => {
 
       {/* Templates Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {filteredTemplates.map((template) => (
-          <Card key={template.id} className="group hover:shadow-lg transition-all duration-200 border border-border/50">
+        {filteredTemplates.map(template => (
+          <Card
+            key={template.id}
+            className="group hover:shadow-lg transition-all duration-200 border border-border/50"
+          >
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -268,7 +338,9 @@ export const IntegrationTemplates: React.FC = () => {
                         <span className="text-xs text-muted-foreground">{template.rating}</span>
                       </div>
                       <span className="text-xs text-muted-foreground">•</span>
-                      <span className="text-xs text-muted-foreground">{template.installs} instalações</span>
+                      <span className="text-xs text-muted-foreground">
+                        {template.installs} instalações
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -286,10 +358,10 @@ export const IntegrationTemplates: React.FC = () => {
                 </div>
               </div>
             </CardHeader>
-            
+
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">{template.description}</p>
-              
+
               <div className="flex items-center gap-2">
                 <Badge className={getDifficultyColor(template.difficulty)}>
                   {getDifficultyText(template.difficulty)}
@@ -299,12 +371,15 @@ export const IntegrationTemplates: React.FC = () => {
                   {template.estimatedTime}
                 </Badge>
               </div>
-              
+
               <div>
                 <h4 className="text-sm font-medium text-foreground mb-2">Principais recursos:</h4>
                 <div className="space-y-1">
                   {template.features.slice(0, 3).map((feature, index) => (
-                    <div key={index} className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 text-xs text-muted-foreground"
+                    >
                       <CheckCircle className="w-3 h-3 text-success" />
                       {feature}
                     </div>
@@ -316,7 +391,7 @@ export const IntegrationTemplates: React.FC = () => {
                   )}
                 </div>
               </div>
-              
+
               <div>
                 <h4 className="text-sm font-medium text-foreground mb-2">Requisitos:</h4>
                 <div className="flex flex-wrap gap-1">
@@ -332,7 +407,7 @@ export const IntegrationTemplates: React.FC = () => {
                   )}
                 </div>
               </div>
-              
+
               <div className="flex gap-2 pt-2">
                 <Button variant="outline" size="sm" className="flex-1">
                   Ver Detalhes

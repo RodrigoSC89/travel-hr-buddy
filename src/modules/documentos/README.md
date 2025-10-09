@@ -5,6 +5,7 @@
 The Documentos (Documents) module provides **comprehensive document management** including storage, organization, sharing, and collaboration on documents throughout the organization.
 
 **Key Use Cases:**
+
 - Upload and store documents
 - Organize documents in folders
 - Share documents with permissions

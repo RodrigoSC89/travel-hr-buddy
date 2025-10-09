@@ -5,17 +5,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Upload, 
-  Download, 
-  FileText, 
-  Image, 
-  Video, 
+import {
+  Upload,
+  Download,
+  FileText,
+  Image,
+  Video,
   Mic,
   Camera,
   Paperclip,
@@ -33,7 +46,7 @@ import {
   Star,
   Tags,
   FolderOpen,
-  Archive
+  Archive,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -81,7 +94,7 @@ const DOCUMENT_CATEGORIES: DocumentCategory[] = [
     description: "Fotos, vídeos e documentos que comprovam conformidade",
     required: true,
     documents: [],
-    completionRate: 0
+    completionRate: 0,
   },
   {
     id: "procedures",
@@ -89,7 +102,7 @@ const DOCUMENT_CATEGORIES: DocumentCategory[] = [
     description: "Documentos normativos e procedimentos operacionais",
     required: true,
     documents: [],
-    completionRate: 0
+    completionRate: 0,
   },
   {
     id: "certificates",
@@ -97,7 +110,7 @@ const DOCUMENT_CATEGORIES: DocumentCategory[] = [
     description: "Certificados de conformidade e qualificações",
     required: true,
     documents: [],
-    completionRate: 0
+    completionRate: 0,
   },
   {
     id: "reports",
@@ -105,8 +118,8 @@ const DOCUMENT_CATEGORIES: DocumentCategory[] = [
     description: "Relatórios de auditoria e análises técnicas",
     required: false,
     documents: [],
-    completionRate: 0
-  }
+    completionRate: 0,
+  },
 ];
 
 export const PeotramDocumentManager: React.FC = () => {
@@ -126,7 +139,7 @@ export const PeotramDocumentManager: React.FC = () => {
     tags: "",
     auditId: "",
     elementId: "",
-    requirementId: ""
+    requirementId: "",
   });
 
   useEffect(() => {
@@ -156,8 +169,8 @@ export const PeotramDocumentManager: React.FC = () => {
           reviewedAt: "2024-12-15T14:00:00Z",
           metadata: {
             inspector: "João Silva",
-            timestamp: "2024-12-15T10:30:00Z"
-          }
+            timestamp: "2024-12-15T10:30:00Z",
+          },
         },
         {
           id: "DOC_002",
@@ -179,8 +192,8 @@ export const PeotramDocumentManager: React.FC = () => {
             location: "Sala de Treinamento - Base Santos",
             timestamp: "2024-12-14T16:45:00Z",
             equipment: "iPhone 14 Pro",
-            inspector: "Carlos Eduardo"
-          }
+            inspector: "Carlos Eduardo",
+          },
         },
         {
           id: "DOC_003",
@@ -203,9 +216,9 @@ export const PeotramDocumentManager: React.FC = () => {
             location: "Convés Principal - MV Atlantic Explorer",
             timestamp: "2024-12-13T09:15:00Z",
             equipment: "GoPro Hero 11",
-            inspector: "Ana Costa"
-          }
-        }
+            inspector: "Ana Costa",
+          },
+        },
       ];
 
       setDocuments(mockDocuments);
@@ -216,21 +229,24 @@ export const PeotramDocumentManager: React.FC = () => {
   };
 
   const updateCategoryCompletion = (docs: Document[]) => {
-    setCategories(prev => prev.map(category => {
-      const categoryDocs = docs.filter(doc => {
-        if (category.id === "evidence") return ["photo", "video", "audio"].includes(doc.type);
-        if (category.id === "procedures") return doc.type === "procedure";
-        if (category.id === "certificates") return doc.type === "certificate";
-        if (category.id === "reports") return doc.type === "report";
-        return false;
-      });
+    setCategories(prev =>
+      prev.map(category => {
+        const categoryDocs = docs.filter(doc => {
+          if (category.id === "evidence") return ["photo", "video", "audio"].includes(doc.type);
+          if (category.id === "procedures") return doc.type === "procedure";
+          if (category.id === "certificates") return doc.type === "certificate";
+          if (category.id === "reports") return doc.type === "report";
+          return false;
+        });
 
-      return {
-        ...category,
-        documents: categoryDocs,
-        completionRate: categoryDocs.length > 0 ? Math.min((categoryDocs.length / 5) * 100, 100) : 0
-      };
-    }));
+        return {
+          ...category,
+          documents: categoryDocs,
+          completionRate:
+            categoryDocs.length > 0 ? Math.min((categoryDocs.length / 5) * 100, 100) : 0,
+        };
+      })
+    );
   };
 
   const handleFileUpload = async (files: FileList | null) => {
@@ -241,7 +257,7 @@ export const PeotramDocumentManager: React.FC = () => {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      
+
       // Simular upload
       for (let progress = 0; progress <= 100; progress += 10) {
         setUploadProgress(progress);
@@ -259,7 +275,10 @@ export const PeotramDocumentManager: React.FC = () => {
         auditId: newDocument.auditId,
         elementId: newDocument.elementId,
         requirementId: newDocument.requirementId,
-        tags: newDocument.tags.split(",").map(tag => tag.trim()).filter(Boolean),
+        tags: newDocument.tags
+          .split(",")
+          .map(tag => tag.trim())
+          .filter(Boolean),
         description: newDocument.description,
         version: "1.0",
         status: "pending",
@@ -267,8 +286,8 @@ export const PeotramDocumentManager: React.FC = () => {
         thumbnail: file.type.startsWith("image/") ? URL.createObjectURL(file) : undefined,
         metadata: {
           timestamp: new Date().toISOString(),
-          inspector: "Usuário Atual"
-        }
+          inspector: "Usuário Atual",
+        },
       };
 
       setDocuments(prev => [...prev, newDoc]);
@@ -284,7 +303,7 @@ export const PeotramDocumentManager: React.FC = () => {
       tags: "",
       auditId: "",
       elementId: "",
-      requirementId: ""
+      requirementId: "",
     });
   };
 
@@ -298,34 +317,48 @@ export const PeotramDocumentManager: React.FC = () => {
 
   const getFileIcon = (type: Document["type"], format: string) => {
     switch (type) {
-    case "photo": return Image;
-    case "video": return Video;
-    case "audio": return Mic;
-    case "procedure":
-    case "report":
-    case "certificate":
-      return FileText;
-    default: return Paperclip;
+      case "photo":
+        return Image;
+      case "video":
+        return Video;
+      case "audio":
+        return Mic;
+      case "procedure":
+      case "report":
+      case "certificate":
+        return FileText;
+      default:
+        return Paperclip;
     }
   };
 
   const getStatusColor = (status: Document["status"]) => {
     switch (status) {
-    case "approved": return "bg-success/20 text-success border-success/30";
-    case "pending": return "bg-warning/20 text-warning border-warning/30";
-    case "rejected": return "bg-destructive/20 text-destructive border-destructive/30";
-    case "archived": return "bg-muted/20 text-muted-foreground border-muted/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "approved":
+        return "bg-success/20 text-success border-success/30";
+      case "pending":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "rejected":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      case "archived":
+        return "bg-muted/20 text-muted-foreground border-muted/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusIcon = (status: Document["status"]) => {
     switch (status) {
-    case "approved": return CheckCircle;
-    case "pending": return Clock;
-    case "rejected": return AlertTriangle;
-    case "archived": return Archive;
-    default: return Clock;
+      case "approved":
+        return CheckCircle;
+      case "pending":
+        return Clock;
+      case "rejected":
+        return AlertTriangle;
+      case "archived":
+        return Archive;
+      default:
+        return Clock;
     }
   };
 
@@ -338,13 +371,15 @@ export const PeotramDocumentManager: React.FC = () => {
   };
 
   const filteredDocuments = documents.filter(doc => {
-    const matchesCategory = selectedCategory === "all" || 
+    const matchesCategory =
+      selectedCategory === "all" ||
       (selectedCategory === "evidence" && ["photo", "video", "audio"].includes(doc.type)) ||
       (selectedCategory === "procedures" && doc.type === "procedure") ||
       (selectedCategory === "certificates" && doc.type === "certificate") ||
       (selectedCategory === "reports" && doc.type === "report");
-    
-    const matchesSearch = searchTerm === "" || 
+
+    const matchesSearch =
+      searchTerm === "" ||
       doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       doc.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -358,12 +393,14 @@ export const PeotramDocumentManager: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Gerenciador de Documentos PEOTRAM</h2>
+            <h2 className="text-2xl font-bold text-foreground">
+              Gerenciador de Documentos PEOTRAM
+            </h2>
             <p className="text-muted-foreground">
               Upload, organização e controle de documentos de auditoria
             </p>
           </div>
-          
+
           <div className="flex gap-2">
             <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
               <DialogTrigger asChild>
@@ -376,17 +413,18 @@ export const PeotramDocumentManager: React.FC = () => {
                 <DialogHeader>
                   <DialogTitle>Upload de Documentos</DialogTitle>
                   <DialogDescription>
-                    Faça upload de evidências, procedimentos e documentos relacionados à auditoria PEOTRAM
+                    Faça upload de evidências, procedimentos e documentos relacionados à auditoria
+                    PEOTRAM
                   </DialogDescription>
                 </DialogHeader>
-                
+
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Tipo de Documento</Label>
-                      <Select 
-                        value={newDocument.type} 
-                        onValueChange={(value: Document["type"]) => 
+                      <Select
+                        value={newDocument.type}
+                        onValueChange={(value: Document["type"]) =>
                           setNewDocument(prev => ({ ...prev, type: value }))
                         }
                       >
@@ -404,12 +442,14 @@ export const PeotramDocumentManager: React.FC = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label>Auditoria</Label>
                       <Input
                         value={newDocument.auditId}
-                        onChange={(e) => setNewDocument(prev => ({ ...prev, auditId: e.target.value }))}
+                        onChange={e =>
+                          setNewDocument(prev => ({ ...prev, auditId: e.target.value }))
+                        }
                         placeholder="ID da Auditoria"
                       />
                     </div>
@@ -419,7 +459,9 @@ export const PeotramDocumentManager: React.FC = () => {
                     <Label>Descrição</Label>
                     <Textarea
                       value={newDocument.description}
-                      onChange={(e) => setNewDocument(prev => ({ ...prev, description: e.target.value }))}
+                      onChange={e =>
+                        setNewDocument(prev => ({ ...prev, description: e.target.value }))
+                      }
                       placeholder="Descreva o documento e sua relevância para a auditoria..."
                       rows={3}
                     />
@@ -429,7 +471,7 @@ export const PeotramDocumentManager: React.FC = () => {
                     <Label>Tags (separadas por vírgula)</Label>
                     <Input
                       value={newDocument.tags}
-                      onChange={(e) => setNewDocument(prev => ({ ...prev, tags: e.target.value }))}
+                      onChange={e => setNewDocument(prev => ({ ...prev, tags: e.target.value }))}
                       placeholder="evidência, conformidade, segurança"
                     />
                   </div>
@@ -440,7 +482,7 @@ export const PeotramDocumentManager: React.FC = () => {
                       <input
                         type="file"
                         multiple
-                        onChange={(e) => handleFileUpload(e.target.files)}
+                        onChange={e => handleFileUpload(e.target.files)}
                         className="hidden"
                         id="file-upload"
                         accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.mp4,.mov,.mp3,.wav"
@@ -474,7 +516,7 @@ export const PeotramDocumentManager: React.FC = () => {
 
         {/* Resumo por categoria */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {categories.map((category) => (
+          {categories.map(category => (
             <Card key={category.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
@@ -503,12 +545,12 @@ export const PeotramDocumentManager: React.FC = () => {
               <Input
                 placeholder="Buscar documentos..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
           </div>
-          
+
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="w-48">
               <SelectValue />
@@ -525,12 +567,15 @@ export const PeotramDocumentManager: React.FC = () => {
 
         {/* Lista de documentos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredDocuments.map((doc) => {
+          {filteredDocuments.map(doc => {
             const FileIcon = getFileIcon(doc.type, doc.format);
             const StatusIcon = getStatusIcon(doc.status);
-            
+
             return (
-              <Card key={doc.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer">
+              <Card
+                key={doc.id}
+                className="hover:shadow-lg transition-all duration-300 cursor-pointer"
+              >
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -544,21 +589,25 @@ export const PeotramDocumentManager: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-1 ml-2">
                       <Badge variant="outline" className={getStatusColor(doc.status)}>
                         <StatusIcon className="w-3 h-3 mr-1" />
-                        {doc.status === "approved" ? "Aprovado" :
-                          doc.status === "pending" ? "Pendente" :
-                            doc.status === "rejected" ? "Rejeitado" : "Arquivado"}
+                        {doc.status === "approved"
+                          ? "Aprovado"
+                          : doc.status === "pending"
+                            ? "Pendente"
+                            : doc.status === "rejected"
+                              ? "Rejeitado"
+                              : "Arquivado"}
                       </Badge>
                     </div>
                   </div>
 
                   {doc.thumbnail && (
                     <div className="mb-3">
-                      <img 
-                        src={doc.thumbnail} 
+                      <img
+                        src={doc.thumbnail}
                         alt={doc.name}
                         className="w-full h-32 object-cover rounded-lg"
                       />
@@ -570,7 +619,7 @@ export const PeotramDocumentManager: React.FC = () => {
                       <span>{formatFileSize(doc.size)}</span>
                       <span>{doc.format.toUpperCase()}</span>
                     </div>
-                    
+
                     <div className="flex justify-between text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <User className="w-3 h-3" />
@@ -584,7 +633,7 @@ export const PeotramDocumentManager: React.FC = () => {
 
                     {doc.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-2">
-                        {doc.tags.slice(0, 3).map((tag) => (
+                        {doc.tags.slice(0, 3).map(tag => (
                           <Badge key={tag} variant="outline" className="text-xs">
                             {tag}
                           </Badge>
@@ -608,7 +657,7 @@ export const PeotramDocumentManager: React.FC = () => {
                           <p>Visualizar</p>
                         </TooltipContent>
                       </Tooltip>
-                      
+
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button variant="outline" size="sm" className="flex-1">
@@ -619,7 +668,7 @@ export const PeotramDocumentManager: React.FC = () => {
                           <p>Baixar</p>
                         </TooltipContent>
                       </Tooltip>
-                      
+
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button variant="outline" size="sm" className="flex-1">
@@ -644,7 +693,9 @@ export const PeotramDocumentManager: React.FC = () => {
               <FolderOpen className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">Nenhum documento encontrado</h3>
               <p className="text-muted-foreground mb-4">
-                {searchTerm ? "Nenhum documento corresponde aos filtros aplicados." : "Não há documentos nesta categoria."}
+                {searchTerm
+                  ? "Nenhum documento corresponde aos filtros aplicados."
+                  : "Não há documentos nesta categoria."}
               </p>
               <Button onClick={() => setIsUploadOpen(true)}>
                 <Plus className="w-4 h-4 mr-2" />

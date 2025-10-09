@@ -111,31 +111,31 @@ interface TenantContextType {
   tenantPlans: SaasPlan[];
   tenantUsage: TenantUsage | null;
   availableTenants: SaasTenant[];
-  
+
   // Estado de loading
   isLoading: boolean;
   error: string | null;
-  
+
   // Funções de gestão
   switchTenant: (tenantId: string) => Promise<void>;
   updateBranding: (branding: Partial<TenantBranding>) => Promise<void>;
   updateTenantSettings: (settings: Partial<SaasTenant>) => Promise<void>;
-  
+
   // Funções de usuários
   inviteTenantUser: (email: string, role: string) => Promise<void>;
   updateUserRole: (userId: string, role: string) => Promise<void>;
   removeTenantUser: (userId: string) => Promise<void>;
   getTenantUsers: () => Promise<TenantUser[]>;
-  
+
   // Funções de verificação
   checkPermission: (permission: string) => boolean;
   checkFeatureAccess: (feature: string) => boolean;
   checkUsageLimits: (type: string) => boolean;
-  
+
   // Funções de planos
   upgradePlan: (planId: string) => Promise<void>;
   downgradeplan: (planId: string) => Promise<void>;
-  
+
   // Utilidades
   formatCurrency: (amount: number) => string;
   formatDate: (date: string) => string;
@@ -154,7 +154,7 @@ export const useTenant = () => {
 
 export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
-  
+
   // Estados
   const [currentTenant, setCurrentTenant] = useState<SaasTenant | null>(null);
   const [currentBranding, setCurrentBranding] = useState<TenantBranding | null>(null);
@@ -184,10 +184,12 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       // 1. Carregar tenants do usuário
       const { data: userTenants, error: tenantsError } = await supabase
         .from("tenant_users")
-        .select(`
+        .select(
+          `
           *,
           saas_tenants!inner(*)
-        `)
+        `
+        )
         .eq("user_id", user?.id)
         .eq("status", "active");
 
@@ -216,10 +218,10 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           fleet_management: true,
           advanced_analytics: true,
           ai_analysis: true,
-          white_label: true
+          white_label: true,
         },
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       setCurrentTenant(defaultTenant as SaasTenant);
@@ -232,7 +234,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       // 5. Carregar usage do tenant
       await loadTenantUsage(defaultTenant.id);
-
     } catch (err) {
       console.error("Erro ao carregar dados do tenant:", err);
       setError("Erro ao carregar dados da empresa");
@@ -275,35 +276,34 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           fleet_management: true,
           analytics: true,
           hr: true,
-          ai_analysis: true
+          ai_analysis: true,
         },
         module_settings: {
           peotram: {
             templates_enabled: true,
             ai_analysis: true,
-            permissions_matrix: true
+            permissions_matrix: true,
           },
           fleet: {
-            real_time_tracking: true
+            real_time_tracking: true,
           },
           analytics: {
-            advanced_reports: true
-          }
+            advanced_reports: true,
+          },
         },
         custom_fields: {},
         business_rules: {
           max_reservations_per_user: 10,
           alert_frequency: "daily",
-          auto_backup: true
+          auto_backup: true,
         },
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       const finalBranding = branding || defaultBranding;
       setCurrentBranding(finalBranding);
       applyBrandingTheme(finalBranding);
-
     } catch (err) {
       console.error("Erro ao carregar branding:", err);
     }
@@ -333,11 +333,10 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         permissions: {},
         joined_at: new Date().toISOString(),
         last_active_at: new Date().toISOString(),
-        metadata: {}
+        metadata: {},
       };
 
       setCurrentUser(tenantUser || defaultUser);
-
     } catch (err) {
       console.error("Erro ao carregar usuário do tenant:", err);
     }
@@ -373,11 +372,10 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         vessels_managed: 8,
         documents_processed: 42,
         reports_generated: 23,
-        metadata: {}
+        metadata: {},
       };
 
       setTenantUsage(usage || defaultUsage);
-
     } catch (err) {
       console.error("Erro ao carregar usage do tenant:", err);
     }
@@ -393,7 +391,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       if (error) throw error;
       setTenantPlans(plans || []);
-
     } catch (err) {
       console.error("Erro ao carregar planos:", err);
     }
@@ -401,25 +398,25 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const applyBrandingTheme = (branding: TenantBranding) => {
     const root = document.documentElement;
-    
+
     // Aplicar cores personalizadas
     root.style.setProperty("--primary", branding.primary_color);
     root.style.setProperty("--secondary", branding.secondary_color);
     root.style.setProperty("--accent", branding.accent_color);
-    
+
     if (branding.background_color) {
       root.style.setProperty("--background", branding.background_color);
     }
-    
+
     if (branding.text_color) {
       root.style.setProperty("--foreground", branding.text_color);
     }
-    
+
     // Atualizar título da página
     if (branding.company_name) {
       document.title = `${branding.company_name} - Plataforma Marítima`;
     }
-    
+
     // Aplicar tema escuro/claro
     if (branding.theme_mode !== "auto") {
       document.documentElement.classList.toggle("dark", branding.theme_mode === "dark");
@@ -437,7 +434,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       await loadTenantBranding(tenantId);
       await loadCurrentTenantUser(tenantId);
       await loadTenantUsage(tenantId);
-
     } catch (err) {
       console.error("Erro ao trocar tenant:", err);
       setError("Erro ao trocar empresa");
@@ -461,7 +457,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       setCurrentBranding(data);
       applyBrandingTheme(data);
-
     } catch (err) {
       console.error("Erro ao atualizar branding:", err);
       throw err;
@@ -481,7 +476,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       if (error) throw error;
       setCurrentTenant(data);
-
     } catch (err) {
       console.error("Erro ao atualizar configurações:", err);
       throw err;
@@ -519,22 +513,22 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         permissions: {},
         joined_at: new Date().toISOString(),
         last_active_at: new Date().toISOString(),
-        metadata: {}
-      }
+        metadata: {},
+      },
     ];
   };
 
   const checkPermission = (permission: string): boolean => {
     if (!currentUser) return false;
-    
+
     // Admin tem todas as permissões
     if (currentUser.role === "owner" || currentUser.role === "admin") return true;
-    
+
     const rolePermissions = {
       manager: ["view_analytics", "manage_data", "manage_team"],
       operator: ["manage_data", "view_data"],
       member: ["view_data"],
-      viewer: ["view_data"]
+      viewer: ["view_data"],
     };
 
     const userPermissions = rolePermissions[currentUser.role as keyof typeof rolePermissions] || [];
@@ -548,18 +542,18 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const checkUsageLimits = (type: string): boolean => {
     if (!currentTenant || !tenantUsage) return false;
-    
+
     switch (type) {
-    case "users":
-      return tenantUsage.active_users < currentTenant.max_users;
-    case "vessels":
-      return tenantUsage.vessels_managed < currentTenant.max_vessels;
-    case "storage":
-      return tenantUsage.storage_used_gb < currentTenant.max_storage_gb;
-    case "api_calls":
-      return tenantUsage.api_calls_made < currentTenant.max_api_calls_per_month;
-    default:
-      return false;
+      case "users":
+        return tenantUsage.active_users < currentTenant.max_users;
+      case "vessels":
+        return tenantUsage.vessels_managed < currentTenant.max_vessels;
+      case "storage":
+        return tenantUsage.storage_used_gb < currentTenant.max_storage_gb;
+      case "api_calls":
+        return tenantUsage.api_calls_made < currentTenant.max_api_calls_per_month;
+      default:
+        return false;
     }
   };
 
@@ -575,18 +569,18 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const currency = currentBranding?.default_currency || "BRL";
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
-      currency: currency
+      currency: currency,
     }).format(amount);
   };
 
   const formatDate = (date: string): string => {
     const format = currentBranding?.date_format || "DD/MM/YYYY";
     const dateObj = new Date(date);
-    
+
     if (format === "DD/MM/YYYY") {
       return dateObj.toLocaleDateString("pt-BR");
     }
-    
+
     return dateObj.toLocaleDateString();
   };
 
@@ -617,12 +611,8 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     downgradeplan,
     formatCurrency,
     formatDate,
-    getSubdomain
+    getSubdomain,
   };
 
-  return (
-    <TenantContext.Provider value={value}>
-      {children}
-    </TenantContext.Provider>
-  );
+  return <TenantContext.Provider value={value}>{children}</TenantContext.Provider>;
 };

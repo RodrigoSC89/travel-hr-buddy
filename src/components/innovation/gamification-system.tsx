@@ -4,19 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Trophy, 
-  Star, 
-  Target, 
-  Zap, 
-  Crown, 
+import {
+  Trophy,
+  Star,
+  Target,
+  Zap,
+  Crown,
   Award,
   TrendingUp,
   Users,
   Calendar,
   CheckCircle,
   Flame,
-  Medal
+  Medal,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -60,7 +60,7 @@ interface Challenge {
 export const GamificationSystem: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   const [userLevel, setUserLevel] = useState(12);
   const [userPoints, setUserPoints] = useState(2480);
   const [userXP, setUserXP] = useState(380);
@@ -77,7 +77,7 @@ export const GamificationSystem: React.FC = () => {
       category: "productivity",
       rarity: "common",
       earned: true,
-      earnedDate: "2024-01-08"
+      earnedDate: "2024-01-08",
     },
     {
       id: "2",
@@ -90,7 +90,7 @@ export const GamificationSystem: React.FC = () => {
       earned: true,
       earnedDate: "2024-01-15",
       progress: 10,
-      maxProgress: 10
+      maxProgress: 10,
     },
     {
       id: "3",
@@ -102,7 +102,7 @@ export const GamificationSystem: React.FC = () => {
       rarity: "epic",
       earned: false,
       progress: 1,
-      maxProgress: 3
+      maxProgress: 3,
     },
     {
       id: "4",
@@ -114,8 +114,8 @@ export const GamificationSystem: React.FC = () => {
       rarity: "legendary",
       earned: false,
       progress: 2480,
-      maxProgress: 50000
-    }
+      maxProgress: 50000,
+    },
   ]);
 
   const [leaderboard] = useState<Leaderboard[]>([
@@ -123,7 +123,7 @@ export const GamificationSystem: React.FC = () => {
     { rank: 2, user: "João Santos", points: 4850, level: 16, trend: "stable" },
     { rank: 3, user: "Maria Costa", points: 3920, level: 15, trend: "down" },
     { rank: 4, user: "Você", points: userPoints, level: userLevel, trend: "up" },
-    { rank: 5, user: "Pedro Lima", points: 2340, level: 11, trend: "up" }
+    { rank: 5, user: "Pedro Lima", points: 2340, level: 11, trend: "up" },
   ]);
 
   const [challenges] = useState<Challenge[]>([
@@ -137,7 +137,7 @@ export const GamificationSystem: React.FC = () => {
       completed: false,
       progress: 3,
       maxProgress: 5,
-      type: "daily"
+      type: "daily",
     },
     {
       id: "2",
@@ -149,7 +149,7 @@ export const GamificationSystem: React.FC = () => {
       completed: true,
       progress: 3,
       maxProgress: 3,
-      type: "weekly"
+      type: "weekly",
     },
     {
       id: "3",
@@ -161,25 +161,33 @@ export const GamificationSystem: React.FC = () => {
       completed: false,
       progress: 12,
       maxProgress: 30,
-      type: "monthly"
-    }
+      type: "monthly",
+    },
   ]);
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-    case "common": return "text-muted-foreground border-gray-200 bg-gray-50";
-    case "rare": return "text-blue-600 border-blue-200 bg-blue-50";
-    case "epic": return "text-purple-600 border-purple-200 bg-purple-50";
-    case "legendary": return "text-yellow-600 border-yellow-200 bg-yellow-50";
-    default: return "text-muted-foreground border-gray-200 bg-gray-50";
+      case "common":
+        return "text-muted-foreground border-gray-200 bg-gray-50";
+      case "rare":
+        return "text-blue-600 border-blue-200 bg-blue-50";
+      case "epic":
+        return "text-purple-600 border-purple-200 bg-purple-50";
+      case "legendary":
+        return "text-yellow-600 border-yellow-200 bg-yellow-50";
+      default:
+        return "text-muted-foreground border-gray-200 bg-gray-50";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="h-4 w-4 text-green-500" />;
-    case "down": return <TrendingUp className="h-4 w-4 text-red-500 transform rotate-180" />;
-    default: return <div className="h-4 w-4" />;
+      case "up":
+        return <TrendingUp className="h-4 w-4 text-green-500" />;
+      case "down":
+        return <TrendingUp className="h-4 w-4 text-red-500 transform rotate-180" />;
+      default:
+        return <div className="h-4 w-4" />;
     }
   };
 
@@ -202,9 +210,7 @@ export const GamificationSystem: React.FC = () => {
             <Trophy className="h-8 w-8 text-yellow-500" />
             Sistema de Gamificação
           </h1>
-          <p className="text-muted-foreground">
-            Acompanhe seu progresso e conquiste recompensas
-          </p>
+          <p className="text-muted-foreground">Acompanhe seu progresso e conquiste recompensas</p>
         </div>
       </div>
 
@@ -221,7 +227,9 @@ export const GamificationSystem: React.FC = () => {
               </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-600">{userPoints.toLocaleString()}</div>
+              <div className="text-3xl font-bold text-yellow-600">
+                {userPoints.toLocaleString()}
+              </div>
               <div className="text-sm text-muted-foreground">Pontos Totais</div>
               <div className="flex items-center justify-center mt-2">
                 <Medal className="h-4 w-4 text-yellow-500 mr-1" />
@@ -237,7 +245,9 @@ export const GamificationSystem: React.FC = () => {
               </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">{achievements.filter(a => a.earned).length}</div>
+              <div className="text-3xl font-bold text-green-600">
+                {achievements.filter(a => a.earned).length}
+              </div>
               <div className="text-sm text-muted-foreground">Conquistas</div>
               <div className="text-xs text-muted-foreground mt-2">
                 de {achievements.length} disponíveis
@@ -257,8 +267,11 @@ export const GamificationSystem: React.FC = () => {
 
         <TabsContent value="achievements" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {achievements.map((achievement) => (
-              <Card key={achievement.id} className={`${achievement.earned ? "ring-2 ring-green-200" : ""}`}>
+            {achievements.map(achievement => (
+              <Card
+                key={achievement.id}
+                className={`${achievement.earned ? "ring-2 ring-green-200" : ""}`}
+              >
                 <CardContent className="p-4">
                   <div className="flex items-start space-x-4">
                     <div className={`p-3 rounded-full ${getRarityColor(achievement.rarity)}`}>
@@ -284,13 +297,14 @@ export const GamificationSystem: React.FC = () => {
                             <CheckCircle className="h-4 w-4 mr-1" />
                             <span className="text-sm">Conquistado</span>
                           </div>
-                        ) : achievement.progress !== undefined && achievement.maxProgress !== undefined ? (
+                        ) : achievement.progress !== undefined &&
+                          achievement.maxProgress !== undefined ? (
                           <div className="text-right">
                             <div className="text-xs text-muted-foreground">
                               {achievement.progress}/{achievement.maxProgress}
                             </div>
-                            <Progress 
-                              value={(achievement.progress / achievement.maxProgress) * 100} 
+                            <Progress
+                              value={(achievement.progress / achievement.maxProgress) * 100}
                               className="w-20 h-2 mt-1"
                             />
                           </div>
@@ -311,16 +325,27 @@ export const GamificationSystem: React.FC = () => {
 
         <TabsContent value="challenges" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {challenges.map((challenge) => (
+            {challenges.map(challenge => (
               <Card key={challenge.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{challenge.title}</CardTitle>
-                    <Badge variant={challenge.type === "daily" ? "default" : 
-                      challenge.type === "weekly" ? "secondary" : "outline"}>
-                      {challenge.type === "daily" ? "Diário" :
-                        challenge.type === "weekly" ? "Semanal" : 
-                          challenge.type === "monthly" ? "Mensal" : "Especial"}
+                    <Badge
+                      variant={
+                        challenge.type === "daily"
+                          ? "default"
+                          : challenge.type === "weekly"
+                            ? "secondary"
+                            : "outline"
+                      }
+                    >
+                      {challenge.type === "daily"
+                        ? "Diário"
+                        : challenge.type === "weekly"
+                          ? "Semanal"
+                          : challenge.type === "monthly"
+                            ? "Mensal"
+                            : "Especial"}
                     </Badge>
                   </div>
                   <CardDescription>{challenge.description}</CardDescription>
@@ -328,10 +353,12 @@ export const GamificationSystem: React.FC = () => {
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between text-sm">
                     <span>Progresso</span>
-                    <span>{challenge.progress}/{challenge.maxProgress}</span>
+                    <span>
+                      {challenge.progress}/{challenge.maxProgress}
+                    </span>
                   </div>
                   <Progress value={(challenge.progress / challenge.maxProgress) * 100} />
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                       <div className="flex items-center">
@@ -350,10 +377,7 @@ export const GamificationSystem: React.FC = () => {
                   </div>
 
                   {challenge.completed ? (
-                    <Button 
-                      onClick={() => claimReward(challenge.id)}
-                      className="w-full"
-                    >
+                    <Button onClick={() => claimReward(challenge.id)} className="w-full">
                       Coletar Recompensa
                     </Button>
                   ) : (
@@ -371,17 +395,17 @@ export const GamificationSystem: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Ranking Global</CardTitle>
-              <CardDescription>
-                Os melhores performers do mês
-              </CardDescription>
+              <CardDescription>Os melhores performers do mês</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {leaderboard.map((entry) => (
-                  <div 
-                    key={entry.rank} 
+                {leaderboard.map(entry => (
+                  <div
+                    key={entry.rank}
                     className={`flex items-center space-x-4 p-3 rounded-lg ${
-                      entry.user === "Você" ? "bg-primary/10 border border-primary/20" : "bg-muted/30"
+                      entry.user === "Você"
+                        ? "bg-primary/10 border border-primary/20"
+                        : "bg-muted/30"
                     }`}
                   >
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold">
@@ -407,12 +431,42 @@ export const GamificationSystem: React.FC = () => {
         <TabsContent value="rewards" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { title: "Dia de Folga Extra", points: 5000, description: "Ganhe um dia de folga adicional", available: false },
-              { title: "Vale Presente", points: 2000, description: "Vale de R$ 200 em loja de sua escolha", available: true },
-              { title: "Curso Online", points: 1500, description: "Acesso a qualquer curso da plataforma", available: true },
-              { title: "Upgrade de Equipamento", points: 3000, description: "Melhore seu setup de trabalho", available: true },
-              { title: "Estacionamento VIP", points: 1000, description: "Vaga exclusiva por 1 mês", available: true },
-              { title: "Happy Hour da Equipe", points: 800, description: "Organize um happy hour para sua equipe", available: true }
+              {
+                title: "Dia de Folga Extra",
+                points: 5000,
+                description: "Ganhe um dia de folga adicional",
+                available: false,
+              },
+              {
+                title: "Vale Presente",
+                points: 2000,
+                description: "Vale de R$ 200 em loja de sua escolha",
+                available: true,
+              },
+              {
+                title: "Curso Online",
+                points: 1500,
+                description: "Acesso a qualquer curso da plataforma",
+                available: true,
+              },
+              {
+                title: "Upgrade de Equipamento",
+                points: 3000,
+                description: "Melhore seu setup de trabalho",
+                available: true,
+              },
+              {
+                title: "Estacionamento VIP",
+                points: 1000,
+                description: "Vaga exclusiva por 1 mês",
+                available: true,
+              },
+              {
+                title: "Happy Hour da Equipe",
+                points: 800,
+                description: "Organize um happy hour para sua equipe",
+                available: true,
+              },
             ].map((reward, index) => (
               <Card key={index}>
                 <CardContent className="p-4 text-center">
@@ -422,7 +476,7 @@ export const GamificationSystem: React.FC = () => {
                   <div className="text-lg font-bold text-primary mb-3">
                     {reward.points.toLocaleString()} pts
                   </div>
-                  <Button 
+                  <Button
                     disabled={!reward.available || userPoints < reward.points}
                     className="w-full"
                   >

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import {
   Wand2,
   Sparkles,
   Brain,
@@ -24,7 +24,7 @@ import {
   Shield,
   RefreshCw,
   Eye,
-  Download
+  Download,
 } from "lucide-react";
 
 interface OptimizationSuggestion {
@@ -61,7 +61,8 @@ export const SmartOptimization: React.FC = () => {
       id: "1",
       type: "performance",
       title: "Implementar Cache Inteligente",
-      description: "Ativar cache automático para endpoints com baixa variação de dados reduzirá latência significativamente.",
+      description:
+        "Ativar cache automático para endpoints com baixa variação de dados reduzirá latência significativamente.",
       impact: "high",
       effort: "easy",
       estimatedImprovement: "Redução de 45% na latência",
@@ -69,16 +70,17 @@ export const SmartOptimization: React.FC = () => {
         "Analisar padrões de resposta dos últimos 30 dias",
         "Identificar endpoints candidatos ao cache",
         "Configurar TTL otimizado baseado em frequência de mudança",
-        "Implementar invalidação inteligente de cache"
+        "Implementar invalidação inteligente de cache",
       ],
       isImplemented: false,
-      canAutoImplement: true
+      canAutoImplement: true,
     },
     {
       id: "2",
       type: "security",
       title: "Renovação Automática de Certificados",
-      description: "Configure renovação automática de certificados SSL e tokens de API para evitar interrupções.",
+      description:
+        "Configure renovação automática de certificados SSL e tokens de API para evitar interrupções.",
       impact: "critical",
       effort: "medium",
       estimatedImprovement: "Eliminar 100% dos downtimes por certificados expirados",
@@ -86,10 +88,10 @@ export const SmartOptimization: React.FC = () => {
         "Implementar monitoramento de expiração",
         "Configurar webhook para renovação automática",
         "Criar sistema de fallback em caso de falha",
-        "Implementar alertas preventivos"
+        "Implementar alertas preventivos",
       ],
       isImplemented: false,
-      canAutoImplement: true
+      canAutoImplement: true,
     },
     {
       id: "3",
@@ -103,16 +105,17 @@ export const SmartOptimization: React.FC = () => {
         "Analisar histórico de uso de APIs",
         "Identificar picos e vales de tráfego",
         "Implementar rate limiting dinâmico",
-        "Configurar alertas de limite"
+        "Configurar alertas de limite",
       ],
       isImplemented: false,
-      canAutoImplement: true
+      canAutoImplement: true,
     },
     {
       id: "4",
       type: "reliability",
       title: "Circuit Breaker Adaptativo",
-      description: "Implementar circuit breaker que aprende padrões de falha e se adapta automaticamente.",
+      description:
+        "Implementar circuit breaker que aprende padrões de falha e se adapta automaticamente.",
       impact: "high",
       effort: "complex",
       estimatedImprovement: "Aumento de 25% na disponibilidade",
@@ -120,11 +123,11 @@ export const SmartOptimization: React.FC = () => {
         "Configurar monitoramento de saúde dos serviços",
         "Implementar algoritmo de circuit breaker adaptativo",
         "Definir métricas de recuperação automática",
-        "Configurar fallbacks inteligentes"
+        "Configurar fallbacks inteligentes",
       ],
       isImplemented: true,
-      canAutoImplement: false
-    }
+      canAutoImplement: false,
+    },
   ]);
 
   const [autoOptimizations] = useState<AutoOptimization[]>([
@@ -136,7 +139,7 @@ export const SmartOptimization: React.FC = () => {
       lastRun: "2024-01-20T16:30:00Z",
       nextRun: "2024-01-21T02:00:00Z",
       successRate: 98.5,
-      improvementAchieved: "Liberação de 2.3GB de cache desnecessário"
+      improvementAchieved: "Liberação de 2.3GB de cache desnecessário",
     },
     {
       id: "2",
@@ -146,7 +149,7 @@ export const SmartOptimization: React.FC = () => {
       lastRun: "2024-01-20T15:45:00Z",
       nextRun: "2024-01-20T17:45:00Z",
       successRate: 94.2,
-      improvementAchieved: "Redução de 18% no tempo de resposta"
+      improvementAchieved: "Redução de 18% no tempo de resposta",
     },
     {
       id: "3",
@@ -156,7 +159,7 @@ export const SmartOptimization: React.FC = () => {
       lastRun: "2024-01-20T14:20:00Z",
       nextRun: "2024-01-20T20:20:00Z",
       successRate: 96.8,
-      improvementAchieved: "Economia de 40% na largura de banda"
+      improvementAchieved: "Economia de 40% na largura de banda",
     },
     {
       id: "4",
@@ -166,70 +169,84 @@ export const SmartOptimization: React.FC = () => {
       lastRun: "2024-01-19T10:15:00Z",
       nextRun: "Pausado",
       successRate: 87.3,
-      improvementAchieved: "Redução de 12% em timeouts desnecessários"
-    }
+      improvementAchieved: "Redução de 12% em timeouts desnecessários",
+    },
   ]);
 
   const getImpactColor = (impact: OptimizationSuggestion["impact"]) => {
     switch (impact) {
-    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
-    case "high": return "bg-warning/20 text-warning border-warning/30";
-    case "medium": return "bg-primary/20 text-primary border-primary/30";
-    case "low": return "bg-muted text-muted-foreground border-border";
+      case "critical":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      case "high":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "medium":
+        return "bg-primary/20 text-primary border-primary/30";
+      case "low":
+        return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getEffortColor = (effort: OptimizationSuggestion["effort"]) => {
     switch (effort) {
-    case "easy": return "bg-success/20 text-success border-success/30";
-    case "medium": return "bg-warning/20 text-warning border-warning/30";
-    case "complex": return "bg-destructive/20 text-destructive border-destructive/30";
+      case "easy":
+        return "bg-success/20 text-success border-success/30";
+      case "medium":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "complex":
+        return "bg-destructive/20 text-destructive border-destructive/30";
     }
   };
 
   const getTypeIcon = (type: OptimizationSuggestion["type"]) => {
     switch (type) {
-    case "performance": return <Gauge className="w-4 h-4" />;
-    case "security": return <Shield className="w-4 h-4" />;
-    case "cost": return <BarChart3 className="w-4 h-4" />;
-    case "reliability": return <CheckCircle className="w-4 h-4" />;
+      case "performance":
+        return <Gauge className="w-4 h-4" />;
+      case "security":
+        return <Shield className="w-4 h-4" />;
+      case "cost":
+        return <BarChart3 className="w-4 h-4" />;
+      case "reliability":
+        return <CheckCircle className="w-4 h-4" />;
     }
   };
 
   const getStatusColor = (status: AutoOptimization["status"]) => {
     switch (status) {
-    case "active": return "bg-success/20 text-success border-success/30";
-    case "paused": return "bg-warning/20 text-warning border-warning/30";
-    case "disabled": return "bg-muted text-muted-foreground border-border";
+      case "active":
+        return "bg-success/20 text-success border-success/30";
+      case "paused":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "disabled":
+        return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const runSmartScan = async () => {
     setIsScanning(true);
     setScanProgress(0);
-    
+
     // Simular análise progressiva
     const steps = [
       "Analisando padrões de tráfego...",
       "Verificando performance de endpoints...",
       "Examinando configurações de segurança...",
       "Calculando otimizações possíveis...",
-      "Gerando recomendações..."
+      "Gerando recomendações...",
     ];
-    
+
     for (let i = 0; i < steps.length; i++) {
       await new Promise(resolve => setTimeout(resolve, 1000));
       setScanProgress((i + 1) * 20);
-      
+
       toast({
         title: "Análise em Progresso",
         description: steps[i],
       });
     }
-    
+
     setIsScanning(false);
     setScanProgress(0);
-    
+
     toast({
       title: "Análise Concluída",
       description: "4 novas otimizações foram identificadas.",
@@ -238,12 +255,12 @@ export const SmartOptimization: React.FC = () => {
 
   const implementSuggestion = (suggestionId: string) => {
     const suggestion = suggestions.find(s => s.id === suggestionId);
-    
+
     toast({
       title: "Implementando Otimização",
       description: `Aplicando: ${suggestion?.title}`,
     });
-    
+
     // Simular implementação
     setTimeout(() => {
       toast({
@@ -264,15 +281,13 @@ export const SmartOptimization: React.FC = () => {
                 <Wand2 className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <CardTitle className="text-2xl text-foreground">
-                  Otimização Inteligente
-                </CardTitle>
+                <CardTitle className="text-2xl text-foreground">Otimização Inteligente</CardTitle>
                 <CardDescription>
                   IA analisa e otimiza automaticamente suas integrações
                 </CardDescription>
               </div>
             </div>
-            <Button 
+            <Button
               onClick={runSmartScan}
               disabled={isScanning}
               className="bg-primary hover:bg-primary/90"
@@ -290,7 +305,7 @@ export const SmartOptimization: React.FC = () => {
               )}
             </Button>
           </div>
-          
+
           {isScanning && (
             <div className="mt-4">
               <div className="flex justify-between text-sm mb-2">
@@ -310,9 +325,9 @@ export const SmartOptimization: React.FC = () => {
             <Lightbulb className="w-5 h-5 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Sugestões de Otimização</h3>
           </div>
-          
+
           <div className="space-y-4">
-            {suggestions.map((suggestion) => (
+            {suggestions.map(suggestion => (
               <Card key={suggestion.id} className="border border-border/50">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
@@ -321,16 +336,16 @@ export const SmartOptimization: React.FC = () => {
                         {getTypeIcon(suggestion.type)}
                       </div>
                       <div>
-                        <CardTitle className="text-base text-foreground">{suggestion.title}</CardTitle>
+                        <CardTitle className="text-base text-foreground">
+                          {suggestion.title}
+                        </CardTitle>
                         <p className="text-sm text-muted-foreground">{suggestion.description}</p>
                       </div>
                     </div>
-                    {suggestion.isImplemented && (
-                      <CheckCircle className="w-5 h-5 text-success" />
-                    )}
+                    {suggestion.isImplemented && <CheckCircle className="w-5 h-5 text-success" />}
                   </div>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-4">
                   <div className="flex items-center gap-2">
                     <Badge className={getImpactColor(suggestion.impact)}>
@@ -346,7 +361,7 @@ export const SmartOptimization: React.FC = () => {
                       </Badge>
                     )}
                   </div>
-                  
+
                   <div className="p-3 bg-muted/30 rounded-lg">
                     <p className="text-sm font-medium text-success mb-2">
                       💡 {suggestion.estimatedImprovement}
@@ -364,20 +379,16 @@ export const SmartOptimization: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   {!suggestion.isImplemented && (
                     <div className="flex gap-2">
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className="flex-1"
-                      >
+                      <Button size="sm" variant="outline" className="flex-1">
                         <Eye className="w-3 h-3 mr-1" />
                         Ver Detalhes
                       </Button>
                       {suggestion.canAutoImplement ? (
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           className="flex-1 bg-primary hover:bg-primary/90"
                           onClick={() => implementSuggestion(suggestion.id)}
                         >
@@ -385,11 +396,7 @@ export const SmartOptimization: React.FC = () => {
                           Implementar
                         </Button>
                       ) : (
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          className="flex-1"
-                        >
+                        <Button size="sm" variant="outline" className="flex-1">
                           <Settings className="w-3 h-3 mr-1" />
                           Configurar
                         </Button>
@@ -408,9 +415,9 @@ export const SmartOptimization: React.FC = () => {
             <Brain className="w-5 h-5 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Auto-Otimizações Ativas</h3>
           </div>
-          
+
           <div className="space-y-4">
-            {autoOptimizations.map((auto) => (
+            {autoOptimizations.map(auto => (
               <Card key={auto.id} className="border border-border/50">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -418,12 +425,10 @@ export const SmartOptimization: React.FC = () => {
                       <CardTitle className="text-base text-foreground">{auto.name}</CardTitle>
                       <p className="text-sm text-muted-foreground">{auto.description}</p>
                     </div>
-                    <Badge className={getStatusColor(auto.status)}>
-                      {auto.status}
-                    </Badge>
+                    <Badge className={getStatusColor(auto.status)}>{auto.status}</Badge>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
@@ -433,25 +438,24 @@ export const SmartOptimization: React.FC = () => {
                     <div>
                       <p className="text-muted-foreground">Próxima Execução</p>
                       <p className="font-medium text-foreground">
-                        {auto.nextRun === "Pausado" ? "Pausado" : 
-                          new Date(auto.nextRun).toLocaleTimeString("pt-BR", { 
-                            hour: "2-digit", 
-                            minute: "2-digit" 
-                          })}
+                        {auto.nextRun === "Pausado"
+                          ? "Pausado"
+                          : new Date(auto.nextRun).toLocaleTimeString("pt-BR", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="p-3 bg-success/10 border border-success/20 rounded-lg">
                     <div className="flex items-center gap-2 mb-1">
                       <TrendingUp className="w-4 h-4 text-success" />
                       <span className="text-sm font-medium text-success">Resultado Atual</span>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      {auto.improvementAchieved}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{auto.improvementAchieved}</p>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" className="flex-1">
                       <Settings className="w-3 h-3 mr-1" />
@@ -466,7 +470,7 @@ export const SmartOptimization: React.FC = () => {
               </Card>
             ))}
           </div>
-          
+
           {/* Performance Summary */}
           <Card>
             <CardHeader>
@@ -494,7 +498,7 @@ export const SmartOptimization: React.FC = () => {
                   <p className="text-xs text-muted-foreground">Disponibilidade</p>
                 </div>
               </div>
-              
+
               <div className="mt-4 flex gap-2">
                 <Button size="sm" variant="outline" className="flex-1">
                   <Download className="w-3 h-3 mr-1" />

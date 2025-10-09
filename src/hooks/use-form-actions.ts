@@ -10,7 +10,7 @@ export const useFormActions = () => {
       title: "Salvando",
       description: `Salvando ${formName}...`,
     });
-    
+
     // Simular save
     setTimeout(() => {
       toast({
@@ -48,7 +48,7 @@ export const useFormActions = () => {
         title: "Excluindo",
         description: `Excluindo ${itemName}...`,
       });
-      
+
       setTimeout(() => {
         toast({
           title: "Excluído com sucesso",
@@ -64,6 +64,6 @@ export const useFormActions = () => {
     handleSaveForm,
     handleCancelForm,
     handleResetForm,
-    handleDeleteItem
+    handleDeleteItem,
   };
 };

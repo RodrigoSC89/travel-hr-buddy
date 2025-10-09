@@ -21,7 +21,7 @@ import {
   Brain,
   Zap,
   Languages,
-  FileUp
+  FileUp,
 } from "lucide-react";
 import { toast } from "sonner";
 import { getOCRService, OCRResult, OCRProgress } from "@/services/ocr-service";
@@ -43,90 +43,93 @@ export const PeotramOCRProcessor: React.FC = () => {
   const [selectedDoc, setSelectedDoc] = useState<ProcessedDocument | null>(null);
   const [batchMode, setBatchMode] = useState(false);
   const [language, setLanguage] = useState<"por+eng" | "eng" | "por">("por+eng");
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const ocrService = getOCRService();
 
-  const handleFileSelect = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
+  const handleFileSelect = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const files = event.target.files;
+      if (!files || files.length === 0) return;
 
-    setIsProcessing(true);
-    setCurrentProgress(0);
-
-    try {
-      await ocrService.initialize(language);
-      
-      const filesArray = Array.from(files);
-      const processedDocs: ProcessedDocument[] = [];
-
-      if (batchMode && filesArray.length > 1) {
-        // Batch processing
-        const results = await ocrService.processBatch(
-          filesArray,
-          (currentIndex, total, itemProgress) => {
-            const overallProgress = ((currentIndex + itemProgress.progress) / total) * 100;
-            setCurrentProgress(overallProgress);
-          }
-        );
-
-        for (let i = 0; i < filesArray.length; i++) {
-          const file = filesArray[i];
-          const imageUrl = URL.createObjectURL(file);
-          
-          processedDocs.push({
-            id: `doc-${Date.now()}-${i}`,
-            fileName: file.name,
-            fileType: file.type,
-            imageUrl,
-            ocrResult: results[i],
-            processedAt: new Date(),
-          });
-        }
-      } else {
-        // Single file processing
-        for (const file of filesArray) {
-          const imageUrl = URL.createObjectURL(file);
-          
-          const result = await ocrService.processImage(file, (progress: OCRProgress) => {
-            setCurrentProgress(progress.progress * 100);
-          });
-
-          const extractedFields = await ocrService.extractFormFields(file);
-
-          processedDocs.push({
-            id: `doc-${Date.now()}`,
-            fileName: file.name,
-            fileType: file.type,
-            imageUrl,
-            ocrResult: result,
-            processedAt: new Date(),
-            extractedFields,
-          });
-        }
-      }
-
-      setDocuments(prev => [...processedDocs, ...prev]);
-      toast.success(`${processedDocs.length} documento(s) processado(s) com sucesso!`, {
-        description: `Confiança média: ${Math.round(processedDocs.reduce((sum, d) => sum + d.ocrResult.confidence, 0) / processedDocs.length)}%`,
-      });
-      
-      if (processedDocs.length > 0) {
-        setSelectedDoc(processedDocs[0]);
-      }
-    } catch (error) {
-      console.error("Error processing documents:", error);
-      toast.error("Erro ao processar documentos", {
-        description: error instanceof Error ? error.message : "Erro desconhecido",
-      });
-    } finally {
-      setIsProcessing(false);
+      setIsProcessing(true);
       setCurrentProgress(0);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+
+      try {
+        await ocrService.initialize(language);
+
+        const filesArray = Array.from(files);
+        const processedDocs: ProcessedDocument[] = [];
+
+        if (batchMode && filesArray.length > 1) {
+          // Batch processing
+          const results = await ocrService.processBatch(
+            filesArray,
+            (currentIndex, total, itemProgress) => {
+              const overallProgress = ((currentIndex + itemProgress.progress) / total) * 100;
+              setCurrentProgress(overallProgress);
+            }
+          );
+
+          for (let i = 0; i < filesArray.length; i++) {
+            const file = filesArray[i];
+            const imageUrl = URL.createObjectURL(file);
+
+            processedDocs.push({
+              id: `doc-${Date.now()}-${i}`,
+              fileName: file.name,
+              fileType: file.type,
+              imageUrl,
+              ocrResult: results[i],
+              processedAt: new Date(),
+            });
+          }
+        } else {
+          // Single file processing
+          for (const file of filesArray) {
+            const imageUrl = URL.createObjectURL(file);
+
+            const result = await ocrService.processImage(file, (progress: OCRProgress) => {
+              setCurrentProgress(progress.progress * 100);
+            });
+
+            const extractedFields = await ocrService.extractFormFields(file);
+
+            processedDocs.push({
+              id: `doc-${Date.now()}`,
+              fileName: file.name,
+              fileType: file.type,
+              imageUrl,
+              ocrResult: result,
+              processedAt: new Date(),
+              extractedFields,
+            });
+          }
+        }
+
+        setDocuments(prev => [...processedDocs, ...prev]);
+        toast.success(`${processedDocs.length} documento(s) processado(s) com sucesso!`, {
+          description: `Confiança média: ${Math.round(processedDocs.reduce((sum, d) => sum + d.ocrResult.confidence, 0) / processedDocs.length)}%`,
+        });
+
+        if (processedDocs.length > 0) {
+          setSelectedDoc(processedDocs[0]);
+        }
+      } catch (error) {
+        console.error("Error processing documents:", error);
+        toast.error("Erro ao processar documentos", {
+          description: error instanceof Error ? error.message : "Erro desconhecido",
+        });
+      } finally {
+        setIsProcessing(false);
+        setCurrentProgress(0);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
       }
-    }
-  }, [language, batchMode, ocrService]);
+    },
+    [language, batchMode, ocrService]
+  );
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
@@ -140,12 +143,13 @@ export const PeotramOCRProcessor: React.FC = () => {
       processedAt: selectedDoc.processedAt,
       confidence: selectedDoc.ocrResult.confidence,
       text: selectedDoc.ocrResult.text,
-      extractedFields: selectedDoc.extractedFields ? 
-        Object.fromEntries(selectedDoc.extractedFields) : {},
+      extractedFields: selectedDoc.extractedFields
+        ? Object.fromEntries(selectedDoc.extractedFields)
+        : {},
     };
 
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
-      type: "application/json" 
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: "application/json",
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -203,7 +207,7 @@ export const PeotramOCRProcessor: React.FC = () => {
               <select
                 className="w-full px-3 py-2 border rounded-md"
                 value={language}
-                onChange={(e) => setLanguage(e.target.value as any)}
+                onChange={e => setLanguage(e.target.value as any)}
                 disabled={isProcessing}
               >
                 <option value="por+eng">Português + Inglês</option>
@@ -219,7 +223,7 @@ export const PeotramOCRProcessor: React.FC = () => {
                   type="checkbox"
                   id="batchMode"
                   checked={batchMode}
-                  onChange={(e) => setBatchMode(e.target.checked)}
+                  onChange={e => setBatchMode(e.target.checked)}
                   disabled={isProcessing}
                   className="w-4 h-4"
                 />
@@ -247,11 +251,7 @@ export const PeotramOCRProcessor: React.FC = () => {
               onChange={handleFileSelect}
               className="hidden"
             />
-            <Button
-              onClick={handleUploadClick}
-              disabled={isProcessing}
-              className="flex-1"
-            >
+            <Button onClick={handleUploadClick} disabled={isProcessing} className="flex-1">
               {isProcessing ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -292,13 +292,15 @@ export const PeotramOCRProcessor: React.FC = () => {
               </TabsList>
 
               <TabsContent value="list" className="space-y-2">
-                {documents.map((doc) => {
+                {documents.map(doc => {
                   const confidenceInfo = formatConfidence(doc.ocrResult.confidence);
                   return (
                     <div
                       key={doc.id}
                       className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                        selectedDoc?.id === doc.id ? "bg-primary/5 border-primary" : "hover:bg-muted/50"
+                        selectedDoc?.id === doc.id
+                          ? "bg-primary/5 border-primary"
+                          : "hover:bg-muted/50"
                       }`}
                       onClick={() => setSelectedDoc(doc)}
                     >
@@ -371,7 +373,11 @@ export const PeotramOCRProcessor: React.FC = () => {
                         <CardContent className="space-y-3">
                           <div className="flex items-center justify-between p-2 bg-muted rounded">
                             <span className="text-sm">Confiança:</span>
-                            <Badge variant={selectedDoc.ocrResult.confidence >= 90 ? "default" : "secondary"}>
+                            <Badge
+                              variant={
+                                selectedDoc.ocrResult.confidence >= 90 ? "default" : "secondary"
+                              }
+                            >
                               {Math.round(selectedDoc.ocrResult.confidence)}%
                             </Badge>
                           </div>
@@ -401,12 +407,14 @@ export const PeotramOCRProcessor: React.FC = () => {
                         </CardHeader>
                         <CardContent>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {Array.from(selectedDoc.extractedFields.entries()).map(([key, value]) => (
-                              <div key={key} className="p-3 border rounded-lg">
-                                <Label className="text-xs text-muted-foreground">{key}</Label>
-                                <p className="mt-1 font-medium">{value}</p>
-                              </div>
-                            ))}
+                            {Array.from(selectedDoc.extractedFields.entries()).map(
+                              ([key, value]) => (
+                                <div key={key} className="p-3 border rounded-lg">
+                                  <Label className="text-xs text-muted-foreground">{key}</Label>
+                                  <p className="mt-1 font-medium">{value}</p>
+                                </div>
+                              )
+                            )}
                           </div>
                         </CardContent>
                       </Card>

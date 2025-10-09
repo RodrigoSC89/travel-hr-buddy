@@ -12,7 +12,7 @@ export const PermissionGuard: React.FC<PermissionGuardProps> = ({
   permission,
   action = "read",
   children,
-  fallback = null
+  fallback = null,
 }) => {
   const { hasPermission } = usePermissions();
 

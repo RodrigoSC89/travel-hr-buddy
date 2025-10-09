@@ -38,16 +38,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         )}
         <h3 className="text-lg font-semibold mb-2">{title}</h3>
         {description && (
-          <p className="text-sm text-muted-foreground mb-4 max-w-md">
-            {description}
-          </p>
+          <p className="text-sm text-muted-foreground mb-4 max-w-md">{description}</p>
         )}
         {actionLabel && onAction && (
-          <Button
-            onClick={onAction}
-            variant="default"
-            aria-label={actionLabel}
-          >
+          <Button onClick={onAction} variant="default" aria-label={actionLabel}>
             {actionLabel}
           </Button>
         )}

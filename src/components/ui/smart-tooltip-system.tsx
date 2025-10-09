@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  HelpCircle, 
-  Lightbulb, 
-  TrendingUp, 
+import {
+  HelpCircle,
+  Lightbulb,
+  TrendingUp,
   Zap,
   ChevronRight,
   X,
@@ -18,7 +18,7 @@ import {
   Compass,
   Anchor,
   Ship,
-  Target
+  Target,
 } from "lucide-react";
 
 interface TooltipData {
@@ -53,49 +53,54 @@ const SmartTooltipSystem: React.FC = () => {
   const tooltipDatabase: TooltipData[] = [
     {
       id: "nautical-copilot",
-      element: "[data-tour=\"copilot\"]",
+      element: '[data-tour="copilot"]',
       title: "Nautilus Copilot IA",
-      description: "Seu assistente marítimo inteligente. Faça perguntas sobre operações, solicite relatórios ou execute comandos por voz.",
+      description:
+        "Seu assistente marítimo inteligente. Faça perguntas sobre operações, solicite relatórios ou execute comandos por voz.",
       category: "feature",
       priority: "high",
-      position: "right"
+      position: "right",
     },
     {
       id: "fleet-status",
-      element: "[data-tour=\"fleet\"]",
+      element: '[data-tour="fleet"]',
       title: "Status da Frota",
-      description: "Monitore em tempo real todas as embarcações, suas posições, status operacional e próximas manutenções.",
+      description:
+        "Monitore em tempo real todas as embarcações, suas posições, status operacional e próximas manutenções.",
       category: "navigation",
       priority: "high",
-      position: "bottom"
+      position: "bottom",
     },
     {
       id: "integration-hub",
-      element: "[data-tour=\"integrations\"]",
+      element: '[data-tour="integrations"]',
       title: "Hub de Integrações",
-      description: "Conecte-se com APIs marítimas, dados meteorológicos e sistemas governamentais para automação completa.",
+      description:
+        "Conecte-se com APIs marítimas, dados meteorológicos e sistemas governamentais para automação completa.",
       category: "feature",
       priority: "medium",
-      position: "left"
+      position: "left",
     },
     {
       id: "custom-theme",
-      element: "[data-tour=\"theme\"]",
+      element: '[data-tour="theme"]',
       title: "Personalização Náutica",
-      description: "Customize cores, temas e terminologia para adequar o sistema à identidade da sua empresa marítima.",
+      description:
+        "Customize cores, temas e terminologia para adequar o sistema à identidade da sua empresa marítima.",
       category: "feature",
       priority: "medium",
-      position: "top"
+      position: "top",
     },
     {
       id: "quick-actions",
-      element: "[data-tour=\"actions\"]",
+      element: '[data-tour="actions"]',
       title: "Ações Rápidas",
-      description: "Acesse rapidamente as funções mais utilizadas: relatórios, alertas, comunicação e monitoramento.",
+      description:
+        "Acesse rapidamente as funções mais utilizadas: relatórios, alertas, comunicação e monitoramento.",
       category: "navigation",
       priority: "high",
-      position: "bottom"
-    }
+      position: "bottom",
+    },
   ];
 
   const contextualAssistants: ContextualAssistant[] = [
@@ -103,45 +108,47 @@ const SmartTooltipSystem: React.FC = () => {
       id: "first-visit",
       trigger: "new_user",
       title: "Bem-vindo ao Nautilus One!",
-      message: "Detectamos que é sua primeira vez aqui. Gostaria de fazer um tour guiado pelas principais funcionalidades?",
+      message:
+        "Detectamos que é sua primeira vez aqui. Gostaria de fazer um tour guiado pelas principais funcionalidades?",
       type: "info",
       actions: [
         { label: "Iniciar Tour", action: () => startGuidedTour() },
-        { label: "Pular", action: () => dismissAssistant("first-visit") }
-      ]
+        { label: "Pular", action: () => dismissAssistant("first-visit") },
+      ],
     },
     {
       id: "low-efficiency",
       trigger: "efficiency_below_threshold",
       title: "Oportunidade de Otimização",
-      message: "Detectamos que a eficiência operacional está abaixo do esperado. O Copilot IA pode sugerir melhorias automáticas.",
+      message:
+        "Detectamos que a eficiência operacional está abaixo do esperado. O Copilot IA pode sugerir melhorias automáticas.",
       type: "warning",
       actions: [
         { label: "Ver Sugestões", action: () => openOptimizationPanel() },
-        { label: "Ignorar", action: () => dismissAssistant("low-efficiency") }
-      ]
+        { label: "Ignorar", action: () => dismissAssistant("low-efficiency") },
+      ],
     },
     {
       id: "new-feature",
       trigger: "feature_announcement",
       title: "Nova Funcionalidade Disponível",
-      message: "Acabamos de lançar o Sistema de Identidade Marítima. Personalize completamente a aparência do sistema!",
+      message:
+        "Acabamos de lançar o Sistema de Identidade Marítima. Personalize completamente a aparência do sistema!",
       type: "success",
       actions: [
         { label: "Explorar", action: () => openIdentitySystem() },
-        { label: "Mais Tarde", action: () => dismissAssistant("new-feature") }
-      ]
+        { label: "Mais Tarde", action: () => dismissAssistant("new-feature") },
+      ],
     },
     {
       id: "performance-tip",
       trigger: "idle_time",
       title: "Dica de Produtividade",
-      message: "Você pode usar Ctrl+K para abrir a busca global rapidamente e navegar entre módulos.",
+      message:
+        "Você pode usar Ctrl+K para abrir a busca global rapidamente e navegar entre módulos.",
       type: "tip",
-      actions: [
-        { label: "Entendi", action: () => dismissAssistant("performance-tip") }
-      ]
-    }
+      actions: [{ label: "Entendi", action: () => dismissAssistant("performance-tip") }],
+    },
   ];
 
   useEffect(() => {
@@ -159,7 +166,8 @@ const SmartTooltipSystem: React.FC = () => {
       const resetTimer = () => {
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => {
-          if (Math.random() > 0.7) { // 30% de chance
+          if (Math.random() > 0.7) {
+            // 30% de chance
             showAssistant("performance-tip");
           }
         }, 30000); // 30 segundos
@@ -235,21 +243,31 @@ const SmartTooltipSystem: React.FC = () => {
 
   const getAssistantIcon = (type: ContextualAssistant["type"]) => {
     switch (type) {
-    case "tip": return <Lightbulb className="w-5 h-5 text-blue-500" />;
-    case "warning": return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
-    case "success": return <CheckCircle className="w-5 h-5 text-green-500" />;
-    case "info": return <Info className="w-5 h-5 text-blue-500" />;
-    default: return <HelpCircle className="w-5 h-5 text-muted-foreground" />;
+      case "tip":
+        return <Lightbulb className="w-5 h-5 text-blue-500" />;
+      case "warning":
+        return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
+      case "success":
+        return <CheckCircle className="w-5 h-5 text-green-500" />;
+      case "info":
+        return <Info className="w-5 h-5 text-blue-500" />;
+      default:
+        return <HelpCircle className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: TooltipData["category"]) => {
     switch (category) {
-    case "navigation": return <Compass className="w-4 h-4" />;
-    case "feature": return <Star className="w-4 h-4" />;
-    case "optimization": return <TrendingUp className="w-4 h-4" />;
-    case "help": return <HelpCircle className="w-4 h-4" />;
-    default: return <Navigation className="w-4 h-4" />;
+      case "navigation":
+        return <Compass className="w-4 h-4" />;
+      case "feature":
+        return <Star className="w-4 h-4" />;
+      case "optimization":
+        return <TrendingUp className="w-4 h-4" />;
+      case "help":
+        return <HelpCircle className="w-4 h-4" />;
+      default:
+        return <Navigation className="w-4 h-4" />;
     }
   };
 
@@ -257,8 +275,11 @@ const SmartTooltipSystem: React.FC = () => {
     <>
       {/* Assistentes Contextuais */}
       <div className="fixed bottom-4 right-4 z-50 space-y-3">
-        {assistantMessages.map((assistant) => (
-          <Card key={assistant.id} className="w-80 glass-maritime shadow-beacon animate-slide-in-right">
+        {assistantMessages.map(assistant => (
+          <Card
+            key={assistant.id}
+            className="w-80 glass-maritime shadow-beacon animate-slide-in-right"
+          >
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -321,7 +342,9 @@ const SmartTooltipSystem: React.FC = () => {
                       <div className="flex items-center gap-2">
                         {getCategoryIcon(tooltipDatabase[currentTour].category)}
                         <h3 className="font-semibold">{tooltipDatabase[currentTour].title}</h3>
-                        <Badge className={`badge-${tooltipDatabase[currentTour].priority === "high" ? "captain" : "crew"}`}>
+                        <Badge
+                          className={`badge-${tooltipDatabase[currentTour].priority === "high" ? "captain" : "crew"}`}
+                        >
                           {tooltipDatabase[currentTour].category}
                         </Badge>
                       </div>
@@ -346,7 +369,6 @@ const SmartTooltipSystem: React.FC = () => {
         </div>
       )}
 
-
       {/* Painel de Ajuda */}
       {isHelpMode && currentTour === null && (
         <Card className="fixed bottom-20 left-4 z-30 w-80 glass-maritime shadow-navigation">
@@ -365,7 +387,7 @@ const SmartTooltipSystem: React.FC = () => {
               <Navigation className="w-4 h-4 mr-2" />
               Iniciar Tour Guiado
             </Button>
-            
+
             <Button
               variant="outline"
               className="w-full justify-start btn-harbor"
@@ -374,7 +396,7 @@ const SmartTooltipSystem: React.FC = () => {
               <Zap className="w-4 h-4 mr-2" />
               Dicas de Produtividade
             </Button>
-            
+
             <Button
               variant="outline"
               className="w-full justify-start btn-harbor"
@@ -383,11 +405,9 @@ const SmartTooltipSystem: React.FC = () => {
               <Star className="w-4 h-4 mr-2" />
               Novidades do Sistema
             </Button>
-            
+
             <div className="pt-2 border-t">
-              <p className="text-xs text-muted-foreground">
-                💡 Dica: Use Ctrl+K para busca global
-              </p>
+              <p className="text-xs text-muted-foreground">💡 Dica: Use Ctrl+K para busca global</p>
             </div>
           </CardContent>
         </Card>

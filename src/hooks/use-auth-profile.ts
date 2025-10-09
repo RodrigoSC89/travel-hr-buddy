@@ -61,7 +61,7 @@ export const useAuthProfile = () => {
               theme: "system" as const,
               notifications: true,
               language: "pt" as const,
-            }
+            },
           };
 
           const { data: newProfile, error: createError } = await supabase
@@ -88,7 +88,7 @@ export const useAuthProfile = () => {
                 theme: "system",
                 notifications: true,
                 language: "pt",
-              }
+              },
             };
             setProfile(mappedNewProfile);
           }
@@ -107,7 +107,7 @@ export const useAuthProfile = () => {
               theme: "system",
               notifications: true,
               language: "pt",
-            }
+            },
           };
           setProfile(mappedProfile);
         }
@@ -127,7 +127,7 @@ export const useAuthProfile = () => {
             theme: "system",
             notifications: true,
             language: "pt",
-          }
+          },
         });
       } finally {
         setIsLoading(false);
@@ -169,7 +169,7 @@ export const useAuthProfile = () => {
         position: data.position,
         phone: data.phone,
         role: profile.role,
-        preferences: profile.preferences
+        preferences: profile.preferences,
       };
       setProfile(mappedProfile);
       toast({
@@ -199,9 +199,7 @@ export const useAuthProfile = () => {
       const fileName = `${profile.id}-${Math.random()}.${fileExt}`;
       const filePath = `avatars/${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, file);
+      const { error: uploadError } = await supabase.storage.from("avatars").upload(filePath, file);
 
       if (uploadError) {
         console.error("Error uploading avatar:", uploadError);
@@ -213,9 +211,7 @@ export const useAuthProfile = () => {
         return false;
       }
 
-      const { data: publicUrl } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(filePath);
+      const { data: publicUrl } = supabase.storage.from("avatars").getPublicUrl(filePath);
 
       const success = await updateProfile({ avatar_url: publicUrl.publicUrl });
       if (success) {
@@ -224,7 +220,7 @@ export const useAuthProfile = () => {
           description: "Avatar atualizado com sucesso",
         });
       }
-      
+
       return success;
     } catch (error) {
       console.error("Error in uploadAvatar:", error);

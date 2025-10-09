@@ -4,21 +4,47 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  TrendingUp, 
-  Users, 
-  Ship, 
-  Database, 
-  Clock, 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  TrendingUp,
+  Users,
+  Ship,
+  Database,
+  Clock,
   Calendar,
   BarChart3,
   PieChart,
   Activity,
-  Download
+  Download,
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart as RechartsPieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 const mockUsageData = [
   { date: "2024-01-01", users: 15, storage: 2.5, api_calls: 1200 },
@@ -27,7 +53,7 @@ const mockUsageData = [
   { date: "2024-01-04", users: 25, storage: 3.4, api_calls: 1800 },
   { date: "2024-01-05", users: 20, storage: 3.2, api_calls: 1500 },
   { date: "2024-01-06", users: 28, storage: 3.8, api_calls: 2000 },
-  { date: "2024-01-07", users: 32, storage: 4.2, api_calls: 2200 }
+  { date: "2024-01-07", users: 32, storage: 4.2, api_calls: 2200 },
 ];
 
 const mockModuleUsage = [
@@ -35,15 +61,40 @@ const mockModuleUsage = [
   { name: "Fleet Management", usage: 70, color: "#10b981" },
   { name: "HR Dashboard", usage: 60, color: "#f59e0b" },
   { name: "Analytics", usage: 45, color: "#ef4444" },
-  { name: "Communication", usage: 30, color: "#8b5cf6" }
+  { name: "Communication", usage: 30, color: "#8b5cf6" },
 ];
 
 const mockActivityLog = [
-  { time: "2024-01-07 14:30", user: "admin@blueshipping.com", action: "Criou novo audit PEOTRAM", module: "PEOTRAM" },
-  { time: "2024-01-07 14:15", user: "captain@blueshipping.com", action: "Atualizou posição da embarcação", module: "Fleet" },
-  { time: "2024-01-07 13:45", user: "hr@blueshipping.com", action: "Adicionou certificado marítimo", module: "HR" },
-  { time: "2024-01-07 13:30", user: "admin@blueshipping.com", action: "Configurou alertas inteligentes", module: "Intelligence" },
-  { time: "2024-01-07 12:15", user: "operator@blueshipping.com", action: "Concluiu checklist operacional", module: "Operations" }
+  {
+    time: "2024-01-07 14:30",
+    user: "admin@blueshipping.com",
+    action: "Criou novo audit PEOTRAM",
+    module: "PEOTRAM",
+  },
+  {
+    time: "2024-01-07 14:15",
+    user: "captain@blueshipping.com",
+    action: "Atualizou posição da embarcação",
+    module: "Fleet",
+  },
+  {
+    time: "2024-01-07 13:45",
+    user: "hr@blueshipping.com",
+    action: "Adicionou certificado marítimo",
+    module: "HR",
+  },
+  {
+    time: "2024-01-07 13:30",
+    user: "admin@blueshipping.com",
+    action: "Configurou alertas inteligentes",
+    module: "Intelligence",
+  },
+  {
+    time: "2024-01-07 12:15",
+    user: "operator@blueshipping.com",
+    action: "Concluiu checklist operacional",
+    module: "Operations",
+  },
 ];
 
 export const UsageAnalytics: React.FC = () => {
@@ -54,11 +105,11 @@ export const UsageAnalytics: React.FC = () => {
   };
 
   const formatTime = (timeStr: string) => {
-    return new Date(timeStr).toLocaleString("pt-BR", { 
-      day: "2-digit", 
-      month: "2-digit", 
-      hour: "2-digit", 
-      minute: "2-digit" 
+    return new Date(timeStr).toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -127,7 +178,7 @@ export const UsageAnalytics: React.FC = () => {
             <TabsTrigger value="modules">Módulos</TabsTrigger>
             <TabsTrigger value="activity">Atividade</TabsTrigger>
           </TabsList>
-          
+
           <div className="flex items-center gap-2">
             <Select value={timeRange} onValueChange={setTimeRange}>
               <SelectTrigger className="w-32">
@@ -161,25 +212,20 @@ export const UsageAnalytics: React.FC = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={mockUsageData}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="date" 
-                      tickFormatter={formatDate}
-                    />
+                    <XAxis dataKey="date" tickFormatter={formatDate} />
                     <YAxis />
-                    <Tooltip 
-                      labelFormatter={(label) => formatDate(label)}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="users" 
-                      stroke="#3b82f6" 
+                    <Tooltip labelFormatter={label => formatDate(label)} />
+                    <Line
+                      type="monotone"
+                      dataKey="users"
+                      stroke="#3b82f6"
                       strokeWidth={2}
                       name="Usuários"
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="api_calls" 
-                      stroke="#10b981" 
+                    <Line
+                      type="monotone"
+                      dataKey="api_calls"
+                      stroke="#10b981"
                       strokeWidth={2}
                       name="API Calls"
                     />
@@ -202,14 +248,11 @@ export const UsageAnalytics: React.FC = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={mockUsageData}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="date" 
-                      tickFormatter={formatDate}
-                    />
+                    <XAxis dataKey="date" tickFormatter={formatDate} />
                     <YAxis />
-                    <Tooltip 
-                      labelFormatter={(label) => formatDate(label)}
-                      formatter={(value) => [`${value} GB`, "Armazenamento"]}
+                    <Tooltip
+                      labelFormatter={label => formatDate(label)}
+                      formatter={value => [`${value} GB`, "Armazenamento"]}
                     />
                     <Bar dataKey="storage" fill="#f59e0b" />
                   </BarChart>
@@ -246,7 +289,7 @@ export const UsageAnalytics: React.FC = () => {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip formatter={(value) => [`${value}%`, "Uso"]} />
+                      <Tooltip formatter={value => [`${value}%`, "Uso"]} />
                     </RechartsPieChart>
                   </ResponsiveContainer>
                 </div>
@@ -259,17 +302,17 @@ export const UsageAnalytics: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {mockModuleUsage.map((module) => (
+                  {mockModuleUsage.map(module => (
                     <div key={module.name} className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{module.name}</span>
                         <span className="text-sm text-muted-foreground">{module.usage}%</span>
                       </div>
-                      <Progress 
-                        value={module.usage} 
+                      <Progress
+                        value={module.usage}
                         className="h-2"
-                        style={{ 
-                          backgroundColor: module.color + "20"
+                        style={{
+                          backgroundColor: module.color + "20",
                         }}
                       />
                     </div>
@@ -293,7 +336,7 @@ export const UsageAnalytics: React.FC = () => {
                   </div>
                   <Progress value={75} className="h-2" />
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Alertas Inteligentes</span>
@@ -301,7 +344,7 @@ export const UsageAnalytics: React.FC = () => {
                   </div>
                   <Progress value={60} className="h-2" />
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Automação</span>
@@ -357,7 +400,9 @@ export const UsageAnalytics: React.FC = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Tempo Médio de Resposta</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Tempo Médio de Resposta
+                    </p>
                     <p className="text-2xl font-bold">142ms</p>
                     <p className="text-sm text-green-600">-5ms vs ontem</p>
                   </div>

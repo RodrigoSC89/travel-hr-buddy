@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Smartphone, 
-  Wifi, 
-  Battery, 
-  Signal, 
-  Download, 
+import {
+  Smartphone,
+  Wifi,
+  Battery,
+  Signal,
+  Download,
   Settings,
   Bell,
   Camera,
@@ -31,7 +31,7 @@ import {
   CheckCircle,
   Clock,
   Zap,
-  X
+  X,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useToast } from "@/hooks/use-toast";
@@ -78,7 +78,7 @@ export const EnhancedMobileSupport: React.FC = () => {
     isInstalled: false,
     isStandalone: false,
     canInstall: false,
-    updateAvailable: false
+    updateAvailable: false,
   });
   const [mobileSettings, setMobileSettings] = useState<MobileSettings>({
     notifications: true,
@@ -90,11 +90,11 @@ export const EnhancedMobileSupport: React.FC = () => {
     offlineMode: true,
     autoSync: true,
     compressionLevel: "medium",
-    dataUsage: "normal"
+    dataUsage: "normal",
   });
   const [isLoading, setIsLoading] = useState(true);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
-  
+
   const isMobile = useIsMobile();
   const { toast } = useToast();
 
@@ -106,22 +106,24 @@ export const EnhancedMobileSupport: React.FC = () => {
 
   const detectDeviceCapabilities = async () => {
     setIsLoading(true);
-    
+
     try {
       const info: DeviceInfo = {
         platform: navigator.platform,
         userAgent: navigator.userAgent,
         screenSize: {
           width: window.screen.width,
-          height: window.screen.height
+          height: window.screen.height,
         },
-        orientation: window.screen.orientation?.type.includes("portrait") ? "portrait" : "landscape",
+        orientation: window.screen.orientation?.type.includes("portrait")
+          ? "portrait"
+          : "landscape",
         isOnline: navigator.onLine,
         touchSupport: "ontouchstart" in window,
         cameraSupport: !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia),
         geolocationSupport: "geolocation" in navigator,
         notificationSupport: "Notification" in window,
-        vibrationSupport: "vibrate" in navigator
+        vibrationSupport: "vibrate" in navigator,
       };
 
       // Battery API (se disponível)
@@ -151,25 +153,26 @@ export const EnhancedMobileSupport: React.FC = () => {
 
   const setupPWAListeners = () => {
     // Listener para o evento beforeinstallprompt
-    window.addEventListener("beforeinstallprompt", (e) => {
+    window.addEventListener("beforeinstallprompt", e => {
       e.preventDefault();
       setInstallPrompt(e);
       setPwaStatus(prev => ({ ...prev, canInstall: true }));
     });
 
     // Verificar se está rodando como PWA
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches ||
-                        (window.navigator as any).standalone === true;
-    
-    setPwaStatus(prev => ({ 
-      ...prev, 
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (window.navigator as any).standalone === true;
+
+    setPwaStatus(prev => ({
+      ...prev,
       isStandalone,
-      isInstalled: isStandalone 
+      isInstalled: isStandalone,
     }));
 
     // Listener para atualizações do service worker
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.addEventListener("message", (event) => {
+      navigator.serviceWorker.addEventListener("message", event => {
         if (event.data && event.data.type === "UPDATE_AVAILABLE") {
           setPwaStatus(prev => ({ ...prev, updateAvailable: true }));
         }
@@ -194,15 +197,15 @@ export const EnhancedMobileSupport: React.FC = () => {
     if (installPrompt) {
       installPrompt.prompt();
       const result = await installPrompt.userChoice;
-      
+
       if (result.outcome === "accepted") {
         toast({
           title: "App instalado",
-          description: "O app foi instalado na sua tela inicial"
+          description: "O app foi instalado na sua tela inicial",
         });
         setPwaStatus(prev => ({ ...prev, canInstall: false, isInstalled: true }));
       }
-      
+
       setInstallPrompt(null);
     }
   };
@@ -210,110 +213,112 @@ export const EnhancedMobileSupport: React.FC = () => {
   const requestPermission = async (permission: keyof MobileSettings) => {
     try {
       switch (permission) {
-      case "notifications":
-        if ("Notification" in window) {
-          const result = await Notification.requestPermission();
-          const granted = result === "granted";
-          saveMobileSettings({ notifications: granted });
-          toast({
-            title: granted ? "Notificações ativadas" : "Notificações negadas",
-            description: granted ? "Você receberá notificações importantes" : "Ative nas configurações do navegador"
-          });
-        }
-        break;
-          
-      case "location":
-        if ("geolocation" in navigator) {
-          navigator.geolocation.getCurrentPosition(
-            () => {
-              saveMobileSettings({ location: true });
+        case "notifications":
+          if ("Notification" in window) {
+            const result = await Notification.requestPermission();
+            const granted = result === "granted";
+            saveMobileSettings({ notifications: granted });
+            toast({
+              title: granted ? "Notificações ativadas" : "Notificações negadas",
+              description: granted
+                ? "Você receberá notificações importantes"
+                : "Ative nas configurações do navegador",
+            });
+          }
+          break;
+
+        case "location":
+          if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+              () => {
+                saveMobileSettings({ location: true });
+                toast({
+                  title: "Localização ativada",
+                  description: "O app pode acessar sua localização",
+                });
+              },
+              () => {
+                saveMobileSettings({ location: false });
+                toast({
+                  title: "Localização negada",
+                  description: "Ative nas configurações do navegador",
+                  variant: "destructive",
+                });
+              }
+            );
+          }
+          break;
+
+        case "camera":
+          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+              stream.getTracks().forEach(track => track.stop());
+              saveMobileSettings({ camera: true });
               toast({
-                title: "Localização ativada",
-                description: "O app pode acessar sua localização"
+                title: "Câmera ativada",
+                description: "O app pode acessar a câmera",
               });
-            },
-            () => {
-              saveMobileSettings({ location: false });
+            } catch (error) {
+              saveMobileSettings({ camera: false });
               toast({
-                title: "Localização negada",
+                title: "Câmera negada",
                 description: "Ative nas configurações do navegador",
-                variant: "destructive"
+                variant: "destructive",
               });
             }
-          );
-        }
-        break;
-          
-      case "camera":
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            stream.getTracks().forEach(track => track.stop());
-            saveMobileSettings({ camera: true });
+          }
+          break;
+
+        case "microphone":
+          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+              stream.getTracks().forEach(track => track.stop());
+              saveMobileSettings({ microphone: true });
+              toast({
+                title: "Microfone ativado",
+                description: "O app pode acessar o microfone",
+              });
+            } catch (error) {
+              saveMobileSettings({ microphone: false });
+              toast({
+                title: "Microfone negado",
+                description: "Ative nas configurações do navegador",
+                variant: "destructive",
+              });
+            }
+          }
+          break;
+
+        case "vibration":
+          if ("vibrate" in navigator) {
+            navigator.vibrate(200);
+            saveMobileSettings({ vibration: true });
             toast({
-              title: "Câmera ativada",
-              description: "O app pode acessar a câmera"
-            });
-          } catch (error) {
-            saveMobileSettings({ camera: false });
-            toast({
-              title: "Câmera negada",
-              description: "Ative nas configurações do navegador",
-              variant: "destructive"
+              title: "Vibração ativada",
+              description: "O app pode usar vibração",
             });
           }
-        }
-        break;
-          
-      case "microphone":
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            stream.getTracks().forEach(track => track.stop());
-            saveMobileSettings({ microphone: true });
-            toast({
-              title: "Microfone ativado",
-              description: "O app pode acessar o microfone"
-            });
-          } catch (error) {
-            saveMobileSettings({ microphone: false });
-            toast({
-              title: "Microfone negado",
-              description: "Ative nas configurações do navegador",
-              variant: "destructive"
-            });
-          }
-        }
-        break;
-          
-      case "vibration":
-        if ("vibrate" in navigator) {
-          navigator.vibrate(200);
-          saveMobileSettings({ vibration: true });
-          toast({
-            title: "Vibração ativada",
-            description: "O app pode usar vibração"
-          });
-        }
-        break;
+          break;
       }
     } catch (error) {
       console.error(`Erro ao solicitar permissão ${permission}:`, error);
       toast({
         title: "Erro",
         description: `Não foi possível ativar ${permission}`,
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const updateServiceWorker = () => {
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.ready.then((registration) => {
+      navigator.serviceWorker.ready.then(registration => {
         registration.update();
         toast({
           title: "Atualizando app",
-          description: "A nova versão será carregada em breve"
+          description: "A nova versão será carregada em breve",
         });
       });
     }
@@ -327,10 +332,14 @@ export const EnhancedMobileSupport: React.FC = () => {
 
   const getConnectionIcon = (connection?: string) => {
     switch (connection) {
-    case "4g": return <Signal className="h-4 w-4 text-green-500" />;
-    case "3g": return <Signal className="h-4 w-4 text-yellow-500" />;
-    case "2g": return <Signal className="h-4 w-4 text-red-500" />;
-    default: return <Wifi className="h-4 w-4" />;
+      case "4g":
+        return <Signal className="h-4 w-4 text-green-500" />;
+      case "3g":
+        return <Signal className="h-4 w-4 text-yellow-500" />;
+      case "2g":
+        return <Signal className="h-4 w-4 text-red-500" />;
+      default:
+        return <Wifi className="h-4 w-4" />;
     }
   };
 
@@ -374,20 +383,19 @@ export const EnhancedMobileSupport: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               {deviceInfo.batteryLevel !== undefined && (
                 <div className="flex items-center gap-2">
                   <Battery className={`h-4 w-4 ${getBatteryColor(deviceInfo.batteryLevel)}`} />
                   <div>
                     <div className="text-sm font-medium">Bateria</div>
                     <div className="text-xs text-muted-foreground">
-                      {deviceInfo.batteryLevel}%
-                      {deviceInfo.isCharging && " (carregando)"}
+                      {deviceInfo.batteryLevel}%{deviceInfo.isCharging && " (carregando)"}
                     </div>
                   </div>
                 </div>
               )}
-              
+
               <div className="flex items-center gap-2">
                 <Maximize2 className="h-4 w-4" />
                 <div>
@@ -397,14 +405,12 @@ export const EnhancedMobileSupport: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <RotateCcw className="h-4 w-4" />
                 <div>
                   <div className="text-sm font-medium">Orientação</div>
-                  <div className="text-xs text-muted-foreground">
-                    {deviceInfo.orientation}
-                  </div>
+                  <div className="text-xs text-muted-foreground">{deviceInfo.orientation}</div>
                 </div>
               </div>
             </div>
@@ -438,7 +444,7 @@ export const EnhancedMobileSupport: React.FC = () => {
               </Button>
             )}
           </div>
-          
+
           {pwaStatus.updateAvailable && (
             <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
               <div className="flex items-center gap-2">
@@ -465,7 +471,7 @@ export const EnhancedMobileSupport: React.FC = () => {
           {/* Permissions */}
           <div className="space-y-4">
             <h3 className="font-medium">Permissões do Sistema</h3>
-            
+
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -477,7 +483,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                   onCheckedChange={() => requestPermission("notifications")}
                 />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4" />
@@ -488,7 +494,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                   onCheckedChange={() => requestPermission("location")}
                 />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Camera className="h-4 w-4" />
@@ -499,7 +505,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                   onCheckedChange={() => requestPermission("camera")}
                 />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Mic className="h-4 w-4" />
@@ -510,7 +516,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                   onCheckedChange={() => requestPermission("microphone")}
                 />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Vibrate className="h-4 w-4" />
@@ -527,7 +533,7 @@ export const EnhancedMobileSupport: React.FC = () => {
           {/* App Settings */}
           <div className="space-y-4 border-t pt-4">
             <h3 className="font-medium">Configurações do App</h3>
-            
+
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -536,10 +542,10 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.darkMode}
-                  onCheckedChange={(checked) => saveMobileSettings({ darkMode: checked })}
+                  onCheckedChange={checked => saveMobileSettings({ darkMode: checked })}
                 />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Wifi className="h-4 w-4" />
@@ -547,10 +553,10 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.offlineMode}
-                  onCheckedChange={(checked) => saveMobileSettings({ offlineMode: checked })}
+                  onCheckedChange={checked => saveMobileSettings({ offlineMode: checked })}
                 />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <RotateCcw className="h-4 w-4" />
@@ -558,7 +564,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.autoSync}
-                  onCheckedChange={(checked) => saveMobileSettings({ autoSync: checked })}
+                  onCheckedChange={checked => saveMobileSettings({ autoSync: checked })}
                 />
               </div>
             </div>
@@ -567,21 +573,16 @@ export const EnhancedMobileSupport: React.FC = () => {
           {/* Test Features */}
           <div className="space-y-4 border-t pt-4">
             <h3 className="font-medium">Testar Funcionalidades</h3>
-            
+
             <div className="flex flex-wrap gap-2">
-              <Button 
-                size="sm" 
-                variant="outline" 
-                onClick={triggerVibration}
-                className="gap-2"
-              >
+              <Button size="sm" variant="outline" onClick={triggerVibration} className="gap-2">
                 <Vibrate className="h-3 w-3" />
                 Testar Vibração
               </Button>
-              
-              <Button 
-                size="sm" 
-                variant="outline" 
+
+              <Button
+                size="sm"
+                variant="outline"
                 onClick={() => toast({ title: "Teste", description: "Notificação de teste" })}
                 className="gap-2"
               >
@@ -609,7 +610,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 )}
                 <span className="text-sm">Touch</span>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 {deviceInfo.cameraSupport ? (
                   <CheckCircle className="h-4 w-4 text-green-500" />
@@ -618,7 +619,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 )}
                 <span className="text-sm">Câmera</span>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 {deviceInfo.geolocationSupport ? (
                   <CheckCircle className="h-4 w-4 text-green-500" />
@@ -627,7 +628,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 )}
                 <span className="text-sm">GPS</span>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 {deviceInfo.notificationSupport ? (
                   <CheckCircle className="h-4 w-4 text-green-500" />
@@ -636,7 +637,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 )}
                 <span className="text-sm">Notificações</span>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 {deviceInfo.vibrationSupport ? (
                   <CheckCircle className="h-4 w-4 text-green-500" />
@@ -645,7 +646,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 )}
                 <span className="text-sm">Vibração</span>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 {deviceInfo.isOnline ? (
                   <CheckCircle className="h-4 w-4 text-green-500" />

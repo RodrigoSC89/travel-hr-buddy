@@ -5,6 +5,7 @@
 The Viagens (Travel) module is the **comprehensive travel management system** for planning, booking, and tracking business trips. It streamlines the entire travel lifecycle from request to reconciliation.
 
 **Key Use Cases:**
+
 - Plan and request business travel
 - Search and book flights, hotels, and transportation
 - Track travel itineraries and schedules

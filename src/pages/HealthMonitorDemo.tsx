@@ -18,11 +18,7 @@ const HealthMonitorDemo = () => {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => window.history.back()}
-              >
+              <Button variant="outline" size="sm" onClick={() => window.history.back()}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Voltar
               </Button>

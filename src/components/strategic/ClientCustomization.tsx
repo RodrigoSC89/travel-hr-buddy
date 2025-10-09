@@ -6,11 +6,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Palette, 
-  Building, 
-  Users, 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Palette,
+  Building,
+  Users,
   Settings,
   Plus,
   Edit,
@@ -18,7 +24,7 @@ import {
   Check,
   Upload,
   Eye,
-  Save
+  Save,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -62,26 +68,26 @@ export const ClientCustomization = () => {
       id: "default",
       name: "Nautilus Padrão",
       primaryColor: "#2563eb",
-      secondaryColor: "#0ea5e9"
+      secondaryColor: "#0ea5e9",
     },
     {
       id: "corporate",
       name: "Corporativo",
       primaryColor: "#1f2937",
-      secondaryColor: "#374151"
+      secondaryColor: "#374151",
     },
     {
       id: "ocean",
       name: "Oceano Profundo",
       primaryColor: "#0c4a6e",
-      secondaryColor: "#0369a1"
+      secondaryColor: "#0369a1",
     },
     {
       id: "sunset",
       name: "Pôr do Sol",
       primaryColor: "#dc2626",
-      secondaryColor: "#ea580c"
-    }
+      secondaryColor: "#ea580c",
+    },
   ];
 
   const mockOrganizations: Organization[] = [
@@ -93,7 +99,7 @@ export const ClientCustomization = () => {
       plan: "enterprise",
       customFields: 12,
       theme: "corporate",
-      status: "active"
+      status: "active",
     },
     {
       id: "2",
@@ -103,7 +109,7 @@ export const ClientCustomization = () => {
       plan: "premium",
       customFields: 8,
       theme: "ocean",
-      status: "active"
+      status: "active",
     },
     {
       id: "3",
@@ -113,8 +119,8 @@ export const ClientCustomization = () => {
       plan: "basic",
       customFields: 3,
       theme: "default",
-      status: "active"
-    }
+      status: "active",
+    },
   ];
 
   const defaultCustomFields: CustomField[] = [
@@ -123,7 +129,7 @@ export const ClientCustomization = () => {
       name: "Número do DPC",
       type: "text",
       required: true,
-      module: "crew"
+      module: "crew",
     },
     {
       id: "2",
@@ -131,15 +137,15 @@ export const ClientCustomization = () => {
       type: "select",
       required: true,
       options: ["Cabotagem", "Longo Curso", "Interior", "Apoio Marítimo"],
-      module: "vessels"
+      module: "vessels",
     },
     {
       id: "3",
       name: "Centro de Custo",
       type: "text",
       required: false,
-      module: "voyages"
-    }
+      module: "voyages",
+    },
   ];
 
   useState(() => {
@@ -153,16 +159,14 @@ export const ClientCustomization = () => {
       name: "Novo Campo",
       type: "text",
       required: false,
-      module: "crew"
+      module: "crew",
     };
     setCustomFields([...customFields, newField]);
   };
 
   const updateCustomField = (id: string, updates: Partial<CustomField>) => {
-    setCustomFields(fields => 
-      fields.map(field => 
-        field.id === id ? { ...field, ...updates } : field
-      )
+    setCustomFields(fields =>
+      fields.map(field => (field.id === id ? { ...field, ...updates } : field))
     );
   };
 
@@ -185,7 +189,7 @@ export const ClientCustomization = () => {
         id: `clone_${Date.now()}`,
         name: `${org.name} (Cópia)`,
         subdomain: `${org.subdomain}-copy`,
-        status: "inactive"
+        status: "inactive",
       };
       setOrganizations([...organizations, newOrg]);
       toast({
@@ -197,16 +201,20 @@ export const ClientCustomization = () => {
 
   const getPlanColor = (plan: string) => {
     switch (plan) {
-    case "enterprise": return "bg-primary text-primary-foreground";
-    case "premium": return "bg-warning text-warning-foreground";
-    case "basic": return "bg-info text-info-foreground";
-    default: return "bg-muted text-muted-foreground";
+      case "enterprise":
+        return "bg-primary text-primary-foreground";
+      case "premium":
+        return "bg-warning text-warning-foreground";
+      case "basic":
+        return "bg-info text-info-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusColor = (status: string) => {
-    return status === "active" 
-      ? "bg-success text-success-foreground" 
+    return status === "active"
+      ? "bg-success text-success-foreground"
       : "bg-muted text-muted-foreground";
   };
 
@@ -250,23 +258,23 @@ export const ClientCustomization = () => {
                 <div className="space-y-4">
                   <h3 className="font-semibold">Temas Pré-definidos</h3>
                   <div className="grid grid-cols-2 gap-3">
-                    {themes.map((theme) => (
-                      <div 
+                    {themes.map(theme => (
+                      <div
                         key={theme.id}
                         className={`border-2 rounded-lg p-3 cursor-pointer transition-all ${
-                          selectedTheme === theme.id 
-                            ? "border-primary bg-primary/5" 
+                          selectedTheme === theme.id
+                            ? "border-primary bg-primary/5"
                             : "border-muted hover:border-border"
                         }`}
                         onClick={() => setSelectedTheme(theme.id)}
                       >
                         <div className="flex items-center gap-2 mb-2">
-                          <div 
-                            className="w-4 h-4 rounded-full" 
+                          <div
+                            className="w-4 h-4 rounded-full"
                             style={{ backgroundColor: theme.primaryColor }}
                           />
-                          <div 
-                            className="w-4 h-4 rounded-full" 
+                          <div
+                            className="w-4 h-4 rounded-full"
                             style={{ backgroundColor: theme.secondaryColor }}
                           />
                         </div>
@@ -279,7 +287,7 @@ export const ClientCustomization = () => {
                 {/* Custom Theme Options */}
                 <div className="space-y-4">
                   <h3 className="font-semibold">Personalização</h3>
-                  
+
                   <div className="space-y-3">
                     <div>
                       <Label htmlFor="logo-upload">Logo da Empresa</Label>
@@ -290,36 +298,20 @@ export const ClientCustomization = () => {
                         </Button>
                       </div>
                     </div>
-                    
+
                     <div>
                       <Label htmlFor="primary-color">Cor Primária</Label>
                       <div className="mt-1 flex gap-2">
-                        <Input 
-                          type="color" 
-                          defaultValue="#2563eb"
-                          className="w-16 h-10 p-1"
-                        />
-                        <Input 
-                          defaultValue="#2563eb" 
-                          placeholder="#2563eb"
-                          className="flex-1"
-                        />
+                        <Input type="color" defaultValue="#2563eb" className="w-16 h-10 p-1" />
+                        <Input defaultValue="#2563eb" placeholder="#2563eb" className="flex-1" />
                       </div>
                     </div>
-                    
+
                     <div>
                       <Label htmlFor="secondary-color">Cor Secundária</Label>
                       <div className="mt-1 flex gap-2">
-                        <Input 
-                          type="color" 
-                          defaultValue="#0ea5e9"
-                          className="w-16 h-10 p-1"
-                        />
-                        <Input 
-                          defaultValue="#0ea5e9" 
-                          placeholder="#0ea5e9"
-                          className="flex-1"
-                        />
+                        <Input type="color" defaultValue="#0ea5e9" className="w-16 h-10 p-1" />
+                        <Input defaultValue="#0ea5e9" placeholder="#0ea5e9" className="flex-1" />
                       </div>
                     </div>
                   </div>
@@ -357,23 +349,25 @@ export const ClientCustomization = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {customFields.map((field) => (
+                {customFields.map(field => (
                   <div key={field.id} className="border rounded-lg p-4">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                       <div>
                         <Label>Nome do Campo</Label>
-                        <Input 
+                        <Input
                           value={field.name}
-                          onChange={(e) => updateCustomField(field.id, { name: e.target.value })}
+                          onChange={e => updateCustomField(field.id, { name: e.target.value })}
                           className="mt-1"
                         />
                       </div>
-                      
+
                       <div>
                         <Label>Tipo</Label>
-                        <Select 
+                        <Select
                           value={field.type}
-                          onValueChange={(value: any) => updateCustomField(field.id, { type: value })}
+                          onValueChange={(value: any) =>
+                            updateCustomField(field.id, { type: value })
+                          }
                         >
                           <SelectTrigger className="mt-1">
                             <SelectValue />
@@ -387,12 +381,12 @@ export const ClientCustomization = () => {
                           </SelectContent>
                         </Select>
                       </div>
-                      
+
                       <div>
                         <Label>Módulo</Label>
-                        <Select 
+                        <Select
                           value={field.module}
-                          onValueChange={(value) => updateCustomField(field.id, { module: value })}
+                          onValueChange={value => updateCustomField(field.id, { module: value })}
                         >
                           <SelectTrigger className="mt-1">
                             <SelectValue />
@@ -405,21 +399,23 @@ export const ClientCustomization = () => {
                           </SelectContent>
                         </Select>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2 pt-6">
-                        <Switch 
+                        <Switch
                           checked={field.required}
-                          onCheckedChange={(checked) => updateCustomField(field.id, { required: checked })}
+                          onCheckedChange={checked =>
+                            updateCustomField(field.id, { required: checked })
+                          }
                         />
                         <Label>Obrigatório</Label>
                       </div>
-                      
+
                       <div className="flex items-center gap-2 pt-6">
                         <Button variant="outline" size="sm">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           onClick={() => removeCustomField(field.id)}
                         >
@@ -427,16 +423,21 @@ export const ClientCustomization = () => {
                         </Button>
                       </div>
                     </div>
-                    
+
                     {field.type === "select" && (
                       <div className="mt-3">
                         <Label>Opções (separadas por vírgula)</Label>
-                        <Input 
+                        <Input
                           placeholder="Opção 1, Opção 2, Opção 3"
                           value={field.options?.join(", ") || ""}
-                          onChange={(e) => updateCustomField(field.id, { 
-                            options: e.target.value.split(",").map(s => s.trim()).filter(Boolean)
-                          })}
+                          onChange={e =>
+                            updateCustomField(field.id, {
+                              options: e.target.value
+                                .split(",")
+                                .map(s => s.trim())
+                                .filter(Boolean),
+                            })
+                          }
                           className="mt-1"
                         />
                       </div>
@@ -465,7 +466,7 @@ export const ClientCustomization = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {organizations.map((org) => (
+                {organizations.map(org => (
                   <div key={org.id} className="border rounded-lg p-4 hover-lift">
                     <div className="flex items-center justify-between mb-3">
                       <div>
@@ -475,15 +476,11 @@ export const ClientCustomization = () => {
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge className={getPlanColor(org.plan)}>
-                          {org.plan}
-                        </Badge>
-                        <Badge className={getStatusColor(org.status)}>
-                          {org.status}
-                        </Badge>
+                        <Badge className={getPlanColor(org.plan)}>{org.plan}</Badge>
+                        <Badge className={getStatusColor(org.status)}>{org.status}</Badge>
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                       <div>
                         <span className="font-medium">Usuários:</span>
@@ -501,8 +498,8 @@ export const ClientCustomization = () => {
                         <Button variant="outline" size="sm">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           onClick={() => cloneOrganization(org.id)}
                         >
@@ -540,31 +537,33 @@ export const ClientCustomization = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {["Dashboard", "RH Marítimo", "Logística", "Reservas", "Relatórios"].map((module) => (
-                      <tr key={module} className="border-b">
-                        <td className="p-2 font-medium">{module}</td>
-                        <td className="text-center p-2">
-                          <Check className="h-4 w-4 text-success mx-auto" />
-                        </td>
-                        <td className="text-center p-2">
-                          <Check className="h-4 w-4 text-success mx-auto" />
-                        </td>
-                        <td className="text-center p-2">
-                          {module !== "Relatórios" ? (
-                            <Check className="h-4 w-4 text-warning mx-auto" />
-                          ) : (
-                            <span className="text-muted-foreground">—</span>
-                          )}
-                        </td>
-                        <td className="text-center p-2">
-                          {module === "Dashboard" ? (
-                            <Check className="h-4 w-4 text-info mx-auto" />
-                          ) : (
-                            <span className="text-muted-foreground">—</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
+                    {["Dashboard", "RH Marítimo", "Logística", "Reservas", "Relatórios"].map(
+                      module => (
+                        <tr key={module} className="border-b">
+                          <td className="p-2 font-medium">{module}</td>
+                          <td className="text-center p-2">
+                            <Check className="h-4 w-4 text-success mx-auto" />
+                          </td>
+                          <td className="text-center p-2">
+                            <Check className="h-4 w-4 text-success mx-auto" />
+                          </td>
+                          <td className="text-center p-2">
+                            {module !== "Relatórios" ? (
+                              <Check className="h-4 w-4 text-warning mx-auto" />
+                            ) : (
+                              <span className="text-muted-foreground">—</span>
+                            )}
+                          </td>
+                          <td className="text-center p-2">
+                            {module === "Dashboard" ? (
+                              <Check className="h-4 w-4 text-info mx-auto" />
+                            ) : (
+                              <span className="text-muted-foreground">—</span>
+                            )}
+                          </td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -587,28 +586,26 @@ export const ClientCustomization = () => {
                   {
                     name: "Armador Padrão",
                     description: "Configuração para empresas de navegação tradicionais",
-                    modules: ["Dashboard", "RH", "Logística", "Viagens"]
+                    modules: ["Dashboard", "RH", "Logística", "Viagens"],
                   },
                   {
                     name: "Offshore Premium",
                     description: "Template especializado para operações offshore",
-                    modules: ["Dashboard", "RH", "Logística", "Segurança", "Compliance"]
+                    modules: ["Dashboard", "RH", "Logística", "Segurança", "Compliance"],
                   },
                   {
                     name: "Turismo Náutico",
                     description: "Configuração para turismo e embarcações de recreio",
-                    modules: ["Dashboard", "Reservas", "Clientes", "Rotas"]
-                  }
+                    modules: ["Dashboard", "Reservas", "Clientes", "Rotas"],
+                  },
                 ].map((template, index) => (
                   <div key={index} className="border rounded-lg p-4 hover-lift">
                     <h4 className="font-semibold mb-2">{template.name}</h4>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      {template.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground mb-3">{template.description}</p>
                     <div className="space-y-2 mb-4">
                       <span className="text-xs font-medium">Módulos inclusos:</span>
                       <div className="flex flex-wrap gap-1">
-                        {template.modules.map((module) => (
+                        {template.modules.map(module => (
                           <Badge key={module} variant="outline" className="text-xs">
                             {module}
                           </Badge>

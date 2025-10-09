@@ -4,25 +4,44 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { 
-  Settings, 
-  Play, 
-  Pause, 
-  Trash2, 
-  Plus, 
-  Clock, 
-  Zap, 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Settings,
+  Play,
+  Pause,
+  Trash2,
+  Plus,
+  Clock,
+  Zap,
   Mail,
   CheckCircle,
   Calendar,
   Activity,
   AlertTriangle,
-  Eye
+  Eye,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -55,26 +74,26 @@ const actionTemplates = {
     name: "Verificar Certificados",
     description: "Verifica certificados que estão vencendo",
     icon: CheckCircle,
-    config: { days_ahead: 30 }
+    config: { days_ahead: 30 },
   },
   send_notification: {
     name: "Enviar Notificação",
     description: "Envia notificação para usuários",
     icon: AlertTriangle,
-    config: { template: "default", users: [] }
+    config: { template: "default", users: [] },
   },
   email_notification: {
     name: "Email Automático",
     description: "Envia email para destinatários",
     icon: Mail,
-    config: { recipients: [], template: "default" }
+    config: { recipients: [], template: "default" },
   },
   generate_report: {
     name: "Gerar Relatório",
     description: "Gera relatório automático",
     icon: Activity,
-    config: { report_type: "summary", format: "pdf" }
-  }
+    config: { report_type: "summary", format: "pdf" },
+  },
 };
 
 export const AutomationWorkflowsManager: React.FC = () => {
@@ -92,7 +111,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
     description: "",
     trigger_type: "schedule" as const,
     trigger_config: { cron: "0 9 * * *", timezone: "America/Sao_Paulo" },
-    actions: [] as any[]
+    actions: [] as any[],
   });
 
   const loadWorkflows = useCallback(async () => {
@@ -103,13 +122,13 @@ export const AutomationWorkflowsManager: React.FC = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setWorkflows(data as AutomationWorkflow[] || []);
+      setWorkflows((data as AutomationWorkflow[]) || []);
     } catch (error) {
       console.error("Erro ao carregar workflows:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as automações.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -130,13 +149,13 @@ export const AutomationWorkflowsManager: React.FC = () => {
         .limit(20);
 
       if (error) throw error;
-      setExecutions(data as AutomationExecution[] || []);
+      setExecutions((data as AutomationExecution[]) || []);
     } catch (error) {
       console.error("Erro ao carregar execuções:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar o histórico de execuções.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -150,12 +169,8 @@ export const AutomationWorkflowsManager: React.FC = () => {
 
       if (error) throw error;
 
-      setWorkflows(prev => 
-        prev.map(w => 
-          w.id === workflow.id 
-            ? { ...w, is_active: !w.is_active }
-            : w
-        )
+      setWorkflows(prev =>
+        prev.map(w => (w.id === workflow.id ? { ...w, is_active: !w.is_active } : w))
       );
 
       toast({
@@ -167,7 +182,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
       toast({
         title: "Erro",
         description: "Não foi possível atualizar a automação.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -176,10 +191,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
     if (!confirm(`Tem certeza que deseja excluir "${workflow.name}"?`)) return;
 
     try {
-      const { error } = await supabase
-        .from("automation_workflows")
-        .delete()
-        .eq("id", workflow.id);
+      const { error } = await supabase.from("automation_workflows").delete().eq("id", workflow.id);
 
       if (error) throw error;
 
@@ -193,7 +205,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
       toast({
         title: "Erro",
         description: "Não foi possível excluir a automação.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -201,14 +213,12 @@ export const AutomationWorkflowsManager: React.FC = () => {
   const createWorkflow = async () => {
     try {
       const { data: user } = await supabase.auth.getUser();
-      
-      const { error } = await supabase
-        .from("automation_workflows")
-        .insert({
-          ...formData,
-          created_by: user.user?.id,
-          organization_id: user.user?.id // Temporário para demo
-        });
+
+      const { error } = await supabase.from("automation_workflows").insert({
+        ...formData,
+        created_by: user.user?.id,
+        organization_id: user.user?.id, // Temporário para demo
+      });
 
       if (error) throw error;
 
@@ -218,9 +228,9 @@ export const AutomationWorkflowsManager: React.FC = () => {
         description: "",
         trigger_type: "schedule",
         trigger_config: { cron: "0 9 * * *", timezone: "America/Sao_Paulo" },
-        actions: []
+        actions: [],
       });
-      
+
       await loadWorkflows();
       toast({
         title: "Automação criada!",
@@ -231,7 +241,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
       toast({
         title: "Erro",
         description: "Não foi possível criar a automação.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -240,29 +250,29 @@ export const AutomationWorkflowsManager: React.FC = () => {
     const template = actionTemplates[actionType as keyof typeof actionTemplates];
     setFormData(prev => ({
       ...prev,
-      actions: [...prev.actions, { type: actionType, ...template.config }]
+      actions: [...prev.actions, { type: actionType, ...template.config }],
     }));
   };
 
   const removeAction = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      actions: prev.actions.filter((_, i) => i !== index)
+      actions: prev.actions.filter((_, i) => i !== index),
     }));
   };
 
   const getTriggerDescription = (workflow: AutomationWorkflow) => {
     const { trigger_type, trigger_config } = workflow;
-    
+
     switch (trigger_type) {
-    case "schedule":
-      return `Agendado: ${trigger_config.cron}`;
-    case "event":
-      return `Evento: ${trigger_config.event_type}`;
-    case "condition":
-      return `Condição: ${trigger_config.condition}`;
-    default:
-      return "Não configurado";
+      case "schedule":
+        return `Agendado: ${trigger_config.cron}`;
+      case "event":
+        return `Evento: ${trigger_config.event_type}`;
+      case "condition":
+        return `Condição: ${trigger_config.condition}`;
+      default:
+        return "Não configurado";
     }
   };
 
@@ -275,16 +285,24 @@ export const AutomationWorkflowsManager: React.FC = () => {
 
   const getExecutionStatusBadge = (status: string) => {
     switch (status) {
-    case "completed":
-      return <Badge variant="default" className="bg-green-100 text-green-800">Sucesso</Badge>;
-    case "failed":
-      return <Badge variant="destructive">Falha</Badge>;
-    case "running":
-      return <Badge variant="default" className="bg-blue-100 text-blue-800">Executando</Badge>;
-    case "pending":
-      return <Badge variant="outline">Pendente</Badge>;
-    default:
-      return <Badge variant="outline">{status}</Badge>;
+      case "completed":
+        return (
+          <Badge variant="default" className="bg-green-100 text-green-800">
+            Sucesso
+          </Badge>
+        );
+      case "failed":
+        return <Badge variant="destructive">Falha</Badge>;
+      case "running":
+        return (
+          <Badge variant="default" className="bg-blue-100 text-blue-800">
+            Executando
+          </Badge>
+        );
+      case "pending":
+        return <Badge variant="outline">Pendente</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
     }
   };
 
@@ -310,7 +328,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
             Gerencie workflows automáticos e triggers inteligentes
           </p>
         </div>
-        
+
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -322,7 +340,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
             <DialogHeader>
               <DialogTitle>Criar Nova Automação</DialogTitle>
             </DialogHeader>
-            
+
             <div className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -330,16 +348,18 @@ export const AutomationWorkflowsManager: React.FC = () => {
                   <Input
                     id="name"
                     value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Ex: Alerta de Certificados"
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="trigger">Tipo de Trigger</Label>
-                  <Select 
-                    value={formData.trigger_type} 
-                    onValueChange={(value: any) => setFormData(prev => ({ ...prev, trigger_type: value }))}
+                  <Select
+                    value={formData.trigger_type}
+                    onValueChange={(value: any) =>
+                      setFormData(prev => ({ ...prev, trigger_type: value }))
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -352,79 +372,78 @@ export const AutomationWorkflowsManager: React.FC = () => {
                   </Select>
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="description">Descrição</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Descreva o que esta automação faz..."
                 />
               </div>
-              
+
               {formData.trigger_type === "schedule" && (
                 <div className="space-y-2">
                   <Label htmlFor="cron">Expressão Cron</Label>
                   <Input
                     id="cron"
                     value={formData.trigger_config.cron}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      trigger_config: { ...prev.trigger_config, cron: e.target.value }
-                    }))}
+                    onChange={e =>
+                      setFormData(prev => ({
+                        ...prev,
+                        trigger_config: { ...prev.trigger_config, cron: e.target.value },
+                      }))
+                    }
                     placeholder="Ex: 0 9 * * * (todo dia às 9h)"
                   />
                 </div>
               )}
-              
+
               <div className="space-y-4">
                 <Label>Ações da Automação</Label>
-                
+
                 {formData.actions.map((action, index) => (
                   <Card key={index} className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="font-medium">
-                          {actionTemplates[action.type as keyof typeof actionTemplates]?.name || action.type}
+                          {actionTemplates[action.type as keyof typeof actionTemplates]?.name ||
+                            action.type}
                         </h4>
                         <p className="text-sm text-muted-foreground">
-                          {actionTemplates[action.type as keyof typeof actionTemplates]?.description}
+                          {
+                            actionTemplates[action.type as keyof typeof actionTemplates]
+                              ?.description
+                          }
                         </p>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeAction(index)}
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => removeAction(index)}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   </Card>
                 ))}
-                
+
                 <div className="flex gap-2 flex-wrap">
                   {Object.entries(actionTemplates).map(([key, template]) => (
-                    <Button
-                      key={key}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => addAction(key)}
-                    >
+                    <Button key={key} variant="outline" size="sm" onClick={() => addAction(key)}>
                       <template.icon className="w-4 h-4 mr-2" />
                       {template.name}
                     </Button>
                   ))}
                 </div>
               </div>
-              
+
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button 
+                <Button
                   onClick={createWorkflow}
-                  disabled={!formData.name || !formData.description || formData.actions.length === 0}
+                  disabled={
+                    !formData.name || !formData.description || formData.actions.length === 0
+                  }
                 >
                   Criar Automação
                 </Button>
@@ -462,35 +481,26 @@ export const AutomationWorkflowsManager: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {workflows.map((workflow) => (
+                {workflows.map(workflow => (
                   <TableRow key={workflow.id}>
                     <TableCell>
                       <div>
                         <div className="font-medium">{workflow.name}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {workflow.description}
-                        </div>
+                        <div className="text-sm text-muted-foreground">{workflow.description}</div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="text-sm">
-                        {getTriggerDescription(workflow)}
-                      </div>
+                      <div className="text-sm">{getTriggerDescription(workflow)}</div>
                     </TableCell>
                     <TableCell>
-                      <div className="text-sm">
-                        {workflow.actions.length} ação(ões)
-                      </div>
+                      <div className="text-sm">{workflow.actions.length} ação(ões)</div>
                     </TableCell>
-                    <TableCell>
-                      {getStatusBadge(workflow)}
-                    </TableCell>
+                    <TableCell>{getStatusBadge(workflow)}</TableCell>
                     <TableCell>
                       <div className="text-sm">
-                        {workflow.last_executed_at 
+                        {workflow.last_executed_at
                           ? new Date(workflow.last_executed_at).toLocaleString("pt-BR")
-                          : "Nunca"
-                        }
+                          : "Nunca"}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -509,22 +519,14 @@ export const AutomationWorkflowsManager: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => toggleWorkflow(workflow)}
-                        >
+                        <Button variant="ghost" size="sm" onClick={() => toggleWorkflow(workflow)}>
                           {workflow.is_active ? (
                             <Pause className="w-4 h-4" />
                           ) : (
                             <Play className="w-4 h-4" />
                           )}
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => deleteWorkflow(workflow)}
-                        >
+                        <Button variant="ghost" size="sm" onClick={() => deleteWorkflow(workflow)}>
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
@@ -541,18 +543,14 @@ export const AutomationWorkflowsManager: React.FC = () => {
       <Dialog open={isExecutionsDialogOpen} onOpenChange={setIsExecutionsDialogOpen}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle>
-              Histórico de Execuções - {selectedWorkflow?.name}
-            </DialogTitle>
+            <DialogTitle>Histórico de Execuções - {selectedWorkflow?.name}</DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-4">
             {executions.length === 0 ? (
               <div className="text-center py-8">
                 <Activity className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">
-                  Esta automação ainda não foi executada
-                </p>
+                <p className="text-muted-foreground">Esta automação ainda não foi executada</p>
               </div>
             ) : (
               <Table>
@@ -566,30 +564,25 @@ export const AutomationWorkflowsManager: React.FC = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {executions.map((execution) => (
+                  {executions.map(execution => (
                     <TableRow key={execution.id}>
-                      <TableCell>
-                        {getExecutionStatusBadge(execution.status)}
-                      </TableCell>
+                      <TableCell>{getExecutionStatusBadge(execution.status)}</TableCell>
                       <TableCell>
                         {new Date(execution.started_at).toLocaleString("pt-BR")}
                       </TableCell>
                       <TableCell>
-                        {execution.duration_ms 
+                        {execution.duration_ms
                           ? `${execution.duration_ms}ms`
-                          : execution.status === "running" 
+                          : execution.status === "running"
                             ? "Executando..."
-                            : "-"
-                        }
+                            : "-"}
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline">{execution.triggered_by}</Badge>
                       </TableCell>
                       <TableCell>
                         {execution.error_message ? (
-                          <div className="text-red-600 text-sm">
-                            {execution.error_message}
-                          </div>
+                          <div className="text-red-600 text-sm">{execution.error_message}</div>
                         ) : execution.status === "completed" ? (
                           <div className="text-green-600 text-sm">Sucesso</div>
                         ) : (

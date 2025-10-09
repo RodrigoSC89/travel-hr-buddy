@@ -4,9 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Leaf, 
-  TrendingDown, 
+import {
+  Leaf,
+  TrendingDown,
   TrendingUp,
   Target,
   BarChart3,
@@ -14,7 +14,7 @@ import {
   Anchor,
   AlertCircle,
   Award,
-  Download
+  Download,
 } from "lucide-react";
 
 interface VesselEmissions {
@@ -49,22 +49,22 @@ export const CarbonFootprintTracker: React.FC = () => {
         total: 245.8,
         perNauticalMile: 0.578,
         trend: "down",
-        change: -8.5
+        change: -8.5,
       },
       yearToDate: {
         total: 2847.5,
         target: 3200,
-        percentage: 89
+        percentage: 89,
       },
       breakdown: {
         fuel: 89.2,
         electricity: 8.5,
-        other: 2.3
+        other: 2.3,
       },
       offsetPrograms: [
         { name: "Reflorestamento Amazônia", amount: 45.5 },
-        { name: "Energia Renovável", amount: 28.3 }
-      ]
+        { name: "Energia Renovável", amount: 28.3 },
+      ],
     },
     {
       vessel: "MV-Neptune",
@@ -72,22 +72,22 @@ export const CarbonFootprintTracker: React.FC = () => {
         total: 198.4,
         perNauticalMile: 0.492,
         trend: "down",
-        change: -12.3
+        change: -12.3,
       },
       yearToDate: {
         total: 2245.8,
         target: 2800,
-        percentage: 80
+        percentage: 80,
       },
       breakdown: {
         fuel: 91.5,
         electricity: 6.8,
-        other: 1.7
+        other: 1.7,
       },
       offsetPrograms: [
         { name: "Captura de Carbono", amount: 38.2 },
-        { name: "Energia Solar", amount: 22.1 }
-      ]
+        { name: "Energia Solar", amount: 22.1 },
+      ],
     },
     {
       vessel: "MV-Poseidon",
@@ -95,29 +95,28 @@ export const CarbonFootprintTracker: React.FC = () => {
         total: 287.3,
         perNauticalMile: 0.615,
         trend: "up",
-        change: 5.2
+        change: 5.2,
       },
       yearToDate: {
         total: 3142.6,
         target: 3000,
-        percentage: 105
+        percentage: 105,
       },
       breakdown: {
         fuel: 88.7,
         electricity: 9.2,
-        other: 2.1
+        other: 2.1,
       },
-      offsetPrograms: [
-        { name: "Preservação Oceânica", amount: 52.4 }
-      ]
-    }
+      offsetPrograms: [{ name: "Preservação Oceânica", amount: 52.4 }],
+    },
   ]);
 
   const totalEmissions = emissions.reduce((sum, e) => sum + e.currentMonth.total, 0);
   const totalYTD = emissions.reduce((sum, e) => sum + e.yearToDate.total, 0);
   const targetYTD = emissions.reduce((sum, e) => sum + e.yearToDate.target, 0);
-  const totalOffset = emissions.reduce((sum, e) => 
-    sum + e.offsetPrograms.reduce((s, p) => s + p.amount, 0), 0
+  const totalOffset = emissions.reduce(
+    (sum, e) => sum + e.offsetPrograms.reduce((s, p) => s + p.amount, 0),
+    0
   );
 
   const avgTrend = emissions.reduce((sum, e) => sum + e.currentMonth.change, 0) / emissions.length;
@@ -147,7 +146,7 @@ export const CarbonFootprintTracker: React.FC = () => {
             <p className="text-xs text-muted-foreground">CO₂ equivalente</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Acumulado 2025</CardTitle>
@@ -159,19 +158,22 @@ export const CarbonFootprintTracker: React.FC = () => {
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Tendência Média</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${avgTrend < 0 ? "text-green-600" : "text-red-600"}`}>
-              {avgTrend > 0 ? "+" : ""}{avgTrend.toFixed(1)}%
+            <div
+              className={`text-2xl font-bold ${avgTrend < 0 ? "text-green-600" : "text-red-600"}`}
+            >
+              {avgTrend > 0 ? "+" : ""}
+              {avgTrend.toFixed(1)}%
             </div>
             <p className="text-xs text-muted-foreground">vs. mês anterior</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Offset Ativo</CardTitle>
@@ -220,15 +222,10 @@ export const CarbonFootprintTracker: React.FC = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      Meta Anual de Redução
-                    </span>
+                    <span className="text-sm text-muted-foreground">Meta Anual de Redução</span>
                     <span className="text-2xl font-bold">15%</span>
                   </div>
-                  <Progress 
-                    value={((targetYTD - totalYTD) / targetYTD) * 100} 
-                    className="h-3"
-                  />
+                  <Progress value={((targetYTD - totalYTD) / targetYTD) * 100} className="h-3" />
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div>
                       <div className="text-muted-foreground">Atual</div>
@@ -240,7 +237,9 @@ export const CarbonFootprintTracker: React.FC = () => {
                     </div>
                     <div>
                       <div className="text-muted-foreground">Diferença</div>
-                      <div className={`font-bold ${totalYTD < targetYTD ? "text-green-600" : "text-red-600"}`}>
+                      <div
+                        className={`font-bold ${totalYTD < targetYTD ? "text-green-600" : "text-red-600"}`}
+                      >
                         {((totalYTD - targetYTD) / 1000).toFixed(2)}k t
                       </div>
                     </div>
@@ -282,7 +281,7 @@ export const CarbonFootprintTracker: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="vessels" className="space-y-4 mt-4">
-              {emissions.map((emission) => (
+              {emissions.map(emission => (
                 <Card key={emission.vessel} className="border-l-4 border-l-green-500">
                   <CardHeader>
                     <div className="flex items-center justify-between">
@@ -292,10 +291,13 @@ export const CarbonFootprintTracker: React.FC = () => {
                           {emission.vessel}
                         </Badge>
                         {getTrendIcon(emission.currentMonth.trend)}
-                        <span className={`text-sm font-medium ${
-                          emission.currentMonth.change < 0 ? "text-green-600" : "text-red-600"
-                        }`}>
-                          {emission.currentMonth.change > 0 ? "+" : ""}{emission.currentMonth.change}%
+                        <span
+                          className={`text-sm font-medium ${
+                            emission.currentMonth.change < 0 ? "text-green-600" : "text-red-600"
+                          }`}
+                        >
+                          {emission.currentMonth.change > 0 ? "+" : ""}
+                          {emission.currentMonth.change}%
                         </span>
                       </div>
                       {emission.yearToDate.percentage <= 90 && (
@@ -311,9 +313,7 @@ export const CarbonFootprintTracker: React.FC = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <div className="text-sm text-muted-foreground">Mês Atual</div>
-                        <div className="text-2xl font-bold">
-                          {emission.currentMonth.total} t
-                        </div>
+                        <div className="text-2xl font-bold">{emission.currentMonth.total} t</div>
                         <div className="text-sm text-muted-foreground">
                           {emission.currentMonth.perNauticalMile} kg/nm
                         </div>
@@ -323,7 +323,9 @@ export const CarbonFootprintTracker: React.FC = () => {
                         <div className="text-2xl font-bold">
                           {(emission.yearToDate.total / 1000).toFixed(2)}k t
                         </div>
-                        <div className={`text-sm font-medium ${getPerformanceColor(emission.yearToDate.percentage)}`}>
+                        <div
+                          className={`text-sm font-medium ${getPerformanceColor(emission.yearToDate.percentage)}`}
+                        >
                           {emission.yearToDate.percentage}% da meta
                         </div>
                       </div>
@@ -337,10 +339,7 @@ export const CarbonFootprintTracker: React.FC = () => {
                           {emission.yearToDate.total} / {emission.yearToDate.target} t
                         </span>
                       </div>
-                      <Progress 
-                        value={emission.yearToDate.percentage} 
-                        className="h-3"
-                      />
+                      <Progress value={emission.yearToDate.percentage} className="h-3" />
                     </div>
 
                     {/* Breakdown */}
@@ -376,7 +375,7 @@ export const CarbonFootprintTracker: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="offset" className="space-y-4 mt-4">
-              {emissions.map((emission) => (
+              {emissions.map(emission => (
                 <Card key={emission.vessel}>
                   <CardHeader>
                     <div className="flex items-center gap-2">
@@ -384,29 +383,26 @@ export const CarbonFootprintTracker: React.FC = () => {
                         <Anchor className="h-3 w-3" />
                         {emission.vessel}
                       </Badge>
-                      <CardTitle className="text-base">
-                        Programas de Compensação Ativos
-                      </CardTitle>
+                      <CardTitle className="text-base">Programas de Compensação Ativos</CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {emission.offsetPrograms.map((program, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg"
+                      >
                         <div className="flex items-center gap-3">
                           <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
                             <Leaf className="h-4 w-4 text-green-600" />
                           </div>
                           <div>
                             <div className="font-medium text-sm">{program.name}</div>
-                            <div className="text-xs text-muted-foreground">
-                              Compensação ativa
-                            </div>
+                            <div className="text-xs text-muted-foreground">Compensação ativa</div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-lg font-bold text-green-600">
-                            {program.amount}t
-                          </div>
+                          <div className="text-lg font-bold text-green-600">{program.amount}t</div>
                           <div className="text-xs text-muted-foreground">CO₂</div>
                         </div>
                       </div>

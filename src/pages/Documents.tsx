@@ -15,7 +15,7 @@ const DocumentsPage = () => {
         badges={[
           { icon: Upload, label: "Upload Rápido" },
           { icon: Search, label: "Busca IA" },
-          { icon: Shield, label: "Seguro" }
+          { icon: Shield, label: "Seguro" },
         ]}
       />
       <AdvancedDocumentCenter />

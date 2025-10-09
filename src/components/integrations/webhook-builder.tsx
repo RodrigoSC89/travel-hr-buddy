@@ -7,9 +7,15 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import {
   Webhook,
   Code,
   Play,
@@ -29,7 +35,7 @@ import {
   Filter,
   BarChart3,
   Activity,
-  MessageSquare
+  MessageSquare,
 } from "lucide-react";
 
 interface WebhookConfig {
@@ -81,8 +87,8 @@ export const WebhookBuilder: React.FC = () => {
     retryConfig: {
       enabled: true,
       maxRetries: 3,
-      backoffStrategy: "exponential"
-    }
+      backoffStrategy: "exponential",
+    },
   });
 
   const [webhooks] = useState<WebhookConfig[]>([
@@ -92,11 +98,11 @@ export const WebhookBuilder: React.FC = () => {
       url: "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX",
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      payload: "{\"text\": \"Nova integração ativada: {{integration_name}}\"}",
+      payload: '{"text": "Nova integração ativada: {{integration_name}}"}',
       authentication: { type: "none", value: "" },
       triggers: ["integration_connected", "integration_error"],
       isActive: true,
-      retryConfig: { enabled: true, maxRetries: 3, backoffStrategy: "exponential" }
+      retryConfig: { enabled: true, maxRetries: 3, backoffStrategy: "exponential" },
     },
     {
       id: "2",
@@ -104,12 +110,12 @@ export const WebhookBuilder: React.FC = () => {
       url: "https://outlook.office.com/webhook/XXXXXXXX",
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      payload: "{\"title\": \"Sistema Nautilus\", \"text\": \"{{event_description}}\"}",
+      payload: '{"title": "Sistema Nautilus", "text": "{{event_description}}"}',
       authentication: { type: "bearer", value: "xxxxx" },
       triggers: ["high_error_rate", "system_health_critical"],
       isActive: false,
-      retryConfig: { enabled: true, maxRetries: 5, backoffStrategy: "fixed" }
-    }
+      retryConfig: { enabled: true, maxRetries: 5, backoffStrategy: "fixed" },
+    },
   ]);
 
   const [recentEvents] = useState<WebhookEvent[]>([
@@ -121,7 +127,7 @@ export const WebhookBuilder: React.FC = () => {
       statusCode: 200,
       response: "ok",
       duration: 234,
-      retryCount: 0
+      retryCount: 0,
     },
     {
       id: "2",
@@ -131,7 +137,7 @@ export const WebhookBuilder: React.FC = () => {
       statusCode: 500,
       response: "Internal Server Error",
       duration: 1240,
-      retryCount: 2
+      retryCount: 2,
     },
     {
       id: "3",
@@ -141,19 +147,51 @@ export const WebhookBuilder: React.FC = () => {
       statusCode: 200,
       response: "Message delivered",
       duration: 567,
-      retryCount: 0
-    }
+      retryCount: 0,
+    },
   ]);
 
   const availableTriggers = [
-    { value: "integration_connected", label: "Integração Conectada", description: "Quando uma nova integração é ativada" },
-    { value: "integration_disconnected", label: "Integração Desconectada", description: "Quando uma integração é desativada" },
-    { value: "integration_error", label: "Erro de Integração", description: "Quando ocorre falha em uma integração" },
-    { value: "high_error_rate", label: "Alta Taxa de Erro", description: "Quando taxa de erro excede limite" },
-    { value: "system_health_critical", label: "Saúde Crítica", description: "Quando saúde do sistema fica crítica" },
-    { value: "performance_degradation", label: "Degradação de Performance", description: "Quando performance fica abaixo do esperado" },
-    { value: "token_expiring", label: "Token Expirando", description: "Quando token está próximo do vencimento" },
-    { value: "daily_report", label: "Relatório Diário", description: "Relatório automático diário" }
+    {
+      value: "integration_connected",
+      label: "Integração Conectada",
+      description: "Quando uma nova integração é ativada",
+    },
+    {
+      value: "integration_disconnected",
+      label: "Integração Desconectada",
+      description: "Quando uma integração é desativada",
+    },
+    {
+      value: "integration_error",
+      label: "Erro de Integração",
+      description: "Quando ocorre falha em uma integração",
+    },
+    {
+      value: "high_error_rate",
+      label: "Alta Taxa de Erro",
+      description: "Quando taxa de erro excede limite",
+    },
+    {
+      value: "system_health_critical",
+      label: "Saúde Crítica",
+      description: "Quando saúde do sistema fica crítica",
+    },
+    {
+      value: "performance_degradation",
+      label: "Degradação de Performance",
+      description: "Quando performance fica abaixo do esperado",
+    },
+    {
+      value: "token_expiring",
+      label: "Token Expirando",
+      description: "Quando token está próximo do vencimento",
+    },
+    {
+      value: "daily_report",
+      label: "Relatório Diário",
+      description: "Relatório automático diário",
+    },
   ];
 
   const payloadTemplates = {
@@ -201,19 +239,19 @@ export const WebhookBuilder: React.FC = () => {
   "description": "{{event_description}}",
   "timestamp": "{{timestamp}}",
   "data": {{event_data}}
-}`
+}`,
   };
 
   const handleSaveWebhook = () => {
     setIsCreating(true);
-    
+
     setTimeout(() => {
       setIsCreating(false);
       toast({
         title: "Webhook Criado",
         description: `Webhook "${webhookConfig.name}" foi criado com sucesso.`,
       });
-      
+
       // Reset form
       setWebhookConfig({
         name: "",
@@ -227,15 +265,15 @@ export const WebhookBuilder: React.FC = () => {
         retryConfig: {
           enabled: true,
           maxRetries: 3,
-          backoffStrategy: "exponential"
-        }
+          backoffStrategy: "exponential",
+        },
       });
     }, 1500);
   };
 
   const handleTestWebhook = (webhookId: string) => {
     setIsTesting(true);
-    
+
     setTimeout(() => {
       setIsTesting(false);
       toast({
@@ -256,9 +294,9 @@ export const WebhookBuilder: React.FC = () => {
   const loadTemplate = (template: string) => {
     setWebhookConfig({
       ...webhookConfig,
-      payload: payloadTemplates[template as keyof typeof payloadTemplates]
+      payload: payloadTemplates[template as keyof typeof payloadTemplates],
     });
-    
+
     toast({
       title: "Template Carregado",
       description: `Template ${template} foi aplicado ao payload.`,
@@ -267,17 +305,23 @@ export const WebhookBuilder: React.FC = () => {
 
   const getStatusColor = (status: WebhookEvent["status"]) => {
     switch (status) {
-    case "success": return "text-success";
-    case "failed": return "text-destructive";
-    case "retrying": return "text-warning";
+      case "success":
+        return "text-success";
+      case "failed":
+        return "text-destructive";
+      case "retrying":
+        return "text-warning";
     }
   };
 
   const getStatusIcon = (status: WebhookEvent["status"]) => {
     switch (status) {
-    case "success": return <CheckCircle className="w-4 h-4 text-success" />;
-    case "failed": return <AlertTriangle className="w-4 h-4 text-destructive" />;
-    case "retrying": return <RefreshCw className="w-4 h-4 text-warning animate-spin" />;
+      case "success":
+        return <CheckCircle className="w-4 h-4 text-success" />;
+      case "failed":
+        return <AlertTriangle className="w-4 h-4 text-destructive" />;
+      case "retrying":
+        return <RefreshCw className="w-4 h-4 text-warning animate-spin" />;
     }
   };
 
@@ -291,9 +335,7 @@ export const WebhookBuilder: React.FC = () => {
               <Webhook className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-2xl text-foreground">
-                Webhook Builder
-              </CardTitle>
+              <CardTitle className="text-2xl text-foreground">Webhook Builder</CardTitle>
               <CardDescription>
                 Crie e gerencie webhooks personalizados para suas integrações
               </CardDescription>
@@ -326,26 +368,28 @@ export const WebhookBuilder: React.FC = () => {
                   <Input
                     id="webhook-name"
                     value={webhookConfig.name}
-                    onChange={(e) => setWebhookConfig({...webhookConfig, name: e.target.value})}
+                    onChange={e => setWebhookConfig({ ...webhookConfig, name: e.target.value })}
                     placeholder="Ex: Notificações Slack"
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="webhook-url">URL de Destino</Label>
                   <Input
                     id="webhook-url"
                     value={webhookConfig.url}
-                    onChange={(e) => setWebhookConfig({...webhookConfig, url: e.target.value})}
+                    onChange={e => setWebhookConfig({ ...webhookConfig, url: e.target.value })}
                     placeholder="https://hooks.slack.com/services/..."
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Método HTTP</Label>
-                  <Select 
-                    value={webhookConfig.method} 
-                    onValueChange={(value: any) => setWebhookConfig({...webhookConfig, method: value})}
+                  <Select
+                    value={webhookConfig.method}
+                    onValueChange={(value: any) =>
+                      setWebhookConfig({ ...webhookConfig, method: value })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -357,34 +401,40 @@ export const WebhookBuilder: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Triggers</Label>
                   <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto">
-                    {availableTriggers.map((trigger) => (
-                      <div key={trigger.value} className="flex items-start space-x-2 p-2 border border-border rounded-lg">
+                    {availableTriggers.map(trigger => (
+                      <div
+                        key={trigger.value}
+                        className="flex items-start space-x-2 p-2 border border-border rounded-lg"
+                      >
                         <input
                           type="checkbox"
                           id={trigger.value}
                           checked={webhookConfig.triggers?.includes(trigger.value)}
-                          onChange={(e) => {
+                          onChange={e => {
                             const triggers = webhookConfig.triggers || [];
                             if (e.target.checked) {
                               setWebhookConfig({
                                 ...webhookConfig,
-                                triggers: [...triggers, trigger.value]
+                                triggers: [...triggers, trigger.value],
                               });
                             } else {
                               setWebhookConfig({
                                 ...webhookConfig,
-                                triggers: triggers.filter(t => t !== trigger.value)
+                                triggers: triggers.filter(t => t !== trigger.value),
                               });
                             }
                           }}
                           className="mt-1"
                         />
                         <div className="flex-1">
-                          <label htmlFor={trigger.value} className="text-sm font-medium text-foreground cursor-pointer">
+                          <label
+                            htmlFor={trigger.value}
+                            className="text-sm font-medium text-foreground cursor-pointer"
+                          >
                             {trigger.label}
                           </label>
                           <p className="text-xs text-muted-foreground">{trigger.description}</p>
@@ -408,48 +458,39 @@ export const WebhookBuilder: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <Label>Template de Payload</Label>
                     <div className="flex gap-1">
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => loadTemplate("slack")}
-                      >
+                      <Button size="sm" variant="outline" onClick={() => loadTemplate("slack")}>
                         Slack
                       </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => loadTemplate("teams")}
-                      >
+                      <Button size="sm" variant="outline" onClick={() => loadTemplate("teams")}>
                         Teams
                       </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => loadTemplate("generic")}
-                      >
+                      <Button size="sm" variant="outline" onClick={() => loadTemplate("generic")}>
                         Generic
                       </Button>
                     </div>
                   </div>
                   <Textarea
                     value={webhookConfig.payload}
-                    onChange={(e) => setWebhookConfig({...webhookConfig, payload: e.target.value})}
+                    onChange={e => setWebhookConfig({ ...webhookConfig, payload: e.target.value })}
                     placeholder="Payload JSON do webhook..."
                     className="font-mono text-sm min-h-32"
                   />
                   <p className="text-xs text-muted-foreground">
-                    Use variáveis como {"{{event_type}}"}, {"{{timestamp}}"}, {"{{event_description}}"}
+                    Use variáveis como {"{{event_type}}"}, {"{{timestamp}}"},{" "}
+                    {"{{event_description}}"}
                   </p>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Tipo de Autenticação</Label>
-                  <Select 
-                    value={webhookConfig.authentication?.type} 
-                    onValueChange={(value: any) => setWebhookConfig({
-                      ...webhookConfig, 
-                      authentication: {...webhookConfig.authentication, type: value}
-                    })}
+                  <Select
+                    value={webhookConfig.authentication?.type}
+                    onValueChange={(value: any) =>
+                      setWebhookConfig({
+                        ...webhookConfig,
+                        authentication: { ...webhookConfig.authentication, type: value },
+                      })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -462,34 +503,38 @@ export const WebhookBuilder: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 {webhookConfig.authentication?.type !== "none" && (
                   <div className="space-y-2">
                     <Label>Valor da Autenticação</Label>
                     <Input
                       type="password"
                       value={webhookConfig.authentication?.value}
-                      onChange={(e) => setWebhookConfig({
-                        ...webhookConfig,
-                        authentication: {
-                          ...webhookConfig.authentication,
-                          value: e.target.value
-                        }
-                      })}
+                      onChange={e =>
+                        setWebhookConfig({
+                          ...webhookConfig,
+                          authentication: {
+                            ...webhookConfig.authentication,
+                            value: e.target.value,
+                          },
+                        })
+                      }
                       placeholder="Token ou chave de autenticação"
                     />
                   </div>
                 )}
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Webhook Ativo</Label>
-                  <Switch 
+                  <Switch
                     checked={webhookConfig.isActive}
-                    onCheckedChange={(checked) => setWebhookConfig({...webhookConfig, isActive: checked})}
+                    onCheckedChange={checked =>
+                      setWebhookConfig({ ...webhookConfig, isActive: checked })
+                    }
                   />
                 </div>
-                
-                <Button 
+
+                <Button
                   onClick={handleSaveWebhook}
                   disabled={isCreating || !webhookConfig.name || !webhookConfig.url}
                   className="w-full bg-primary hover:bg-primary/90"
@@ -514,7 +559,7 @@ export const WebhookBuilder: React.FC = () => {
         {/* Lista de Webhooks */}
         <TabsContent value="webhooks" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {webhooks.map((webhook) => (
+            {webhooks.map(webhook => (
               <Card key={webhook.id} className="border border-border/50">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -524,47 +569,42 @@ export const WebhookBuilder: React.FC = () => {
                       </div>
                       <div>
                         <CardTitle className="text-base text-foreground">{webhook.name}</CardTitle>
-                        <p className="text-xs text-muted-foreground">{webhook.method} • {webhook.triggers.length} triggers</p>
+                        <p className="text-xs text-muted-foreground">
+                          {webhook.method} • {webhook.triggers.length} triggers
+                        </p>
                       </div>
                     </div>
-                    <Switch 
-                      checked={webhook.isActive}
-                      onCheckedChange={() => {}}
-                    />
+                    <Switch checked={webhook.isActive} onCheckedChange={() => {}} />
                   </div>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-4">
                   <div className="p-2 bg-muted/30 rounded-lg">
                     <div className="flex items-center justify-between">
                       <code className="text-xs text-muted-foreground truncate flex-1">
                         {webhook.url}
                       </code>
-                      <Button 
-                        size="sm" 
-                        variant="ghost" 
-                        onClick={() => copyWebhookUrl(webhook.url)}
-                      >
+                      <Button size="sm" variant="ghost" onClick={() => copyWebhookUrl(webhook.url)}>
                         <Copy className="w-3 h-3" />
                       </Button>
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-1">
-                    {webhook.triggers.map((trigger) => (
+                    {webhook.triggers.map(trigger => (
                       <Badge key={trigger} variant="outline" className="text-xs">
                         {availableTriggers.find(t => t.value === trigger)?.label}
                       </Badge>
                     ))}
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" className="flex-1">
                       <Settings className="w-3 h-3 mr-1" />
                       Editar
                     </Button>
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       variant="outline"
                       onClick={() => handleTestWebhook(webhook.id)}
                       disabled={isTesting}
@@ -594,8 +634,11 @@ export const WebhookBuilder: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentEvents.map((event) => (
-                  <div key={event.id} className="flex items-center justify-between p-3 border border-border/50 rounded-lg">
+                {recentEvents.map(event => (
+                  <div
+                    key={event.id}
+                    className="flex items-center justify-between p-3 border border-border/50 rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       {getStatusIcon(event.status)}
                       <div>
@@ -617,10 +660,14 @@ export const WebhookBuilder: React.FC = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <Badge 
-                        className={`${event.status === "success" ? "bg-success/20 text-success border-success/30" : 
-                          event.status === "failed" ? "bg-destructive/20 text-destructive border-destructive/30" :
-                            "bg-warning/20 text-warning border-warning/30"}`}
+                      <Badge
+                        className={`${
+                          event.status === "success"
+                            ? "bg-success/20 text-success border-success/30"
+                            : event.status === "failed"
+                              ? "bg-destructive/20 text-destructive border-destructive/30"
+                              : "bg-warning/20 text-warning border-warning/30"
+                        }`}
                       >
                         {event.statusCode}
                       </Badge>
@@ -652,9 +699,9 @@ export const WebhookBuilder: React.FC = () => {
                   <p className="text-xs text-muted-foreground">
                     Inclui blocos, formatação markdown e contexto
                   </p>
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
+                  <Button
+                    size="sm"
+                    variant="outline"
                     className="w-full"
                     onClick={() => loadTemplate("slack")}
                   >
@@ -681,9 +728,9 @@ export const WebhookBuilder: React.FC = () => {
                   <p className="text-xs text-muted-foreground">
                     MessageCard com seções e fatos estruturados
                   </p>
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
+                  <Button
+                    size="sm"
+                    variant="outline"
                     className="w-full"
                     onClick={() => loadTemplate("teams")}
                   >
@@ -710,9 +757,9 @@ export const WebhookBuilder: React.FC = () => {
                   <p className="text-xs text-muted-foreground">
                     Estrutura simples com campos essenciais
                   </p>
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
+                  <Button
+                    size="sm"
+                    variant="outline"
                     className="w-full"
                     onClick={() => loadTemplate("generic")}
                   >

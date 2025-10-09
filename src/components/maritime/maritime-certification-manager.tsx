@@ -4,16 +4,28 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Award, 
-  AlertTriangle, 
-  Calendar, 
+import {
+  Award,
+  AlertTriangle,
+  Calendar,
   Plus,
   Download,
   Upload,
@@ -24,7 +36,7 @@ import {
   XCircle,
   Clock,
   FileText,
-  Users
+  Users,
 } from "lucide-react";
 
 interface MaritimeCertificate {
@@ -70,7 +82,7 @@ export const MaritimeCertificationManager = () => {
   const loadCertifications = async () => {
     try {
       setLoading(true);
-      
+
       // Simulando dados de certificações marítimas
       const mockCertificates: MaritimeCertificate[] = [
         {
@@ -84,7 +96,7 @@ export const MaritimeCertificationManager = () => {
           status: "valid",
           issuing_country: "Brasil",
           renewal_cost: 1500,
-          notes: "Renovação automática disponível"
+          notes: "Renovação automática disponível",
         },
         {
           id: "2",
@@ -97,7 +109,7 @@ export const MaritimeCertificationManager = () => {
           status: "expiring",
           issuing_country: "Brasil",
           renewal_cost: 2500,
-          notes: "Renovação urgente necessária"
+          notes: "Renovação urgente necessária",
         },
         {
           id: "3",
@@ -110,7 +122,7 @@ export const MaritimeCertificationManager = () => {
           status: "expired",
           issuing_country: "Brasil",
           renewal_cost: 800,
-          notes: "Exame médico necessário"
+          notes: "Exame médico necessário",
         },
         {
           id: "4",
@@ -122,8 +134,8 @@ export const MaritimeCertificationManager = () => {
           expiry_date: "2026-01-20",
           status: "valid",
           issuing_country: "Brasil",
-          renewal_cost: 600
-        }
+          renewal_cost: 600,
+        },
       ];
 
       setCertificates(mockCertificates);
@@ -132,7 +144,7 @@ export const MaritimeCertificationManager = () => {
       toast({
         title: "Erro",
         description: "Erro ao carregar certificações",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -150,7 +162,7 @@ export const MaritimeCertificationManager = () => {
           certification_type: "Chief Officer License",
           expiry_date: "2024-12-31",
           days_until_expiry: 45,
-          alert_type: "expiring_soon"
+          alert_type: "expiring_soon",
         },
         {
           id: "2",
@@ -159,8 +171,8 @@ export const MaritimeCertificationManager = () => {
           certification_type: "Medical Certificate",
           expiry_date: "2024-03-10",
           days_until_expiry: -50,
-          alert_type: "expired"
-        }
+          alert_type: "expired",
+        },
       ];
 
       setAlerts(mockAlerts);
@@ -171,36 +183,51 @@ export const MaritimeCertificationManager = () => {
 
   const getStatusColor = (status: MaritimeCertificate["status"]) => {
     switch (status) {
-    case "valid": return "bg-green-500";
-    case "expiring": return "bg-yellow-500";
-    case "expired": return "bg-red-500";
-    case "pending_renewal": return "bg-orange-500";
-    default: return "bg-gray-500";
+      case "valid":
+        return "bg-green-500";
+      case "expiring":
+        return "bg-yellow-500";
+      case "expired":
+        return "bg-red-500";
+      case "pending_renewal":
+        return "bg-orange-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
   const getStatusText = (status: MaritimeCertificate["status"]) => {
     switch (status) {
-    case "valid": return "Válida";
-    case "expiring": return "Vencendo";
-    case "expired": return "Vencida";
-    case "pending_renewal": return "Renovação Pendente";
-    default: return "Desconhecido";
+      case "valid":
+        return "Válida";
+      case "expiring":
+        return "Vencendo";
+      case "expired":
+        return "Vencida";
+      case "pending_renewal":
+        return "Renovação Pendente";
+      default:
+        return "Desconhecido";
     }
   };
 
   const getAlertColor = (alertType: CertificationAlert["alert_type"]) => {
     switch (alertType) {
-    case "expiring_soon": return "bg-yellow-100 border-yellow-500 text-yellow-800";
-    case "expired": return "bg-red-100 border-red-500 text-red-800";
-    case "renewal_required": return "bg-orange-100 border-orange-500 text-orange-800";
-    default: return "bg-secondary border-muted text-secondary-foreground";
+      case "expiring_soon":
+        return "bg-yellow-100 border-yellow-500 text-yellow-800";
+      case "expired":
+        return "bg-red-100 border-red-500 text-red-800";
+      case "renewal_required":
+        return "bg-orange-100 border-orange-500 text-orange-800";
+      default:
+        return "bg-secondary border-muted text-secondary-foreground";
     }
   };
 
   const filteredCertificates = certificates.filter(cert => {
-    const matchesSearch = cert.crew_member_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         cert.certification_type.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      cert.crew_member_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      cert.certification_type.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -210,7 +237,7 @@ export const MaritimeCertificationManager = () => {
     valid: certificates.filter(c => c.status === "valid").length,
     expiring: certificates.filter(c => c.status === "expiring").length,
     expired: certificates.filter(c => c.status === "expired").length,
-    pending: certificates.filter(c => c.status === "pending_renewal").length
+    pending: certificates.filter(c => c.status === "pending_renewal").length,
   };
 
   if (loading) {
@@ -231,13 +258,13 @@ export const MaritimeCertificationManager = () => {
             Gerencie certificações da tripulação e alertas de vencimento
           </p>
         </div>
-        
+
         <div className="flex gap-2">
           <Button variant="outline" className="flex items-center gap-2">
             <Download className="h-4 w-4" />
             Exportar
           </Button>
-          
+
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button className="flex items-center gap-2">
@@ -263,45 +290,43 @@ export const MaritimeCertificationManager = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label>Tipo de Certificação</Label>
                   <Input placeholder="Ex: STCW Basic Safety" />
                 </div>
-                
+
                 <div>
                   <Label>Número do Certificado</Label>
                   <Input placeholder="Ex: BST-2024-001" />
                 </div>
-                
+
                 <div>
                   <Label>Autoridade Emissora</Label>
                   <Input placeholder="Ex: Marinha do Brasil" />
                 </div>
-                
+
                 <div>
                   <Label>Data de Emissão</Label>
                   <Input type="date" />
                 </div>
-                
+
                 <div>
                   <Label>Data de Vencimento</Label>
                   <Input type="date" />
                 </div>
-                
+
                 <div className="col-span-2">
                   <Label>Observações</Label>
                   <Textarea placeholder="Observações adicionais..." />
                 </div>
               </div>
-              
+
               <div className="flex justify-end gap-2 mt-6">
                 <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button onClick={() => setIsAddDialogOpen(false)}>
-                  Salvar Certificação
-                </Button>
+                <Button onClick={() => setIsAddDialogOpen(false)}>Salvar Certificação</Button>
               </div>
             </DialogContent>
           </Dialog>
@@ -317,7 +342,7 @@ export const MaritimeCertificationManager = () => {
             <div className="text-sm text-muted-foreground">Total</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 text-center">
             <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-600" />
@@ -325,7 +350,7 @@ export const MaritimeCertificationManager = () => {
             <div className="text-sm text-muted-foreground">Válidas</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 text-center">
             <Clock className="h-8 w-8 mx-auto mb-2 text-yellow-600" />
@@ -333,7 +358,7 @@ export const MaritimeCertificationManager = () => {
             <div className="text-sm text-muted-foreground">Vencendo</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 text-center">
             <XCircle className="h-8 w-8 mx-auto mb-2 text-red-600" />
@@ -341,7 +366,7 @@ export const MaritimeCertificationManager = () => {
             <div className="text-sm text-muted-foreground">Vencidas</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 text-center">
             <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-orange-600" />
@@ -362,7 +387,7 @@ export const MaritimeCertificationManager = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {alerts.map((alert) => (
+              {alerts.map(alert => (
                 <div
                   key={alert.id}
                   className={`p-3 rounded-lg border-2 ${getAlertColor(alert.alert_type)}`}
@@ -373,13 +398,12 @@ export const MaritimeCertificationManager = () => {
                       <p className="text-sm">{alert.certification_type}</p>
                       <p className="text-xs">
                         Vencimento: {new Date(alert.expiry_date).toLocaleDateString()}
-                        {alert.days_until_expiry > 0 
-                          ? ` (${alert.days_until_expiry} dias)` 
-                          : ` (vencida há ${Math.abs(alert.days_until_expiry)} dias)`
-                        }
+                        {alert.days_until_expiry > 0
+                          ? ` (${alert.days_until_expiry} dias)`
+                          : ` (vencida há ${Math.abs(alert.days_until_expiry)} dias)`}
                       </p>
                     </div>
-                    
+
                     <Button size="sm" variant="outline">
                       Ação Necessária
                     </Button>
@@ -413,12 +437,12 @@ export const MaritimeCertificationManager = () => {
                     <Input
                       placeholder="Buscar por tripulante ou certificação..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={e => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>
                 </div>
-                
+
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Status" />
@@ -442,25 +466,26 @@ export const MaritimeCertificationManager = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {filteredCertificates.map((cert) => (
-                  <div key={cert.id} className="border rounded-lg p-4 hover:bg-accent transition-colors">
+                {filteredCertificates.map(cert => (
+                  <div
+                    key={cert.id}
+                    className="border rounded-lg p-4 hover:bg-accent transition-colors"
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
                           <Award className="h-6 w-6 text-primary" />
                         </div>
-                        
+
                         <div>
                           <h3 className="font-semibold">{cert.crew_member_name}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {cert.certification_type}
-                          </p>
+                          <p className="text-sm text-muted-foreground">{cert.certification_type}</p>
                           <p className="text-xs text-muted-foreground">
                             {cert.certificate_number} • {cert.issuing_authority}
                           </p>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-4">
                         <div className="text-right">
                           <Badge className={`${getStatusColor(cert.status)} text-azure-50`}>
@@ -470,7 +495,7 @@ export const MaritimeCertificationManager = () => {
                             Vence: {new Date(cert.expiry_date).toLocaleDateString()}
                           </div>
                         </div>
-                        
+
                         <div className="flex gap-2">
                           <Button variant="outline" size="sm">
                             <FileText className="h-3 w-3 mr-1" />
@@ -483,7 +508,7 @@ export const MaritimeCertificationManager = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     {cert.notes && (
                       <div className="mt-3 pt-3 border-t">
                         <p className="text-sm text-muted-foreground">
@@ -505,22 +530,27 @@ export const MaritimeCertificationManager = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {certificates.filter(c => c.status === "expiring").map((cert) => (
-                  <div key={cert.id} className="border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-semibold">{cert.crew_member_name}</h3>
-                        <p className="text-sm">{cert.certification_type}</p>
-                        <p className="text-xs text-yellow-700">
-                          Vencimento: {new Date(cert.expiry_date).toLocaleDateString()}
-                        </p>
+                {certificates
+                  .filter(c => c.status === "expiring")
+                  .map(cert => (
+                    <div
+                      key={cert.id}
+                      className="border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-semibold">{cert.crew_member_name}</h3>
+                          <p className="text-sm">{cert.certification_type}</p>
+                          <p className="text-xs text-yellow-700">
+                            Vencimento: {new Date(cert.expiry_date).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <Button variant="outline" className="border-yellow-500 text-yellow-700">
+                          Renovar Agora
+                        </Button>
                       </div>
-                      <Button variant="outline" className="border-yellow-500 text-yellow-700">
-                        Renovar Agora
-                      </Button>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </Card>
@@ -533,22 +563,22 @@ export const MaritimeCertificationManager = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {certificates.filter(c => c.status === "expired").map((cert) => (
-                  <div key={cert.id} className="border-l-4 border-red-500 bg-red-50 p-4 rounded">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-semibold">{cert.crew_member_name}</h3>
-                        <p className="text-sm">{cert.certification_type}</p>
-                        <p className="text-xs text-red-700">
-                          Vencida em: {new Date(cert.expiry_date).toLocaleDateString()}
-                        </p>
+                {certificates
+                  .filter(c => c.status === "expired")
+                  .map(cert => (
+                    <div key={cert.id} className="border-l-4 border-red-500 bg-red-50 p-4 rounded">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-semibold">{cert.crew_member_name}</h3>
+                          <p className="text-sm">{cert.certification_type}</p>
+                          <p className="text-xs text-red-700">
+                            Vencida em: {new Date(cert.expiry_date).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <Button variant="destructive">Renovação Urgente</Button>
                       </div>
-                      <Button variant="destructive">
-                        Renovação Urgente
-                      </Button>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </Card>
@@ -559,9 +589,7 @@ export const MaritimeCertificationManager = () => {
             <CardContent className="text-center py-12">
               <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">Relatórios de Certificações</h3>
-              <p className="text-muted-foreground">
-                Relatórios detalhados em desenvolvimento
-              </p>
+              <p className="text-muted-foreground">Relatórios detalhados em desenvolvimento</p>
             </CardContent>
           </Card>
         </TabsContent>

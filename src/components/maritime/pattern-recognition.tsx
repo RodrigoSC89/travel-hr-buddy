@@ -4,15 +4,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Network, 
-  TrendingUp, 
-  Activity, 
+import {
+  Network,
+  TrendingUp,
+  Activity,
   Waves,
   Anchor,
   Timer,
   Gauge,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 
 interface OperationalPattern {
@@ -49,8 +49,8 @@ export const PatternRecognition: React.FC = () => {
       metrics: [
         { name: "Consumo Base", value: 245, trend: "stable" },
         { name: "Consumo Previsto", value: 289, trend: "up" },
-        { name: "Desvio Médio", value: 18, trend: "stable" }
-      ]
+        { name: "Desvio Médio", value: 18, trend: "stable" },
+      ],
     },
     {
       id: "2",
@@ -66,8 +66,8 @@ export const PatternRecognition: React.FC = () => {
       metrics: [
         { name: "Horas desde troca", value: 2650, trend: "up" },
         { name: "Horas limite", value: 2800, trend: "stable" },
-        { name: "Margem segurança", value: 150, trend: "down" }
-      ]
+        { name: "Margem segurança", value: 150, trend: "down" },
+      ],
     },
     {
       id: "3",
@@ -83,8 +83,8 @@ export const PatternRecognition: React.FC = () => {
       metrics: [
         { name: "Tempo médio", value: 8.2, trend: "down" },
         { name: "Consumo médio", value: 1850, trend: "down" },
-        { name: "Economia", value: 12, trend: "up" }
-      ]
+        { name: "Economia", value: 12, trend: "up" },
+      ],
     },
     {
       id: "4",
@@ -100,28 +100,38 @@ export const PatternRecognition: React.FC = () => {
       metrics: [
         { name: "Eficiência média", value: 92, trend: "up" },
         { name: "Tempo resposta", value: 3.5, trend: "down" },
-        { name: "Incidentes", value: 0.8, trend: "down" }
-      ]
-    }
+        { name: "Incidentes", value: 0.8, trend: "down" },
+      ],
+    },
   ]);
 
   const getPatternIcon = (type: string) => {
     switch (type) {
-    case "fuel_consumption": return <Gauge className="h-5 w-5" />;
-    case "maintenance_cycle": return <Activity className="h-5 w-5" />;
-    case "route_efficiency": return <Waves className="h-5 w-5" />;
-    case "crew_performance": return <TrendingUp className="h-5 w-5" />;
-    default: return <Network className="h-5 w-5" />;
+      case "fuel_consumption":
+        return <Gauge className="h-5 w-5" />;
+      case "maintenance_cycle":
+        return <Activity className="h-5 w-5" />;
+      case "route_efficiency":
+        return <Waves className="h-5 w-5" />;
+      case "crew_performance":
+        return <TrendingUp className="h-5 w-5" />;
+      default:
+        return <Network className="h-5 w-5" />;
     }
   };
 
   const getPatternTypeLabel = (type: string) => {
     switch (type) {
-    case "fuel_consumption": return "Consumo";
-    case "maintenance_cycle": return "Manutenção";
-    case "route_efficiency": return "Rotas";
-    case "crew_performance": return "Tripulação";
-    default: return type;
+      case "fuel_consumption":
+        return "Consumo";
+      case "maintenance_cycle":
+        return "Manutenção";
+      case "route_efficiency":
+        return "Rotas";
+      case "crew_performance":
+        return "Tripulação";
+      default:
+        return type;
     }
   };
 
@@ -148,7 +158,7 @@ export const PatternRecognition: React.FC = () => {
             <p className="text-xs text-muted-foreground">Identificados</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Precisão Média</CardTitle>
@@ -158,19 +168,17 @@ export const PatternRecognition: React.FC = () => {
             <p className="text-xs text-muted-foreground">Confiabilidade do modelo</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Embarcações</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {new Set(patterns.map(p => p.vessel)).size}
-            </div>
+            <div className="text-2xl font-bold">{new Set(patterns.map(p => p.vessel)).size}</div>
             <p className="text-xs text-muted-foreground">Monitoradas</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Próxima Previsão</CardTitle>
@@ -211,11 +219,17 @@ export const PatternRecognition: React.FC = () => {
               <TabsTrigger value="crew_performance">Tripulação</TabsTrigger>
             </TabsList>
 
-            {["all", "fuel_consumption", "maintenance_cycle", "route_efficiency", "crew_performance"].map((tab) => (
+            {[
+              "all",
+              "fuel_consumption",
+              "maintenance_cycle",
+              "route_efficiency",
+              "crew_performance",
+            ].map(tab => (
               <TabsContent key={tab} value={tab} className="space-y-4 mt-4">
                 {patterns
                   .filter(p => tab === "all" || p.patternType === tab)
-                  .map((pattern) => (
+                  .map(pattern => (
                     <Card key={pattern.id} className="border-l-4 border-l-blue-500">
                       <CardHeader>
                         <div className="flex items-start justify-between">

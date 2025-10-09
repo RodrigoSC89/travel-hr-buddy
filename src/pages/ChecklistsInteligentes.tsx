@@ -5,7 +5,7 @@ import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
+import {
   ClipboardCheck,
   Brain,
   Shield,
@@ -20,7 +20,7 @@ import {
   Plus,
   FileText,
   RefreshCw,
-  Download
+  Download,
 } from "lucide-react";
 
 const ChecklistsInteligentes = () => {
@@ -34,7 +34,7 @@ const ChecklistsInteligentes = () => {
     { icon: ClipboardCheck, label: "Checklists Ativos", value: "24", color: "primary" },
     { icon: CheckCircle, label: "Completados Hoje", value: "18", color: "success" },
     { icon: Settings, label: "Em Andamento", value: "6", color: "warning" },
-    { icon: BarChart3, label: "Taxa de Sucesso", value: "96%", color: "info" }
+    { icon: BarChart3, label: "Taxa de Sucesso", value: "96%", color: "info" },
   ];
 
   return (
@@ -47,17 +47,22 @@ const ChecklistsInteligentes = () => {
         badges={[
           { icon: Brain, label: "IA Preditiva" },
           { icon: Shield, label: "Segurança Total" },
-          { icon: Zap, label: "Automação Completa" }
+          { icon: Zap, label: "Automação Completa" },
         ]}
       />
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {quickStats.map((stat, index) => (
-          <Card key={index} className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
-              bg-gradient-to-br from-card via-card/95 to-${stat.color}/5 border-${stat.color}/20 hover:border-${stat.color}/40`}>
+          <Card
+            key={index}
+            className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
+              bg-gradient-to-br from-card via-card/95 to-${stat.color}/5 border-${stat.color}/20 hover:border-${stat.color}/40`}
+          >
             <CardContent className="p-4 flex items-center gap-3">
-              <div className={`p-3 rounded-xl bg-${stat.color}/20 group-hover:scale-110 transition-transform duration-300`}>
+              <div
+                className={`p-3 rounded-xl bg-${stat.color}/20 group-hover:scale-110 transition-transform duration-300`}
+              >
                 <stat.icon className={`w-6 h-6 text-${stat.color}`} />
               </div>
               <div>
@@ -81,16 +86,16 @@ const ChecklistsInteligentes = () => {
               <Star className="w-6 h-6 text-warning animate-pulse" />
             </CardTitle>
             <CardDescription className="text-base flex items-center gap-2">
-                Sistema avançado com IA para operações de bordo
+              Sistema avançado com IA para operações de bordo
               <div className="flex gap-1">
                 <Badge variant="outline" className="bg-success/10 text-success border-success/30">
-                    DP Operacional
+                  DP Operacional
                 </Badge>
                 <Badge variant="outline" className="bg-info/10 text-info border-info/30">
-                    Máquinas
+                  Máquinas
                 </Badge>
                 <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
-                    Náutica
+                  Náutica
                 </Badge>
               </div>
             </CardDescription>
@@ -112,29 +117,29 @@ const ChecklistsInteligentes = () => {
             label: "Novo Checklist",
             icon: <Plus className="h-4 w-4" />,
             action: () => console.log("Novo checklist"),
-            variant: "default"
+            variant: "default",
           },
           {
             id: "templates",
             label: "Templates",
             icon: <FileText className="h-4 w-4" />,
             action: () => console.log("Templates"),
-            variant: "outline"
+            variant: "outline",
           },
           {
             id: "reports",
             label: "Relatórios",
             icon: <BarChart3 className="h-4 w-4" />,
             action: () => console.log("Relatórios"),
-            variant: "outline"
+            variant: "outline",
           },
           {
             id: "ai-assist",
             label: "IA Assistente",
             icon: <Brain className="h-4 w-4" />,
             action: () => console.log("IA Assistente"),
-            variant: "outline"
-          }
+            variant: "outline",
+          },
         ]}
         quickActions={[
           {
@@ -142,14 +147,14 @@ const ChecklistsInteligentes = () => {
             label: "Atualizar",
             icon: <RefreshCw className="h-3 w-3" />,
             action: () => window.location.reload(),
-            shortcut: "F5"
+            shortcut: "F5",
           },
           {
             id: "export",
             label: "Exportar",
             icon: <Download className="h-3 w-3" />,
-            action: () => console.log("Exportar")
-          }
+            action: () => console.log("Exportar"),
+          },
         ]}
       />
     </ModulePageWrapper>

@@ -3,7 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import VoiceHistory from "@/components/voice/VoiceHistory";
 import VoiceAnalytics from "@/components/voice/VoiceAnalytics";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,10 +18,10 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
-import { 
-  Mic, 
-  Settings, 
-  History, 
+import {
+  Mic,
+  Settings,
+  History,
   BarChart3,
   Bot,
   Volume2,
@@ -26,7 +32,7 @@ import {
   Headphones,
   X,
   Sparkles,
-  Zap
+  Zap,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -43,9 +49,9 @@ export default function Voice() {
     voice: "alloy",
     language: "pt-BR",
     wakeWord: true,
-    noiseReduction: true
+    noiseReduction: true,
   });
-  
+
   const navigate = useNavigate();
   const { toast } = useToast();
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -56,11 +62,11 @@ export default function Voice() {
       setAudioPermission("granted");
       // Stop the stream immediately as we just needed permission
       stream.getTracks().forEach(track => track.stop());
-      
+
       toast({
         title: "Permissão Concedida",
         description: "Microfone configurado com sucesso!",
-        duration: 3000
+        duration: 3000,
       });
     } catch (error) {
       setAudioPermission("denied");
@@ -68,7 +74,7 @@ export default function Voice() {
         title: "Permissão Negada",
         description: "Microfone é necessário para usar comandos de voz",
         variant: "destructive",
-        duration: 4000
+        duration: 4000,
       });
     }
   }, [toast]);
@@ -110,7 +116,7 @@ export default function Voice() {
     toast({
       title: "Assistente Ativo",
       description: "Ouvindo seus comandos...",
-      duration: 2000
+      duration: 2000,
     });
 
     // Simulate voice recognition timeout
@@ -126,29 +132,29 @@ export default function Voice() {
     toast({
       title: "Assistente Pausado",
       description: "Clique no microfone para ativar novamente",
-      duration: 2000
+      duration: 2000,
     });
   };
 
   const handleNavigation = (module: string) => {
     const routes: { [key: string]: string } = {
-      "dashboard": "/",
-      "analytics": "/analytics",
-      "reports": "/reports",
-      "settings": "/settings",
-      "travel": "/travel",
-      "maritime": "/maritime",
-      "communication": "/communication",
-      "admin": "/admin"
+      dashboard: "/",
+      analytics: "/analytics",
+      reports: "/reports",
+      settings: "/settings",
+      travel: "/travel",
+      maritime: "/maritime",
+      communication: "/communication",
+      admin: "/admin",
     };
-    
+
     const route = routes[module.toLowerCase()];
     if (route) {
       navigate(route);
       toast({
         title: "Navegando",
         description: `Redirecionando para ${module}`,
-        duration: 2000
+        duration: 2000,
       });
     }
   };
@@ -157,7 +163,7 @@ export default function Voice() {
     toast({
       title: "Configurações Salvas",
       description: "Suas preferências de voz foram atualizadas",
-      duration: 3000
+      duration: 3000,
     });
     setShowAdvancedSettings(false);
   };
@@ -167,9 +173,9 @@ export default function Voice() {
     toast({
       title: "Testando Voz",
       description: "Reproduzindo amostra de voz...",
-      duration: 2000
+      duration: 2000,
     });
-    
+
     setTimeout(() => {
       setIsSpeaking(false);
     }, 3000);
@@ -185,27 +191,27 @@ export default function Voice() {
         badges={[
           { icon: Mic, label: "Comandos de Voz" },
           { icon: Sparkles, label: "IA Conversacional" },
-          { icon: Zap, label: "Tempo Real" }
+          { icon: Zap, label: "Tempo Real" },
         ]}
       />
 
       {/* Quick Actions */}
       <div className="flex items-center gap-3 mb-6">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => setShowAdvancedSettings(true)}
           className="flex items-center gap-2"
         >
           <Settings className="h-4 w-4" />
           Configurações Avançadas
         </Button>
-        
+
         <Button
           onClick={handleVoiceToggle}
           disabled={audioPermission === "denied"}
           className={`flex items-center gap-2 ${
-            isListening 
-              ? "bg-destructive hover:bg-destructive/90" 
+            isListening
+              ? "bg-destructive hover:bg-destructive/90"
               : "bg-primary hover:bg-primary/90"
           }`}
         >
@@ -254,20 +260,21 @@ export default function Voice() {
                 OUVINDO
               </Badge>
             )}
-            {isSpeaking && (
-              <Badge className="bg-success text-success-foreground">
-                FALANDO
-              </Badge>
-            )}
+            {isSpeaking && <Badge className="bg-success text-success-foreground">FALANDO</Badge>}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className={`text-2xl font-bold ${
-                isListening ? "text-destructive" : 
-                  isSpeaking ? "text-success" : "text-muted-foreground"
-              }`}>
+              <div
+                className={`text-2xl font-bold ${
+                  isListening
+                    ? "text-destructive"
+                    : isSpeaking
+                      ? "text-success"
+                      : "text-muted-foreground"
+                }`}
+              >
                 {isListening ? "ATIVO" : isSpeaking ? "FALANDO" : "STANDBY"}
               </div>
               <div className="text-sm text-muted-foreground">Status Atual</div>
@@ -323,10 +330,10 @@ export default function Voice() {
                       Detectar automaticamente quando você fala
                     </div>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={voiceSettings.autoListen}
-                    onCheckedChange={(checked) => 
-                      setVoiceSettings(prev => ({...prev, autoListen: checked}))
+                    onCheckedChange={checked =>
+                      setVoiceSettings(prev => ({ ...prev, autoListen: checked }))
                     }
                   />
                 </div>
@@ -339,8 +346,8 @@ export default function Voice() {
                   </div>
                   <Slider
                     value={[voiceSettings.volume]}
-                    onValueChange={(value) => 
-                      setVoiceSettings(prev => ({...prev, volume: value[0]}))
+                    onValueChange={value =>
+                      setVoiceSettings(prev => ({ ...prev, volume: value[0] }))
                     }
                     max={1}
                     min={0}
@@ -360,8 +367,8 @@ export default function Voice() {
                   </div>
                   <Slider
                     value={[voiceSettings.sensitivity]}
-                    onValueChange={(value) => 
-                      setVoiceSettings(prev => ({...prev, sensitivity: value[0]}))
+                    onValueChange={value =>
+                      setVoiceSettings(prev => ({ ...prev, sensitivity: value[0] }))
                     }
                     max={1}
                     min={0}
@@ -393,7 +400,7 @@ export default function Voice() {
 
         <TabsContent value="analytics">
           <div className="grid gap-6">
-            <VoiceAnalytics 
+            <VoiceAnalytics
               isConnected={!isSpeaking}
               totalMessages={messages.length}
               sessionDuration={247}
@@ -413,16 +420,14 @@ export default function Voice() {
               Configurações Avançadas
             </DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-4">
             {/* Voice Selection */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Voz do Assistente</label>
-              <Select 
-                value={voiceSettings.voice} 
-                onValueChange={(value) => 
-                  setVoiceSettings(prev => ({...prev, voice: value}))
-                }
+              <Select
+                value={voiceSettings.voice}
+                onValueChange={value => setVoiceSettings(prev => ({ ...prev, voice: value }))}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -441,11 +446,9 @@ export default function Voice() {
             {/* Language */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Idioma</label>
-              <Select 
-                value={voiceSettings.language} 
-                onValueChange={(value) => 
-                  setVoiceSettings(prev => ({...prev, language: value}))
-                }
+              <Select
+                value={voiceSettings.language}
+                onValueChange={value => setVoiceSettings(prev => ({ ...prev, language: value }))}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -462,14 +465,12 @@ export default function Voice() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <label className="text-sm font-medium">Palavra de Ativação</label>
-                <div className="text-sm text-muted-foreground">
-                  Ativar com "Olá Nautilus"
-                </div>
+                <div className="text-sm text-muted-foreground">Ativar com "Olá Nautilus"</div>
               </div>
-              <Switch 
+              <Switch
                 checked={voiceSettings.wakeWord}
-                onCheckedChange={(checked) => 
-                  setVoiceSettings(prev => ({...prev, wakeWord: checked}))
+                onCheckedChange={checked =>
+                  setVoiceSettings(prev => ({ ...prev, wakeWord: checked }))
                 }
               />
             </div>
@@ -478,21 +479,19 @@ export default function Voice() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <label className="text-sm font-medium">Redução de Ruído</label>
-                <div className="text-sm text-muted-foreground">
-                  Filtrar ruídos de fundo
-                </div>
+                <div className="text-sm text-muted-foreground">Filtrar ruídos de fundo</div>
               </div>
-              <Switch 
+              <Switch
                 checked={voiceSettings.noiseReduction}
-                onCheckedChange={(checked) => 
-                  setVoiceSettings(prev => ({...prev, noiseReduction: checked}))
+                onCheckedChange={checked =>
+                  setVoiceSettings(prev => ({ ...prev, noiseReduction: checked }))
                 }
               />
             </div>
 
             <div className="flex gap-2 pt-4">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setShowAdvancedSettings(false)}
                 className="flex-1"
               >

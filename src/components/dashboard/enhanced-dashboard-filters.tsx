@@ -4,9 +4,24 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Calendar, Settings, Filter, Clock, TrendingUp, Users, DollarSign, Activity } from "lucide-react";
+import {
+  Calendar,
+  Settings,
+  Filter,
+  Clock,
+  TrendingUp,
+  Users,
+  DollarSign,
+  Activity,
+} from "lucide-react";
 
 interface DashboardFiltersProps {
   selectedKPIs: string[];
@@ -50,7 +65,7 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
     setSelectedLayout(layout);
     toast({
       title: "📊 Layout Alterado",
-      description: `Dashboard exibindo em modo ${layout}`
+      description: `Dashboard exibindo em modo ${layout}`,
     });
   };
 
@@ -65,24 +80,16 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
               Última atualização: {lastUpdated.toLocaleTimeString("pt-BR")}
             </span>
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <Switch
-              id="auto-update"
-              checked={isAutoUpdate}
-              onCheckedChange={onAutoUpdateToggle}
-            />
+            <Switch id="auto-update" checked={isAutoUpdate} onCheckedChange={onAutoUpdateToggle} />
             <Label htmlFor="auto-update" className="text-sm">
               Atualização automática
             </Label>
           </div>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsFiltersOpen(!isFiltersOpen)}
-        >
+        <Button variant="outline" size="sm" onClick={() => setIsFiltersOpen(!isFiltersOpen)}>
           <Filter className="w-4 h-4 mr-2" />
           Filtros Avançados
         </Button>
@@ -106,7 +113,7 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
                   <SelectValue placeholder="Selecione o período" />
                 </SelectTrigger>
                 <SelectContent>
-                  {periodOptions.map((option) => (
+                  {periodOptions.map(option => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
@@ -119,12 +126,12 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
             <div className="space-y-4">
               <Label>KPIs Visíveis</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {availableKPIs.map((kpi) => (
+                {availableKPIs.map(kpi => (
                   <div
                     key={kpi.id}
                     className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-all hover:shadow-sm ${
-                      selectedKPIs.includes(kpi.id) 
-                        ? "border-primary bg-primary/5" 
+                      selectedKPIs.includes(kpi.id)
+                        ? "border-primary bg-primary/5"
                         : "border-border"
                     }`}
                     onClick={() => onKPIToggle(kpi.id)}
@@ -146,9 +153,9 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
             <div className="space-y-2">
               <Label>Layout do Dashboard</Label>
               <div className="grid grid-cols-3 gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => handleLayoutChange("compacto")}
                   className={selectedLayout === "compacto" ? "border-primary" : ""}
                 >
@@ -157,9 +164,9 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
                     <span className="text-xs">Compacto</span>
                   </div>
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => handleLayoutChange("grade")}
                   className={selectedLayout === "grade" ? "border-primary" : ""}
                 >
@@ -173,9 +180,9 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
                     <span className="text-xs">Grade</span>
                   </div>
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => handleLayoutChange("lista")}
                   className={selectedLayout === "lista" ? "border-primary" : ""}
                 >
@@ -195,9 +202,7 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
               <Button variant="outline" onClick={() => setIsFiltersOpen(false)}>
                 Cancelar
               </Button>
-              <Button onClick={() => setIsFiltersOpen(false)}>
-                Salvar Preferências
-              </Button>
+              <Button onClick={() => setIsFiltersOpen(false)}>Salvar Preferências</Button>
             </div>
           </CardContent>
         </Card>

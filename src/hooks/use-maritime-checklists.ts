@@ -1,7 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import type { Checklist, ChecklistTemplate, ChecklistItem } from "@/components/maritime-checklists/checklist-types";
+import type {
+  Checklist,
+  ChecklistTemplate,
+  ChecklistItem,
+} from "@/components/maritime-checklists/checklist-types";
 
 export const useMaritimeChecklists = (userId: string) => {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
@@ -15,66 +19,70 @@ export const useMaritimeChecklists = (userId: string) => {
       setLoading(true);
       const { data, error } = await supabase
         .from("operational_checklists")
-        .select(`
+        .select(
+          `
           *,
           checklist_items(*),
           vessels(*)
-        `)
+        `
+        )
         .eq("created_by", userId)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       // Transform data to match our Checklist interface
-      const transformedChecklists: Checklist[] = data?.map(item => ({
-        id: item.id,
-        title: item.title,
-        type: "dp" as any, // Default type, will be updated when we add proper type field
-        version: "1.0",
-        description: item.title || "",
-        vessel: {
-          id: item.vessels?.id || "",
-          name: item.vessels?.name || "Unknown Vessel",
-          type: item.vessels?.vessel_type || "Unknown",
-          imo: item.vessels?.imo_number || "",
-          flag: item.vessels?.flag_state || "",
-          classification: "DNV", // Default classification
-          operator: "Maritime Operator" // Default operator
-        },
-        inspector: {
-          id: userId,
-          name: "Current User",
-          license: "LIC001",
-          company: "Maritime Company",
-          email: "user@maritime.com",
-          phone: "+55 11 99999-9999",
-          certifications: ["Maritime Inspector"]
-        },
-        status: item.status as any,
-        items: item.checklist_items?.map((checklistItem: any) => ({
-          id: checklistItem.id,
-          title: checklistItem.title,
-          description: checklistItem.description,
-          type: "boolean",
-          required: checklistItem.required,
-          category: "General",
-          order: checklistItem.order_index,
-          status: checklistItem.completed ? "completed" : "pending",
-          value: checklistItem.completed,
-          notes: checklistItem.notes,
-          timestamp: checklistItem.completed_at
-        })) || [],
-        createdAt: item.created_at,
-        updatedAt: item.updated_at,
-        completedAt: null, // Will be set when completed
-        priority: "medium" as any, // Default priority
-        estimatedDuration: 180, // Default duration
-        complianceScore: item.compliance_score,
-        workflow: [],
-        tags: [],
-        template: false,
-        syncStatus: "synced" as any
-      })) || [];
+      const transformedChecklists: Checklist[] =
+        data?.map(item => ({
+          id: item.id,
+          title: item.title,
+          type: "dp" as any, // Default type, will be updated when we add proper type field
+          version: "1.0",
+          description: item.title || "",
+          vessel: {
+            id: item.vessels?.id || "",
+            name: item.vessels?.name || "Unknown Vessel",
+            type: item.vessels?.vessel_type || "Unknown",
+            imo: item.vessels?.imo_number || "",
+            flag: item.vessels?.flag_state || "",
+            classification: "DNV", // Default classification
+            operator: "Maritime Operator", // Default operator
+          },
+          inspector: {
+            id: userId,
+            name: "Current User",
+            license: "LIC001",
+            company: "Maritime Company",
+            email: "user@maritime.com",
+            phone: "+55 11 99999-9999",
+            certifications: ["Maritime Inspector"],
+          },
+          status: item.status as any,
+          items:
+            item.checklist_items?.map((checklistItem: any) => ({
+              id: checklistItem.id,
+              title: checklistItem.title,
+              description: checklistItem.description,
+              type: "boolean",
+              required: checklistItem.required,
+              category: "General",
+              order: checklistItem.order_index,
+              status: checklistItem.completed ? "completed" : "pending",
+              value: checklistItem.completed,
+              notes: checklistItem.notes,
+              timestamp: checklistItem.completed_at,
+            })) || [],
+          createdAt: item.created_at,
+          updatedAt: item.updated_at,
+          completedAt: null, // Will be set when completed
+          priority: "medium" as any, // Default priority
+          estimatedDuration: 180, // Default duration
+          complianceScore: item.compliance_score,
+          workflow: [],
+          tags: [],
+          template: false,
+          syncStatus: "synced" as any,
+        })) || [];
 
       setChecklists(transformedChecklists);
     } catch (err) {
@@ -105,7 +113,7 @@ export const useMaritimeChecklists = (userId: string) => {
         active: true,
         createdBy: "admin",
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       },
       {
         id: "template-2",
@@ -122,7 +130,7 @@ export const useMaritimeChecklists = (userId: string) => {
         active: true,
         createdBy: "admin",
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       },
       {
         id: "template-3",
@@ -139,7 +147,7 @@ export const useMaritimeChecklists = (userId: string) => {
         active: true,
         createdBy: "admin",
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       },
       {
         id: "template-4",
@@ -156,8 +164,8 @@ export const useMaritimeChecklists = (userId: string) => {
         active: true,
         createdBy: "admin",
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      }
+        updatedAt: new Date().toISOString(),
+      },
     ];
 
     setTemplates(mockTemplates);
@@ -176,7 +184,7 @@ export const useMaritimeChecklists = (userId: string) => {
           priority: checklist.priority,
           compliance_score: checklist.complianceScore,
           completed_at: checklist.completedAt,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq("id", checklist.id);
 
@@ -190,7 +198,7 @@ export const useMaritimeChecklists = (userId: string) => {
             completed: item.status === "completed",
             completed_at: item.timestamp,
             notes: item.notes,
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           })
           .eq("id", item.id);
 
@@ -199,7 +207,7 @@ export const useMaritimeChecklists = (userId: string) => {
 
       // Refresh the checklists
       await fetchChecklists();
-      
+
       toast.success("Checklist salvo com sucesso!");
     } catch (err) {
       console.error("Error saving checklist:", err);
@@ -216,7 +224,7 @@ export const useMaritimeChecklists = (userId: string) => {
         .update({
           status: "pending_review",
           completed_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq("id", checklist.id);
 
@@ -224,7 +232,7 @@ export const useMaritimeChecklists = (userId: string) => {
 
       // Refresh the checklists
       await fetchChecklists();
-      
+
       toast.success("Checklist enviado para revisão!");
     } catch (err) {
       console.error("Error submitting checklist:", err);
@@ -253,7 +261,7 @@ export const useMaritimeChecklists = (userId: string) => {
           estimated_duration: template.estimatedDuration,
           vessel_id: vesselId,
           organization_id: null, // Will be set by RLS
-          created_by: userId
+          created_by: userId,
         })
         .select()
         .single();
@@ -265,7 +273,7 @@ export const useMaritimeChecklists = (userId: string) => {
 
       // Refresh the checklists
       await fetchChecklists();
-      
+
       toast.success("Checklist criado com sucesso!");
       return checklist;
     } catch (err) {
@@ -290,6 +298,6 @@ export const useMaritimeChecklists = (userId: string) => {
     saveChecklist,
     submitChecklist,
     createChecklistFromTemplate,
-    refetch: fetchChecklists
+    refetch: fetchChecklists,
   };
 };

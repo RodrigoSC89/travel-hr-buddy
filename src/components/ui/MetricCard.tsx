@@ -54,7 +54,7 @@ const descriptionVariantStyles = {
 /**
  * Unified MetricCard/KPICard/StatsCard component
  * Consolidates kpi-cards.tsx, stats-card.tsx, and organization-stats-cards patterns
- * 
+ *
  * @example
  * // Basic usage
  * <MetricCard
@@ -63,7 +63,7 @@ const descriptionVariantStyles = {
  *   icon={Users}
  *   description="Active users this month"
  * />
- * 
+ *
  * @example
  * // With trend
  * <MetricCard
@@ -72,7 +72,7 @@ const descriptionVariantStyles = {
  *   icon={DollarSign}
  *   trend={{ value: 12.5, isPositive: true, period: "last month" }}
  * />
- * 
+ *
  * @example
  * // Ocean variant
  * <MetricCard
@@ -91,57 +91,42 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   trend,
   variant = "default",
   className = "",
-  iconClassName = ""
+  iconClassName = "",
 }) => {
   // For ocean variant, use a different layout
   if (variant === "ocean") {
     return (
-      <div className={cn(
-        "p-6 rounded-xl shadow-wave transition-all duration-300",
-        variantStyles[variant],
-        className
-      )}>
+      <div
+        className={cn(
+          "p-6 rounded-xl shadow-wave transition-all duration-300",
+          variantStyles[variant],
+          className
+        )}
+      >
         <div className="flex items-center justify-between mb-4">
-          <div className={cn(
-            "p-3 rounded-lg",
-            iconVariantStyles[variant],
-            iconClassName
-          )}>
+          <div className={cn("p-3 rounded-lg", iconVariantStyles[variant], iconClassName)}>
             <Icon className="h-6 w-6" />
           </div>
           {trend && (
-            <div className={cn(
-              "flex items-center text-sm font-medium",
-              trend.isPositive || trend.type === "increase" ? "text-azure-50/90" : "text-red-200",
-            )}>
+            <div
+              className={cn(
+                "flex items-center text-sm font-medium",
+                trend.isPositive || trend.type === "increase" ? "text-azure-50/90" : "text-red-200"
+              )}
+            >
               <span className="mr-1">
-                {(trend.isPositive || trend.type === "increase") ? "↗" : "↘"}
+                {trend.isPositive || trend.type === "increase" ? "↗" : "↘"}
               </span>
               {Math.abs(trend.value)}%
             </div>
           )}
         </div>
-        
+
         <div>
-          <p className={cn(
-            "text-3xl font-bold mb-1",
-            valueVariantStyles[variant]
-          )}>
-            {value}
-          </p>
-          <p className={cn(
-            "text-sm",
-            descriptionVariantStyles[variant]
-          )}>
-            {title}
-          </p>
+          <p className={cn("text-3xl font-bold mb-1", valueVariantStyles[variant])}>{value}</p>
+          <p className={cn("text-sm", descriptionVariantStyles[variant])}>{title}</p>
           {description && (
-            <p className={cn(
-              "text-xs mt-1",
-              descriptionVariantStyles[variant]
-            )}>
-              {description}
-            </p>
+            <p className={cn("text-xs mt-1", descriptionVariantStyles[variant])}>{description}</p>
           )}
         </div>
       </div>
@@ -150,48 +135,29 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 
   // Standard Card variant
   return (
-    <Card className={cn(
-      "transition-all duration-200",
-      variantStyles[variant],
-      className
-    )}>
+    <Card className={cn("transition-all duration-200", variantStyles[variant], className)}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
-          {title}
-        </CardTitle>
+        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
         <Icon className={cn("h-4 w-4 text-muted-foreground", iconClassName)} />
       </CardHeader>
       <CardContent>
-        <div className={cn(
-          "text-2xl font-bold",
-          valueVariantStyles[variant]
-        )}>
-          {value}
-        </div>
+        <div className={cn("text-2xl font-bold", valueVariantStyles[variant])}>{value}</div>
         {description && (
-          <p className={cn(
-            "text-xs mt-1",
-            descriptionVariantStyles[variant]
-          )}>
-            {description}
-          </p>
+          <p className={cn("text-xs mt-1", descriptionVariantStyles[variant])}>{description}</p>
         )}
         {trend && (
           <div className="flex items-center pt-1">
-            <span 
+            <span
               className={cn(
                 "text-xs font-medium",
-                trend.isPositive || trend.type === "increase" 
-                  ? "text-success" 
-                  : "text-destructive"
+                trend.isPositive || trend.type === "increase" ? "text-success" : "text-destructive"
               )}
             >
-              {(trend.isPositive || trend.type === "increase") ? "+" : ""}{trend.value}%
+              {trend.isPositive || trend.type === "increase" ? "+" : ""}
+              {trend.value}%
             </span>
             {trend.period && (
-              <span className="text-xs text-muted-foreground ml-1">
-                vs {trend.period}
-              </span>
+              <span className="text-xs text-muted-foreground ml-1">vs {trend.period}</span>
             )}
           </div>
         )}

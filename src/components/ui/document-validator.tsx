@@ -29,7 +29,7 @@ interface DocumentValidatorProps {
 
 export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
   documentType,
-  onValidationComplete
+  onValidationComplete,
 }) => {
   const [file, setFile] = useState<File | null>(null);
   const [validationResult, setValidationResult] = useState<DocumentValidationResult | null>(null);
@@ -39,7 +39,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
     issueDate: "",
     expiryDate: "",
     issuer: "",
-    notes: ""
+    notes: "",
   });
   const { toast } = useToast();
 
@@ -48,16 +48,16 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
     license: "Licença",
     passport: "Passaporte",
     visa: "Visto",
-    contract: "Contrato"
+    contract: "Contrato",
   };
 
   const validateDocument = async () => {
     setIsValidating(true);
-    
+
     try {
       // Simular validação (em produção, seria uma chamada à API)
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       const issues: ValidationIssue[] = [];
       let score = 100;
 
@@ -67,7 +67,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           type: "error",
           field: "documentNumber",
           message: "Número do documento é obrigatório",
-          severity: "high"
+          severity: "high",
         });
         score -= 25;
       }
@@ -77,7 +77,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           type: "error",
           field: "issueDate",
           message: "Data de emissão é obrigatória",
-          severity: "high"
+          severity: "high",
         });
         score -= 20;
       }
@@ -87,20 +87,22 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           type: "warning",
           field: "expiryDate",
           message: "Data de validade não informada",
-          severity: "medium"
+          severity: "medium",
         });
         score -= 15;
       } else {
         const expiryDate = new Date(manualData.expiryDate);
         const today = new Date();
-        const daysUntilExpiry = Math.ceil((expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-        
+        const daysUntilExpiry = Math.ceil(
+          (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+        );
+
         if (daysUntilExpiry < 0) {
           issues.push({
             type: "error",
             field: "expiryDate",
             message: "Documento vencido",
-            severity: "high"
+            severity: "high",
           });
           score -= 30;
         } else if (daysUntilExpiry < 30) {
@@ -108,7 +110,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             type: "warning",
             field: "expiryDate",
             message: "Documento vence em menos de 30 dias",
-            severity: "medium"
+            severity: "medium",
           });
           score -= 10;
         }
@@ -119,7 +121,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           type: "warning",
           field: "issuer",
           message: "Órgão emissor não informado",
-          severity: "medium"
+          severity: "medium",
         });
         score -= 10;
       }
@@ -130,7 +132,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           type: "warning",
           field: "documentNumber",
           message: "Número do certificado parece muito curto",
-          severity: "low"
+          severity: "low",
         });
         score -= 5;
       }
@@ -138,7 +140,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       const suggestions = [
         "Verifique se todos os dados estão corretos",
         "Confirme a autenticidade do documento com o órgão emissor",
-        "Mantenha uma cópia digital segura do documento"
+        "Mantenha uma cópia digital segura do documento",
       ];
 
       if (issues.some(i => i.severity === "high")) {
@@ -149,7 +151,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
         isValid: score >= 70 && !issues.some(i => i.type === "error"),
         score: Math.max(0, score),
         issues,
-        suggestions
+        suggestions,
       };
 
       setValidationResult(result);
@@ -157,17 +159,16 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
 
       toast({
         title: result.isValid ? "Validação concluída" : "Problemas encontrados",
-        description: result.isValid 
-          ? "Documento validado com sucesso" 
+        description: result.isValid
+          ? "Documento validado com sucesso"
           : `Encontrados ${issues.length} problema(s)`,
-        variant: result.isValid ? "default" : "destructive"
+        variant: result.isValid ? "default" : "destructive",
       });
-
     } catch (error) {
       toast({
         title: "Erro na validação",
         description: "Não foi possível validar o documento",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsValidating(false);
@@ -180,7 +181,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       setFile(selectedFile);
       toast({
         title: "Arquivo carregado",
-        description: `${selectedFile.name} foi carregado com sucesso`
+        description: `${selectedFile.name} foi carregado com sucesso`,
       });
     }
   };
@@ -193,12 +194,12 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
 
   const getIssueIcon = (type: ValidationIssue["type"]) => {
     switch (type) {
-    case "error":
-      return <FileX className="h-4 w-4 text-red-500" />;
-    case "warning":
-      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    case "info":
-      return <CheckCircle className="h-4 w-4 text-blue-500" />;
+      case "error":
+        return <FileX className="h-4 w-4 text-red-500" />;
+      case "warning":
+        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      case "info":
+        return <CheckCircle className="h-4 w-4 text-blue-500" />;
     }
   };
 
@@ -244,7 +245,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               <Input
                 id="documentNumber"
                 value={manualData.documentNumber}
-                onChange={(e) => setManualData(prev => ({ ...prev, documentNumber: e.target.value }))}
+                onChange={e => setManualData(prev => ({ ...prev, documentNumber: e.target.value }))}
                 placeholder="Ex: ABC123456"
               />
             </div>
@@ -253,7 +254,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               <Input
                 id="issuer"
                 value={manualData.issuer}
-                onChange={(e) => setManualData(prev => ({ ...prev, issuer: e.target.value }))}
+                onChange={e => setManualData(prev => ({ ...prev, issuer: e.target.value }))}
                 placeholder="Ex: Marinha do Brasil"
               />
             </div>
@@ -263,7 +264,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                 id="issueDate"
                 type="date"
                 value={manualData.issueDate}
-                onChange={(e) => setManualData(prev => ({ ...prev, issueDate: e.target.value }))}
+                onChange={e => setManualData(prev => ({ ...prev, issueDate: e.target.value }))}
               />
             </div>
             <div>
@@ -272,7 +273,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                 id="expiryDate"
                 type="date"
                 value={manualData.expiryDate}
-                onChange={(e) => setManualData(prev => ({ ...prev, expiryDate: e.target.value }))}
+                onChange={e => setManualData(prev => ({ ...prev, expiryDate: e.target.value }))}
               />
             </div>
           </div>
@@ -282,17 +283,13 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             <Textarea
               id="notes"
               value={manualData.notes}
-              onChange={(e) => setManualData(prev => ({ ...prev, notes: e.target.value }))}
+              onChange={e => setManualData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="Informações adicionais sobre o documento..."
               rows={3}
             />
           </div>
 
-          <Button 
-            onClick={validateDocument} 
-            disabled={isValidating}
-            className="w-full"
-          >
+          <Button onClick={validateDocument} disabled={isValidating} className="w-full">
             {isValidating ? "Validando..." : "Validar Documento"}
           </Button>
         </CardContent>
@@ -305,7 +302,8 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             <CardTitle className="flex items-center justify-between">
               <span>Resultado da Validação</span>
               <Badge variant={validationResult.isValid ? "default" : "destructive"}>
-                Score: <span className={getScoreColor(validationResult.score)}>
+                Score:{" "}
+                <span className={getScoreColor(validationResult.score)}>
                   {validationResult.score}/100
                 </span>
               </Badge>
@@ -324,12 +322,14 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                         <p className="text-sm font-medium">{issue.field}</p>
                         <p className="text-xs text-muted-foreground">{issue.message}</p>
                       </div>
-                      <Badge 
-                        variant="outline" 
+                      <Badge
+                        variant="outline"
                         className={`text-xs ${
-                          issue.severity === "high" ? "border-red-200" :
-                            issue.severity === "medium" ? "border-yellow-200" :
-                              "border-blue-200"
+                          issue.severity === "high"
+                            ? "border-red-200"
+                            : issue.severity === "medium"
+                              ? "border-yellow-200"
+                              : "border-blue-200"
                         }`}
                       >
                         {issue.severity}

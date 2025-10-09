@@ -38,18 +38,20 @@ export const ModuleHeader: React.FC<ModuleHeaderProps> = ({
   return (
     <>
       {withBackButton && <BackToDashboard />}
-      
-      <div className={cn(
-        "relative overflow-hidden rounded-2xl p-8 text-white",
-        "bg-gradient-to-br",
-        gradientClasses[gradient],
-        "shadow-lg",
-        className
-      )}>
+
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-2xl p-8 text-white",
+          "bg-gradient-to-br",
+          gradientClasses[gradient],
+          "shadow-lg",
+          className
+        )}
+      >
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-mesh opacity-20 pointer-events-none" />
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-white/10 to-transparent rounded-full blur-2xl pointer-events-none" />
-        
+
         {/* Content */}
         <div className="relative z-10">
           <div className="flex items-start gap-4 mb-4">
@@ -61,7 +63,7 @@ export const ModuleHeader: React.FC<ModuleHeaderProps> = ({
               <p className="text-lg opacity-95">{description}</p>
             </div>
           </div>
-          
+
           {badges.length > 0 && (
             <div className="flex flex-wrap gap-3 mt-6">
               {badges.map((badge, index) => {

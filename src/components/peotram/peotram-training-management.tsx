@@ -19,7 +19,7 @@ import {
   TrendingUp,
   FileText,
   Video,
-  Headphones
+  Headphones,
 } from "lucide-react";
 
 interface TrainingModule {
@@ -78,7 +78,7 @@ export const PeotramTrainingManagement: React.FC = () => {
       status: "concluido",
       progress: 100,
       completionDate: "2024-12-15",
-      certificateAvailable: true
+      certificateAvailable: true,
     },
     {
       id: "MOD_002",
@@ -91,7 +91,7 @@ export const PeotramTrainingManagement: React.FC = () => {
       prerequisites: ["MOD_001"],
       status: "em_progresso",
       progress: 60,
-      certificateAvailable: false
+      certificateAvailable: false,
     },
     {
       id: "MOD_003",
@@ -104,8 +104,8 @@ export const PeotramTrainingManagement: React.FC = () => {
       prerequisites: ["MOD_001", "MOD_002"],
       status: "bloqueado",
       progress: 0,
-      certificateAvailable: true
-    }
+      certificateAvailable: true,
+    },
   ];
 
   const getDemoPaths = (): TrainingPath[] => [
@@ -117,7 +117,7 @@ export const PeotramTrainingManagement: React.FC = () => {
       modules: ["MOD_001", "MOD_002", "MOD_003", "MOD_004", "MOD_005"],
       estimatedHours: 40,
       completionRate: 45,
-      enrolled: 12
+      enrolled: 12,
     },
     {
       id: "PATH_002",
@@ -127,8 +127,8 @@ export const PeotramTrainingManagement: React.FC = () => {
       modules: ["MOD_001", "MOD_002", "MOD_006", "MOD_007"],
       estimatedHours: 25,
       completionRate: 78,
-      enrolled: 8
-    }
+      enrolled: 8,
+    },
   ];
 
   const getDemoSessions = (): TrainingSession[] => [
@@ -143,7 +143,7 @@ export const PeotramTrainingManagement: React.FC = () => {
       maxParticipants: 20,
       currentParticipants: 15,
       status: "agendado",
-      type: "presencial"
+      type: "presencial",
     },
     {
       id: "SESS_002",
@@ -156,8 +156,8 @@ export const PeotramTrainingManagement: React.FC = () => {
       maxParticipants: 100,
       currentParticipants: 67,
       status: "agendado",
-      type: "virtual"
-    }
+      type: "virtual",
+    },
   ];
 
   const [modules] = useState<TrainingModule[]>(getDemoModules());
@@ -166,40 +166,59 @@ export const PeotramTrainingManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "concluido": return "bg-success/20 text-success border-success/30";
-    case "em_progresso": return "bg-info/20 text-info border-info/30";
-    case "disponivel": return "bg-primary/20 text-primary border-primary/30";
-    case "bloqueado": return "bg-muted/20 text-muted-foreground border-muted/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "concluido":
+        return "bg-success/20 text-success border-success/30";
+      case "em_progresso":
+        return "bg-info/20 text-info border-info/30";
+      case "disponivel":
+        return "bg-primary/20 text-primary border-primary/30";
+      case "bloqueado":
+        return "bg-muted/20 text-muted-foreground border-muted/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-    case "concluido": return "Concluído";
-    case "em_progresso": return "Em Progresso";
-    case "disponivel": return "Disponível";
-    case "bloqueado": return "Bloqueado";
-    default: return status;
+      case "concluido":
+        return "Concluído";
+      case "em_progresso":
+        return "Em Progresso";
+      case "disponivel":
+        return "Disponível";
+      case "bloqueado":
+        return "Bloqueado";
+      default:
+        return status;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "video": return <Video className="w-4 h-4" />;
-    case "documento": return <FileText className="w-4 h-4" />;
-    case "presencial": return <Users className="w-4 h-4" />;
-    case "simulacao": return <Target className="w-4 h-4" />;
-    default: return <BookOpen className="w-4 h-4" />;
+      case "video":
+        return <Video className="w-4 h-4" />;
+      case "documento":
+        return <FileText className="w-4 h-4" />;
+      case "presencial":
+        return <Users className="w-4 h-4" />;
+      case "simulacao":
+        return <Target className="w-4 h-4" />;
+      default:
+        return <BookOpen className="w-4 h-4" />;
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-    case "basico": return "bg-success/20 text-success";
-    case "intermediario": return "bg-warning/20 text-warning";
-    case "avancado": return "bg-destructive/20 text-destructive";
-    default: return "bg-muted/20 text-muted-foreground";
+      case "basico":
+        return "bg-success/20 text-success";
+      case "intermediario":
+        return "bg-warning/20 text-warning";
+      case "avancado":
+        return "bg-destructive/20 text-destructive";
+      default:
+        return "bg-muted/20 text-muted-foreground";
     }
   };
 
@@ -208,9 +227,7 @@ export const PeotramTrainingManagement: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-foreground">Gestão de Treinamentos PEOTRAM</h2>
-          <p className="text-muted-foreground">
-            Sistema de capacitação e certificação PEOTRAM
-          </p>
+          <p className="text-muted-foreground">Sistema de capacitação e certificação PEOTRAM</p>
         </div>
         <Button className="bg-primary hover:bg-primary/90">
           <Plus className="w-4 h-4 mr-2" />
@@ -244,7 +261,7 @@ export const PeotramTrainingManagement: React.FC = () => {
 
         <TabsContent value="modules" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {modules.map((module) => (
+            {modules.map(module => (
               <Card
                 key={module.id}
                 className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-accent/5"
@@ -285,7 +302,7 @@ export const PeotramTrainingManagement: React.FC = () => {
                   <div className="space-y-2">
                     <div className="text-sm font-medium">Elementos PEOTRAM:</div>
                     <div className="flex flex-wrap gap-1">
-                      {module.peotramElements.map((element) => (
+                      {module.peotramElements.map(element => (
                         <Badge key={element} variant="secondary" className="text-xs">
                           {element}
                         </Badge>
@@ -321,7 +338,7 @@ export const PeotramTrainingManagement: React.FC = () => {
 
         <TabsContent value="paths" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {paths.map((path) => (
+            {paths.map(path => (
               <Card
                 key={path.id}
                 className="hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-card to-accent/5"
@@ -329,7 +346,10 @@ export const PeotramTrainingManagement: React.FC = () => {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-xl">{path.title}</CardTitle>
-                    <Badge variant="outline" className="bg-primary/20 text-primary border-primary/30">
+                    <Badge
+                      variant="outline"
+                      className="bg-primary/20 text-primary border-primary/30"
+                    >
                       {path.targetRole}
                     </Badge>
                   </div>
@@ -358,7 +378,7 @@ export const PeotramTrainingManagement: React.FC = () => {
                   <div className="space-y-2">
                     <div className="text-sm font-medium">Módulos ({path.modules.length}):</div>
                     <div className="flex flex-wrap gap-1">
-                      {path.modules.slice(0, 3).map((moduleId) => (
+                      {path.modules.slice(0, 3).map(moduleId => (
                         <Badge key={moduleId} variant="secondary" className="text-xs">
                           {moduleId}
                         </Badge>
@@ -388,7 +408,7 @@ export const PeotramTrainingManagement: React.FC = () => {
 
         <TabsContent value="sessions" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {sessions.map((session) => (
+            {sessions.map(session => (
               <Card
                 key={session.id}
                 className="hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-card to-accent/5"
@@ -403,7 +423,10 @@ export const PeotramTrainingManagement: React.FC = () => {
                   <CardDescription className="flex items-center gap-2">
                     <Avatar className="w-6 h-6">
                       <AvatarFallback className="text-xs">
-                        {session.instructor.split(" ").map(n => n[0]).join("")}
+                        {session.instructor
+                          .split(" ")
+                          .map(n => n[0])
+                          .join("")}
                       </AvatarFallback>
                     </Avatar>
                     {session.instructor}
@@ -413,22 +436,28 @@ export const PeotramTrainingManagement: React.FC = () => {
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-muted-foreground" />
-                      <span>{session.date} às {session.time}</span>
+                      <span>
+                        {session.date} às {session.time}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4 text-muted-foreground" />
-                      <span>{Math.floor(session.duration / 60)}h {session.duration % 60}min</span>
+                      <span>
+                        {Math.floor(session.duration / 60)}h {session.duration % 60}min
+                      </span>
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Vagas Ocupadas</span>
-                      <span>{session.currentParticipants}/{session.maxParticipants}</span>
+                      <span>
+                        {session.currentParticipants}/{session.maxParticipants}
+                      </span>
                     </div>
-                    <Progress 
-                      value={(session.currentParticipants / session.maxParticipants) * 100} 
-                      className="h-2" 
+                    <Progress
+                      value={(session.currentParticipants / session.maxParticipants) * 100}
+                      className="h-2"
                     />
                   </div>
 
@@ -460,9 +489,7 @@ export const PeotramTrainingManagement: React.FC = () => {
               </CardHeader>
               <CardContent className="text-center space-y-4">
                 <Badge className="bg-success/20 text-success">Obtido</Badge>
-                <div className="text-sm text-muted-foreground">
-                  Emitido em: 15/12/2024
-                </div>
+                <div className="text-sm text-muted-foreground">Emitido em: 15/12/2024</div>
                 <Button variant="outline" size="sm">
                   <Download className="w-3 h-3 mr-1" />
                   Baixar Certificado
@@ -477,11 +504,11 @@ export const PeotramTrainingManagement: React.FC = () => {
                 <CardDescription>Especialização em gestão de riscos</CardDescription>
               </CardHeader>
               <CardContent className="text-center space-y-4">
-                <Badge variant="outline" className="bg-warning/20 text-warning">Em Progresso</Badge>
+                <Badge variant="outline" className="bg-warning/20 text-warning">
+                  Em Progresso
+                </Badge>
                 <Progress value={75} className="h-2" />
-                <div className="text-sm text-muted-foreground">
-                  75% concluído
-                </div>
+                <div className="text-sm text-muted-foreground">75% concluído</div>
               </CardContent>
             </Card>
           </div>
@@ -496,9 +523,7 @@ export const PeotramTrainingManagement: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">15</div>
-                <p className="text-xs text-muted-foreground">
-                  +3 este mês
-                </p>
+                <p className="text-xs text-muted-foreground">+3 este mês</p>
               </CardContent>
             </Card>
 
@@ -509,9 +534,7 @@ export const PeotramTrainingManagement: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">127</div>
-                <p className="text-xs text-muted-foreground">
-                  Total acumulado
-                </p>
+                <p className="text-xs text-muted-foreground">Total acumulado</p>
               </CardContent>
             </Card>
 
@@ -522,9 +545,7 @@ export const PeotramTrainingManagement: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-success">89%</div>
-                <p className="text-xs text-muted-foreground">
-                  Acima da meta
-                </p>
+                <p className="text-xs text-muted-foreground">Acima da meta</p>
               </CardContent>
             </Card>
 
@@ -535,9 +556,7 @@ export const PeotramTrainingManagement: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-primary">3</div>
-                <p className="text-xs text-muted-foreground">
-                  2 em progresso
-                </p>
+                <p className="text-xs text-muted-foreground">2 em progresso</p>
               </CardContent>
             </Card>
           </div>

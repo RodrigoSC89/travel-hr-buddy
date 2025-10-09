@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { 
+import {
   TrendingUp,
   TrendingDown,
   DollarSign,
@@ -18,9 +18,19 @@ import {
   ArrowDownRight,
   BarChart3,
   Activity,
-  Clock
+  Clock,
 } from "lucide-react";
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  BarChart,
+  Bar,
+} from "recharts";
 
 const ExecutiveMetricsPanel = () => {
   const executiveMetrics = [
@@ -32,7 +42,7 @@ const ExecutiveMetricsPanel = () => {
       target: "R$ 2.1M",
       progress: 88.1,
       benchmark: "Acima do setor",
-      period: "Mensal"
+      period: "Mensal",
     },
     {
       title: "ROE",
@@ -42,7 +52,7 @@ const ExecutiveMetricsPanel = () => {
       target: "20%",
       progress: 93.5,
       benchmark: "Top 10%",
-      period: "Anual"
+      period: "Anual",
     },
     {
       title: "Margem Operacional",
@@ -52,7 +62,7 @@ const ExecutiveMetricsPanel = () => {
       target: "16%",
       progress: 95.6,
       benchmark: "Dentro da meta",
-      period: "Trimestral"
+      period: "Trimestral",
     },
     {
       title: "Fluxo de Caixa",
@@ -62,8 +72,8 @@ const ExecutiveMetricsPanel = () => {
       target: "R$ 1.2M",
       progress: 81.7,
       benchmark: "Saudável",
-      period: "Mensal"
-    }
+      period: "Mensal",
+    },
   ];
 
   const operationalKPIs = [
@@ -72,29 +82,29 @@ const ExecutiveMetricsPanel = () => {
       value: "87.3%",
       target: "90%",
       status: "warning",
-      improvement: "+2.1% vs mês anterior"
+      improvement: "+2.1% vs mês anterior",
     },
     {
       title: "Eficiência Combustível",
       value: "92.1%",
       target: "88%",
       status: "excellent",
-      improvement: "+4.2% vs mês anterior"
+      improvement: "+4.2% vs mês anterior",
     },
     {
       title: "Score de Segurança",
       value: "98.5%",
       target: "95%",
       status: "excellent",
-      improvement: "Líder do setor"
+      improvement: "Líder do setor",
     },
     {
       title: "Compliance Rate",
       value: "99.2%",
       target: "98%",
       status: "excellent",
-      improvement: "100% das auditorias"
-    }
+      improvement: "100% das auditorias",
+    },
   ];
 
   const revenueData = [
@@ -103,16 +113,21 @@ const ExecutiveMetricsPanel = () => {
     { month: "Set", revenue: 2180, forecast: 2400, expenses: 1640 },
     { month: "Out", revenue: 2350, forecast: 2500, expenses: 1750 },
     { month: "Nov", revenue: 2420, forecast: 2600, expenses: 1820 },
-    { month: "Dez", revenue: 2450, forecast: 2700, expenses: 1840 }
+    { month: "Dez", revenue: 2450, forecast: 2700, expenses: 1840 },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "excellent": return "text-green-700 bg-green-100 border-green-200";
-    case "good": return "text-blue-700 bg-blue-100 border-blue-200";
-    case "warning": return "text-orange-700 bg-orange-100 border-orange-200";
-    case "critical": return "text-red-700 bg-red-100 border-red-200";
-    default: return "text-secondary-foreground bg-secondary border-border";
+      case "excellent":
+        return "text-green-700 bg-green-100 border-green-200";
+      case "good":
+        return "text-blue-700 bg-blue-100 border-blue-200";
+      case "warning":
+        return "text-orange-700 bg-orange-100 border-orange-200";
+      case "critical":
+        return "text-red-700 bg-red-100 border-red-200";
+      default:
+        return "text-secondary-foreground bg-secondary border-border";
     }
   };
 
@@ -132,21 +147,32 @@ const ExecutiveMetricsPanel = () => {
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {executiveMetrics.map((metric, index) => (
-              <div key={index} className="relative p-6 rounded-xl border-2 border-border/30 hover:border-primary/30 transition-all bg-gradient-to-br from-background to-muted/20">
+              <div
+                key={index}
+                className="relative p-6 rounded-xl border-2 border-border/30 hover:border-primary/30 transition-all bg-gradient-to-br from-background to-muted/20"
+              >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="text-2xl font-bold text-foreground">{metric.value}</div>
                       <div className="text-sm text-muted-foreground">{metric.title}</div>
                     </div>
-                    <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                      metric.trend === "up" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"
-                    }`}>
-                      {metric.trend === "up" ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                    <div
+                      className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                        metric.trend === "up"
+                          ? "text-green-700 bg-green-100"
+                          : "text-red-700 bg-red-100"
+                      }`}
+                    >
+                      {metric.trend === "up" ? (
+                        <ArrowUpRight className="w-3 h-3" />
+                      ) : (
+                        <ArrowDownRight className="w-3 h-3" />
+                      )}
                       {metric.change}
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Meta: {metric.target}</span>
@@ -154,7 +180,7 @@ const ExecutiveMetricsPanel = () => {
                     </div>
                     <Progress value={metric.progress} className="h-2" />
                   </div>
-                  
+
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground">Benchmark:</span>
@@ -188,15 +214,15 @@ const ExecutiveMetricsPanel = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                 <XAxis dataKey="month" stroke="#64748b" />
                 <YAxis stroke="#64748b" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: "hsl(var(--card))", 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
                     border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px"
+                    borderRadius: "8px",
                   }}
                   formatter={(value: any, name: string) => [
-                    `R$ ${(value/1000).toFixed(0)}K`,
-                    name === "revenue" ? "Receita" : name === "forecast" ? "Previsão" : "Despesas"
+                    `R$ ${(value / 1000).toFixed(0)}K`,
+                    name === "revenue" ? "Receita" : name === "forecast" ? "Previsão" : "Despesas",
                   ]}
                 />
                 <Bar dataKey="revenue" fill="#3b82f6" name="Receita" radius={[4, 4, 0, 0]} />
@@ -223,26 +249,28 @@ const ExecutiveMetricsPanel = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">{kpi.title}</span>
                     <Badge className={getStatusColor(kpi.status)} variant="outline">
-                      {kpi.status === "excellent" ? "Excelente" :
-                        kpi.status === "good" ? "Bom" :
-                          kpi.status === "warning" ? "Atenção" : "Crítico"}
+                      {kpi.status === "excellent"
+                        ? "Excelente"
+                        : kpi.status === "good"
+                          ? "Bom"
+                          : kpi.status === "warning"
+                            ? "Atenção"
+                            : "Crítico"}
                     </Badge>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-2xl font-bold text-foreground">{kpi.value}</span>
                       <span className="text-sm text-muted-foreground">Meta: {kpi.target}</span>
                     </div>
-                    <Progress 
-                      value={parseFloat(kpi.value) / parseFloat(kpi.target) * 100} 
+                    <Progress
+                      value={(parseFloat(kpi.value) / parseFloat(kpi.target)) * 100}
                       className="h-2"
                     />
                   </div>
-                  
-                  <div className="text-xs text-muted-foreground">
-                    {kpi.improvement}
-                  </div>
+
+                  <div className="text-xs text-muted-foreground">{kpi.improvement}</div>
                 </div>
               ))}
             </div>
@@ -281,7 +309,7 @@ const ExecutiveMetricsPanel = () => {
                 </li>
               </ul>
             </div>
-            
+
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-orange-600" />
@@ -302,7 +330,7 @@ const ExecutiveMetricsPanel = () => {
                 </li>
               </ul>
             </div>
-            
+
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Target className="w-5 h-5 text-blue-600" />

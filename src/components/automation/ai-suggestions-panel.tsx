@@ -3,10 +3,10 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { 
-  Lightbulb, 
-  AlertTriangle, 
-  TrendingUp, 
+import {
+  Lightbulb,
+  AlertTriangle,
+  TrendingUp,
   CheckCircle,
   X,
   Clock,
@@ -14,7 +14,7 @@ import {
   Ship,
   FileText,
   ChevronRight,
-  Zap
+  Zap,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -50,13 +50,13 @@ export const AISuggestionsPanel: React.FC = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setSuggestions(data as AISuggestion[] || []);
+      setSuggestions((data as AISuggestion[]) || []);
     } catch (error) {
       console.error("Erro ao carregar sugestões:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as sugestões da IA.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -72,7 +72,7 @@ export const AISuggestionsPanel: React.FC = () => {
       const updates: Partial<AISuggestion> = {
         is_read: true,
         ...(actionType === "accept" && { is_acted_upon: true }),
-        ...(actionType === "dismiss" && { is_dismissed: true })
+        ...(actionType === "dismiss" && { is_dismissed: true }),
       };
 
       const { error } = await supabase
@@ -82,12 +82,10 @@ export const AISuggestionsPanel: React.FC = () => {
 
       if (error) throw error;
 
-      setSuggestions(prev => 
-        prev.map(s => 
-          s.id === suggestion.id 
-            ? { ...s, ...updates }
-            : s
-        ).filter(s => !s.is_dismissed)
+      setSuggestions(prev =>
+        prev
+          .map(s => (s.id === suggestion.id ? { ...s, ...updates } : s))
+          .filter(s => !s.is_dismissed)
       );
 
       if (actionType === "accept") {
@@ -107,67 +105,85 @@ export const AISuggestionsPanel: React.FC = () => {
       toast({
         title: "Erro",
         description: "Não foi possível processar a ação.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const executeAction = async (suggestion: AISuggestion) => {
     const { action_data } = suggestion;
-    
+
     switch (action_data.action) {
-    case "renew_certificates":
-      // Redirecionar para a página de certificados
-      navigate("/maritime-certifications");
-      break;
-    case "review_schedule":
-      // Redirecionar para a página de escalas
-      navigate("/crew-management");
-      break;
-    case "assign_auditor":
-      // Abrir modal de atribuição de auditor
-      // Implementar lógica específica
-      break;
-    default:
-        // Action not implemented yet
+      case "renew_certificates":
+        // Redirecionar para a página de certificados
+        navigate("/maritime-certifications");
+        break;
+      case "review_schedule":
+        // Redirecionar para a página de escalas
+        navigate("/crew-management");
+        break;
+      case "assign_auditor":
+        // Abrir modal de atribuição de auditor
+        // Implementar lógica específica
+        break;
+      default:
+      // Action not implemented yet
     }
   };
 
   const getSuggestionIcon = (type: string) => {
     switch (type) {
-    case "action": return CheckCircle;
-    case "insight": return Lightbulb;
-    case "reminder": return Clock;
-    case "optimization": return TrendingUp;
-    default: return Zap;
+      case "action":
+        return CheckCircle;
+      case "insight":
+        return Lightbulb;
+      case "reminder":
+        return Clock;
+      case "optimization":
+        return TrendingUp;
+      default:
+        return Zap;
     }
   };
 
   const getSuggestionColor = (priority: number) => {
     switch (priority) {
-    case 4: return "bg-red-100 text-red-800 border-red-200";
-    case 3: return "bg-orange-100 text-orange-800 border-orange-200";
-    case 2: return "bg-blue-100 text-blue-800 border-blue-200";
-    default: return "bg-secondary text-secondary-foreground border-border";
+      case 4:
+        return "bg-red-100 text-red-800 border-red-200";
+      case 3:
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      case 2:
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      default:
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getPriorityLabel = (priority: number) => {
     switch (priority) {
-    case 4: return "Urgente";
-    case 3: return "Alta";
-    case 2: return "Média";
-    default: return "Baixa";
+      case 4:
+        return "Urgente";
+      case 3:
+        return "Alta";
+      case 2:
+        return "Média";
+      default:
+        return "Baixa";
     }
   };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-    case "action": return "Ação Requerida";
-    case "insight": return "Insight";
-    case "reminder": return "Lembrete";
-    case "optimization": return "Otimização";
-    default: return type;
+      case "action":
+        return "Ação Requerida";
+      case "insight":
+        return "Insight";
+      case "reminder":
+        return "Lembrete";
+      case "optimization":
+        return "Otimização";
+      default:
+        return type;
     }
   };
 
@@ -196,7 +212,7 @@ export const AISuggestionsPanel: React.FC = () => {
           <Zap className="w-5 h-5 text-primary" />
           <h2 className="text-xl font-semibold">Sugestões da IA</h2>
         </div>
-        
+
         <div className="flex gap-2">
           <Button
             variant={filter === "all" ? "default" : "outline"}
@@ -235,13 +251,14 @@ export const AISuggestionsPanel: React.FC = () => {
         </Card>
       ) : (
         <div className="space-y-3">
-          {filteredSuggestions.map((suggestion) => {
+          {filteredSuggestions.map(suggestion => {
             const Icon = getSuggestionIcon(suggestion.type);
-            const isExpired = suggestion.valid_until && new Date(suggestion.valid_until) < new Date();
-            
+            const isExpired =
+              suggestion.valid_until && new Date(suggestion.valid_until) < new Date();
+
             return (
-              <Card 
-                key={suggestion.id} 
+              <Card
+                key={suggestion.id}
                 className={`transition-all duration-200 hover:shadow-md ${
                   !suggestion.is_read ? "border-l-4 border-l-primary" : ""
                 } ${isExpired ? "opacity-60" : ""}`}
@@ -251,7 +268,7 @@ export const AISuggestionsPanel: React.FC = () => {
                     <div className={`p-2 rounded-lg ${getSuggestionColor(suggestion.priority)}`}>
                       <Icon className="w-5 h-5" />
                     </div>
-                    
+
                     <div className="flex-1 space-y-2">
                       <div className="flex items-start justify-between">
                         <div className="space-y-1">
@@ -265,15 +282,15 @@ export const AISuggestionsPanel: React.FC = () => {
                             <Badge variant="outline" className="text-xs">
                               {getTypeLabel(suggestion.type)}
                             </Badge>
-                            <Badge 
-                              variant="outline" 
+                            <Badge
+                              variant="outline"
                               className={`text-xs ${getSuggestionColor(suggestion.priority)}`}
                             >
                               {getPriorityLabel(suggestion.priority)}
                             </Badge>
                           </div>
                         </div>
-                        
+
                         <div className="flex gap-1">
                           {suggestion.type === "action" && !suggestion.is_acted_upon && (
                             <Button
@@ -295,11 +312,9 @@ export const AISuggestionsPanel: React.FC = () => {
                           </Button>
                         </div>
                       </div>
-                      
-                      <p className="text-sm text-muted-foreground">
-                        {suggestion.description}
-                      </p>
-                      
+
+                      <p className="text-sm text-muted-foreground">{suggestion.description}</p>
+
                       {suggestion.action_data && Object.keys(suggestion.action_data).length > 0 && (
                         <div className="flex gap-2 text-xs text-muted-foreground">
                           {suggestion.action_data.savings && (
@@ -322,12 +337,13 @@ export const AISuggestionsPanel: React.FC = () => {
                           )}
                         </div>
                       )}
-                      
+
                       <div className="text-xs text-muted-foreground">
                         {new Date(suggestion.created_at).toLocaleString("pt-BR")}
                         {suggestion.valid_until && (
                           <span className="ml-2">
-                            • Válido até {new Date(suggestion.valid_until).toLocaleDateString("pt-BR")}
+                            • Válido até{" "}
+                            {new Date(suggestion.valid_until).toLocaleDateString("pt-BR")}
                           </span>
                         )}
                       </div>

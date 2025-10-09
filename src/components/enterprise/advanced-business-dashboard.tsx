@@ -4,12 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Users, 
-  Ship, 
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Users,
+  Ship,
   FileText,
   BarChart3,
   PieChart,
@@ -30,9 +30,25 @@ import {
   Eye,
   ArrowUp,
   ArrowDown,
-  Minus
+  Minus,
 } from "lucide-react";
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart as RechartsPieChart, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Pie } from "recharts";
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  PieChart as RechartsPieChart,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  Pie,
+} from "recharts";
 
 interface KPIMetric {
   id: string;
@@ -75,7 +91,9 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8", "#82CA9D"
 
 export const AdvancedBusinessDashboard: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<"7d" | "30d" | "90d" | "1y">("30d");
-  const [selectedCategory, setSelectedCategory] = useState<"all" | "financial" | "operational" | "safety" | "hr" | "environmental">("all");
+  const [selectedCategory, setSelectedCategory] = useState<
+    "all" | "financial" | "operational" | "safety" | "hr" | "environmental"
+  >("all");
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(new Date());
 
@@ -92,7 +110,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       target: 13000000,
       category: "financial",
       icon: <DollarSign className="h-4 w-4" />,
-      color: "#10B981"
+      color: "#10B981",
     },
     {
       id: "profit_margin",
@@ -105,7 +123,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       target: 25,
       category: "financial",
       icon: <TrendingUp className="h-4 w-4" />,
-      color: "#059669"
+      color: "#059669",
     },
     {
       id: "fleet_utilization",
@@ -118,7 +136,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       target: 90,
       category: "operational",
       icon: <Ship className="h-4 w-4" />,
-      color: "#3B82F6"
+      color: "#3B82F6",
     },
     {
       id: "safety_incidents",
@@ -131,7 +149,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       target: 0,
       category: "safety",
       icon: <AlertTriangle className="h-4 w-4" />,
-      color: "#EF4444"
+      color: "#EF4444",
     },
     {
       id: "employee_satisfaction",
@@ -144,7 +162,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       target: 9,
       category: "hr",
       icon: <Users className="h-4 w-4" />,
-      color: "#8B5CF6"
+      color: "#8B5CF6",
     },
     {
       id: "carbon_footprint",
@@ -157,31 +175,33 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       target: 1000,
       category: "environmental",
       icon: <Globe className="h-4 w-4" />,
-      color: "#10B981"
-    }
+      color: "#10B981",
+    },
   ];
 
   const businessInsights: BusinessInsight[] = [
     {
       id: "1",
       title: "Oportunidade de Otimização de Rotas",
-      description: "Análise de dados mostra potencial de redução de 15% no consumo de combustível através de otimização de rotas.",
+      description:
+        "Análise de dados mostra potencial de redução de 15% no consumo de combustível através de otimização de rotas.",
       impact: "high",
       category: "opportunity",
       priority: 1,
       actionable: true,
       estimatedROI: 850000,
-      timeframe: "3-6 meses"
+      timeframe: "3-6 meses",
     },
     {
       id: "2",
       title: "Risco de Não Conformidade Ambiental",
-      description: "Novas regulamentações ambientais exigem adequação dos sistemas de monitoramento até dezembro.",
+      description:
+        "Novas regulamentações ambientais exigem adequação dos sistemas de monitoramento até dezembro.",
       impact: "high",
       category: "risk",
       priority: 2,
       actionable: true,
-      timeframe: "1-3 meses"
+      timeframe: "1-3 meses",
     },
     {
       id: "3",
@@ -192,8 +212,8 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       priority: 3,
       actionable: true,
       estimatedROI: 320000,
-      timeframe: "2-4 meses"
-    }
+      timeframe: "2-4 meses",
+    },
   ];
 
   const departmentData: DepartmentPerformance[] = [
@@ -205,7 +225,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       efficiency: 88,
       satisfaction: 8.5,
       headcount: 125,
-      projects: 8
+      projects: 8,
     },
     {
       department: "Recursos Humanos",
@@ -215,7 +235,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       efficiency: 91,
       satisfaction: 9.1,
       headcount: 45,
-      projects: 12
+      projects: 12,
     },
     {
       department: "Financeiro",
@@ -225,7 +245,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       efficiency: 94,
       satisfaction: 8.8,
       headcount: 28,
-      projects: 5
+      projects: 5,
     },
     {
       department: "TI",
@@ -235,8 +255,8 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       efficiency: 85,
       satisfaction: 8.2,
       headcount: 35,
-      projects: 15
-    }
+      projects: 15,
+    },
   ];
 
   const performanceData = [
@@ -245,7 +265,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
     { month: "Mar", revenue: 12500000, costs: 9200000, profit: 3300000 },
     { month: "Abr", revenue: 12100000, costs: 8800000, profit: 3300000 },
     { month: "Mai", revenue: 13200000, costs: 9600000, profit: 3600000 },
-    { month: "Jun", revenue: 12800000, costs: 9100000, profit: 3700000 }
+    { month: "Jun", revenue: 12800000, costs: 9100000, profit: 3700000 },
   ];
 
   const fleetUtilizationData = [
@@ -253,69 +273,70 @@ export const AdvancedBusinessDashboard: React.FC = () => {
     { vessel: "Navio B", utilization: 87, efficiency: 92, maintenance: 8 },
     { vessel: "Navio C", utilization: 92, efficiency: 85, maintenance: 12 },
     { vessel: "Navio D", utilization: 78, efficiency: 79, maintenance: 18 },
-    { vessel: "Navio E", utilization: 89, efficiency: 91, maintenance: 7 }
+    { vessel: "Navio E", utilization: 89, efficiency: 91, maintenance: 7 },
   ];
 
   const formatValue = (value: number, format: string, unit: string) => {
     switch (format) {
-    case "currency":
-      return new Intl.NumberFormat("pt-BR", { 
-        style: "currency", 
-        currency: "BRL",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      }).format(value);
-    case "percentage":
-      return `${value.toFixed(1)}${unit}`;
-    case "decimal":
-      return `${value.toFixed(1)}${unit}`;
-    default:
-      return `${value.toLocaleString("pt-BR")} ${unit}`;
+      case "currency":
+        return new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(value);
+      case "percentage":
+        return `${value.toFixed(1)}${unit}`;
+      case "decimal":
+        return `${value.toFixed(1)}${unit}`;
+      default:
+        return `${value.toLocaleString("pt-BR")} ${unit}`;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up":
-      return <ArrowUp className="h-3 w-3 text-green-500" />;
-    case "down":
-      return <ArrowDown className="h-3 w-3 text-red-500" />;
-    default:
-      return <Minus className="h-3 w-3 text-muted-foreground" />;
+      case "up":
+        return <ArrowUp className="h-3 w-3 text-green-500" />;
+      case "down":
+        return <ArrowDown className="h-3 w-3 text-red-500" />;
+      default:
+        return <Minus className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-    case "high":
-      return "border-red-200 bg-red-50";
-    case "medium":
-      return "border-yellow-200 bg-yellow-50";
-    case "low":
-      return "border-blue-200 bg-blue-50";
-    default:
-      return "border-gray-200 bg-gray-50";
+      case "high":
+        return "border-red-200 bg-red-50";
+      case "medium":
+        return "border-yellow-200 bg-yellow-50";
+      case "low":
+        return "border-blue-200 bg-blue-50";
+      default:
+        return "border-gray-200 bg-gray-50";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "opportunity":
-      return <Target className="h-4 w-4 text-green-500" />;
-    case "risk":
-      return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    case "optimization":
-      return <Zap className="h-4 w-4 text-blue-500" />;
-    case "compliance":
-      return <CheckCircle className="h-4 w-4 text-purple-500" />;
-    default:
-      return <Briefcase className="h-4 w-4 text-muted-foreground" />;
+      case "opportunity":
+        return <Target className="h-4 w-4 text-green-500" />;
+      case "risk":
+        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case "optimization":
+        return <Zap className="h-4 w-4 text-blue-500" />;
+      case "compliance":
+        return <CheckCircle className="h-4 w-4 text-purple-500" />;
+      default:
+        return <Briefcase className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
-  const filteredKPIs = selectedCategory === "all" 
-    ? kpiMetrics 
-    : kpiMetrics.filter(kpi => kpi.category === selectedCategory);
+  const filteredKPIs =
+    selectedCategory === "all"
+      ? kpiMetrics
+      : kpiMetrics.filter(kpi => kpi.category === selectedCategory);
 
   const refreshData = async () => {
     setIsLoading(true);
@@ -332,14 +353,15 @@ export const AdvancedBusinessDashboard: React.FC = () => {
         <div>
           <h1 className="text-3xl font-bold">Dashboard Executivo</h1>
           <p className="text-muted-foreground">
-            Visão estratégica completa do negócio • Última atualização: {lastUpdated.toLocaleTimeString("pt-BR")}
+            Visão estratégica completa do negócio • Última atualização:{" "}
+            {lastUpdated.toLocaleTimeString("pt-BR")}
           </p>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <select
             value={selectedPeriod}
-            onChange={(e) => setSelectedPeriod(e.target.value as any)}
+            onChange={e => setSelectedPeriod(e.target.value as any)}
             className="bg-background border border-border rounded px-3 py-2 text-sm"
           >
             <option value="7d">Últimos 7 dias</option>
@@ -347,12 +369,12 @@ export const AdvancedBusinessDashboard: React.FC = () => {
             <option value="90d">Últimos 90 dias</option>
             <option value="1y">Último ano</option>
           </select>
-          
+
           <Button onClick={refreshData} disabled={isLoading} variant="outline" className="gap-2">
             <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
-          
+
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" />
             Exportar
@@ -366,7 +388,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
           <h2 className="text-xl font-semibold">Indicadores Principais</h2>
           <select
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value as any)}
+            onChange={e => setSelectedCategory(e.target.value as any)}
             className="bg-background border border-border rounded px-3 py-2 text-sm"
           >
             <option value="all">Todas as categorias</option>
@@ -377,9 +399,9 @@ export const AdvancedBusinessDashboard: React.FC = () => {
             <option value="environmental">Ambiental</option>
           </select>
         </div>
-        
+
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredKPIs.map((kpi) => (
+          {filteredKPIs.map(kpi => (
             <Card key={kpi.id} className="border-l-4" style={{ borderLeftColor: kpi.color }}>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -389,7 +411,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                   </div>
                   {getTrendIcon(kpi.trend)}
                 </div>
-                
+
                 <div className="mt-2">
                   <div className="text-2xl font-bold">
                     {formatValue(kpi.value, kpi.format, kpi.unit)}
@@ -400,18 +422,15 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                         <span>Meta: {formatValue(kpi.target, kpi.format, kpi.unit)}</span>
                         <span>{Math.round((kpi.value / kpi.target) * 100)}%</span>
                       </div>
-                      <Progress 
-                        value={(kpi.value / kpi.target) * 100} 
-                        className="h-2"
-                      />
+                      <Progress value={(kpi.value / kpi.target) * 100} className="h-2" />
                     </div>
                   )}
                 </div>
-                
+
                 <div className="mt-2 text-xs text-muted-foreground">
                   {kpi.trend === "up" ? "+" : kpi.trend === "down" ? "-" : ""}
-                  {Math.abs(((kpi.value - kpi.previousValue) / kpi.previousValue) * 100).toFixed(1)}% 
-                  vs período anterior
+                  {Math.abs(((kpi.value - kpi.previousValue) / kpi.previousValue) * 100).toFixed(1)}
+                  % vs período anterior
                 </div>
               </CardContent>
             </Card>
@@ -440,13 +459,34 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                   <AreaChart data={performanceData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
-                    <YAxis tickFormatter={(value) => `R$ ${(value / 1000000).toFixed(1)}M`} />
-                    <Tooltip 
+                    <YAxis tickFormatter={value => `R$ ${(value / 1000000).toFixed(1)}M`} />
+                    <Tooltip
                       formatter={(value: number) => [`R$ ${(value / 1000000).toFixed(1)}M`, ""]}
                     />
-                    <Area type="monotone" dataKey="revenue" stackId="1" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.6} />
-                    <Area type="monotone" dataKey="costs" stackId="2" stroke="#EF4444" fill="#EF4444" fillOpacity={0.6} />
-                    <Area type="monotone" dataKey="profit" stackId="3" stroke="#10B981" fill="#10B981" fillOpacity={0.6} />
+                    <Area
+                      type="monotone"
+                      dataKey="revenue"
+                      stackId="1"
+                      stroke="#3B82F6"
+                      fill="#3B82F6"
+                      fillOpacity={0.6}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="costs"
+                      stackId="2"
+                      stroke="#EF4444"
+                      fill="#EF4444"
+                      fillOpacity={0.6}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="profit"
+                      stackId="3"
+                      stroke="#10B981"
+                      fill="#10B981"
+                      fillOpacity={0.6}
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -464,7 +504,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                         { name: "Transporte de Carga", value: 45, color: "#3B82F6" },
                         { name: "Serviços Portuários", value: 30, color: "#10B981" },
                         { name: "Logística", value: 15, color: "#F59E0B" },
-                        { name: "Outros", value: 10, color: "#EF4444" }
+                        { name: "Outros", value: 10, color: "#EF4444" },
                       ]}
                       cx="50%"
                       cy="50%"
@@ -476,12 +516,12 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                         { name: "Transporte de Carga", value: 45, color: "#3B82F6" },
                         { name: "Serviços Portuários", value: 30, color: "#10B981" },
                         { name: "Logística", value: 15, color: "#F59E0B" },
-                        { name: "Outros", value: 10, color: "#EF4444" }
+                        { name: "Outros", value: 10, color: "#EF4444" },
                       ].map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value) => `${value}%`} />
+                    <Tooltip formatter={value => `${value}%`} />
                     <Legend />
                   </RechartsPieChart>
                 </ResponsiveContainer>
@@ -516,21 +556,21 @@ export const AdvancedBusinessDashboard: React.FC = () => {
         {/* Departments Tab */}
         <TabsContent value="departments" className="space-y-4">
           <div className="grid gap-4">
-            {departmentData.map((dept) => (
+            {departmentData.map(dept => (
               <Card key={dept.department}>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold">{dept.department}</h3>
                     <Badge variant="outline">{dept.headcount} funcionários</Badge>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div>
                       <div className="text-sm text-muted-foreground">Performance</div>
                       <div className="text-xl font-bold">{dept.performance}%</div>
                       <Progress value={dept.performance} className="mt-1" />
                     </div>
-                    
+
                     <div>
                       <div className="text-sm text-muted-foreground">Orçamento Usado</div>
                       <div className="text-xl font-bold">
@@ -538,13 +578,13 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                       </div>
                       <Progress value={(dept.budgetUsed / dept.budget) * 100} className="mt-1" />
                     </div>
-                    
+
                     <div>
                       <div className="text-sm text-muted-foreground">Eficiência</div>
                       <div className="text-xl font-bold">{dept.efficiency}%</div>
                       <Progress value={dept.efficiency} className="mt-1" />
                     </div>
-                    
+
                     <div>
                       <div className="text-sm text-muted-foreground">Projetos Ativos</div>
                       <div className="text-xl font-bold">{dept.projects}</div>
@@ -560,7 +600,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
         {/* Insights Tab */}
         <TabsContent value="insights" className="space-y-4">
           <div className="space-y-4">
-            {businessInsights.map((insight) => (
+            {businessInsights.map(insight => (
               <Card key={insight.id} className={`border-2 ${getImpactColor(insight.impact)}`}>
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
@@ -573,9 +613,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                             {insight.impact.toUpperCase()}
                           </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          {insight.description}
-                        </p>
+                        <p className="text-sm text-muted-foreground mb-3">{insight.description}</p>
                         <div className="flex items-center gap-4 text-xs text-muted-foreground">
                           <div className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />

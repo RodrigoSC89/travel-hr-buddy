@@ -65,7 +65,7 @@ const SimpleNavigation = () => {
     { path: "/sgso", label: "SGSO" },
     { path: "/analytics", label: "Analytics" },
     { path: "/admin", label: "Admin" },
-    { path: "/settings", label: "Configurações" }
+    { path: "/settings", label: "Configurações" },
   ];
 
   return (
@@ -73,13 +73,13 @@ const SimpleNavigation = () => {
       <div className="container mx-auto">
         <h1 className="text-xl font-bold mb-4">🚢 Nautilus One</h1>
         <div className="flex flex-wrap gap-2">
-          {navItems.map((item) => (
+          {navItems.map(item => (
             <a
               key={item.path}
               href={item.path}
               className={`px-3 py-2 rounded text-sm ${
-                currentPath === item.path 
-                  ? "bg-blue-700 text-white" 
+                currentPath === item.path
+                  ? "bg-blue-700 text-white"
                   : "bg-blue-800 hover:bg-blue-700 text-blue-100"
               }`}
               onClick={() => setCurrentPath(item.path)}

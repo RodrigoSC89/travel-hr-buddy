@@ -78,12 +78,12 @@ export const useSystemActions = () => {
       });
       return;
     }
-    
+
     toast({
       title: "Atualizando",
       description: "Carregando dados mais recentes",
     });
-    
+
     // Implementar refresh dos dados
     setTimeout(() => {
       window.location.reload();

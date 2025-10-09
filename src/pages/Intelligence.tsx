@@ -15,7 +15,7 @@ const Intelligence = () => {
         badges={[
           { icon: MessageSquare, label: "Chatbot Avançado" },
           { icon: Sparkles, label: "IA Contextual" },
-          { icon: Zap, label: "Respostas Instantâneas" }
+          { icon: Zap, label: "Respostas Instantâneas" },
         ]}
       />
       <EnhancedAIChatbot />

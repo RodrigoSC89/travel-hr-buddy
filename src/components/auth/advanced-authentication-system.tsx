@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Shield, 
-  Key, 
-  Smartphone, 
+import {
+  Shield,
+  Key,
+  Smartphone,
   Fingerprint,
   QrCode,
   AlertTriangle,
@@ -16,42 +16,36 @@ import {
   EyeOff,
   Copy,
   RefreshCw,
-  Lock
+  Lock,
 } from "lucide-react";
 
 export const AdvancedAuthenticationSystem: React.FC = () => {
   const [isEnabled2FA, setIsEnabled2FA] = useState(false);
   const [isBiometricEnabled, setIsBiometricEnabled] = useState(false);
   const [totpSecret, setTotpSecret] = useState("JBSWY3DPEHPK3PXP");
-  const [backupCodes] = useState([
-    "123456789",
-    "987654321",
-    "456789123",
-    "789123456",
-    "321654987"
-  ]);
+  const [backupCodes] = useState(["123456789", "987654321", "456789123", "789123456", "321654987"]);
   const [activeSessions] = useState([
     {
       id: "1",
       device: "Chrome - Windows",
       location: "São Paulo, Brasil",
       lastActive: "2 minutos atrás",
-      current: true
+      current: true,
     },
     {
-      id: "2", 
+      id: "2",
       device: "Safari - iPhone",
       location: "Rio de Janeiro, Brasil",
       lastActive: "1 hora atrás",
-      current: false
+      current: false,
     },
     {
       id: "3",
       device: "Chrome - Android",
-      location: "Santos, Brasil", 
+      location: "Santos, Brasil",
       lastActive: "1 dia atrás",
-      current: false
-    }
+      current: false,
+    },
   ]);
 
   const [authLogs] = useState([
@@ -60,22 +54,22 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
       action: "Login bem-sucedido",
       device: "Chrome - Windows",
       timestamp: "2024-01-15 14:30:15",
-      status: "success"
+      status: "success",
     },
     {
       id: "2",
       action: "Tentativa de login falhada",
       device: "Unknown",
       timestamp: "2024-01-15 12:15:30",
-      status: "failed"
+      status: "failed",
     },
     {
       id: "3",
       action: "2FA configurado",
       device: "Chrome - Windows",
       timestamp: "2024-01-15 10:45:22",
-      status: "success"
-    }
+      status: "success",
+    },
   ]);
 
   const handleEnable2FA = () => {
@@ -136,7 +130,9 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">2FA</p>
                 <p className="text-lg font-bold">{isEnabled2FA ? "Ativo" : "Inativo"}</p>
               </div>
-              <Key className={`h-8 w-8 ${isEnabled2FA ? "text-green-500" : "text-muted-foreground"}`} />
+              <Key
+                className={`h-8 w-8 ${isEnabled2FA ? "text-green-500" : "text-muted-foreground"}`}
+              />
             </div>
           </CardContent>
         </Card>
@@ -148,7 +144,9 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Biometria</p>
                 <p className="text-lg font-bold">{isBiometricEnabled ? "Ativo" : "Inativo"}</p>
               </div>
-              <Fingerprint className={`h-8 w-8 ${isBiometricEnabled ? "text-green-500" : "text-muted-foreground"}`} />
+              <Fingerprint
+                className={`h-8 w-8 ${isBiometricEnabled ? "text-green-500" : "text-muted-foreground"}`}
+              />
             </div>
           </CardContent>
         </Card>
@@ -183,10 +181,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                   {isEnabled2FA ? "Proteção ativa" : "Configurar para maior segurança"}
                 </p>
               </div>
-              <Button 
-                onClick={handleEnable2FA}
-                variant={isEnabled2FA ? "outline" : "default"}
-              >
+              <Button onClick={handleEnable2FA} variant={isEnabled2FA ? "outline" : "default"}>
                 {isEnabled2FA ? "Desativar" : "Ativar"} 2FA
               </Button>
             </div>
@@ -258,10 +253,12 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
               <div>
                 <p className="font-medium">Biometria</p>
                 <p className="text-sm text-muted-foreground">
-                  {isBiometricEnabled ? "Impressão digital configurada" : "Configure sua impressão digital"}
+                  {isBiometricEnabled
+                    ? "Impressão digital configurada"
+                    : "Configure sua impressão digital"}
                 </p>
               </div>
-              <Button 
+              <Button
                 onClick={handleEnableBiometric}
                 variant={isBiometricEnabled ? "outline" : "default"}
               >
@@ -270,15 +267,16 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
             </div>
 
             <div className="p-4 border rounded-lg text-center">
-              <Fingerprint className={`w-16 h-16 mx-auto mb-4 ${isBiometricEnabled ? "text-green-500" : "text-muted-foreground"}`} />
+              <Fingerprint
+                className={`w-16 h-16 mx-auto mb-4 ${isBiometricEnabled ? "text-green-500" : "text-muted-foreground"}`}
+              />
               <p className="font-medium">
                 {isBiometricEnabled ? "Biometria Ativa" : "Biometria Inativa"}
               </p>
               <p className="text-sm text-muted-foreground">
-                {isBiometricEnabled 
+                {isBiometricEnabled
                   ? "Toque no sensor para fazer login rapidamente"
-                  : "Configure para login mais rápido e seguro"
-                }
+                  : "Configure para login mais rápido e seguro"}
               </p>
             </div>
 
@@ -307,7 +305,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {activeSessions.map((session) => (
+            {activeSessions.map(session => (
               <div
                 key={session.id}
                 className={`flex items-center justify-between p-4 border rounded-lg ${
@@ -335,11 +333,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                     </Badge>
                   )}
                   {!session.current && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => revokeSession(session.id)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => revokeSession(session.id)}>
                       Revogar
                     </Button>
                   )}
@@ -360,7 +354,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {authLogs.map((log) => (
+            {authLogs.map(log => (
               <div key={log.id} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3">
                   {log.status === "success" ? (
@@ -375,7 +369,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-medium">{log.timestamp}</p>
-                  <Badge 
+                  <Badge
                     variant={log.status === "success" ? "default" : "destructive"}
                     className="text-xs"
                   >

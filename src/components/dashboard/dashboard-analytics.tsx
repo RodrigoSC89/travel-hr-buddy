@@ -3,28 +3,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  AreaChart, 
-  Area, 
-  PieChart, 
-  Pie, 
-  Cell, 
-  BarChart, 
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
   Bar,
   RadialBarChart,
   RadialBar,
-  Legend
+  Legend,
 } from "recharts";
-import { 
-  TrendingUp, 
-  BarChart3, 
+import {
+  TrendingUp,
+  BarChart3,
   PieChart as PieChartIcon,
   Activity,
   Brain,
@@ -35,7 +35,7 @@ import {
   Users,
   Ship,
   Settings,
-  Award
+  Award,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -76,19 +76,19 @@ const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {
       { date: "01/04", value: 88, category: "performance" },
       { date: "01/05", value: 94, category: "performance" },
       { date: "01/06", value: 96, category: "performance" },
-      { date: "01/07", value: 93, category: "performance" }
+      { date: "01/07", value: 93, category: "performance" },
     ];
 
     const distributionData: ChartData[] = [
       { name: "Conformes", value: 75, color: "#22c55e" },
       { name: "Pendentes", value: 15, color: "#f59e0b" },
-      { name: "Não Conformes", value: 10, color: "#ef4444" }
+      { name: "Não Conformes", value: 10, color: "#ef4444" },
     ];
 
     const comparisonData: ChartData[] = [
       { name: "Meta", value: 95, percentage: 95 },
       { name: "Atual", value: 87, percentage: 87 },
-      { name: "Anterior", value: 82, percentage: 82 }
+      { name: "Anterior", value: 82, percentage: 82 },
     ];
 
     return { performanceData, distributionData, comparisonData };
@@ -107,35 +107,26 @@ const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {
             <TrendingUp className="h-5 w-5 text-primary" />
             Tendência de Performance
           </CardTitle>
-          <CardDescription>
-            Evolução dos indicadores nos últimos 7 dias
-          </CardDescription>
+          <CardDescription>Evolução dos indicadores nos últimos 7 dias</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={performanceData}>
               <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-              <XAxis 
-                dataKey="date" 
-                fontSize={12}
-                tick={{ fill: "hsl(var(--muted-foreground))" }}
-              />
-              <YAxis 
-                fontSize={12}
-                tick={{ fill: "hsl(var(--muted-foreground))" }}
-              />
-              <Tooltip 
+              <XAxis dataKey="date" fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} />
+              <YAxis fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} />
+              <Tooltip
                 contentStyle={{
                   backgroundColor: "hsl(var(--background))",
                   border: "1px solid hsl(var(--border))",
-                  borderRadius: "8px"
+                  borderRadius: "8px",
                 }}
               />
-              <Area 
-                type="monotone" 
-                dataKey="value" 
-                stroke="hsl(var(--primary))" 
-                fill="hsl(var(--primary))" 
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="hsl(var(--primary))"
+                fill="hsl(var(--primary))"
                 fillOpacity={0.2}
                 strokeWidth={3}
               />
@@ -151,9 +142,7 @@ const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {
             <PieChartIcon className="h-5 w-5 text-success" />
             Distribuição Status
           </CardTitle>
-          <CardDescription>
-            Proporção atual por categoria
-          </CardDescription>
+          <CardDescription>Proporção atual por categoria</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={250}>
@@ -185,9 +174,7 @@ const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {
             <BarChart3 className="h-5 w-5 text-info" />
             Comparativo de Indicadores
           </CardTitle>
-          <CardDescription>
-            Análise comparativa entre períodos
-          </CardDescription>
+          <CardDescription>Análise comparativa entre períodos</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={200}>
@@ -212,7 +199,7 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
 
   const generateInsights = async () => {
     setIsGenerating(true);
-    
+
     // Simulate AI insights generation
     setTimeout(() => {
       const sampleInsights: AIInsight[] = [
@@ -220,47 +207,51 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
           id: "1",
           type: "prediction",
           title: "Previsão de Não Conformidade",
-          description: "Baseado nos padrões históricos, há 78% de chance de não conformidade na Embarcação MV Beta nos próximos 15 dias.",
+          description:
+            "Baseado nos padrões históricos, há 78% de chance de não conformidade na Embarcação MV Beta nos próximos 15 dias.",
           confidence: 78,
           impact: "high",
           actionable: true,
-          metadata: { vessel: "MV Beta", days: 15 }
+          metadata: { vessel: "MV Beta", days: 15 },
         },
         {
           id: "2",
           type: "recommendation",
           title: "Otimização de Treinamentos",
-          description: "Recomenda-se focar treinamentos em segurança para tripulação com baixa performance (< 85%).",
+          description:
+            "Recomenda-se focar treinamentos em segurança para tripulação com baixa performance (< 85%).",
           confidence: 92,
           impact: "medium",
           actionable: true,
-          metadata: { threshold: 85, module: "training" }
+          metadata: { threshold: 85, module: "training" },
         },
         {
           id: "3",
           type: "optimization",
           title: "Eficiência Operacional",
-          description: "Redistribuindo 3 membros da tripulação, é possível aumentar a eficiência geral em 12%.",
+          description:
+            "Redistribuindo 3 membros da tripulação, é possível aumentar a eficiência geral em 12%.",
           confidence: 85,
           impact: "medium",
           actionable: true,
-          metadata: { efficiency_gain: 12, crew_moves: 3 }
+          metadata: { efficiency_gain: 12, crew_moves: 3 },
         },
         {
           id: "4",
           type: "alert",
           title: "Padrão Anômalo Detectado",
-          description: "Detectado aumento de 34% em falhas de equipamentos na última semana. Investigação recomendada.",
+          description:
+            "Detectado aumento de 34% em falhas de equipamentos na última semana. Investigação recomendada.",
           confidence: 89,
           impact: "high",
           actionable: true,
-          metadata: { increase: 34, period: "7_days" }
-        }
+          metadata: { increase: 34, period: "7_days" },
+        },
       ];
 
       setInsights(sampleInsights);
       setIsGenerating(false);
-      
+
       toast({
         title: "IA Insights Gerados",
         description: `${sampleInsights.length} insights foram gerados com base nos dados atuais.`,
@@ -274,21 +265,31 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
 
   const getInsightIcon = (type: AIInsight["type"]) => {
     switch (type) {
-    case "prediction": return <TrendingUp className="h-4 w-4" />;
-    case "recommendation": return <Target className="h-4 w-4" />;
-    case "optimization": return <Zap className="h-4 w-4" />;
-    case "alert": return <AlertTriangle className="h-4 w-4" />;
-    default: return <Brain className="h-4 w-4" />;
+      case "prediction":
+        return <TrendingUp className="h-4 w-4" />;
+      case "recommendation":
+        return <Target className="h-4 w-4" />;
+      case "optimization":
+        return <Zap className="h-4 w-4" />;
+      case "alert":
+        return <AlertTriangle className="h-4 w-4" />;
+      default:
+        return <Brain className="h-4 w-4" />;
     }
   };
 
   const getInsightColor = (type: AIInsight["type"]) => {
     switch (type) {
-    case "prediction": return "text-info";
-    case "recommendation": return "text-success";
-    case "optimization": return "text-warning";
-    case "alert": return "text-destructive";
-    default: return "text-primary";
+      case "prediction":
+        return "text-info";
+      case "recommendation":
+        return "text-success";
+      case "optimization":
+        return "text-warning";
+      case "alert":
+        return "text-destructive";
+      default:
+        return "text-primary";
     }
   };
 
@@ -301,16 +302,9 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
               <Brain className="h-5 w-5 text-primary" />
               IA Insights
             </CardTitle>
-            <CardDescription>
-              Análises preditivas e recomendações inteligentes
-            </CardDescription>
+            <CardDescription>Análises preditivas e recomendações inteligentes</CardDescription>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={generateInsights}
-            disabled={isGenerating}
-          >
+          <Button variant="outline" size="sm" onClick={generateInsights} disabled={isGenerating}>
             {isGenerating ? (
               <div className="w-4 h-4 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
             ) : (
@@ -321,8 +315,8 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
         </div>
       </CardHeader>
       <CardContent className="space-y-4 max-h-96 overflow-y-auto">
-        {insights.map((insight) => (
-          <div 
+        {insights.map(insight => (
+          <div
             key={insight.id}
             className="p-4 rounded-lg border bg-card hover:shadow-md transition-shadow"
           >
@@ -334,8 +328,14 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-medium text-sm">{insight.title}</h4>
                   <div className="flex items-center gap-2">
-                    <Badge 
-                      variant={insight.impact === "high" ? "destructive" : insight.impact === "medium" ? "default" : "secondary"}
+                    <Badge
+                      variant={
+                        insight.impact === "high"
+                          ? "destructive"
+                          : insight.impact === "medium"
+                            ? "default"
+                            : "secondary"
+                      }
                       className="text-xs"
                     >
                       {insight.impact}
@@ -355,7 +355,7 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
             </div>
           </div>
         ))}
-        
+
         {insights.length === 0 && !isGenerating && (
           <div className="text-center py-8 text-muted-foreground">
             <Brain className="h-12 w-12 mx-auto mb-4 opacity-50" />

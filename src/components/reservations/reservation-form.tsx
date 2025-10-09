@@ -1,23 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  CalendarIcon, 
-  MapPin, 
-  DollarSign, 
-  User, 
-  Building, 
-  Phone, 
+import {
+  CalendarIcon,
+  MapPin,
+  DollarSign,
+  User,
+  Building,
+  Phone,
   ExternalLink,
   AlertTriangle,
-  Bookmark
+  Bookmark,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -36,7 +48,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   isOpen,
   onClose,
   reservation,
-  onSaved
+  onSaved,
 }) => {
   const [loading, setLoading] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
@@ -55,7 +67,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     total_amount: "",
     currency: "BRL",
     status: "confirmed" as EnhancedReservation["status"],
-    notes: ""
+    notes: "",
   });
 
   const { toast } = useToast();
@@ -78,7 +90,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         total_amount: reservation.total_amount?.toString() || "",
         currency: reservation.currency || "BRL",
         status: reservation.status,
-        notes: reservation.notes || ""
+        notes: reservation.notes || "",
       });
     } else {
       resetForm();
@@ -101,7 +113,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       total_amount: "",
       currency: "BRL",
       status: "confirmed",
-      notes: ""
+      notes: "",
     });
   };
 
@@ -117,7 +129,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       supplier_url: templateData.supplier_url || "",
       room_type: templateData.room_type || "",
       currency: templateData.currency || "BRL",
-      notes: templateData.notes || ""
+      notes: templateData.notes || "",
     });
   };
 
@@ -126,7 +138,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       toast({
         title: "Erro de validação",
         description: "Título é obrigatório",
-        variant: "destructive"
+        variant: "destructive",
       });
       return false;
     }
@@ -135,7 +147,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       toast({
         title: "Erro de validação",
         description: "Data de início e fim são obrigatórias",
-        variant: "destructive"
+        variant: "destructive",
       });
       return false;
     }
@@ -144,7 +156,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       toast({
         title: "Erro de validação",
         description: "Data de fim deve ser posterior à data de início",
-        variant: "destructive"
+        variant: "destructive",
       });
       return false;
     }
@@ -176,7 +188,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         status: formData.status,
         notes: formData.notes.trim() || null,
         user_id: user.id,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       if (reservation) {
@@ -189,21 +201,21 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
 
         toast({
           title: "Sucesso",
-          description: "Reserva atualizada com sucesso!"
+          description: "Reserva atualizada com sucesso!",
         });
       } else {
-        const { error } = await supabase
-          .from("reservations")
-          .insert([{
+        const { error } = await supabase.from("reservations").insert([
+          {
             ...reservationData,
-            created_at: new Date().toISOString()
-          }]);
+            created_at: new Date().toISOString(),
+          },
+        ]);
 
         if (error) throw error;
 
         toast({
           title: "Sucesso",
-          description: "Reserva criada com sucesso!"
+          description: "Reserva criada com sucesso!",
         });
       }
 
@@ -213,7 +225,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       toast({
         title: "Erro",
         description: "Erro ao salvar reserva. Tente novamente.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -222,12 +234,18 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-    case "hotel": return "Hotel / Hospedagem";
-    case "flight": return "Voo";
-    case "transport": return "Transporte Terrestre";
-    case "embarkation": return "Embarque";
-    case "other": return "Outro";
-    default: return type;
+      case "hotel":
+        return "Hotel / Hospedagem";
+      case "flight":
+        return "Voo";
+      case "transport":
+        return "Transporte Terrestre";
+      case "embarkation":
+        return "Embarque";
+      case "other":
+        return "Outro";
+      default:
+        return type;
     }
   };
 
@@ -243,7 +261,9 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                   {reservation ? "Editar Reserva" : "Nova Reserva"}
                 </DialogTitle>
                 <DialogDescription>
-                  {reservation ? "Edite os detalhes da reserva" : "Crie uma nova reserva com todas as informações necessárias"}
+                  {reservation
+                    ? "Edite os detalhes da reserva"
+                    : "Crie uma nova reserva com todas as informações necessárias"}
                 </DialogDescription>
               </div>
               <Button
@@ -271,7 +291,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="title"
                       value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      onChange={e => setFormData({ ...formData, title: e.target.value })}
                       placeholder="Ex: Hotel Santos Dumont - Rio de Janeiro"
                       required
                     />
@@ -280,7 +300,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Label htmlFor="type">Tipo de Reserva *</Label>
                     <Select
                       value={formData.reservation_type}
-                      onValueChange={(value: EnhancedReservation["reservation_type"]) => 
+                      onValueChange={(value: EnhancedReservation["reservation_type"]) =>
                         setFormData({ ...formData, reservation_type: value })
                       }
                     >
@@ -308,7 +328,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                   <Textarea
                     id="description"
                     value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={e => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Detalhes adicionais sobre a reserva..."
                     rows={3}
                   />
@@ -332,7 +352,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       id="start_date"
                       type="datetime-local"
                       value={formData.start_date}
-                      onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                      onChange={e => setFormData({ ...formData, start_date: e.target.value })}
                       required
                     />
                   </div>
@@ -342,7 +362,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       id="end_date"
                       type="datetime-local"
                       value={formData.end_date}
-                      onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                      onChange={e => setFormData({ ...formData, end_date: e.target.value })}
                       required
                     />
                   </div>
@@ -354,7 +374,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="location"
                       value={formData.location}
-                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      onChange={e => setFormData({ ...formData, location: e.target.value })}
                       placeholder="Ex: Rio de Janeiro, RJ"
                     />
                   </div>
@@ -363,7 +383,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="address"
                       value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      onChange={e => setFormData({ ...formData, address: e.target.value })}
                       placeholder="Rua, número, bairro, CEP"
                     />
                   </div>
@@ -383,7 +403,9 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="confirmation_number"
                       value={formData.confirmation_number}
-                      onChange={(e) => setFormData({ ...formData, confirmation_number: e.target.value })}
+                      onChange={e =>
+                        setFormData({ ...formData, confirmation_number: e.target.value })
+                      }
                       placeholder="Ex: ABC123456"
                     />
                   </div>
@@ -392,7 +414,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="room_type"
                       value={formData.room_type}
-                      onChange={(e) => setFormData({ ...formData, room_type: e.target.value })}
+                      onChange={e => setFormData({ ...formData, room_type: e.target.value })}
                       placeholder="Ex: Quarto duplo standard"
                     />
                   </div>
@@ -408,7 +430,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                         type="number"
                         step="0.01"
                         value={formData.total_amount}
-                        onChange={(e) => setFormData({ ...formData, total_amount: e.target.value })}
+                        onChange={e => setFormData({ ...formData, total_amount: e.target.value })}
                         placeholder="0.00"
                         className="pl-10"
                       />
@@ -418,7 +440,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Label htmlFor="currency">Moeda</Label>
                     <Select
                       value={formData.currency}
-                      onValueChange={(value) => setFormData({ ...formData, currency: value })}
+                      onValueChange={value => setFormData({ ...formData, currency: value })}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -434,7 +456,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Label htmlFor="status">Status</Label>
                     <Select
                       value={formData.status}
-                      onValueChange={(value: EnhancedReservation["status"]) => 
+                      onValueChange={(value: EnhancedReservation["status"]) =>
                         setFormData({ ...formData, status: value })
                       }
                     >
@@ -467,7 +489,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       <Input
                         id="contact_info"
                         value={formData.contact_info}
-                        onChange={(e) => setFormData({ ...formData, contact_info: e.target.value })}
+                        onChange={e => setFormData({ ...formData, contact_info: e.target.value })}
                         placeholder="Telefone, email, etc."
                         className="pl-10"
                       />
@@ -481,7 +503,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                         id="supplier_url"
                         type="url"
                         value={formData.supplier_url}
-                        onChange={(e) => setFormData({ ...formData, supplier_url: e.target.value })}
+                        onChange={e => setFormData({ ...formData, supplier_url: e.target.value })}
                         placeholder="https://..."
                         className="pl-10"
                       />
@@ -494,7 +516,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                   <Textarea
                     id="notes"
                     value={formData.notes}
-                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                    onChange={e => setFormData({ ...formData, notes: e.target.value })}
                     placeholder="Observações internas, requisitos especiais, etc."
                     rows={3}
                   />
@@ -504,12 +526,8 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
-              <Button 
-                type="submit" 
-                disabled={loading} 
-                className="flex-1"
-              >
-                {loading ? "Salvando..." : (reservation ? "Atualizar Reserva" : "Criar Reserva")}
+              <Button type="submit" disabled={loading} className="flex-1">
+                {loading ? "Salvando..." : reservation ? "Atualizar Reserva" : "Criar Reserva"}
               </Button>
               <Button
                 type="button"

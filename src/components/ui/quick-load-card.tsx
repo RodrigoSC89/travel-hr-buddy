@@ -21,7 +21,7 @@ export const QuickLoadCard: React.FC<QuickLoadCardProps> = ({
   onClick,
   status = "Disponível",
   isLoading = false,
-  badge
+  badge,
 }) => {
   return (
     <Card className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 bg-gradient-to-br from-card to-secondary/5">
@@ -42,7 +42,7 @@ export const QuickLoadCard: React.FC<QuickLoadCardProps> = ({
       <CardContent>
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-green-600">{status}</span>
-          <Button 
+          <Button
             onClick={onClick}
             disabled={isLoading}
             className="transition-all duration-300"

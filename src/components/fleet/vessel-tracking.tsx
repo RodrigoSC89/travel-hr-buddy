@@ -5,18 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Ship, 
-  Navigation, 
-  MapPin, 
-  Fuel, 
+import {
+  Ship,
+  Navigation,
+  MapPin,
+  Fuel,
   Gauge,
   Thermometer,
   Wind,
   Radio,
   AlertTriangle,
   CheckCircle,
-  Clock
+  Clock,
 } from "lucide-react";
 
 interface VesselPosition {
@@ -49,7 +49,7 @@ export const VesselTracking = () => {
 
   useEffect(() => {
     loadVessels();
-    
+
     // Set up real-time tracking
     const interval = setInterval(() => {
       if (trackingMode === "real-time") {
@@ -62,34 +62,32 @@ export const VesselTracking = () => {
 
   const loadVessels = async () => {
     try {
-      const { data, error } = await supabase
-        .from("vessels")
-        .select("*")
-        .eq("status", "active");
+      const { data, error } = await supabase.from("vessels").select("*").eq("status", "active");
 
       if (error) throw error;
 
       // Transform to tracking format with mock real-time data
-      const trackingData: VesselPosition[] = data?.map(vessel => ({
-        id: vessel.id,
-        name: vessel.name,
-        latitude: -23.5505 + (Math.random() - 0.5) * 0.1,
-        longitude: -46.6333 + (Math.random() - 0.5) * 0.1,
-        speed: Math.random() * 20,
-        heading: Math.random() * 360,
-        status: ["sailing", "anchored", "docked"][Math.floor(Math.random() * 3)] as any,
-        fuel_level: 50 + Math.random() * 50,
-        last_update: new Date().toISOString(),
-        weather: {
-          temperature: 20 + Math.random() * 15,
-          wind_speed: Math.random() * 25,
-          wind_direction: Math.random() * 360,
-          visibility: 5 + Math.random() * 5
-        },
-        crew_count: Math.floor(10 + Math.random() * 20),
-        destination: "Porto de Santos",
-        eta: new Date(Date.now() + Math.random() * 86400000 * 7).toISOString()
-      })) || [];
+      const trackingData: VesselPosition[] =
+        data?.map(vessel => ({
+          id: vessel.id,
+          name: vessel.name,
+          latitude: -23.5505 + (Math.random() - 0.5) * 0.1,
+          longitude: -46.6333 + (Math.random() - 0.5) * 0.1,
+          speed: Math.random() * 20,
+          heading: Math.random() * 360,
+          status: ["sailing", "anchored", "docked"][Math.floor(Math.random() * 3)] as any,
+          fuel_level: 50 + Math.random() * 50,
+          last_update: new Date().toISOString(),
+          weather: {
+            temperature: 20 + Math.random() * 15,
+            wind_speed: Math.random() * 25,
+            wind_direction: Math.random() * 360,
+            visibility: 5 + Math.random() * 5,
+          },
+          crew_count: Math.floor(10 + Math.random() * 20),
+          destination: "Porto de Santos",
+          eta: new Date(Date.now() + Math.random() * 86400000 * 7).toISOString(),
+        })) || [];
 
       setVessels(trackingData);
       if (!selectedVessel && trackingData.length > 0) {
@@ -100,7 +98,7 @@ export const VesselTracking = () => {
       toast({
         title: "Erro",
         description: "Erro ao carregar dados dos navios",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -109,23 +107,35 @@ export const VesselTracking = () => {
 
   const getStatusColor = (status: VesselPosition["status"]) => {
     switch (status) {
-    case "sailing": return "bg-blue-500";
-    case "anchored": return "bg-yellow-500";
-    case "docked": return "bg-green-500";
-    case "maintenance": return "bg-orange-500";
-    case "emergency": return "bg-red-500";
-    default: return "bg-gray-500";
+      case "sailing":
+        return "bg-blue-500";
+      case "anchored":
+        return "bg-yellow-500";
+      case "docked":
+        return "bg-green-500";
+      case "maintenance":
+        return "bg-orange-500";
+      case "emergency":
+        return "bg-red-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
   const getStatusText = (status: VesselPosition["status"]) => {
     switch (status) {
-    case "sailing": return "Navegando";
-    case "anchored": return "Ancorado";
-    case "docked": return "Atracado";
-    case "maintenance": return "Manutenção";
-    case "emergency": return "Emergência";
-    default: return "Desconhecido";
+      case "sailing":
+        return "Navegando";
+      case "anchored":
+        return "Ancorado";
+      case "docked":
+        return "Atracado";
+      case "maintenance":
+        return "Manutenção";
+      case "emergency":
+        return "Emergência";
+      default:
+        return "Desconhecido";
     }
   };
 
@@ -151,8 +161,8 @@ export const VesselTracking = () => {
             Acompanhe a posição e status da frota em tempo real
           </p>
         </div>
-        
-        <Tabs value={trackingMode} onValueChange={(value) => setTrackingMode(value as any)}>
+
+        <Tabs value={trackingMode} onValueChange={value => setTrackingMode(value as any)}>
           <TabsList>
             <TabsTrigger value="real-time">Tempo Real</TabsTrigger>
             <TabsTrigger value="historical">Histórico</TabsTrigger>
@@ -171,23 +181,26 @@ export const VesselTracking = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {vessels.map((vessel) => (
+              {vessels.map(vessel => (
                 <div
                   key={vessel.id}
                   className={`p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedVessel?.id === vessel.id 
-                      ? "border-primary bg-primary/5" 
+                    selectedVessel?.id === vessel.id
+                      ? "border-primary bg-primary/5"
                       : "border-border hover:bg-accent"
                   }`}
                   onClick={() => setSelectedVessel(vessel)}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium">{vessel.name}</h4>
-                    <Badge variant="outline" className={`${getStatusColor(vessel.status)} text-azure-50`}>
+                    <Badge
+                      variant="outline"
+                      className={`${getStatusColor(vessel.status)} text-azure-50`}
+                    >
                       {getStatusText(vessel.status)}
                     </Badge>
                   </div>
-                  
+
                   <div className="space-y-1 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <MapPin className="h-3 w-3" />
@@ -220,7 +233,10 @@ export const VesselTracking = () => {
                       <Ship className="h-6 w-6" />
                       {selectedVessel.name}
                     </CardTitle>
-                    <Badge variant="outline" className={`${getStatusColor(selectedVessel.status)} text-azure-50`}>
+                    <Badge
+                      variant="outline"
+                      className={`${getStatusColor(selectedVessel.status)} text-azure-50`}
+                    >
                       {getStatusText(selectedVessel.status)}
                     </Badge>
                   </div>
@@ -232,19 +248,21 @@ export const VesselTracking = () => {
                       <div className="text-2xl font-bold">{selectedVessel.speed.toFixed(1)}</div>
                       <div className="text-sm text-muted-foreground">Nós</div>
                     </div>
-                    
+
                     <div className="text-center p-3 bg-accent rounded-lg">
                       <Fuel className="h-6 w-6 mx-auto mb-2 text-primary" />
-                      <div className="text-2xl font-bold">{selectedVessel.fuel_level.toFixed(0)}%</div>
+                      <div className="text-2xl font-bold">
+                        {selectedVessel.fuel_level.toFixed(0)}%
+                      </div>
                       <div className="text-sm text-muted-foreground">Combustível</div>
                     </div>
-                    
+
                     <div className="text-center p-3 bg-accent rounded-lg">
                       <MapPin className="h-6 w-6 mx-auto mb-2 text-primary" />
                       <div className="text-lg font-bold">{selectedVessel.heading.toFixed(0)}°</div>
                       <div className="text-sm text-muted-foreground">Rumo</div>
                     </div>
-                    
+
                     <div className="text-center p-3 bg-accent rounded-lg">
                       <CheckCircle className="h-6 w-6 mx-auto mb-2 text-primary" />
                       <div className="text-2xl font-bold">{selectedVessel.crew_count}</div>

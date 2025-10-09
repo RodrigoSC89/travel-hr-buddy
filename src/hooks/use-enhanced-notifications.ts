@@ -28,7 +28,7 @@ export const useEnhancedNotifications = () => {
 
     try {
       setIsLoading(true);
-      
+
       // Simular notificações baseadas em dados reais
       const mockNotifications: Notification[] = [];
 
@@ -44,7 +44,7 @@ export const useEnhancedNotifications = () => {
         const daysUntilExpiry = Math.ceil(
           (new Date(cert.expiry_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
         );
-        
+
         mockNotifications.push({
           id: `cert-${cert.id}`,
           title: "Certificado Expirando",
@@ -53,9 +53,9 @@ export const useEnhancedNotifications = () => {
           read: false,
           action: {
             label: "Ver Certificado",
-            href: "/hr"
+            href: "/hr",
           },
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
         });
       });
 
@@ -75,9 +75,9 @@ export const useEnhancedNotifications = () => {
           read: false,
           action: {
             label: "Ver Alertas",
-            href: "/price-alerts"
+            href: "/price-alerts",
           },
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
         });
       }
 
@@ -91,14 +91,15 @@ export const useEnhancedNotifications = () => {
         mockNotifications.push({
           id: "welcome",
           title: "Bem-vindo ao Sistema!",
-          message: "Explore todas as funcionalidades disponíveis. Precisa de ajuda? Consulte nossa documentação.",
+          message:
+            "Explore todas as funcionalidades disponíveis. Precisa de ajuda? Consulte nossa documentação.",
           type: "success",
           read: false,
           action: {
             label: "Explorar",
-            href: "/"
+            href: "/",
           },
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
         });
       }
 
@@ -115,9 +116,7 @@ export const useEnhancedNotifications = () => {
   const markAsRead = (notificationId: string) => {
     setNotifications(prev =>
       prev.map(notification =>
-        notification.id === notificationId
-          ? { ...notification, read: true }
-          : notification
+        notification.id === notificationId ? { ...notification, read: true } : notification
       )
     );
     setUnreadCount(prev => Math.max(0, prev - 1));
@@ -125,9 +124,7 @@ export const useEnhancedNotifications = () => {
 
   // Marcar todas como lidas
   const markAllAsRead = () => {
-    setNotifications(prev =>
-      prev.map(notification => ({ ...notification, read: true }))
-    );
+    setNotifications(prev => prev.map(notification => ({ ...notification, read: true })));
     setUnreadCount(0);
   };
 
@@ -161,6 +158,6 @@ export const useEnhancedNotifications = () => {
     fetchNotifications,
     markAsRead,
     markAllAsRead,
-    removeNotification
+    removeNotification,
   };
 };

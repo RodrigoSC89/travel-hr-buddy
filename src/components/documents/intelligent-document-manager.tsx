@@ -6,13 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogHeader, 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
   DialogTitle,
-  DialogTrigger 
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   DropdownMenu,
@@ -20,14 +20,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { 
-  FileText, 
-  Upload, 
-  Search, 
-  Filter, 
-  Eye, 
-  Download, 
-  Share2, 
+import {
+  FileText,
+  Upload,
+  Search,
+  Filter,
+  Eye,
+  Download,
+  Share2,
   Trash2,
   Star,
   StarOff,
@@ -47,7 +47,7 @@ import {
   Grid,
   List,
   SortAsc,
-  Calendar
+  Calendar,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -94,7 +94,7 @@ const IntelligentDocumentManager = () => {
       aiSummary: "Contrato de fornecimento de materiais com prazo de 12 meses...",
       confidence: 95,
       version: 1,
-      permissions: ["read", "write", "share"]
+      permissions: ["read", "write", "share"],
     },
     {
       id: "2",
@@ -109,7 +109,7 @@ const IntelligentDocumentManager = () => {
       favorite: false,
       confidence: 87,
       version: 2,
-      permissions: ["read", "write"]
+      permissions: ["read", "write"],
     },
     {
       id: "3",
@@ -125,8 +125,8 @@ const IntelligentDocumentManager = () => {
       aiSummary: "Documento define diretrizes de segurança da informação...",
       confidence: 92,
       version: 3,
-      permissions: ["read"]
-    }
+      permissions: ["read"],
+    },
   ]);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -140,48 +140,49 @@ const IntelligentDocumentManager = () => {
   const categories = ["all", "Contratos", "Relatórios", "Políticas", "Financeiro", "RH"];
 
   const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSearch =
+      doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || doc.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "completed":
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
-    case "processing":
-      return <Zap className="w-4 h-4 text-blue-500 animate-pulse" />;
-    case "error":
-      return <FileX className="w-4 h-4 text-red-500" />;
-    default:
-      return <AlertCircle className="w-4 h-4 text-yellow-500" />;
+      case "completed":
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case "processing":
+        return <Zap className="w-4 h-4 text-blue-500 animate-pulse" />;
+      case "error":
+        return <FileX className="w-4 h-4 text-red-500" />;
+      default:
+        return <AlertCircle className="w-4 h-4 text-yellow-500" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed":
-      return "bg-green-100 text-green-800";
-    case "processing":
-      return "bg-blue-100 text-blue-800";
-    case "error":
-      return "bg-red-100 text-red-800";
-    default:
-      return "bg-yellow-100 text-yellow-800";
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "processing":
+        return "bg-blue-100 text-blue-800";
+      case "error":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-yellow-100 text-yellow-800";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type.toLowerCase()) {
-    case "pdf":
-      return <FileText className="w-8 h-8 text-red-500" />;
-    case "excel":
-      return <FileText className="w-8 h-8 text-green-500" />;
-    case "word":
-      return <FileText className="w-8 h-8 text-blue-500" />;
-    default:
-      return <FileText className="w-8 h-8 text-muted-foreground" />;
+      case "pdf":
+        return <FileText className="w-8 h-8 text-red-500" />;
+      case "excel":
+        return <FileText className="w-8 h-8 text-green-500" />;
+      case "word":
+        return <FileText className="w-8 h-8 text-blue-500" />;
+      default:
+        return <FileText className="w-8 h-8 text-muted-foreground" />;
     }
   };
 
@@ -190,13 +191,13 @@ const IntelligentDocumentManager = () => {
     if (!files) return;
 
     setShowUploadDialog(true);
-    
+
     // Simulate upload progress
     let progress = 0;
     const interval = setInterval(() => {
       progress += 10;
       setUploadProgress(progress);
-      
+
       if (progress >= 100) {
         clearInterval(interval);
         setTimeout(() => {
@@ -204,9 +205,9 @@ const IntelligentDocumentManager = () => {
           setUploadProgress(0);
           toast({
             title: "Upload concluído",
-            description: `${files.length} arquivo(s) enviado(s) com sucesso`
+            description: `${files.length} arquivo(s) enviado(s) com sucesso`,
           });
-          
+
           // Add new document to list
           const newDoc: Document = {
             id: (documents.length + 1).toString(),
@@ -221,9 +222,9 @@ const IntelligentDocumentManager = () => {
             favorite: false,
             confidence: 0,
             version: 1,
-            permissions: ["read", "write", "share"]
+            permissions: ["read", "write", "share"],
           };
-          
+
           setDocuments(prev => [newDoc, ...prev]);
         }, 1000);
       }
@@ -231,38 +232,41 @@ const IntelligentDocumentManager = () => {
   };
 
   const toggleFavorite = (id: string) => {
-    setDocuments(prev => prev.map(doc => 
-      doc.id === id ? { ...doc, favorite: !doc.favorite } : doc
-    ));
+    setDocuments(prev =>
+      prev.map(doc => (doc.id === id ? { ...doc, favorite: !doc.favorite } : doc))
+    );
   };
 
   const deleteDocument = (id: string) => {
     setDocuments(prev => prev.filter(doc => doc.id !== id));
     toast({
       title: "Documento excluído",
-      description: "O documento foi removido permanentemente"
+      description: "O documento foi removido permanentemente",
     });
   };
 
   const analyzeDocument = (id: string) => {
-    setDocuments(prev => prev.map(doc => 
-      doc.id === id ? { ...doc, status: "processing" } : doc
-    ));
-    
+    setDocuments(prev => prev.map(doc => (doc.id === id ? { ...doc, status: "processing" } : doc)));
+
     // Simulate AI analysis
     setTimeout(() => {
-      setDocuments(prev => prev.map(doc => 
-        doc.id === id ? { 
-          ...doc, 
-          status: "completed",
-          aiSummary: "Análise IA concluída. Documento contém informações importantes sobre...",
-          confidence: Math.floor(Math.random() * 20) + 80
-        } : doc
-      ));
-      
+      setDocuments(prev =>
+        prev.map(doc =>
+          doc.id === id
+            ? {
+                ...doc,
+                status: "completed",
+                aiSummary:
+                  "Análise IA concluída. Documento contém informações importantes sobre...",
+                confidence: Math.floor(Math.random() * 20) + 80,
+              }
+            : doc
+        )
+      );
+
       toast({
         title: "Análise IA concluída",
-        description: "Documento analisado com sucesso"
+        description: "Documento analisado com sucesso",
       });
     }, 3000);
   };
@@ -270,7 +274,7 @@ const IntelligentDocumentManager = () => {
   const shareDocument = (document: Document) => {
     toast({
       title: "Link de compartilhamento",
-      description: "Link copiado para a área de transferência"
+      description: "Link copiado para a área de transferência",
     });
   };
 
@@ -284,7 +288,7 @@ const IntelligentDocumentManager = () => {
             IA avançada para análise e organização de documentos
           </p>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <input
             ref={fileInputRef}
@@ -294,11 +298,8 @@ const IntelligentDocumentManager = () => {
             onChange={handleFileUpload}
             className="hidden"
           />
-          
-          <Button 
-            onClick={() => fileInputRef.current?.click()}
-            className="gap-2"
-          >
+
+          <Button onClick={() => fileInputRef.current?.click()} className="gap-2">
             <Upload className="w-4 h-4" />
             Upload
           </Button>
@@ -312,14 +313,14 @@ const IntelligentDocumentManager = () => {
           <Input
             placeholder="Buscar documentos, tags ou conteúdo..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             className="pl-10"
           />
         </div>
-        
-        <select 
+
+        <select
           value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
+          onChange={e => setSelectedCategory(e.target.value)}
           className="bg-background border border-border rounded px-3 py-2"
         >
           {categories.map(category => (
@@ -328,7 +329,7 @@ const IntelligentDocumentManager = () => {
             </option>
           ))}
         </select>
-        
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="gap-2">
@@ -340,15 +341,11 @@ const IntelligentDocumentManager = () => {
             <DropdownMenuItem onClick={() => setSortBy("lastModified")}>
               Última modificação
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy("name")}>
-              Nome
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy("size")}>
-              Tamanho
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setSortBy("name")}>Nome</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setSortBy("size")}>Tamanho</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        
+
         <div className="flex items-center gap-2">
           <Button
             variant={viewMode === "grid" ? "default" : "outline"}
@@ -378,7 +375,7 @@ const IntelligentDocumentManager = () => {
             <div className="text-2xl font-bold">{documents.length}</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -390,38 +387,33 @@ const IntelligentDocumentManager = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 text-orange-500" />
               <span className="text-sm font-medium">Favoritos</span>
             </div>
-            <div className="text-2xl font-bold">
-              {documents.filter(d => d.favorite).length}
-            </div>
+            <div className="text-2xl font-bold">{documents.filter(d => d.favorite).length}</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <Brain className="w-4 h-4 text-purple-500" />
               <span className="text-sm font-medium">IA Analisados</span>
             </div>
-            <div className="text-2xl font-bold">
-              {documents.filter(d => d.aiSummary).length}
-            </div>
+            <div className="text-2xl font-bold">{documents.filter(d => d.aiSummary).length}</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Documents Grid/List */}
-      <div className={viewMode === "grid" ? 
-        "grid gap-4 md:grid-cols-2 lg:grid-cols-3" : 
-        "space-y-2"
-      }>
-        {filteredDocuments.map((document) => (
+      <div
+        className={viewMode === "grid" ? "grid gap-4 md:grid-cols-2 lg:grid-cols-3" : "space-y-2"}
+      >
+        {filteredDocuments.map(document => (
           <Card key={document.id} className="border-border hover:shadow-md transition-shadow">
             {viewMode === "grid" ? (
               <CardContent className="p-4">
@@ -437,7 +429,7 @@ const IntelligentDocumentManager = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm">
@@ -457,7 +449,7 @@ const IntelligentDocumentManager = () => {
                         <Brain className="w-4 h-4 mr-2" />
                         Analisar IA
                       </DropdownMenuItem>
-                      <DropdownMenuItem 
+                      <DropdownMenuItem
                         onClick={() => deleteDocument(document.id)}
                         className="text-red-600"
                       >
@@ -467,33 +459,30 @@ const IntelligentDocumentManager = () => {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <Badge className={getStatusColor(document.status)}>
                       {getStatusIcon(document.status)}
                       <span className="ml-1">{document.status}</span>
                     </Badge>
-                    
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleFavorite(document.id)}
-                    >
-                      {document.favorite ? 
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> :
+
+                    <Button variant="ghost" size="sm" onClick={() => toggleFavorite(document.id)}>
+                      {document.favorite ? (
+                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      ) : (
                         <StarOff className="w-4 h-4" />
-                      }
+                      )}
                     </Button>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <User className="w-3 h-3" />
                     <span>{document.author}</span>
                     <Clock className="w-3 h-3 ml-2" />
                     <span>{document.lastModified.toLocaleDateString()}</span>
                   </div>
-                  
+
                   {document.confidence > 0 && (
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
@@ -503,7 +492,7 @@ const IntelligentDocumentManager = () => {
                       <Progress value={document.confidence} className="h-1" />
                     </div>
                   )}
-                  
+
                   {document.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1">
                       {document.tags.slice(0, 3).map((tag, index) => (
@@ -513,7 +502,7 @@ const IntelligentDocumentManager = () => {
                       ))}
                     </div>
                   )}
-                  
+
                   {document.aiSummary && (
                     <p className="text-xs text-muted-foreground line-clamp-2">
                       {document.aiSummary}
@@ -525,13 +514,11 @@ const IntelligentDocumentManager = () => {
               <CardContent className="p-4">
                 <div className="flex items-center gap-4">
                   {getTypeIcon(document.type)}
-                  
+
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <h3 className="font-medium">{document.name}</h3>
-                      <Badge className={getStatusColor(document.status)}>
-                        {document.status}
-                      </Badge>
+                      <Badge className={getStatusColor(document.status)}>{document.status}</Badge>
                       {document.favorite && (
                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                       )}
@@ -543,7 +530,7 @@ const IntelligentDocumentManager = () => {
                       <span>{document.category}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     <Button variant="ghost" size="sm">
                       <Eye className="w-4 h-4" />
@@ -581,15 +568,11 @@ const IntelligentDocumentManager = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Enviando Documentos</DialogTitle>
-            <DialogDescription>
-              Processando e analisando arquivos com IA...
-            </DialogDescription>
+            <DialogDescription>Processando e analisando arquivos com IA...</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <Progress value={uploadProgress} />
-            <p className="text-center text-sm text-muted-foreground">
-              {uploadProgress}% concluído
-            </p>
+            <p className="text-center text-sm text-muted-foreground">{uploadProgress}% concluído</p>
           </div>
         </DialogContent>
       </Dialog>
