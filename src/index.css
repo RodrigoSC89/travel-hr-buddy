@@ -891,25 +891,9 @@
 }
 
 /* Enhanced Travel Module Animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
 @keyframes float-reverse {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(10px); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { 
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
-    transform: scale(1);
-  }
-  50% { 
-    box-shadow: 0 0 40px hsl(var(--primary) / 0.6);
-    transform: scale(1.02);
-  }
 }
 
 @keyframes slide-up {
@@ -923,42 +907,8 @@
   }
 }
 
-@keyframes bounce-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.3);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-  70% {
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
 .animate-float-reverse {
   animation: float-reverse 4s ease-in-out infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.6s ease-out;
-}
-
-.animate-bounce-in {
-  animation: bounce-in 0.8s ease-out;
 }
 
 /* Enhanced button hover effects */
