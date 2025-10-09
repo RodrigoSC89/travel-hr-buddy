@@ -82,7 +82,7 @@ export const initSentry = () => {
     ],
     
     // Set user context
-    beforeSend(event, hint) {
+    beforeSend(event) {
       // Filter out development errors if needed
       if (environment === "development") {
         console.log("Sentry Event (dev):", event);
