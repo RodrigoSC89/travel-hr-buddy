@@ -47,6 +47,55 @@ The application uses environment variables to securely store API keys for variou
 #### ElevenLabs (Voice Services)
 - `VITE_ELEVENLABS_API_KEY` - For text-to-speech functionality
 
+### Travel & Flights APIs
+
+#### Skyscanner
+- `VITE_SKYSCANNER_API_KEY` - For flight search and booking
+
+#### Brazilian Airlines
+- `VITE_TAM_API_KEY` - TAM Airlines integration
+- `VITE_GOL_API_KEY` - GOL Airlines integration
+- `VITE_AZUL_API_KEY` - AZUL Airlines integration
+
+#### Other Travel Services
+- `VITE_MAXMILHAS_API_KEY` - Flight deals platform
+- `VITE_DECOLAR_API_KEY` - Decolar.com integration
+- `VITE_GOOGLE_FLIGHTS_ENABLED` - Enable Google Flights integration (boolean)
+
+### Hotel Booking APIs
+
+#### Booking.com
+- `BOOKING_API_KEY` - For Booking.com hotel search and reservation
+
+**Where to get:** https://www.booking.com/content/affiliates.html
+
+#### Hotels.com
+- `HOTELS_API_KEY` - For Hotels.com integration
+
+**Where to get:** https://developer.hotelbeds.com/
+
+#### Airbnb
+- `AIRBNB_CLIENT_ID` - For Airbnb property search and booking
+
+**Where to get:** https://www.airbnb.com/partner
+
+#### TripAdvisor
+- `TRIPADVISOR_API_KEY` - For hotel reviews and recommendations
+
+**Where to get:** https://www.tripadvisor.com/developers
+
+### Fleet & Vessel Tracking APIs
+
+#### Marine Traffic
+- `MARINE_TRAFFIC_API_KEY` - For vessel tracking and maritime data
+
+**Where to get:** https://www.marinetraffic.com/en/ais-api-services
+
+#### Vessel Finder
+- `VESSEL_FINDER_API_KEY` - For real-time vessel positions
+
+**Where to get:** https://www.vesselfinder.com/api
+
 ## Setup Instructions
 
 ### Local Development
@@ -108,6 +157,12 @@ To configure environment variables for Supabase Edge Functions:
 - `VITE_AMADEUS_API_KEY` - Travel booking features
 - `VITE_ELEVENLABS_API_KEY` - Voice interactions
 - `WINDY_API_KEY` - Future weather visualization
+- `BOOKING_API_KEY` - Booking.com hotel integration
+- `HOTELS_API_KEY` - Hotels.com integration
+- `AIRBNB_CLIENT_ID` - Airbnb property search
+- `TRIPADVISOR_API_KEY` - Hotel reviews and ratings
+- `MARINE_TRAFFIC_API_KEY` - Vessel tracking
+- `VESSEL_FINDER_API_KEY` - Fleet monitoring
 
 ## Affected Features by API Key
 
@@ -127,6 +182,19 @@ To configure environment variables for Supabase Edge Functions:
 - Advanced weather map overlays
 - Wind pattern visualization
 - Detailed meteorological data
+
+### HOTEL BOOKING APIs
+- Hotel search functionality
+- Room availability and pricing
+- Direct booking integrations
+- Hotel reviews and ratings
+- Property comparisons
+
+### FLEET & VESSEL TRACKING APIs
+- Real-time vessel positions
+- Maritime traffic monitoring
+- Fleet management dashboards
+- Vessel performance tracking
 
 ## Troubleshooting
 
