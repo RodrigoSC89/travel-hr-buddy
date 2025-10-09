@@ -10,6 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import { ModuleHeader } from '@/components/ui/module-header';
 import { 
   Mic, 
   Settings, 
@@ -22,7 +24,9 @@ import {
   Pause,
   Square,
   Headphones,
-  X
+  X,
+  Sparkles,
+  Zap
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -172,51 +176,51 @@ export default function Voice() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 lg:p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Bot className="h-8 w-8 text-primary" />
-            Assistente de Voz
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Controle o sistema usando comandos de voz inteligentes
-          </p>
-        </div>
+    <ModulePageWrapper gradient="purple">
+      <ModuleHeader
+        icon={Bot}
+        title="Assistente de Voz"
+        description="Controle o sistema usando comandos de voz inteligentes com IA avançada"
+        gradient="purple"
+        badges={[
+          { icon: Mic, label: 'Comandos de Voz' },
+          { icon: Sparkles, label: 'IA Conversacional' },
+          { icon: Zap, label: 'Tempo Real' }
+        ]}
+      />
+
+      {/* Quick Actions */}
+      <div className="flex items-center gap-3 mb-6">
+        <Button 
+          variant="outline" 
+          onClick={() => setShowAdvancedSettings(true)}
+          className="flex items-center gap-2"
+        >
+          <Settings className="h-4 w-4" />
+          Configurações Avançadas
+        </Button>
         
-        <div className="flex items-center gap-3">
-          <Button 
-            variant="outline" 
-            onClick={() => setShowAdvancedSettings(true)}
-            className="flex items-center gap-2"
-          >
-            <Settings className="h-4 w-4" />
-            Configurações Avançadas
-          </Button>
-          
-          <Button
-            onClick={handleVoiceToggle}
-            disabled={audioPermission === 'denied'}
-            className={`flex items-center gap-2 ${
-              isListening 
-                ? 'bg-destructive hover:bg-destructive/90' 
-                : 'bg-primary hover:bg-primary/90'
-            }`}
-          >
-            {isListening ? (
-              <>
-                <MicOff className="h-4 w-4" />
-                Parar
-              </>
-            ) : (
-              <>
-                <Mic className="h-4 w-4" />
-                Ativar Voz
-              </>
-            )}
-          </Button>
-        </div>
+        <Button
+          onClick={handleVoiceToggle}
+          disabled={audioPermission === 'denied'}
+          className={`flex items-center gap-2 ${
+            isListening 
+              ? 'bg-destructive hover:bg-destructive/90' 
+              : 'bg-primary hover:bg-primary/90'
+          }`}
+        >
+          {isListening ? (
+            <>
+              <MicOff className="h-4 w-4" />
+              Parar
+            </>
+          ) : (
+            <>
+              <Mic className="h-4 w-4" />
+              Ativar Voz
+            </>
+          )}
+        </Button>
       </div>
 
       {/* Permission Alert */}
@@ -501,6 +505,6 @@ export default function Voice() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </ModulePageWrapper>
   );
 }

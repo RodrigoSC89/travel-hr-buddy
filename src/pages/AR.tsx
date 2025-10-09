@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
-import { Eye } from 'lucide-react';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { Eye, Sparkles, Zap, Camera } from 'lucide-react';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import { ModuleHeader } from '@/components/ui/module-header';
+import { DashboardSkeleton } from '@/components/ui/loading-skeleton';
 
 // Lazy loading da interface AR
 const ARInterface = React.lazy(() => 
@@ -11,30 +13,23 @@ const ARInterface = React.lazy(() =>
 
 const AR: React.FC = () => {
   return (
-    <div className="p-6 space-y-6">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="p-3 rounded-lg bg-primary/10">
-              <Eye className="h-8 w-8 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">Realidade Aumentada</h1>
-              <p className="text-muted-foreground">
-                Interface imersiva para visualização e interação avançada
-              </p>
-            </div>
-          </div>
-          
-      <Suspense fallback={
-        <div className="flex items-center justify-center p-12">
-          <div className="text-center">
-            <LoadingSpinner size="lg" />
-            <p className="mt-4 text-muted-foreground">Carregando interface AR...</p>
-          </div>
-        </div>
-      }>
+    <ModulePageWrapper gradient="purple">
+      <ModuleHeader
+        icon={Eye}
+        title="Realidade Aumentada"
+        description="Interface imersiva para visualização, manutenção e treinamento com tecnologia AR"
+        gradient="indigo"
+        badges={[
+          { icon: Camera, label: 'Interface Imersiva' },
+          { icon: Sparkles, label: 'Tecnologia Avançada' },
+          { icon: Zap, label: '3 Aplicações' }
+        ]}
+      />
+      
+      <Suspense fallback={<DashboardSkeleton />}>
         <ARInterface />
       </Suspense>
-    </div>
+    </ModulePageWrapper>
   );
 };
 

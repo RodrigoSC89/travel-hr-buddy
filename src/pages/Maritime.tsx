@@ -4,6 +4,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
+import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
+import { ModuleHeader } from '@/components/ui/module-header';
+import { DashboardSkeleton } from '@/components/ui/loading-skeleton';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Ship, 
@@ -133,23 +136,25 @@ export default function Maritime() {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-        </div>
-      </div>
+      <ModulePageWrapper gradient="blue">
+        <DashboardSkeleton />
+      </ModulePageWrapper>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="flex flex-col space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard Marítimo</h1>
-        <p className="text-muted-foreground">
-          Gestão completa da operação marítima e conformidade regulatória
-        </p>
-      </div>
+    <ModulePageWrapper gradient="blue">
+      <ModuleHeader
+        icon={Ship}
+        title="Dashboard Marítimo"
+        description="Gestão completa da operação marítima e conformidade regulatória"
+        gradient="blue"
+        badges={[
+          { icon: Users, label: `${stats.activeCrew} Tripulação` },
+          { icon: CheckCircle, label: `${stats.complianceScore}% Compliance` },
+          { icon: TrendingUp, label: 'Performance' }
+        ]}
+      />
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
@@ -505,6 +510,6 @@ export default function Maritime() {
           <PredictiveMaintenanceSystem />
         </div>
       )}
-    </div>
+    </ModulePageWrapper>
   );
 }
