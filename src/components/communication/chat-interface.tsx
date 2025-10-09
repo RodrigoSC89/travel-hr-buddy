@@ -78,7 +78,7 @@ export const ChatInterface = () => {
     };
 
     getCurrentUser();
-  }, []);
+  }, [loadConversations, loadAllUsers]);
 
   useEffect(() => {
     if (selectedConversation) {
