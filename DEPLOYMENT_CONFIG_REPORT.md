@@ -27,7 +27,7 @@ Added:
 - `preview` script now uses `--host` flag
 - `deploy:vercel` script for Vercel deployment
 - `deploy:netlify` script for Netlify deployment
-- `engines` field specifying Node.js >=18.0.0 and npm >=8.0.0
+- `engines` field specifying Node.js 18.x (locked to major version) and npm >=8.0.0
 
 ### 5. **vite.config.ts** (UPDATED)
 Enhanced production configuration:
