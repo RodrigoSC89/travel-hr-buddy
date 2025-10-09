@@ -9,11 +9,21 @@
 ### Step 1: Configure Environment Variables
 Go to your Vercel project settings and add these variables:
 ```
+# Required - Supabase
 VITE_SUPABASE_URL=your-supabase-url
 VITE_SUPABASE_ANON_KEY=your-anon-key
 VITE_SUPABASE_PROJECT_ID=your-project-id
 VITE_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
+
+# Optional - Maps & Weather (for enhanced features)
+VITE_MAPBOX_TOKEN=your-mapbox-token
+VITE_MAPBOX_ACCESS_TOKEN=your-mapbox-access-token
+VITE_OPENWEATHER_API_KEY=your-openweather-key
 ```
+
+**Note**: For Supabase Edge Functions, also configure in Supabase Dashboard:
+- `MAPBOX_PUBLIC_TOKEN` - For mapbox-token function
+- `OPENWEATHER_API_KEY` - For weather-integration and maritime-weather functions
 
 ### Step 2: Deploy
 ```bash
