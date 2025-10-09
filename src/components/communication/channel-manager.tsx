@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -83,16 +83,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     is_public: true
   });
 
-  useEffect(() => {
-    loadChannels();
-    setupRealTimeSubscription();
-  }, []);
-
-  useEffect(() => {
-    filterChannels();
-  }, [channels, searchTerm, selectedType]);
-
-  const loadChannels = async () => {
+  const loadChannels = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -189,9 +180,9 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
 
-  const setupRealTimeSubscription = () => {
+  const setupRealTimeSubscription = useCallback(() => {
     const channel = supabase
       .channel('channels-changes')
       .on(
@@ -210,9 +201,9 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     return () => {
       supabase.removeChannel(channel);
     };
-  };
+  }, [loadChannels]);
 
-  const filterChannels = () => {
+  const filterChannels = useCallback(() => {
     let filtered = [...channels];
 
     if (searchTerm) {
@@ -227,7 +218,16 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     }
 
     setFilteredChannels(filtered);
-  };
+  }, [channels, searchTerm, selectedType]);
+
+  useEffect(() => {
+    loadChannels();
+    setupRealTimeSubscription();
+  }, [loadChannels, setupRealTimeSubscription]);
+
+  useEffect(() => {
+    filterChannels();
+  }, [filterChannels]);
 
   const createChannel = async () => {
     try {
