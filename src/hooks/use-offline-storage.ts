@@ -3,16 +3,16 @@ import { useState, useEffect, useCallback } from "react";
 interface OfflineData {
   id: string;
   action: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: number;
   synced: boolean;
 }
 
 interface UseOfflineStorageReturn {
   isOnline: boolean;
-  saveToCache: (key: string, data: any) => Promise<void>;
-  getFromCache: (key: string) => Promise<any>;
-  addPendingChange: (action: string, data: any) => Promise<void>;
+  saveToCache: (key: string, data: unknown) => Promise<void>;
+  getFromCache: (key: string) => Promise<unknown>;
+  addPendingChange: (action: string, data: Record<string, unknown>) => Promise<void>;
   getPendingChanges: () => Promise<OfflineData[]>;
   syncPendingChanges: () => Promise<void>;
   clearCache: () => Promise<void>;
