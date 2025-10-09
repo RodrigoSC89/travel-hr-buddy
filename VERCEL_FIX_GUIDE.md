@@ -88,18 +88,15 @@ export default defineConfig(({ mode }) => ({
 ```
 
 ### 5. Arquivo `.vercelignore`
-Criado para otimizar o deploy:
-```
-node_modules
-.git
-*.log
-.env
-.env.local
-.DS_Store
-*.sw?
-```
+**REMOVIDO** - O arquivo `.vercelignore` foi removido para permitir que o Vercel use o `.gitignore` padrão.
 
-**Importante:** Não ignore `src` e `public` pois Vite precisa desses diretórios durante o processo de build.
+**Por quê?**
+- Quando `.vercelignore` existe, o Vercel ignora completamente o `.gitignore`
+- Isso pode causar problemas com a resolução de módulos durante o build
+- Para projetos Vite, é melhor deixar o Vercel usar o `.gitignore` automaticamente
+- O `.gitignore` já contém todas as exclusões necessárias (node_modules, dist, logs, etc.)
+
+**Importante:** Não use `.vercelignore` para projetos Vite/React, pois pode causar erros de build como "failed to resolve import".
 
 ### 6. Node.js Version
 Atualizado `package.json`:
