@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Users, 
   Shield, 
@@ -28,10 +28,10 @@ import {
   Globe,
   Award,
   Camera
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { CrewScheduleVisualizer } from './crew-schedule-visualizer';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { CrewScheduleVisualizer } from "./crew-schedule-visualizer";
 
 interface CrewMember {
   id: string;
@@ -39,7 +39,7 @@ interface CrewMember {
   rank: string;
   nationality: string;
   vessel?: string;
-  status: 'onboard' | 'on_leave' | 'available' | 'training' | 'medical_leave';
+  status: "onboard" | "on_leave" | "available" | "training" | "medical_leave";
   contract: {
     start_date: string;
     end_date: string;
@@ -49,7 +49,7 @@ interface CrewMember {
   medical: {
     last_checkup: string;
     next_due: string;
-    status: 'valid' | 'expiring' | 'expired';
+    status: "valid" | "expiring" | "expired";
   };
   contact: {
     email: string;
@@ -71,12 +71,12 @@ interface CrewMember {
 interface Certification {
   id: string;
   name: string;
-  type: 'stcw' | 'mlc' | 'ism' | 'security' | 'medical' | 'technical';
+  type: "stcw" | "mlc" | "ism" | "security" | "medical" | "technical";
   issue_date: string;
   expiry_date: string;
   issuing_authority: string;
   certificate_number: string;
-  status: 'valid' | 'expiring' | 'expired';
+  status: "valid" | "expiring" | "expired";
   renewal_required: boolean;
 }
 
@@ -94,7 +94,7 @@ interface WellnessMetric {
 interface TrainingProgram {
   id: string;
   name: string;
-  type: 'safety' | 'technical' | 'leadership' | 'compliance' | 'wellness';
+  type: "safety" | "technical" | "leadership" | "compliance" | "wellness";
   duration_hours: number;
   participants: string[];
   completion_rate: number;
@@ -104,7 +104,7 @@ interface TrainingProgram {
 }
 
 export const MaritimeHRDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [wellnessData, setWellnessData] = useState<WellnessMetric[]>([]);
@@ -120,128 +120,128 @@ export const MaritimeHRDashboard: React.FC = () => {
   const loadMockData = () => {
     const mockCrew: CrewMember[] = [
       {
-        id: '1',
-        name: 'Capitão João Silva',
-        rank: 'Master',
-        nationality: 'Brazilian',
-        vessel: 'MV Nautilus Pioneer',
-        status: 'onboard',
+        id: "1",
+        name: "Capitão João Silva",
+        rank: "Master",
+        nationality: "Brazilian",
+        vessel: "MV Nautilus Pioneer",
+        status: "onboard",
         contract: {
-          start_date: '2023-06-01',
-          end_date: '2024-02-01',
+          start_date: "2023-06-01",
+          end_date: "2024-02-01",
           duration_months: 8
         },
         certifications: [
           {
-            id: 'c1',
-            name: 'Certificate of Competency - Master',
-            type: 'stcw',
-            issue_date: '2020-03-15',
-            expiry_date: '2025-03-15',
-            issuing_authority: 'Brazilian Maritime Authority',
-            certificate_number: 'BMA-2020-M-001',
-            status: 'valid',
+            id: "c1",
+            name: "Certificate of Competency - Master",
+            type: "stcw",
+            issue_date: "2020-03-15",
+            expiry_date: "2025-03-15",
+            issuing_authority: "Brazilian Maritime Authority",
+            certificate_number: "BMA-2020-M-001",
+            status: "valid",
             renewal_required: false
           }
         ],
         medical: {
-          last_checkup: '2023-11-15',
-          next_due: '2024-05-15',
-          status: 'valid'
+          last_checkup: "2023-11-15",
+          next_due: "2024-05-15",
+          status: "valid"
         },
         contact: {
-          email: 'joao.silva@nautilus.com',
-          phone: '+55 11 99999-0001',
-          emergency_contact: '+55 11 88888-0001'
+          email: "joao.silva@nautilus.com",
+          phone: "+55 11 99999-0001",
+          emergency_contact: "+55 11 88888-0001"
         },
         performance: {
           rating: 9.2,
-          last_evaluation: '2023-12-01',
-          areas_improvement: ['Bridge Team Management', 'Digital Navigation']
+          last_evaluation: "2023-12-01",
+          areas_improvement: ["Bridge Team Management", "Digital Navigation"]
         },
         sea_service: {
           total_months: 180,
-          vessels_served: ['MV Atlantic Explorer', 'MV Pacific Star', 'MV Nautilus Pioneer'],
-          last_voyage_end: '2023-05-30'
+          vessels_served: ["MV Atlantic Explorer", "MV Pacific Star", "MV Nautilus Pioneer"],
+          last_voyage_end: "2023-05-30"
         }
       },
       {
-        id: '2',
-        name: 'Oficial Maria Santos',
-        rank: 'Chief Officer',
-        nationality: 'Brazilian',
-        vessel: 'MV Atlantic Explorer',
-        status: 'on_leave',
+        id: "2",
+        name: "Oficial Maria Santos",
+        rank: "Chief Officer",
+        nationality: "Brazilian",
+        vessel: "MV Atlantic Explorer",
+        status: "on_leave",
         contract: {
-          start_date: '2023-08-01',
-          end_date: '2024-04-01',
+          start_date: "2023-08-01",
+          end_date: "2024-04-01",
           duration_months: 8
         },
         certifications: [
           {
-            id: 'c2',
-            name: 'Certificate of Competency - Chief Officer',
-            type: 'stcw',
-            issue_date: '2019-06-20',
-            expiry_date: '2024-06-20',
-            issuing_authority: 'Brazilian Maritime Authority',
-            certificate_number: 'BMA-2019-CO-002',
-            status: 'expiring',
+            id: "c2",
+            name: "Certificate of Competency - Chief Officer",
+            type: "stcw",
+            issue_date: "2019-06-20",
+            expiry_date: "2024-06-20",
+            issuing_authority: "Brazilian Maritime Authority",
+            certificate_number: "BMA-2019-CO-002",
+            status: "expiring",
             renewal_required: true
           }
         ],
         medical: {
-          last_checkup: '2023-10-20',
-          next_due: '2024-04-20',
-          status: 'valid'
+          last_checkup: "2023-10-20",
+          next_due: "2024-04-20",
+          status: "valid"
         },
         contact: {
-          email: 'maria.santos@nautilus.com',
-          phone: '+55 11 99999-0002',
-          emergency_contact: '+55 11 88888-0002'
+          email: "maria.santos@nautilus.com",
+          phone: "+55 11 99999-0002",
+          emergency_contact: "+55 11 88888-0002"
         },
         performance: {
           rating: 8.8,
-          last_evaluation: '2023-11-15',
-          areas_improvement: ['ECDIS Advanced', 'Cargo Operations']
+          last_evaluation: "2023-11-15",
+          areas_improvement: ["ECDIS Advanced", "Cargo Operations"]
         },
         sea_service: {
           total_months: 96,
-          vessels_served: ['MV Coastal Runner', 'MV Atlantic Explorer'],
-          last_voyage_end: '2023-07-15'
+          vessels_served: ["MV Coastal Runner", "MV Atlantic Explorer"],
+          last_voyage_end: "2023-07-15"
         }
       }
     ];
 
     const mockTraining: TrainingProgram[] = [
       {
-        id: '1',
-        name: 'Advanced Bridge Resource Management',
-        type: 'safety',
+        id: "1",
+        name: "Advanced Bridge Resource Management",
+        type: "safety",
         duration_hours: 40,
-        participants: ['1', '2'],
+        participants: ["1", "2"],
         completion_rate: 85,
-        next_session: '2024-02-15T09:00:00Z',
-        instructor: 'Capt. Roberto Lima',
+        next_session: "2024-02-15T09:00:00Z",
+        instructor: "Capt. Roberto Lima",
         virtual_reality: true
       },
       {
-        id: '2',
-        name: 'Mental Health and Wellness at Sea',
-        type: 'wellness',
+        id: "2",
+        name: "Mental Health and Wellness at Sea",
+        type: "wellness",
         duration_hours: 16,
-        participants: ['1', '2'],
+        participants: ["1", "2"],
         completion_rate: 92,
-        next_session: '2024-02-20T14:00:00Z',
-        instructor: 'Dr. Ana Carvalho',
+        next_session: "2024-02-20T14:00:00Z",
+        instructor: "Dr. Ana Carvalho",
         virtual_reality: false
       }
     ];
 
     const mockWellness: WellnessMetric[] = [
       {
-        crew_id: '1',
-        date: '2024-01-15',
+        crew_id: "1",
+        date: "2024-01-15",
         stress_level: 3,
         sleep_quality: 8,
         physical_health: 9,
@@ -259,32 +259,32 @@ export const MaritimeHRDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'onboard': return 'text-blue-600 bg-blue-100';
-      case 'on_leave': return 'text-green-600 bg-green-100';
-      case 'available': return 'text-muted-foreground bg-gray-100';
-      case 'training': return 'text-purple-600 bg-purple-100';
-      case 'medical_leave': return 'text-red-600 bg-red-100';
-      default: return 'text-muted-foreground bg-gray-100';
+    case "onboard": return "text-blue-600 bg-blue-100";
+    case "on_leave": return "text-green-600 bg-green-100";
+    case "available": return "text-muted-foreground bg-gray-100";
+    case "training": return "text-purple-600 bg-purple-100";
+    case "medical_leave": return "text-red-600 bg-red-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'onboard': return 'A Bordo';
-      case 'on_leave': return 'De Folga';
-      case 'available': return 'Disponível';
-      case 'training': return 'Treinamento';
-      case 'medical_leave': return 'Licença Médica';
-      default: return 'Desconhecido';
+    case "onboard": return "A Bordo";
+    case "on_leave": return "De Folga";
+    case "available": return "Disponível";
+    case "training": return "Treinamento";
+    case "medical_leave": return "Licença Médica";
+    default: return "Desconhecido";
     }
   };
 
   const getCertificationStatusColor = (status: string) => {
     switch (status) {
-      case 'valid': return 'text-green-600 bg-green-100';
-      case 'expiring': return 'text-yellow-600 bg-yellow-100';
-      case 'expired': return 'text-red-600 bg-red-100';
-      default: return 'text-muted-foreground bg-gray-100';
+    case "valid": return "text-green-600 bg-green-100";
+    case "expiring": return "text-yellow-600 bg-yellow-100";
+    case "expired": return "text-red-600 bg-red-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 
@@ -323,7 +323,7 @@ export const MaritimeHRDashboard: React.FC = () => {
       {/* Header Section */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-900 via-blue-800 to-cyan-900 p-8 text-azure-50">
         <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
         }}></div>
         <div className="relative z-10">
           <div className="flex items-center gap-4 mb-6">
@@ -421,7 +421,7 @@ export const MaritimeHRDashboard: React.FC = () => {
                         <div>
                           <h3 className="font-semibold">{crew.name}</h3>
                           <p className="text-sm text-muted-foreground">{crew.rank}</p>
-                          <p className="text-xs text-muted-foreground">{crew.vessel || 'Sem embarcação'}</p>
+                          <p className="text-xs text-muted-foreground">{crew.vessel || "Sem embarcação"}</p>
                         </div>
                       </div>
                       <div className="text-right">
@@ -565,7 +565,7 @@ export const MaritimeHRDashboard: React.FC = () => {
                     <div 
                       key={crew.id}
                       className={`p-3 border rounded-lg cursor-pointer transition-colors ${
-                        selectedCrew?.id === crew.id ? 'bg-primary/10 border-primary' : 'hover:bg-muted/50'
+                        selectedCrew?.id === crew.id ? "bg-primary/10 border-primary" : "hover:bg-muted/50"
                       }`}
                       onClick={() => setSelectedCrew(crew)}
                     >
@@ -612,7 +612,7 @@ export const MaritimeHRDashboard: React.FC = () => {
                           </div>
                           <div className="flex justify-between">
                             <span>Embarcação:</span>
-                            <span className="font-medium">{selectedCrew.vessel || 'N/A'}</span>
+                            <span className="font-medium">{selectedCrew.vessel || "N/A"}</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Status:</span>
@@ -629,13 +629,13 @@ export const MaritimeHRDashboard: React.FC = () => {
                           <div className="flex justify-between">
                             <span>Início:</span>
                             <span className="font-medium">
-                              {new Date(selectedCrew.contract.start_date).toLocaleDateString('pt-BR')}
+                              {new Date(selectedCrew.contract.start_date).toLocaleDateString("pt-BR")}
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Fim:</span>
                             <span className="font-medium">
-                              {new Date(selectedCrew.contract.end_date).toLocaleDateString('pt-BR')}
+                              {new Date(selectedCrew.contract.end_date).toLocaleDateString("pt-BR")}
                             </span>
                           </div>
                           <div className="flex justify-between">
@@ -677,13 +677,13 @@ export const MaritimeHRDashboard: React.FC = () => {
                           <div className="flex justify-between">
                             <span>Último Exame:</span>
                             <span className="font-medium">
-                              {new Date(selectedCrew.medical.last_checkup).toLocaleDateString('pt-BR')}
+                              {new Date(selectedCrew.medical.last_checkup).toLocaleDateString("pt-BR")}
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Próximo Exame:</span>
                             <span className="font-medium">
-                              {new Date(selectedCrew.medical.next_due).toLocaleDateString('pt-BR')}
+                              {new Date(selectedCrew.medical.next_due).toLocaleDateString("pt-BR")}
                             </span>
                           </div>
                           <div className="flex justify-between">
@@ -727,7 +727,7 @@ export const MaritimeHRDashboard: React.FC = () => {
                           <div className="flex justify-between">
                             <span>Última Viagem:</span>
                             <span className="font-medium">
-                              {new Date(selectedCrew.sea_service.last_voyage_end).toLocaleDateString('pt-BR')}
+                              {new Date(selectedCrew.sea_service.last_voyage_end).toLocaleDateString("pt-BR")}
                             </span>
                           </div>
                         </div>
@@ -826,7 +826,7 @@ export const MaritimeHRDashboard: React.FC = () => {
                     <div className="text-right">
                       <div className="text-lg font-bold">{program.completion_rate}%</div>
                       <p className="text-sm text-muted-foreground">
-                        Próxima sessão: {new Date(program.next_session).toLocaleDateString('pt-BR')}
+                        Próxima sessão: {new Date(program.next_session).toLocaleDateString("pt-BR")}
                       </p>
                     </div>
                   </div>

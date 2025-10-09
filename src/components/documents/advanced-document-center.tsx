@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   FileText, 
   Upload, 
@@ -36,19 +36,19 @@ import {
   TrendingUp,
   RefreshCw,
   Plus
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface Document {
   id: string;
   title: string;
   description: string;
-  type: 'pdf' | 'docx' | 'xlsx' | 'pptx' | 'image' | 'other';
+  type: "pdf" | "docx" | "xlsx" | "pptx" | "image" | "other";
   category: string;
   size: number;
-  status: 'draft' | 'review' | 'approved' | 'archived';
+  status: "draft" | "review" | "approved" | "archived";
   version: string;
   createdAt: Date;
   updatedAt: Date;
@@ -60,7 +60,7 @@ interface Document {
   collaborators: string[];
   approvals: Array<{
     user: string;
-    status: 'pending' | 'approved' | 'rejected';
+    status: "pending" | "approved" | "rejected";
     date: Date;
     comments?: string;
   }>;
@@ -73,7 +73,7 @@ interface DocumentTemplate {
   category: string;
   fields: Array<{
     name: string;
-    type: 'text' | 'number' | 'date' | 'select' | 'textarea';
+    type: "text" | "number" | "date" | "select" | "textarea";
     required: boolean;
     options?: string[];
   }>;
@@ -87,144 +87,144 @@ export const AdvancedDocumentCenter: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [templates, setTemplates] = useState<DocumentTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Dados simulados para demonstração
   const generateMockData = () => {
     const mockDocuments: Document[] = [
       {
-        id: '1',
-        title: 'Manual de Operações Marítimas',
-        description: 'Guia completo de procedimentos operacionais para embarcações',
-        type: 'pdf',
-        category: 'manuais',
+        id: "1",
+        title: "Manual de Operações Marítimas",
+        description: "Guia completo de procedimentos operacionais para embarcações",
+        type: "pdf",
+        category: "manuais",
         size: 2048576, // 2MB
-        status: 'approved',
-        version: '2.1',
+        status: "approved",
+        version: "2.1",
         createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
         updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-        createdBy: 'João Silva',
-        tags: ['marítimo', 'operações', 'manual', 'segurança'],
+        createdBy: "João Silva",
+        tags: ["marítimo", "operações", "manual", "segurança"],
         isPublic: false,
         downloadCount: 47,
         viewCount: 156,
-        collaborators: ['João Silva', 'Maria Santos', 'Pedro Costa'],
+        collaborators: ["João Silva", "Maria Santos", "Pedro Costa"],
         approvals: [
-          { user: 'Supervisor Marítimo', status: 'approved', date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-          { user: 'Diretor Operacional', status: 'approved', date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
+          { user: "Supervisor Marítimo", status: "approved", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
+          { user: "Diretor Operacional", status: "approved", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
         ]
       },
       {
-        id: '2',
-        title: 'Relatório Financeiro Q1 2024',
-        description: 'Análise financeira do primeiro trimestre',
-        type: 'xlsx',
-        category: 'relatórios',
+        id: "2",
+        title: "Relatório Financeiro Q1 2024",
+        description: "Análise financeira do primeiro trimestre",
+        type: "xlsx",
+        category: "relatórios",
         size: 1536000, // 1.5MB
-        status: 'review',
-        version: '1.3',
+        status: "review",
+        version: "1.3",
         createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
         updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-        createdBy: 'Ana Oliveira',
-        tags: ['financeiro', 'relatório', 'Q1', '2024'],
+        createdBy: "Ana Oliveira",
+        tags: ["financeiro", "relatório", "Q1", "2024"],
         isPublic: false,
         downloadCount: 23,
         viewCount: 89,
-        collaborators: ['Ana Oliveira', 'Carlos Ferreira'],
+        collaborators: ["Ana Oliveira", "Carlos Ferreira"],
         approvals: [
-          { user: 'Gerente Financeiro', status: 'pending', date: new Date() },
-          { user: 'CFO', status: 'pending', date: new Date() }
+          { user: "Gerente Financeiro", status: "pending", date: new Date() },
+          { user: "CFO", status: "pending", date: new Date() }
         ]
       },
       {
-        id: '3',
-        title: 'Política de Recursos Humanos',
-        description: 'Documento oficial das políticas de RH da empresa',
-        type: 'docx',
-        category: 'políticas',
+        id: "3",
+        title: "Política de Recursos Humanos",
+        description: "Documento oficial das políticas de RH da empresa",
+        type: "docx",
+        category: "políticas",
         size: 512000, // 512KB
-        status: 'draft',
-        version: '3.0',
+        status: "draft",
+        version: "3.0",
         createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
         updatedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
-        createdBy: 'Roberto Lima',
-        tags: ['rh', 'política', 'recursos humanos', 'oficial'],
+        createdBy: "Roberto Lima",
+        tags: ["rh", "política", "recursos humanos", "oficial"],
         isPublic: true,
         downloadCount: 12,
         viewCount: 67,
-        collaborators: ['Roberto Lima', 'Fernanda Alves'],
+        collaborators: ["Roberto Lima", "Fernanda Alves"],
         approvals: [
-          { user: 'Diretor de RH', status: 'pending', date: new Date() }
+          { user: "Diretor de RH", status: "pending", date: new Date() }
         ]
       },
       {
-        id: '4',
-        title: 'Certificados de Qualidade ISO',
-        description: 'Coleção de certificados ISO da empresa',
-        type: 'pdf',
-        category: 'certificados',
+        id: "4",
+        title: "Certificados de Qualidade ISO",
+        description: "Coleção de certificados ISO da empresa",
+        type: "pdf",
+        category: "certificados",
         size: 3072000, // 3MB
-        status: 'approved',
-        version: '1.0',
+        status: "approved",
+        version: "1.0",
         createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         updatedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        createdBy: 'Qualidade ISO',
-        tags: ['iso', 'qualidade', 'certificado', 'auditoria'],
+        createdBy: "Qualidade ISO",
+        tags: ["iso", "qualidade", "certificado", "auditoria"],
         isPublic: true,
         downloadCount: 89,
         viewCount: 234,
-        collaborators: ['Qualidade ISO'],
+        collaborators: ["Qualidade ISO"],
         approvals: [
-          { user: 'Auditor Interno', status: 'approved', date: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000) }
+          { user: "Auditor Interno", status: "approved", date: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000) }
         ]
       }
     ];
 
     const mockTemplates: DocumentTemplate[] = [
       {
-        id: 't1',
-        name: 'Relatório de Incidente',
-        description: 'Template para reportar incidentes operacionais',
-        category: 'relatórios',
+        id: "t1",
+        name: "Relatório de Incidente",
+        description: "Template para reportar incidentes operacionais",
+        category: "relatórios",
         usageCount: 34,
         fields: [
-          { name: 'Data do Incidente', type: 'date', required: true },
-          { name: 'Local', type: 'text', required: true },
-          { name: 'Descrição', type: 'textarea', required: true },
-          { name: 'Gravidade', type: 'select', required: true, options: ['Baixa', 'Média', 'Alta', 'Crítica'] },
-          { name: 'Responsável', type: 'text', required: true }
+          { name: "Data do Incidente", type: "date", required: true },
+          { name: "Local", type: "text", required: true },
+          { name: "Descrição", type: "textarea", required: true },
+          { name: "Gravidade", type: "select", required: true, options: ["Baixa", "Média", "Alta", "Crítica"] },
+          { name: "Responsável", type: "text", required: true }
         ]
       },
       {
-        id: 't2',
-        name: 'Solicitação de Férias',
-        description: 'Template para solicitação de períodos de férias',
-        category: 'rh',
+        id: "t2",
+        name: "Solicitação de Férias",
+        description: "Template para solicitação de períodos de férias",
+        category: "rh",
         usageCount: 87,
         fields: [
-          { name: 'Nome do Funcionário', type: 'text', required: true },
-          { name: 'Data de Início', type: 'date', required: true },
-          { name: 'Data de Fim', type: 'date', required: true },
-          { name: 'Motivo', type: 'textarea', required: false },
-          { name: 'Substituto', type: 'text', required: true }
+          { name: "Nome do Funcionário", type: "text", required: true },
+          { name: "Data de Início", type: "date", required: true },
+          { name: "Data de Fim", type: "date", required: true },
+          { name: "Motivo", type: "textarea", required: false },
+          { name: "Substituto", type: "text", required: true }
         ]
       },
       {
-        id: 't3',
-        name: 'Avaliação de Fornecedor',
-        description: 'Template para avaliar fornecedores',
-        category: 'compras',
+        id: "t3",
+        name: "Avaliação de Fornecedor",
+        description: "Template para avaliar fornecedores",
+        category: "compras",
         usageCount: 23,
         fields: [
-          { name: 'Nome do Fornecedor', type: 'text', required: true },
-          { name: 'Categoria', type: 'select', required: true, options: ['Serviços', 'Produtos', 'Equipamentos'] },
-          { name: 'Qualidade', type: 'number', required: true },
-          { name: 'Pontualidade', type: 'number', required: true },
-          { name: 'Observações', type: 'textarea', required: false }
+          { name: "Nome do Fornecedor", type: "text", required: true },
+          { name: "Categoria", type: "select", required: true, options: ["Serviços", "Produtos", "Equipamentos"] },
+          { name: "Qualidade", type: "number", required: true },
+          { name: "Pontualidade", type: "number", required: true },
+          { name: "Observações", type: "textarea", required: false }
         ]
       }
     ];
@@ -240,49 +240,49 @@ export const AdvancedDocumentCenter: React.FC = () => {
 
   const getFileTypeIcon = (type: string) => {
     switch (type) {
-      case 'pdf': return '📄';
-      case 'docx': return '📝';
-      case 'xlsx': return '📊';
-      case 'pptx': return '📊';
-      case 'image': return '🖼️';
-      default: return '📁';
+    case "pdf": return "📄";
+    case "docx": return "📝";
+    case "xlsx": return "📊";
+    case "pptx": return "📊";
+    case "image": return "🖼️";
+    default: return "📁";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'approved': return 'text-green-600 bg-green-100';
-      case 'review': return 'text-yellow-600 bg-yellow-100';
-      case 'draft': return 'text-blue-600 bg-blue-100';
-      case 'archived': return 'text-muted-foreground bg-gray-100';
-      default: return 'text-muted-foreground bg-gray-100';
+    case "approved": return "text-green-600 bg-green-100";
+    case "review": return "text-yellow-600 bg-yellow-100";
+    case "draft": return "text-blue-600 bg-blue-100";
+    case "archived": return "text-muted-foreground bg-gray-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'approved': return <CheckCircle className="h-4 w-4" />;
-      case 'review': return <Clock className="h-4 w-4" />;
-      case 'draft': return <Edit className="h-4 w-4" />;
-      case 'archived': return <Archive className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+    case "approved": return <CheckCircle className="h-4 w-4" />;
+    case "review": return <Clock className="h-4 w-4" />;
+    case "draft": return <Edit className="h-4 w-4" />;
+    case "archived": return <Archive className="h-4 w-4" />;
+    default: return <FileText className="h-4 w-4" />;
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const filteredDocuments = documents.filter(doc => {
     const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          doc.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = categoryFilter === 'all' || doc.category === categoryFilter;
-    const matchesStatus = statusFilter === 'all' || doc.status === statusFilter;
+    const matchesCategory = categoryFilter === "all" || doc.category === categoryFilter;
+    const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
     
     return matchesSearch && matchesCategory && matchesStatus;
   });
@@ -317,7 +317,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     setSelectedDocument(document);
   };
 
-  const handleStatusChange = (documentId: string, newStatus: Document['status']) => {
+  const handleStatusChange = (documentId: string, newStatus: Document["status"]) => {
     setDocuments(prev => prev.map(doc => 
       doc.id === documentId 
         ? { ...doc, status: newStatus, updatedAt: new Date() }
@@ -370,7 +370,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{documents.length}</div>
             <p className="text-xs text-muted-foreground">
-              {documents.filter(d => d.status === 'approved').length} aprovados
+              {documents.filter(d => d.status === "approved").length} aprovados
             </p>
           </CardContent>
         </Card>
@@ -397,7 +397,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {documents.filter(d => d.status === 'review').length}
+              {documents.filter(d => d.status === "review").length}
             </div>
             <p className="text-xs text-muted-foreground">
               aguardando aprovação
@@ -468,16 +468,16 @@ export const AdvancedDocumentCenter: React.FC = () => {
 
             <div className="flex items-center space-x-2">
               <Button 
-                variant={viewMode === 'grid' ? 'default' : 'outline'} 
+                variant={viewMode === "grid" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setViewMode('grid')}
+                onClick={() => setViewMode("grid")}
               >
                 Grid
               </Button>
               <Button 
-                variant={viewMode === 'list' ? 'default' : 'outline'} 
+                variant={viewMode === "list" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setViewMode('list')}
+                onClick={() => setViewMode("list")}
               >
                 Lista
               </Button>
@@ -485,7 +485,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
           </div>
 
           {/* Lista/Grid de Documentos */}
-          {viewMode === 'grid' ? (
+          {viewMode === "grid" ? (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredDocuments.map((doc) => (
                 <Card key={doc.id} className="cursor-pointer hover:shadow-md transition-shadow">
@@ -656,7 +656,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {documents.filter(doc => doc.status === 'review').map((doc) => (
+                {documents.filter(doc => doc.status === "review").map((doc) => (
                   <div key={doc.id} className="flex items-center justify-between p-4 border border-border rounded-lg">
                     <div className="flex-1">
                       <h4 className="font-medium">{doc.title}</h4>
@@ -676,13 +676,13 @@ export const AdvancedDocumentCenter: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="destructive"
-                        onClick={() => handleStatusChange(doc.id, 'draft')}
+                        onClick={() => handleStatusChange(doc.id, "draft")}
                       >
                         Rejeitar
                       </Button>
                       <Button 
                         size="sm"
-                        onClick={() => handleStatusChange(doc.id, 'approved')}
+                        onClick={() => handleStatusChange(doc.id, "approved")}
                       >
                         Aprovar
                       </Button>
@@ -703,7 +703,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {['manuais', 'relatórios', 'políticas', 'certificados'].map((category) => {
+                  {["manuais", "relatórios", "políticas", "certificados"].map((category) => {
                     const count = documents.filter(d => d.category === category).length;
                     const percentage = (count / documents.length) * 100;
                     
@@ -743,7 +743,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <span>Aprovações pendentes</span>
                     <span className="font-bold text-yellow-600">
-                      {documents.filter(d => d.status === 'review').length}
+                      {documents.filter(d => d.status === "review").length}
                     </span>
                   </div>
                 </div>

@@ -1,7 +1,7 @@
-import React from 'react';
-import { FloatingActionButton } from '@/components/ui/floating-action-button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { FloatingActionButton } from "@/components/ui/floating-action-button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 /**
  * Demo page to showcase the Floating Action Button

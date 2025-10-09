@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   CalendarIcon, 
   Plus, 
@@ -20,22 +20,22 @@ import {
   AlertTriangle,
   Bot,
   Calendar
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import { ReservationFilters } from './reservation-filters';
-import { ReservationForm } from './reservation-form';
-import { ReservationCard } from './reservation-card';
-import { ReservationStats } from './reservation-stats';
-import { ReservationAI } from './reservation-ai';
-import { ReservationCalendarView } from './reservation-calendar-view';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { ReservationFilters } from "./reservation-filters";
+import { ReservationForm } from "./reservation-form";
+import { ReservationCard } from "./reservation-card";
+import { ReservationStats } from "./reservation-stats";
+import { ReservationAI } from "./reservation-ai";
+import { ReservationCalendarView } from "./reservation-calendar-view";
 
 export interface EnhancedReservation {
   id: string;
   title: string;
   description?: string;
-  reservation_type: 'hotel' | 'transport' | 'embarkation' | 'flight' | 'other';
+  reservation_type: "hotel" | "transport" | "embarkation" | "flight" | "other";
   start_date: string;
   end_date: string;
   location?: string;
@@ -46,7 +46,7 @@ export interface EnhancedReservation {
   room_type?: string;
   total_amount?: number;
   currency?: string;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  status: "pending" | "confirmed" | "cancelled" | "completed";
   notes?: string;
   attachments?: string[];
   created_at: string;
@@ -70,13 +70,13 @@ export const EnhancedReservationsDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedReservation, setSelectedReservation] = useState<EnhancedReservation | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [filters, setFilters] = useState<ReservationFiltersType>({
-    type: 'all',
-    status: 'all',
+    type: "all",
+    status: "all",
     dateRange: null,
-    searchTerm: '',
-    crewMember: 'all'
+    searchTerm: "",
+    crewMember: "all"
   });
 
   const { toast } = useToast();
@@ -92,24 +92,24 @@ export const EnhancedReservationsDashboard: React.FC = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('reservations')
-        .select('*')
-        .order('start_date', { ascending: true });
+        .from("reservations")
+        .select("*")
+        .order("start_date", { ascending: true });
 
       if (error) throw error;
       
       // Fetch user profiles separately to get crew member names
       const userIds = [...new Set((data || []).map(item => item.user_id))];
       const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id, full_name')
-        .in('id', userIds);
+        .from("profiles")
+        .select("id, full_name")
+        .in("id", userIds);
 
       const profileMap = new Map(profiles?.map(p => [p.id, p.full_name]) || []);
       
       const enhancedData = (data || []).map(item => ({
         ...item,
-        crew_member_name: profileMap.get(item.user_id) || 'N/A',
+        crew_member_name: profileMap.get(item.user_id) || "N/A",
         conflict_detected: false,
         ai_suggestions: []
       })) as EnhancedReservation[];
@@ -118,7 +118,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       const conflictChecked = detectConflicts(enhancedData);
       setReservations(conflictChecked);
     } catch (error) {
-      console.error('Error fetching reservations:', error);
+      console.error("Error fetching reservations:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar reservas",
@@ -142,17 +142,17 @@ export const EnhancedReservationsDashboard: React.FC = () => {
         ...reservation,
         conflict_detected: conflicts.length > 0,
         ai_suggestions: conflicts.length > 0 ? [
-          'Conflito de data detectado',
-          'Considere reagendar uma das reservas',
-          'Verifique horários de check-in/check-out'
+          "Conflito de data detectado",
+          "Considere reagendar uma das reservas",
+          "Verifique horários de check-in/check-out"
         ] : []
       };
     });
   };
 
   const filteredReservations = reservations.filter(reservation => {
-    if (filters.type !== 'all' && reservation.reservation_type !== filters.type) return false;
-    if (filters.status !== 'all' && reservation.status !== filters.status) return false;
+    if (filters.type !== "all" && reservation.reservation_type !== filters.type) return false;
+    if (filters.status !== "all" && reservation.status !== filters.status) return false;
     if (filters.searchTerm && !reservation.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) &&
         !reservation.location?.toLowerCase().includes(filters.searchTerm.toLowerCase())) return false;
     if (filters.dateRange) {
@@ -176,13 +176,13 @@ export const EnhancedReservationsDashboard: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Tem certeza que deseja excluir esta reserva?')) return;
+    if (!confirm("Tem certeza que deseja excluir esta reserva?")) return;
     
     try {
       const { error } = await supabase
-        .from('reservations')
+        .from("reservations")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
       
@@ -192,7 +192,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       });
       fetchReservations();
     } catch (error) {
-      console.error('Error deleting reservation:', error);
+      console.error("Error deleting reservation:", error);
       toast({
         title: "Erro",
         description: "Erro ao excluir reserva",
@@ -203,23 +203,23 @@ export const EnhancedReservationsDashboard: React.FC = () => {
 
   const exportReservations = () => {
     const csv = [
-      ['Título', 'Tipo', 'Data Início', 'Data Fim', 'Local', 'Status', 'Tripulante'].join(','),
+      ["Título", "Tipo", "Data Início", "Data Fim", "Local", "Status", "Tripulante"].join(","),
       ...filteredReservations.map(r => [
         r.title,
         r.reservation_type,
-        new Date(r.start_date).toLocaleDateString('pt-BR'),
-        new Date(r.end_date).toLocaleDateString('pt-BR'),
-        r.location || '',
+        new Date(r.start_date).toLocaleDateString("pt-BR"),
+        new Date(r.end_date).toLocaleDateString("pt-BR"),
+        r.location || "",
         r.status,
-        r.crew_member_name || ''
-      ].join(','))
-    ].join('\n');
+        r.crew_member_name || ""
+      ].join(","))
+    ].join("\n");
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `reservas_${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `reservas_${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -310,9 +310,9 @@ export const EnhancedReservationsDashboard: React.FC = () => {
                 <CalendarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-semibold mb-2">Nenhuma reserva encontrada</h3>
                 <p className="text-muted-foreground mb-4">
-                  {filters.searchTerm || filters.type !== 'all' || filters.status !== 'all'
-                    ? 'Nenhuma reserva corresponde aos filtros aplicados'
-                    : 'Crie sua primeira reserva para começar'
+                  {filters.searchTerm || filters.type !== "all" || filters.status !== "all"
+                    ? "Nenhuma reserva corresponde aos filtros aplicados"
+                    : "Crie sua primeira reserva para começar"
                   }
                 </p>
                 <Button onClick={() => setIsFormOpen(true)}>
@@ -347,7 +347,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {['hotel', 'transport', 'embarkation', 'flight', 'other'].map(type => {
+                  {["hotel", "transport", "embarkation", "flight", "other"].map(type => {
                     const count = reservations.filter(r => r.reservation_type === type).length;
                     const percentage = reservations.length > 0 ? (count / reservations.length) * 100 : 0;
                     return (
@@ -371,8 +371,8 @@ export const EnhancedReservationsDashboard: React.FC = () => {
                     <div key={reservation.id} className="p-2 bg-red-50 rounded">
                       <p className="font-medium text-red-800">{reservation.title}</p>
                       <p className="text-sm text-red-600">
-                        {new Date(reservation.start_date).toLocaleDateString('pt-BR')} - 
-                        {new Date(reservation.end_date).toLocaleDateString('pt-BR')}
+                        {new Date(reservation.start_date).toLocaleDateString("pt-BR")} - 
+                        {new Date(reservation.end_date).toLocaleDateString("pt-BR")}
                       </p>
                     </div>
                   ))}

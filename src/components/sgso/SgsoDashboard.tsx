@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Shield,
   AlertTriangle,
@@ -15,18 +15,18 @@ import {
   Activity,
   Bell,
   Calendar
-} from 'lucide-react';
-import { AnpPracticesManager } from './AnpPracticesManager';
-import { RiskAssessmentMatrix } from './RiskAssessmentMatrix';
-import { IncidentReporting } from './IncidentReporting';
-import { TrainingCompliance } from './TrainingCompliance';
-import { AuditPlanner } from './AuditPlanner';
-import { NonConformityManager } from './NonConformityManager';
-import { ComplianceMetrics } from './ComplianceMetrics';
-import { EmergencyResponse } from './EmergencyResponse';
+} from "lucide-react";
+import { AnpPracticesManager } from "./AnpPracticesManager";
+import { RiskAssessmentMatrix } from "./RiskAssessmentMatrix";
+import { IncidentReporting } from "./IncidentReporting";
+import { TrainingCompliance } from "./TrainingCompliance";
+import { AuditPlanner } from "./AuditPlanner";
+import { NonConformityManager } from "./NonConformityManager";
+import { ComplianceMetrics } from "./ComplianceMetrics";
+import { EmergencyResponse } from "./EmergencyResponse";
 
 export const SgsoDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   // Sample KPIs
   const kpis = {
@@ -244,21 +244,21 @@ export const SgsoDashboard: React.FC = () => {
                   <CardContent>
                     <div className="space-y-3">
                       {[
-                        { type: 'incident', title: 'Novo incidente registrado', time: '2 horas atrás', severity: 'high' },
-                        { type: 'audit', title: 'Auditoria ANP concluída', time: '5 horas atrás', severity: 'info' },
-                        { type: 'practice', title: 'Prática 4 atualizada', time: '1 dia atrás', severity: 'warning' },
-                        { type: 'risk', title: 'Novo risco identificado', time: '2 dias atrás', severity: 'medium' }
+                        { type: "incident", title: "Novo incidente registrado", time: "2 horas atrás", severity: "high" },
+                        { type: "audit", title: "Auditoria ANP concluída", time: "5 horas atrás", severity: "info" },
+                        { type: "practice", title: "Prática 4 atualizada", time: "1 dia atrás", severity: "warning" },
+                        { type: "risk", title: "Novo risco identificado", time: "2 dias atrás", severity: "medium" }
                       ].map((activity, index) => (
                         <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                           <div className={`p-2 rounded-full ${
-                            activity.severity === 'high' ? 'bg-red-100' :
-                            activity.severity === 'warning' ? 'bg-yellow-100' :
-                            activity.severity === 'info' ? 'bg-blue-100' : 'bg-gray-100'
+                            activity.severity === "high" ? "bg-red-100" :
+                              activity.severity === "warning" ? "bg-yellow-100" :
+                                activity.severity === "info" ? "bg-blue-100" : "bg-gray-100"
                           }`}>
                             <Activity className={`h-4 w-4 ${
-                              activity.severity === 'high' ? 'text-red-600' :
-                              activity.severity === 'warning' ? 'text-yellow-600' :
-                              activity.severity === 'info' ? 'text-blue-600' : 'text-muted-foreground'
+                              activity.severity === "high" ? "text-red-600" :
+                                activity.severity === "warning" ? "text-yellow-600" :
+                                  activity.severity === "info" ? "text-blue-600" : "text-muted-foreground"
                             }`} />
                           </div>
                           <div className="flex-1">
@@ -279,16 +279,16 @@ export const SgsoDashboard: React.FC = () => {
                   <CardContent>
                     <div className="space-y-3">
                       {[
-                        { task: 'Auditoria interna Prática 13', due: 'Amanhã', priority: 'high' },
-                        { task: 'Revisão matriz de riscos', due: '3 dias', priority: 'medium' },
-                        { task: 'Treinamento SGSO tripulação', due: '1 semana', priority: 'medium' },
-                        { task: 'Relatório ANP mensal', due: '2 semanas', priority: 'low' }
+                        { task: "Auditoria interna Prática 13", due: "Amanhã", priority: "high" },
+                        { task: "Revisão matriz de riscos", due: "3 dias", priority: "medium" },
+                        { task: "Treinamento SGSO tripulação", due: "1 semana", priority: "medium" },
+                        { task: "Relatório ANP mensal", due: "2 semanas", priority: "low" }
                       ].map((task, index) => (
                         <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
                           <div className="flex items-center gap-3">
                             <Clock className={`h-4 w-4 ${
-                              task.priority === 'high' ? 'text-red-600' :
-                              task.priority === 'medium' ? 'text-yellow-600' : 'text-blue-600'
+                              task.priority === "high" ? "text-red-600" :
+                                task.priority === "medium" ? "text-yellow-600" : "text-blue-600"
                             }`} />
                             <span className="font-semibold text-sm text-gray-900">{task.task}</span>
                           </div>

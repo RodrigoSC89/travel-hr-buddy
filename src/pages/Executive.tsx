@@ -1,9 +1,9 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -20,12 +20,12 @@ import {
   Zap,
   Shield,
   Clock
-} from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+} from "lucide-react";
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const Executive = () => {
-  const [selectedPeriod, setSelectedPeriod] = React.useState('month');
-  const [selectedView, setSelectedView] = React.useState('overview');
+  const [selectedPeriod, setSelectedPeriod] = React.useState("month");
+  const [selectedView, setSelectedView] = React.useState("overview");
 
   // Dados simulados para o dashboard executivo
   const kpiData = {
@@ -38,12 +38,12 @@ const Executive = () => {
   };
 
   const revenueData = [
-    { month: 'Jan', revenue: 2100000, profit: 420000, expenses: 1680000 },
-    { month: 'Fev', revenue: 2200000, profit: 460000, expenses: 1740000 },
-    { month: 'Mar', revenue: 2350000, profit: 520000, expenses: 1830000 },
-    { month: 'Abr', revenue: 2280000, profit: 485000, expenses: 1795000 },
-    { month: 'Mai', revenue: 2450000, profit: 580000, expenses: 1870000 },
-    { month: 'Jun', revenue: 2520000, profit: 630000, expenses: 1890000 }
+    { month: "Jan", revenue: 2100000, profit: 420000, expenses: 1680000 },
+    { month: "Fev", revenue: 2200000, profit: 460000, expenses: 1740000 },
+    { month: "Mar", revenue: 2350000, profit: 520000, expenses: 1830000 },
+    { month: "Abr", revenue: 2280000, profit: 485000, expenses: 1795000 },
+    { month: "Mai", revenue: 2450000, profit: 580000, expenses: 1870000 },
+    { month: "Jun", revenue: 2520000, profit: 630000, expenses: 1890000 }
   ];
 
   const getPercentageChange = (current: number, previous: number) => {
@@ -59,7 +59,7 @@ const Executive = () => {
   };
 
   const getTrendColor = (current: number, previous: number) => {
-    return current > previous ? 'text-green-600' : 'text-red-600';
+    return current > previous ? "text-green-600" : "text-red-600";
   };
 
   return (

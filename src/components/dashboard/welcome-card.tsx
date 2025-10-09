@@ -1,26 +1,26 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { UserProfileBadge } from '@/components/auth/user-profile-badge';
-import { RoleBasedAccess } from '@/components/auth/role-based-access';
-import { useAuth } from '@/contexts/AuthContext';
-import { usePermissions } from '@/hooks/use-permissions';
-import { Settings, Users, BarChart3, FileText } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { UserProfileBadge } from "@/components/auth/user-profile-badge";
+import { RoleBasedAccess } from "@/components/auth/role-based-access";
+import { useAuth } from "@/contexts/AuthContext";
+import { usePermissions } from "@/hooks/use-permissions";
+import { Settings, Users, BarChart3, FileText } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const WelcomeCard: React.FC = () => {
   const { user } = useAuth();
   const { userRole, getRoleDisplayName } = usePermissions();
   const navigate = useNavigate();
 
-  const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuário';
+  const displayName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Usuário";
 
   const getWelcomeMessage = () => {
     const hour = new Date().getHours();
-    let greeting = 'Boa noite';
+    let greeting = "Boa noite";
     
-    if (hour < 12) greeting = 'Bom dia';
-    else if (hour < 18) greeting = 'Boa tarde';
+    if (hour < 12) greeting = "Bom dia";
+    else if (hour < 18) greeting = "Boa tarde";
     
     return `${greeting}, ${displayName}!`;
   };
@@ -28,36 +28,36 @@ export const WelcomeCard: React.FC = () => {
   const getQuickActions = () => {
     const actions = [];
     
-    if (userRole === 'admin') {
+    if (userRole === "admin") {
       actions.push({
         icon: Users,
-        label: 'Gerenciar Usuários',
-        action: () => navigate('/admin'),
-        variant: 'default' as const
+        label: "Gerenciar Usuários",
+        action: () => navigate("/admin"),
+        variant: "default" as const
       });
     }
     
-    if (userRole === 'hr_manager' || userRole === 'admin') {
+    if (userRole === "hr_manager" || userRole === "admin") {
       actions.push({
         icon: FileText,
-        label: 'Relatórios de RH',
-        action: () => navigate('/hr'),
-        variant: 'secondary' as const
+        label: "Relatórios de RH",
+        action: () => navigate("/hr"),
+        variant: "secondary" as const
       });
     }
     
     actions.push({
       icon: BarChart3,
-      label: 'Ver Analytics',
-      action: () => navigate('/analytics'),
-        variant: 'default' as const
+      label: "Ver Analytics",
+      action: () => navigate("/analytics"),
+      variant: "default" as const
     });
     
     actions.push({
       icon: Settings,
-      label: 'Configurações',
-      action: () => navigate('/settings'),
-        variant: 'outline' as const
+      label: "Configurações",
+      action: () => navigate("/settings"),
+      variant: "outline" as const
     });
     
     return actions.slice(0, 3); // Limitar a 3 ações
@@ -98,7 +98,7 @@ export const WelcomeCard: React.FC = () => {
           </div>
 
           <RoleBasedAccess 
-            roles={['admin', 'hr_manager']} 
+            roles={["admin", "hr_manager"]} 
             showFallback={false}
           >
             <div className="mt-4 p-3 bg-primary/20 rounded-lg border border-primary/40 shadow-sm">

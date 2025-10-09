@@ -1,6 +1,6 @@
-import React from 'react';
-import { OrganizationLayout } from '@/components/layout/organization-layout';
-import { TaskManagement } from '@/components/tasks/task-management';
+import React from "react";
+import { OrganizationLayout } from "@/components/layout/organization-layout";
+import { TaskManagement } from "@/components/tasks/task-management";
 
 export default function TaskManagementPage() {
   return (

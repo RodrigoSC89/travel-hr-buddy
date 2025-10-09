@@ -1,11 +1,11 @@
-import { useEffect, useState, useRef, RefObject } from 'react';
+import { useEffect, useState, useRef, RefObject } from "react";
 
 interface UseArrowNavigationOptions {
   isOpen: boolean;
   itemCount: number;
   onSelect?: (index: number) => void;
   onClose?: () => void;
-  orientation?: 'vertical' | 'horizontal';
+  orientation?: "vertical" | "horizontal";
   loop?: boolean;
 }
 
@@ -18,7 +18,7 @@ export const useArrowNavigation = ({
   itemCount,
   onSelect,
   onClose,
-  orientation = 'vertical',
+  orientation = "vertical",
   loop = true,
 }: UseArrowNavigationOptions) => {
   const [focusedIndex, setFocusedIndex] = useState(0);
@@ -36,55 +36,55 @@ export const useArrowNavigation = ({
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      const nextKey = orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
-      const prevKey = orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
+      const nextKey = orientation === "vertical" ? "ArrowDown" : "ArrowRight";
+      const prevKey = orientation === "vertical" ? "ArrowUp" : "ArrowLeft";
 
       switch (e.key) {
-        case nextKey:
-          e.preventDefault();
-          setFocusedIndex(prev => {
-            if (loop) {
-              return (prev + 1) % itemCount;
-            }
-            return Math.min(prev + 1, itemCount - 1);
-          });
-          break;
+      case nextKey:
+        e.preventDefault();
+        setFocusedIndex(prev => {
+          if (loop) {
+            return (prev + 1) % itemCount;
+          }
+          return Math.min(prev + 1, itemCount - 1);
+        });
+        break;
 
-        case prevKey:
-          e.preventDefault();
-          setFocusedIndex(prev => {
-            if (loop) {
-              return prev === 0 ? itemCount - 1 : prev - 1;
-            }
-            return Math.max(prev - 1, 0);
-          });
-          break;
+      case prevKey:
+        e.preventDefault();
+        setFocusedIndex(prev => {
+          if (loop) {
+            return prev === 0 ? itemCount - 1 : prev - 1;
+          }
+          return Math.max(prev - 1, 0);
+        });
+        break;
 
-        case 'Home':
-          e.preventDefault();
-          setFocusedIndex(0);
-          break;
+      case "Home":
+        e.preventDefault();
+        setFocusedIndex(0);
+        break;
 
-        case 'End':
-          e.preventDefault();
-          setFocusedIndex(itemCount - 1);
-          break;
+      case "End":
+        e.preventDefault();
+        setFocusedIndex(itemCount - 1);
+        break;
 
-        case 'Enter':
-        case ' ':
-          e.preventDefault();
-          onSelect?.(focusedIndex);
-          break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        onSelect?.(focusedIndex);
+        break;
 
-        case 'Escape':
-          e.preventDefault();
-          onClose?.();
-          break;
+      case "Escape":
+        e.preventDefault();
+        onClose?.();
+        break;
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, focusedIndex, itemCount, orientation, loop, onSelect, onClose]);
 
   // Focus the element when index changes
@@ -99,7 +99,7 @@ export const useArrowNavigation = ({
       itemRefs.current[index] = el;
     },
     tabIndex: isOpen && focusedIndex === index ? 0 : -1,
-    'data-focused': focusedIndex === index,
+    "data-focused": focusedIndex === index,
     onMouseEnter: () => setFocusedIndex(index),
     onFocus: () => setFocusedIndex(index),
   });

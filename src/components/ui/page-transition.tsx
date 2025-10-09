@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();

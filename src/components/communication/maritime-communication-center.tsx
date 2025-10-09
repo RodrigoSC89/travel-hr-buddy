@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Radio, 
   Send, 
@@ -28,16 +28,16 @@ import {
   Satellite,
   MapPin,
   Bell
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MaritimeCommunication {
   id: string;
   vessel_id: string;
   vessel_name: string;
-  message_type: 'emergency' | 'general' | 'weather_alert' | 'maintenance' | 'navigation' | 'port_authority';
+  message_type: "emergency" | "general" | "weather_alert" | "maintenance" | "navigation" | "port_authority";
   content: string;
-  priority: 'low' | 'normal' | 'high' | 'critical';
-  status: 'sent' | 'delivered' | 'acknowledged' | 'resolved';
+  priority: "low" | "normal" | "high" | "critical";
+  status: "sent" | "delivered" | "acknowledged" | "resolved";
   sent_at: string;
   acknowledged_at?: string;
   coordinates?: { latitude: number; longitude: number };
@@ -48,8 +48,8 @@ interface MaritimeCommunication {
 interface CommunicationChannel {
   id: string;
   name: string;
-  type: 'vhf' | 'satellite' | 'email' | 'emergency' | 'internal';
-  status: 'active' | 'inactive' | 'maintenance';
+  type: "vhf" | "satellite" | "email" | "emergency" | "internal";
+  status: "active" | "inactive" | "maintenance";
   participants: string[];
   last_activity: string;
 }
@@ -57,13 +57,13 @@ interface CommunicationChannel {
 export const MaritimeCommunicationCenter = () => {
   const [communications, setCommunications] = useState<MaritimeCommunication[]>([]);
   const [channels, setChannels] = useState<CommunicationChannel[]>([]);
-  const [activeTab, setActiveTab] = useState('messages');
-  const [selectedChannel, setSelectedChannel] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState("messages");
+  const [selectedChannel, setSelectedChannel] = useState<string>("all");
   const [newMessage, setNewMessage] = useState({
-    vessel_id: '',
-    message_type: 'general' as const,
-    content: '',
-    priority: 'normal' as const,
+    vessel_id: "",
+    message_type: "general" as const,
+    content: "",
+    priority: "normal" as const,
     coordinates: { latitude: 0, longitude: 0 }
   });
   const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
@@ -83,74 +83,74 @@ export const MaritimeCommunicationCenter = () => {
       // Mock communications data
       const mockCommunications: MaritimeCommunication[] = [
         {
-          id: '1',
-          vessel_id: 'mv-atlantic-001',
-          vessel_name: 'MV Atlantic Explorer',
-          message_type: 'emergency',
-          content: 'Vazamento no compartimento de máquinas. Solicitando assistência imediata.',
-          priority: 'critical',
-          status: 'acknowledged',
-          sent_at: '2024-01-20T14:30:00Z',
-          acknowledged_at: '2024-01-20T14:32:00Z',
+          id: "1",
+          vessel_id: "mv-atlantic-001",
+          vessel_name: "MV Atlantic Explorer",
+          message_type: "emergency",
+          content: "Vazamento no compartimento de máquinas. Solicitando assistência imediata.",
+          priority: "critical",
+          status: "acknowledged",
+          sent_at: "2024-01-20T14:30:00Z",
+          acknowledged_at: "2024-01-20T14:32:00Z",
           coordinates: { latitude: -23.5505, longitude: -46.6333 },
-          sender_role: 'captain',
+          sender_role: "captain",
           response_required: true
         },
         {
-          id: '2',
-          vessel_id: 'ms-ocean-002',
-          vessel_name: 'MS Ocean Pioneer',
-          message_type: 'weather_alert',
-          content: 'Tempestade se aproximando. Ventos de 45 nós. Alterando rota para sudeste.',
-          priority: 'high',
-          status: 'delivered',
-          sent_at: '2024-01-20T12:15:00Z',
+          id: "2",
+          vessel_id: "ms-ocean-002",
+          vessel_name: "MS Ocean Pioneer",
+          message_type: "weather_alert",
+          content: "Tempestade se aproximando. Ventos de 45 nós. Alterando rota para sudeste.",
+          priority: "high",
+          status: "delivered",
+          sent_at: "2024-01-20T12:15:00Z",
           coordinates: { latitude: -25.4284, longitude: -48.6732 },
-          sender_role: 'first_officer',
+          sender_role: "first_officer",
           response_required: false
         },
         {
-          id: '3',
-          vessel_id: 'mv-pacific-003',
-          vessel_name: 'MV Pacific Star',
-          message_type: 'navigation',
-          content: 'Aproximando do Porto de Santos. ETA 16:30. Solicitando atracação no cais 5.',
-          priority: 'normal',
-          status: 'sent',
-          sent_at: '2024-01-20T10:45:00Z',
+          id: "3",
+          vessel_id: "mv-pacific-003",
+          vessel_name: "MV Pacific Star",
+          message_type: "navigation",
+          content: "Aproximando do Porto de Santos. ETA 16:30. Solicitando atracação no cais 5.",
+          priority: "normal",
+          status: "sent",
+          sent_at: "2024-01-20T10:45:00Z",
           coordinates: { latitude: -23.9618, longitude: -46.3322 },
-          sender_role: 'captain',
+          sender_role: "captain",
           response_required: true
         },
         {
-          id: '4',
-          vessel_id: 'ms-baltic-004',
-          vessel_name: 'MS Baltic Wind',
-          message_type: 'maintenance',
-          content: 'Motor auxiliar apresentando ruídos anômalos. Programando inspeção no próximo porto.',
-          priority: 'normal',
-          status: 'delivered',
-          sent_at: '2024-01-20T08:30:00Z',
-          sender_role: 'engineer',
+          id: "4",
+          vessel_id: "ms-baltic-004",
+          vessel_name: "MS Baltic Wind",
+          message_type: "maintenance",
+          content: "Motor auxiliar apresentando ruídos anômalos. Programando inspeção no próximo porto.",
+          priority: "normal",
+          status: "delivered",
+          sent_at: "2024-01-20T08:30:00Z",
+          sender_role: "engineer",
           response_required: false
         },
         {
-          id: '5',
-          vessel_id: 'mv-nordic-005',
-          vessel_name: 'MV Nordic Crown',
-          message_type: 'general',
-          content: 'Tripulação em boa saúde. Operações normais. Próximo relatório em 6 horas.',
-          priority: 'low',
-          status: 'delivered',
-          sent_at: '2024-01-20T06:00:00Z',
-          sender_role: 'captain',
+          id: "5",
+          vessel_id: "mv-nordic-005",
+          vessel_name: "MV Nordic Crown",
+          message_type: "general",
+          content: "Tripulação em boa saúde. Operações normais. Próximo relatório em 6 horas.",
+          priority: "low",
+          status: "delivered",
+          sent_at: "2024-01-20T06:00:00Z",
+          sender_role: "captain",
           response_required: false
         }
       ];
 
       setCommunications(mockCommunications);
     } catch (error) {
-      console.error('Error loading communications:', error);
+      console.error("Error loading communications:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar comunicações",
@@ -165,42 +165,42 @@ export const MaritimeCommunicationCenter = () => {
     try {
       const mockChannels: CommunicationChannel[] = [
         {
-          id: 'vhf-16',
-          name: 'VHF Canal 16 (Emergência)',
-          type: 'emergency',
-          status: 'active',
-          participants: ['Todas as embarcações', 'Guarda Costeira'],
-          last_activity: '2024-01-20T14:30:00Z'
+          id: "vhf-16",
+          name: "VHF Canal 16 (Emergência)",
+          type: "emergency",
+          status: "active",
+          participants: ["Todas as embarcações", "Guarda Costeira"],
+          last_activity: "2024-01-20T14:30:00Z"
         },
         {
-          id: 'vhf-68',
-          name: 'VHF Canal 68 (Operações)',
-          type: 'vhf',
-          status: 'active',
-          participants: ['Frota Nautilus', 'Porto de Santos'],
-          last_activity: '2024-01-20T12:15:00Z'
+          id: "vhf-68",
+          name: "VHF Canal 68 (Operações)",
+          type: "vhf",
+          status: "active",
+          participants: ["Frota Nautilus", "Porto de Santos"],
+          last_activity: "2024-01-20T12:15:00Z"
         },
         {
-          id: 'sat-primary',
-          name: 'Satélite Principal',
-          type: 'satellite',
-          status: 'active',
-          participants: ['Todas as embarcações', 'Centro de Controle'],
-          last_activity: '2024-01-20T10:45:00Z'
+          id: "sat-primary",
+          name: "Satélite Principal",
+          type: "satellite",
+          status: "active",
+          participants: ["Todas as embarcações", "Centro de Controle"],
+          last_activity: "2024-01-20T10:45:00Z"
         },
         {
-          id: 'internal-ops',
-          name: 'Operações Internas',
-          type: 'internal',
-          status: 'active',
-          participants: ['Gestão de Frota', 'Capitães'],
-          last_activity: '2024-01-20T08:30:00Z'
+          id: "internal-ops",
+          name: "Operações Internas",
+          type: "internal",
+          status: "active",
+          participants: ["Gestão de Frota", "Capitães"],
+          last_activity: "2024-01-20T08:30:00Z"
         }
       ];
 
       setChannels(mockChannels);
     } catch (error) {
-      console.error('Error loading channels:', error);
+      console.error("Error loading channels:", error);
     }
   };
 
@@ -225,7 +225,7 @@ export const MaritimeCommunicationCenter = () => {
       }
 
       // Call the maritime communication edge function
-      const { data, error } = await supabase.functions.invoke('maritime-communication', {
+      const { data, error } = await supabase.functions.invoke("maritime-communication", {
         body: {
           vessel_id: newMessage.vessel_id,
           message_type: newMessage.message_type,
@@ -246,10 +246,10 @@ export const MaritimeCommunicationCenter = () => {
 
       // Reset form and close dialog
       setNewMessage({
-        vessel_id: '',
-        message_type: 'general',
-        content: '',
-        priority: 'normal',
+        vessel_id: "",
+        message_type: "general",
+        content: "",
+        priority: "normal",
         coordinates: { latitude: 0, longitude: 0 }
       });
       setIsNewMessageOpen(false);
@@ -257,7 +257,7 @@ export const MaritimeCommunicationCenter = () => {
       // Reload communications
       loadCommunications();
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       toast({
         title: "Erro",
         description: "Erro ao enviar mensagem",
@@ -266,67 +266,67 @@ export const MaritimeCommunicationCenter = () => {
     }
   };
 
-  const getMessageTypeColor = (type: MaritimeCommunication['message_type']) => {
+  const getMessageTypeColor = (type: MaritimeCommunication["message_type"]) => {
     switch (type) {
-      case 'emergency': return 'bg-status-error';
-      case 'weather_alert': return 'bg-warning';
-      case 'navigation': return 'bg-info';
-      case 'maintenance': return 'bg-warning';
-      case 'port_authority': return 'bg-primary';
-      case 'general': return 'bg-success';
-      default: return 'bg-muted';
+    case "emergency": return "bg-status-error";
+    case "weather_alert": return "bg-warning";
+    case "navigation": return "bg-info";
+    case "maintenance": return "bg-warning";
+    case "port_authority": return "bg-primary";
+    case "general": return "bg-success";
+    default: return "bg-muted";
     }
   };
 
-  const getMessageTypeText = (type: MaritimeCommunication['message_type']) => {
+  const getMessageTypeText = (type: MaritimeCommunication["message_type"]) => {
     switch (type) {
-      case 'emergency': return 'Emergência';
-      case 'weather_alert': return 'Alerta Meteorológico';
-      case 'navigation': return 'Navegação';
-      case 'maintenance': return 'Manutenção';
-      case 'port_authority': return 'Autoridade Portuária';
-      case 'general': return 'Geral';
-      default: return 'Desconhecido';
+    case "emergency": return "Emergência";
+    case "weather_alert": return "Alerta Meteorológico";
+    case "navigation": return "Navegação";
+    case "maintenance": return "Manutenção";
+    case "port_authority": return "Autoridade Portuária";
+    case "general": return "Geral";
+    default: return "Desconhecido";
     }
   };
 
-  const getPriorityColor = (priority: MaritimeCommunication['priority']) => {
+  const getPriorityColor = (priority: MaritimeCommunication["priority"]) => {
     switch (priority) {
-      case 'critical': return 'text-red-600 bg-red-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'normal': return 'text-blue-600 bg-blue-100';
-      case 'low': return 'text-green-600 bg-green-100';
-      default: return 'text-muted-foreground bg-gray-100';
+    case "critical": return "text-red-600 bg-red-100";
+    case "high": return "text-orange-600 bg-orange-100";
+    case "normal": return "text-blue-600 bg-blue-100";
+    case "low": return "text-green-600 bg-green-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 
-  const getStatusIcon = (status: MaritimeCommunication['status']) => {
+  const getStatusIcon = (status: MaritimeCommunication["status"]) => {
     switch (status) {
-      case 'sent': return Clock;
-      case 'delivered': return CheckCircle;
-      case 'acknowledged': return Radio;
-      case 'resolved': return CheckCircle;
-      default: return MessageSquare;
+    case "sent": return Clock;
+    case "delivered": return CheckCircle;
+    case "acknowledged": return Radio;
+    case "resolved": return CheckCircle;
+    default: return MessageSquare;
     }
   };
 
-  const getChannelIcon = (type: CommunicationChannel['type']) => {
+  const getChannelIcon = (type: CommunicationChannel["type"]) => {
     switch (type) {
-      case 'vhf': return Radio;
-      case 'satellite': return Satellite;
-      case 'email': return Mail;
-      case 'emergency': return AlertTriangle;
-      case 'internal': return MessageSquare;
-      default: return Radio;
+    case "vhf": return Radio;
+    case "satellite": return Satellite;
+    case "email": return Mail;
+    case "emergency": return AlertTriangle;
+    case "internal": return MessageSquare;
+    default: return Radio;
     }
   };
 
   const filteredCommunications = communications.filter(comm => 
-    selectedChannel === 'all' || comm.message_type === selectedChannel
+    selectedChannel === "all" || comm.message_type === selectedChannel
   );
 
-  const emergencyCount = communications.filter(c => c.message_type === 'emergency').length;
-  const pendingCount = communications.filter(c => c.response_required && c.status !== 'resolved').length;
+  const emergencyCount = communications.filter(c => c.message_type === "emergency").length;
+  const pendingCount = communications.filter(c => c.response_required && c.status !== "resolved").length;
 
   if (loading) {
     return (
@@ -350,7 +350,7 @@ export const MaritimeCommunicationCenter = () => {
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="flex items-center gap-1">
             <Radio className="h-3 w-3" />
-            {channels.filter(c => c.status === 'active').length} Canais Ativos
+            {channels.filter(c => c.status === "active").length} Canais Ativos
           </Badge>
           
           <Dialog open={isNewMessageOpen} onOpenChange={setIsNewMessageOpen}>
@@ -495,7 +495,7 @@ export const MaritimeCommunicationCenter = () => {
         <Card>
           <CardContent className="p-4 text-center">
             <Radio className="h-8 w-8 mx-auto mb-2 text-green-600" />
-            <div className="text-2xl font-bold">{channels.filter(c => c.status === 'active').length}</div>
+            <div className="text-2xl font-bold">{channels.filter(c => c.status === "active").length}</div>
             <div className="text-sm text-muted-foreground">Canais Ativos</div>
           </CardContent>
         </Card>
@@ -530,37 +530,37 @@ export const MaritimeCommunicationCenter = () => {
             <CardContent className="pt-6">
               <div className="flex gap-2">
                 <Button 
-                  variant={selectedChannel === 'all' ? 'default' : 'outline'} 
+                  variant={selectedChannel === "all" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setSelectedChannel('all')}
+                  onClick={() => setSelectedChannel("all")}
                 >
                   Todas
                 </Button>
                 <Button 
-                  variant={selectedChannel === 'emergency' ? 'default' : 'outline'} 
+                  variant={selectedChannel === "emergency" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setSelectedChannel('emergency')}
+                  onClick={() => setSelectedChannel("emergency")}
                 >
                   Emergências
                 </Button>
                 <Button 
-                  variant={selectedChannel === 'navigation' ? 'default' : 'outline'} 
+                  variant={selectedChannel === "navigation" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setSelectedChannel('navigation')}
+                  onClick={() => setSelectedChannel("navigation")}
                 >
                   Navegação
                 </Button>
                 <Button 
-                  variant={selectedChannel === 'weather_alert' ? 'default' : 'outline'} 
+                  variant={selectedChannel === "weather_alert" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setSelectedChannel('weather_alert')}
+                  onClick={() => setSelectedChannel("weather_alert")}
                 >
                   Meteorológico
                 </Button>
                 <Button 
-                  variant={selectedChannel === 'maintenance' ? 'default' : 'outline'} 
+                  variant={selectedChannel === "maintenance" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setSelectedChannel('maintenance')}
+                  onClick={() => setSelectedChannel("maintenance")}
                 >
                   Manutenção
                 </Button>
@@ -575,9 +575,9 @@ export const MaritimeCommunicationCenter = () => {
               
               return (
                 <Card key={comm.id} className={`border-l-4 ${
-                  comm.message_type === 'emergency' ? 'border-red-500 bg-red-50' :
-                  comm.priority === 'high' ? 'border-orange-500 bg-orange-50' :
-                  'border-border'
+                  comm.message_type === "emergency" ? "border-red-500 bg-red-50" :
+                    comm.priority === "high" ? "border-orange-500 bg-orange-50" :
+                      "border-border"
                 }`}>
                   <CardContent className="pt-6">
                     <div className="flex items-start justify-between">
@@ -593,9 +593,9 @@ export const MaritimeCommunicationCenter = () => {
                               {getMessageTypeText(comm.message_type)}
                             </Badge>
                             <Badge className={getPriorityColor(comm.priority)}>
-                              {comm.priority === 'critical' ? 'Crítica' :
-                               comm.priority === 'high' ? 'Alta' :
-                               comm.priority === 'normal' ? 'Normal' : 'Baixa'}
+                              {comm.priority === "critical" ? "Crítica" :
+                                comm.priority === "high" ? "Alta" :
+                                  comm.priority === "normal" ? "Normal" : "Baixa"}
                             </Badge>
                             {comm.response_required && (
                               <Badge variant="outline">Resposta Necessária</Badge>
@@ -624,12 +624,12 @@ export const MaritimeCommunicationCenter = () => {
                       </div>
                       
                       <div className="flex gap-2">
-                        {comm.response_required && comm.status !== 'resolved' && (
+                        {comm.response_required && comm.status !== "resolved" && (
                           <Button size="sm">
                             Responder
                           </Button>
                         )}
-                        {comm.status === 'sent' && (
+                        {comm.status === "sent" && (
                           <Button size="sm" variant="outline">
                             Confirmar
                           </Button>
@@ -659,12 +659,12 @@ export const MaritimeCommunicationCenter = () => {
                         <div>
                           <h3 className="font-semibold">{channel.name}</h3>
                           <Badge className={
-                            channel.status === 'active' ? 'bg-status-active text-status-active-foreground' :
-                            channel.status === 'maintenance' ? 'bg-warning text-warning-foreground' :
-                            'bg-status-inactive text-status-inactive-foreground'
+                            channel.status === "active" ? "bg-status-active text-status-active-foreground" :
+                              channel.status === "maintenance" ? "bg-warning text-warning-foreground" :
+                                "bg-status-inactive text-status-inactive-foreground"
                           }>
-                            {channel.status === 'active' ? 'Ativo' :
-                             channel.status === 'maintenance' ? 'Manutenção' : 'Inativo'}
+                            {channel.status === "active" ? "Ativo" :
+                              channel.status === "maintenance" ? "Manutenção" : "Inativo"}
                           </Badge>
                         </div>
                       </div>
@@ -676,7 +676,7 @@ export const MaritimeCommunicationCenter = () => {
                     
                     <div className="space-y-2">
                       <div className="text-sm text-muted-foreground">
-                        <strong>Participantes:</strong> {channel.participants.join(', ')}
+                        <strong>Participantes:</strong> {channel.participants.join(", ")}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         Última atividade: {new Date(channel.last_activity).toLocaleString()}
@@ -696,7 +696,7 @@ export const MaritimeCommunicationCenter = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {communications.filter(c => c.message_type === 'emergency').map((emergency) => (
+                {communications.filter(c => c.message_type === "emergency").map((emergency) => (
                   <div key={emergency.id} className="border-l-4 border-red-500 bg-red-50 p-4 rounded">
                     <div className="flex items-center justify-between">
                       <div>
@@ -718,7 +718,7 @@ export const MaritimeCommunicationCenter = () => {
                   </div>
                 ))}
                 
-                {communications.filter(c => c.message_type === 'emergency').length === 0 && (
+                {communications.filter(c => c.message_type === "emergency").length === 0 && (
                   <div className="text-center py-8">
                     <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-green-600">Nenhuma Emergência Ativa</h3>

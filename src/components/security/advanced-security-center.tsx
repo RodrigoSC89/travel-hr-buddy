@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Shield, 
   AlertTriangle, 
@@ -24,18 +24,18 @@ import {
   RefreshCw,
   Download,
   Settings
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface SecurityAlert {
   id: string;
-  type: 'threat' | 'vulnerability' | 'policy' | 'access';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "threat" | "vulnerability" | "policy" | "access";
+  severity: "low" | "medium" | "high" | "critical";
   title: string;
   description: string;
   timestamp: Date;
-  status: 'active' | 'investigating' | 'resolved';
+  status: "active" | "investigating" | "resolved";
   affectedAssets: string[];
 }
 
@@ -44,8 +44,8 @@ interface SecurityMetric {
   value: number;
   target: number;
   unit: string;
-  status: 'good' | 'warning' | 'critical';
-  trend: 'up' | 'down' | 'stable';
+  status: "good" | "warning" | "critical";
+  trend: "up" | "down" | "stable";
 }
 
 interface VulnerabilityReport {
@@ -53,9 +53,9 @@ interface VulnerabilityReport {
   asset: string;
   vulnerability: string;
   cvss: number;
-  status: 'open' | 'patched' | 'mitigated';
+  status: "open" | "patched" | "mitigated";
   discoveredAt: Date;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
 }
 
 export const AdvancedSecurityCenter: React.FC = () => {
@@ -72,73 +72,73 @@ export const AdvancedSecurityCenter: React.FC = () => {
   const generateSecurityData = () => {
     const mockAlerts: SecurityAlert[] = [
       {
-        id: '1',
-        type: 'threat',
-        severity: 'high',
-        title: 'Tentativa de Acesso Suspeito',
-        description: 'Múltiplas tentativas de login falharam de IP desconhecido',
+        id: "1",
+        type: "threat",
+        severity: "high",
+        title: "Tentativa de Acesso Suspeito",
+        description: "Múltiplas tentativas de login falharam de IP desconhecido",
         timestamp: new Date(Date.now() - 15 * 60000),
-        status: 'active',
-        affectedAssets: ['Login System', 'User Database']
+        status: "active",
+        affectedAssets: ["Login System", "User Database"]
       },
       {
-        id: '2',
-        type: 'vulnerability',
-        severity: 'medium',
-        title: 'Atualização de Segurança Disponível',
-        description: 'Nova versão do framework corrige vulnerabilidades conhecidas',
+        id: "2",
+        type: "vulnerability",
+        severity: "medium",
+        title: "Atualização de Segurança Disponível",
+        description: "Nova versão do framework corrige vulnerabilidades conhecidas",
         timestamp: new Date(Date.now() - 2 * 60 * 60000),
-        status: 'investigating',
-        affectedAssets: ['Web Application']
+        status: "investigating",
+        affectedAssets: ["Web Application"]
       },
       {
-        id: '3',
-        type: 'policy',
-        severity: 'low',
-        title: 'Política de Senha Violada',
-        description: 'Usuário utilizando senha fraca detectada',
+        id: "3",
+        type: "policy",
+        severity: "low",
+        title: "Política de Senha Violada",
+        description: "Usuário utilizando senha fraca detectada",
         timestamp: new Date(Date.now() - 4 * 60 * 60000),
-        status: 'resolved',
-        affectedAssets: ['User Account']
+        status: "resolved",
+        affectedAssets: ["User Account"]
       }
     ];
 
     const mockMetrics: SecurityMetric[] = [
-      { name: 'Score de Segurança', value: 87, target: 95, unit: '%', status: 'warning', trend: 'up' },
-      { name: 'Vulnerabilidades Críticas', value: 2, target: 0, unit: 'unidades', status: 'critical', trend: 'down' },
-      { name: 'Tentativas de Ataque Bloqueadas', value: 147, target: 0, unit: 'unidades', status: 'good', trend: 'stable' },
-      { name: 'Compliance Rate', value: 94, target: 100, unit: '%', status: 'good', trend: 'up' },
-      { name: 'Tempo Médio de Resposta', value: 12, target: 15, unit: 'min', status: 'good', trend: 'down' },
-      { name: 'Uptime de Segurança', value: 99.8, target: 99.9, unit: '%', status: 'good', trend: 'stable' }
+      { name: "Score de Segurança", value: 87, target: 95, unit: "%", status: "warning", trend: "up" },
+      { name: "Vulnerabilidades Críticas", value: 2, target: 0, unit: "unidades", status: "critical", trend: "down" },
+      { name: "Tentativas de Ataque Bloqueadas", value: 147, target: 0, unit: "unidades", status: "good", trend: "stable" },
+      { name: "Compliance Rate", value: 94, target: 100, unit: "%", status: "good", trend: "up" },
+      { name: "Tempo Médio de Resposta", value: 12, target: 15, unit: "min", status: "good", trend: "down" },
+      { name: "Uptime de Segurança", value: 99.8, target: 99.9, unit: "%", status: "good", trend: "stable" }
     ];
 
     const mockVulnerabilities: VulnerabilityReport[] = [
       {
-        id: '1',
-        asset: 'Web Application',
-        vulnerability: 'Cross-Site Scripting (XSS)',
+        id: "1",
+        asset: "Web Application",
+        vulnerability: "Cross-Site Scripting (XSS)",
         cvss: 7.4,
-        status: 'open',
+        status: "open",
         discoveredAt: new Date(Date.now() - 3 * 24 * 60 * 60000),
-        priority: 'high'
+        priority: "high"
       },
       {
-        id: '2',
-        asset: 'Database Server',
-        vulnerability: 'SQL Injection',
+        id: "2",
+        asset: "Database Server",
+        vulnerability: "SQL Injection",
         cvss: 8.1,
-        status: 'patched',
+        status: "patched",
         discoveredAt: new Date(Date.now() - 7 * 24 * 60 * 60000),
-        priority: 'critical'
+        priority: "critical"
       },
       {
-        id: '3',
-        asset: 'API Gateway',
-        vulnerability: 'Insecure Direct Object Reference',
+        id: "3",
+        asset: "API Gateway",
+        vulnerability: "Insecure Direct Object Reference",
         cvss: 5.3,
-        status: 'mitigated',
+        status: "mitigated",
         discoveredAt: new Date(Date.now() - 5 * 24 * 60 * 60000),
-        priority: 'medium'
+        priority: "medium"
       }
     ];
 
@@ -155,54 +155,54 @@ export const AdvancedSecurityCenter: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-blue-500';
-      default: return 'bg-gray-500';
+    case "critical": return "bg-red-500";
+    case "high": return "bg-orange-500";
+    case "medium": return "bg-yellow-500";
+    case "low": return "bg-blue-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'critical':
-      case 'high':
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'medium':
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'low':
-        return <CheckCircle className="h-4 w-4 text-blue-500" />;
-      default:
-        return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+    case "critical":
+    case "high":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "medium":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "low":
+      return <CheckCircle className="h-4 w-4 text-blue-500" />;
+    default:
+      return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'good': return 'text-green-600';
-      case 'warning': return 'text-yellow-600';
-      case 'critical': return 'text-red-600';
-      default: return 'text-muted-foreground';
+    case "good": return "text-green-600";
+    case "warning": return "text-yellow-600";
+    case "critical": return "text-red-600";
+    default: return "text-muted-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-3 w-3 text-green-600" />;
-      case 'down': return <TrendingUp className="h-3 w-3 text-red-600 rotate-180" />;
-      default: return <div className="h-3 w-3" />;
+    case "up": return <TrendingUp className="h-3 w-3 text-green-600" />;
+    case "down": return <TrendingUp className="h-3 w-3 text-red-600 rotate-180" />;
+    default: return <div className="h-3 w-3" />;
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 70) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 90) return "text-green-600";
+    if (score >= 70) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const handleResolveAlert = (alertId: string) => {
     setAlerts(prev => prev.map(alert => 
-      alert.id === alertId ? { ...alert, status: 'resolved' } : alert
+      alert.id === alertId ? { ...alert, status: "resolved" } : alert
     ));
     
     toast({
@@ -272,8 +272,8 @@ export const AdvancedSecurityCenter: React.FC = () => {
             <div className="flex-1">
               <Progress value={securityScore} className="h-3" />
               <div className="mt-2 text-sm text-muted-foreground">
-                {securityScore >= 90 ? 'Excelente' : 
-                 securityScore >= 70 ? 'Bom' : 'Necessita Atenção'}
+                {securityScore >= 90 ? "Excelente" : 
+                  securityScore >= 70 ? "Bom" : "Necessita Atenção"}
               </div>
             </div>
             <div className="text-right">
@@ -296,15 +296,15 @@ export const AdvancedSecurityCenter: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className={`text-2xl font-bold ${getStatusColor(metric.status)}`}>
-                {metric.value}{metric.unit === '%' ? '%' : metric.unit === 'unidades' ? '' : metric.unit}
+                {metric.value}{metric.unit === "%" ? "%" : metric.unit === "unidades" ? "" : metric.unit}
               </div>
               <div className="mt-2">
                 <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                  <span>Meta: {metric.target}{metric.unit === '%' ? '%' : ''}</span>
-                  <Badge variant={metric.status === 'good' ? 'default' : 
-                                  metric.status === 'warning' ? 'secondary' : 'destructive'}>
-                    {metric.status === 'good' ? 'OK' : 
-                     metric.status === 'warning' ? 'Atenção' : 'Crítico'}
+                  <span>Meta: {metric.target}{metric.unit === "%" ? "%" : ""}</span>
+                  <Badge variant={metric.status === "good" ? "default" : 
+                    metric.status === "warning" ? "secondary" : "destructive"}>
+                    {metric.status === "good" ? "OK" : 
+                      metric.status === "warning" ? "Atenção" : "Crítico"}
                   </Badge>
                 </div>
                 {metric.target > 0 && (
@@ -351,10 +351,10 @@ export const AdvancedSecurityCenter: React.FC = () => {
                           <Badge variant="outline" className="capitalize">
                             {alert.type}
                           </Badge>
-                          <Badge variant={alert.status === 'resolved' ? 'default' : 
-                                         alert.status === 'investigating' ? 'secondary' : 'destructive'}>
-                            {alert.status === 'resolved' ? 'Resolvido' : 
-                             alert.status === 'investigating' ? 'Investigando' : 'Ativo'}
+                          <Badge variant={alert.status === "resolved" ? "default" : 
+                            alert.status === "investigating" ? "secondary" : "destructive"}>
+                            {alert.status === "resolved" ? "Resolvido" : 
+                              alert.status === "investigating" ? "Investigando" : "Ativo"}
                           </Badge>
                         </div>
                       </div>
@@ -375,7 +375,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
                           </span>
                         </div>
                         
-                        {alert.status === 'active' && (
+                        {alert.status === "active" && (
                           <Button
                             size="sm"
                             variant="outline"
@@ -407,9 +407,9 @@ export const AdvancedSecurityCenter: React.FC = () => {
                   <div key={vuln.id} className="flex items-center space-x-4 p-4 border border-border rounded-lg">
                     <div className="flex items-center space-x-2">
                       <div className={`w-3 h-3 rounded-full ${
-                        vuln.priority === 'critical' ? 'bg-red-500' :
-                        vuln.priority === 'high' ? 'bg-orange-500' :
-                        vuln.priority === 'medium' ? 'bg-yellow-500' : 'bg-blue-500'
+                        vuln.priority === "critical" ? "bg-red-500" :
+                          vuln.priority === "high" ? "bg-orange-500" :
+                            vuln.priority === "medium" ? "bg-yellow-500" : "bg-blue-500"
                       }`} />
                     </div>
                     
@@ -420,10 +420,10 @@ export const AdvancedSecurityCenter: React.FC = () => {
                           <Badge variant="outline">
                             CVSS: {vuln.cvss}
                           </Badge>
-                          <Badge variant={vuln.status === 'patched' ? 'default' : 
-                                         vuln.status === 'mitigated' ? 'secondary' : 'destructive'}>
-                            {vuln.status === 'patched' ? 'Corrigido' : 
-                             vuln.status === 'mitigated' ? 'Mitigado' : 'Aberto'}
+                          <Badge variant={vuln.status === "patched" ? "default" : 
+                            vuln.status === "mitigated" ? "secondary" : "destructive"}>
+                            {vuln.status === "patched" ? "Corrigido" : 
+                              vuln.status === "mitigated" ? "Mitigado" : "Aberto"}
                           </Badge>
                         </div>
                       </div>

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { 
   Eye, 
   Contrast, 
@@ -15,10 +15,10 @@ import {
   CheckCircle,
   AlertTriangle,
   RefreshCw
-} from 'lucide-react';
+} from "lucide-react";
 
 interface AccessibilityIssue {
-  type: 'error' | 'warning' | 'success';
+  type: "error" | "warning" | "success";
   element: string;
   issue: string;
   fix: string;
@@ -34,70 +34,70 @@ export const AccessibilityAuditor: React.FC = () => {
   // Dados simulados de auditoria de acessibilidade
   const mockIssues: AccessibilityIssue[] = [
     {
-      type: 'success',
-      element: 'Botões principais',
-      issue: 'Contraste adequado (7.2:1)',
-      fix: 'Implementado com texto azure-50 sobre azure-700',
-      page: 'Dashboard'
+      type: "success",
+      element: "Botões principais",
+      issue: "Contraste adequado (7.2:1)",
+      fix: "Implementado com texto azure-50 sobre azure-700",
+      page: "Dashboard"
     },
     {
-      type: 'success',
-      element: 'Navegação',
-      issue: 'Suporte completo ao teclado',
-      fix: 'Tab, Enter e Escape funcionam em todos os elementos',
-      page: 'Global'
+      type: "success",
+      element: "Navegação",
+      issue: "Suporte completo ao teclado",
+      fix: "Tab, Enter e Escape funcionam em todos os elementos",
+      page: "Global"
     },
     {
-      type: 'success',
-      element: 'Formulários',
-      issue: 'Labels associados corretamente',
-      fix: 'Todos os inputs têm aria-label ou label associado',
-      page: 'Todas'
+      type: "success",
+      element: "Formulários",
+      issue: "Labels associados corretamente",
+      fix: "Todos os inputs têm aria-label ou label associado",
+      page: "Todas"
     },
     {
-      type: 'success',
-      element: 'Imagens',
-      issue: 'Alt text implementado',
-      fix: 'Todas as imagens têm descrições alternativas',
-      page: 'Todas'
+      type: "success",
+      element: "Imagens",
+      issue: "Alt text implementado",
+      fix: "Todas as imagens têm descrições alternativas",
+      page: "Todas"
     },
     {
-      type: 'success',
-      element: 'Foco visual',
-      issue: 'Ring de foco visível',
-      fix: 'Focus rings implementados com cores de alto contraste',
-      page: 'Global'
+      type: "success",
+      element: "Foco visual",
+      issue: "Ring de foco visível",
+      fix: "Focus rings implementados com cores de alto contraste",
+      page: "Global"
     }
   ];
 
   const accessibilityCategories = [
     {
-      category: 'Contraste de Cores',
+      category: "Contraste de Cores",
       icon: <Contrast className="w-5 h-5" />,
       score: 100,
-      status: 'Excelente',
-      details: 'WCAG AAA (7:1) em elementos críticos, WCAG AA (4.5:1) em todos os outros'
+      status: "Excelente",
+      details: "WCAG AAA (7:1) em elementos críticos, WCAG AA (4.5:1) em todos os outros"
     },
     {
-      category: 'Navegação por Teclado',
+      category: "Navegação por Teclado",
       icon: <Keyboard className="w-5 h-5" />,
       score: 100,
-      status: 'Completo',
-      details: 'Tab, Enter, Escape, Setas funcionam em todos os componentes'
+      status: "Completo",
+      details: "Tab, Enter, Escape, Setas funcionam em todos os componentes"
     },
     {
-      category: 'Screen Readers',
+      category: "Screen Readers",
       icon: <Users className="w-5 h-5" />,
       score: 100,
-      status: 'Compatível',
-      details: 'ARIA labels, landmarks e roles implementados corretamente'
+      status: "Compatível",
+      details: "ARIA labels, landmarks e roles implementados corretamente"
     },
     {
-      category: 'Responsividade',
+      category: "Responsividade",
       icon: <Smartphone className="w-5 h-5" />,
       score: 100,
-      status: 'Otimizado',
-      details: 'Touch targets 44px+, layout adaptativo, zoom 200% suportado'
+      status: "Otimizado",
+      details: "Touch targets 44px+, layout adaptativo, zoom 200% suportado"
     }
   ];
 
@@ -118,32 +118,32 @@ export const AccessibilityAuditor: React.FC = () => {
     setIsScanning(false);
   };
 
-  const getIssueIcon = (type: AccessibilityIssue['type']) => {
+  const getIssueIcon = (type: AccessibilityIssue["type"]) => {
     switch (type) {
-      case 'error':
-        return <AlertTriangle className="w-4 h-4 text-danger" />;
-      case 'warning':
-        return <AlertTriangle className="w-4 h-4 text-warning" />;
-      case 'success':
-        return <CheckCircle className="w-4 h-4 text-success" />;
+    case "error":
+      return <AlertTriangle className="w-4 h-4 text-danger" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "success":
+      return <CheckCircle className="w-4 h-4 text-success" />;
     }
   };
 
-  const getIssueColor = (type: AccessibilityIssue['type']) => {
+  const getIssueColor = (type: AccessibilityIssue["type"]) => {
     switch (type) {
-      case 'error':
-        return 'border-danger bg-danger/5';
-      case 'warning':
-        return 'border-warning bg-warning/5';
-      case 'success':
-        return 'border-success bg-success/5';
+    case "error":
+      return "border-danger bg-danger/5";
+    case "warning":
+      return "border-warning bg-warning/5";
+    case "success":
+      return "border-success bg-success/5";
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 95) return 'text-success';
-    if (score >= 80) return 'text-warning';
-    return 'text-danger';
+    if (score >= 95) return "text-success";
+    if (score >= 80) return "text-warning";
+    return "text-danger";
   };
 
   return (
@@ -169,8 +169,8 @@ export const AccessibilityAuditor: React.FC = () => {
                 disabled={isScanning}
                 className="gap-2"
               >
-                <RefreshCw className={`w-4 h-4 ${isScanning ? 'animate-spin' : ''}`} />
-                {isScanning ? 'Escaneando...' : 'Executar Auditoria'}
+                <RefreshCw className={`w-4 h-4 ${isScanning ? "animate-spin" : ""}`} />
+                {isScanning ? "Escaneando..." : "Executar Auditoria"}
               </Button>
             </div>
 

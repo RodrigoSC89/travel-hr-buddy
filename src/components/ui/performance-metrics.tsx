@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -9,8 +9,8 @@ import {
   Clock,
   Award,
   AlertTriangle
-} from 'lucide-react';
-import { Card } from '@/components/ui/card';
+} from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 interface MetricData {
   id: string;
@@ -18,100 +18,100 @@ interface MetricData {
   value: number;
   unit: string;
   target: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   trendValue: number;
-  status: 'excellent' | 'good' | 'warning' | 'critical';
+  status: "excellent" | "good" | "warning" | "critical";
   icon: React.ComponentType<any>;
   color: string;
 }
 
 const mockMetrics: MetricData[] = [
   {
-    id: 'efficiency',
-    label: 'Eficiência Operacional',
+    id: "efficiency",
+    label: "Eficiência Operacional",
     value: 94.2,
-    unit: '%',
+    unit: "%",
     target: 90,
-    trend: 'up',
+    trend: "up",
     trendValue: 2.1,
-    status: 'excellent',
+    status: "excellent",
     icon: Target,
-    color: 'text-success'
+    color: "text-success"
   },
   {
-    id: 'fuel_efficiency',
-    label: 'Eficiência Combustível',
+    id: "fuel_efficiency",
+    label: "Eficiência Combustível",
     value: 87.5,
-    unit: '%',
+    unit: "%",
     target: 85,
-    trend: 'down',
+    trend: "down",
     trendValue: -1.2,
-    status: 'good',
+    status: "good",
     icon: Droplets,
-    color: 'text-info'
+    color: "text-info"
   },
   {
-    id: 'uptime',
-    label: 'Tempo Operacional',
+    id: "uptime",
+    label: "Tempo Operacional",
     value: 98.7,
-    unit: '%',
+    unit: "%",
     target: 95,
-    trend: 'up',
+    trend: "up",
     trendValue: 0.8,
-    status: 'excellent',
+    status: "excellent",
     icon: Clock,
-    color: 'text-success'
+    color: "text-success"
   },
   {
-    id: 'power_efficiency',
-    label: 'Eficiência Energética',
+    id: "power_efficiency",
+    label: "Eficiência Energética",
     value: 82.3,
-    unit: '%',
+    unit: "%",
     target: 85,
-    trend: 'down',
+    trend: "down",
     trendValue: -2.5,
-    status: 'warning',
+    status: "warning",
     icon: Zap,
-    color: 'text-warning'
+    color: "text-warning"
   },
   {
-    id: 'compliance',
-    label: 'Compliance Score',
+    id: "compliance",
+    label: "Compliance Score",
     value: 96.8,
-    unit: '%',
+    unit: "%",
     target: 95,
-    trend: 'up',
+    trend: "up",
     trendValue: 1.5,
-    status: 'excellent',
+    status: "excellent",
     icon: Award,
-    color: 'text-success'
+    color: "text-success"
   },
   {
-    id: 'incidents',
-    label: 'Incidentes (Mês)',
+    id: "incidents",
+    label: "Incidentes (Mês)",
     value: 2,
-    unit: '',
+    unit: "",
     target: 0,
-    trend: 'up',
+    trend: "up",
     trendValue: 1,
-    status: 'critical',
+    status: "critical",
     icon: AlertTriangle,
-    color: 'text-danger'
+    color: "text-danger"
   }
 ];
 
 const statusColors = {
-  excellent: 'border-success bg-success/5',
-  good: 'border-info bg-info/5',
-  warning: 'border-warning bg-warning/5',
-  critical: 'border-danger bg-danger/5'
+  excellent: "border-success bg-success/5",
+  good: "border-info bg-info/5",
+  warning: "border-warning bg-warning/5",
+  critical: "border-danger bg-danger/5"
 };
 
 const statusLabels = {
-  excellent: 'Excelente',
-  good: 'Bom',
-  warning: 'Atenção',
-  critical: 'Crítico'
+  excellent: "Excelente",
+  good: "Bom",
+  warning: "Atenção",
+  critical: "Crítico"
 };
 
 interface PerformanceMetricsProps {
@@ -121,7 +121,7 @@ interface PerformanceMetricsProps {
 
 export const PerformanceMetrics = ({ className, compact = false }: PerformanceMetricsProps) => {
   const [metrics, setMetrics] = useState<MetricData[]>(mockMetrics);
-  const [selectedPeriod, setSelectedPeriod] = useState<'24h' | '7d' | '30d'>('24h');
+  const [selectedPeriod, setSelectedPeriod] = useState<"24h" | "7d" | "30d">("24h");
 
   // Simular updates em tempo real
   useEffect(() => {
@@ -131,31 +131,31 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
         let newValue = metric.value;
         
         switch (metric.id) {
-          case 'efficiency':
-          case 'fuel_efficiency':
-          case 'uptime':
-          case 'power_efficiency':
-          case 'compliance':
-            newValue = Math.max(0, Math.min(100, metric.value + variation * 0.5));
-            break;
-          case 'incidents':
-            newValue = Math.max(0, metric.value + (Math.random() > 0.8 ? 1 : 0));
-            break;
+        case "efficiency":
+        case "fuel_efficiency":
+        case "uptime":
+        case "power_efficiency":
+        case "compliance":
+          newValue = Math.max(0, Math.min(100, metric.value + variation * 0.5));
+          break;
+        case "incidents":
+          newValue = Math.max(0, metric.value + (Math.random() > 0.8 ? 1 : 0));
+          break;
         }
         
         // Determinar status baseado no valor e target
         let newStatus = metric.status;
-        if (metric.id === 'incidents') {
-          if (newValue === 0) newStatus = 'excellent';
-          else if (newValue <= 1) newStatus = 'good';
-          else if (newValue <= 3) newStatus = 'warning';
-          else newStatus = 'critical';
+        if (metric.id === "incidents") {
+          if (newValue === 0) newStatus = "excellent";
+          else if (newValue <= 1) newStatus = "good";
+          else if (newValue <= 3) newStatus = "warning";
+          else newStatus = "critical";
         } else {
           const percentage = (newValue / metric.target) * 100;
-          if (percentage >= 105) newStatus = 'excellent';
-          else if (percentage >= 95) newStatus = 'good';
-          else if (percentage >= 85) newStatus = 'warning';
-          else newStatus = 'critical';
+          if (percentage >= 105) newStatus = "excellent";
+          else if (percentage >= 95) newStatus = "good";
+          else if (percentage >= 85) newStatus = "warning";
+          else newStatus = "critical";
         }
         
         return {
@@ -171,7 +171,7 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
 
   const getPerformanceScore = () => {
     const scores = metrics.map(metric => {
-      if (metric.id === 'incidents') {
+      if (metric.id === "incidents") {
         return metric.value === 0 ? 100 : Math.max(0, 100 - (metric.value * 20));
       }
       return (metric.value / metric.target) * 100;
@@ -181,10 +181,10 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
 
   const overallScore = getPerformanceScore();
   const getScoreStatus = (score: number) => {
-    if (score >= 95) return 'excellent';
-    if (score >= 85) return 'good';
-    if (score >= 75) return 'warning';
-    return 'critical';
+    if (score >= 95) return "excellent";
+    if (score >= 85) return "good";
+    if (score >= 75) return "warning";
+    return "critical";
   };
 
   if (compact) {
@@ -198,10 +198,10 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
           <div className="text-right">
             <div className={cn(
               "text-3xl font-bold",
-              getScoreStatus(overallScore) === 'excellent' && "text-success",
-              getScoreStatus(overallScore) === 'good' && "text-info",
-              getScoreStatus(overallScore) === 'warning' && "text-warning",
-              getScoreStatus(overallScore) === 'critical' && "text-danger"
+              getScoreStatus(overallScore) === "excellent" && "text-success",
+              getScoreStatus(overallScore) === "good" && "text-info",
+              getScoreStatus(overallScore) === "warning" && "text-warning",
+              getScoreStatus(overallScore) === "critical" && "text-danger"
             )}>
               {overallScore}%
             </div>
@@ -225,9 +225,9 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
                     </span>
                     <div className={cn(
                       "flex items-center text-xs",
-                      metric.trend === 'up' ? "text-success" : "text-danger"
+                      metric.trend === "up" ? "text-success" : "text-danger"
                     )}>
-                      {metric.trend === 'up' ? (
+                      {metric.trend === "up" ? (
                         <TrendingUp size={12} />
                       ) : (
                         <TrendingDown size={12} />
@@ -254,7 +254,7 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
         </div>
         
         <div className="flex items-center space-x-2">
-          {['24h', '7d', '30d'].map((period) => (
+          {["24h", "7d", "30d"].map((period) => (
             <button
               key={period}
               onClick={() => setSelectedPeriod(period as any)}
@@ -276,10 +276,10 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
         <div className="text-center">
           <div className={cn(
             "text-6xl font-bold mb-2",
-            getScoreStatus(overallScore) === 'excellent' && "text-success",
-            getScoreStatus(overallScore) === 'good' && "text-info",
-            getScoreStatus(overallScore) === 'warning' && "text-warning",
-            getScoreStatus(overallScore) === 'critical' && "text-danger"
+            getScoreStatus(overallScore) === "excellent" && "text-success",
+            getScoreStatus(overallScore) === "good" && "text-info",
+            getScoreStatus(overallScore) === "warning" && "text-warning",
+            getScoreStatus(overallScore) === "critical" && "text-danger"
           )}>
             {overallScore}%
           </div>
@@ -294,7 +294,7 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {metrics.map((metric) => {
           const Icon = metric.icon;
-          const isTarget = metric.value >= metric.target || (metric.id === 'incidents' && metric.value <= metric.target);
+          const isTarget = metric.value >= metric.target || (metric.id === "incidents" && metric.value <= metric.target);
           
           return (
             <Card 
@@ -307,17 +307,17 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
               <div className="flex items-center justify-between mb-4">
                 <div className={cn(
                   "p-3 rounded-lg",
-                  `bg-${metric.color.split('-')[1]}/10`
+                  `bg-${metric.color.split("-")[1]}/10`
                 )}>
                   <Icon className={metric.color} size={24} />
                 </div>
                 <div className={cn(
                   "flex items-center text-sm font-medium",
-                  metric.trend === 'up' && metric.id !== 'incidents' ? "text-success" : 
-                  metric.trend === 'down' && metric.id !== 'incidents' ? "text-danger" :
-                  metric.trend === 'up' && metric.id === 'incidents' ? "text-danger" : "text-success"
+                  metric.trend === "up" && metric.id !== "incidents" ? "text-success" : 
+                    metric.trend === "down" && metric.id !== "incidents" ? "text-danger" :
+                      metric.trend === "up" && metric.id === "incidents" ? "text-danger" : "text-success"
                 )}>
-                  {metric.trend === 'up' ? (
+                  {metric.trend === "up" ? (
                     <TrendingUp size={16} />
                   ) : (
                     <TrendingDown size={16} />
@@ -345,7 +345,7 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
                     "font-medium",
                     isTarget ? "text-success" : "text-danger"
                   )}>
-                    {isTarget ? '✓ Atingida' : '⚠ Abaixo'}
+                    {isTarget ? "✓ Atingida" : "⚠ Abaixo"}
                   </span>
                 </div>
                 
@@ -353,13 +353,13 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
                   <div 
                     className={cn(
                       "h-2 rounded-full transition-all duration-300",
-                      metric.status === 'excellent' && "bg-success",
-                      metric.status === 'good' && "bg-info",
-                      metric.status === 'warning' && "bg-warning",
-                      metric.status === 'critical' && "bg-danger"
+                      metric.status === "excellent" && "bg-success",
+                      metric.status === "good" && "bg-info",
+                      metric.status === "warning" && "bg-warning",
+                      metric.status === "critical" && "bg-danger"
                     )}
                     style={{ 
-                      width: metric.id === 'incidents' 
+                      width: metric.id === "incidents" 
                         ? `${Math.max(10, Math.min(100, (5 - metric.value) * 20))}%`
                         : `${Math.min(100, (metric.value / metric.target) * 100)}%` 
                     }}

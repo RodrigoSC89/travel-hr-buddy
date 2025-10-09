@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { useSidebarActions } from '@/hooks/use-sidebar-actions';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { useSidebarActions } from "@/hooks/use-sidebar-actions";
 import { 
   Search, 
   Zap, 
@@ -26,7 +26,7 @@ import {
   Target,
   Brain,
   Mic
-} from 'lucide-react';
+} from "lucide-react";
 
 interface QuickActionProps {
   title: string;
@@ -39,50 +39,50 @@ interface QuickActionProps {
 
 const quickActions: QuickActionProps[] = [
   // Dashboard e Analytics
-  { title: 'Dashboard Principal', description: 'Visão geral do sistema', icon: BarChart3, module: 'dashboard', category: 'Dashboard', badge: 'Principal' },
-  { title: 'Analytics Avançado', description: 'Análise de dados em tempo real', icon: TrendingUp, module: 'analytics', category: 'Dashboard' },
-  { title: 'Análise Preditiva', description: 'IA para previsões estratégicas', icon: Brain, module: 'predictive-analytics', category: 'Dashboard' },
+  { title: "Dashboard Principal", description: "Visão geral do sistema", icon: BarChart3, module: "dashboard", category: "Dashboard", badge: "Principal" },
+  { title: "Analytics Avançado", description: "Análise de dados em tempo real", icon: TrendingUp, module: "analytics", category: "Dashboard" },
+  { title: "Análise Preditiva", description: "IA para previsões estratégicas", icon: Brain, module: "predictive-analytics", category: "Dashboard" },
   
   // Marítimo e RH
-  { title: 'Sistema Marítimo', description: 'Gestão completa da frota', icon: Ship, module: 'maritime', category: 'Marítimo', badge: 'Essencial' },
-  { title: 'Recursos Humanos', description: 'Gestão de pessoal e certificações', icon: Users, module: 'hr', category: 'Marítimo' },
+  { title: "Sistema Marítimo", description: "Gestão completa da frota", icon: Ship, module: "maritime", category: "Marítimo", badge: "Essencial" },
+  { title: "Recursos Humanos", description: "Gestão de pessoal e certificações", icon: Users, module: "hr", category: "Marítimo" },
   
   // Inovação
-  { title: 'Centro de Inovação', description: 'IA e tecnologias emergentes', icon: Bot, module: 'innovation', category: 'Inovação', badge: 'Novo' },
-  { title: 'Gamificação', description: 'Sistema de conquistas e ranking', icon: Trophy, module: 'gamification', category: 'Inovação' },
-  { title: 'Realidade Aumentada', description: 'Interface imersiva', icon: Eye, module: 'ar', category: 'Inovação' },
-  { title: 'IoT Dashboard', description: 'Dispositivos conectados', icon: Radio, module: 'iot', category: 'Inovação' },
-  { title: 'Blockchain', description: 'Documentos seguros', icon: Shield, module: 'blockchain', category: 'Inovação' },
+  { title: "Centro de Inovação", description: "IA e tecnologias emergentes", icon: Bot, module: "innovation", category: "Inovação", badge: "Novo" },
+  { title: "Gamificação", description: "Sistema de conquistas e ranking", icon: Trophy, module: "gamification", category: "Inovação" },
+  { title: "Realidade Aumentada", description: "Interface imersiva", icon: Eye, module: "ar", category: "Inovação" },
+  { title: "IoT Dashboard", description: "Dispositivos conectados", icon: Radio, module: "iot", category: "Inovação" },
+  { title: "Blockchain", description: "Documentos seguros", icon: Shield, module: "blockchain", category: "Inovação" },
   
   // Operacional
-  { title: 'Viagens', description: 'Voos e hospedagens corporativas', icon: Plane, module: 'travel', category: 'Operacional' },
-  { title: 'Alertas de Preços', description: 'Monitoramento inteligente', icon: Bell, module: 'price-alerts', category: 'Operacional' },
-  { title: 'Reservas', description: 'Agendamentos e recursos', icon: Calendar, module: 'reservations', category: 'Operacional' },
-  { title: 'Comunicação', description: 'Chat e mensagens', icon: MessageSquare, module: 'communication', category: 'Operacional' },
+  { title: "Viagens", description: "Voos e hospedagens corporativas", icon: Plane, module: "travel", category: "Operacional" },
+  { title: "Alertas de Preços", description: "Monitoramento inteligente", icon: Bell, module: "price-alerts", category: "Operacional" },
+  { title: "Reservas", description: "Agendamentos e recursos", icon: Calendar, module: "reservations", category: "Operacional" },
+  { title: "Comunicação", description: "Chat e mensagens", icon: MessageSquare, module: "communication", category: "Operacional" },
   
   // Gestão
-  { title: 'Relatórios', description: 'Documentos e análises', icon: FileText, module: 'reports', category: 'Gestão' },
-  { title: 'Portal do Funcionário', description: 'Acesso personalizado', icon: User, module: 'portal', category: 'Gestão' },
-  { title: 'Configurações', description: 'Preferências do sistema', icon: Settings, module: 'settings', category: 'Gestão' },
+  { title: "Relatórios", description: "Documentos e análises", icon: FileText, module: "reports", category: "Gestão" },
+  { title: "Portal do Funcionário", description: "Acesso personalizado", icon: User, module: "portal", category: "Gestão" },
+  { title: "Configurações", description: "Preferências do sistema", icon: Settings, module: "settings", category: "Gestão" },
   
   // Estratégico
-  { title: 'Centro Estratégico', description: 'Melhorias baseadas em SWOT', icon: Target, module: 'strategic', category: 'Estratégico', badge: 'Premium' },
-  { title: 'Assistente de Voz', description: 'Comandos inteligentes', icon: Mic, module: 'voice', category: 'Estratégico' },
-  { title: 'Inteligência', description: 'Processamento de documentos', icon: Brain, module: 'intelligence', category: 'Estratégico' },
-  { title: 'Otimização', description: 'Performance e melhorias', icon: Zap, module: 'optimization', category: 'Estratégico' }
+  { title: "Centro Estratégico", description: "Melhorias baseadas em SWOT", icon: Target, module: "strategic", category: "Estratégico", badge: "Premium" },
+  { title: "Assistente de Voz", description: "Comandos inteligentes", icon: Mic, module: "voice", category: "Estratégico" },
+  { title: "Inteligência", description: "Processamento de documentos", icon: Brain, module: "intelligence", category: "Estratégico" },
+  { title: "Otimização", description: "Performance e melhorias", icon: Zap, module: "optimization", category: "Estratégico" }
 ];
 
 export const QuickActionsPanel: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Todos");
   const { handleNavigation } = useSidebarActions();
 
-  const categories = ['Todos', ...Array.from(new Set(quickActions.map(action => action.category)))];
+  const categories = ["Todos", ...Array.from(new Set(quickActions.map(action => action.category)))];
   
   const filteredActions = quickActions.filter(action => {
     const matchesSearch = action.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          action.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'Todos' || action.category === selectedCategory;
+    const matchesCategory = selectedCategory === "Todos" || action.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 

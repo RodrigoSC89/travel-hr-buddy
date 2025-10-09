@@ -7,4 +7,4 @@
 export { 
   MetricCard as StatsCard,
   type MetricCardProps as StatsCardProps
-} from '@/components/ui/MetricCard';
+} from "@/components/ui/MetricCard";

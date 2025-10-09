@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
-import { FileText, Plus, Edit, Trash2, Calendar, Ship, Building, CheckCircle, AlertCircle } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
+import { FileText, Plus, Edit, Trash2, Calendar, Ship, Building, CheckCircle, AlertCircle } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface PeotramTemplate {
   id: string;
@@ -23,7 +23,7 @@ interface PeotramTemplate {
     }>;
   };
   is_active: boolean;
-  checklist_type: 'vessel' | 'shore';
+  checklist_type: "vessel" | "shore";
   created_at: string;
 }
 
@@ -43,7 +43,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
   const createNewTemplate = async (templateData: any) => {
     try {
       const { data, error } = await supabase
-        .from('peotram_templates')
+        .from("peotram_templates")
         .insert([templateData])
         .select()
         .single();
@@ -58,7 +58,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
         description: "Template PEOTRAM criado com sucesso!",
       });
     } catch (error) {
-      console.error('Error creating template:', error);
+      console.error("Error creating template:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o template.",
@@ -70,9 +70,9 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
   const updateTemplate = async (id: string, updates: any) => {
     try {
       const { error } = await supabase
-        .from('peotram_templates')
+        .from("peotram_templates")
         .update(updates)
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
 
@@ -84,7 +84,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
         description: "Template atualizado com sucesso!",
       });
     } catch (error) {
-      console.error('Error updating template:', error);
+      console.error("Error updating template:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o template.",
@@ -98,8 +98,8 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
   };
 
   const currentYear = new Date().getFullYear();
-  const vesselTemplates = templates.filter(t => t.checklist_type === 'vessel');
-  const shoreTemplates = templates.filter(t => t.checklist_type === 'shore');
+  const vesselTemplates = templates.filter(t => t.checklist_type === "vessel");
+  const shoreTemplates = templates.filter(t => t.checklist_type === "shore");
 
   return (
     <div className="space-y-6">
@@ -146,7 +146,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
                       size="sm"
                       onClick={() => toggleTemplateStatus(template)}
                     >
-                      {template.is_active ? 'Desativar' : 'Ativar'}
+                      {template.is_active ? "Desativar" : "Ativar"}
                     </Button>
                   </div>
                 </div>
@@ -200,7 +200,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
                       size="sm"
                       onClick={() => toggleTemplateStatus(template)}
                     >
-                      {template.is_active ? 'Desativar' : 'Ativar'}
+                      {template.is_active ? "Desativar" : "Ativar"}
                     </Button>
                   </div>
                 </div>
@@ -218,7 +218,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              Editar Template PEOTRAM {editingTemplate.year} - {editingTemplate.checklist_type === 'vessel' ? 'Embarcação' : 'Base Terrestre'}
+              Editar Template PEOTRAM {editingTemplate.year} - {editingTemplate.checklist_type === "vessel" ? "Embarcação" : "Base Terrestre"}
             </DialogTitle>
             <DialogDescription>
               Configure os elementos e requisitos do template PEOTRAM

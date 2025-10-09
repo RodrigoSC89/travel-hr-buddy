@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Building2,
   Users,
@@ -25,7 +25,7 @@ import {
   CheckCircle,
   Clock,
   Ban
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Organization {
   id: string;
@@ -58,13 +58,13 @@ export const SuperAdminDashboard: React.FC = () => {
 
   // Formulário para nova organização
   const [newOrgForm, setNewOrgForm] = useState({
-    name: '',
-    slug: '',
-    plan_type: 'free',
+    name: "",
+    slug: "",
+    plan_type: "free",
     max_users: 5,
     max_vessels: 2,
     max_storage_gb: 1,
-    billing_email: ''
+    billing_email: ""
   });
 
   const loadOrganizations = useCallback(async () => {
@@ -72,7 +72,7 @@ export const SuperAdminDashboard: React.FC = () => {
       setIsLoading(true);
       
       const { data: orgs, error } = await supabase
-        .from('organizations')
+        .from("organizations")
         .select(`
           *,
           organization_branding(company_name, primary_color, theme_mode),
@@ -85,14 +85,14 @@ export const SuperAdminDashboard: React.FC = () => {
       // Processar dados das organizações
       const processedOrgs = orgs?.map(org => ({
         ...org,
-        user_count: org.organization_users?.filter((u: any) => u.status === 'active').length || 0,
+        user_count: org.organization_users?.filter((u: any) => u.status === "active").length || 0,
         vessel_count: org.vessels?.length || 0,
         branding: org.organization_branding?.[0] || null
       })) || [];
 
       setOrganizations(processedOrgs);
     } catch (error) {
-      console.error('Erro ao carregar organizações:', error);
+      console.error("Erro ao carregar organizações:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar organizações",
@@ -111,9 +111,9 @@ export const SuperAdminDashboard: React.FC = () => {
     try {
       // Validar slug único
       const { data: existingOrg } = await supabase
-        .from('organizations')
-        .select('id')
-        .eq('slug', newOrgForm.slug)
+        .from("organizations")
+        .select("id")
+        .eq("slug", newOrgForm.slug)
         .single();
 
       if (existingOrg) {
@@ -126,7 +126,7 @@ export const SuperAdminDashboard: React.FC = () => {
       }
 
       const { data, error } = await supabase
-        .from('organizations')
+        .from("organizations")
         .insert([newOrgForm])
         .select()
         .single();
@@ -140,18 +140,18 @@ export const SuperAdminDashboard: React.FC = () => {
 
       setShowCreateModal(false);
       setNewOrgForm({
-        name: '',
-        slug: '',
-        plan_type: 'free',
+        name: "",
+        slug: "",
+        plan_type: "free",
         max_users: 5,
         max_vessels: 2,
         max_storage_gb: 1,
-        billing_email: ''
+        billing_email: ""
       });
       
       loadOrganizations();
     } catch (error) {
-      console.error('Erro ao criar organização:', error);
+      console.error("Erro ao criar organização:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar organização",
@@ -163,9 +163,9 @@ export const SuperAdminDashboard: React.FC = () => {
   const updateOrganizationStatus = async (orgId: string, status: string) => {
     try {
       const { error } = await supabase
-        .from('organizations')
+        .from("organizations")
         .update({ status })
-        .eq('id', orgId);
+        .eq("id", orgId);
 
       if (error) throw error;
 
@@ -176,7 +176,7 @@ export const SuperAdminDashboard: React.FC = () => {
 
       loadOrganizations();
     } catch (error) {
-      console.error('Erro ao atualizar status:', error);
+      console.error("Erro ao atualizar status:", error);
       toast({
         title: "Erro",
         description: "Erro ao atualizar status da organização",
@@ -187,26 +187,26 @@ export const SuperAdminDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'trial': return <Clock className="w-4 h-4 text-blue-500" />;
-      case 'suspended': return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      case 'expired': return <Ban className="w-4 h-4 text-red-500" />;
-      default: return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "active": return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "trial": return <Clock className="w-4 h-4 text-blue-500" />;
+    case "suspended": return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+    case "expired": return <Ban className="w-4 h-4 text-red-500" />;
+    default: return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getPlanBadgeColor = (plan: string) => {
     switch (plan) {
-      case 'free': return 'secondary';
-      case 'professional': return 'default';
-      case 'enterprise': return 'destructive';
-      default: return 'secondary';
+    case "free": return "secondary";
+    case "professional": return "default";
+    case "enterprise": return "destructive";
+    default: return "secondary";
     }
   };
 
   // Estatísticas gerais
   const totalOrgs = organizations.length;
-  const activeOrgs = organizations.filter(org => org.status === 'active').length;
+  const activeOrgs = organizations.filter(org => org.status === "active").length;
   const totalUsers = organizations.reduce((sum, org) => sum + (org.user_count || 0), 0);
   const totalVessels = organizations.reduce((sum, org) => sum + (org.vessel_count || 0), 0);
 
@@ -255,7 +255,7 @@ export const SuperAdminDashboard: React.FC = () => {
                 <Label>Slug (Subdomínio)</Label>
                 <Input
                   value={newOrgForm.slug}
-                  onChange={(e) => setNewOrgForm({...newOrgForm, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-')})}
+                  onChange={(e) => setNewOrgForm({...newOrgForm, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-")})}
                   placeholder="Ex: blue-shipping"
                 />
                 <p className="text-xs text-muted-foreground mt-1">
@@ -339,7 +339,7 @@ export const SuperAdminDashboard: React.FC = () => {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">R$ {(organizations.filter(org => org.plan_type === 'professional').length * 299 + organizations.filter(org => org.plan_type === 'enterprise').length * 899).toLocaleString()}</div>
+            <div className="text-2xl font-bold">R$ {(organizations.filter(org => org.plan_type === "professional").length * 299 + organizations.filter(org => org.plan_type === "enterprise").length * 899).toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               Mensal estimada
             </p>
@@ -361,7 +361,7 @@ export const SuperAdminDashboard: React.FC = () => {
               <div key={org.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 rounded-lg flex items-center justify-center text-azure-50 font-bold" 
-                       style={{ backgroundColor: org.branding?.primary_color || '#1e40af' }}>
+                    style={{ backgroundColor: org.branding?.primary_color || "#1e40af" }}>
                     {org.branding?.company_name?.charAt(0) || org.name.charAt(0)}
                   </div>
                   <div>
@@ -376,27 +376,27 @@ export const SuperAdminDashboard: React.FC = () => {
                       {org.slug}.nautilus.app • {org.user_count} usuários • {org.vessel_count} embarcações
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Criado em {new Date(org.created_at).toLocaleDateString('pt-BR')}
+                      Criado em {new Date(org.created_at).toLocaleDateString("pt-BR")}
                     </p>
                   </div>
                 </div>
                 
                 <div className="flex items-center gap-2">
-                  {org.status === 'active' && (
+                  {org.status === "active" && (
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => updateOrganizationStatus(org.id, 'suspended')}
+                      onClick={() => updateOrganizationStatus(org.id, "suspended")}
                     >
                       <Ban className="w-4 h-4 mr-1" />
                       Suspender
                     </Button>
                   )}
-                  {org.status === 'suspended' && (
+                  {org.status === "suspended" && (
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => updateOrganizationStatus(org.id, 'active')}
+                      onClick={() => updateOrganizationStatus(org.id, "active")}
                     >
                       <CheckCircle className="w-4 h-4 mr-1" />
                       Ativar

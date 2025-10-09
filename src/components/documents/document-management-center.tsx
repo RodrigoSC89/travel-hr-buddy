@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { 
   FileText, 
   Upload, 
@@ -24,12 +24,12 @@ import {
   Building,
   AlertTriangle,
   Award
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Document {
   id: string;
   title: string;
-  type: 'contract' | 'certificate' | 'manual' | 'procedure' | 'report' | 'legal' | 'safety';
+  type: "contract" | "certificate" | "manual" | "procedure" | "report" | "legal" | "safety";
   category: string;
   owner: string;
   department: string;
@@ -37,7 +37,7 @@ interface Document {
   last_modified: string;
   file_size: string;
   file_format: string;
-  status: 'active' | 'archived' | 'under_review' | 'expired';
+  status: "active" | "archived" | "under_review" | "expired";
   confidential: boolean;
   version: string;
   description?: string;
@@ -55,10 +55,10 @@ interface DocumentStats {
 export const DocumentManagementCenter = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [stats, setStats] = useState<DocumentStats | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [typeFilter, setTypeFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [activeTab, setActiveTab] = useState("overview");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const [loading, setLoading] = useState(true);
@@ -76,95 +76,95 @@ export const DocumentManagementCenter = () => {
       // Mock documents data
       const mockDocuments: Document[] = [
         {
-          id: '1',
-          title: 'Manual de Segurança Marítima 2024',
-          type: 'manual',
-          category: 'Segurança',
-          owner: 'João Silva',
-          department: 'Operações',
-          upload_date: '2024-01-15',
-          last_modified: '2024-01-20',
-          file_size: '2.5 MB',
-          file_format: 'PDF',
-          status: 'active',
+          id: "1",
+          title: "Manual de Segurança Marítima 2024",
+          type: "manual",
+          category: "Segurança",
+          owner: "João Silva",
+          department: "Operações",
+          upload_date: "2024-01-15",
+          last_modified: "2024-01-20",
+          file_size: "2.5 MB",
+          file_format: "PDF",
+          status: "active",
           confidential: false,
-          version: '2.1',
-          description: 'Manual completo de procedimentos de segurança para operações marítimas',
-          tags: ['segurança', 'procedimentos', 'treinamento']
+          version: "2.1",
+          description: "Manual completo de procedimentos de segurança para operações marítimas",
+          tags: ["segurança", "procedimentos", "treinamento"]
         },
         {
-          id: '2',
-          title: 'Contrato de Afretamento - MV Atlantic',
-          type: 'contract',
-          category: 'Legal',
-          owner: 'Maria Santos',
-          department: 'Jurídico',
-          upload_date: '2024-02-01',
-          last_modified: '2024-02-05',
-          file_size: '1.2 MB',
-          file_format: 'PDF',
-          status: 'active',
+          id: "2",
+          title: "Contrato de Afretamento - MV Atlantic",
+          type: "contract",
+          category: "Legal",
+          owner: "Maria Santos",
+          department: "Jurídico",
+          upload_date: "2024-02-01",
+          last_modified: "2024-02-05",
+          file_size: "1.2 MB",
+          file_format: "PDF",
+          status: "active",
           confidential: true,
-          version: '1.0',
-          description: 'Contrato de afretamento para embarcação MV Atlantic',
-          tags: ['contrato', 'afretamento', 'legal']
+          version: "1.0",
+          description: "Contrato de afretamento para embarcação MV Atlantic",
+          tags: ["contrato", "afretamento", "legal"]
         },
         {
-          id: '3',
-          title: 'Certificado ISPS - Porto Santos',
-          type: 'certificate',
-          category: 'Certificações',
-          owner: 'Carlos Oliveira',
-          department: 'Compliance',
-          upload_date: '2023-12-01',
-          last_modified: '2023-12-01',
-          file_size: '850 KB',
-          file_format: 'PDF',
-          status: 'expired',
+          id: "3",
+          title: "Certificado ISPS - Porto Santos",
+          type: "certificate",
+          category: "Certificações",
+          owner: "Carlos Oliveira",
+          department: "Compliance",
+          upload_date: "2023-12-01",
+          last_modified: "2023-12-01",
+          file_size: "850 KB",
+          file_format: "PDF",
+          status: "expired",
           confidential: false,
-          version: '1.0',
-          description: 'Certificado ISPS para operações no Porto de Santos',
-          tags: ['certificado', 'ISPS', 'porto']
+          version: "1.0",
+          description: "Certificado ISPS para operações no Porto de Santos",
+          tags: ["certificado", "ISPS", "porto"]
         },
         {
-          id: '4',
-          title: 'Relatório de Inspeção Q1 2024',
-          type: 'report',
-          category: 'Inspeções',
-          owner: 'Ana Costa',
-          department: 'Qualidade',
-          upload_date: '2024-03-30',
-          last_modified: '2024-03-30',
-          file_size: '3.1 MB',
-          file_format: 'PDF',
-          status: 'under_review',
+          id: "4",
+          title: "Relatório de Inspeção Q1 2024",
+          type: "report",
+          category: "Inspeções",
+          owner: "Ana Costa",
+          department: "Qualidade",
+          upload_date: "2024-03-30",
+          last_modified: "2024-03-30",
+          file_size: "3.1 MB",
+          file_format: "PDF",
+          status: "under_review",
           confidential: false,
-          version: '1.0',
-          description: 'Relatório trimestral de inspeções de segurança',
-          tags: ['relatório', 'inspeção', 'trimestral']
+          version: "1.0",
+          description: "Relatório trimestral de inspeções de segurança",
+          tags: ["relatório", "inspeção", "trimestral"]
         },
         {
-          id: '5',
-          title: 'Procedimento de Emergência - Derramamento',
-          type: 'procedure',
-          category: 'Emergência',
-          owner: 'Pedro Lima',
-          department: 'Segurança',
-          upload_date: '2024-01-10',
-          last_modified: '2024-01-15',
-          file_size: '1.8 MB',
-          file_format: 'PDF',
-          status: 'active',
+          id: "5",
+          title: "Procedimento de Emergência - Derramamento",
+          type: "procedure",
+          category: "Emergência",
+          owner: "Pedro Lima",
+          department: "Segurança",
+          upload_date: "2024-01-10",
+          last_modified: "2024-01-15",
+          file_size: "1.8 MB",
+          file_format: "PDF",
+          status: "active",
           confidential: false,
-          version: '3.2',
-          description: 'Procedimentos para resposta a emergências de derramamento',
-          tags: ['emergência', 'derramamento', 'procedimento']
+          version: "3.2",
+          description: "Procedimentos para resposta a emergências de derramamento",
+          tags: ["emergência", "derramamento", "procedimento"]
         }
       ];
 
       setDocuments(mockDocuments);
     } catch (error) {
-      console.error('Error loading documents:', error);
+      console.error("Error loading documents:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar documentos",
@@ -195,7 +195,7 @@ export const DocumentManagementCenter = () => {
       return uploadDate > weekAgo;
     }).length;
 
-    const expiringSoon = documents.filter(doc => doc.status === 'expired').length;
+    const expiringSoon = documents.filter(doc => doc.status === "expired").length;
 
     setStats({
       total: documents.length,
@@ -210,49 +210,49 @@ export const DocumentManagementCenter = () => {
     calculateStats();
   }, [documents]);
 
-  const getTypeIcon = (type: Document['type']) => {
+  const getTypeIcon = (type: Document["type"]) => {
     switch (type) {
-      case 'contract': return Building;
-      case 'certificate': return Award;
-      case 'manual': return FileText;
-      case 'procedure': return AlertTriangle;
-      case 'report': return Calendar;
-      case 'legal': return Building;
-      case 'safety': return AlertTriangle;
-      default: return FileText;
+    case "contract": return Building;
+    case "certificate": return Award;
+    case "manual": return FileText;
+    case "procedure": return AlertTriangle;
+    case "report": return Calendar;
+    case "legal": return Building;
+    case "safety": return AlertTriangle;
+    default: return FileText;
     }
   };
 
-  const getTypeText = (type: Document['type']) => {
+  const getTypeText = (type: Document["type"]) => {
     switch (type) {
-      case 'contract': return 'Contrato';
-      case 'certificate': return 'Certificado';
-      case 'manual': return 'Manual';
-      case 'procedure': return 'Procedimento';
-      case 'report': return 'Relatório';
-      case 'legal': return 'Legal';
-      case 'safety': return 'Segurança';
-      default: return 'Documento';
+    case "contract": return "Contrato";
+    case "certificate": return "Certificado";
+    case "manual": return "Manual";
+    case "procedure": return "Procedimento";
+    case "report": return "Relatório";
+    case "legal": return "Legal";
+    case "safety": return "Segurança";
+    default: return "Documento";
     }
   };
 
-  const getStatusColor = (status: Document['status']) => {
+  const getStatusColor = (status: Document["status"]) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'archived': return 'bg-gray-500';
-      case 'under_review': return 'bg-yellow-500';
-      case 'expired': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "active": return "bg-green-500";
+    case "archived": return "bg-gray-500";
+    case "under_review": return "bg-yellow-500";
+    case "expired": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
-  const getStatusText = (status: Document['status']) => {
+  const getStatusText = (status: Document["status"]) => {
     switch (status) {
-      case 'active': return 'Ativo';
-      case 'archived': return 'Arquivado';
-      case 'under_review': return 'Em Revisão';
-      case 'expired': return 'Expirado';
-      default: return 'Desconhecido';
+    case "active": return "Ativo";
+    case "archived": return "Arquivado";
+    case "under_review": return "Em Revisão";
+    case "expired": return "Expirado";
+    default: return "Desconhecido";
     }
   };
 
@@ -260,8 +260,8 @@ export const DocumentManagementCenter = () => {
     const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          doc.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesType = typeFilter === 'all' || doc.type === typeFilter;
-    const matchesStatus = statusFilter === 'all' || doc.status === statusFilter;
+    const matchesType = typeFilter === "all" || doc.type === typeFilter;
+    const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
     return matchesSearch && matchesType && matchesStatus;
   });
 
@@ -573,7 +573,7 @@ export const DocumentManagementCenter = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {documents.filter(d => d.status === 'expired').map((doc) => (
+                {documents.filter(d => d.status === "expired").map((doc) => (
                   <div key={doc.id} className="border-l-4 border-red-500 bg-red-50 p-4 rounded">
                     <div className="flex items-center justify-between">
                       <div>

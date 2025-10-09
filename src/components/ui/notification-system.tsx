@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 import { 
   Bell, 
   AlertTriangle, 
@@ -9,78 +9,78 @@ import {
   Filter,
   Settings,
   Clock
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface Notification {
   id: string;
-  type: 'alert' | 'info' | 'success' | 'warning';
+  type: "alert" | "info" | "success" | "warning";
   title: string;
   message: string;
   vessel?: string;
   timestamp: Date;
   read: boolean;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
 }
 
 const mockNotifications: Notification[] = [
   {
-    id: '1',
-    type: 'alert',
-    title: 'Combustível Baixo',
-    message: 'Embarcação Atlântida reporta 15% de combustível restante',
-    vessel: 'Atlântida',
+    id: "1",
+    type: "alert",
+    title: "Combustível Baixo",
+    message: "Embarcação Atlântida reporta 15% de combustível restante",
+    vessel: "Atlântida",
     timestamp: new Date(Date.now() - 5 * 60 * 1000),
     read: false,
-    priority: 'high'
+    priority: "high"
   },
   {
-    id: '2',
-    type: 'warning',
-    title: 'Manutenção Programada',
-    message: 'Sistema DP da embarcação Pacífico requer manutenção em 3 dias',
-    vessel: 'Pacífico',
+    id: "2",
+    type: "warning",
+    title: "Manutenção Programada",
+    message: "Sistema DP da embarcação Pacífico requer manutenção em 3 dias",
+    vessel: "Pacífico",
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
     read: false,
-    priority: 'medium'
+    priority: "medium"
   },
   {
-    id: '3',
-    type: 'success',
-    title: 'Certificação Renovada',
-    message: 'Certificado IMO da embarcação Índico renovado com sucesso',
-    vessel: 'Índico',
+    id: "3",
+    type: "success",
+    title: "Certificação Renovada",
+    message: "Certificado IMO da embarcação Índico renovado com sucesso",
+    vessel: "Índico",
     timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
     read: true,
-    priority: 'low'
+    priority: "low"
   },
   {
-    id: '4',
-    type: 'info',
-    title: 'Previsão Meteorológica',
-    message: 'Condições adversas previstas para área de operação 14B',
+    id: "4",
+    type: "info",
+    title: "Previsão Meteorológica",
+    message: "Condições adversas previstas para área de operação 14B",
     timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
     read: false,
-    priority: 'medium'
+    priority: "medium"
   },
   {
-    id: '5',
-    type: 'alert',
-    title: 'Sistema DP Offline',
-    message: 'Perda de comunicação com sistema DP da embarcação Ártico',
-    vessel: 'Ártico',
+    id: "5",
+    type: "alert",
+    title: "Sistema DP Offline",
+    message: "Perda de comunicação com sistema DP da embarcação Ártico",
+    vessel: "Ártico",
     timestamp: new Date(Date.now() - 10 * 60 * 1000),
     read: false,
-    priority: 'critical'
+    priority: "critical"
   }
 ];
 
 const typeStyles = {
-  alert: 'bg-danger/10 text-danger border-danger/20',
-  warning: 'bg-warning/10 text-warning border-warning/20',
-  success: 'bg-success/10 text-success border-success/20',
-  info: 'bg-info/10 text-info border-info/20'
+  alert: "bg-danger/10 text-danger border-danger/20",
+  warning: "bg-warning/10 text-warning border-warning/20",
+  success: "bg-success/10 text-success border-success/20",
+  info: "bg-info/10 text-info border-info/20"
 };
 
 const typeIcons = {
@@ -91,10 +91,10 @@ const typeIcons = {
 };
 
 const priorityColors = {
-  low: 'bg-gray-500',
-  medium: 'bg-yellow-500',
-  high: 'bg-orange-500',
-  critical: 'bg-red-500'
+  low: "bg-gray-500",
+  medium: "bg-yellow-500",
+  high: "bg-orange-500",
+  critical: "bg-red-500"
 };
 
 interface NotificationSystemProps {
@@ -104,14 +104,14 @@ interface NotificationSystemProps {
 export const NotificationSystem = ({ className }: NotificationSystemProps) => {
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [isOpen, setIsOpen] = useState(false);
-  const [filter, setFilter] = useState<'all' | 'unread' | 'critical'>('all');
+  const [filter, setFilter] = useState<"all" | "unread" | "critical">("all");
 
   const unreadCount = notifications.filter(n => !n.read).length;
-  const criticalCount = notifications.filter(n => n.priority === 'critical' && !n.read).length;
+  const criticalCount = notifications.filter(n => n.priority === "critical" && !n.read).length;
 
   const filteredNotifications = notifications.filter(notification => {
-    if (filter === 'unread') return !notification.read;
-    if (filter === 'critical') return notification.priority === 'critical';
+    if (filter === "unread") return !notification.read;
+    if (filter === "critical") return notification.priority === "critical";
     return true;
   });
 
@@ -139,7 +139,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
     if (days > 0) return `${days}d atrás`;
     if (hours > 0) return `${hours}h atrás`;
     if (minutes > 0) return `${minutes}m atrás`;
-    return 'Agora';
+    return "Agora";
   };
 
   // Simular novas notificações
@@ -148,12 +148,12 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
       if (Math.random() > 0.8) { // 20% chance a cada 30s
         const newNotification: Notification = {
           id: Date.now().toString(),
-          type: ['alert', 'warning', 'info'][Math.floor(Math.random() * 3)] as any,
-          title: 'Nova Notificação',
-          message: 'Esta é uma notificação de exemplo em tempo real',
+          type: ["alert", "warning", "info"][Math.floor(Math.random() * 3)] as any,
+          title: "Nova Notificação",
+          message: "Esta é uma notificação de exemplo em tempo real",
           timestamp: new Date(),
           read: false,
-          priority: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)] as any
+          priority: ["low", "medium", "high"][Math.floor(Math.random() * 3)] as any
         };
         setNotifications(prev => [newNotification, ...prev]);
       }
@@ -177,7 +177,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
               criticalCount > 0 ? "bg-danger" : "bg-warning"
             )}
           >
-            {unreadCount > 99 ? '99+' : unreadCount}
+            {unreadCount > 99 ? "99+" : unreadCount}
           </Badge>
         )}
       </button>
@@ -214,7 +214,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
 
               {/* Filters */}
               <div className="flex space-x-2 mt-3">
-                {['all', 'unread', 'critical'].map((filterType) => (
+                {["all", "unread", "critical"].map((filterType) => (
                   <button
                     key={filterType}
                     onClick={() => setFilter(filterType as any)}
@@ -225,9 +225,9 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
                         : "text-azure-50/80 hover:bg-azure-600/15"
                     )}
                   >
-                    {filterType === 'all' && 'Todas'}
-                    {filterType === 'unread' && 'Não lidas'}
-                    {filterType === 'critical' && 'Críticas'}
+                    {filterType === "all" && "Todas"}
+                    {filterType === "unread" && "Não lidas"}
+                    {filterType === "critical" && "Críticas"}
                   </button>
                 ))}
               </div>

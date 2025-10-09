@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Globe, 
   Zap, 
@@ -43,23 +43,23 @@ import {
   Key,
   Gauge,
   Calendar
-} from 'lucide-react';
-import { IntegrationMonitoring } from './integration-monitoring';
-import { IntegrationSecurity } from './integration-security';
-import { AIIntegrationAssistant } from './ai-integration-assistant';
-import { IntegrationTemplates as IntegrationTemplatesComponent } from './integration-templates';
-import { IntegrationTesting } from './integration-testing';
-import { IntegrationAutomation } from './integration-automation';
-import { SmartOptimization } from './smart-optimization';
-import { WebhookBuilder } from './webhook-builder';
-import { IntegrationMarketplace } from './integration-marketplace';
+} from "lucide-react";
+import { IntegrationMonitoring } from "./integration-monitoring";
+import { IntegrationSecurity } from "./integration-security";
+import { AIIntegrationAssistant } from "./ai-integration-assistant";
+import { IntegrationTemplates as IntegrationTemplatesComponent } from "./integration-templates";
+import { IntegrationTesting } from "./integration-testing";
+import { IntegrationAutomation } from "./integration-automation";
+import { SmartOptimization } from "./smart-optimization";
+import { WebhookBuilder } from "./webhook-builder";
+import { IntegrationMarketplace } from "./integration-marketplace";
 
 interface Integration {
   id: string;
   name: string;
   description: string;
-  category: 'data' | 'communication' | 'payment' | 'analytics' | 'automation' | 'ai' | 'security';
-  status: 'connected' | 'disconnected' | 'error' | 'configuring';
+  category: "data" | "communication" | "payment" | "analytics" | "automation" | "ai" | "security";
+  status: "connected" | "disconnected" | "error" | "configuring";
   icon: React.ElementType;
   isEnabled: boolean;
   lastSync?: string;
@@ -76,7 +76,7 @@ interface LogEntry {
   id: string;
   integrationId: string;
   timestamp: string;
-  type: 'success' | 'error' | 'warning' | 'info';
+  type: "success" | "error" | "warning" | "info";
   message: string;
   statusCode?: number;
   duration?: number;
@@ -85,7 +85,7 @@ interface LogEntry {
 
 interface AIInsight {
   id: string;
-  type: 'suggestion' | 'warning' | 'optimization';
+  type: "suggestion" | "warning" | "optimization";
   title: string;
   description: string;
   confidence: number;
@@ -93,10 +93,10 @@ interface AIInsight {
 }
 
 export const AdvancedIntegrationsHub: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [isWizardOpen, setIsWizardOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
@@ -113,15 +113,15 @@ export const AdvancedIntegrationsHub: React.FC = () => {
   const loadIntegrations = () => {
     const mockIntegrations: Integration[] = [
       {
-        id: '1',
-        name: 'Supabase Database',
-        description: 'Sistema de banco de dados principal com sincronização em tempo real',
-        category: 'data',
-        status: 'connected',
+        id: "1",
+        name: "Supabase Database",
+        description: "Sistema de banco de dados principal com sincronização em tempo real",
+        category: "data",
+        status: "connected",
         icon: Database,
         isEnabled: true,
-        lastSync: '2024-01-15T10:30:00Z',
-        provider: 'Supabase',
+        lastSync: "2024-01-15T10:30:00Z",
+        provider: "Supabase",
         healthScore: 98,
         requests24h: 2847,
         uptime: 99.8,
@@ -129,14 +129,14 @@ export const AdvancedIntegrationsHub: React.FC = () => {
         template: true
       },
       {
-        id: '2',
-        name: 'WhatsApp Business API',
-        description: 'Comunicação direta com tripulação via WhatsApp Business',
-        category: 'communication',
-        status: 'configuring',
+        id: "2",
+        name: "WhatsApp Business API",
+        description: "Comunicação direta com tripulação via WhatsApp Business",
+        category: "communication",
+        status: "configuring",
         icon: MessageSquare,
         isEnabled: false,
-        provider: 'Meta',
+        provider: "Meta",
         healthScore: 0,
         requests24h: 0,
         uptime: 0,
@@ -144,29 +144,29 @@ export const AdvancedIntegrationsHub: React.FC = () => {
         template: true
       },
       {
-        id: '3',
-        name: 'Nautilus Analytics AI',
-        description: 'IA preditiva para análise de performance e otimização operacional',
-        category: 'ai',
-        status: 'connected',
+        id: "3",
+        name: "Nautilus Analytics AI",
+        description: "IA preditiva para análise de performance e otimização operacional",
+        category: "ai",
+        status: "connected",
         icon: Brain,
         isEnabled: true,
-        lastSync: '2024-01-15T11:00:00Z',
-        provider: 'Nautilus AI',
+        lastSync: "2024-01-15T11:00:00Z",
+        provider: "Nautilus AI",
         healthScore: 95,
         requests24h: 1243,
         uptime: 97.2,
         errorRate: 0.3
       },
       {
-        id: '4',
-        name: 'Stripe Payments',
-        description: 'Processamento seguro de pagamentos e cobrança automática',
-        category: 'payment',
-        status: 'error',
+        id: "4",
+        name: "Stripe Payments",
+        description: "Processamento seguro de pagamentos e cobrança automática",
+        category: "payment",
+        status: "error",
         icon: CreditCard,
         isEnabled: false,
-        provider: 'Stripe',
+        provider: "Stripe",
         healthScore: 45,
         requests24h: 156,
         uptime: 85.4,
@@ -174,15 +174,15 @@ export const AdvancedIntegrationsHub: React.FC = () => {
         template: true
       },
       {
-        id: '5',
-        name: 'Microsoft Outlook',
-        description: 'Integração com calendário e emails corporativos',
-        category: 'communication',
-        status: 'connected',
+        id: "5",
+        name: "Microsoft Outlook",
+        description: "Integração com calendário e emails corporativos",
+        category: "communication",
+        status: "connected",
         icon: Mail,
         isEnabled: true,
-        lastSync: '2024-01-15T10:45:00Z',
-        provider: 'Microsoft',
+        lastSync: "2024-01-15T10:45:00Z",
+        provider: "Microsoft",
         healthScore: 89,
         requests24h: 524,
         uptime: 96.7,
@@ -190,14 +190,14 @@ export const AdvancedIntegrationsHub: React.FC = () => {
         template: true
       },
       {
-        id: '6',
-        name: 'Power BI Dashboard',
-        description: 'Dashboards avançados e relatórios executivos em tempo real',
-        category: 'analytics',
-        status: 'disconnected',
+        id: "6",
+        name: "Power BI Dashboard",
+        description: "Dashboards avançados e relatórios executivos em tempo real",
+        category: "analytics",
+        status: "disconnected",
         icon: BarChart3,
         isEnabled: false,
-        provider: 'Microsoft',
+        provider: "Microsoft",
         healthScore: 0,
         requests24h: 0,
         uptime: 0,
@@ -212,29 +212,29 @@ export const AdvancedIntegrationsHub: React.FC = () => {
   const loadLogs = () => {
     const mockLogs: LogEntry[] = [
       {
-        id: '1',
-        integrationId: '1',
+        id: "1",
+        integrationId: "1",
         timestamp: new Date().toISOString(),
-        type: 'success',
-        message: 'Sincronização de dados concluída com sucesso',
+        type: "success",
+        message: "Sincronização de dados concluída com sucesso",
         statusCode: 200,
         duration: 1250
       },
       {
-        id: '2',
-        integrationId: '4',
+        id: "2",
+        integrationId: "4",
         timestamp: new Date(Date.now() - 300000).toISOString(),
-        type: 'error',
-        message: 'Falha na autenticação - Token expirado',
+        type: "error",
+        message: "Falha na autenticação - Token expirado",
         statusCode: 401,
         duration: 2100
       },
       {
-        id: '3',
-        integrationId: '3',
+        id: "3",
+        integrationId: "3",
         timestamp: new Date(Date.now() - 600000).toISOString(),
-        type: 'warning',
-        message: 'Taxa de requisições próxima do limite',
+        type: "warning",
+        message: "Taxa de requisições próxima do limite",
         statusCode: 429,
         duration: 890
       }
@@ -246,27 +246,27 @@ export const AdvancedIntegrationsHub: React.FC = () => {
   const loadAIInsights = () => {
     const mockInsights: AIInsight[] = [
       {
-        id: '1',
-        type: 'warning',
-        title: 'Token de autenticação expirado',
-        description: 'A integração Stripe está retornando erro 401. O token de autenticação precisa ser renovado.',
+        id: "1",
+        type: "warning",
+        title: "Token de autenticação expirado",
+        description: "A integração Stripe está retornando erro 401. O token de autenticação precisa ser renovado.",
         confidence: 95,
-        action: 'Renovar token na configuração'
+        action: "Renovar token na configuração"
       },
       {
-        id: '2',
-        type: 'suggestion',
-        title: 'Integração recomendada: Google Calendar',
-        description: 'Baseado no uso de alertas de viagem, recomendamos integrar com Google Calendar para melhor organização.',
+        id: "2",
+        type: "suggestion",
+        title: "Integração recomendada: Google Calendar",
+        description: "Baseado no uso de alertas de viagem, recomendamos integrar com Google Calendar para melhor organização.",
         confidence: 78
       },
       {
-        id: '3',
-        type: 'optimization',
-        title: 'Otimização de cache detectada',
-        description: 'A configuração de cache pode ser otimizada para reduzir latência em 15%.',
+        id: "3",
+        type: "optimization",
+        title: "Otimização de cache detectada",
+        description: "A configuração de cache pode ser otimizada para reduzir latência em 15%.",
         confidence: 82,
-        action: 'Aplicar otimização automática'
+        action: "Aplicar otimização automática"
       }
     ];
 
@@ -275,21 +275,21 @@ export const AdvancedIntegrationsHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected': return 'bg-success/10 text-success border-success/20';
-      case 'disconnected': return 'bg-muted text-muted-foreground border-border';
-      case 'error': return 'bg-destructive/10 text-destructive border-destructive/20';
-      case 'configuring': return 'bg-warning/10 text-warning border-warning/20';
-      default: return 'bg-muted text-muted-foreground border-border';
+    case "connected": return "bg-success/10 text-success border-success/20";
+    case "disconnected": return "bg-muted text-muted-foreground border-border";
+    case "error": return "bg-destructive/10 text-destructive border-destructive/20";
+    case "configuring": return "bg-warning/10 text-warning border-warning/20";
+    default: return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected': return <CheckCircle className="w-4 h-4" />;
-      case 'disconnected': return <Gauge className="w-4 h-4" />;
-      case 'error': return <AlertTriangle className="w-4 h-4" />;
-      case 'configuring': return <Settings className="w-4 h-4 animate-spin" />;
-      default: return <Gauge className="w-4 h-4" />;
+    case "connected": return <CheckCircle className="w-4 h-4" />;
+    case "disconnected": return <Gauge className="w-4 h-4" />;
+    case "error": return <AlertTriangle className="w-4 h-4" />;
+    case "configuring": return <Settings className="w-4 h-4 animate-spin" />;
+    default: return <Gauge className="w-4 h-4" />;
     }
   };
 
@@ -297,17 +297,17 @@ export const AdvancedIntegrationsHub: React.FC = () => {
     setIntegrations(prev => prev.map(integration => 
       integration.id === id 
         ? { 
-            ...integration, 
-            isEnabled: !integration.isEnabled,
-            status: !integration.isEnabled ? 'connected' : 'disconnected'
-          }
+          ...integration, 
+          isEnabled: !integration.isEnabled,
+          status: !integration.isEnabled ? "connected" : "disconnected"
+        }
         : integration
     ));
     
     const integration = integrations.find(i => i.id === id);
     toast({
       title: "Status Atualizado",
-      description: `${integration?.name} foi ${integration?.isEnabled ? 'desabilitada' : 'habilitada'}`,
+      description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
     });
   };
 
@@ -328,14 +328,14 @@ export const AdvancedIntegrationsHub: React.FC = () => {
   };
 
   const filteredIntegrations = integrations.filter(integration => {
-    const matchesCategory = selectedCategory === 'all' || integration.category === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
-  const connectedCount = integrations.filter(i => i.status === 'connected').length;
-  const errorCount = integrations.filter(i => i.status === 'error').length;
+  const connectedCount = integrations.filter(i => i.status === "connected").length;
+  const errorCount = integrations.filter(i => i.status === "error").length;
   const totalRequests = integrations.reduce((sum, i) => sum + i.requests24h, 0);
 
   return (
@@ -488,15 +488,15 @@ export const AdvancedIntegrationsHub: React.FC = () => {
               </div>
             </div>
             <div className="flex gap-2">
-              {['all', 'data', 'communication', 'payment', 'analytics', 'ai'].map((category) => (
+              {["all", "data", "communication", "payment", "analytics", "ai"].map((category) => (
                 <Button
                   key={category}
-                  variant={selectedCategory === category ? 'default' : 'outline'}
+                  variant={selectedCategory === category ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedCategory(category)}
                   className="capitalize"
                 >
-                  {category === 'all' ? 'Todas' : category}
+                  {category === "all" ? "Todas" : category}
                 </Button>
               ))}
             </div>
@@ -565,21 +565,21 @@ const IntegrationCard: React.FC<{
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected': return 'bg-success/10 text-success border-success/20';
-      case 'disconnected': return 'bg-muted text-muted-foreground border-border';
-      case 'error': return 'bg-destructive/10 text-destructive border-destructive/20';
-      case 'configuring': return 'bg-warning/10 text-warning border-warning/20';
-      default: return 'bg-muted text-muted-foreground border-border';
+    case "connected": return "bg-success/10 text-success border-success/20";
+    case "disconnected": return "bg-muted text-muted-foreground border-border";
+    case "error": return "bg-destructive/10 text-destructive border-destructive/20";
+    case "configuring": return "bg-warning/10 text-warning border-warning/20";
+    default: return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected': return <CheckCircle className="w-4 h-4" />;
-      case 'disconnected': return <Gauge className="w-4 h-4" />;
-      case 'error': return <AlertTriangle className="w-4 h-4" />;
-      case 'configuring': return <Settings className="w-4 h-4 animate-spin" />;
-      default: return <Gauge className="w-4 h-4" />;
+    case "connected": return <CheckCircle className="w-4 h-4" />;
+    case "disconnected": return <Gauge className="w-4 h-4" />;
+    case "error": return <AlertTriangle className="w-4 h-4" />;
+    case "configuring": return <Settings className="w-4 h-4 animate-spin" />;
+    default: return <Gauge className="w-4 h-4" />;
     }
   };
   
@@ -619,7 +619,7 @@ const IntegrationCard: React.FC<{
         </div>
         
         {/* Métricas */}
-        {integration.status === 'connected' && (
+        {integration.status === "connected" && (
           <div className="grid grid-cols-2 gap-2 text-xs">
             <div className="bg-muted/50 rounded p-2">
               <p className="text-muted-foreground">Saúde</p>
@@ -634,7 +634,7 @@ const IntegrationCard: React.FC<{
         
         {integration.lastSync && (
           <p className="text-xs text-muted-foreground">
-            Última sync: {new Date(integration.lastSync).toLocaleString('pt-BR')}
+            Última sync: {new Date(integration.lastSync).toLocaleString("pt-BR")}
           </p>
         )}
         
@@ -679,7 +679,7 @@ const AISystemStatus: React.FC<{
             </div>
             <h3 className="font-semibold text-lg text-foreground mb-2">Integrações Ativas</h3>
             <p className="text-3xl font-bold text-success mb-2">
-              {integrations.filter(i => i.status === 'connected').length}
+              {integrations.filter(i => i.status === "connected").length}
             </p>
             <p className="text-sm text-muted-foreground">
               de {integrations.length} configuradas
@@ -761,31 +761,31 @@ const IntegrationTemplates: React.FC<{
 }> = ({ onSelect }) => {
   const templates = [
     {
-      name: 'Google Calendar',
-      description: 'Sincronização automática de eventos e agendamentos',
+      name: "Google Calendar",
+      description: "Sincronização automática de eventos e agendamentos",
       icon: Calendar,
-      category: 'communication',
+      category: "communication",
       popular: true
     },
     {
-      name: 'Slack/Teams',
-      description: 'Notificações e alertas em tempo real',
+      name: "Slack/Teams",
+      description: "Notificações e alertas em tempo real",
       icon: MessageSquare,
-      category: 'communication',
+      category: "communication",
       popular: true
     },
     {
-      name: 'Power BI',
-      description: 'Dashboards e relatórios executivos',
+      name: "Power BI",
+      description: "Dashboards e relatórios executivos",
       icon: BarChart3,
-      category: 'analytics',
+      category: "analytics",
       popular: false
     },
     {
-      name: 'OCR Service',
-      description: 'Processamento automático de documentos',
+      name: "OCR Service",
+      description: "Processamento automático de documentos",
       icon: Eye,
-      category: 'ai',
+      category: "ai",
       popular: false
     }
   ];
@@ -837,13 +837,13 @@ const LogsViewer: React.FC<{
   logs: LogEntry[];
   integrations: Integration[];
 }> = ({ logs, integrations }) => {
-  const getLogTypeColor = (type: LogEntry['type']) => {
+  const getLogTypeColor = (type: LogEntry["type"]) => {
     switch (type) {
-      case 'success': return 'text-success bg-success/10 border-success/20';
-      case 'error': return 'text-destructive bg-destructive/10 border-destructive/20';
-      case 'warning': return 'text-warning bg-warning/10 border-warning/20';
-      case 'info': return 'text-info bg-info/10 border-info/20';
-      default: return 'text-muted-foreground bg-muted border-border';
+    case "success": return "text-success bg-success/10 border-success/20";
+    case "error": return "text-destructive bg-destructive/10 border-destructive/20";
+    case "warning": return "text-warning bg-warning/10 border-warning/20";
+    case "info": return "text-info bg-info/10 border-info/20";
+    default: return "text-muted-foreground bg-muted border-border";
     }
   };
 
@@ -880,7 +880,7 @@ const LogsViewer: React.FC<{
                   </div>
                 </div>
                 <div className="text-right text-sm text-muted-foreground">
-                  <p>{new Date(log.timestamp).toLocaleTimeString('pt-BR')}</p>
+                  <p>{new Date(log.timestamp).toLocaleTimeString("pt-BR")}</p>
                   {log.duration && <p>{log.duration}ms</p>}
                 </div>
               </div>
@@ -896,21 +896,21 @@ const LogsViewer: React.FC<{
 const AIInsightsPanel: React.FC<{
   insights: AIInsight[];
 }> = ({ insights }) => {
-  const getInsightColor = (type: AIInsight['type']) => {
+  const getInsightColor = (type: AIInsight["type"]) => {
     switch (type) {
-      case 'suggestion': return 'border-primary/20 bg-primary/5';
-      case 'warning': return 'border-warning/20 bg-warning/5';
-      case 'optimization': return 'border-success/20 bg-success/5';
-      default: return 'border-border bg-background';
+    case "suggestion": return "border-primary/20 bg-primary/5";
+    case "warning": return "border-warning/20 bg-warning/5";
+    case "optimization": return "border-success/20 bg-success/5";
+    default: return "border-border bg-background";
     }
   };
 
-  const getInsightIcon = (type: AIInsight['type']) => {
+  const getInsightIcon = (type: AIInsight["type"]) => {
     switch (type) {
-      case 'suggestion': return <Brain className="w-5 h-5 text-primary" />;
-      case 'warning': return <AlertTriangle className="w-5 h-5 text-warning" />;
-      case 'optimization': return <TrendingUp className="w-5 h-5 text-success" />;
-      default: return <Brain className="w-5 h-5 text-muted-foreground" />;
+    case "suggestion": return <Brain className="w-5 h-5 text-primary" />;
+    case "warning": return <AlertTriangle className="w-5 h-5 text-warning" />;
+    case "optimization": return <TrendingUp className="w-5 h-5 text-success" />;
+    default: return <Brain className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -964,19 +964,19 @@ const IntegrationWizard: React.FC<{
 }> = ({ onClose }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    name: '',
-    type: '',
-    endpoint: '',
-    method: 'GET',
+    name: "",
+    type: "",
+    endpoint: "",
+    method: "GET",
     headers: {},
-    auth: ''
+    auth: ""
   });
 
   const steps = [
-    { title: 'Tipo de Integração', description: 'Selecione o tipo de integração' },
-    { title: 'Configuração', description: 'Configure os parâmetros' },
-    { title: 'Autenticação', description: 'Configure a autenticação' },
-    { title: 'Teste', description: 'Teste a conexão' }
+    { title: "Tipo de Integração", description: "Selecione o tipo de integração" },
+    { title: "Configuração", description: "Configure os parâmetros" },
+    { title: "Autenticação", description: "Configure a autenticação" },
+    { title: "Teste", description: "Teste a conexão" }
   ];
 
   return (
@@ -986,13 +986,13 @@ const IntegrationWizard: React.FC<{
         {steps.map((step, index) => (
           <div key={index} className="flex items-center">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
-              index + 1 <= currentStep ? 'bg-primary border-primary text-primary-foreground' : 'border-border text-muted-foreground'
+              index + 1 <= currentStep ? "bg-primary border-primary text-primary-foreground" : "border-border text-muted-foreground"
             }`}>
               {index + 1}
             </div>
             {index < steps.length - 1 && (
               <div className={`h-0.5 w-16 ml-2 ${
-                index + 1 < currentStep ? 'bg-primary' : 'bg-border'
+                index + 1 < currentStep ? "bg-primary" : "bg-border"
               }`} />
             )}
           </div>
@@ -1005,9 +1005,9 @@ const IntegrationWizard: React.FC<{
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">Selecione o Tipo de Integração</h3>
             <div className="grid grid-cols-2 gap-4">
-              {['REST API', 'Webhook', 'OAuth 2.0', 'Database'].map((type) => (
+              {["REST API", "Webhook", "OAuth 2.0", "Database"].map((type) => (
                 <Card key={type} className={`cursor-pointer transition-all hover:shadow-md border ${
-                  formData.type === type ? 'border-primary bg-primary/5' : 'border-border'
+                  formData.type === type ? "border-primary bg-primary/5" : "border-border"
                 }`} onClick={() => setFormData(prev => ({ ...prev, type }))}>
                   <CardContent className="p-4 text-center">
                     <p className="font-medium text-foreground">{type}</p>
@@ -1121,7 +1121,7 @@ const IntegrationWizard: React.FC<{
           }}
           className="bg-primary hover:bg-primary/90 text-primary-foreground"
         >
-          {currentStep === steps.length ? 'Finalizar' : 'Próximo'}
+          {currentStep === steps.length ? "Finalizar" : "Próximo"}
         </Button>
       </div>
     </div>

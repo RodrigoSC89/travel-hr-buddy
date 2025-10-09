@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Users, 
   UserPlus,
@@ -17,8 +17,8 @@ import {
   Search,
   Download,
   Edit
-} from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface CrewMember {
   id: string;
@@ -41,9 +41,9 @@ export default function CrewManagement() {
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
   const [vessels, setVessels] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [vesselFilter, setVesselFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [vesselFilter, setVesselFilter] = useState("all");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -56,9 +56,9 @@ export default function CrewManagement() {
       
       // Carregar navios
       const { data: vesselsData } = await supabase
-        .from('vessels')
-        .select('*')
-        .eq('organization_id', '550e8400-e29b-41d4-a716-446655440000');
+        .from("vessels")
+        .select("*")
+        .eq("organization_id", "550e8400-e29b-41d4-a716-446655440000");
 
       if (vesselsData) {
         setVessels(vesselsData);
@@ -67,70 +67,70 @@ export default function CrewManagement() {
       // Dados demo para tripulação
       const demoCrewMembers: CrewMember[] = [
         {
-          id: '1',
-          full_name: 'João Silva',
-          position: 'Comandante',
-          rank: 'Capitão',
-          nationality: 'Brasileiro',
-          passport_number: 'BR123456789',
-          phone: '+55 11 99999-9999',
-          email: 'joao.silva@nautilus.com',
-          employee_id: 'EMP001',
-          status: 'active',
+          id: "1",
+          full_name: "João Silva",
+          position: "Comandante",
+          rank: "Capitão",
+          nationality: "Brasileiro",
+          passport_number: "BR123456789",
+          phone: "+55 11 99999-9999",
+          email: "joao.silva@nautilus.com",
+          employee_id: "EMP001",
+          status: "active",
           vessel_id: vesselsData?.[0]?.id,
-          contract_start: '2024-01-01',
-          contract_end: '2024-12-31',
+          contract_start: "2024-01-01",
+          contract_end: "2024-12-31",
           experience_years: 15
         },
         {
-          id: '2',
-          full_name: 'Carlos Santos',
-          position: 'Chefe de Máquinas',
-          rank: 'Oficial',
-          nationality: 'Brasileiro',
-          passport_number: 'BR987654321',
-          phone: '+55 21 77777-7777',
-          email: 'carlos.santos@nautilus.com',
-          employee_id: 'EMP002',
-          status: 'active',
+          id: "2",
+          full_name: "Carlos Santos",
+          position: "Chefe de Máquinas",
+          rank: "Oficial",
+          nationality: "Brasileiro",
+          passport_number: "BR987654321",
+          phone: "+55 21 77777-7777",
+          email: "carlos.santos@nautilus.com",
+          employee_id: "EMP002",
+          status: "active",
           vessel_id: vesselsData?.[0]?.id,
-          contract_start: '2024-01-01',
-          contract_end: '2024-12-31',
+          contract_start: "2024-01-01",
+          contract_end: "2024-12-31",
           experience_years: 12
         },
         {
-          id: '3',
-          full_name: 'Maria Oliveira',
-          position: 'Oficial de Convés',
-          rank: 'Oficial',
-          nationality: 'Brasileira',
-          passport_number: 'BR456789123',
-          phone: '+55 11 66666-6666',
-          email: 'maria.oliveira@nautilus.com',
-          employee_id: 'EMP003',
-          status: 'active',
+          id: "3",
+          full_name: "Maria Oliveira",
+          position: "Oficial de Convés",
+          rank: "Oficial",
+          nationality: "Brasileira",
+          passport_number: "BR456789123",
+          phone: "+55 11 66666-6666",
+          email: "maria.oliveira@nautilus.com",
+          employee_id: "EMP003",
+          status: "active",
           vessel_id: vesselsData?.[1]?.id,
-          contract_start: '2024-01-01',
-          contract_end: '2024-12-31',
+          contract_start: "2024-01-01",
+          contract_end: "2024-12-31",
           experience_years: 8
         },
         {
-          id: '4',
-          full_name: 'Pedro Costa',
-          position: 'Marinheiro',
-          nationality: 'Brasileiro',
-          passport_number: 'BR789123456',
-          phone: '+55 31 55555-5555',
-          email: 'pedro.costa@nautilus.com',
-          employee_id: 'EMP004',
-          status: 'shore_leave',
+          id: "4",
+          full_name: "Pedro Costa",
+          position: "Marinheiro",
+          nationality: "Brasileiro",
+          passport_number: "BR789123456",
+          phone: "+55 31 55555-5555",
+          email: "pedro.costa@nautilus.com",
+          employee_id: "EMP004",
+          status: "shore_leave",
           experience_years: 5
         }
       ];
       setCrewMembers(demoCrewMembers);
       
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
+      console.error("Erro ao carregar dados:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados da tripulação",
@@ -143,26 +143,26 @@ export default function CrewManagement() {
 
   const getVesselName = (vesselId: string) => {
     const vessel = vessels.find(v => v.id === vesselId);
-    return vessel ? vessel.name : 'Não atribuído';
+    return vessel ? vessel.name : "Não atribuído";
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'shore_leave': return 'bg-yellow-500';
-      case 'medical_leave': return 'bg-orange-500';
-      case 'inactive': return 'bg-gray-500';
-      default: return 'bg-gray-500';
+    case "active": return "bg-green-500";
+    case "shore_leave": return "bg-yellow-500";
+    case "medical_leave": return "bg-orange-500";
+    case "inactive": return "bg-gray-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'active': return 'Ativo';
-      case 'shore_leave': return 'Licença Terra';
-      case 'medical_leave': return 'Licença Médica';
-      case 'inactive': return 'Inativo';
-      default: return status;
+    case "active": return "Ativo";
+    case "shore_leave": return "Licença Terra";
+    case "medical_leave": return "Licença Médica";
+    case "inactive": return "Inativo";
+    default: return status;
     }
   };
 
@@ -170,8 +170,8 @@ export default function CrewManagement() {
     const matchesSearch = member.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          member.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          member.employee_id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || member.status === statusFilter;
-    const matchesVessel = vesselFilter === 'all' || member.vessel_id === vesselFilter;
+    const matchesStatus = statusFilter === "all" || member.status === statusFilter;
+    const matchesVessel = vesselFilter === "all" || member.vessel_id === vesselFilter;
     
     return matchesSearch && matchesStatus && matchesVessel;
   });
@@ -216,7 +216,7 @@ export default function CrewManagement() {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Ativos</p>
                 <p className="text-2xl font-bold text-green-600">
-                  {crewMembers.filter(m => m.status === 'active').length}
+                  {crewMembers.filter(m => m.status === "active").length}
                 </p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-600" />
@@ -230,7 +230,7 @@ export default function CrewManagement() {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Em Licença</p>
                 <p className="text-2xl font-bold text-yellow-600">
-                  {crewMembers.filter(m => m.status === 'shore_leave').length}
+                  {crewMembers.filter(m => m.status === "shore_leave").length}
                 </p>
               </div>
               <Calendar className="h-8 w-8 text-yellow-600" />

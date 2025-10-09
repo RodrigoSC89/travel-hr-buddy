@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   AlertTriangle, 
   FileText, 
@@ -23,15 +23,15 @@ import {
   Plus,
   Search,
   Activity
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Incident {
   id: string;
   title: string;
   description: string;
-  type: 'safety' | 'environmental' | 'operational' | 'security' | 'technical' | 'human-error';
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  status: 'reported' | 'investigating' | 'action-required' | 'resolved' | 'closed';
+  type: "safety" | "environmental" | "operational" | "security" | "technical" | "human-error";
+  severity: "low" | "medium" | "high" | "critical";
+  status: "reported" | "investigating" | "action-required" | "resolved" | "closed";
   location: string;
   reportedBy: string;
   reportedAt: string;
@@ -42,8 +42,8 @@ interface Incident {
   preventiveActions: string[];
   impact: {
     personnel: number;
-    environment: 'none' | 'minor' | 'moderate' | 'major';
-    operations: 'none' | 'minor' | 'moderate' | 'major';
+    environment: "none" | "minor" | "moderate" | "major";
+    operations: "none" | "minor" | "moderate" | "major";
     financial: number;
   };
   witnesses: string[];
@@ -58,7 +58,7 @@ interface Investigation {
   endDate?: string;
   findings: string[];
   recommendations: string[];
-  status: 'ongoing' | 'completed' | 'pending-review';
+  status: "ongoing" | "completed" | "pending-review";
 }
 
 export const PeotramIncidentManager: React.FC = () => {
@@ -66,70 +66,70 @@ export const PeotramIncidentManager: React.FC = () => {
   const [investigations, setInvestigations] = useState<Investigation[]>(getDemoInvestigations());
   const [isNewIncidentOpen, setIsNewIncidentOpen] = useState(false);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterStatus, setFilterStatus] = useState<string>("all");
 
   function getDemoIncidents(): Incident[] {
     return [
       {
-        id: 'INC2024001',
-        title: 'Derramamento de Óleo no Convés',
-        description: 'Pequeno vazamento de óleo hidráulico detectado durante operação de guindaste',
-        type: 'environmental',
-        severity: 'medium',
-        status: 'investigating',
-        location: 'Convés Principal - Seção 2',
-        reportedBy: 'João Silva',
-        reportedAt: '2024-01-22T14:30:00Z',
-        assignedTo: 'Maria Santos',
-        rootCause: 'Desgaste de vedação hidráulica',
+        id: "INC2024001",
+        title: "Derramamento de Óleo no Convés",
+        description: "Pequeno vazamento de óleo hidráulico detectado durante operação de guindaste",
+        type: "environmental",
+        severity: "medium",
+        status: "investigating",
+        location: "Convés Principal - Seção 2",
+        reportedBy: "João Silva",
+        reportedAt: "2024-01-22T14:30:00Z",
+        assignedTo: "Maria Santos",
+        rootCause: "Desgaste de vedação hidráulica",
         correctiveActions: [
-          'Substituição imediata da vedação',
-          'Limpeza da área contaminada',
-          'Verificação de outros pontos similares'
+          "Substituição imediata da vedação",
+          "Limpeza da área contaminada",
+          "Verificação de outros pontos similares"
         ],
         preventiveActions: [
-          'Inspeção mensal de vedações hidráulicas',
-          'Treinamento sobre detecção precoce'
+          "Inspeção mensal de vedações hidráulicas",
+          "Treinamento sobre detecção precoce"
         ],
         impact: {
           personnel: 0,
-          environment: 'minor',
-          operations: 'minor',
+          environment: "minor",
+          operations: "minor",
           financial: 2500
         },
-        witnesses: ['Carlos Lima', 'Ana Costa'],
-        attachments: ['foto_vazamento.jpg', 'relatorio_inicial.pdf']
+        witnesses: ["Carlos Lima", "Ana Costa"],
+        attachments: ["foto_vazamento.jpg", "relatorio_inicial.pdf"]
       },
       {
-        id: 'INC2024002',
-        title: 'Queda de Tripulante',
-        description: 'Tripulante escorregou em superfície molhada resultando em lesão no joelho',
-        type: 'safety',
-        severity: 'high',
-        status: 'action-required',
-        location: 'Praça de Máquinas',
-        reportedBy: 'Pedro Oliveira',
-        reportedAt: '2024-01-21T09:15:00Z',
-        assignedTo: 'Dr. Carlos Eduardo',
-        rootCause: 'Ausência de sinalização em área molhada',
+        id: "INC2024002",
+        title: "Queda de Tripulante",
+        description: "Tripulante escorregou em superfície molhada resultando em lesão no joelho",
+        type: "safety",
+        severity: "high",
+        status: "action-required",
+        location: "Praça de Máquinas",
+        reportedBy: "Pedro Oliveira",
+        reportedAt: "2024-01-21T09:15:00Z",
+        assignedTo: "Dr. Carlos Eduardo",
+        rootCause: "Ausência de sinalização em área molhada",
         correctiveActions: [
-          'Atendimento médico imediato',
-          'Instalação de sinalização adequada',
-          'Melhoria na drenagem da área'
+          "Atendimento médico imediato",
+          "Instalação de sinalização adequada",
+          "Melhoria na drenagem da área"
         ],
         preventiveActions: [
-          'Inspeção diária de superfícies',
-          'Treinamento sobre uso de EPI antiderrapante',
-          'Procedimento para limpeza de superfícies'
+          "Inspeção diária de superfícies",
+          "Treinamento sobre uso de EPI antiderrapante",
+          "Procedimento para limpeza de superfícies"
         ],
         impact: {
           personnel: 1,
-          environment: 'none',
-          operations: 'moderate',
+          environment: "none",
+          operations: "moderate",
           financial: 5000
         },
-        witnesses: ['Roberto Santos', 'Luis Felipe'],
-        attachments: ['relatorio_medico.pdf', 'fotos_local.jpg']
+        witnesses: ["Roberto Santos", "Luis Felipe"],
+        attachments: ["relatorio_medico.pdf", "fotos_local.jpg"]
       }
     ];
   }
@@ -137,20 +137,20 @@ export const PeotramIncidentManager: React.FC = () => {
   function getDemoInvestigations(): Investigation[] {
     return [
       {
-        id: 'INV2024001',
-        incidentId: 'INC2024001',
-        investigator: 'Maria Santos',
-        startDate: '2024-01-22T15:00:00Z',
-        status: 'ongoing',
+        id: "INV2024001",
+        incidentId: "INC2024001",
+        investigator: "Maria Santos",
+        startDate: "2024-01-22T15:00:00Z",
+        status: "ongoing",
         findings: [
-          'Vedação hidráulica com 18 meses de uso',
-          'Última manutenção preventiva há 6 meses',
-          'Pressão do sistema dentro dos parâmetros normais'
+          "Vedação hidráulica com 18 meses de uso",
+          "Última manutenção preventiva há 6 meses",
+          "Pressão do sistema dentro dos parâmetros normais"
         ],
         recommendations: [
-          'Reduzir intervalo de substituição de vedações',
-          'Implementar monitoramento contínuo de pressão',
-          'Revisar procedimentos de manutenção preventiva'
+          "Reduzir intervalo de substituição de vedações",
+          "Implementar monitoramento contínuo de pressão",
+          "Revisar procedimentos de manutenção preventiva"
         ]
       }
     ];
@@ -158,37 +158,37 @@ export const PeotramIncidentManager: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'high': return 'bg-destructive/10 text-destructive border-destructive/20';
-      case 'medium': return 'bg-warning/20 text-warning border-warning/30';
-      case 'low': return 'bg-info/20 text-info border-info/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high": return "bg-destructive/10 text-destructive border-destructive/20";
+    case "medium": return "bg-warning/20 text-warning border-warning/30";
+    case "low": return "bg-info/20 text-info border-info/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'resolved': case 'closed': return 'bg-success/20 text-success border-success/30';
-      case 'action-required': return 'bg-warning/20 text-warning border-warning/30';
-      case 'investigating': return 'bg-info/20 text-info border-info/30';
-      case 'reported': return 'bg-muted/20 text-muted-foreground border-muted/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "resolved": case "closed": return "bg-success/20 text-success border-success/30";
+    case "action-required": return "bg-warning/20 text-warning border-warning/30";
+    case "investigating": return "bg-info/20 text-info border-info/30";
+    case "reported": return "bg-muted/20 text-muted-foreground border-muted/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'safety': return <AlertTriangle className="w-4 h-4" />;
-      case 'environmental': return <Activity className="w-4 h-4" />;
-      case 'operational': return <Clock className="w-4 h-4" />;
-      case 'security': return <Eye className="w-4 h-4" />;
-      case 'technical': return <FileText className="w-4 h-4" />;
-      case 'human-error': return <Users className="w-4 h-4" />;
-      default: return <AlertTriangle className="w-4 h-4" />;
+    case "safety": return <AlertTriangle className="w-4 h-4" />;
+    case "environmental": return <Activity className="w-4 h-4" />;
+    case "operational": return <Clock className="w-4 h-4" />;
+    case "security": return <Eye className="w-4 h-4" />;
+    case "technical": return <FileText className="w-4 h-4" />;
+    case "human-error": return <Users className="w-4 h-4" />;
+    default: return <AlertTriangle className="w-4 h-4" />;
     }
   };
 
-  const filteredIncidents = filterStatus === 'all' 
+  const filteredIncidents = filterStatus === "all" 
     ? incidents 
     : incidents.filter(incident => incident.status === filterStatus);
 
@@ -414,9 +414,9 @@ export const PeotramIncidentManager: React.FC = () => {
                         </CardDescription>
                       </div>
                       <Badge variant="outline" className={
-                        investigation.status === 'completed' ? 'bg-success/20 text-success border-success/30' :
-                        investigation.status === 'ongoing' ? 'bg-info/20 text-info border-info/30' :
-                        'bg-warning/20 text-warning border-warning/30'
+                        investigation.status === "completed" ? "bg-success/20 text-success border-success/30" :
+                          investigation.status === "ongoing" ? "bg-info/20 text-info border-info/30" :
+                            "bg-warning/20 text-warning border-warning/30"
                       }>
                         {investigation.status}
                       </Badge>
@@ -483,7 +483,7 @@ export const PeotramIncidentManager: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <AlertTriangle className="w-8 h-8 text-warning" />
                   <div>
-                    <p className="text-2xl font-bold">{incidents.filter(i => i.severity === 'high' || i.severity === 'critical').length}</p>
+                    <p className="text-2xl font-bold">{incidents.filter(i => i.severity === "high" || i.severity === "critical").length}</p>
                     <p className="text-sm text-muted-foreground">Alta Severidade</p>
                   </div>
                 </div>
@@ -495,7 +495,7 @@ export const PeotramIncidentManager: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-8 h-8 text-success" />
                   <div>
-                    <p className="text-2xl font-bold">{incidents.filter(i => i.status === 'resolved' || i.status === 'closed').length}</p>
+                    <p className="text-2xl font-bold">{incidents.filter(i => i.status === "resolved" || i.status === "closed").length}</p>
                     <p className="text-sm text-muted-foreground">Resolvidos</p>
                   </div>
                 </div>

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Progress } from '@/components/ui/progress';
-import { Calendar } from '@/components/ui/calendar';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Progress } from "@/components/ui/progress";
+import { Calendar } from "@/components/ui/calendar";
 import { 
   Shield, 
   AlertTriangle, 
@@ -23,17 +23,17 @@ import {
   Award,
   BookOpen,
   Zap
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Certification {
   id: string;
   name: string;
-  type: 'STCW' | 'Medical' | 'Security' | 'Safety' | 'Technical';
+  type: "STCW" | "Medical" | "Security" | "Safety" | "Technical";
   issuingAuthority: string;
   issueDate: Date;
   expiryDate: Date;
-  status: 'valid' | 'expiring' | 'expired' | 'pending';
+  status: "valid" | "expiring" | "expired" | "pending";
   crewMember: {
     name: string;
     rank: string;
@@ -54,7 +54,7 @@ interface ComplianceMetric {
 export const CertificationManager: React.FC = () => {
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [complianceMetrics, setComplianceMetrics] = useState<ComplianceMetric[]>([]);
   const { toast } = useToast();
 
@@ -62,61 +62,61 @@ export const CertificationManager: React.FC = () => {
     // Mock data para demonstração
     const mockCertifications: Certification[] = [
       {
-        id: '1',
-        name: 'Basic Safety Training (BST)',
-        type: 'STCW',
-        issuingAuthority: 'Marinha do Brasil',
-        issueDate: new Date('2023-01-15'),
-        expiryDate: new Date('2028-01-15'),
-        status: 'valid',
+        id: "1",
+        name: "Basic Safety Training (BST)",
+        type: "STCW",
+        issuingAuthority: "Marinha do Brasil",
+        issueDate: new Date("2023-01-15"),
+        expiryDate: new Date("2028-01-15"),
+        status: "valid",
         crewMember: {
-          name: 'João Silva',
-          rank: 'AB Seaman',
-          vessel: 'MV Ocean Pioneer'
+          name: "João Silva",
+          rank: "AB Seaman",
+          vessel: "MV Ocean Pioneer"
         },
         renewalCost: 1500,
-        mandatoryFor: ['All Crew']
+        mandatoryFor: ["All Crew"]
       },
       {
-        id: '2',
-        name: 'Medical Certificate',
-        type: 'Medical',
-        issuingAuthority: 'Authorized Medical Examiner',
-        issueDate: new Date('2023-06-01'),
-        expiryDate: new Date('2024-06-01'),
-        status: 'expiring',
+        id: "2",
+        name: "Medical Certificate",
+        type: "Medical",
+        issuingAuthority: "Authorized Medical Examiner",
+        issueDate: new Date("2023-06-01"),
+        expiryDate: new Date("2024-06-01"),
+        status: "expiring",
         crewMember: {
-          name: 'Maria Santos',
-          rank: 'Cook',
-          vessel: 'MV Atlantic Star'
+          name: "Maria Santos",
+          rank: "Cook",
+          vessel: "MV Atlantic Star"
         },
         renewalCost: 300,
-        mandatoryFor: ['All Crew']
+        mandatoryFor: ["All Crew"]
       },
       {
-        id: '3',
-        name: 'Ship Security Officer (SSO)',
-        type: 'Security',
-        issuingAuthority: 'Maritime Security Agency',
-        issueDate: new Date('2022-03-10'),
-        expiryDate: new Date('2024-03-10'),
-        status: 'expired',
+        id: "3",
+        name: "Ship Security Officer (SSO)",
+        type: "Security",
+        issuingAuthority: "Maritime Security Agency",
+        issueDate: new Date("2022-03-10"),
+        expiryDate: new Date("2024-03-10"),
+        status: "expired",
         crewMember: {
-          name: 'Carlos Lima',
-          rank: 'Chief Officer',
-          vessel: 'MV Ocean Pioneer'
+          name: "Carlos Lima",
+          rank: "Chief Officer",
+          vessel: "MV Ocean Pioneer"
         },
         renewalCost: 2500,
-        mandatoryFor: ['Officers']
+        mandatoryFor: ["Officers"]
       }
     ];
 
     const mockMetrics: ComplianceMetric[] = [
-      { category: 'STCW', compliance: 87, total: 45, critical: 3 },
-      { category: 'Medical', compliance: 92, total: 38, critical: 1 },
-      { category: 'Security', compliance: 78, total: 25, critical: 5 },
-      { category: 'Safety', compliance: 94, total: 52, critical: 2 },
-      { category: 'Technical', compliance: 89, total: 31, critical: 1 }
+      { category: "STCW", compliance: 87, total: 45, critical: 3 },
+      { category: "Medical", compliance: 92, total: 38, critical: 1 },
+      { category: "Security", compliance: 78, total: 25, critical: 5 },
+      { category: "Safety", compliance: 94, total: 52, critical: 2 },
+      { category: "Technical", compliance: 89, total: 31, critical: 1 }
     ];
 
     setCertifications(mockCertifications);
@@ -125,32 +125,32 @@ export const CertificationManager: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'valid': return 'text-green-600 bg-green-50 border-green-200';
-      case 'expiring': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'expired': return 'text-red-600 bg-red-50 border-red-200';
-      case 'pending': return 'text-blue-600 bg-blue-50 border-blue-200';
-      default: return 'text-muted-foreground bg-gray-50 border-gray-200';
+    case "valid": return "text-green-600 bg-green-50 border-green-200";
+    case "expiring": return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    case "expired": return "text-red-600 bg-red-50 border-red-200";
+    case "pending": return "text-blue-600 bg-blue-50 border-blue-200";
+    default: return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'valid': return <CheckCircle className="h-4 w-4" />;
-      case 'expiring': return <Clock className="h-4 w-4" />;
-      case 'expired': return <AlertTriangle className="h-4 w-4" />;
-      case 'pending': return <Clock className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+    case "valid": return <CheckCircle className="h-4 w-4" />;
+    case "expiring": return <Clock className="h-4 w-4" />;
+    case "expired": return <AlertTriangle className="h-4 w-4" />;
+    case "pending": return <Clock className="h-4 w-4" />;
+    default: return <FileText className="h-4 w-4" />;
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'STCW': return 'bg-blue-500';
-      case 'Medical': return 'bg-green-500';
-      case 'Security': return 'bg-red-500';
-      case 'Safety': return 'bg-yellow-500';
-      case 'Technical': return 'bg-purple-500';
-      default: return 'bg-gray-500';
+    case "STCW": return "bg-blue-500";
+    case "Medical": return "bg-green-500";
+    case "Security": return "bg-red-500";
+    case "Safety": return "bg-yellow-500";
+    case "Technical": return "bg-purple-500";
+    default: return "bg-gray-500";
     }
   };
 
@@ -313,21 +313,21 @@ export const CertificationManager: React.FC = () => {
                         <div className="flex items-center gap-4">
                           <div className="text-center">
                             <p className="text-sm font-medium">
-                              {cert.expiryDate.toLocaleDateString('pt-BR')}
+                              {cert.expiryDate.toLocaleDateString("pt-BR")}
                             </p>
                             <p className="text-xs text-muted-foreground">
                               {getDaysUntilExpiry(cert.expiryDate) > 0 
                                 ? `${getDaysUntilExpiry(cert.expiryDate)} dias`
-                                : 'Vencido'
+                                : "Vencido"
                               }
                             </p>
                           </div>
                           <Badge className={getStatusColor(cert.status)}>
                             {getStatusIcon(cert.status)}
                             <span className="ml-1">
-                              {cert.status === 'valid' ? 'Válido' :
-                               cert.status === 'expiring' ? 'Vencendo' :
-                               cert.status === 'expired' ? 'Vencido' : 'Pendente'}
+                              {cert.status === "valid" ? "Válido" :
+                                cert.status === "expiring" ? "Vencendo" :
+                                  cert.status === "expired" ? "Vencido" : "Pendente"}
                             </span>
                           </Badge>
                         </div>
@@ -465,11 +465,11 @@ export const CertificationManager: React.FC = () => {
                           </td>
                           <td className="p-4">
                             <div>
-                              <p className="font-medium">{cert.expiryDate.toLocaleDateString('pt-BR')}</p>
+                              <p className="font-medium">{cert.expiryDate.toLocaleDateString("pt-BR")}</p>
                               <p className="text-sm text-muted-foreground">
                                 {getDaysUntilExpiry(cert.expiryDate) > 0 
                                   ? `${getDaysUntilExpiry(cert.expiryDate)} dias`
-                                  : 'Vencido'
+                                  : "Vencido"
                                 }
                               </p>
                             </div>
@@ -478,9 +478,9 @@ export const CertificationManager: React.FC = () => {
                             <Badge className={getStatusColor(cert.status)}>
                               {getStatusIcon(cert.status)}
                               <span className="ml-1">
-                                {cert.status === 'valid' ? 'Válido' :
-                                 cert.status === 'expiring' ? 'Vencendo' :
-                                 cert.status === 'expired' ? 'Vencido' : 'Pendente'}
+                                {cert.status === "valid" ? "Válido" :
+                                  cert.status === "expiring" ? "Vencendo" :
+                                    cert.status === "expired" ? "Vencido" : "Pendente"}
                               </span>
                             </Badge>
                           </td>

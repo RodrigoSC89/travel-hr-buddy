@@ -1,35 +1,35 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 interface NotificationRequest {
   userId?: string;
-  type: 'smart_alert' | 'system_insight' | 'recommendation_update' | 'performance_summary';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  type: "smart_alert" | "system_insight" | "recommendation_update" | "performance_summary";
+  priority: "low" | "medium" | "high" | "critical";
   context?: any;
 }
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const { userId, type, priority, context }: NotificationRequest = await req.json();
     
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY is not set');
+      throw new Error("OPENAI_API_KEY is not set");
     }
 
     const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
     console.log(`Generating intelligent notification: ${type} for user ${userId}`);
@@ -80,34 +80,34 @@ Diretrizes:
 
 **Tipo:** ${type}
 **Prioridade:** ${priority}
-**Usuário:** ${userId || 'Sistema'}
+**Usuário:** ${userId || "Sistema"}
 
 **Contexto:**
 ${JSON.stringify(notificationContext, null, 2)}
 
 Crie uma notificação personalizada e acionável baseada nestes dados.`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: "gpt-4o-mini",
         messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
         ],
         temperature: 0.3,
         max_tokens: 1500,
-        response_format: { type: 'json_object' }
+        response_format: { type: "json_object" }
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('OpenAI API error:', errorText);
+      console.error("OpenAI API error:", errorText);
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
@@ -117,8 +117,8 @@ Crie uma notificação personalizada e acionável baseada nestes dados.`;
     try {
       notificationData = JSON.parse(data.choices[0].message.content);
     } catch (error) {
-      console.error('Error parsing AI response:', error);
-      throw new Error('Failed to parse AI notification');
+      console.error("Error parsing AI response:", error);
+      throw new Error("Failed to parse AI notification");
     }
 
     // Save notification to database
@@ -138,18 +138,18 @@ Crie uma notificação personalizada e acionável baseada nestes dados.`;
 
     try {
       const { data: savedNotification, error: saveError } = await supabase
-        .from('intelligent_notifications')
+        .from("intelligent_notifications")
         .insert(notificationRecord)
         .select()
         .single();
 
       if (saveError) {
-        console.error('Error saving notification:', saveError);
+        console.error("Error saving notification:", saveError);
       } else {
-        console.log('Notification saved:', savedNotification.id);
+        console.log("Notification saved:", savedNotification.id);
       }
     } catch (saveError) {
-      console.log('Notifications table not available, skipping save');
+      console.log("Notifications table not available, skipping save");
     }
 
     // Send push notification if configured
@@ -162,7 +162,7 @@ Crie uma notificação personalizada e acionável baseada nestes dados.`;
       await sendEmailNotification(supabase, userId, notificationData.notification);
     }
 
-    console.log('Intelligent notification generated successfully');
+    console.log("Intelligent notification generated successfully");
 
     return new Response(JSON.stringify({ 
       success: true,
@@ -170,17 +170,17 @@ Crie uma notificação personalizada e acionável baseada nestes dados.`;
       metadata: notificationData.metadata,
       generatedAt: new Date().toISOString()
     }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error) {
-    console.error('Error generating intelligent notification:', error);
+    console.error("Error generating intelligent notification:", error);
     return new Response(JSON.stringify({ 
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred'
+      error: error instanceof Error ? error.message : "Unknown error occurred"
     }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
@@ -201,9 +201,9 @@ async function collectNotificationContext(supabase: any, userId: string | undefi
   try {
     // Get user profile
     const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
       .single();
 
     if (profile) {
@@ -215,40 +215,40 @@ async function collectNotificationContext(supabase: any, userId: string | undefi
     }
 
     // Get recent activity based on notification type
-    if (type === 'smart_alert') {
+    if (type === "smart_alert") {
       const { data: recentAlerts } = await supabase
-        .from('price_alerts')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('is_active', true)
+        .from("price_alerts")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("is_active", true)
         .limit(3);
 
       data.recentAlerts = recentAlerts;
     }
 
-    if (type === 'system_insight') {
+    if (type === "system_insight") {
       const { data: userStats } = await supabase
-        .from('user_statistics')
-        .select('*')
-        .eq('user_id', userId)
+        .from("user_statistics")
+        .select("*")
+        .eq("user_id", userId)
         .single();
 
       data.userStatistics = userStats;
     }
 
-    if (type === 'recommendation_update') {
+    if (type === "recommendation_update") {
       // Get recent recommendations or actions
       data.lastActivity = await getLastUserActivity(supabase, userId);
     }
 
-    if (type === 'performance_summary') {
+    if (type === "performance_summary") {
       // Get performance data
       data.performanceData = await getPerformanceData(supabase, userId);
     }
 
   } catch (error) {
-    console.error('Error collecting notification context:', error);
-    data.error = 'Could not collect full context';
+    console.error("Error collecting notification context:", error);
+    data.error = "Could not collect full context";
   }
 
   return data;
@@ -257,10 +257,10 @@ async function collectNotificationContext(supabase: any, userId: string | undefi
 async function getLastUserActivity(supabase: any, userId: string) {
   try {
     const { data: recentReports } = await supabase
-      .from('ai_reports')
-      .select('type, created_at')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
+      .from("ai_reports")
+      .select("type, created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
       .limit(1);
 
     return recentReports?.[0] || null;
@@ -272,9 +272,9 @@ async function getLastUserActivity(supabase: any, userId: string) {
 async function getPerformanceData(supabase: any, userId: string) {
   try {
     const { data: alerts } = await supabase
-      .from('price_alerts')
-      .select('*')
-      .eq('user_id', userId);
+      .from("price_alerts")
+      .select("*")
+      .eq("user_id", userId);
 
     const activeAlerts = alerts?.filter((a: any) => a.is_active).length || 0;
     const totalAlerts = alerts?.length || 0;
@@ -292,11 +292,11 @@ async function getPerformanceData(supabase: any, userId: string) {
 async function sendPushNotification(supabase: any, userId: string, notification: any) {
   // Implementation for push notifications
   // This would integrate with a push notification service
-  console.log('Sending push notification to user:', userId);
+  console.log("Sending push notification to user:", userId);
 }
 
 async function sendEmailNotification(supabase: any, userId: string, notification: any) {
   // Implementation for email notifications
   // This would integrate with an email service
-  console.log('Sending email notification to user:', userId);
+  console.log("Sending email notification to user:", userId);
 }

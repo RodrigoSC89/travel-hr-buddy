@@ -1,10 +1,10 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import ModuleActionButton from '@/components/ui/module-action-button';
-import { BackToDashboard } from '@/components/ui/back-to-dashboard';
+import React, { useState, useEffect, lazy, Suspense } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import ModuleActionButton from "@/components/ui/module-action-button";
+import { BackToDashboard } from "@/components/ui/back-to-dashboard";
 import { 
   Plane, 
   Building, 
@@ -30,20 +30,20 @@ import {
   Bell,
   FileText,
   Users
-} from 'lucide-react';
+} from "lucide-react";
 
 // Lazy load travel components to reduce initial bundle size
-const FlightSearch = lazy(() => import('@/components/travel/flight-search').then(m => ({ default: m.FlightSearch })));
-const EnhancedHotelSearch = lazy(() => import('@/components/travel/enhanced-hotel-search').then(m => ({ default: m.EnhancedHotelSearch })));
-const TravelMap = lazy(() => import('@/components/travel/travel-map').then(m => ({ default: m.TravelMap })));
-const PredictiveTravelDashboard = lazy(() => import('@/components/travel/predictive-travel-dashboard').then(m => ({ default: m.PredictiveTravelDashboard })));
-const TravelAnalyticsDashboard = lazy(() => import('@/components/travel/travel-analytics-dashboard').then(m => ({ default: m.TravelAnalyticsDashboard })));
-const TravelBookingSystem = lazy(() => import('@/components/travel/travel-booking-system').then(m => ({ default: m.TravelBookingSystem })));
-const TravelApprovalSystem = lazy(() => import('@/components/travel/travel-approval-system').then(m => ({ default: m.TravelApprovalSystem })));
-const TravelExpenseSystem = lazy(() => import('@/components/travel/travel-expense-system').then(m => ({ default: m.TravelExpenseSystem })));
-const TravelCommunication = lazy(() => import('@/components/travel/travel-communication').then(m => ({ default: m.TravelCommunication })));
-const TravelNotifications = lazy(() => import('@/components/travel/travel-notifications').then(m => ({ default: m.TravelNotifications })));
-const TravelDocumentManager = lazy(() => import('@/components/travel/travel-document-manager').then(m => ({ default: m.TravelDocumentManager })));
+const FlightSearch = lazy(() => import("@/components/travel/flight-search").then(m => ({ default: m.FlightSearch })));
+const EnhancedHotelSearch = lazy(() => import("@/components/travel/enhanced-hotel-search").then(m => ({ default: m.EnhancedHotelSearch })));
+const TravelMap = lazy(() => import("@/components/travel/travel-map").then(m => ({ default: m.TravelMap })));
+const PredictiveTravelDashboard = lazy(() => import("@/components/travel/predictive-travel-dashboard").then(m => ({ default: m.PredictiveTravelDashboard })));
+const TravelAnalyticsDashboard = lazy(() => import("@/components/travel/travel-analytics-dashboard").then(m => ({ default: m.TravelAnalyticsDashboard })));
+const TravelBookingSystem = lazy(() => import("@/components/travel/travel-booking-system").then(m => ({ default: m.TravelBookingSystem })));
+const TravelApprovalSystem = lazy(() => import("@/components/travel/travel-approval-system").then(m => ({ default: m.TravelApprovalSystem })));
+const TravelExpenseSystem = lazy(() => import("@/components/travel/travel-expense-system").then(m => ({ default: m.TravelExpenseSystem })));
+const TravelCommunication = lazy(() => import("@/components/travel/travel-communication").then(m => ({ default: m.TravelCommunication })));
+const TravelNotifications = lazy(() => import("@/components/travel/travel-notifications").then(m => ({ default: m.TravelNotifications })));
+const TravelDocumentManager = lazy(() => import("@/components/travel/travel-document-manager").then(m => ({ default: m.TravelDocumentManager })));
 
 // Loading component for suspense fallback
 const ComponentLoader = () => (
@@ -58,22 +58,22 @@ const ComponentLoader = () => (
 const Travel = () => {
   const [sampleLocations] = useState([
     {
-      id: '1',
-      name: 'Aeroporto Internacional do Galeão',
+      id: "1",
+      name: "Aeroporto Internacional do Galeão",
       coordinates: [-43.2502, -22.8099] as [number, number],
-      type: 'airport' as const
+      type: "airport" as const
     },
     {
-      id: '2', 
-      name: 'Hotel Copacabana Palace',
+      id: "2", 
+      name: "Hotel Copacabana Palace",
       coordinates: [-43.1729, -22.9068] as [number, number],
-      type: 'hotel' as const
+      type: "hotel" as const
     },
     {
-      id: '3',
-      name: 'Aeroporto de Congonhas',
+      id: "3",
+      name: "Aeroporto de Congonhas",
       coordinates: [-46.6566, -23.6262] as [number, number],
-      type: 'airport' as const
+      type: "airport" as const
     }
   ]);
 
@@ -104,13 +104,13 @@ const Travel = () => {
         {/* Enhanced Hero Section with Modern Design */}
         <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-info via-info/90 to-info-glow p-8 text-info-foreground 
           transition-all duration-1000 transform border border-info/20 backdrop-blur-sm
-          ${isLoaded ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
+          ${isLoaded ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"}`}>
           
           {/* Enhanced Background Pattern */}
           <div className="absolute inset-0 bg-mesh opacity-20" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/15 to-transparent rounded-full blur-2xl animate-pulse" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/3 right-1/3 w-32 h-32 bg-gradient-to-r from-success/10 to-warning/10 rounded-full blur-xl animate-bounce" style={{ animationDelay: '2s' }} />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: "1s" }} />
+          <div className="absolute top-1/3 right-1/3 w-32 h-32 bg-gradient-to-r from-success/10 to-warning/10 rounded-full blur-xl animate-bounce" style={{ animationDelay: "2s" }} />
           
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-6">
@@ -332,47 +332,47 @@ const Travel = () => {
         moduleIcon={<Plane className="h-4 w-4" />}
         actions={[
           {
-            id: 'new-trip',
-            label: 'Nova Viagem',
+            id: "new-trip",
+            label: "Nova Viagem",
             icon: <Plus className="h-4 w-4" />,
-            action: () => console.log('Nova viagem'),
-            variant: 'default'
+            action: () => console.log("Nova viagem"),
+            variant: "default"
           },
           {
-            id: 'bookings',
-            label: 'Reservas',
+            id: "bookings",
+            label: "Reservas",
             icon: <Calendar className="h-4 w-4" />,
-            action: () => console.log('Reservas'),
-            variant: 'outline'
+            action: () => console.log("Reservas"),
+            variant: "outline"
           },
           {
-            id: 'expenses',
-            label: 'Despesas',
+            id: "expenses",
+            label: "Despesas",
             icon: <DollarSign className="h-4 w-4" />,
-            action: () => console.log('Despesas'),
-            variant: 'outline'
+            action: () => console.log("Despesas"),
+            variant: "outline"
           },
           {
-            id: 'reports',
-            label: 'Relatórios',
+            id: "reports",
+            label: "Relatórios",
             icon: <BarChart3 className="h-4 w-4" />,
-            action: () => console.log('Relatórios'),
-            variant: 'outline'
+            action: () => console.log("Relatórios"),
+            variant: "outline"
           }
         ]}
         quickActions={[
           {
-            id: 'refresh',
-            label: 'Atualizar',
+            id: "refresh",
+            label: "Atualizar",
             icon: <RefreshCw className="h-3 w-3" />,
             action: () => window.location.reload(),
-            shortcut: 'F5'
+            shortcut: "F5"
           },
           {
-            id: 'export',
-            label: 'Exportar',
+            id: "export",
+            label: "Exportar",
             icon: <Download className="h-3 w-3" />,
-            action: () => console.log('Exportar')
+            action: () => console.log("Exportar")
           }
         ]}
       />

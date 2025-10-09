@@ -1,10 +1,10 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 interface PredictionRequest {
@@ -13,21 +13,21 @@ interface PredictionRequest {
 }
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const { timeframe, includeFactors = true }: PredictionRequest = await req.json();
     
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY is not set');
+      throw new Error("OPENAI_API_KEY is not set");
     }
 
     const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
     console.log(`Generating predictions for timeframe: ${timeframe}`);
@@ -78,29 +78,29 @@ Gere previsões para as seguintes métricas principais:
 - Performance de Sistemas
 - Engajamento dos Funcionários
 
-${includeFactors ? 'Inclua fatores influentes específicos para cada previsão.' : ''}`;
+${includeFactors ? "Inclua fatores influentes específicos para cada previsão." : ""}`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: "gpt-4o-mini",
         messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
         ],
         temperature: 0.2,
         max_tokens: 3000,
-        response_format: { type: 'json_object' }
+        response_format: { type: "json_object" }
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('OpenAI API error:', errorText);
+      console.error("OpenAI API error:", errorText);
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
@@ -110,14 +110,14 @@ ${includeFactors ? 'Inclua fatores influentes específicos para cada previsão.'
     try {
       predictions = JSON.parse(data.choices[0].message.content);
     } catch (error) {
-      console.error('Error parsing AI response:', error);
-      throw new Error('Failed to parse AI predictions');
+      console.error("Error parsing AI response:", error);
+      throw new Error("Failed to parse AI predictions");
     }
 
     // Save predictions to database for tracking
     try {
       const { error: saveError } = await supabase
-        .from('ai_predictions')
+        .from("ai_predictions")
         .insert({
           timeframe,
           predictions: predictions.predictions,
@@ -127,13 +127,13 @@ ${includeFactors ? 'Inclua fatores influentes específicos para cada previsão.'
         });
 
       if (saveError) {
-        console.error('Error saving predictions:', saveError);
+        console.error("Error saving predictions:", saveError);
       }
     } catch (saveError) {
-      console.log('Predictions table not available, skipping save');
+      console.log("Predictions table not available, skipping save");
     }
 
-    console.log('Predictions generated successfully');
+    console.log("Predictions generated successfully");
 
     return new Response(JSON.stringify({ 
       success: true,
@@ -142,17 +142,17 @@ ${includeFactors ? 'Inclua fatores influentes específicos para cada previsão.'
       generatedAt: new Date().toISOString(),
       timeframe
     }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error) {
-    console.error('Error generating predictions:', error);
+    console.error("Error generating predictions:", error);
     return new Response(JSON.stringify({ 
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred'
+      error: error instanceof Error ? error.message : "Unknown error occurred"
     }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
@@ -166,8 +166,8 @@ async function collectHistoricalData(supabase: any, timeframe: string) {
   try {
     // Get user statistics
     const { data: userStats } = await supabase
-      .from('user_statistics')
-      .select('*')
+      .from("user_statistics")
+      .select("*")
       .limit(100);
 
     if (userStats) {
@@ -180,9 +180,9 @@ async function collectHistoricalData(supabase: any, timeframe: string) {
 
     // Get price alerts data
     const { data: priceAlerts } = await supabase
-      .from('price_alerts')
-      .select('*')
-      .gte('created_at', new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString());
+      .from("price_alerts")
+      .select("*")
+      .gte("created_at", new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString());
 
     if (priceAlerts) {
       data.priceAlerts = {
@@ -194,8 +194,8 @@ async function collectHistoricalData(supabase: any, timeframe: string) {
 
     // Get certificates data
     const { data: certificates } = await supabase
-      .from('certificates')
-      .select('*');
+      .from("certificates")
+      .select("*");
 
     if (certificates) {
       data.certificates = {
@@ -212,8 +212,8 @@ async function collectHistoricalData(supabase: any, timeframe: string) {
 
     // Get profiles data
     const { data: profiles } = await supabase
-      .from('profiles')
-      .select('*');
+      .from("profiles")
+      .select("*");
 
     if (profiles) {
       data.employees = {
@@ -225,20 +225,20 @@ async function collectHistoricalData(supabase: any, timeframe: string) {
     }
 
   } catch (error) {
-    console.error('Error collecting historical data:', error);
+    console.error("Error collecting historical data:", error);
     // Return mock data structure for predictions
     data.mock = true;
-    data.revenue = { current: 125432, trend: 'up', growth: 12.5 };
-    data.satisfaction = { current: 94, trend: 'stable', volatility: 'low' };
-    data.productivity = { current: 89, trend: 'up', improvement: 5.2 };
-    data.turnover = { current: 8.5, trend: 'down', reduction: 15.3 };
+    data.revenue = { current: 125432, trend: "up", growth: 12.5 };
+    data.satisfaction = { current: 94, trend: "stable", volatility: "low" };
+    data.productivity = { current: 89, trend: "up", improvement: 5.2 };
+    data.turnover = { current: 8.5, trend: "down", reduction: 15.3 };
   }
 
   return data;
 }
 
 function analyzeAlertsTrend(alerts: any[]) {
-  if (alerts.length < 2) return 'stable';
+  if (alerts.length < 2) return "stable";
   
   const last30Days = alerts.filter(alert => 
     new Date(alert.created_at) >= new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
@@ -250,7 +250,7 @@ function analyzeAlertsTrend(alerts: any[]) {
            date < new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   });
   
-  if (last30Days.length > previous30Days.length * 1.1) return 'up';
-  if (last30Days.length < previous30Days.length * 0.9) return 'down';
-  return 'stable';
+  if (last30Days.length > previous30Days.length * 1.1) return "up";
+  if (last30Days.length < previous30Days.length * 0.9) return "down";
+  return "stable";
 }

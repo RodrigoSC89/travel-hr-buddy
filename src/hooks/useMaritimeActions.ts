@@ -1,5 +1,5 @@
-import { useToast } from '@/hooks/use-toast';
-import { useCallback, useState } from 'react';
+import { useToast } from "@/hooks/use-toast";
+import { useCallback, useState } from "react";
 
 /**
  * Hook for maritime module actions with proper loading states and feedback
@@ -12,15 +12,15 @@ export const useMaritimeActions = () => {
     toast({
       title: message,
       description: description,
-      variant: 'default',
+      variant: "default",
     });
   }, [toast]);
 
   const showError = useCallback((message: string, description?: string) => {
     toast({
       title: message,
-      description: description || 'Por favor, tente novamente.',
-      variant: 'destructive',
+      description: description || "Por favor, tente novamente.",
+      variant: "destructive",
     });
   }, [toast]);
 
@@ -36,12 +36,12 @@ export const useMaritimeActions = () => {
     try {
       // Simulate export action
       await new Promise(resolve => setTimeout(resolve, 500));
-      showSuccess('Exportação concluída', `Dados de ${moduleName} exportados com sucesso`);
+      showSuccess("Exportação concluída", `Dados de ${moduleName} exportados com sucesso`);
       
       // In a real implementation, this would trigger actual export
       console.log(`Exporting ${moduleName} data:`, data);
     } catch (error) {
-      showError('Erro na exportação', 'Não foi possível exportar os dados');
+      showError("Erro na exportação", "Não foi possível exportar os dados");
     } finally {
       setIsLoading(false);
     }
@@ -55,9 +55,9 @@ export const useMaritimeActions = () => {
       } else {
         await new Promise(resolve => setTimeout(resolve, 500));
       }
-      showSuccess('Dados atualizados', `${moduleName} atualizado com sucesso`);
+      showSuccess("Dados atualizados", `${moduleName} atualizado com sucesso`);
     } catch (error) {
-      showError('Erro ao atualizar', 'Não foi possível atualizar os dados');
+      showError("Erro ao atualizar", "Não foi possível atualizar os dados");
     } finally {
       setIsLoading(false);
     }
@@ -69,9 +69,9 @@ export const useMaritimeActions = () => {
       if (callback) {
         await callback();
       }
-      showSuccess('Item criado', `${itemName} criado com sucesso`);
+      showSuccess("Item criado", `${itemName} criado com sucesso`);
     } catch (error) {
-      showError('Erro ao criar', `Não foi possível criar ${itemName}`);
+      showError("Erro ao criar", `Não foi possível criar ${itemName}`);
     } finally {
       setIsLoading(false);
     }
@@ -83,9 +83,9 @@ export const useMaritimeActions = () => {
       if (callback) {
         await callback();
       }
-      showSuccess('Item atualizado', `${itemName} atualizado com sucesso`);
+      showSuccess("Item atualizado", `${itemName} atualizado com sucesso`);
     } catch (error) {
-      showError('Erro ao atualizar', `Não foi possível atualizar ${itemName}`);
+      showError("Erro ao atualizar", `Não foi possível atualizar ${itemName}`);
     } finally {
       setIsLoading(false);
     }
@@ -97,16 +97,16 @@ export const useMaritimeActions = () => {
       if (callback) {
         await callback();
       }
-      showSuccess('Item excluído', `${itemName} excluído com sucesso`);
+      showSuccess("Item excluído", `${itemName} excluído com sucesso`);
     } catch (error) {
-      showError('Erro ao excluir', `Não foi possível excluir ${itemName}`);
+      showError("Erro ao excluir", `Não foi possível excluir ${itemName}`);
     } finally {
       setIsLoading(false);
     }
   }, [showSuccess, showError]);
 
   const handleViewDetails = useCallback((itemName: string, id?: string | number) => {
-    showInfo('Visualizando detalhes', `Abrindo detalhes de ${itemName}${id ? ` #${id}` : ''}`);
+    showInfo("Visualizando detalhes", `Abrindo detalhes de ${itemName}${id ? ` #${id}` : ""}`);
     console.log(`View details for ${itemName}`, id);
   }, [showInfo]);
 
@@ -118,9 +118,9 @@ export const useMaritimeActions = () => {
       } else {
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
-      showSuccess('Relatório gerado', `${reportName} gerado com sucesso`);
+      showSuccess("Relatório gerado", `${reportName} gerado com sucesso`);
     } catch (error) {
-      showError('Erro ao gerar relatório', 'Não foi possível gerar o relatório');
+      showError("Erro ao gerar relatório", "Não foi possível gerar o relatório");
     } finally {
       setIsLoading(false);
     }

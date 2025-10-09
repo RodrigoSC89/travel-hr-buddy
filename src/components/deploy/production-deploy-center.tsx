@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { 
   Monitor, 
   Globe, 
@@ -23,16 +23,16 @@ import {
   Settings,
   Play,
   User
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface SystemMetrics {
   uptime: number;
   responseTime: number;
   activeUsers: number;
-  databaseStatus: 'healthy' | 'warning' | 'critical';
-  apiStatus: 'online' | 'offline' | 'degraded';
+  databaseStatus: "healthy" | "warning" | "critical";
+  apiStatus: "online" | "offline" | "degraded";
   memoryUsage: number;
   cpuUsage: number;
 }
@@ -42,7 +42,7 @@ interface DeploymentConfig {
   subdomain: string;
   sslEnabled: boolean;
   cdnEnabled: boolean;
-  environment: 'staging' | 'production';
+  environment: "staging" | "production";
   monitoringEnabled: boolean;
 }
 
@@ -51,18 +51,18 @@ const ProductionDeployCenter: React.FC = () => {
     uptime: 99.9,
     responseTime: 245,
     activeUsers: 12,
-    databaseStatus: 'healthy',
-    apiStatus: 'online',
+    databaseStatus: "healthy",
+    apiStatus: "online",
     memoryUsage: 45,
     cpuUsage: 23
   });
 
   const [deployConfig, setDeployConfig] = useState<DeploymentConfig>({
-    domain: '',
-    subdomain: 'nautilus',
+    domain: "",
+    subdomain: "nautilus",
     sslEnabled: true,
     cdnEnabled: true,
-    environment: 'production',
+    environment: "production",
     monitoringEnabled: true
   });
 
@@ -92,14 +92,14 @@ const ProductionDeployCenter: React.FC = () => {
     try {
       // Simular processo de deploy
       const steps = [
-        'Preparando ambiente de produção...',
-        'Configurando domínio e SSL...',
-        'Otimizando assets...',
-        'Configurando CDN...',
-        'Ativando monitoramento...',
-        'Executando testes finais...',
-        'Publicando aplicação...',
-        'Verificando saúde do sistema...'
+        "Preparando ambiente de produção...",
+        "Configurando domínio e SSL...",
+        "Otimizando assets...",
+        "Configurando CDN...",
+        "Ativando monitoramento...",
+        "Executando testes finais...",
+        "Publicando aplicação...",
+        "Verificando saúde do sistema..."
       ];
 
       for (let i = 0; i < steps.length; i++) {
@@ -109,10 +109,10 @@ const ProductionDeployCenter: React.FC = () => {
       }
 
       setIsLive(true);
-      toast.success('🚀 Deploy concluído! Sistema Nautilus One está live em produção!');
+      toast.success("🚀 Deploy concluído! Sistema Nautilus One está live em produção!");
       
     } catch (error) {
-      toast.error('Erro durante o deploy');
+      toast.error("Erro durante o deploy");
     } finally {
       setIsDeploying(false);
     }
@@ -120,30 +120,30 @@ const ProductionDeployCenter: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy':
-      case 'online':
-        return 'text-green-600 bg-green-50 border-green-200';
-      case 'warning':
-      case 'degraded':
-        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'critical':
-      case 'offline':
-        return 'text-red-600 bg-red-50 border-red-200';
-      default:
-        return 'text-muted-foreground bg-gray-50 border-gray-200';
+    case "healthy":
+    case "online":
+      return "text-green-600 bg-green-50 border-green-200";
+    case "warning":
+    case "degraded":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    case "critical":
+    case "offline":
+      return "text-red-600 bg-red-50 border-red-200";
+    default:
+      return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'healthy':
-      case 'online':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'warning':
-      case 'degraded':
-        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "healthy":
+    case "online":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "warning":
+    case "degraded":
+      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -375,7 +375,7 @@ const ProductionDeployCenter: React.FC = () => {
                         <span className="font-mono text-sm">
                           {deployConfig.domain ? 
                             `https://${deployConfig.subdomain}.${deployConfig.domain}` :
-                            'https://nautilus.exemplo.com.br'
+                            "https://nautilus.exemplo.com.br"
                           }
                         </span>
                       </div>
@@ -432,12 +432,12 @@ const ProductionDeployCenter: React.FC = () => {
                       <h4 className="font-medium">Checklist Pré-Deploy</h4>
                       <div className="space-y-2">
                         {[
-                          'Auditoria técnica aprovada',
-                          'Testes de homologação concluídos',
-                          'Configurações de segurança validadas',
-                          'Domínio configurado',
-                          'SSL ativo',
-                          'Monitoramento configurado'
+                          "Auditoria técnica aprovada",
+                          "Testes de homologação concluídos",
+                          "Configurações de segurança validadas",
+                          "Domínio configurado",
+                          "SSL ativo",
+                          "Monitoramento configurado"
                         ].map((item, index) => (
                           <div key={index} className="flex items-center gap-2">
                             <CheckCircle className="w-4 h-4 text-green-500" />
@@ -541,9 +541,9 @@ const ProductionDeployCenter: React.FC = () => {
                   </h4>
                   <div className="space-y-3">
                     {[
-                      { name: 'Equipe Técnica Petrobras', status: 'Ativo', users: 5 },
-                      { name: 'Gestores Marítimos', status: 'Convite Enviado', users: 8 },
-                      { name: 'Operadores de Campo', status: 'Aguardando', users: 12 }
+                      { name: "Equipe Técnica Petrobras", status: "Ativo", users: 5 },
+                      { name: "Gestores Marítimos", status: "Convite Enviado", users: 8 },
+                      { name: "Operadores de Campo", status: "Aguardando", users: 12 }
                     ].map((group, index) => (
                       <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
                         <div>
@@ -551,9 +551,9 @@ const ProductionDeployCenter: React.FC = () => {
                           <p className="text-xs text-muted-foreground">{group.users} usuários</p>
                         </div>
                         <Badge className={
-                          group.status === 'Ativo' ? 'text-green-600 bg-green-50 border-green-200' :
-                          group.status === 'Convite Enviado' ? 'text-blue-600 bg-blue-50 border-blue-200' :
-                          'text-yellow-600 bg-yellow-50 border-yellow-200'
+                          group.status === "Ativo" ? "text-green-600 bg-green-50 border-green-200" :
+                            group.status === "Convite Enviado" ? "text-blue-600 bg-blue-50 border-blue-200" :
+                              "text-yellow-600 bg-yellow-50 border-yellow-200"
                         }>
                           {group.status}
                         </Badge>

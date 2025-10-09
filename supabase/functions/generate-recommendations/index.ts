@@ -1,35 +1,35 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 interface RecommendationRequest {
   userId: string;
-  context: 'dashboard' | 'hr' | 'travel' | 'finance' | 'general';
+  context: "dashboard" | "hr" | "travel" | "finance" | "general";
   userBehavior?: any;
   preferences?: any;
 }
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const { userId, context, userBehavior, preferences }: RecommendationRequest = await req.json();
     
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY is not set');
+      throw new Error("OPENAI_API_KEY is not set");
     }
 
     const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
     console.log(`Generating personalized recommendations for user ${userId} in context ${context}`);
@@ -94,27 +94,27 @@ ${JSON.stringify({ userBehavior, preferences }, null, 2)}
 
 Gere recomendações inteligentes e personalizadas baseadas nesses dados.`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: "gpt-4o-mini",
         messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
         ],
         temperature: 0.4,
         max_tokens: 3000,
-        response_format: { type: 'json_object' }
+        response_format: { type: "json_object" }
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('OpenAI API error:', errorText);
+      console.error("OpenAI API error:", errorText);
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
@@ -124,14 +124,14 @@ Gere recomendações inteligentes e personalizadas baseadas nesses dados.`;
     try {
       recommendations = JSON.parse(data.choices[0].message.content);
     } catch (error) {
-      console.error('Error parsing AI response:', error);
-      throw new Error('Failed to parse AI recommendations');
+      console.error("Error parsing AI response:", error);
+      throw new Error("Failed to parse AI recommendations");
     }
 
     // Save recommendations to database for tracking
     try {
       const { error: saveError } = await supabase
-        .from('user_recommendations')
+        .from("user_recommendations")
         .insert({
           user_id: userId,
           context,
@@ -142,13 +142,13 @@ Gere recomendações inteligentes e personalizadas baseadas nesses dados.`;
         });
 
       if (saveError) {
-        console.error('Error saving recommendations:', saveError);
+        console.error("Error saving recommendations:", saveError);
       }
     } catch (saveError) {
-      console.log('Recommendations table not available, skipping save');
+      console.log("Recommendations table not available, skipping save");
     }
 
-    console.log('Personalized recommendations generated successfully');
+    console.log("Personalized recommendations generated successfully");
 
     return new Response(JSON.stringify({ 
       success: true,
@@ -158,17 +158,17 @@ Gere recomendações inteligentes e personalizadas baseadas nesses dados.`;
       generatedAt: new Date().toISOString(),
       context
     }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error) {
-    console.error('Error generating recommendations:', error);
+    console.error("Error generating recommendations:", error);
     return new Response(JSON.stringify({ 
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred'
+      error: error instanceof Error ? error.message : "Unknown error occurred"
     }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
@@ -183,9 +183,9 @@ async function collectUserData(supabase: any, userId: string, context: string) {
   try {
     // Get user profile
     const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
       .single();
 
     if (profile) {
@@ -194,9 +194,9 @@ async function collectUserData(supabase: any, userId: string, context: string) {
 
     // Get user role
     const { data: userRole } = await supabase
-      .from('user_roles')
-      .select('*')
-      .eq('user_id', userId)
+      .from("user_roles")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (userRole) {
@@ -205,9 +205,9 @@ async function collectUserData(supabase: any, userId: string, context: string) {
 
     // Get user statistics
     const { data: userStats } = await supabase
-      .from('user_statistics')
-      .select('*')
-      .eq('user_id', userId)
+      .from("user_statistics")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (userStats) {
@@ -216,10 +216,10 @@ async function collectUserData(supabase: any, userId: string, context: string) {
 
     // Get user's price alerts (behavior data)
     const { data: priceAlerts } = await supabase
-      .from('price_alerts')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
+      .from("price_alerts")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
       .limit(10);
 
     if (priceAlerts) {
@@ -229,9 +229,9 @@ async function collectUserData(supabase: any, userId: string, context: string) {
 
     // Get notification settings (preferences)
     const { data: notificationSettings } = await supabase
-      .from('notification_settings')
-      .select('*')
-      .eq('user_id', userId)
+      .from("notification_settings")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (notificationSettings) {
@@ -239,11 +239,11 @@ async function collectUserData(supabase: any, userId: string, context: string) {
     }
 
     // Context-specific data
-    if (context === 'hr') {
+    if (context === "hr") {
       const { data: certificates } = await supabase
-        .from('employee_certificates')
-        .select('*')
-        .eq('employee_id', profile?.employee_id || profile?.email);
+        .from("employee_certificates")
+        .select("*")
+        .eq("employee_id", profile?.employee_id || profile?.email);
 
       if (certificates) {
         data.certificates = certificates;
@@ -253,10 +253,10 @@ async function collectUserData(supabase: any, userId: string, context: string) {
 
     // Get recent AI reports
     const { data: recentReports } = await supabase
-      .from('ai_reports')
-      .select('type, created_at')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
+      .from("ai_reports")
+      .select("type, created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
       .limit(5);
 
     if (recentReports) {
@@ -264,13 +264,13 @@ async function collectUserData(supabase: any, userId: string, context: string) {
     }
 
   } catch (error) {
-    console.error('Error collecting user data:', error);
+    console.error("Error collecting user data:", error);
     // Return basic mock data for recommendations
     data.mock = true;
     data.basicProfile = {
-      department: 'General',
-      role: 'employee',
-      activityLevel: 'medium'
+      department: "General",
+      role: "employee",
+      activityLevel: "medium"
     };
   }
 
@@ -281,7 +281,7 @@ function analyzeAlertPatterns(alerts: any[]) {
   if (!alerts || alerts.length === 0) return null;
 
   const categories = alerts.reduce((acc: any, alert) => {
-    acc[alert.category || 'other'] = (acc[alert.category || 'other'] || 0) + 1;
+    acc[alert.category || "other"] = (acc[alert.category || "other"] || 0) + 1;
     return acc;
   }, {});
 
@@ -294,7 +294,7 @@ function analyzeAlertPatterns(alerts: any[]) {
       .sort(([,a], [,b]) => (b as number) - (a as number))
       .slice(0, 3),
     averageTargetPrice: avgTargetPrice,
-    frequency: alerts.length > 5 ? 'high' : alerts.length > 2 ? 'medium' : 'low'
+    frequency: alerts.length > 5 ? "high" : alerts.length > 2 ? "medium" : "low"
   };
 }
 

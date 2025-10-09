@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import {
   AlertTriangle,
   TrendingDown,
   TrendingUp,
   Shield,
   Activity
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Risk {
   id: string;
@@ -17,46 +17,46 @@ interface Risk {
   category: string;
   probability: number;
   impact: number;
-  riskLevel: 'negligible' | 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: "negligible" | "low" | "medium" | "high" | "critical";
   riskScore: number;
 }
 
 const SAMPLE_RISKS: Risk[] = [
-  { id: '1', title: 'Falha DP em operação crítica', category: 'operational', probability: 2, impact: 5, riskLevel: 'high', riskScore: 10 },
-  { id: '2', title: 'Vazamento de óleo', category: 'environmental', probability: 3, impact: 4, riskLevel: 'medium', riskScore: 12 },
-  { id: '3', title: 'Acidente com tripulante', category: 'health_safety', probability: 2, impact: 4, riskLevel: 'medium', riskScore: 8 },
-  { id: '4', title: 'Falha sistema contraincêndio', category: 'operational', probability: 4, impact: 5, riskLevel: 'critical', riskScore: 20 },
+  { id: "1", title: "Falha DP em operação crítica", category: "operational", probability: 2, impact: 5, riskLevel: "high", riskScore: 10 },
+  { id: "2", title: "Vazamento de óleo", category: "environmental", probability: 3, impact: 4, riskLevel: "medium", riskScore: 12 },
+  { id: "3", title: "Acidente com tripulante", category: "health_safety", probability: 2, impact: 4, riskLevel: "medium", riskScore: 8 },
+  { id: "4", title: "Falha sistema contraincêndio", category: "operational", probability: 4, impact: 5, riskLevel: "critical", riskScore: 20 },
 ];
 
 const getRiskColor = (level: string) => {
   const colors = {
-    critical: 'bg-red-700 text-white border-red-900',
-    high: 'bg-orange-600 text-white border-orange-800',
-    medium: 'bg-yellow-500 text-white border-yellow-700',
-    low: 'bg-blue-500 text-white border-blue-700',
-    negligible: 'bg-green-500 text-white border-green-700'
+    critical: "bg-red-700 text-white border-red-900",
+    high: "bg-orange-600 text-white border-orange-800",
+    medium: "bg-yellow-500 text-white border-yellow-700",
+    low: "bg-blue-500 text-white border-blue-700",
+    negligible: "bg-green-500 text-white border-green-700"
   };
-  return colors[level as keyof typeof colors] || 'bg-gray-500';
+  return colors[level as keyof typeof colors] || "bg-gray-500";
 };
 
 const getRiskLevelLabel = (level: string) => {
   const labels = {
-    critical: 'Crítico',
-    high: 'Alto',
-    medium: 'Médio',
-    low: 'Baixo',
-    negligible: 'Negligível'
+    critical: "Crítico",
+    high: "Alto",
+    medium: "Médio",
+    low: "Baixo",
+    negligible: "Negligível"
   };
   return labels[level as keyof typeof labels] || level;
 };
 
 const calculateRiskLevel = (probability: number, impact: number): string => {
   const score = probability * impact;
-  if (score >= 20) return 'critical';
-  if (score >= 15) return 'high';
-  if (score >= 8) return 'medium';
-  if (score >= 4) return 'low';
-  return 'negligible';
+  if (score >= 20) return "critical";
+  if (score >= 15) return "high";
+  if (score >= 8) return "medium";
+  if (score >= 4) return "low";
+  return "negligible";
 };
 
 export const RiskAssessmentMatrix: React.FC = () => {
@@ -79,12 +79,12 @@ export const RiskAssessmentMatrix: React.FC = () => {
     // TODO: Open new risk registration form
   };
 
-  const probabilityLabels = ['Muito Baixa (1)', 'Baixa (2)', 'Média (3)', 'Alta (4)', 'Muito Alta (5)'];
-  const impactLabels = ['Insignificante (1)', 'Menor (2)', 'Moderado (3)', 'Maior (4)', 'Catastrófico (5)'];
+  const probabilityLabels = ["Muito Baixa (1)", "Baixa (2)", "Média (3)", "Alta (4)", "Muito Alta (5)"];
+  const impactLabels = ["Insignificante (1)", "Menor (2)", "Moderado (3)", "Maior (4)", "Catastrófico (5)"];
 
-  const criticalCount = SAMPLE_RISKS.filter(r => r.riskLevel === 'critical').length;
-  const highCount = SAMPLE_RISKS.filter(r => r.riskLevel === 'high').length;
-  const mediumCount = SAMPLE_RISKS.filter(r => r.riskLevel === 'medium').length;
+  const criticalCount = SAMPLE_RISKS.filter(r => r.riskLevel === "critical").length;
+  const highCount = SAMPLE_RISKS.filter(r => r.riskLevel === "high").length;
+  const mediumCount = SAMPLE_RISKS.filter(r => r.riskLevel === "medium").length;
 
   return (
     <div className="space-y-6">
@@ -212,7 +212,7 @@ export const RiskAssessmentMatrix: React.FC = () => {
 
               {/* Legend */}
               <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-3">
-                {['critical', 'high', 'medium', 'low', 'negligible'].map((level) => (
+                {["critical", "high", "medium", "low", "negligible"].map((level) => (
                   <div key={level} className="flex items-center gap-2">
                     <div className={`w-6 h-6 rounded ${getRiskColor(level)} border-2`} />
                     <span className="text-sm font-semibold text-gray-900">

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Store,
   Download,
@@ -22,157 +22,157 @@ import {
   Brain,
   Cpu,
   Upload
-} from 'lucide-react';
+} from "lucide-react";
 
 interface IntegrationListing {
   id: string;
   name: string;
   description: string;
-  category: 'productivity' | 'communication' | 'analytics' | 'payment' | 'ai' | 'automation';
+  category: "productivity" | "communication" | "analytics" | "payment" | "ai" | "automation";
   author: string;
   version: string;
   downloads: number;
   rating: number;
   reviews: number;
-  price: 'free' | 'premium';
+  price: "free" | "premium";
   tags: string[];
   isVerified: boolean;
   isFeatured: boolean;
   lastUpdated: string;
-  supportLevel: 'community' | 'developer' | 'enterprise';
+  supportLevel: "community" | "developer" | "enterprise";
 }
 
 export const IntegrationMarketplace: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('browse');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedFilter, setSelectedFilter] = useState('popular');
+  const [selectedTab, setSelectedTab] = useState("browse");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedFilter, setSelectedFilter] = useState("popular");
   const { toast } = useToast();
 
   const integrations: IntegrationListing[] = [
     {
-      id: '1',
-      name: 'Advanced WhatsApp Business',
-      description: 'Integração completa com WhatsApp Business API, incluindo templates, análise de mensagens e automação inteligente.',
-      category: 'communication',
-      author: 'TechCorp Solutions',
-      version: '2.1.4',
+      id: "1",
+      name: "Advanced WhatsApp Business",
+      description: "Integração completa com WhatsApp Business API, incluindo templates, análise de mensagens e automação inteligente.",
+      category: "communication",
+      author: "TechCorp Solutions",
+      version: "2.1.4",
       downloads: 15420,
       rating: 4.8,
       reviews: 324,
-      price: 'premium',
-      tags: ['whatsapp', 'messaging', 'automation', 'ai'],
+      price: "premium",
+      tags: ["whatsapp", "messaging", "automation", "ai"],
       isVerified: true,
       isFeatured: true,
-      lastUpdated: '2024-01-15',
-      supportLevel: 'enterprise'
+      lastUpdated: "2024-01-15",
+      supportLevel: "enterprise"
     },
     {
-      id: '2',
-      name: 'Google Workspace Suite',
-      description: 'Conecte-se com todo o ecossistema Google: Gmail, Calendar, Drive, Sheets e muito mais em uma única integração.',
-      category: 'productivity',
-      author: 'Google Partner',
-      version: '1.5.2',
+      id: "2",
+      name: "Google Workspace Suite",
+      description: "Conecte-se com todo o ecossistema Google: Gmail, Calendar, Drive, Sheets e muito mais em uma única integração.",
+      category: "productivity",
+      author: "Google Partner",
+      version: "1.5.2",
       downloads: 28340,
       rating: 4.9,
       reviews: 856,
-      price: 'free',
-      tags: ['google', 'workspace', 'calendar', 'gmail', 'drive'],
+      price: "free",
+      tags: ["google", "workspace", "calendar", "gmail", "drive"],
       isVerified: true,
       isFeatured: true,
-      lastUpdated: '2024-01-18',
-      supportLevel: 'developer'
+      lastUpdated: "2024-01-18",
+      supportLevel: "developer"
     },
     {
-      id: '3',
-      name: 'AI Analytics Dashboard',
-      description: 'Dashboard inteligente com análises preditivas, insights automáticos e relatórios personalizados baseados em IA.',
-      category: 'ai',
-      author: 'DataMind AI',
-      version: '3.0.1',
+      id: "3",
+      name: "AI Analytics Dashboard",
+      description: "Dashboard inteligente com análises preditivas, insights automáticos e relatórios personalizados baseados em IA.",
+      category: "ai",
+      author: "DataMind AI",
+      version: "3.0.1",
       downloads: 8750,
       rating: 4.7,
       reviews: 198,
-      price: 'premium',
-      tags: ['ai', 'analytics', 'dashboard', 'predictions', 'insights'],
+      price: "premium",
+      tags: ["ai", "analytics", "dashboard", "predictions", "insights"],
       isVerified: true,
       isFeatured: false,
-      lastUpdated: '2024-01-12',
-      supportLevel: 'enterprise'
+      lastUpdated: "2024-01-12",
+      supportLevel: "enterprise"
     },
     {
-      id: '4',
-      name: 'Stripe Advanced Payments',
-      description: 'Processamento avançado de pagamentos com Stripe, incluindo assinaturas, marketplace e análise financeira.',
-      category: 'payment',
-      author: 'FinTech Integrations',
-      version: '1.8.3',
+      id: "4",
+      name: "Stripe Advanced Payments",
+      description: "Processamento avançado de pagamentos com Stripe, incluindo assinaturas, marketplace e análise financeira.",
+      category: "payment",
+      author: "FinTech Integrations",
+      version: "1.8.3",
       downloads: 12680,
       rating: 4.6,
       reviews: 445,
-      price: 'free',
-      tags: ['stripe', 'payments', 'subscriptions', 'finance'],
+      price: "free",
+      tags: ["stripe", "payments", "subscriptions", "finance"],
       isVerified: true,
       isFeatured: false,
-      lastUpdated: '2024-01-20',
-      supportLevel: 'developer'
+      lastUpdated: "2024-01-20",
+      supportLevel: "developer"
     },
     {
-      id: '5',
-      name: 'Slack Team Collaboration',
-      description: 'Integração avançada com Slack para comunicação em equipe, notificações inteligentes e comandos personalizados.',
-      category: 'communication',
-      author: 'SlackWorks',
-      version: '2.3.1',
+      id: "5",
+      name: "Slack Team Collaboration",
+      description: "Integração avançada com Slack para comunicação em equipe, notificações inteligentes e comandos personalizados.",
+      category: "communication",
+      author: "SlackWorks",
+      version: "2.3.1",
       downloads: 19230,
       rating: 4.5,
       reviews: 567,
-      price: 'free',
-      tags: ['slack', 'collaboration', 'notifications', 'team'],
+      price: "free",
+      tags: ["slack", "collaboration", "notifications", "team"],
       isVerified: true,
       isFeatured: true,
-      lastUpdated: '2024-01-16',
-      supportLevel: 'community'
+      lastUpdated: "2024-01-16",
+      supportLevel: "community"
     }
   ];
 
   const categories = [
-    { id: 'all', name: 'Todas', count: integrations.length, icon: Globe },
-    { id: 'productivity', name: 'Produtividade', count: integrations.filter(i => i.category === 'productivity').length, icon: Zap },
-    { id: 'communication', name: 'Comunicação', count: integrations.filter(i => i.category === 'communication').length, icon: MessageSquare },
-    { id: 'analytics', name: 'Analytics', count: integrations.filter(i => i.category === 'analytics').length, icon: BarChart3 },
-    { id: 'payment', name: 'Pagamentos', count: integrations.filter(i => i.category === 'payment').length, icon: CreditCard },
-    { id: 'ai', name: 'Inteligência Artificial', count: integrations.filter(i => i.category === 'ai').length, icon: Brain },
-    { id: 'automation', name: 'Automação', count: integrations.filter(i => i.category === 'automation').length, icon: Cpu }
+    { id: "all", name: "Todas", count: integrations.length, icon: Globe },
+    { id: "productivity", name: "Produtividade", count: integrations.filter(i => i.category === "productivity").length, icon: Zap },
+    { id: "communication", name: "Comunicação", count: integrations.filter(i => i.category === "communication").length, icon: MessageSquare },
+    { id: "analytics", name: "Analytics", count: integrations.filter(i => i.category === "analytics").length, icon: BarChart3 },
+    { id: "payment", name: "Pagamentos", count: integrations.filter(i => i.category === "payment").length, icon: CreditCard },
+    { id: "ai", name: "Inteligência Artificial", count: integrations.filter(i => i.category === "ai").length, icon: Brain },
+    { id: "automation", name: "Automação", count: integrations.filter(i => i.category === "automation").length, icon: Cpu }
   ];
 
   const filters = [
-    { value: 'popular', label: 'Mais Populares' },
-    { value: 'newest', label: 'Mais Recentes' },
-    { value: 'rating', label: 'Melhor Avaliados' },
-    { value: 'free', label: 'Gratuitos' },
-    { value: 'premium', label: 'Premium' },
-    { value: 'verified', label: 'Verificados' }
+    { value: "popular", label: "Mais Populares" },
+    { value: "newest", label: "Mais Recentes" },
+    { value: "rating", label: "Melhor Avaliados" },
+    { value: "free", label: "Gratuitos" },
+    { value: "premium", label: "Premium" },
+    { value: "verified", label: "Verificados" }
   ];
 
   const filteredIntegrations = integrations.filter(integration => {
     const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          integration.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          integration.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || integration.category === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   const sortedIntegrations = [...filteredIntegrations].sort((a, b) => {
     switch (selectedFilter) {
-      case 'popular': return b.downloads - a.downloads;
-      case 'newest': return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
-      case 'rating': return b.rating - a.rating;
-      case 'free': return a.price === 'free' ? -1 : 1;
-      case 'premium': return a.price === 'premium' ? -1 : 1;
-      case 'verified': return a.isVerified ? -1 : 1;
-      default: return 0;
+    case "popular": return b.downloads - a.downloads;
+    case "newest": return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
+    case "rating": return b.rating - a.rating;
+    case "free": return a.price === "free" ? -1 : 1;
+    case "premium": return a.price === "premium" ? -1 : 1;
+    case "verified": return a.isVerified ? -1 : 1;
+    default: return 0;
     }
   });
 
@@ -190,23 +190,23 @@ export const IntegrationMarketplace: React.FC = () => {
     }, 2000);
   };
 
-  const getCategoryIcon = (category: IntegrationListing['category']) => {
+  const getCategoryIcon = (category: IntegrationListing["category"]) => {
     const categoryData = categories.find(c => c.id === category);
     const Icon = categoryData?.icon || Globe;
     return <Icon className="w-4 h-4" />;
   };
 
-  const getPriceColor = (price: IntegrationListing['price']) => {
-    return price === 'free' 
-      ? 'bg-success/20 text-success border-success/30'
-      : 'bg-warning/20 text-warning border-warning/30';
+  const getPriceColor = (price: IntegrationListing["price"]) => {
+    return price === "free" 
+      ? "bg-success/20 text-success border-success/30"
+      : "bg-warning/20 text-warning border-warning/30";
   };
 
-  const getSupportColor = (level: IntegrationListing['supportLevel']) => {
+  const getSupportColor = (level: IntegrationListing["supportLevel"]) => {
     switch (level) {
-      case 'enterprise': return 'bg-primary/20 text-primary border-primary/30';
-      case 'developer': return 'bg-accent/20 text-accent border-accent/30';
-      case 'community': return 'bg-muted text-muted-foreground border-border';
+    case "enterprise": return "bg-primary/20 text-primary border-primary/30";
+    case "developer": return "bg-accent/20 text-accent border-accent/30";
+    case "community": return "bg-muted text-muted-foreground border-border";
     }
   };
 
@@ -340,7 +340,7 @@ export const IntegrationMarketplace: React.FC = () => {
                   
                   <div className="flex items-center gap-2">
                     <Badge className={getPriceColor(integration.price)}>
-                      {integration.price === 'free' ? 'Gratuito' : 'Premium'}
+                      {integration.price === "free" ? "Gratuito" : "Premium"}
                     </Badge>
                     <Badge className={getSupportColor(integration.supportLevel)}>
                       {integration.supportLevel}
@@ -449,7 +449,7 @@ export const IntegrationMarketplace: React.FC = () => {
               <p className="text-muted-foreground mb-4">
                 Explore o marketplace e instale integrações para começar.
               </p>
-              <Button onClick={() => setSelectedTab('browse')} className="bg-primary hover:bg-primary/90">
+              <Button onClick={() => setSelectedTab("browse")} className="bg-primary hover:bg-primary/90">
                 <Store className="w-4 h-4 mr-2" />
                 Explorar Marketplace
               </Button>

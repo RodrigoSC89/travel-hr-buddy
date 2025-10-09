@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Upload, 
   FileText, 
@@ -26,8 +26,8 @@ import {
   Users,
   Ship,
   Settings
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ChecklistItem {
   id: string;
@@ -39,17 +39,17 @@ interface ChecklistItem {
   completedBy?: string;
   notes?: string;
   evidenceUrls?: string[];
-  criticality: 'baixa' | 'media' | 'alta' | 'critica';
+  criticality: "baixa" | "media" | "alta" | "critica";
 }
 
 interface Checklist {
   id: string;
   title: string;
-  type: 'dp_dpo' | 'dp_maquinas' | 'rotina_maquinas' | 'rotina_nautica' | 'outro';
+  type: "dp_dpo" | "dp_maquinas" | "rotina_maquinas" | "rotina_nautica" | "outro";
   vessel_id?: string;
   created_by: string;
   created_at: string;
-  status: 'rascunho' | 'em_andamento' | 'concluido' | 'auditado';
+  status: "rascunho" | "em_andamento" | "concluido" | "auditado";
   compliance_score?: number;
   ai_analysis?: any;
   items: ChecklistItem[];
@@ -67,61 +67,61 @@ interface AIAnalysis {
 export const IntelligentChecklistManager: React.FC = () => {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [selectedChecklist, setSelectedChecklist] = useState<Checklist | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
-  const [uploadType, setUploadType] = useState<'pdf' | 'image' | 'manual'>('manual');
+  const [uploadType, setUploadType] = useState<"pdf" | "image" | "manual">("manual");
   const { toast } = useToast();
 
   const mockChecklists: Checklist[] = [
     {
-      id: '1',
-      title: 'DP para DPO - Navio Alpha',
-      type: 'dp_dpo',
-      vessel_id: 'vessel_001',
-      created_by: 'João Silva',
-      created_at: '2024-01-15T10:00:00Z',
-      status: 'concluido',
+      id: "1",
+      title: "DP para DPO - Navio Alpha",
+      type: "dp_dpo",
+      vessel_id: "vessel_001",
+      created_by: "João Silva",
+      created_at: "2024-01-15T10:00:00Z",
+      status: "concluido",
       compliance_score: 87,
       ai_analysis: {
         overall_score: 87,
         issues_found: 3,
         critical_issues: 1,
         recommendations: [
-          'Verificar sistema de alarme no item 15',
-          'Incluir assinatura digital nos documentos',
-          'Adicionar foto do painel de controle'
+          "Verificar sistema de alarme no item 15",
+          "Incluir assinatura digital nos documentos",
+          "Adicionar foto do painel de controle"
         ]
       },
       items: [
         {
-          id: 'item_1',
-          title: 'Verificação do Sistema de Posicionamento Dinâmico',
-          description: 'Verificar funcionamento completo do sistema DP',
+          id: "item_1",
+          title: "Verificação do Sistema de Posicionamento Dinâmico",
+          description: "Verificar funcionamento completo do sistema DP",
           required: true,
           completed: true,
-          completedAt: '2024-01-15T10:30:00Z',
-          completedBy: 'João Silva',
-          notes: 'Sistema funcionando normalmente',
-          criticality: 'critica'
+          completedAt: "2024-01-15T10:30:00Z",
+          completedBy: "João Silva",
+          notes: "Sistema funcionando normalmente",
+          criticality: "critica"
         },
         {
-          id: 'item_2',
-          title: 'Teste de Redundância dos Thrusters',
-          description: 'Verificar operação individual de cada thruster',
+          id: "item_2",
+          title: "Teste de Redundância dos Thrusters",
+          description: "Verificar operação individual de cada thruster",
           required: true,
           completed: true,
-          completedAt: '2024-01-15T11:00:00Z',
-          completedBy: 'João Silva',
-          criticality: 'alta'
+          completedAt: "2024-01-15T11:00:00Z",
+          completedBy: "João Silva",
+          criticality: "alta"
         },
         {
-          id: 'item_3',
-          title: 'Calibração dos Sensores de Referência',
-          description: 'Verificar precisão dos sensores DGPS e gyro',
+          id: "item_3",
+          title: "Calibração dos Sensores de Referência",
+          description: "Verificar precisão dos sensores DGPS e gyro",
           required: true,
           completed: false,
-          criticality: 'media'
+          criticality: "media"
         }
       ]
     }
@@ -133,19 +133,19 @@ export const IntelligentChecklistManager: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'concluido': return 'bg-green-500';
-      case 'em_andamento': return 'bg-blue-500';
-      case 'auditado': return 'bg-purple-500';
-      default: return 'bg-gray-500';
+    case "concluido": return "bg-green-500";
+    case "em_andamento": return "bg-blue-500";
+    case "auditado": return "bg-purple-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getCriticalityColor = (criticality: string) => {
     switch (criticality) {
-      case 'critica': return 'text-red-600 bg-red-50';
-      case 'alta': return 'text-orange-600 bg-orange-50';
-      case 'media': return 'text-yellow-600 bg-yellow-50';
-      default: return 'text-green-600 bg-green-50';
+    case "critica": return "text-red-600 bg-red-50";
+    case "alta": return "text-orange-600 bg-orange-50";
+    case "media": return "text-yellow-600 bg-yellow-50";
+    default: return "text-green-600 bg-green-50";
     }
   };
 
@@ -183,12 +183,12 @@ export const IntelligentChecklistManager: React.FC = () => {
         issues_found: Math.floor(Math.random() * 5) + 1,
         critical_issues: Math.floor(Math.random() * 2),
         recommendations: [
-          'Adicionar evidência fotográfica para itens críticos',
-          'Verificar assinatura digital nos documentos',
-          'Incluir horário preciso nas verificações'
+          "Adicionar evidência fotográfica para itens críticos",
+          "Verificar assinatura digital nos documentos",
+          "Incluir horário preciso nas verificações"
         ],
-        missing_fields: ['Assinatura do responsável', 'Foto do equipamento'],
-        inconsistencies: ['Horário inconsistente no item 3']
+        missing_fields: ["Assinatura do responsável", "Foto do equipamento"],
+        inconsistencies: ["Horário inconsistente no item 3"]
       };
 
       setChecklists(prev => prev.map(checklist => 
@@ -251,7 +251,7 @@ export const IntelligentChecklistManager: React.FC = () => {
                   </SelectContent>
                 </Select>
 
-                {uploadType === 'manual' && (
+                {uploadType === "manual" && (
                   <div className="space-y-3">
                     <Input placeholder="Título do checklist" />
                     <Select>
@@ -269,18 +269,18 @@ export const IntelligentChecklistManager: React.FC = () => {
                   </div>
                 )}
 
-                {(uploadType === 'pdf' || uploadType === 'image') && (
+                {(uploadType === "pdf" || uploadType === "image") && (
                   <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
                     <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                     <p className="text-sm text-muted-foreground">
                       Arraste arquivos aqui ou clique para selecionar
                     </p>
-                    <Input type="file" className="mt-2" accept={uploadType === 'pdf' ? '.pdf' : 'image/*'} />
+                    <Input type="file" className="mt-2" accept={uploadType === "pdf" ? ".pdf" : "image/*"} />
                   </div>
                 )}
 
                 <Button className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Processando...' : 'Criar Checklist'}
+                  {isLoading ? "Processando..." : "Criar Checklist"}
                 </Button>
               </div>
             </DialogContent>
@@ -360,7 +360,7 @@ export const IntelligentChecklistManager: React.FC = () => {
           <div className="grid gap-4">
             {checklists.map((checklist) => (
               <Card key={checklist.id} className="cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => setSelectedChecklist(checklist)}>
+                onClick={() => setSelectedChecklist(checklist)}>
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -379,7 +379,7 @@ export const IntelligentChecklistManager: React.FC = () => {
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <Ship className="h-4 w-4" />
-                          {checklist.vessel_id || 'N/A'}
+                          {checklist.vessel_id || "N/A"}
                         </span>
                         <span className="flex items-center gap-1">
                           <Users className="h-4 w-4" />
@@ -404,10 +404,10 @@ export const IntelligentChecklistManager: React.FC = () => {
 
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                runAIAnalysis(checklist.id);
-                              }}>
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          runAIAnalysis(checklist.id);
+                        }}>
                         <Brain className="h-4 w-4" />
                       </Button>
                       <Button variant="outline" size="sm">
@@ -430,10 +430,10 @@ export const IntelligentChecklistManager: React.FC = () => {
               <CardContent>
                 <div className="space-y-3">
                   {[
-                    { type: 'DP para DPO', score: 92 },
-                    { type: 'Rotina Máquinas', score: 87 },
-                    { type: 'Rotina Náutica', score: 83 },
-                    { type: 'DP para Máquinas', score: 89 }
+                    { type: "DP para DPO", score: 92 },
+                    { type: "Rotina Máquinas", score: 87 },
+                    { type: "Rotina Náutica", score: 83 },
+                    { type: "DP para Máquinas", score: 89 }
                   ].map((item) => (
                     <div key={item.type} className="flex justify-between items-center">
                       <span className="text-sm">{item.type}</span>
@@ -454,10 +454,10 @@ export const IntelligentChecklistManager: React.FC = () => {
               <CardContent>
                 <div className="space-y-3">
                   {[
-                    { type: 'DP para DPO', time: '45 min' },
-                    { type: 'Rotina Máquinas', time: '32 min' },
-                    { type: 'Rotina Náutica', time: '28 min' },
-                    { type: 'DP para Máquinas', time: '38 min' }
+                    { type: "DP para DPO", time: "45 min" },
+                    { type: "Rotina Máquinas", time: "32 min" },
+                    { type: "Rotina Náutica", time: "28 min" },
+                    { type: "DP para Máquinas", time: "38 min" }
                   ].map((item) => (
                     <div key={item.type} className="flex justify-between items-center">
                       <span className="text-sm">{item.type}</span>

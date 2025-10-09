@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   TrendingUp, 
   Users, 
@@ -17,48 +17,48 @@ import {
   PieChart,
   Activity,
   Download
-} from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
+} from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell } from "recharts";
 
 const mockUsageData = [
-  { date: '2024-01-01', users: 15, storage: 2.5, api_calls: 1200 },
-  { date: '2024-01-02', users: 18, storage: 2.8, api_calls: 1400 },
-  { date: '2024-01-03', users: 22, storage: 3.1, api_calls: 1600 },
-  { date: '2024-01-04', users: 25, storage: 3.4, api_calls: 1800 },
-  { date: '2024-01-05', users: 20, storage: 3.2, api_calls: 1500 },
-  { date: '2024-01-06', users: 28, storage: 3.8, api_calls: 2000 },
-  { date: '2024-01-07', users: 32, storage: 4.2, api_calls: 2200 }
+  { date: "2024-01-01", users: 15, storage: 2.5, api_calls: 1200 },
+  { date: "2024-01-02", users: 18, storage: 2.8, api_calls: 1400 },
+  { date: "2024-01-03", users: 22, storage: 3.1, api_calls: 1600 },
+  { date: "2024-01-04", users: 25, storage: 3.4, api_calls: 1800 },
+  { date: "2024-01-05", users: 20, storage: 3.2, api_calls: 1500 },
+  { date: "2024-01-06", users: 28, storage: 3.8, api_calls: 2000 },
+  { date: "2024-01-07", users: 32, storage: 4.2, api_calls: 2200 }
 ];
 
 const mockModuleUsage = [
-  { name: 'PEOTRAM', usage: 85, color: '#3b82f6' },
-  { name: 'Fleet Management', usage: 70, color: '#10b981' },
-  { name: 'HR Dashboard', usage: 60, color: '#f59e0b' },
-  { name: 'Analytics', usage: 45, color: '#ef4444' },
-  { name: 'Communication', usage: 30, color: '#8b5cf6' }
+  { name: "PEOTRAM", usage: 85, color: "#3b82f6" },
+  { name: "Fleet Management", usage: 70, color: "#10b981" },
+  { name: "HR Dashboard", usage: 60, color: "#f59e0b" },
+  { name: "Analytics", usage: 45, color: "#ef4444" },
+  { name: "Communication", usage: 30, color: "#8b5cf6" }
 ];
 
 const mockActivityLog = [
-  { time: '2024-01-07 14:30', user: 'admin@blueshipping.com', action: 'Criou novo audit PEOTRAM', module: 'PEOTRAM' },
-  { time: '2024-01-07 14:15', user: 'captain@blueshipping.com', action: 'Atualizou posição da embarcação', module: 'Fleet' },
-  { time: '2024-01-07 13:45', user: 'hr@blueshipping.com', action: 'Adicionou certificado marítimo', module: 'HR' },
-  { time: '2024-01-07 13:30', user: 'admin@blueshipping.com', action: 'Configurou alertas inteligentes', module: 'Intelligence' },
-  { time: '2024-01-07 12:15', user: 'operator@blueshipping.com', action: 'Concluiu checklist operacional', module: 'Operations' }
+  { time: "2024-01-07 14:30", user: "admin@blueshipping.com", action: "Criou novo audit PEOTRAM", module: "PEOTRAM" },
+  { time: "2024-01-07 14:15", user: "captain@blueshipping.com", action: "Atualizou posição da embarcação", module: "Fleet" },
+  { time: "2024-01-07 13:45", user: "hr@blueshipping.com", action: "Adicionou certificado marítimo", module: "HR" },
+  { time: "2024-01-07 13:30", user: "admin@blueshipping.com", action: "Configurou alertas inteligentes", module: "Intelligence" },
+  { time: "2024-01-07 12:15", user: "operator@blueshipping.com", action: "Concluiu checklist operacional", module: "Operations" }
 ];
 
 export const UsageAnalytics: React.FC = () => {
-  const [timeRange, setTimeRange] = useState('7d');
+  const [timeRange, setTimeRange] = useState("7d");
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' });
+    return new Date(dateStr).toLocaleDateString("pt-BR", { month: "short", day: "numeric" });
   };
 
   const formatTime = (timeStr: string) => {
-    return new Date(timeStr).toLocaleString('pt-BR', { 
-      day: '2-digit', 
-      month: '2-digit', 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(timeStr).toLocaleString("pt-BR", { 
+      day: "2-digit", 
+      month: "2-digit", 
+      hour: "2-digit", 
+      minute: "2-digit" 
     });
   };
 
@@ -209,7 +209,7 @@ export const UsageAnalytics: React.FC = () => {
                     <YAxis />
                     <Tooltip 
                       labelFormatter={(label) => formatDate(label)}
-                      formatter={(value) => [`${value} GB`, 'Armazenamento']}
+                      formatter={(value) => [`${value} GB`, "Armazenamento"]}
                     />
                     <Bar dataKey="storage" fill="#f59e0b" />
                   </BarChart>
@@ -246,7 +246,7 @@ export const UsageAnalytics: React.FC = () => {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip formatter={(value) => [`${value}%`, 'Uso']} />
+                      <Tooltip formatter={(value) => [`${value}%`, "Uso"]} />
                     </RechartsPieChart>
                   </ResponsiveContainer>
                 </div>
@@ -269,7 +269,7 @@ export const UsageAnalytics: React.FC = () => {
                         value={module.usage} 
                         className="h-2"
                         style={{ 
-                          backgroundColor: module.color + '20'
+                          backgroundColor: module.color + "20"
                         }}
                       />
                     </div>

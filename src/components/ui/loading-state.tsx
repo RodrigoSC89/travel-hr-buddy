@@ -9,4 +9,4 @@ export {
   LoadingOverlay,
   type LoadingProps as LoadingStateProps,
   type LoadingOverlayProps
-} from './Loading';
+} from "./Loading";

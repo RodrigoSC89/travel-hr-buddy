@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Shield, 
   CheckCircle2, 
@@ -13,8 +13,8 @@ import {
   Anchor,
   ChevronRight,
   AlertTriangle
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface KPICardProps {
   title: string;
@@ -22,7 +22,7 @@ interface KPICardProps {
   subtitle?: string;
   trend?: string;
   icon: React.ReactNode;
-  color?: 'blue' | 'green' | 'yellow' | 'red' | 'purple';
+  color?: "blue" | "green" | "yellow" | "red" | "purple";
   onClick?: () => void;
   actionLabel?: string;
 }
@@ -33,40 +33,40 @@ const ModernKPICard: React.FC<KPICardProps> = ({
   subtitle,
   trend,
   icon,
-  color = 'blue',
+  color = "blue",
   onClick,
   actionLabel
 }) => {
   const colorClasses = {
     blue: {
-      bg: 'bg-gradient-to-br from-azure-500 to-azure-600',
-      icon: 'bg-azure-100 text-azure-700',
-      text: 'text-azure-600',
-      badge: 'bg-azure-100 text-azure-700 border-azure-200'
+      bg: "bg-gradient-to-br from-azure-500 to-azure-600",
+      icon: "bg-azure-100 text-azure-700",
+      text: "text-azure-600",
+      badge: "bg-azure-100 text-azure-700 border-azure-200"
     },
     green: {
-      bg: 'bg-gradient-to-br from-emerald-500 to-emerald-600',
-      icon: 'bg-emerald-100 text-emerald-700',
-      text: 'text-emerald-600',
-      badge: 'bg-emerald-100 text-emerald-700 border-emerald-200'
+      bg: "bg-gradient-to-br from-emerald-500 to-emerald-600",
+      icon: "bg-emerald-100 text-emerald-700",
+      text: "text-emerald-600",
+      badge: "bg-emerald-100 text-emerald-700 border-emerald-200"
     },
     yellow: {
-      bg: 'bg-gradient-to-br from-amber-500 to-orange-500',
-      icon: 'bg-amber-100 text-amber-700',
-      text: 'text-amber-600',
-      badge: 'bg-amber-100 text-amber-700 border-amber-200'
+      bg: "bg-gradient-to-br from-amber-500 to-orange-500",
+      icon: "bg-amber-100 text-amber-700",
+      text: "text-amber-600",
+      badge: "bg-amber-100 text-amber-700 border-amber-200"
     },
     red: {
-      bg: 'bg-gradient-to-br from-red-500 to-red-600',
-      icon: 'bg-red-100 text-red-700',
-      text: 'text-red-600',
-      badge: 'bg-red-100 text-red-700 border-red-200'
+      bg: "bg-gradient-to-br from-red-500 to-red-600",
+      icon: "bg-red-100 text-red-700",
+      text: "text-red-600",
+      badge: "bg-red-100 text-red-700 border-red-200"
     },
     purple: {
-      bg: 'bg-gradient-to-br from-purple-500 to-purple-600',
-      icon: 'bg-purple-100 text-purple-700',
-      text: 'text-purple-600',
-      badge: 'bg-purple-100 text-purple-700 border-purple-200'
+      bg: "bg-gradient-to-br from-purple-500 to-purple-600",
+      icon: "bg-purple-100 text-purple-700",
+      text: "text-purple-600",
+      badge: "bg-purple-100 text-purple-700 border-purple-200"
     }
   };
 
@@ -112,7 +112,7 @@ const ModernKPICard: React.FC<KPICardProps> = ({
               className={`${classes.text} hover:bg-accent ml-auto`}
               aria-label={actionLabel || `Ver detalhes de ${title}`}
             >
-              {actionLabel || 'Ver mais'}
+              {actionLabel || "Ver mais"}
               <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           )}
@@ -131,64 +131,64 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
 
   const kpis = [
     {
-      title: 'Conformidade PEOTRAM',
-      value: '96.8%',
-      subtitle: 'Última auditoria: 15/09/2025',
-      trend: '+2.3% vs mês anterior',
+      title: "Conformidade PEOTRAM",
+      value: "96.8%",
+      subtitle: "Última auditoria: 15/09/2025",
+      trend: "+2.3% vs mês anterior",
       icon: <Shield className="w-6 h-6 text-white" />,
-      color: 'green' as const,
-      onClick: () => navigate('/peotram'),
-      actionLabel: 'Ver PEOTRAM'
+      color: "green" as const,
+      onClick: () => navigate("/peotram"),
+      actionLabel: "Ver PEOTRAM"
     },
     {
-      title: 'Tripulação Ativa',
-      value: '247',
-      subtitle: '12 embarcações em operação',
-      trend: '98% certificados válidos',
+      title: "Tripulação Ativa",
+      value: "247",
+      subtitle: "12 embarcações em operação",
+      trend: "98% certificados válidos",
       icon: <Users className="w-6 h-6 text-white" />,
-      color: 'blue' as const,
-      onClick: () => navigate('/maritime'),
-      actionLabel: 'Ver Frota'
+      color: "blue" as const,
+      onClick: () => navigate("/maritime"),
+      actionLabel: "Ver Frota"
     },
     {
-      title: 'Certificações',
-      value: '28',
-      subtitle: 'Vencendo em 30 dias',
-      trend: 'Ação necessária',
+      title: "Certificações",
+      value: "28",
+      subtitle: "Vencendo em 30 dias",
+      trend: "Ação necessária",
       icon: <AlertTriangle className="w-6 h-6 text-white" />,
-      color: 'yellow' as const,
-      onClick: () => navigate('/maritime-certifications'),
-      actionLabel: 'Verificar'
+      color: "yellow" as const,
+      onClick: () => navigate("/maritime-certifications"),
+      actionLabel: "Verificar"
     },
     {
-      title: 'Eficiência Operacional',
-      value: '94.2%',
-      subtitle: 'Média dos últimos 30 dias',
-      trend: '+1.8% vs período anterior',
+      title: "Eficiência Operacional",
+      value: "94.2%",
+      subtitle: "Média dos últimos 30 dias",
+      trend: "+1.8% vs período anterior",
       icon: <TrendingUp className="w-6 h-6 text-white" />,
-      color: 'purple' as const,
-      onClick: () => navigate('/analytics'),
-      actionLabel: 'Analytics'
+      color: "purple" as const,
+      onClick: () => navigate("/analytics"),
+      actionLabel: "Analytics"
     },
     {
-      title: 'Tempo Médio de Resposta',
-      value: '4.2h',
-      subtitle: 'Resolução de incidentes',
-      trend: '-15 min vs média',
+      title: "Tempo Médio de Resposta",
+      value: "4.2h",
+      subtitle: "Resolução de incidentes",
+      trend: "-15 min vs média",
       icon: <Clock className="w-6 h-6 text-white" />,
-      color: 'green' as const,
-      onClick: () => navigate('/system-monitor'),
-      actionLabel: 'Monitor'
+      color: "green" as const,
+      onClick: () => navigate("/system-monitor"),
+      actionLabel: "Monitor"
     },
     {
-      title: 'Disponibilidade da Frota',
-      value: '92%',
-      subtitle: '11 de 12 embarcações ativas',
-      trend: 'Dentro da meta (>90%)',
+      title: "Disponibilidade da Frota",
+      value: "92%",
+      subtitle: "11 de 12 embarcações ativas",
+      trend: "Dentro da meta (>90%)",
       icon: <Anchor className="w-6 h-6 text-white" />,
-      color: 'blue' as const,
-      onClick: () => navigate('/fleet-dashboard'),
-      actionLabel: 'Frota'
+      color: "blue" as const,
+      onClick: () => navigate("/fleet-dashboard"),
+      actionLabel: "Frota"
     }
   ];
 

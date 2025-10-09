@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Shield, 
   Ship, 
@@ -23,21 +23,21 @@ import {
   Download,
   Info,
   Settings
-} from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+} from "lucide-react";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface PerformanceIndicator {
   id: string;
   name: string;
   description: string;
-  category: 'safety' | 'availability' | 'innovation' | 'certification' | 'supplier';
+  category: "safety" | "availability" | "innovation" | "certification" | "supplier";
   currentValue: number;
   target: number;
   unit: string;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   trendValue: number;
-  status: 'excellent' | 'good' | 'warning' | 'critical';
+  status: "excellent" | "good" | "warning" | "critical";
   lastUpdated: string;
   benchmark: number;
   historicalData: { period: string; value: number }[];
@@ -57,103 +57,103 @@ interface SupplierPerformance {
   };
   contractValue: number;
   lastEvaluation: string;
-  status: 'excellent' | 'good' | 'warning' | 'critical';
+  status: "excellent" | "good" | "warning" | "critical";
   improvements: string[];
   risks: string[];
 }
 
 const PERFORMANCE_INDICATORS: PerformanceIndicator[] = [
   {
-    id: 'TASO',
-    name: 'TASO',
-    description: 'Taxa de Acidentes de Segurança Operacional',
-    category: 'safety',
+    id: "TASO",
+    name: "TASO",
+    description: "Taxa de Acidentes de Segurança Operacional",
+    category: "safety",
     currentValue: 0.12,
     target: 0.15,
-    unit: 'acidentes/milhão HH',
-    trend: 'down',
+    unit: "acidentes/milhão HH",
+    trend: "down",
     trendValue: -15.2,
-    status: 'good',
-    lastUpdated: '2024-12-15',
+    status: "good",
+    lastUpdated: "2024-12-15",
     benchmark: 0.18,
     historicalData: [
-      { period: 'Jan', value: 0.18 },
-      { period: 'Fev', value: 0.16 },
-      { period: 'Mar', value: 0.14 },
-      { period: 'Abr', value: 0.13 },
-      { period: 'Mai', value: 0.15 },
-      { period: 'Jun', value: 0.12 },
-      { period: 'Jul', value: 0.11 },
-      { period: 'Ago', value: 0.13 },
-      { period: 'Set', value: 0.12 },
-      { period: 'Out', value: 0.10 },
-      { period: 'Nov', value: 0.11 },
-      { period: 'Dez', value: 0.12 }
+      { period: "Jan", value: 0.18 },
+      { period: "Fev", value: 0.16 },
+      { period: "Mar", value: 0.14 },
+      { period: "Abr", value: 0.13 },
+      { period: "Mai", value: 0.15 },
+      { period: "Jun", value: 0.12 },
+      { period: "Jul", value: 0.11 },
+      { period: "Ago", value: 0.13 },
+      { period: "Set", value: 0.12 },
+      { period: "Out", value: 0.10 },
+      { period: "Nov", value: 0.11 },
+      { period: "Dez", value: 0.12 }
     ]
   },
   {
-    id: 'IDEMB',
-    name: 'IDEMB',
-    description: 'Índice de Disponibilidade de Embarcação',
-    category: 'availability',
+    id: "IDEMB",
+    name: "IDEMB",
+    description: "Índice de Disponibilidade de Embarcação",
+    category: "availability",
     currentValue: 94.7,
     target: 95.0,
-    unit: '%',
-    trend: 'up',
+    unit: "%",
+    trend: "up",
     trendValue: 2.3,
-    status: 'warning',
-    lastUpdated: '2024-12-15',
+    status: "warning",
+    lastUpdated: "2024-12-15",
     benchmark: 92.0,
     historicalData: [
-      { period: 'Jan', value: 91.2 },
-      { period: 'Fev', value: 92.1 },
-      { period: 'Mar', value: 93.4 },
-      { period: 'Abr', value: 94.1 },
-      { period: 'Mai', value: 93.8 },
-      { period: 'Jun', value: 94.5 },
-      { period: 'Jul', value: 95.2 },
-      { period: 'Ago', value: 94.9 },
-      { period: 'Set', value: 94.3 },
-      { period: 'Out', value: 95.1 },
-      { period: 'Nov', value: 94.8 },
-      { period: 'Dez', value: 94.7 }
+      { period: "Jan", value: 91.2 },
+      { period: "Fev", value: 92.1 },
+      { period: "Mar", value: 93.4 },
+      { period: "Abr", value: 94.1 },
+      { period: "Mai", value: 93.8 },
+      { period: "Jun", value: 94.5 },
+      { period: "Jul", value: 95.2 },
+      { period: "Ago", value: 94.9 },
+      { period: "Set", value: 94.3 },
+      { period: "Out", value: 95.1 },
+      { period: "Nov", value: 94.8 },
+      { period: "Dez", value: 94.7 }
     ]
   },
   {
-    id: 'INNOVATION',
-    name: 'Índice de Inovação',
-    description: 'Pontuação de iniciativas de inovação implementadas',
-    category: 'innovation',
+    id: "INNOVATION",
+    name: "Índice de Inovação",
+    description: "Pontuação de iniciativas de inovação implementadas",
+    category: "innovation",
     currentValue: 78.5,
     target: 80.0,
-    unit: 'pontos',
-    trend: 'up',
+    unit: "pontos",
+    trend: "up",
     trendValue: 5.8,
-    status: 'good',
-    lastUpdated: '2024-12-15',
+    status: "good",
+    lastUpdated: "2024-12-15",
     benchmark: 75.0,
     historicalData: [
-      { period: 'Jan', value: 70.2 },
-      { period: 'Fev', value: 71.5 },
-      { period: 'Mar', value: 73.1 },
-      { period: 'Abr', value: 74.8 },
-      { period: 'Mai', value: 75.2 },
-      { period: 'Jun', value: 76.1 },
-      { period: 'Jul', value: 77.3 },
-      { period: 'Ago', value: 77.8 },
-      { period: 'Set', value: 78.1 },
-      { period: 'Out', value: 78.9 },
-      { period: 'Nov', value: 78.2 },
-      { period: 'Dez', value: 78.5 }
+      { period: "Jan", value: 70.2 },
+      { period: "Fev", value: 71.5 },
+      { period: "Mar", value: 73.1 },
+      { period: "Abr", value: 74.8 },
+      { period: "Mai", value: 75.2 },
+      { period: "Jun", value: 76.1 },
+      { period: "Jul", value: 77.3 },
+      { period: "Ago", value: 77.8 },
+      { period: "Set", value: 78.1 },
+      { period: "Out", value: 78.9 },
+      { period: "Nov", value: 78.2 },
+      { period: "Dez", value: 78.5 }
     ]
   }
 ];
 
 const SUPPLIER_PERFORMANCE: SupplierPerformance[] = [
   {
-    id: 'SUPP_001',
-    name: 'Fornecedor Alpha Marine',
-    category: 'Serviços de Manutenção',
+    id: "SUPP_001",
+    name: "Fornecedor Alpha Marine",
+    category: "Serviços de Manutenção",
     overallScore: 87.3,
     indicators: {
       safety: 92,
@@ -163,15 +163,15 @@ const SUPPLIER_PERFORMANCE: SupplierPerformance[] = [
       innovation: 89
     },
     contractValue: 2500000,
-    lastEvaluation: '2024-12-01',
-    status: 'good',
-    improvements: ['Redução de 15% no tempo de manutenção', 'Implementação de IoT'],
-    risks: ['Dependência excessiva', 'Capacidade limitada para expansão']
+    lastEvaluation: "2024-12-01",
+    status: "good",
+    improvements: ["Redução de 15% no tempo de manutenção", "Implementação de IoT"],
+    risks: ["Dependência excessiva", "Capacidade limitada para expansão"]
   },
   {
-    id: 'SUPP_002',
-    name: 'Beta Logistics Corp',
-    category: 'Logística e Suprimentos',
+    id: "SUPP_002",
+    name: "Beta Logistics Corp",
+    category: "Logística e Suprimentos",
     overallScore: 91.7,
     indicators: {
       safety: 95,
@@ -181,61 +181,61 @@ const SUPPLIER_PERFORMANCE: SupplierPerformance[] = [
       innovation: 92
     },
     contractValue: 1800000,
-    lastEvaluation: '2024-11-28',
-    status: 'excellent',
-    improvements: ['Sistema de rastreamento em tempo real', 'Redução de 20% nos custos'],
-    risks: ['Exposição cambial', 'Dependência de terceiros']
+    lastEvaluation: "2024-11-28",
+    status: "excellent",
+    improvements: ["Sistema de rastreamento em tempo real", "Redução de 20% nos custos"],
+    risks: ["Exposição cambial", "Dependência de terceiros"]
   }
 ];
 
 export const PeotramPerformanceIndicators: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('2024');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedPeriod, setSelectedPeriod] = useState("2024");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [indicators] = useState<PerformanceIndicator[]>(PERFORMANCE_INDICATORS);
   const [suppliers] = useState<SupplierPerformance[]>(SUPPLIER_PERFORMANCE);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'excellent': return 'hsl(var(--success))';
-      case 'good': return 'hsl(var(--info))';
-      case 'warning': return 'hsl(var(--warning))';
-      case 'critical': return 'hsl(var(--destructive))';
-      default: return 'hsl(var(--muted))';
+    case "excellent": return "hsl(var(--success))";
+    case "good": return "hsl(var(--info))";
+    case "warning": return "hsl(var(--warning))";
+    case "critical": return "hsl(var(--destructive))";
+    default: return "hsl(var(--muted))";
     }
   };
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-      case 'excellent': return 'bg-success/20 text-success border-success/30';
-      case 'good': return 'bg-info/20 text-info border-info/30';
-      case 'warning': return 'bg-warning/20 text-warning border-warning/30';
-      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "excellent": return "bg-success/20 text-success border-success/30";
+    case "good": return "bg-info/20 text-info border-info/30";
+    case "warning": return "bg-warning/20 text-warning border-warning/30";
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="w-4 h-4 text-success" />;
-      case 'down': return <TrendingDown className="w-4 h-4 text-destructive" />;
-      default: return <BarChart3 className="w-4 h-4 text-muted-foreground" />;
+    case "up": return <TrendingUp className="w-4 h-4 text-success" />;
+    case "down": return <TrendingDown className="w-4 h-4 text-destructive" />;
+    default: return <BarChart3 className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'safety': return Shield;
-      case 'availability': return Ship;
-      case 'innovation': return Zap;
-      case 'certification': return Award;
-      case 'supplier': return Users;
-      default: return BarChart3;
+    case "safety": return Shield;
+    case "availability": return Ship;
+    case "innovation": return Zap;
+    case "certification": return Award;
+    case "supplier": return Users;
+    default: return BarChart3;
     }
   };
 
   const formatNumber = (value: number, unit: string) => {
-    if (unit === '%') return `${value.toFixed(1)}%`;
-    if (unit === 'pontos') return `${value.toFixed(1)} pts`;
+    if (unit === "%") return `${value.toFixed(1)}%`;
+    if (unit === "pontos") return `${value.toFixed(1)} pts`;
     return `${value.toFixed(2)} ${unit}`;
   };
 
@@ -284,7 +284,7 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                     <CardHeader className="pb-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg" style={{ backgroundColor: getStatusColor(indicator.status) + '20' }}>
+                          <div className="p-2 rounded-lg" style={{ backgroundColor: getStatusColor(indicator.status) + "20" }}>
                             <CategoryIcon className="w-5 h-5" style={{ color: getStatusColor(indicator.status) }} />
                           </div>
                           <div>
@@ -295,9 +295,9 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                           </div>
                         </div>
                         <Badge variant="outline" className={getStatusBadgeColor(indicator.status)}>
-                          {indicator.status === 'excellent' ? 'Excelente' :
-                           indicator.status === 'good' ? 'Bom' :
-                           indicator.status === 'warning' ? 'Atenção' : 'Crítico'}
+                          {indicator.status === "excellent" ? "Excelente" :
+                            indicator.status === "good" ? "Bom" :
+                              indicator.status === "warning" ? "Atenção" : "Crítico"}
                         </Badge>
                       </div>
                     </CardHeader>
@@ -310,9 +310,9 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                           </div>
                           <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             {getTrendIcon(indicator.trend)}
-                            <span className={indicator.trend === 'up' ? 'text-success' : 
-                                           indicator.trend === 'down' ? 'text-destructive' : 'text-muted-foreground'}>
-                              {indicator.trend === 'up' ? '+' : indicator.trend === 'down' ? '' : ''}
+                            <span className={indicator.trend === "up" ? "text-success" : 
+                              indicator.trend === "down" ? "text-destructive" : "text-muted-foreground"}>
+                              {indicator.trend === "up" ? "+" : indicator.trend === "down" ? "" : ""}
                               {indicator.trendValue.toFixed(1)}%
                             </span>
                           </div>
@@ -341,7 +341,7 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                         </div>
                         <div className="flex justify-between text-xs text-muted-foreground">
                           <span>Última atualização:</span>
-                          <span>{new Date(indicator.lastUpdated).toLocaleDateString('pt-BR')}</span>
+                          <span>{new Date(indicator.lastUpdated).toLocaleDateString("pt-BR")}</span>
                         </div>
                       </div>
 
@@ -416,9 +416,9 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                       <YAxis stroke="hsl(var(--muted-foreground))" />
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: 'hsl(var(--card))', 
-                          border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px'
+                          backgroundColor: "hsl(var(--card))", 
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "8px"
                         }} 
                       />
                       {indicators.map((indicator, index) => (
@@ -454,9 +454,9 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                           {supplier.overallScore.toFixed(1)}
                         </div>
                         <Badge variant="outline" className={getStatusBadgeColor(supplier.status)}>
-                          {supplier.status === 'excellent' ? 'Excelente' :
-                           supplier.status === 'good' ? 'Bom' :
-                           supplier.status === 'warning' ? 'Atenção' : 'Crítico'}
+                          {supplier.status === "excellent" ? "Excelente" :
+                            supplier.status === "good" ? "Bom" :
+                              supplier.status === "warning" ? "Atenção" : "Crítico"}
                         </Badge>
                       </div>
                     </div>
@@ -467,10 +467,10 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                       {Object.entries(supplier.indicators).map(([key, value]) => (
                         <div key={key} className="flex items-center justify-between">
                           <span className="text-sm capitalize">
-                            {key === 'safety' ? 'Segurança' :
-                             key === 'quality' ? 'Qualidade' :
-                             key === 'delivery' ? 'Entrega' :
-                             key === 'cost' ? 'Custo' : 'Inovação'}
+                            {key === "safety" ? "Segurança" :
+                              key === "quality" ? "Qualidade" :
+                                key === "delivery" ? "Entrega" :
+                                  key === "cost" ? "Custo" : "Inovação"}
                           </span>
                           <div className="flex items-center gap-2">
                             <Progress value={value} className="w-16 h-2" />
@@ -484,12 +484,12 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                       <div className="flex justify-between text-sm text-muted-foreground mb-2">
                         <span>Valor do Contrato:</span>
                         <span className="font-medium">
-                          R$ {supplier.contractValue.toLocaleString('pt-BR')}
+                          R$ {supplier.contractValue.toLocaleString("pt-BR")}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm text-muted-foreground">
                         <span>Última Avaliação:</span>
-                        <span>{new Date(supplier.lastEvaluation).toLocaleDateString('pt-BR')}</span>
+                        <span>{new Date(supplier.lastEvaluation).toLocaleDateString("pt-BR")}</span>
                       </div>
                     </div>
 

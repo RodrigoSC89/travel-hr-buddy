@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Navigation, 
   TrendingDown, 
@@ -24,8 +24,8 @@ import {
   Target,
   BarChart3,
   Calendar
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface RouteOptimization {
   id: string;
@@ -39,8 +39,8 @@ interface RouteOptimization {
   costSavings: number;
   weatherConditions: string[];
   currentConditions: string[];
-  trafficLevel: 'low' | 'medium' | 'high';
-  recommendation: 'optimal' | 'good' | 'acceptable' | 'avoid';
+  trafficLevel: "low" | "medium" | "high";
+  recommendation: "optimal" | "good" | "acceptable" | "avoid";
   confidence: number;
 }
 
@@ -52,7 +52,7 @@ interface WeatherForecast {
   precipitation: number;
   visibility: number;
   conditions: string;
-  severity: 'calm' | 'moderate' | 'rough' | 'severe';
+  severity: "calm" | "moderate" | "rough" | "severe";
 }
 
 export const NeuralRouteOptimizer: React.FC = () => {
@@ -64,51 +64,51 @@ export const NeuralRouteOptimizer: React.FC = () => {
 
   const [routes] = useState<RouteOptimization[]>([
     {
-      id: 'route1',
-      from: 'Santos, Brasil',
-      to: 'Rotterdam, Holanda',
+      id: "route1",
+      from: "Santos, Brasil",
+      to: "Rotterdam, Holanda",
       distance: 5890,
       estimatedTime: 16.5,
       fuelConsumption: 1850,
       fuelSavings: 30,
       timeSavings: 25,
       costSavings: 125000,
-      weatherConditions: ['Bom tempo', 'Ventos favoráveis', 'Mar calmo'],
-      currentConditions: ['Corrente favorável 2.5kt', 'Temperatura ideal'],
-      trafficLevel: 'low',
-      recommendation: 'optimal',
+      weatherConditions: ["Bom tempo", "Ventos favoráveis", "Mar calmo"],
+      currentConditions: ["Corrente favorável 2.5kt", "Temperatura ideal"],
+      trafficLevel: "low",
+      recommendation: "optimal",
       confidence: 98
     },
     {
-      id: 'route2',
-      from: 'Santos, Brasil',
-      to: 'Rotterdam, Holanda',
+      id: "route2",
+      from: "Santos, Brasil",
+      to: "Rotterdam, Holanda",
       distance: 6120,
       estimatedTime: 18.2,
       fuelConsumption: 2100,
       fuelSavings: 15,
       timeSavings: 10,
       costSavings: 65000,
-      weatherConditions: ['Ventos moderados', 'Chuva leve'],
-      currentConditions: ['Corrente neutra', 'Tráfego moderado'],
-      trafficLevel: 'medium',
-      recommendation: 'good',
+      weatherConditions: ["Ventos moderados", "Chuva leve"],
+      currentConditions: ["Corrente neutra", "Tráfego moderado"],
+      trafficLevel: "medium",
+      recommendation: "good",
       confidence: 85
     },
     {
-      id: 'route3',
-      from: 'Santos, Brasil',
-      to: 'Rotterdam, Holanda',
+      id: "route3",
+      from: "Santos, Brasil",
+      to: "Rotterdam, Holanda",
       distance: 5750,
       estimatedTime: 17.8,
       fuelConsumption: 2250,
       fuelSavings: 5,
       timeSavings: 5,
       costSavings: 25000,
-      weatherConditions: ['Mar agitado previsto', 'Tempestade possível'],
-      currentConditions: ['Corrente contrária 1.5kt', 'Zona de alta densidade'],
-      trafficLevel: 'high',
-      recommendation: 'acceptable',
+      weatherConditions: ["Mar agitado previsto", "Tempestade possível"],
+      currentConditions: ["Corrente contrária 1.5kt", "Zona de alta densidade"],
+      trafficLevel: "high",
+      recommendation: "acceptable",
       confidence: 72
     }
   ]);
@@ -132,8 +132,8 @@ export const NeuralRouteOptimizer: React.FC = () => {
         temperature: 18 + Math.random() * 10,
         precipitation: Math.random() * 100,
         visibility: 5 + Math.random() * 10,
-        conditions: i % 3 === 0 ? 'Ensolarado' : i % 3 === 1 ? 'Parcialmente nublado' : 'Nublado',
-        severity: i % 4 === 0 ? 'calm' : i % 4 === 1 ? 'moderate' : i % 4 === 2 ? 'rough' : 'moderate'
+        conditions: i % 3 === 0 ? "Ensolarado" : i % 3 === 1 ? "Parcialmente nublado" : "Nublado",
+        severity: i % 4 === 0 ? "calm" : i % 4 === 1 ? "moderate" : i % 4 === 2 ? "rough" : "moderate"
       });
     }
 
@@ -161,29 +161,29 @@ export const NeuralRouteOptimizer: React.FC = () => {
     }, 200);
   };
 
-  const getRecommendationColor = (rec: RouteOptimization['recommendation']) => {
+  const getRecommendationColor = (rec: RouteOptimization["recommendation"]) => {
     switch (rec) {
-      case 'optimal': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-      case 'good': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300';
-      case 'acceptable': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      case 'avoid': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
+    case "optimal": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "good": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+    case "acceptable": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "avoid": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
     }
   };
 
-  const getTrafficColor = (level: RouteOptimization['trafficLevel']) => {
+  const getTrafficColor = (level: RouteOptimization["trafficLevel"]) => {
     switch (level) {
-      case 'low': return 'text-green-600 dark:text-green-400';
-      case 'medium': return 'text-yellow-600 dark:text-yellow-400';
-      case 'high': return 'text-red-600 dark:text-red-400';
+    case "low": return "text-green-600 dark:text-green-400";
+    case "medium": return "text-yellow-600 dark:text-yellow-400";
+    case "high": return "text-red-600 dark:text-red-400";
     }
   };
 
-  const getSeverityColor = (severity: WeatherForecast['severity']) => {
+  const getSeverityColor = (severity: WeatherForecast["severity"]) => {
     switch (severity) {
-      case 'calm': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-      case 'moderate': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300';
-      case 'rough': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      case 'severe': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
+    case "calm": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "moderate": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+    case "rough": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "severe": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
     }
   };
 
@@ -217,7 +217,7 @@ export const NeuralRouteOptimizer: React.FC = () => {
               className="bg-white text-cyan-600 hover:bg-white/90"
             >
               <Brain className="h-5 w-5 mr-2" />
-              {isOptimizing ? 'Otimizando...' : 'Otimizar Rota'}
+              {isOptimizing ? "Otimizando..." : "Otimizar Rota"}
             </Button>
           </div>
         </CardHeader>
@@ -236,19 +236,19 @@ export const NeuralRouteOptimizer: React.FC = () => {
             <Progress value={optimizationProgress} className="h-2" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="flex items-center gap-2">
-                <Cloud className={optimizationProgress > 25 ? 'text-green-500' : 'text-muted-foreground'} />
+                <Cloud className={optimizationProgress > 25 ? "text-green-500" : "text-muted-foreground"} />
                 <span className="text-sm">Dados meteorológicos</span>
               </div>
               <div className="flex items-center gap-2">
-                <Waves className={optimizationProgress > 50 ? 'text-green-500' : 'text-muted-foreground'} />
+                <Waves className={optimizationProgress > 50 ? "text-green-500" : "text-muted-foreground"} />
                 <span className="text-sm">Análise de correntes</span>
               </div>
               <div className="flex items-center gap-2">
-                <Ship className={optimizationProgress > 75 ? 'text-green-500' : 'text-muted-foreground'} />
+                <Ship className={optimizationProgress > 75 ? "text-green-500" : "text-muted-foreground"} />
                 <span className="text-sm">Tráfego marítimo</span>
               </div>
               <div className="flex items-center gap-2">
-                <Fuel className={optimizationProgress === 100 ? 'text-green-500' : 'text-muted-foreground'} />
+                <Fuel className={optimizationProgress === 100 ? "text-green-500" : "text-muted-foreground"} />
                 <span className="text-sm">Otimização combustível</span>
               </div>
             </div>
@@ -272,7 +272,7 @@ export const NeuralRouteOptimizer: React.FC = () => {
                 <Card 
                   key={route.id} 
                   className={`cursor-pointer transition-all ${
-                    selectedRoute?.id === route.id ? 'border-primary border-2' : 'hover:border-primary/50'
+                    selectedRoute?.id === route.id ? "border-primary border-2" : "hover:border-primary/50"
                   }`}
                   onClick={() => setSelectedRoute(route)}
                 >
@@ -283,9 +283,9 @@ export const NeuralRouteOptimizer: React.FC = () => {
                           <Ship className="h-5 w-5 text-primary" />
                           <span className="font-semibold">{route.from} → {route.to}</span>
                           <Badge className={getRecommendationColor(route.recommendation)}>
-                            {route.recommendation === 'optimal' ? '⭐ ÓTIMA' : 
-                             route.recommendation === 'good' ? '✅ BOA' : 
-                             route.recommendation === 'acceptable' ? '⚠️ ACEITÁVEL' : '❌ EVITAR'}
+                            {route.recommendation === "optimal" ? "⭐ ÓTIMA" : 
+                              route.recommendation === "good" ? "✅ BOA" : 
+                                route.recommendation === "acceptable" ? "⚠️ ACEITÁVEL" : "❌ EVITAR"}
                           </Badge>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
@@ -362,8 +362,8 @@ export const NeuralRouteOptimizer: React.FC = () => {
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-medium text-muted-foreground">Tráfego:</span>
                         <Badge className={`text-xs ${getTrafficColor(route.trafficLevel)}`}>
-                          {route.trafficLevel === 'low' ? '🟢 Baixo' : 
-                           route.trafficLevel === 'medium' ? '🟡 Médio' : '🔴 Alto'}
+                          {route.trafficLevel === "low" ? "🟢 Baixo" : 
+                            route.trafficLevel === "medium" ? "🟡 Médio" : "🔴 Alto"}
                         </Badge>
                       </div>
                     </div>
@@ -391,15 +391,15 @@ export const NeuralRouteOptimizer: React.FC = () => {
                 <div key={idx} className="p-3 border rounded-lg space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-sm">
-                      {forecast.date.toLocaleDateString('pt-BR', { 
-                        day: '2-digit', 
-                        month: 'short' 
+                      {forecast.date.toLocaleDateString("pt-BR", { 
+                        day: "2-digit", 
+                        month: "short" 
                       })}
                     </span>
                     <Badge className={getSeverityColor(forecast.severity)}>
-                      {forecast.severity === 'calm' ? '🌊 Calmo' : 
-                       forecast.severity === 'moderate' ? '🌊 Moderado' : 
-                       forecast.severity === 'rough' ? '🌊 Agitado' : '⚠️ Severo'}
+                      {forecast.severity === "calm" ? "🌊 Calmo" : 
+                        forecast.severity === "moderate" ? "🌊 Moderado" : 
+                          forecast.severity === "rough" ? "🌊 Agitado" : "⚠️ Severo"}
                     </Badge>
                   </div>
                   <div className="text-xs text-muted-foreground">{forecast.conditions}</div>

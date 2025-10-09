@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Activity, 
   Clock, 
@@ -18,67 +18,67 @@ import {
   Zap,
   Eye,
   RefreshCw
-} from 'lucide-react';
+} from "lucide-react";
 
 export const ContinuousTestingMonitoring: React.FC = () => {
   const [testResults] = useState([
     {
-      id: '1',
-      name: 'Teste de Backup Semanal',
-      type: 'backup_integrity',
-      status: 'passed',
-      lastRun: '2024-01-14 03:00:00',
-      duration: '2h 15min',
-      nextRun: '2024-01-21 03:00:00',
-      frequency: 'semanal',
+      id: "1",
+      name: "Teste de Backup Semanal",
+      type: "backup_integrity",
+      status: "passed",
+      lastRun: "2024-01-14 03:00:00",
+      duration: "2h 15min",
+      nextRun: "2024-01-21 03:00:00",
+      frequency: "semanal",
       successRate: 98.5,
       criticalPath: true
     },
     {
-      id: '2',
-      name: 'Simulação de Failover',
-      type: 'disaster_recovery',
-      status: 'warning',
-      lastRun: '2024-01-10 14:30:00',
-      duration: '45min',
-      nextRun: '2024-01-20 14:30:00',
-      frequency: 'quinzenal',
+      id: "2",
+      name: "Simulação de Failover",
+      type: "disaster_recovery",
+      status: "warning",
+      lastRun: "2024-01-10 14:30:00",
+      duration: "45min",
+      nextRun: "2024-01-20 14:30:00",
+      frequency: "quinzenal",
       successRate: 95.2,
       criticalPath: true
     },
     {
-      id: '3',
-      name: 'Teste de Recuperação Parcial',
-      type: 'data_recovery',
-      status: 'passed',
-      lastRun: '2024-01-12 10:15:00',
-      duration: '23min',
-      nextRun: '2024-01-26 10:15:00',
-      frequency: 'quinzenal',
+      id: "3",
+      name: "Teste de Recuperação Parcial",
+      type: "data_recovery",
+      status: "passed",
+      lastRun: "2024-01-12 10:15:00",
+      duration: "23min",
+      nextRun: "2024-01-26 10:15:00",
+      frequency: "quinzenal",
       successRate: 99.1,
       criticalPath: false
     },
     {
-      id: '4',
-      name: 'Teste de Segurança',
-      type: 'security_audit',
-      status: 'failed',
-      lastRun: '2024-01-11 16:00:00',
-      duration: '1h 30min',
-      nextRun: '2024-01-18 16:00:00',
-      frequency: 'semanal',
+      id: "4",
+      name: "Teste de Segurança",
+      type: "security_audit",
+      status: "failed",
+      lastRun: "2024-01-11 16:00:00",
+      duration: "1h 30min",
+      nextRun: "2024-01-18 16:00:00",
+      frequency: "semanal",
       successRate: 87.3,
       criticalPath: true
     },
     {
-      id: '5',
-      name: 'Teste de Carga do Sistema',
-      type: 'performance',
-      status: 'passed',
-      lastRun: '2024-01-13 20:00:00',
-      duration: '3h 45min',
-      nextRun: '2024-01-27 20:00:00',
-      frequency: 'quinzenal',
+      id: "5",
+      name: "Teste de Carga do Sistema",
+      type: "performance",
+      status: "passed",
+      lastRun: "2024-01-13 20:00:00",
+      duration: "3h 45min",
+      nextRun: "2024-01-27 20:00:00",
+      frequency: "quinzenal",
       successRate: 92.8,
       criticalPath: false
     }
@@ -86,30 +86,30 @@ export const ContinuousTestingMonitoring: React.FC = () => {
 
   const [monitoringAlerts] = useState([
     {
-      id: '1',
-      type: 'critical',
-      title: 'Teste de Segurança Falhou',
-      description: 'Vulnerabilidades detectadas no último teste de penetração',
-      timestamp: '2024-01-11 16:45:00',
-      component: 'Security Test',
+      id: "1",
+      type: "critical",
+      title: "Teste de Segurança Falhou",
+      description: "Vulnerabilidades detectadas no último teste de penetração",
+      timestamp: "2024-01-11 16:45:00",
+      component: "Security Test",
       action_required: true
     },
     {
-      id: '2',
-      type: 'warning',
-      title: 'Failover com Atraso',
-      description: 'Tempo de failover excedeu o limite de 30 segundos (45s)',
-      timestamp: '2024-01-10 14:32:00',
-      component: 'Disaster Recovery',
+      id: "2",
+      type: "warning",
+      title: "Failover com Atraso",
+      description: "Tempo de failover excedeu o limite de 30 segundos (45s)",
+      timestamp: "2024-01-10 14:32:00",
+      component: "Disaster Recovery",
       action_required: false
     },
     {
-      id: '3',
-      type: 'info',
-      title: 'Backup Concluído com Sucesso',
-      description: 'Backup completo realizado sem erros',
-      timestamp: '2024-01-14 05:15:00',
-      component: 'Backup System',
+      id: "3",
+      type: "info",
+      title: "Backup Concluído com Sucesso",
+      description: "Backup completo realizado sem erros",
+      timestamp: "2024-01-14 05:15:00",
+      component: "Backup System",
       action_required: false
     }
   ]);
@@ -125,39 +125,39 @@ export const ContinuousTestingMonitoring: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'passed': return 'text-green-500';
-      case 'warning': return 'text-yellow-500';
-      case 'failed': return 'text-red-500';
-      default: return 'text-muted-foreground';
+    case "passed": return "text-green-500";
+    case "warning": return "text-yellow-500";
+    case "failed": return "text-red-500";
+    default: return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'passed': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-      case 'warning': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      case 'failed': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300';
+    case "passed": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "warning": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "failed": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getAlertColor = (type: string) => {
     switch (type) {
-      case 'critical': return 'border-red-200 bg-red-50 dark:bg-red-900/20';
-      case 'warning': return 'border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20';
-      case 'info': return 'border-blue-200 bg-blue-50 dark:bg-blue-900/20';
-      default: return 'border-gray-200 bg-gray-50 dark:bg-gray-900/20';
+    case "critical": return "border-red-200 bg-red-50 dark:bg-red-900/20";
+    case "warning": return "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20";
+    case "info": return "border-blue-200 bg-blue-50 dark:bg-blue-900/20";
+    default: return "border-gray-200 bg-gray-50 dark:bg-gray-900/20";
     }
   };
 
   const getTestIcon = (type: string) => {
     switch (type) {
-      case 'backup_integrity': return TestTube;
-      case 'disaster_recovery': return RefreshCw;
-      case 'data_recovery': return Activity;
-      case 'security_audit': return Shield;
-      case 'performance': return BarChart;
-      default: return CheckCircle;
+    case "backup_integrity": return TestTube;
+    case "disaster_recovery": return RefreshCw;
+    case "data_recovery": return Activity;
+    case "security_audit": return Shield;
+    case "performance": return BarChart;
+    default: return CheckCircle;
     }
   };
 
@@ -268,8 +268,8 @@ export const ContinuousTestingMonitoring: React.FC = () => {
                           )}
                         </div>
                         <Badge className={getStatusBadge(test.status)}>
-                          {test.status === 'passed' ? 'Passou' : 
-                           test.status === 'warning' ? 'Atenção' : 'Falhou'}
+                          {test.status === "passed" ? "Passou" : 
+                            test.status === "warning" ? "Atenção" : "Falhou"}
                         </Badge>
                       </div>
 
@@ -301,7 +301,7 @@ export const ContinuousTestingMonitoring: React.FC = () => {
                         </div>
                       </div>
 
-                      {test.status === 'failed' && (
+                      {test.status === "failed" && (
                         <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
                           <div className="flex items-center gap-2 mb-2">
                             <XCircle className="w-4 h-4 text-red-600" />
@@ -315,7 +315,7 @@ export const ContinuousTestingMonitoring: React.FC = () => {
                         </div>
                       )}
 
-                      {test.status === 'warning' && (
+                      {test.status === "warning" && (
                         <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
                           <div className="flex items-center gap-2 mb-2">
                             <AlertTriangle className="w-4 h-4 text-yellow-600" />
@@ -429,13 +429,13 @@ export const ContinuousTestingMonitoring: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-7 gap-2">
-                    {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day, index) => (
+                    {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((day, index) => (
                       <div key={index} className="text-center p-2 border rounded-lg">
                         <div className="font-medium text-sm">{day}</div>
                         <div className="text-xs text-muted-foreground mt-1">
-                          {index === 0 && 'Backup'}
-                          {index === 3 && 'Segurança'}
-                          {index === 6 && 'Performance'}
+                          {index === 0 && "Backup"}
+                          {index === 3 && "Segurança"}
+                          {index === 6 && "Performance"}
                         </div>
                       </div>
                     ))}

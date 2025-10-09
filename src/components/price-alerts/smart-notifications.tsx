@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Bell, 
   BellRing, 
@@ -27,7 +27,7 @@ import {
   Calendar,
   User,
   TrendingDown
-} from 'lucide-react';
+} from "lucide-react";
 
 interface NotificationSettings {
   id: string;
@@ -35,7 +35,7 @@ interface NotificationSettings {
   email_enabled: boolean;
   push_enabled: boolean;
   sms_enabled: boolean;
-  frequency: 'immediate' | 'daily' | 'weekly';
+  frequency: "immediate" | "daily" | "weekly";
   quiet_hours: {
     enabled: boolean;
     start: string;
@@ -55,11 +55,11 @@ interface NotificationSettings {
 
 interface NotificationHistory {
   id: string;
-  type: 'email' | 'push' | 'sms';
+  type: "email" | "push" | "sms";
   title: string;
   message: string;
   sent_at: string;
-  status: 'sent' | 'delivered' | 'failed';
+  status: "sent" | "delivered" | "failed";
   alert_id?: string;
 }
 
@@ -69,8 +69,8 @@ export const SmartNotifications: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [testNotification, setTestNotification] = useState({
-    type: 'email' as 'email' | 'push' | 'sms',
-    message: 'Teste de notificação do sistema de alertas'
+    type: "email" as "email" | "push" | "sms",
+    message: "Teste de notificação do sistema de alertas"
   });
 
   const { toast } = useToast();
@@ -92,16 +92,16 @@ export const SmartNotifications: React.FC = () => {
       } else {
         // Default settings
         const defaultSettings: NotificationSettings = {
-          id: '1',
-          user_id: user?.id || '',
+          id: "1",
+          user_id: user?.id || "",
           email_enabled: true,
           push_enabled: true,
           sms_enabled: false,
-          frequency: 'immediate',
+          frequency: "immediate",
           quiet_hours: {
             enabled: false,
-            start: '22:00',
-            end: '08:00'
+            start: "22:00",
+            end: "08:00"
           },
           categories: {
             price_drops: true,
@@ -117,7 +117,7 @@ export const SmartNotifications: React.FC = () => {
         setSettings(defaultSettings);
       }
     } catch (error) {
-      console.error('Error loading notification settings:', error);
+      console.error("Error loading notification settings:", error);
     } finally {
       setIsLoading(false);
     }
@@ -127,28 +127,28 @@ export const SmartNotifications: React.FC = () => {
     // Mock notification history
     const mockHistory: NotificationHistory[] = [
       {
-        id: '1',
-        type: 'email',
-        title: 'Meta de preço atingida!',
-        message: 'Passagem SP-RJ agora custa R$ 450,00 (meta: R$ 500,00)',
+        id: "1",
+        type: "email",
+        title: "Meta de preço atingida!",
+        message: "Passagem SP-RJ agora custa R$ 450,00 (meta: R$ 500,00)",
         sent_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        status: 'delivered'
+        status: "delivered"
       },
       {
-        id: '2',
-        type: 'push',
-        title: 'IA Recomenda: Aguardar compra',
-        message: 'Preços tendem a cair 15% nas próximas 2 semanas',
+        id: "2",
+        type: "push",
+        title: "IA Recomenda: Aguardar compra",
+        message: "Preços tendem a cair 15% nas próximas 2 semanas",
         sent_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-        status: 'delivered'
+        status: "delivered"
       },
       {
-        id: '3',
-        type: 'email',
-        title: 'Queda significativa detectada',
-        message: 'Hotel Copacabana: R$ 220,00 (-25% vs. semana passada)',
+        id: "3",
+        type: "email",
+        title: "Queda significativa detectada",
+        message: "Hotel Copacabana: R$ 220,00 (-25% vs. semana passada)",
         sent_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-        status: 'delivered'
+        status: "delivered"
       }
     ];
     setHistory(mockHistory);
@@ -167,7 +167,7 @@ export const SmartNotifications: React.FC = () => {
         description: "Suas preferências de notificação foram atualizadas.",
       });
     } catch (error) {
-      console.error('Error saving settings:', error);
+      console.error("Error saving settings:", error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar as configurações",
@@ -186,10 +186,10 @@ export const SmartNotifications: React.FC = () => {
       const newNotification: NotificationHistory = {
         id: Date.now().toString(),
         type: testNotification.type,
-        title: 'Teste de Notificação',
+        title: "Teste de Notificação",
         message: testNotification.message,
         sent_at: new Date().toISOString(),
-        status: 'sent'
+        status: "sent"
       };
       
       setHistory(prev => [newNotification, ...prev]);
@@ -199,7 +199,7 @@ export const SmartNotifications: React.FC = () => {
         description: `Teste enviado via ${testNotification.type}`,
       });
     } catch (error) {
-      console.error('Error sending test notification:', error);
+      console.error("Error sending test notification:", error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar a notificação de teste",
@@ -210,25 +210,25 @@ export const SmartNotifications: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'delivered':
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case 'failed':
-        return <AlertTriangle className="w-4 h-4 text-destructive" />;
-      default:
-        return <Clock className="w-4 h-4 text-warning" />;
+    case "delivered":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "failed":
+      return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    default:
+      return <Clock className="w-4 h-4 text-warning" />;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'email':
-        return <Mail className="w-4 h-4 text-primary" />;
-      case 'push':
-        return <Smartphone className="w-4 h-4 text-primary" />;
-      case 'sms':
-        return <MessageSquare className="w-4 h-4 text-primary" />;
-      default:
-        return <Bell className="w-4 h-4 text-primary" />;
+    case "email":
+      return <Mail className="w-4 h-4 text-primary" />;
+    case "push":
+      return <Smartphone className="w-4 h-4 text-primary" />;
+    case "sms":
+      return <MessageSquare className="w-4 h-4 text-primary" />;
+    default:
+      return <Bell className="w-4 h-4 text-primary" />;
     }
   };
 
@@ -415,7 +415,7 @@ export const SmartNotifications: React.FC = () => {
                 <Label className="text-sm font-medium">Frequência de Notificações</Label>
                 <Select 
                   value={settings.frequency} 
-                  onValueChange={(value: 'immediate' | 'daily' | 'weekly') => 
+                  onValueChange={(value: "immediate" | "daily" | "weekly") => 
                     setSettings(prev => prev ? { ...prev, frequency: value } : null)
                   }
                 >
@@ -551,7 +551,7 @@ export const SmartNotifications: React.FC = () => {
           <div className="flex items-center gap-4">
             <Select 
               value={testNotification.type} 
-              onValueChange={(value: 'email' | 'push' | 'sms') => 
+              onValueChange={(value: "email" | "push" | "sms") => 
                 setTestNotification(prev => ({ ...prev, type: value }))
               }
             >
@@ -606,7 +606,7 @@ export const SmartNotifications: React.FC = () => {
                       {notification.type}
                     </Badge>
                     <span className="text-xs text-muted-foreground">
-                      {new Date(notification.sent_at).toLocaleString('pt-BR')}
+                      {new Date(notification.sent_at).toLocaleString("pt-BR")}
                     </span>
                   </div>
                 </div>

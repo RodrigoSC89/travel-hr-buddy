@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Shield, 
   Key, 
@@ -14,14 +14,14 @@ import {
   CheckCircle,
   Users,
   Clock
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface SecurityPolicy {
   id: string;
   name: string;
   description: string;
-  level: 'low' | 'medium' | 'high' | 'critical';
+  level: "low" | "medium" | "high" | "critical";
   enabled: boolean;
   lastUpdated: Date;
 }
@@ -32,7 +32,7 @@ interface AccessLog {
   action: string;
   integration: string;
   timestamp: Date;
-  status: 'success' | 'failed' | 'blocked';
+  status: "success" | "failed" | "blocked";
   ipAddress: string;
 }
 
@@ -40,34 +40,34 @@ export const IntegrationSecurity: React.FC = () => {
   const [showApiKeys, setShowApiKeys] = useState(false);
   const [securityPolicies, setSecurityPolicies] = useState<SecurityPolicy[]>([
     {
-      id: '1',
-      name: 'Criptografia de Dados',
-      description: 'Todos os dados em trânsito são criptografados com TLS 1.3',
-      level: 'high',
+      id: "1",
+      name: "Criptografia de Dados",
+      description: "Todos os dados em trânsito são criptografados com TLS 1.3",
+      level: "high",
       enabled: true,
       lastUpdated: new Date()
     },
     {
-      id: '2',
-      name: 'Rotação Automática de Tokens',
-      description: 'Tokens são renovados automaticamente a cada 30 dias',
-      level: 'medium',
+      id: "2",
+      name: "Rotação Automática de Tokens",
+      description: "Tokens são renovados automaticamente a cada 30 dias",
+      level: "medium",
       enabled: true,
       lastUpdated: new Date()
     },
     {
-      id: '3',
-      name: 'Auditoria de Acessos',
-      description: 'Log completo de todas as ações de integração',
-      level: 'critical',
+      id: "3",
+      name: "Auditoria de Acessos",
+      description: "Log completo de todas as ações de integração",
+      level: "critical",
       enabled: true,
       lastUpdated: new Date()
     },
     {
-      id: '4',
-      name: 'Rate Limiting',
-      description: 'Limite de requisições por minuto para prevenir ataques',
-      level: 'medium',
+      id: "4",
+      name: "Rate Limiting",
+      description: "Limite de requisições por minuto para prevenir ataques",
+      level: "medium",
       enabled: false,
       lastUpdated: new Date()
     }
@@ -75,50 +75,50 @@ export const IntegrationSecurity: React.FC = () => {
 
   const [accessLogs] = useState<AccessLog[]>([
     {
-      id: '1',
-      user: 'admin@nautilus.com',
-      action: 'API Key Generated',
-      integration: 'Stripe Payment',
+      id: "1",
+      user: "admin@nautilus.com",
+      action: "API Key Generated",
+      integration: "Stripe Payment",
       timestamp: new Date(Date.now() - 300000),
-      status: 'success',
-      ipAddress: '192.168.1.100'
+      status: "success",
+      ipAddress: "192.168.1.100"
     },
     {
-      id: '2',
-      user: 'operador@nautilus.com',
-      action: 'Integration Test',
-      integration: 'WhatsApp API',
+      id: "2",
+      user: "operador@nautilus.com",
+      action: "Integration Test",
+      integration: "WhatsApp API",
       timestamp: new Date(Date.now() - 600000),
-      status: 'failed',
-      ipAddress: '192.168.1.101'
+      status: "failed",
+      ipAddress: "192.168.1.101"
     },
     {
-      id: '3',
-      user: 'security@nautilus.com',
-      action: 'Security Scan',
-      integration: 'All Integrations',
+      id: "3",
+      user: "security@nautilus.com",
+      action: "Security Scan",
+      integration: "All Integrations",
       timestamp: new Date(Date.now() - 900000),
-      status: 'success',
-      ipAddress: '192.168.1.102'
+      status: "success",
+      ipAddress: "192.168.1.102"
     }
   ]);
 
   const { toast } = useToast();
 
-  const getLevelColor = (level: SecurityPolicy['level']) => {
+  const getLevelColor = (level: SecurityPolicy["level"]) => {
     switch (level) {
-      case 'low': return 'bg-success/10 text-success border-success/20';
-      case 'medium': return 'bg-warning/10 text-warning border-warning/20';
-      case 'high': return 'bg-primary/10 text-primary border-primary/20';
-      case 'critical': return 'bg-destructive/10 text-destructive border-destructive/20';
+    case "low": return "bg-success/10 text-success border-success/20";
+    case "medium": return "bg-warning/10 text-warning border-warning/20";
+    case "high": return "bg-primary/10 text-primary border-primary/20";
+    case "critical": return "bg-destructive/10 text-destructive border-destructive/20";
     }
   };
 
-  const getStatusColor = (status: AccessLog['status']) => {
+  const getStatusColor = (status: AccessLog["status"]) => {
     switch (status) {
-      case 'success': return 'bg-success/10 text-success border-success/20';
-      case 'failed': return 'bg-destructive/10 text-destructive border-destructive/20';
-      case 'blocked': return 'bg-warning/10 text-warning border-warning/20';
+    case "success": return "bg-success/10 text-success border-success/20";
+    case "failed": return "bg-destructive/10 text-destructive border-destructive/20";
+    case "blocked": return "bg-warning/10 text-warning border-warning/20";
     }
   };
 
@@ -134,7 +134,7 @@ export const IntegrationSecurity: React.FC = () => {
     const policy = securityPolicies.find(p => p.id === id);
     toast({
       title: "Política Atualizada",
-      description: `${policy?.name} foi ${policy?.enabled ? 'desativada' : 'ativada'}`,
+      description: `${policy?.name} foi ${policy?.enabled ? "desativada" : "ativada"}`,
     });
   };
 
@@ -238,7 +238,7 @@ export const IntegrationSecurity: React.FC = () => {
               <div key={policy.id} className="flex items-center justify-between p-4 border border-border/50 rounded-lg">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <Shield className={`w-5 h-5 ${policy.enabled ? 'text-success' : 'text-muted-foreground'}`} />
+                    <Shield className={`w-5 h-5 ${policy.enabled ? "text-success" : "text-muted-foreground"}`} />
                     <div>
                       <h4 className="font-medium text-foreground">{policy.name}</h4>
                       <p className="text-sm text-muted-foreground">{policy.description}</p>
@@ -254,7 +254,7 @@ export const IntegrationSecurity: React.FC = () => {
                     size="sm"
                     onClick={() => togglePolicy(policy.id)}
                   >
-                    {policy.enabled ? 'Ativo' : 'Inativo'}
+                    {policy.enabled ? "Ativo" : "Inativo"}
                   </Button>
                 </div>
               </div>
@@ -281,14 +281,14 @@ export const IntegrationSecurity: React.FC = () => {
             </Alert>
 
             <div className="space-y-3">
-              {['Stripe Payment API', 'WhatsApp Business', 'Google Calendar'].map((service, index) => (
+              {["Stripe Payment API", "WhatsApp Business", "Google Calendar"].map((service, index) => (
                 <div key={service} className="flex items-center justify-between p-3 border border-border/50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <Key className="w-4 h-4 text-primary" />
                     <div>
                       <p className="font-medium text-foreground">{service}</p>
                       <p className="text-xs text-muted-foreground">
-                        {showApiKeys ? `naut_${Math.random().toString(36).substring(2, 15)}` : '••••••••••••••••'}
+                        {showApiKeys ? `naut_${Math.random().toString(36).substring(2, 15)}` : "••••••••••••••••"}
                       </p>
                     </div>
                   </div>
@@ -336,7 +336,7 @@ export const IntegrationSecurity: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-muted-foreground">
-                    {log.timestamp.toLocaleString('pt-BR')}
+                    {log.timestamp.toLocaleString("pt-BR")}
                   </p>
                 </div>
               </div>

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { OrganizationLayout } from '@/components/layout/organization-layout';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import VesselManagement from '@/components/fleet/vessel-management';
-import { VesselTracking } from '@/components/fleet/vessel-tracking';
-import { FleetAnalytics } from '@/components/analytics/fleet-analytics';
+import React, { useState } from "react";
+import { OrganizationLayout } from "@/components/layout/organization-layout";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import VesselManagement from "@/components/fleet/vessel-management";
+import { VesselTracking } from "@/components/fleet/vessel-tracking";
+import { FleetAnalytics } from "@/components/analytics/fleet-analytics";
 import { 
   Ship, 
   Navigation, 
@@ -12,10 +12,10 @@ import {
   Calendar,
   Users,
   Wrench
-} from 'lucide-react';
+} from "lucide-react";
 
 export default function FleetDashboard() {
-  const [activeTab, setActiveTab] = useState('management');
+  const [activeTab, setActiveTab] = useState("management");
 
   return (
     <OrganizationLayout title="Dashboard da Frota">

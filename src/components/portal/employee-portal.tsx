@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   User, 
   Calendar, 
@@ -19,17 +19,17 @@ import {
   Download,
   Upload,
   CheckCircle
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { EmployeeDossierSummary } from './employee-dossier-summary';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { EmployeeDossierSummary } from "./employee-dossier-summary";
 
 interface TimeEntry {
   date: string;
   hours: number;
   project: string;
   description: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
 }
 
 interface Achievement {
@@ -39,7 +39,7 @@ interface Achievement {
   points: number;
   earned: boolean;
   earnedDate?: string;
-  category: 'productivity' | 'quality' | 'collaboration' | 'innovation';
+  category: "productivity" | "quality" | "collaboration" | "innovation";
 }
 
 export const EmployeePortal: React.FC = () => {
@@ -47,62 +47,62 @@ export const EmployeePortal: React.FC = () => {
   const { toast } = useToast();
   const [timeEntries, setTimeEntries] = useState<TimeEntry[]>([
     {
-      date: '2024-01-15',
+      date: "2024-01-15",
       hours: 8,
-      project: 'Nautilus One',
-      description: 'Desenvolvimento de funcionalidades',
-      status: 'approved'
+      project: "Nautilus One",
+      description: "Desenvolvimento de funcionalidades",
+      status: "approved"
     },
     {
-      date: '2024-01-16',
+      date: "2024-01-16",
       hours: 7.5,
-      project: 'Maritime System',
-      description: 'Testes e validação',
-      status: 'pending'
+      project: "Maritime System",
+      description: "Testes e validação",
+      status: "pending"
     }
   ]);
 
   const [achievements] = useState<Achievement[]>([
     {
-      id: '1',
-      title: 'Primeira Semana',
-      description: 'Complete sua primeira semana no projeto',
+      id: "1",
+      title: "Primeira Semana",
+      description: "Complete sua primeira semana no projeto",
       points: 100,
       earned: true,
-      earnedDate: '2024-01-08',
-      category: 'productivity'
+      earnedDate: "2024-01-08",
+      category: "productivity"
     },
     {
-      id: '2',
-      title: 'Colaborador Exemplar',
-      description: 'Ajude 5 colegas diferentes',
+      id: "2",
+      title: "Colaborador Exemplar",
+      description: "Ajude 5 colegas diferentes",
       points: 250,
       earned: true,
-      earnedDate: '2024-01-12',
-      category: 'collaboration'
+      earnedDate: "2024-01-12",
+      category: "collaboration"
     },
     {
-      id: '3',
-      title: 'Inovador',
-      description: 'Sugira uma melhoria implementada',
+      id: "3",
+      title: "Inovador",
+      description: "Sugira uma melhoria implementada",
       points: 500,
       earned: false,
-      category: 'innovation'
+      category: "innovation"
     }
   ]);
 
   const [newTimeEntry, setNewTimeEntry] = useState({
-    date: '',
-    hours: '',
-    project: '',
-    description: ''
+    date: "",
+    hours: "",
+    project: "",
+    description: ""
   });
 
   const [leaveRequest, setLeaveRequest] = useState({
-    startDate: '',
-    endDate: '',
-    type: 'vacation',
-    reason: ''
+    startDate: "",
+    endDate: "",
+    type: "vacation",
+    reason: ""
   });
 
   const totalPoints = achievements.filter(a => a.earned).reduce((sum, a) => sum + a.points, 0);
@@ -128,11 +128,11 @@ export const EmployeePortal: React.FC = () => {
     const entry: TimeEntry = {
       ...newTimeEntry,
       hours: parseFloat(newTimeEntry.hours),
-      status: 'pending'
+      status: "pending"
     };
 
     setTimeEntries([...timeEntries, entry]);
-    setNewTimeEntry({ date: '', hours: '', project: '', description: '' });
+    setNewTimeEntry({ date: "", hours: "", project: "", description: "" });
     
     toast({
       title: "Entrada registrada",
@@ -155,7 +155,7 @@ export const EmployeePortal: React.FC = () => {
       description: "Sua solicitação de licença foi enviada para aprovação"
     });
     
-    setLeaveRequest({ startDate: '', endDate: '', type: 'vacation', reason: '' });
+    setLeaveRequest({ startDate: "", endDate: "", type: "vacation", reason: "" });
   };
 
   return (
@@ -164,7 +164,7 @@ export const EmployeePortal: React.FC = () => {
         <div>
           <h1 className="text-3xl font-bold">Portal do Funcionário</h1>
           <p className="text-muted-foreground">
-            Bem-vindo(a), {user?.email?.split('@')[0]}
+            Bem-vindo(a), {user?.email?.split("@")[0]}
           </p>
         </div>
         <div className="text-right">
@@ -286,11 +286,11 @@ export const EmployeePortal: React.FC = () => {
                       )}
                     </div>
                     <Badge variant={
-                      entry.status === 'approved' ? 'default' : 
-                      entry.status === 'pending' ? 'secondary' : 'destructive'
+                      entry.status === "approved" ? "default" : 
+                        entry.status === "pending" ? "secondary" : "destructive"
                     }>
-                      {entry.status === 'approved' ? 'Aprovado' :
-                       entry.status === 'pending' ? 'Pendente' : 'Rejeitado'}
+                      {entry.status === "approved" ? "Aprovado" :
+                        entry.status === "pending" ? "Pendente" : "Rejeitado"}
                     </Badge>
                   </div>
                 ))}
@@ -355,9 +355,9 @@ export const EmployeePortal: React.FC = () => {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {achievements.map((achievement) => (
-                  <div key={achievement.id} className={`p-4 border rounded-lg ${achievement.earned ? 'bg-green-50 border-green-200' : 'bg-gray-50'}`}>
+                  <div key={achievement.id} className={`p-4 border rounded-lg ${achievement.earned ? "bg-green-50 border-green-200" : "bg-gray-50"}`}>
                     <div className="flex items-start space-x-3">
-                      <div className={`p-2 rounded-full ${achievement.earned ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-muted-foreground'}`}>
+                      <div className={`p-2 rounded-full ${achievement.earned ? "bg-green-100 text-green-600" : "bg-gray-100 text-muted-foreground"}`}>
                         {achievement.earned ? <CheckCircle className="h-5 w-5" /> : <Award className="h-5 w-5" />}
                       </div>
                       <div className="flex-1">
@@ -399,9 +399,9 @@ export const EmployeePortal: React.FC = () => {
               
               <div className="space-y-2">
                 {[
-                  { name: 'Certificado STCW.pdf', date: '2024-01-10', status: 'verified' },
-                  { name: 'Carteira de Trabalho.pdf', date: '2024-01-08', status: 'pending' },
-                  { name: 'Exame Médico.pdf', date: '2024-01-05', status: 'verified' }
+                  { name: "Certificado STCW.pdf", date: "2024-01-10", status: "verified" },
+                  { name: "Carteira de Trabalho.pdf", date: "2024-01-08", status: "pending" },
+                  { name: "Exame Médico.pdf", date: "2024-01-05", status: "verified" }
                 ].map((doc, index) => (
                   <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center space-x-3">
@@ -414,8 +414,8 @@ export const EmployeePortal: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Badge variant={doc.status === 'verified' ? 'default' : 'secondary'}>
-                        {doc.status === 'verified' ? 'Verificado' : 'Pendente'}
+                      <Badge variant={doc.status === "verified" ? "default" : "secondary"}>
+                        {doc.status === "verified" ? "Verificado" : "Pendente"}
                       </Badge>
                       <Button variant="ghost" size="sm">
                         <Download className="h-4 w-4" />

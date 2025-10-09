@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Users, 
   Mail, 
@@ -20,22 +20,22 @@ import {
   Video,
   Download,
   Send
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface UserGroup {
   id: string;
   name: string;
   description: string;
   userCount: number;
-  status: 'active' | 'invited' | 'pending';
+  status: "active" | "invited" | "pending";
   completedTraining: number;
 }
 
 interface TrainingMaterial {
   id: string;
   title: string;
-  type: 'video' | 'document' | 'interactive';
+  type: "video" | "document" | "interactive";
   duration: string;
   completed: boolean;
 }
@@ -52,141 +52,141 @@ interface Feedback {
 const UserOnboardingCenter: React.FC = () => {
   const [userGroups, setUserGroups] = useState<UserGroup[]>([
     {
-      id: '1',
-      name: 'Equipe Técnica Petrobras',
-      description: 'Engenheiros e técnicos especialistas',
+      id: "1",
+      name: "Equipe Técnica Petrobras",
+      description: "Engenheiros e técnicos especialistas",
       userCount: 15,
-      status: 'active',
+      status: "active",
       completedTraining: 12
     },
     {
-      id: '2',
-      name: 'Gestores Marítimos',
-      description: 'Gerentes e supervisores de operações',
+      id: "2",
+      name: "Gestores Marítimos",
+      description: "Gerentes e supervisores de operações",
       userCount: 8,
-      status: 'invited',
+      status: "invited",
       completedTraining: 3
     },
     {
-      id: '3',
-      name: 'Operadores de Campo',
-      description: 'Equipe operacional e tripulação',
+      id: "3",
+      name: "Operadores de Campo",
+      description: "Equipe operacional e tripulação",
       userCount: 25,
-      status: 'pending',
+      status: "pending",
       completedTraining: 0
     }
   ]);
 
   const [trainingMaterials] = useState<TrainingMaterial[]>([
     {
-      id: '1',
-      title: 'Introdução ao Nautilus One',
-      type: 'video',
-      duration: '15 min',
+      id: "1",
+      title: "Introdução ao Nautilus One",
+      type: "video",
+      duration: "15 min",
       completed: true
     },
     {
-      id: '2',
-      title: 'Navegação e Interface',
-      type: 'interactive',
-      duration: '20 min',
+      id: "2",
+      title: "Navegação e Interface",
+      type: "interactive",
+      duration: "20 min",
       completed: true
     },
     {
-      id: '3',
-      title: 'Gestão de Viagens e Reservas',
-      type: 'video',
-      duration: '25 min',
+      id: "3",
+      title: "Gestão de Viagens e Reservas",
+      type: "video",
+      duration: "25 min",
       completed: false
     },
     {
-      id: '4',
-      title: 'Sistema Marítimo e PEOTRAM',
-      type: 'document',
-      duration: '30 min',
+      id: "4",
+      title: "Sistema Marítimo e PEOTRAM",
+      type: "document",
+      duration: "30 min",
       completed: false
     },
     {
-      id: '5',
-      title: 'Relatórios e Analytics',
-      type: 'interactive',
-      duration: '18 min',
+      id: "5",
+      title: "Relatórios e Analytics",
+      type: "interactive",
+      duration: "18 min",
       completed: false
     }
   ]);
 
   const [feedbacks] = useState<Feedback[]>([
     {
-      id: '1',
-      user: 'João Silva',
+      id: "1",
+      user: "João Silva",
       rating: 5,
-      comment: 'Interface muito intuitiva e funcional. O sistema atende perfeitamente nossas necessidades.',
-      module: 'Dashboard',
-      date: '2024-01-15'
+      comment: "Interface muito intuitiva e funcional. O sistema atende perfeitamente nossas necessidades.",
+      module: "Dashboard",
+      date: "2024-01-15"
     },
     {
-      id: '2',
-      user: 'Maria Santos',
+      id: "2",
+      user: "Maria Santos",
       rating: 4,
-      comment: 'Excelente para gestão de viagens. Poderia ter mais opções de filtros nos relatórios.',
-      module: 'Viagens',
-      date: '2024-01-14'
+      comment: "Excelente para gestão de viagens. Poderia ter mais opções de filtros nos relatórios.",
+      module: "Viagens",
+      date: "2024-01-14"
     },
     {
-      id: '3',
-      user: 'Carlos Lima',
+      id: "3",
+      user: "Carlos Lima",
       rating: 5,
-      comment: 'O assistente IA é impressionante. Economiza muito tempo nas operações diárias.',
-      module: 'IA Assistant',
-      date: '2024-01-13'
+      comment: "O assistente IA é impressionante. Economiza muito tempo nas operações diárias.",
+      module: "IA Assistant",
+      date: "2024-01-13"
     }
   ]);
 
   const [newInvite, setNewInvite] = useState({
-    email: '',
-    name: '',
-    role: '',
-    message: ''
+    email: "",
+    name: "",
+    role: "",
+    message: ""
   });
 
   const handleSendInvite = () => {
     if (!newInvite.email || !newInvite.name) {
-      toast.error('Preencha email e nome para enviar convite');
+      toast.error("Preencha email e nome para enviar convite");
       return;
     }
 
     toast.success(`Convite enviado para ${newInvite.name}`);
-    setNewInvite({ email: '', name: '', role: '', message: '' });
+    setNewInvite({ email: "", name: "", role: "", message: "" });
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active':
-        return 'text-green-600 bg-green-50 border-green-200';
-      case 'invited':
-        return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'pending':
-        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      default:
-        return 'text-muted-foreground bg-gray-50 border-gray-200';
+    case "active":
+      return "text-green-600 bg-green-50 border-green-200";
+    case "invited":
+      return "text-blue-600 bg-blue-50 border-blue-200";
+    case "pending":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    default:
+      return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'active': return 'Ativo';
-      case 'invited': return 'Convidado';
-      case 'pending': return 'Pendente';
-      default: return 'Desconhecido';
+    case "active": return "Ativo";
+    case "invited": return "Convidado";
+    case "pending": return "Pendente";
+    default: return "Desconhecido";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'video': return <Video className="w-4 h-4" />;
-      case 'document': return <FileText className="w-4 h-4" />;
-      case 'interactive': return <Target className="w-4 h-4" />;
-      default: return <BookOpen className="w-4 h-4" />;
+    case "video": return <Video className="w-4 h-4" />;
+    case "document": return <FileText className="w-4 h-4" />;
+    case "interactive": return <Target className="w-4 h-4" />;
+    default: return <BookOpen className="w-4 h-4" />;
     }
   };
 
@@ -195,7 +195,7 @@ const UserOnboardingCenter: React.FC = () => {
     : 0;
 
   const totalUsers = userGroups.reduce((sum, group) => sum + group.userCount, 0);
-  const activeUsers = userGroups.filter(g => g.status === 'active').reduce((sum, group) => sum + group.userCount, 0);
+  const activeUsers = userGroups.filter(g => g.status === "active").reduce((sum, group) => sum + group.userCount, 0);
   const completedTraining = userGroups.reduce((sum, group) => sum + group.completedTraining, 0);
 
   return (
@@ -437,7 +437,7 @@ const UserOnboardingCenter: React.FC = () => {
                           <Star
                             key={i}
                             className={`w-4 h-4 ${
-                              i < feedback.rating ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'
+                              i < feedback.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
                             }`}
                           />
                         ))}
@@ -467,15 +467,15 @@ const UserOnboardingCenter: React.FC = () => {
                   <h4 className="font-medium">Fluxo de Onboarding</h4>
                   <div className="space-y-3">
                     {[
-                      { step: 1, title: 'Envio de Convite', description: 'Email automático com credenciais', completed: true },
-                      { step: 2, title: 'Primeiro Acesso', description: 'Tutorial interativo', completed: true },
-                      { step: 3, title: 'Configuração de Perfil', description: 'Personalização inicial', completed: true },
-                      { step: 4, title: 'Treinamento Básico', description: 'Módulos essenciais', completed: false },
-                      { step: 5, title: 'Certificação', description: 'Avaliação de conhecimento', completed: false }
+                      { step: 1, title: "Envio de Convite", description: "Email automático com credenciais", completed: true },
+                      { step: 2, title: "Primeiro Acesso", description: "Tutorial interativo", completed: true },
+                      { step: 3, title: "Configuração de Perfil", description: "Personalização inicial", completed: true },
+                      { step: 4, title: "Treinamento Básico", description: "Módulos essenciais", completed: false },
+                      { step: 5, title: "Certificação", description: "Avaliação de conhecimento", completed: false }
                     ].map((item) => (
                       <div key={item.step} className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                          item.completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-muted-foreground'
+                          item.completed ? "bg-green-100 text-green-600" : "bg-gray-100 text-muted-foreground"
                         }`}>
                           {item.completed ? <CheckCircle className="w-4 h-4" /> : item.step}
                         </div>

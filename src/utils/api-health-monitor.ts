@@ -3,11 +3,11 @@
  * Monitors the health of external API connections and implements circuit breaker pattern
  */
 
-import { logger } from './logger';
+import { logger } from "./logger";
 
 interface APIHealthStatus {
   name: string;
-  status: 'healthy' | 'degraded' | 'down';
+  status: "healthy" | "degraded" | "down";
   lastCheck: Date;
   responseTime?: number;
   errorCount: number;
@@ -15,7 +15,7 @@ interface APIHealthStatus {
 }
 
 interface CircuitBreakerState {
-  state: 'closed' | 'open' | 'half-open';
+  state: "closed" | "open" | "half-open";
   failures: number;
   lastFailureTime: number;
   nextRetryTime: number;
@@ -36,19 +36,19 @@ export class APIHealthMonitor {
   }
 
   private initializeAPIs() {
-    const apis = ['openai', 'supabase', 'realtime'];
+    const apis = ["openai", "supabase", "realtime"];
     
     apis.forEach(api => {
       this.healthStatus.set(api, {
         name: api,
-        status: 'healthy',
+        status: "healthy",
         lastCheck: new Date(),
         errorCount: 0,
         successCount: 0
       });
       
       this.circuitBreakers.set(api, {
-        state: 'closed',
+        state: "closed",
         failures: 0,
         lastFailureTime: 0,
         nextRetryTime: 0
@@ -66,25 +66,25 @@ export class APIHealthMonitor {
     const now = Date.now();
 
     switch (breaker.state) {
-      case 'closed':
-        return true;
+    case "closed":
+      return true;
       
-      case 'open':
-        // Check if we should transition to half-open
-        if (now >= breaker.nextRetryTime) {
-          breaker.state = 'half-open';
-          logger.log(`Circuit breaker for ${apiName} transitioned to half-open`);
-          return true;
-        }
-        logger.warn(`Circuit breaker for ${apiName} is open, blocking request`);
-        return false;
-      
-      case 'half-open':
-        // Allow one request to test if service recovered
+    case "open":
+      // Check if we should transition to half-open
+      if (now >= breaker.nextRetryTime) {
+        breaker.state = "half-open";
+        logger.log(`Circuit breaker for ${apiName} transitioned to half-open`);
         return true;
+      }
+      logger.warn(`Circuit breaker for ${apiName} is open, blocking request`);
+      return false;
       
-      default:
-        return true;
+    case "half-open":
+      // Allow one request to test if service recovered
+      return true;
+      
+    default:
+      return true;
     }
   }
 
@@ -103,19 +103,19 @@ export class APIHealthMonitor {
       
       // Update status based on response time
       if (responseTime && responseTime > 5000) {
-        status.status = 'degraded';
+        status.status = "degraded";
       } else {
-        status.status = 'healthy';
+        status.status = "healthy";
       }
     }
     
     if (breaker) {
       // Reset circuit breaker on success
-      if (breaker.state === 'half-open') {
-        breaker.state = 'closed';
+      if (breaker.state === "half-open") {
+        breaker.state = "closed";
         breaker.failures = 0;
         logger.log(`Circuit breaker for ${apiName} closed after successful request`);
-      } else if (breaker.state === 'closed') {
+      } else if (breaker.state === "closed") {
         breaker.failures = Math.max(0, breaker.failures - 1);
       }
     }
@@ -136,9 +136,9 @@ export class APIHealthMonitor {
       
       // Update status based on error count
       if (status.errorCount >= 10) {
-        status.status = 'down';
+        status.status = "down";
       } else if (status.errorCount >= 3) {
-        status.status = 'degraded';
+        status.status = "degraded";
       }
     }
     
@@ -147,15 +147,15 @@ export class APIHealthMonitor {
       breaker.lastFailureTime = Date.now();
       
       // Open circuit breaker if threshold exceeded
-      if (breaker.failures >= this.failureThreshold && breaker.state === 'closed') {
-        breaker.state = 'open';
+      if (breaker.failures >= this.failureThreshold && breaker.state === "closed") {
+        breaker.state = "open";
         breaker.nextRetryTime = Date.now() + this.timeoutThreshold;
         logger.error(`Circuit breaker for ${apiName} opened after ${breaker.failures} failures`);
       }
       
       // If already half-open and still failing, go back to open
-      if (breaker.state === 'half-open') {
-        breaker.state = 'open';
+      if (breaker.state === "half-open") {
+        breaker.state = "open";
         breaker.nextRetryTime = Date.now() + this.timeoutThreshold;
         logger.error(`Circuit breaker for ${apiName} reopened after failed retry`);
       }
@@ -214,9 +214,9 @@ export class APIHealthMonitor {
         if (timeSinceLastCheck > 60000 && status.errorCount > 0) {
           status.errorCount = Math.max(0, status.errorCount - 1);
           if (status.errorCount < 3) {
-            status.status = 'healthy';
+            status.status = "healthy";
           } else if (status.errorCount < 10) {
-            status.status = 'degraded';
+            status.status = "degraded";
           }
         }
       });
@@ -242,7 +242,7 @@ export class APIHealthMonitor {
   public resetCircuitBreaker(apiName: string) {
     const breaker = this.circuitBreakers.get(apiName);
     if (breaker) {
-      breaker.state = 'closed';
+      breaker.state = "closed";
       breaker.failures = 0;
       breaker.lastFailureTime = 0;
       breaker.nextRetryTime = 0;

@@ -1,6 +1,6 @@
-import React from 'react';
-import { EnhancedNotificationCenter } from '@/components/notifications/enhanced-notification-center';
-import { OrganizationLayout } from '@/components/layout/organization-layout';
+import React from "react";
+import { EnhancedNotificationCenter } from "@/components/notifications/enhanced-notification-center";
+import { OrganizationLayout } from "@/components/layout/organization-layout";
 
 export default function NotificationCenterPage() {
   return (

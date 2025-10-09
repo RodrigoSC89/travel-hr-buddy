@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { MaritimeChecklistSystem } from '@/components/maritime-checklists/maritime-checklist-system';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect, useCallback } from "react";
+import { MaritimeChecklistSystem } from "@/components/maritime-checklists/maritime-checklist-system";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Ship, 
   FileText, 
@@ -16,9 +16,9 @@ import {
   BarChart3,
   Calendar,
   Activity
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface MaritimeStats {
   totalChecklists: number;
@@ -31,8 +31,8 @@ interface MaritimeStats {
 
 export default function MaritimeChecklists() {
   // Mock user for development
-  const user = { id: 'demo-user-id' };
-  const [view, setView] = useState<'dashboard' | 'checklists'>('dashboard');
+  const user = { id: "demo-user-id" };
+  const [view, setView] = useState<"dashboard" | "checklists">("dashboard");
   const [stats, setStats] = useState<MaritimeStats>({
     totalChecklists: 0,
     completedChecklists: 0,
@@ -49,23 +49,23 @@ export default function MaritimeChecklists() {
       
       // Fetch checklists stats
       const { data: checklists, error: checklistsError } = await supabase
-        .from('operational_checklists')
-        .select('status, compliance_score')
-        .eq('created_by', user?.id);
+        .from("operational_checklists")
+        .select("status, compliance_score")
+        .eq("created_by", user?.id);
 
       if (checklistsError) throw checklistsError;
 
       // Fetch vessels count
       const { data: vessels, error: vesselsError } = await supabase
-        .from('vessels')
-        .select('id', { count: 'exact' });
+        .from("vessels")
+        .select("id", { count: "exact" });
 
       if (vesselsError) throw vesselsError;
 
       // Calculate stats
       const total = checklists?.length || 0;
-      const completed = checklists?.filter(c => c.status === 'completed').length || 0;
-      const pending = checklists?.filter(c => c.status === 'in_progress' || c.status === 'draft').length || 0;
+      const completed = checklists?.filter(c => c.status === "completed").length || 0;
+      const pending = checklists?.filter(c => c.status === "in_progress" || c.status === "draft").length || 0;
       const avgCompliance = checklists?.length > 0 
         ? checklists.reduce((sum, c) => sum + (c.compliance_score || 0), 0) / checklists.length 
         : 0;
@@ -79,8 +79,8 @@ export default function MaritimeChecklists() {
         criticalIssues: 0 // TODO: Calculate from checklist items
       });
     } catch (error) {
-      console.error('Error fetching maritime stats:', error);
-      toast.error('Erro ao carregar estatísticas');
+      console.error("Error fetching maritime stats:", error);
+      toast.error("Erro ao carregar estatísticas");
     } finally {
       setLoading(false);
     }
@@ -92,10 +92,10 @@ export default function MaritimeChecklists() {
     }
   }, [user, fetchMaritimeStats]);
 
-  if (view === 'checklists') {
+  if (view === "checklists") {
     return (
       <MaritimeChecklistSystem
-        userId={user?.id || ''}
+        userId={user?.id || ""}
         userRole="inspector"
         vesselId={undefined}
       />
@@ -118,11 +118,11 @@ export default function MaritimeChecklists() {
               </p>
             </div>
             <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setView('dashboard')}>
+              <Button variant="outline" onClick={() => setView("dashboard")}>
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Dashboard
               </Button>
-              <Button onClick={() => setView('checklists')}>
+              <Button onClick={() => setView("checklists")}>
                 <FileText className="w-4 h-4 mr-2" />
                 Checklists
               </Button>
@@ -259,7 +259,7 @@ export default function MaritimeChecklists() {
               <Button 
                 className="w-full justify-start" 
                 variant="outline"
-                onClick={() => setView('checklists')}
+                onClick={() => setView("checklists")}
               >
                 <FileText className="w-4 h-4 mr-2" />
                 Novo Checklist
@@ -267,7 +267,7 @@ export default function MaritimeChecklists() {
               <Button 
                 className="w-full justify-start" 
                 variant="outline"
-                onClick={() => setView('checklists')}
+                onClick={() => setView("checklists")}
               >
                 <Users className="w-4 h-4 mr-2" />
                 Gerenciar Inspetores
@@ -275,7 +275,7 @@ export default function MaritimeChecklists() {
               <Button 
                 className="w-full justify-start" 
                 variant="outline"
-                onClick={() => setView('checklists')}
+                onClick={() => setView("checklists")}
               >
                 <Ship className="w-4 h-4 mr-2" />
                 Cadastrar Navio
@@ -283,7 +283,7 @@ export default function MaritimeChecklists() {
               <Button 
                 className="w-full justify-start" 
                 variant="outline"
-                onClick={() => setView('checklists')}
+                onClick={() => setView("checklists")}
               >
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Relatórios
@@ -307,28 +307,28 @@ export default function MaritimeChecklists() {
             <div className="space-y-4">
               {[
                 {
-                  type: 'completed',
-                  title: 'Checklist DP finalizado',
-                  description: 'MV Ocean Explorer - Inspeção Dynamic Positioning',
-                  time: '2 horas atrás',
+                  type: "completed",
+                  title: "Checklist DP finalizado",
+                  description: "MV Ocean Explorer - Inspeção Dynamic Positioning",
+                  time: "2 horas atrás",
                   icon: CheckCircle,
-                  color: 'text-green-600'
+                  color: "text-green-600"
                 },
                 {
-                  type: 'started',
-                  title: 'Nova inspeção iniciada',
-                  description: 'PSV Atlantic - Rotina de Máquinas',
-                  time: '4 horas atrás',
+                  type: "started",
+                  title: "Nova inspeção iniciada",
+                  description: "PSV Atlantic - Rotina de Máquinas",
+                  time: "4 horas atrás",
                   icon: Clock,
-                  color: 'text-blue-600'
+                  color: "text-blue-600"
                 },
                 {
-                  type: 'alert',
-                  title: 'Anomalia detectada',
-                  description: 'AHTS Pacific - Sistema de segurança',
-                  time: '6 horas atrás',
+                  type: "alert",
+                  title: "Anomalia detectada",
+                  description: "AHTS Pacific - Sistema de segurança",
+                  time: "6 horas atrás",
                   icon: AlertTriangle,
-                  color: 'text-orange-600'
+                  color: "text-orange-600"
                 }
               ].map((activity, index) => (
                 <div key={index} className="flex items-start gap-3 p-3 rounded-lg border">

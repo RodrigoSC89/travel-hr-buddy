@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Brain, 
   TrendingUp, 
@@ -22,8 +22,8 @@ import {
   FileText,
   Bell,
   RefreshCw
-} from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface AIAnalytics {
   accuracy: number;
@@ -68,24 +68,24 @@ export const AIAnalyticsDashboard: React.FC = () => {
         processingTime: 1.3,
         userSatisfaction: 4.7,
         categories: [
-          { name: 'Processamento de Documentos', value: 35, color: 'hsl(var(--primary))' },
-          { name: 'Notificações Inteligentes', value: 28, color: 'hsl(var(--secondary))' },
-          { name: 'Recomendações', value: 22, color: 'hsl(var(--accent))' },
-          { name: 'Análise Preditiva', value: 15, color: 'hsl(var(--muted))' }
+          { name: "Processamento de Documentos", value: 35, color: "hsl(var(--primary))" },
+          { name: "Notificações Inteligentes", value: 28, color: "hsl(var(--secondary))" },
+          { name: "Recomendações", value: 22, color: "hsl(var(--accent))" },
+          { name: "Análise Preditiva", value: 15, color: "hsl(var(--muted))" }
         ],
         trends: [
-          { period: 'Jan', accuracy: 89.2, volume: 1250 },
-          { period: 'Fev', accuracy: 91.5, volume: 1380 },
-          { period: 'Mar', accuracy: 93.1, volume: 1520 },
-          { period: 'Abr', accuracy: 94.2, volume: 1680 },
-          { period: 'Mai', accuracy: 94.8, volume: 1750 }
+          { period: "Jan", accuracy: 89.2, volume: 1250 },
+          { period: "Fev", accuracy: 91.5, volume: 1380 },
+          { period: "Mar", accuracy: 93.1, volume: 1520 },
+          { period: "Abr", accuracy: 94.2, volume: 1680 },
+          { period: "Mai", accuracy: 94.8, volume: 1750 }
         ],
         insights: [
-          'Precisão da IA aumentou 5.6% nos últimos 3 meses',
-          'Tempo de processamento reduziu em 23% com otimizações recentes',
-          'Satisfação do usuário mantém-se acima de 4.5/5.0',
-          'Pico de uso ocorre entre 9h-11h nos dias úteis',
-          'Funcionalidades mais utilizadas: Documentos (35%) e Notificações (28%)'
+          "Precisão da IA aumentou 5.6% nos últimos 3 meses",
+          "Tempo de processamento reduziu em 23% com otimizações recentes",
+          "Satisfação do usuário mantém-se acima de 4.5/5.0",
+          "Pico de uso ocorre entre 9h-11h nos dias úteis",
+          "Funcionalidades mais utilizadas: Documentos (35%) e Notificações (28%)"
         ]
       };
 
@@ -97,7 +97,7 @@ export const AIAnalyticsDashboard: React.FC = () => {
         description: "Dados de IA atualizados com sucesso",
       });
     } catch (error) {
-      console.error('Error loading analytics:', error);
+      console.error("Error loading analytics:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar analytics de IA",
@@ -109,9 +109,9 @@ export const AIAnalyticsDashboard: React.FC = () => {
   };
 
   const getAccuracyColor = (accuracy: number) => {
-    if (accuracy >= 95) return 'text-green-600';
-    if (accuracy >= 90) return 'text-yellow-600';
-    return 'text-red-600';
+    if (accuracy >= 95) return "text-green-600";
+    if (accuracy >= 90) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getStatusIcon = (value: number, threshold: number) => {
@@ -156,11 +156,11 @@ export const AIAnalyticsDashboard: React.FC = () => {
         <div className="flex items-center gap-2">
           {lastUpdated && (
             <span className="text-sm text-muted-foreground">
-              Atualizado: {lastUpdated.toLocaleTimeString('pt-BR')}
+              Atualizado: {lastUpdated.toLocaleTimeString("pt-BR")}
             </span>
           )}
           <Button onClick={loadAnalytics} disabled={isLoading} variant="outline">
-            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
         </div>

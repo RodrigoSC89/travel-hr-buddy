@@ -1,8 +1,8 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Shield, 
   Zap, 
@@ -14,13 +14,13 @@ import {
   Database,
   Lock,
   Activity
-} from 'lucide-react';
+} from "lucide-react";
 
 interface TestResult {
   category: string;
   tests: {
     name: string;
-    status: 'passed' | 'failed' | 'warning';
+    status: "passed" | "failed" | "warning";
     description: string;
   }[];
 }
@@ -32,53 +32,53 @@ export const ProductionReadinessValidator: React.FC = () => {
 
   const testCategories: TestResult[] = [
     {
-      category: 'Funcionalidade',
+      category: "Funcionalidade",
       tests: [
-        { name: 'Autenticação', status: 'passed', description: 'Login/logout funcionando' },
-        { name: 'Navegação', status: 'passed', description: 'Todas as rotas acessíveis' },
-        { name: 'CRUD Operations', status: 'passed', description: 'Criar, ler, atualizar, deletar' },
-        { name: 'Formulários', status: 'passed', description: 'Validação e submissão' },
-        { name: 'Upload de Arquivos', status: 'passed', description: 'Upload e visualização' }
+        { name: "Autenticação", status: "passed", description: "Login/logout funcionando" },
+        { name: "Navegação", status: "passed", description: "Todas as rotas acessíveis" },
+        { name: "CRUD Operations", status: "passed", description: "Criar, ler, atualizar, deletar" },
+        { name: "Formulários", status: "passed", description: "Validação e submissão" },
+        { name: "Upload de Arquivos", status: "passed", description: "Upload e visualização" }
       ]
     },
     {
-      category: 'Performance',
+      category: "Performance",
       tests: [
-        { name: 'Bundle Size', status: 'passed', description: '< 2MB total' },
-        { name: 'First Paint', status: 'passed', description: '< 1.5s' },
-        { name: 'Lighthouse Score', status: 'passed', description: '95+ pontos' },
-        { name: 'Core Web Vitals', status: 'passed', description: 'Todos verdes' },
-        { name: 'Memory Usage', status: 'passed', description: 'Sem vazamentos' }
+        { name: "Bundle Size", status: "passed", description: "< 2MB total" },
+        { name: "First Paint", status: "passed", description: "< 1.5s" },
+        { name: "Lighthouse Score", status: "passed", description: "95+ pontos" },
+        { name: "Core Web Vitals", status: "passed", description: "Todos verdes" },
+        { name: "Memory Usage", status: "passed", description: "Sem vazamentos" }
       ]
     },
     {
-      category: 'Segurança',
+      category: "Segurança",
       tests: [
-        { name: 'RLS Policies', status: 'passed', description: 'Todas as tabelas protegidas' },
-        { name: 'Input Validation', status: 'passed', description: 'Sanitização implementada' },
-        { name: 'HTTPS Headers', status: 'passed', description: 'CSP e security headers' },
-        { name: 'Secrets Management', status: 'passed', description: 'API keys seguras' },
-        { name: 'Authentication', status: 'passed', description: 'JWT e sessões seguras' }
+        { name: "RLS Policies", status: "passed", description: "Todas as tabelas protegidas" },
+        { name: "Input Validation", status: "passed", description: "Sanitização implementada" },
+        { name: "HTTPS Headers", status: "passed", description: "CSP e security headers" },
+        { name: "Secrets Management", status: "passed", description: "API keys seguras" },
+        { name: "Authentication", status: "passed", description: "JWT e sessões seguras" }
       ]
     },
     {
-      category: 'Acessibilidade',
+      category: "Acessibilidade",
       tests: [
-        { name: 'WCAG AA', status: 'passed', description: 'Contraste 4.5:1+' },
-        { name: 'Navegação por Teclado', status: 'passed', description: 'Tab e Enter funcionam' },
-        { name: 'Screen Readers', status: 'passed', description: 'ARIA labels completos' },
-        { name: 'Foco Visível', status: 'passed', description: 'Focus rings implementados' },
-        { name: 'Semântica HTML', status: 'passed', description: 'Markup semântico' }
+        { name: "WCAG AA", status: "passed", description: "Contraste 4.5:1+" },
+        { name: "Navegação por Teclado", status: "passed", description: "Tab e Enter funcionam" },
+        { name: "Screen Readers", status: "passed", description: "ARIA labels completos" },
+        { name: "Foco Visível", status: "passed", description: "Focus rings implementados" },
+        { name: "Semântica HTML", status: "passed", description: "Markup semântico" }
       ]
     },
     {
-      category: 'Responsividade',
+      category: "Responsividade",
       tests: [
-        { name: 'Mobile (320px+)', status: 'passed', description: 'Smartphones' },
-        { name: 'Tablet (768px+)', status: 'passed', description: 'Tablets' },
-        { name: 'Desktop (1024px+)', status: 'passed', description: 'Desktops' },
-        { name: '4K (1920px+)', status: 'passed', description: 'Monitores grandes' },
-        { name: 'Touch Targets', status: 'passed', description: 'Mínimo 44px' }
+        { name: "Mobile (320px+)", status: "passed", description: "Smartphones" },
+        { name: "Tablet (768px+)", status: "passed", description: "Tablets" },
+        { name: "Desktop (1024px+)", status: "passed", description: "Desktops" },
+        { name: "4K (1920px+)", status: "passed", description: "Monitores grandes" },
+        { name: "Touch Targets", status: "passed", description: "Mínimo 44px" }
       ]
     }
   ];
@@ -100,33 +100,33 @@ export const ProductionReadinessValidator: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'passed':
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case 'failed':
-        return <span className="w-4 h-4 text-danger">❌</span>;
-      case 'warning':
-        return <span className="w-4 h-4 text-warning">⚠️</span>;
-      default:
-        return null;
+    case "passed":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    case "failed":
+      return <span className="w-4 h-4 text-danger">❌</span>;
+    case "warning":
+      return <span className="w-4 h-4 text-warning">⚠️</span>;
+    default:
+      return null;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'passed':
-        return 'bg-success text-success-foreground';
-      case 'failed':
-        return 'bg-danger text-danger-foreground';
-      case 'warning':
-        return 'bg-warning text-warning-foreground';
-      default:
-        return 'bg-muted text-muted-foreground';
+    case "passed":
+      return "bg-success text-success-foreground";
+    case "failed":
+      return "bg-danger text-danger-foreground";
+    case "warning":
+      return "bg-warning text-warning-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const totalTests = testCategories.reduce((acc, cat) => acc + cat.tests.length, 0);
   const passedTests = results.reduce((acc, cat) => 
-    acc + cat.tests.filter(test => test.status === 'passed').length, 0
+    acc + cat.tests.filter(test => test.status === "passed").length, 0
   );
 
   return (
@@ -153,7 +153,7 @@ export const ProductionReadinessValidator: React.FC = () => {
                 className="gap-2"
               >
                 <Activity className="w-4 h-4" />
-                {isRunning ? 'Validando...' : 'Executar Validação'}
+                {isRunning ? "Validando..." : "Executar Validação"}
               </Button>
             </div>
 
@@ -187,11 +187,11 @@ export const ProductionReadinessValidator: React.FC = () => {
                   <Card key={index} className="border border-border/50">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base flex items-center gap-2">
-                        {category.category === 'Funcionalidade' && <Monitor className="w-4 h-4" />}
-                        {category.category === 'Performance' && <Zap className="w-4 h-4" />}
-                        {category.category === 'Segurança' && <Lock className="w-4 h-4" />}
-                        {category.category === 'Acessibilidade' && <Users className="w-4 h-4" />}
-                        {category.category === 'Responsividade' && <Smartphone className="w-4 h-4" />}
+                        {category.category === "Funcionalidade" && <Monitor className="w-4 h-4" />}
+                        {category.category === "Performance" && <Zap className="w-4 h-4" />}
+                        {category.category === "Segurança" && <Lock className="w-4 h-4" />}
+                        {category.category === "Acessibilidade" && <Users className="w-4 h-4" />}
+                        {category.category === "Responsividade" && <Smartphone className="w-4 h-4" />}
                         {category.category}
                       </CardTitle>
                     </CardHeader>

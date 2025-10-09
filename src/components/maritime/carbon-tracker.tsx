@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Leaf, 
   TrendingDown, 
@@ -15,14 +15,14 @@ import {
   AlertCircle,
   Award,
   Download
-} from 'lucide-react';
+} from "lucide-react";
 
 interface VesselEmissions {
   vessel: string;
   currentMonth: {
     total: number;
     perNauticalMile: number;
-    trend: 'up' | 'down' | 'stable';
+    trend: "up" | "down" | "stable";
     change: number;
   };
   yearToDate: {
@@ -44,11 +44,11 @@ interface VesselEmissions {
 export const CarbonFootprintTracker: React.FC = () => {
   const [emissions, setEmissions] = useState<VesselEmissions[]>([
     {
-      vessel: 'MV-Atlas',
+      vessel: "MV-Atlas",
       currentMonth: {
         total: 245.8,
         perNauticalMile: 0.578,
-        trend: 'down',
+        trend: "down",
         change: -8.5
       },
       yearToDate: {
@@ -62,16 +62,16 @@ export const CarbonFootprintTracker: React.FC = () => {
         other: 2.3
       },
       offsetPrograms: [
-        { name: 'Reflorestamento Amazônia', amount: 45.5 },
-        { name: 'Energia Renovável', amount: 28.3 }
+        { name: "Reflorestamento Amazônia", amount: 45.5 },
+        { name: "Energia Renovável", amount: 28.3 }
       ]
     },
     {
-      vessel: 'MV-Neptune',
+      vessel: "MV-Neptune",
       currentMonth: {
         total: 198.4,
         perNauticalMile: 0.492,
-        trend: 'down',
+        trend: "down",
         change: -12.3
       },
       yearToDate: {
@@ -85,16 +85,16 @@ export const CarbonFootprintTracker: React.FC = () => {
         other: 1.7
       },
       offsetPrograms: [
-        { name: 'Captura de Carbono', amount: 38.2 },
-        { name: 'Energia Solar', amount: 22.1 }
+        { name: "Captura de Carbono", amount: 38.2 },
+        { name: "Energia Solar", amount: 22.1 }
       ]
     },
     {
-      vessel: 'MV-Poseidon',
+      vessel: "MV-Poseidon",
       currentMonth: {
         total: 287.3,
         perNauticalMile: 0.615,
-        trend: 'up',
+        trend: "up",
         change: 5.2
       },
       yearToDate: {
@@ -108,7 +108,7 @@ export const CarbonFootprintTracker: React.FC = () => {
         other: 2.1
       },
       offsetPrograms: [
-        { name: 'Preservação Oceânica', amount: 52.4 }
+        { name: "Preservação Oceânica", amount: 52.4 }
       ]
     }
   ]);
@@ -123,15 +123,15 @@ export const CarbonFootprintTracker: React.FC = () => {
   const avgTrend = emissions.reduce((sum, e) => sum + e.currentMonth.change, 0) / emissions.length;
 
   const getTrendIcon = (trend: string) => {
-    if (trend === 'down') return <TrendingDown className="h-4 w-4 text-green-600" />;
-    if (trend === 'up') return <TrendingUp className="h-4 w-4 text-red-600" />;
+    if (trend === "down") return <TrendingDown className="h-4 w-4 text-green-600" />;
+    if (trend === "up") return <TrendingUp className="h-4 w-4 text-red-600" />;
     return <BarChart3 className="h-4 w-4 text-yellow-600" />;
   };
 
   const getPerformanceColor = (percentage: number) => {
-    if (percentage <= 90) return 'text-green-600';
-    if (percentage <= 100) return 'text-yellow-600';
-    return 'text-red-600';
+    if (percentage <= 90) return "text-green-600";
+    if (percentage <= 100) return "text-yellow-600";
+    return "text-red-600";
   };
 
   return (
@@ -165,8 +165,8 @@ export const CarbonFootprintTracker: React.FC = () => {
             <CardTitle className="text-sm font-medium">Tendência Média</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${avgTrend < 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {avgTrend > 0 ? '+' : ''}{avgTrend.toFixed(1)}%
+            <div className={`text-2xl font-bold ${avgTrend < 0 ? "text-green-600" : "text-red-600"}`}>
+              {avgTrend > 0 ? "+" : ""}{avgTrend.toFixed(1)}%
             </div>
             <p className="text-xs text-muted-foreground">vs. mês anterior</p>
           </CardContent>
@@ -240,7 +240,7 @@ export const CarbonFootprintTracker: React.FC = () => {
                     </div>
                     <div>
                       <div className="text-muted-foreground">Diferença</div>
-                      <div className={`font-bold ${totalYTD < targetYTD ? 'text-green-600' : 'text-red-600'}`}>
+                      <div className={`font-bold ${totalYTD < targetYTD ? "text-green-600" : "text-red-600"}`}>
                         {((totalYTD - targetYTD) / 1000).toFixed(2)}k t
                       </div>
                     </div>
@@ -293,9 +293,9 @@ export const CarbonFootprintTracker: React.FC = () => {
                         </Badge>
                         {getTrendIcon(emission.currentMonth.trend)}
                         <span className={`text-sm font-medium ${
-                          emission.currentMonth.change < 0 ? 'text-green-600' : 'text-red-600'
+                          emission.currentMonth.change < 0 ? "text-green-600" : "text-red-600"
                         }`}>
-                          {emission.currentMonth.change > 0 ? '+' : ''}{emission.currentMonth.change}%
+                          {emission.currentMonth.change > 0 ? "+" : ""}{emission.currentMonth.change}%
                         </span>
                       </div>
                       {emission.yearToDate.percentage <= 90 && (

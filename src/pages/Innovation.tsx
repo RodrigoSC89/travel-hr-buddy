@@ -28,9 +28,9 @@ const Innovation = () => {
         description="Tecnologias avançadas e inteligência artificial para o futuro marítimo"
         gradient="purple"
         badges={[
-          { icon: Bot, label: 'IA Avançada' },
-          { icon: Rocket, label: 'Inovação' },
-          { icon: Sparkles, label: 'Tecnologia' }
+          { icon: Bot, label: "IA Avançada" },
+          { icon: Rocket, label: "Inovação" },
+          { icon: Sparkles, label: "Tecnologia" }
         ]}
       />
 
@@ -139,7 +139,7 @@ const Innovation = () => {
         <TabsContent value="ai" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer" 
-                  onClick={() => handleModuleAccess('/ai-assistant')}>
+              onClick={() => handleModuleAccess("/ai-assistant")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-blue-500" />
@@ -157,7 +157,7 @@ const Innovation = () => {
                 </div>
                 <Button className="w-full" onClick={(e) => {
                   e.stopPropagation();
-                  handleModuleAccess('/ai-assistant');
+                  handleModuleAccess("/ai-assistant");
                 }}>
                   Acessar Assistente
                 </Button>
@@ -165,7 +165,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer" 
-                  onClick={() => handleModuleAccess('/predictive-analytics')}>
+              onClick={() => handleModuleAccess("/predictive-analytics")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Brain className="h-5 w-5 text-purple-500" />
@@ -183,7 +183,7 @@ const Innovation = () => {
                 </div>
                 <Button className="w-full" onClick={(e) => {
                   e.stopPropagation();
-                  handleModuleAccess('/predictive-analytics');
+                  handleModuleAccess("/predictive-analytics");
                 }}>
                   Ver Predições
                 </Button>
@@ -315,7 +315,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-                  onClick={() => handleModuleAccess('/iot')}>
+              onClick={() => handleModuleAccess("/iot")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Smartphone className="h-5 w-5 text-blue-500" />
@@ -333,7 +333,7 @@ const Innovation = () => {
                 </div>
                 <Button className="w-full" onClick={(e) => {
                   e.stopPropagation();
-                  handleModuleAccess('/iot');
+                  handleModuleAccess("/iot");
                 }}>
                   Ver Dashboard
                 </Button>

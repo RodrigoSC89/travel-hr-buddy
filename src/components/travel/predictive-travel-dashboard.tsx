@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { StatsCard } from '@/components/ui/stats-card';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { StatsCard } from "@/components/ui/stats-card";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import {
   TrendingUp,
   TrendingDown,
@@ -24,12 +24,12 @@ import {
   BarChart3,
   Lightbulb,
   Zap
-} from 'lucide-react';
+} from "lucide-react";
 
 interface PredictionData {
   current_avg_price: number;
   predicted_price: number;
-  price_trend: 'rising' | 'falling' | 'stable';
+  price_trend: "rising" | "falling" | "stable";
   confidence_score: number;
   best_booking_window_start: string;
   best_booking_window_end: string;
@@ -66,15 +66,15 @@ export const PredictiveTravelDashboard: React.FC = () => {
   const [predictions, setPredictions] = useState<PredictionData | null>(null);
   const [alerts, setAlerts] = useState<PriceAlert[]>([]);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
-  const [searchRoute, setSearchRoute] = useState('GRU-SDU');
-  const [searchType, setSearchType] = useState('flight');
+  const [searchRoute, setSearchRoute] = useState("GRU-SDU");
+  const [searchType, setSearchType] = useState("flight");
 
   // Estados para criar alertas
   const [newAlert, setNewAlert] = useState({
-    route: '',
-    targetPrice: '',
-    travelDate: '',
-    type: 'flight'
+    route: "",
+    targetPrice: "",
+    travelDate: "",
+    type: "flight"
   });
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export const PredictiveTravelDashboard: React.FC = () => {
         loadAlerts()
       ]);
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
+      console.error("Erro ao carregar dados:", error);
     }
   };
 
@@ -97,9 +97,9 @@ export const PredictiveTravelDashboard: React.FC = () => {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData?.user) return;
 
-      const { data, error } = await supabase.functions.invoke('travel-predictive-analysis', {
+      const { data, error } = await supabase.functions.invoke("travel-predictive-analysis", {
         body: {
-          action: 'get_recommendations',
+          action: "get_recommendations",
           data: { userId: userData.user.id }
         }
       });
@@ -107,7 +107,7 @@ export const PredictiveTravelDashboard: React.FC = () => {
       if (error) throw error;
       setRecommendations(data.data || []);
     } catch (error) {
-      console.error('Erro ao carregar recomendações:', error);
+      console.error("Erro ao carregar recomendações:", error);
     }
   };
 
@@ -117,25 +117,25 @@ export const PredictiveTravelDashboard: React.FC = () => {
       if (!userData?.user) return;
 
       const { data, error } = await supabase
-        .from('travel_price_alerts')
-        .select('*')
-        .eq('user_id', userData.user.id)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+        .from("travel_price_alerts")
+        .select("*")
+        .eq("user_id", userData.user.id)
+        .eq("status", "active")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setAlerts(data || []);
     } catch (error) {
-      console.error('Erro ao carregar alertas:', error);
+      console.error("Erro ao carregar alertas:", error);
     }
   };
 
   const generatePrediction = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('travel-predictive-analysis', {
+      const { data, error } = await supabase.functions.invoke("travel-predictive-analysis", {
         body: {
-          action: 'generate_predictions',
+          action: "generate_predictions",
           type: searchType,
           route: searchRoute
         }
@@ -146,10 +146,10 @@ export const PredictiveTravelDashboard: React.FC = () => {
       setPredictions(data.data);
       toast({
         title: "Análise Concluída",
-        description: `Predições geradas para ${searchType === 'flight' ? 'voos' : 'hotéis'} - ${searchRoute}`
+        description: `Predições geradas para ${searchType === "flight" ? "voos" : "hotéis"} - ${searchRoute}`
       });
     } catch (error) {
-      console.error('Erro ao gerar predições:', error);
+      console.error("Erro ao gerar predições:", error);
       toast({
         title: "Erro",
         description: "Erro ao gerar predições. Tente novamente.",
@@ -181,16 +181,16 @@ export const PredictiveTravelDashboard: React.FC = () => {
         return;
       }
 
-      const { error } = await supabase.functions.invoke('travel-predictive-analysis', {
+      const { error } = await supabase.functions.invoke("travel-predictive-analysis", {
         body: {
-          action: 'create_price_alert',
+          action: "create_price_alert",
           data: {
             userId: userData.user.id,
             type: newAlert.type,
             route: newAlert.route,
             targetPrice: parseFloat(newAlert.targetPrice),
             currentPrice: predictions?.current_avg_price || 0,
-            alertType: 'price_drop',
+            alertType: "price_drop",
             travelDate: newAlert.travelDate || null
           }
         }
@@ -203,10 +203,10 @@ export const PredictiveTravelDashboard: React.FC = () => {
         description: "Você será notificado quando o preço atingir o valor desejado."
       });
 
-      setNewAlert({ route: '', targetPrice: '', travelDate: '', type: 'flight' });
+      setNewAlert({ route: "", targetPrice: "", travelDate: "", type: "flight" });
       loadAlerts();
     } catch (error) {
-      console.error('Erro ao criar alerta:', error);
+      console.error("Erro ao criar alerta:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar alerta. Tente novamente.",
@@ -217,64 +217,64 @@ export const PredictiveTravelDashboard: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'rising': return <TrendingUp className="h-4 w-4 text-red-500" />;
-      case 'falling': return <TrendingDown className="h-4 w-4 text-green-500" />;
-      default: return <Minus className="h-4 w-4 text-yellow-500" />;
+    case "rising": return <TrendingUp className="h-4 w-4 text-red-500" />;
+    case "falling": return <TrendingDown className="h-4 w-4 text-green-500" />;
+    default: return <Minus className="h-4 w-4 text-yellow-500" />;
     }
   };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-      case 'rising': return 'text-red-600';
-      case 'falling': return 'text-green-600';
-      default: return 'text-yellow-600';
+    case "rising": return "text-red-600";
+    case "falling": return "text-green-600";
+    default: return "text-yellow-600";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-blue-100 text-blue-800 border-blue-200';
-      default: return 'bg-secondary text-secondary-foreground border-border';
+    case "urgent": return "bg-red-100 text-red-800 border-red-200";
+    case "high": return "bg-orange-100 text-orange-800 border-orange-200";
+    case "medium": return "bg-blue-100 text-blue-800 border-blue-200";
+    default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL"
     }).format(value);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR');
+    return new Date(dateString).toLocaleDateString("pt-BR");
   };
 
   const statsData = [
     {
-      title: 'Alertas Ativos',
+      title: "Alertas Ativos",
       value: alerts.length.toString(),
       icon: Bell,
-      variant: 'default' as const
+      variant: "default" as const
     },
     {
-      title: 'Recomendações',
+      title: "Recomendações",
       value: recommendations.filter(r => r.is_active !== false).length.toString(),
       icon: Lightbulb,
-      variant: 'success' as const
+      variant: "success" as const
     },
     {
-      title: 'Economia Potencial',
+      title: "Economia Potencial",
       value: formatCurrency(recommendations.reduce((acc, r) => acc + (r.estimated_savings || 0), 0)),
       icon: DollarSign,
-      variant: 'ocean' as const
+      variant: "ocean" as const
     },
     {
-      title: 'Precisão IA',
-      value: predictions ? `${Math.round(predictions.confidence_score * 100)}%` : '0%',
+      title: "Precisão IA",
+      value: predictions ? `${Math.round(predictions.confidence_score * 100)}%` : "0%",
       icon: Target,
-      variant: 'warning' as const
+      variant: "warning" as const
     }
   ];
 
@@ -345,13 +345,13 @@ export const PredictiveTravelDashboard: React.FC = () => {
                 </div>
                 <div>
                   <Label htmlFor="search-route">
-                    {searchType === 'flight' ? 'Rota (ex: GRU-SDU)' : 'Destino (ex: Rio de Janeiro)'}
+                    {searchType === "flight" ? "Rota (ex: GRU-SDU)" : "Destino (ex: Rio de Janeiro)"}
                   </Label>
                   <Input
                     id="search-route"
                     value={searchRoute}
                     onChange={(e) => setSearchRoute(e.target.value)}
-                    placeholder={searchType === 'flight' ? 'GRU-SDU' : 'Rio de Janeiro'}
+                    placeholder={searchType === "flight" ? "GRU-SDU" : "Rio de Janeiro"}
                   />
                 </div>
                 <Button
@@ -414,8 +414,8 @@ export const PredictiveTravelDashboard: React.FC = () => {
                       </div>
 
                       <div className="mt-4 flex flex-wrap gap-2">
-                        <Badge variant={predictions.price_trend === 'rising' ? 'destructive' : predictions.price_trend === 'falling' ? 'default' : 'secondary'}>
-                          Tendência: {predictions.price_trend === 'rising' ? 'Alta' : predictions.price_trend === 'falling' ? 'Baixa' : 'Estável'}
+                        <Badge variant={predictions.price_trend === "rising" ? "destructive" : predictions.price_trend === "falling" ? "default" : "secondary"}>
+                          Tendência: {predictions.price_trend === "rising" ? "Alta" : predictions.price_trend === "falling" ? "Baixa" : "Estável"}
                         </Badge>
                         <Badge variant="outline">
                           Demanda: {predictions.demand_level}
@@ -511,7 +511,7 @@ export const PredictiveTravelDashboard: React.FC = () => {
                       {alerts.map((alert) => (
                         <div key={alert.id} className="flex items-center justify-between p-3 border rounded-lg">
                           <div className="flex items-center gap-3">
-                            {alert.type === 'flight' ? (
+                            {alert.type === "flight" ? (
                               <Plane className="h-4 w-4 text-blue-500" />
                             ) : (
                               <Hotel className="h-4 w-4 text-green-500" />
@@ -524,8 +524,8 @@ export const PredictiveTravelDashboard: React.FC = () => {
                               </div>
                             </div>
                           </div>
-                          <Badge variant={alert.status === 'active' ? 'default' : 'secondary'}>
-                            {alert.status === 'active' ? 'Ativo' : 'Inativo'}
+                          <Badge variant={alert.status === "active" ? "default" : "secondary"}>
+                            {alert.status === "active" ? "Ativo" : "Inativo"}
                           </Badge>
                         </div>
                       ))}
@@ -564,9 +564,9 @@ export const PredictiveTravelDashboard: React.FC = () => {
                       </div>
                       <div className="flex flex-col items-end gap-2">
                         <Badge className={getPriorityColor(rec.priority)}>
-                          {rec.priority === 'urgent' ? 'Urgente' : 
-                           rec.priority === 'high' ? 'Alta' :
-                           rec.priority === 'medium' ? 'Média' : 'Baixa'}
+                          {rec.priority === "urgent" ? "Urgente" : 
+                            rec.priority === "high" ? "Alta" :
+                              rec.priority === "medium" ? "Média" : "Baixa"}
                         </Badge>
                         {rec.estimated_savings && (
                           <div className="text-sm font-medium text-green-600">

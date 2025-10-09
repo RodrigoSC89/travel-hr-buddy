@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import {
   Settings,
   User,
@@ -32,7 +32,7 @@ import {
   MessageSquare,
   Volume2,
   VolumeX
-} from 'lucide-react';
+} from "lucide-react";
 
 interface UserSettings {
   profile: {
@@ -76,11 +76,11 @@ interface UserSettings {
 export const SettingsPanel = () => {
   const [settings, setSettings] = useState<UserSettings>({
     profile: {
-      display_name: 'João Silva',
-      signature: 'João Silva\nDPO - Dynamic Positioning Officer\nNautilus Maritime Solutions',
-      avatar_url: '',
-      timezone: 'America/Sao_Paulo',
-      language: 'pt-BR'
+      display_name: "João Silva",
+      signature: "João Silva\nDPO - Dynamic Positioning Officer\nNautilus Maritime Solutions",
+      avatar_url: "",
+      timezone: "America/Sao_Paulo",
+      language: "pt-BR"
     },
     privacy: {
       show_online_status: true,
@@ -95,8 +95,8 @@ export const SettingsPanel = () => {
       sound_enabled: true,
       desktop_enabled: true,
       quiet_hours_enabled: false,
-      quiet_start: '22:00',
-      quiet_end: '08:00'
+      quiet_start: "22:00",
+      quiet_end: "08:00"
     },
     communication: {
       auto_archive_days: 90,
@@ -126,7 +126,7 @@ export const SettingsPanel = () => {
       // Mock loading settings - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-      console.error('Error loading settings:', error);
+      console.error("Error loading settings:", error);
     }
   };
 
@@ -154,7 +154,7 @@ export const SettingsPanel = () => {
         description: "Configurações salvas com sucesso"
       });
     } catch (error) {
-      console.error('Error saving settings:', error);
+      console.error("Error saving settings:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar configurações",
@@ -168,11 +168,11 @@ export const SettingsPanel = () => {
   const resetSettings = () => {
     setSettings({
       profile: {
-        display_name: 'João Silva',
-        signature: 'João Silva\nDPO - Dynamic Positioning Officer\nNautilus Maritime Solutions',
-        avatar_url: '',
-        timezone: 'America/Sao_Paulo',
-        language: 'pt-BR'
+        display_name: "João Silva",
+        signature: "João Silva\nDPO - Dynamic Positioning Officer\nNautilus Maritime Solutions",
+        avatar_url: "",
+        timezone: "America/Sao_Paulo",
+        language: "pt-BR"
       },
       privacy: {
         show_online_status: true,
@@ -187,8 +187,8 @@ export const SettingsPanel = () => {
         sound_enabled: true,
         desktop_enabled: true,
         quiet_hours_enabled: false,
-        quiet_start: '22:00',
-        quiet_end: '08:00'
+        quiet_start: "22:00",
+        quiet_end: "08:00"
       },
       communication: {
         auto_archive_days: 90,
@@ -208,9 +208,9 @@ export const SettingsPanel = () => {
   };
 
   const handleAvatarUpload = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/jpeg,image/png,image/gif';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/jpeg,image/png,image/gif";
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0];
@@ -227,7 +227,7 @@ export const SettingsPanel = () => {
         
         // In a real implementation, upload to storage and get URL
         const url = URL.createObjectURL(file);
-        updateSettings('profile', { avatar_url: url });
+        updateSettings("profile", { avatar_url: url });
         
         toast({
           title: "Sucesso",
@@ -248,13 +248,13 @@ export const SettingsPanel = () => {
       };
       
       const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
-        type: 'application/json'
+        type: "application/json"
       });
       
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `nautilus-communication-data-${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `nautilus-communication-data-${new Date().toISOString().split("T")[0]}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -265,7 +265,7 @@ export const SettingsPanel = () => {
         description: "Dados exportados com sucesso"
       });
     } catch (error) {
-      console.error('Error exporting data:', error);
+      console.error("Error exporting data:", error);
       toast({
         title: "Erro",
         description: "Erro ao exportar dados",
@@ -342,7 +342,7 @@ export const SettingsPanel = () => {
                   <Label>Nome de Exibição</Label>
                   <Input
                     value={settings.profile.display_name}
-                    onChange={(e) => updateSettings('profile', { display_name: e.target.value })}
+                    onChange={(e) => updateSettings("profile", { display_name: e.target.value })}
                     placeholder="Seu nome completo"
                   />
                 </div>
@@ -351,7 +351,7 @@ export const SettingsPanel = () => {
                   <Label>Assinatura</Label>
                   <Textarea
                     value={settings.profile.signature}
-                    onChange={(e) => updateSettings('profile', { signature: e.target.value })}
+                    onChange={(e) => updateSettings("profile", { signature: e.target.value })}
                     placeholder="Assinatura para suas mensagens"
                     className="min-h-20"
                   />
@@ -361,7 +361,7 @@ export const SettingsPanel = () => {
                   <Label>Fuso Horário</Label>
                   <Select 
                     value={settings.profile.timezone}
-                    onValueChange={(value) => updateSettings('profile', { timezone: value })}
+                    onValueChange={(value) => updateSettings("profile", { timezone: value })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -379,7 +379,7 @@ export const SettingsPanel = () => {
                   <Label>Idioma</Label>
                   <Select 
                     value={settings.profile.language}
-                    onValueChange={(value) => updateSettings('profile', { language: value })}
+                    onValueChange={(value) => updateSettings("profile", { language: value })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -418,7 +418,7 @@ export const SettingsPanel = () => {
                   <Label>URL do Avatar</Label>
                   <Input
                     value={settings.profile.avatar_url}
-                    onChange={(e) => updateSettings('profile', { avatar_url: e.target.value })}
+                    onChange={(e) => updateSettings("profile", { avatar_url: e.target.value })}
                     placeholder="https://exemplo.com/avatar.jpg"
                   />
                 </div>
@@ -442,7 +442,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.notifications.email_enabled}
-                    onCheckedChange={(checked) => updateSettings('notifications', { email_enabled: checked })}
+                    onCheckedChange={(checked) => updateSettings("notifications", { email_enabled: checked })}
                   />
                 </div>
                 
@@ -453,7 +453,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.notifications.push_enabled}
-                    onCheckedChange={(checked) => updateSettings('notifications', { push_enabled: checked })}
+                    onCheckedChange={(checked) => updateSettings("notifications", { push_enabled: checked })}
                   />
                 </div>
                 
@@ -464,7 +464,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.notifications.sms_enabled}
-                    onCheckedChange={(checked) => updateSettings('notifications', { sms_enabled: checked })}
+                    onCheckedChange={(checked) => updateSettings("notifications", { sms_enabled: checked })}
                   />
                 </div>
                 
@@ -475,7 +475,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.notifications.desktop_enabled}
-                    onCheckedChange={(checked) => updateSettings('notifications', { desktop_enabled: checked })}
+                    onCheckedChange={(checked) => updateSettings("notifications", { desktop_enabled: checked })}
                   />
                 </div>
                 
@@ -489,7 +489,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.notifications.sound_enabled}
-                    onCheckedChange={(checked) => updateSettings('notifications', { sound_enabled: checked })}
+                    onCheckedChange={(checked) => updateSettings("notifications", { sound_enabled: checked })}
                   />
                 </div>
               </CardContent>
@@ -504,7 +504,7 @@ export const SettingsPanel = () => {
                   <Label>Ativar horário de silêncio</Label>
                   <Switch 
                     checked={settings.notifications.quiet_hours_enabled}
-                    onCheckedChange={(checked) => updateSettings('notifications', { quiet_hours_enabled: checked })}
+                    onCheckedChange={(checked) => updateSettings("notifications", { quiet_hours_enabled: checked })}
                   />
                 </div>
                 
@@ -514,14 +514,14 @@ export const SettingsPanel = () => {
                       <Label>Início</Label>
                       <Select 
                         value={settings.notifications.quiet_start}
-                        onValueChange={(value) => updateSettings('notifications', { quiet_start: value })}
+                        onValueChange={(value) => updateSettings("notifications", { quiet_start: value })}
                       >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           {Array.from({ length: 24 }, (_, i) => {
-                            const hour = i.toString().padStart(2, '0');
+                            const hour = i.toString().padStart(2, "0");
                             return (
                               <SelectItem key={hour} value={`${hour}:00`}>
                                 {hour}:00
@@ -536,14 +536,14 @@ export const SettingsPanel = () => {
                       <Label>Fim</Label>
                       <Select 
                         value={settings.notifications.quiet_end}
-                        onValueChange={(value) => updateSettings('notifications', { quiet_end: value })}
+                        onValueChange={(value) => updateSettings("notifications", { quiet_end: value })}
                       >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           {Array.from({ length: 24 }, (_, i) => {
-                            const hour = i.toString().padStart(2, '0');
+                            const hour = i.toString().padStart(2, "0");
                             return (
                               <SelectItem key={hour} value={`${hour}:00`}>
                                 {hour}:00
@@ -578,7 +578,7 @@ export const SettingsPanel = () => {
                     </div>
                     <Switch 
                       checked={settings.privacy.show_online_status}
-                      onCheckedChange={(checked) => updateSettings('privacy', { show_online_status: checked })}
+                      onCheckedChange={(checked) => updateSettings("privacy", { show_online_status: checked })}
                     />
                   </div>
                   
@@ -591,7 +591,7 @@ export const SettingsPanel = () => {
                     </div>
                     <Switch 
                       checked={settings.privacy.allow_direct_messages}
-                      onCheckedChange={(checked) => updateSettings('privacy', { allow_direct_messages: checked })}
+                      onCheckedChange={(checked) => updateSettings("privacy", { allow_direct_messages: checked })}
                     />
                   </div>
                 </div>
@@ -606,7 +606,7 @@ export const SettingsPanel = () => {
                     </div>
                     <Switch 
                       checked={settings.privacy.read_receipts}
-                      onCheckedChange={(checked) => updateSettings('privacy', { read_receipts: checked })}
+                      onCheckedChange={(checked) => updateSettings("privacy", { read_receipts: checked })}
                     />
                   </div>
                   
@@ -619,7 +619,7 @@ export const SettingsPanel = () => {
                     </div>
                     <Switch 
                       checked={settings.privacy.typing_indicators}
-                      onCheckedChange={(checked) => updateSettings('privacy', { typing_indicators: checked })}
+                      onCheckedChange={(checked) => updateSettings("privacy", { typing_indicators: checked })}
                     />
                   </div>
                 </div>
@@ -640,7 +640,7 @@ export const SettingsPanel = () => {
                   <Label>Auto-arquivar mensagens após (dias)</Label>
                   <Select 
                     value={settings.communication.auto_archive_days.toString()}
-                    onValueChange={(value) => updateSettings('communication', { auto_archive_days: parseInt(value) })}
+                    onValueChange={(value) => updateSettings("communication", { auto_archive_days: parseInt(value) })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -665,7 +665,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.communication.message_preview}
-                    onCheckedChange={(checked) => updateSettings('communication', { message_preview: checked })}
+                    onCheckedChange={(checked) => updateSettings("communication", { message_preview: checked })}
                   />
                 </div>
                 
@@ -678,7 +678,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.communication.thread_grouping}
-                    onCheckedChange={(checked) => updateSettings('communication', { thread_grouping: checked })}
+                    onCheckedChange={(checked) => updateSettings("communication", { thread_grouping: checked })}
                   />
                 </div>
               </CardContent>
@@ -698,7 +698,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.communication.ai_suggestions}
-                    onCheckedChange={(checked) => updateSettings('communication', { ai_suggestions: checked })}
+                    onCheckedChange={(checked) => updateSettings("communication", { ai_suggestions: checked })}
                   />
                 </div>
                 
@@ -711,7 +711,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.communication.smart_replies}
-                    onCheckedChange={(checked) => updateSettings('communication', { smart_replies: checked })}
+                    onCheckedChange={(checked) => updateSettings("communication", { smart_replies: checked })}
                   />
                 </div>
               </CardContent>
@@ -736,7 +736,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.security.two_factor_enabled}
-                    onCheckedChange={(checked) => updateSettings('security', { two_factor_enabled: checked })}
+                    onCheckedChange={(checked) => updateSettings("security", { two_factor_enabled: checked })}
                   />
                 </div>
                 
@@ -744,7 +744,7 @@ export const SettingsPanel = () => {
                   <Label>Timeout de sessão (horas)</Label>
                   <Select 
                     value={settings.security.session_timeout.toString()}
-                    onValueChange={(value) => updateSettings('security', { session_timeout: parseInt(value) })}
+                    onValueChange={(value) => updateSettings("security", { session_timeout: parseInt(value) })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -768,7 +768,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.security.login_notifications}
-                    onCheckedChange={(checked) => updateSettings('security', { login_notifications: checked })}
+                    onCheckedChange={(checked) => updateSettings("security", { login_notifications: checked })}
                   />
                 </div>
                 
@@ -781,7 +781,7 @@ export const SettingsPanel = () => {
                   </div>
                   <Switch 
                     checked={settings.security.device_verification}
-                    onCheckedChange={(checked) => updateSettings('security', { device_verification: checked })}
+                    onCheckedChange={(checked) => updateSettings("security", { device_verification: checked })}
                   />
                 </div>
               </CardContent>

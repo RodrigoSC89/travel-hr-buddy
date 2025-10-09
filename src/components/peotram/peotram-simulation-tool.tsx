@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { Separator } from '@/components/ui/separator';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Calculator, 
   TrendingUp, 
@@ -27,8 +27,8 @@ import {
   Shield,
   Archive,
   Eye
-} from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+} from "lucide-react";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
 
 interface SimulationScenario {
   id: string;
@@ -42,13 +42,13 @@ interface SimulationScenario {
       min: number;
       max: number;
       unit: string;
-      impact: 'positive' | 'negative' | 'neutral';
+      impact: "positive" | "negative" | "neutral";
     };
   };
   results: {
     overallScore: number;
     complianceRate: number;
-    riskLevel: 'low' | 'medium' | 'high' | 'critical';
+    riskLevel: "low" | "medium" | "high" | "critical";
     estimatedCost: number;
     implementationTime: number;
     recommendations: string[];
@@ -64,57 +64,57 @@ interface SimulationScenario {
 interface WhatIfAnalysis {
   scenario: string;
   inputChanges: { parameter: string; change: number }[];
-  outputChanges: { metric: string; change: number; impact: 'positive' | 'negative' }[];
+  outputChanges: { metric: string; change: number; impact: "positive" | "negative" }[];
   recommendations: string[];
-  feasibility: 'high' | 'medium' | 'low';
-  priority: 'critical' | 'high' | 'medium' | 'low';
+  feasibility: "high" | "medium" | "low";
+  priority: "critical" | "high" | "medium" | "low";
 }
 
 const SIMULATION_PARAMETERS = {
   trainingInvestment: {
-    name: 'Investimento em Treinamento',
+    name: "Investimento em Treinamento",
     currentValue: 100000,
     simulatedValue: 100000,
     min: 50000,
     max: 500000,
-    unit: 'R$',
-    impact: 'positive' as const
+    unit: "R$",
+    impact: "positive" as const
   },
   maintenanceFrequency: {
-    name: 'Frequência de Manutenção',
+    name: "Frequência de Manutenção",
     currentValue: 30,
     simulatedValue: 30,
     min: 15,
     max: 90,
-    unit: 'dias',
-    impact: 'positive' as const
+    unit: "dias",
+    impact: "positive" as const
   },
   auditFrequency: {
-    name: 'Frequência de Auditorias',
+    name: "Frequência de Auditorias",
     currentValue: 90,
     simulatedValue: 90,
     min: 30,
     max: 180,
-    unit: 'dias',
-    impact: 'positive' as const
+    unit: "dias",
+    impact: "positive" as const
   },
   staffing: {
-    name: 'Nível de Equipe',
+    name: "Nível de Equipe",
     currentValue: 100,
     simulatedValue: 100,
     min: 80,
     max: 150,
-    unit: '%',
-    impact: 'positive' as const
+    unit: "%",
+    impact: "positive" as const
   },
   technologyInvestment: {
-    name: 'Investimento em Tecnologia',
+    name: "Investimento em Tecnologia",
     currentValue: 200000,
     simulatedValue: 200000,
     min: 50000,
     max: 1000000,
-    unit: 'R$',
-    impact: 'positive' as const
+    unit: "R$",
+    impact: "positive" as const
   }
 };
 
@@ -134,25 +134,25 @@ export const PeotramSimulationTool: React.FC = () => {
     // Mock de cenários salvos
     const mockScenarios: SimulationScenario[] = [
       {
-        id: 'scenario_1',
-        name: 'Investimento em Treinamento Avançado',
-        description: 'Aumento de 50% no investimento em treinamento',
+        id: "scenario_1",
+        name: "Investimento em Treinamento Avançado",
+        description: "Aumento de 50% no investimento em treinamento",
         parameters: { ...SIMULATION_PARAMETERS },
         results: {
           overallScore: 92.3,
           complianceRate: 87.5,
-          riskLevel: 'low',
+          riskLevel: "low",
           estimatedCost: 150000,
           implementationTime: 60,
           recommendations: [
-            'Implementar programa de treinamento contínuo',
-            'Criar certificações internas',
-            'Estabelecer mentoria técnica'
+            "Implementar programa de treinamento contínuo",
+            "Criar certificações internas",
+            "Estabelecer mentoria técnica"
           ],
           impacts: [
-            { category: 'Segurança', current: 85, projected: 92, improvement: 8.2 },
-            { category: 'Conformidade', current: 78, projected: 88, improvement: 12.8 },
-            { category: 'Eficiência', current: 82, projected: 87, improvement: 6.1 }
+            { category: "Segurança", current: 85, projected: 92, improvement: 8.2 },
+            { category: "Conformidade", current: 78, projected: 88, improvement: 12.8 },
+            { category: "Eficiência", current: 82, projected: 87, improvement: 6.1 }
           ]
         }
       }
@@ -172,15 +172,15 @@ export const PeotramSimulationTool: React.FC = () => {
       
       const scenario: SimulationScenario = {
         id: `scenario_${Date.now()}`,
-        name: `Simulação ${new Date().toLocaleString('pt-BR')}`,
-        description: 'Simulação customizada dos parâmetros PEOTRAM',
+        name: `Simulação ${new Date().toLocaleString("pt-BR")}`,
+        description: "Simulação customizada dos parâmetros PEOTRAM",
         parameters: { ...parameters },
         results
       };
       
       setCurrentScenario(scenario);
     } catch (error) {
-      console.error('Erro na simulação:', error);
+      console.error("Erro na simulação:", error);
     } finally {
       setIsRunning(false);
     }
@@ -224,11 +224,11 @@ export const PeotramSimulationTool: React.FC = () => {
     const complianceRate = Math.min(Math.max(complianceBase, 0), 100);
     
     // Determinar nível de risco
-    let riskLevel: 'low' | 'medium' | 'high' | 'critical' = 'medium';
-    if (overallScore >= 90) riskLevel = 'low';
-    else if (overallScore >= 75) riskLevel = 'medium';
-    else if (overallScore >= 60) riskLevel = 'high';
-    else riskLevel = 'critical';
+    let riskLevel: "low" | "medium" | "high" | "critical" = "medium";
+    if (overallScore >= 90) riskLevel = "low";
+    else if (overallScore >= 75) riskLevel = "medium";
+    else if (overallScore >= 60) riskLevel = "high";
+    else riskLevel = "critical";
     
     return {
       overallScore: Math.round(overallScore * 10) / 10,
@@ -238,9 +238,9 @@ export const PeotramSimulationTool: React.FC = () => {
       implementationTime: Math.ceil((Math.abs(costBase) / 10000) + 30),
       recommendations: generateRecommendations(),
       impacts: [
-        { category: 'Segurança', current: 85, projected: Math.min(85 + (overallScore - 75) * 0.4, 100), improvement: (overallScore - 75) * 0.4 },
-        { category: 'Conformidade', current: 78, projected: Math.min(78 + (complianceRate - 70) * 0.5, 100), improvement: (complianceRate - 70) * 0.5 },
-        { category: 'Eficiência', current: 82, projected: Math.min(82 + (overallScore - 75) * 0.3, 100), improvement: (overallScore - 75) * 0.3 }
+        { category: "Segurança", current: 85, projected: Math.min(85 + (overallScore - 75) * 0.4, 100), improvement: (overallScore - 75) * 0.4 },
+        { category: "Conformidade", current: 78, projected: Math.min(78 + (complianceRate - 70) * 0.5, 100), improvement: (complianceRate - 70) * 0.5 },
+        { category: "Eficiência", current: 82, projected: Math.min(82 + (overallScore - 75) * 0.3, 100), improvement: (overallScore - 75) * 0.3 }
       ]
     };
   };
@@ -249,23 +249,23 @@ export const PeotramSimulationTool: React.FC = () => {
     const recommendations = [];
     
     if (parameters.trainingInvestment.simulatedValue > parameters.trainingInvestment.currentValue) {
-      recommendations.push('Implementar programa de capacitação técnica avançada');
+      recommendations.push("Implementar programa de capacitação técnica avançada");
     }
     
     if (parameters.maintenanceFrequency.simulatedValue < parameters.maintenanceFrequency.currentValue) {
-      recommendations.push('Estabelecer cronograma de manutenção preventiva mais rigoroso');
+      recommendations.push("Estabelecer cronograma de manutenção preventiva mais rigoroso");
     }
     
     if (parameters.auditFrequency.simulatedValue < parameters.auditFrequency.currentValue) {
-      recommendations.push('Aumentar frequência de auditorias internas');
+      recommendations.push("Aumentar frequência de auditorias internas");
     }
     
     if (parameters.technologyInvestment.simulatedValue > parameters.technologyInvestment.currentValue) {
-      recommendations.push('Investir em sistemas de monitoramento digital');
+      recommendations.push("Investir em sistemas de monitoramento digital");
     }
     
     if (recommendations.length === 0) {
-      recommendations.push('Manter estratégia atual com monitoramento contínuo');
+      recommendations.push("Manter estratégia atual com monitoramento contínuo");
     }
     
     return recommendations;
@@ -293,19 +293,19 @@ export const PeotramSimulationTool: React.FC = () => {
   };
 
   const getImpactColor = (improvement: number) => {
-    if (improvement > 5) return 'text-success';
-    if (improvement > 0) return 'text-info';
-    if (improvement > -5) return 'text-warning';
-    return 'text-destructive';
+    if (improvement > 5) return "text-success";
+    if (improvement > 0) return "text-info";
+    if (improvement > -5) return "text-warning";
+    return "text-destructive";
   };
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'low': return 'bg-success/20 text-success border-success/30';
-      case 'medium': return 'bg-warning/20 text-warning border-warning/30';
-      case 'high': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'critical': return 'bg-destructive/30 text-destructive border-destructive/40';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "low": return "bg-success/20 text-success border-success/30";
+    case "medium": return "bg-warning/20 text-warning border-warning/30";
+    case "high": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "critical": return "bg-destructive/30 text-destructive border-destructive/40";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
@@ -340,7 +340,7 @@ export const PeotramSimulationTool: React.FC = () => {
             ) : (
               <Play className="w-4 h-4 mr-2" />
             )}
-            {isRunning ? 'Simulando...' : 'Executar Simulação'}
+            {isRunning ? "Simulando..." : "Executar Simulação"}
           </Button>
         </div>
       </div>
@@ -364,13 +364,13 @@ export const PeotramSimulationTool: React.FC = () => {
                   <Label className="font-medium">{param.name}</Label>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">
-                      {param.simulatedValue.toLocaleString('pt-BR')} {param.unit}
+                      {param.simulatedValue.toLocaleString("pt-BR")} {param.unit}
                     </span>
                     {param.simulatedValue !== param.currentValue && (
                       <Badge variant="outline" className={
-                        param.simulatedValue > param.currentValue ? 'text-success' : 'text-destructive'
+                        param.simulatedValue > param.currentValue ? "text-success" : "text-destructive"
                       }>
-                        {param.simulatedValue > param.currentValue ? '+' : ''}
+                        {param.simulatedValue > param.currentValue ? "+" : ""}
                         {((param.simulatedValue - param.currentValue) / param.currentValue * 100).toFixed(1)}%
                       </Badge>
                     )}
@@ -387,11 +387,11 @@ export const PeotramSimulationTool: React.FC = () => {
                     className="w-full"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>{param.min.toLocaleString('pt-BR')} {param.unit}</span>
+                    <span>{param.min.toLocaleString("pt-BR")} {param.unit}</span>
                     <span className="font-medium">
-                      Atual: {param.currentValue.toLocaleString('pt-BR')} {param.unit}
+                      Atual: {param.currentValue.toLocaleString("pt-BR")} {param.unit}
                     </span>
-                    <span>{param.max.toLocaleString('pt-BR')} {param.unit}</span>
+                    <span>{param.max.toLocaleString("pt-BR")} {param.unit}</span>
                   </div>
                 </div>
               </div>
@@ -450,9 +450,9 @@ export const PeotramSimulationTool: React.FC = () => {
                 <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                   <span className="font-medium">Nível de Risco Projetado:</span>
                   <Badge variant="outline" className={getRiskColor(currentScenario.results.riskLevel)}>
-                    {currentScenario.results.riskLevel === 'low' ? 'Baixo' :
-                     currentScenario.results.riskLevel === 'medium' ? 'Médio' :
-                     currentScenario.results.riskLevel === 'high' ? 'Alto' : 'Crítico'}
+                    {currentScenario.results.riskLevel === "low" ? "Baixo" :
+                      currentScenario.results.riskLevel === "medium" ? "Médio" :
+                        currentScenario.results.riskLevel === "high" ? "Alto" : "Crítico"}
                   </Badge>
                 </div>
 
@@ -467,7 +467,7 @@ export const PeotramSimulationTool: React.FC = () => {
                           {impact.current}% → {Math.round(impact.projected)}%
                         </span>
                         <span className={`text-sm font-medium ${getImpactColor(impact.improvement)}`}>
-                          {impact.improvement > 0 ? '+' : ''}{impact.improvement.toFixed(1)}%
+                          {impact.improvement > 0 ? "+" : ""}{impact.improvement.toFixed(1)}%
                         </span>
                       </div>
                     </div>
@@ -478,7 +478,7 @@ export const PeotramSimulationTool: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="text-muted-foreground">Investimento Estimado:</span>
-                    <div className="font-bold">R$ {currentScenario.results.estimatedCost.toLocaleString('pt-BR')}</div>
+                    <div className="font-bold">R$ {currentScenario.results.estimatedCost.toLocaleString("pt-BR")}</div>
                   </div>
                   <div>
                     <span className="text-muted-foreground">Prazo de Implementação:</span>
@@ -549,8 +549,8 @@ export const PeotramSimulationTool: React.FC = () => {
                         <div>
                           <span className="text-muted-foreground">Risco:</span>
                           <Badge variant="outline" className={getRiskColor(scenario.results.riskLevel)}>
-                            {scenario.results.riskLevel === 'low' ? 'Baixo' :
-                             scenario.results.riskLevel === 'medium' ? 'Médio' : 'Alto'}
+                            {scenario.results.riskLevel === "low" ? "Baixo" :
+                              scenario.results.riskLevel === "medium" ? "Médio" : "Alto"}
                           </Badge>
                         </div>
                       </div>

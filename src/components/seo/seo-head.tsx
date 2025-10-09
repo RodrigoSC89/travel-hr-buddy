@@ -1,5 +1,5 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import React from "react";
+import { Helmet } from "react-helmet-async";
 
 interface SEOHeadProps {
   title?: string;
@@ -11,12 +11,12 @@ interface SEOHeadProps {
 }
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
-  title = 'Nautilus One - Sistema Marítimo Inteligente',
-  description = 'Plataforma completa para gestão marítima com IA, analytics avançados e automação inteligente.',
-  keywords = 'maritimo, gestão, navegação, IA, analytics, automação, nautilus',
-  image = '/nautilus-og-image.jpg',
-  url = 'https://nautilus-one.app',
-  type = 'website'
+  title = "Nautilus One - Sistema Marítimo Inteligente",
+  description = "Plataforma completa para gestão marítima com IA, analytics avançados e automação inteligente.",
+  keywords = "maritimo, gestão, navegação, IA, analytics, automação, nautilus",
+  image = "/nautilus-og-image.jpg",
+  url = "https://nautilus-one.app",
+  type = "website"
 }) => {
   return (
     <Helmet>

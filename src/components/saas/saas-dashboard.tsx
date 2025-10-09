@@ -1,9 +1,9 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Building2,
   Users,
@@ -19,15 +19,15 @@ import {
   Globe,
   Shield,
   Smartphone
-} from 'lucide-react';
-import { useTenant } from '@/contexts/TenantContext';
-import { TenantSwitcher } from './tenant-switcher';
-import { WhiteLabelCustomizer } from './white-label-customizer';
-import { TenantSetupWizard } from './tenant-setup-wizard';
-import { BillingManagement } from './billing-management';
-import { UsageAnalytics } from './usage-analytics';
-import { TenantUserManagement } from './tenant-user-management';
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+} from "lucide-react";
+import { useTenant } from "@/contexts/TenantContext";
+import { TenantSwitcher } from "./tenant-switcher";
+import { WhiteLabelCustomizer } from "./white-label-customizer";
+import { TenantSetupWizard } from "./tenant-setup-wizard";
+import { BillingManagement } from "./billing-management";
+import { UsageAnalytics } from "./usage-analytics";
+import { TenantUserManagement } from "./tenant-user-management";
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 export const SaaSDashboard: React.FC = () => {
   const { 
@@ -43,11 +43,11 @@ export const SaaSDashboard: React.FC = () => {
 
   // Dados simulados para gráficos
   const usageData = [
-    { date: '01/01', users: 8, api_calls: 120, storage: 1.2 },
-    { date: '02/01', users: 12, api_calls: 180, storage: 1.4 },
-    { date: '03/01', users: 15, api_calls: 240, storage: 1.8 },
-    { date: '04/01', users: 18, api_calls: 320, storage: 2.1 },
-    { date: '05/01', users: 22, api_calls: 450, storage: 2.3 },
+    { date: "01/01", users: 8, api_calls: 120, storage: 1.2 },
+    { date: "02/01", users: 12, api_calls: 180, storage: 1.4 },
+    { date: "03/01", users: 15, api_calls: 240, storage: 1.8 },
+    { date: "04/01", users: 18, api_calls: 320, storage: 2.1 },
+    { date: "05/01", users: 22, api_calls: 450, storage: 2.3 },
   ];
 
   const planStats = {
@@ -366,7 +366,7 @@ export const SaaSDashboard: React.FC = () => {
                       Plano {currentTenant.plan_type}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      Faturamento {currentTenant.billing_cycle === 'monthly' ? 'mensal' : 'anual'}
+                      Faturamento {currentTenant.billing_cycle === "monthly" ? "mensal" : "anual"}
                     </p>
                   </div>
                   <div className="text-right">
@@ -409,8 +409,8 @@ export const SaaSDashboard: React.FC = () => {
                     key={plan.id}
                     className={`p-3 border rounded-lg ${
                       plan.slug === currentTenant.plan_type 
-                        ? 'border-primary bg-primary/5' 
-                        : 'border-border'
+                        ? "border-primary bg-primary/5" 
+                        : "border-border"
                     }`}
                   >
                     <div className="flex items-center justify-between">

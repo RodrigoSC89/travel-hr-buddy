@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { 
   ChevronDown,
   ChevronUp,
@@ -14,11 +14,11 @@ import {
   FileText,
   Users,
   TrendingUp
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
-import DraggableFloating from '@/components/ui/draggable-floating';
-import { FloatingShortcutButton } from '@/components/ui/floating-shortcut-button';
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import DraggableFloating from "@/components/ui/draggable-floating";
+import { FloatingShortcutButton } from "@/components/ui/floating-shortcut-button";
 
 interface ModuleAction {
   id: string;
@@ -26,7 +26,7 @@ interface ModuleAction {
   icon: React.ReactNode;
   action: () => void;
   shortcut?: string;
-  variant?: 'default' | 'outline' | 'ghost';
+  variant?: "default" | "outline" | "ghost";
 }
 
 interface ModuleActionButtonProps {
