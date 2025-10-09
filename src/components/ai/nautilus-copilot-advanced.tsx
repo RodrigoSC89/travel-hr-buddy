@@ -254,6 +254,30 @@ What would you like assistance with today?`,
     }
   };
 
+  const handleScheduleMaintenance = () => {
+    toast({
+      title: "🔧 Agendar Manutenção",
+      description: "Abrindo sistema de agendamento de manutenção preventiva"
+    });
+    // TODO: Open maintenance scheduling dialog
+  };
+
+  const handleGenerateReport = () => {
+    toast({
+      title: "📄 Gerar Relatório",
+      description: "Iniciando geração de relatório operacional"
+    });
+    // TODO: Open report generation dialog
+  };
+
+  const handleCrewPlanning = () => {
+    toast({
+      title: "👥 Planejamento de Tripulação",
+      description: "Abrindo ferramenta de planejamento e escalas de tripulação"
+    });
+    // TODO: Open crew planning interface
+  };
+
   return (
     <div className="h-[600px] flex flex-col">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
@@ -501,15 +525,15 @@ What would you like assistance with today?`,
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button variant="outline" size="sm" className="w-full justify-start">
+                <Button variant="outline" size="sm" className="w-full justify-start" onClick={handleScheduleMaintenance}>
                   <Calendar className="h-3 w-3 mr-2" />
                   Schedule Maintenance
                 </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start">
+                <Button variant="outline" size="sm" className="w-full justify-start" onClick={handleGenerateReport}>
                   <FileText className="h-3 w-3 mr-2" />
                   Generate Report
                 </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start">
+                <Button variant="outline" size="sm" className="w-full justify-start" onClick={handleCrewPlanning}>
                   <Users className="h-3 w-3 mr-2" />
                   Crew Planning
                 </Button>
