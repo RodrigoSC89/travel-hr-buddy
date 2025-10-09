@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 import {
   AlertTriangle,
   TrendingDown,
@@ -60,6 +61,23 @@ const calculateRiskLevel = (probability: number, impact: number): string => {
 
 export const RiskAssessmentMatrix: React.FC = () => {
   const [selectedCell, setSelectedCell] = useState<{ probability: number; impact: number } | null>(null);
+  const { toast } = useToast();
+
+  const handleViewDetails = (riskTitle: string) => {
+    toast({
+      title: "📋 Detalhes do Risco",
+      description: `Abrindo análise detalhada: ${riskTitle}`
+    });
+    // TODO: Open risk details dialog
+  };
+
+  const handleNewRisk = () => {
+    toast({
+      title: "➕ Novo Registro de Risco",
+      description: "Abrindo formulário de registro de risco"
+    });
+    // TODO: Open new risk registration form
+  };
 
   const probabilityLabels = ['Muito Baixa (1)', 'Baixa (2)', 'Média (3)', 'Alta (4)', 'Muito Alta (5)'];
   const impactLabels = ['Insignificante (1)', 'Menor (2)', 'Moderado (3)', 'Maior (4)', 'Catastrófico (5)'];
@@ -235,7 +253,7 @@ export const RiskAssessmentMatrix: React.FC = () => {
                         <span>Score: <strong className="text-red-600">{risk.riskScore}</strong></span>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" className="bg-white">
+                    <Button variant="outline" size="sm" className="bg-white" onClick={() => handleViewDetails(risk.title)}>
                       Ver Detalhes
                     </Button>
                   </div>
@@ -245,7 +263,7 @@ export const RiskAssessmentMatrix: React.FC = () => {
           </div>
           
           <div className="mt-6 flex justify-center">
-            <Button className="bg-red-600 hover:bg-red-700 text-white font-semibold">
+            <Button className="bg-red-600 hover:bg-red-700 text-white font-semibold" onClick={handleNewRisk}>
               <AlertTriangle className="h-4 w-4 mr-2" />
               Novo Registro de Risco
             </Button>

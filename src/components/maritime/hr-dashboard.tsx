@@ -310,6 +310,14 @@ export const MaritimeHRDashboard: React.FC = () => {
     });
   };
 
+  const handlePlanRotation = () => {
+    toast({
+      title: "🗓️ Planejamento de Rotação",
+      description: "Abrindo ferramenta de planejamento inteligente de escalas e rotações de tripulação",
+    });
+    // TODO: Implement rotation planning dialog/page
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Section */}
@@ -464,7 +472,11 @@ export const MaritimeHRDashboard: React.FC = () => {
                     <Shield className="h-4 w-4 mr-2" />
                     Verificar Compliance
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button 
+                    onClick={handlePlanRotation}
+                    variant="outline" 
+                    className="w-full justify-start"
+                  >
                     <Calendar className="h-4 w-4 mr-2" />
                     Planejar Rotação
                   </Button>

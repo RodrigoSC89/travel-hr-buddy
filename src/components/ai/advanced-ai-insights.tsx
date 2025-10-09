@@ -171,6 +171,14 @@ const AdvancedAIInsights = () => {
     }
   };
 
+  const handleImplementInsight = (insightTitle: string) => {
+    toast({
+      title: "✨ Implementar Insight",
+      description: `Iniciando implementação: ${insightTitle}`
+    });
+    // TODO: Open implementation workflow dialog
+  };
+
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
@@ -322,7 +330,7 @@ const AdvancedAIInsights = () => {
                         {insight.estimatedSavings}
                       </span>
                     </div>
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" onClick={() => handleImplementInsight(insight.title)}>
                       Implementar
                     </Button>
                   </div>
@@ -496,7 +504,7 @@ const AdvancedAIInsights = () => {
                         </Badge>
                       </div>
                     </div>
-                    <Button>Implementar</Button>
+                    <Button onClick={() => handleImplementInsight(rec.title)}>Implementar</Button>
                   </div>
                 </CardContent>
               </Card>
