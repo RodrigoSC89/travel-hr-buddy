@@ -97,4 +97,7 @@ If Vercel is not loading the application correctly:
 - Check they're set in the hosting platform dashboard
 
 ## Support
-See `DEPLOYMENT_CONFIG_REPORT.md` for detailed documentation.
+For detailed documentation, see:
+- `DEPLOYMENT_CONFIG_REPORT.md` - Deployment configuration details
+- `VERCEL_OPTIMIZATION_GUIDE.md` - Vercel performance optimization and settings recommendations
+- `VERCEL_DEPLOYMENT_READINESS.md` - Complete deployment readiness checklist

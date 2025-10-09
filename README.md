@@ -90,7 +90,35 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/ead06aad-a7d4-45d3-bdf7-e23796c6ac50) and click on Share -> Publish.
+### Quick Deploy Options
+
+1. **Lovable (Easiest):**
+   - Open [Lovable](https://lovable.dev/projects/ead06aad-a7d4-45d3-bdf7-e23796c6ac50)
+   - Click Share → Publish
+
+2. **Vercel (Recommended for Production):**
+   ```bash
+   npm run deploy:vercel
+   ```
+   Or connect your GitHub repository to Vercel for automatic deployments.
+
+3. **Manual Deployment:**
+   ```bash
+   npm run build
+   # Upload the dist/ folder to your hosting provider
+   ```
+
+### Deployment Documentation
+
+**🚀 Start Here:**
+- **[VERCEL_QUICK_START.md](./VERCEL_QUICK_START.md)** - 5-minute visual setup guide
+
+**📚 Comprehensive Guides:**
+- **[QUICK_DEPLOY.md](./QUICK_DEPLOY.md)** - Quick deployment guide for all platforms
+- **[VERCEL_SETTINGS_CHECKLIST.md](./VERCEL_SETTINGS_CHECKLIST.md)** - Interactive settings checklist
+- **[VERCEL_OPTIMIZATION_GUIDE.md](./VERCEL_OPTIMIZATION_GUIDE.md)** - Performance optimization strategies
+- **[VERCEL_DEPLOYMENT_READINESS.md](./VERCEL_DEPLOYMENT_READINESS.md)** - Complete deployment readiness checklist
+- **[DEPLOYMENT_CONFIG_REPORT.md](./DEPLOYMENT_CONFIG_REPORT.md)** - Detailed configuration report
 
 ## Can I connect a custom domain to my Lovable project?
 
