@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 /**
  * Hook to trap focus within a modal/dialog
@@ -22,13 +22,13 @@ export const useFocusTrap = (isActive: boolean) => {
       if (!container) return [];
       
       const focusableSelectors = [
-        'a[href]',
-        'button:not([disabled])',
-        'textarea:not([disabled])',
-        'input:not([disabled])',
-        'select:not([disabled])',
-        '[tabindex]:not([tabindex="-1"])',
-      ].join(', ');
+        "a[href]",
+        "button:not([disabled])",
+        "textarea:not([disabled])",
+        "input:not([disabled])",
+        "select:not([disabled])",
+        "[tabindex]:not([tabindex=\"-1\"])",
+      ].join(", ");
 
       return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors));
     };
@@ -40,7 +40,7 @@ export const useFocusTrap = (isActive: boolean) => {
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
 
       const focusableElements = getFocusableElements();
       if (focusableElements.length === 0) return;
@@ -60,10 +60,10 @@ export const useFocusTrap = (isActive: boolean) => {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
       
       // Restore focus to the previously focused element
       if (previousActiveElement.current) {

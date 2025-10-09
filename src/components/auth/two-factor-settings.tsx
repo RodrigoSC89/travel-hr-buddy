@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { 
   Shield, 
   Smartphone, 
@@ -7,16 +7,16 @@ import {
   Check,
   AlertTriangle,
   Trash2
-} from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+} from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface TwoFactorSettingsProps {
   onClose?: () => void;
@@ -26,12 +26,12 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
   const { user } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState<'setup' | 'verify' | 'enabled'>('setup');
-  const [qrCode, setQrCode] = useState<string>('');
-  const [secret, setSecret] = useState<string>('');
-  const [verificationCode, setVerificationCode] = useState('');
+  const [step, setStep] = useState<"setup" | "verify" | "enabled">("setup");
+  const [qrCode, setQrCode] = useState<string>("");
+  const [secret, setSecret] = useState<string>("");
+  const [verificationCode, setVerificationCode] = useState("");
   const [copied, setCopied] = useState(false);
-  const [factorId, setFactorId] = useState<string>('');
+  const [factorId, setFactorId] = useState<string>("");
   const [factors, setFactors] = useState<any[]>([]);
 
   useEffect(() => {
@@ -45,13 +45,13 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       
       if (data?.all && data.all.length > 0) {
         setFactors(data.all);
-        const enabledFactor = data.all.find(f => f.status === 'verified');
+        const enabledFactor = data.all.find(f => f.status === "verified");
         if (enabledFactor) {
-          setStep('enabled');
+          setStep("enabled");
         }
       }
     } catch (error) {
-      console.error('Error checking MFA factors:', error);
+      console.error("Error checking MFA factors:", error);
     }
   };
 
@@ -59,7 +59,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     setIsLoading(true);
     try {
       const { data, error } = await supabase.auth.mfa.enroll({
-        factorType: 'totp'
+        factorType: "totp"
       });
 
       if (error) throw error;
@@ -67,7 +67,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       setQrCode(data.totp.qr_code);
       setSecret(data.totp.secret);
       setFactorId(data.id);
-      setStep('verify');
+      setStep("verify");
       
       toast({
         title: "2FA Configurado",
@@ -104,7 +104,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
 
       if (error) throw error;
 
-      setStep('enabled');
+      setStep("enabled");
       await checkExistingFactors();
       
       toast({
@@ -129,7 +129,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       if (error) throw error;
 
       await checkExistingFactors();
-      setStep('setup');
+      setStep("setup");
       
       toast({
         title: "2FA Desativado",
@@ -247,7 +247,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         <Input
           id="code"
           value={verificationCode}
-          onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+          onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
           placeholder="000000"
           className="text-center font-mono text-lg tracking-widest"
           maxLength={6}
@@ -257,7 +257,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       <div className="flex gap-2">
         <Button
           variant="outline"
-          onClick={() => setStep('setup')}
+          onClick={() => setStep("setup")}
           className="flex-1"
         >
           Voltar
@@ -304,13 +304,13 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
                 <div>
                   <p className="font-medium">App Autenticador</p>
                   <p className="text-sm text-muted-foreground">
-                    Status: {factor.status === 'verified' ? 'Ativo' : 'Pendente'}
+                    Status: {factor.status === "verified" ? "Ativo" : "Pendente"}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant={factor.status === 'verified' ? 'default' : 'secondary'}>
-                  {factor.status === 'verified' ? 'Ativo' : 'Pendente'}
+                <Badge variant={factor.status === "verified" ? "default" : "secondary"}>
+                  {factor.status === "verified" ? "Ativo" : "Pendente"}
                 </Badge>
                 <Button
                   variant="outline"
@@ -328,7 +328,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
 
       {factors.length === 0 && (
         <Button 
-          onClick={() => setStep('setup')} 
+          onClick={() => setStep("setup")} 
           variant="outline"
           className="w-full"
         >
@@ -350,9 +350,9 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {step === 'setup' && renderSetupStep()}
-        {step === 'verify' && renderVerifyStep()}
-        {step === 'enabled' && renderEnabledStep()}
+        {step === "setup" && renderSetupStep()}
+        {step === "verify" && renderVerifyStep()}
+        {step === "enabled" && renderEnabledStep()}
       </CardContent>
     </Card>
   );

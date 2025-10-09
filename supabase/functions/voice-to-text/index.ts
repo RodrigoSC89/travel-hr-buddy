@@ -2,8 +2,8 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 // Process base64 in chunks to prevent memory issues
@@ -37,46 +37,46 @@ function processBase64Chunks(base64String: string, chunkSize = 32768) {
 }
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    const { audio, language = 'pt' } = await req.json();
+    const { audio, language = "pt" } = await req.json();
     
     if (!audio) {
-      throw new Error('No audio data provided');
+      throw new Error("No audio data provided");
     }
 
-    console.log('Processing voice-to-text request...');
+    console.log("Processing voice-to-text request...");
 
     // Process audio in chunks
     const binaryAudio = processBase64Chunks(audio);
     
     // Prepare form data
     const formData = new FormData();
-    const blob = new Blob([binaryAudio], { type: 'audio/webm' });
-    formData.append('file', blob, 'audio.webm');
-    formData.append('model', 'whisper-1');
-    formData.append('language', language);
+    const blob = new Blob([binaryAudio], { type: "audio/webm" });
+    formData.append("file", blob, "audio.webm");
+    formData.append("model", "whisper-1");
+    formData.append("language", language);
 
     // Send to OpenAI
-    const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
+        "Authorization": `Bearer ${Deno.env.get("OPENAI_API_KEY")}`,
       },
       body: formData,
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('OpenAI API error:', errorText);
+      console.error("OpenAI API error:", errorText);
       throw new Error(`OpenAI API error: ${errorText}`);
     }
 
     const result = await response.json();
-    console.log('Transcription result:', result.text);
+    console.log("Transcription result:", result.text);
 
     return new Response(
       JSON.stringify({ 
@@ -84,19 +84,19 @@ serve(async (req) => {
         language: language,
         success: true 
       }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 
   } catch (error) {
-    console.error('Voice-to-text error:', error);
+    console.error("Voice-to-text error:", error);
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
         success: false 
       }),
       {
         status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );
   }

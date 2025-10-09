@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Ship, 
   MapPin, 
@@ -27,16 +27,16 @@ import {
   Fuel,
   Users,
   Shield
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Vessel {
   id: string;
   name: string;
   imo: string;
-  type: 'container' | 'tanker' | 'bulk' | 'general_cargo' | 'passenger';
+  type: "container" | "tanker" | "bulk" | "general_cargo" | "passenger";
   flag: string;
-  status: 'at_sea' | 'in_port' | 'anchored' | 'maintenance' | 'emergency';
+  status: "at_sea" | "in_port" | "anchored" | "maintenance" | "emergency";
   location: {
     lat: number;
     lng: number;
@@ -69,11 +69,11 @@ interface Vessel {
 interface LogisticsOperation {
   id: string;
   vesselId: string;
-  type: 'loading' | 'unloading' | 'bunkering' | 'crew_change' | 'maintenance';
+  type: "loading" | "unloading" | "bunkering" | "crew_change" | "maintenance";
   port: string;
   scheduled: string;
   estimated_duration: number;
-  status: 'scheduled' | 'in_progress' | 'completed' | 'delayed';
+  status: "scheduled" | "in_progress" | "completed" | "delayed";
   cargo?: {
     type: string;
     quantity: number;
@@ -93,7 +93,7 @@ interface PortSchedule {
 }
 
 export const MaritimeLogisticsDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [vessels, setVessels] = useState<Vessel[]>([]);
   const [operations, setOperations] = useState<LogisticsOperation[]>([]);
   const [portSchedules, setPortSchedules] = useState<PortSchedule[]>([]);
@@ -108,21 +108,21 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
   const loadMockData = () => {
     const mockVessels: Vessel[] = [
       {
-        id: '1',
-        name: 'MV Nautilus Pioneer',
-        imo: 'IMO 9456789',
-        type: 'container',
-        flag: 'Brazil',
-        status: 'at_sea',
+        id: "1",
+        name: "MV Nautilus Pioneer",
+        imo: "IMO 9456789",
+        type: "container",
+        flag: "Brazil",
+        status: "at_sea",
         location: {
           lat: -23.0015,
           lng: -43.2093,
-          country: 'Brazil'
+          country: "Brazil"
         },
-        eta: '2024-01-20T14:30:00Z',
-        etd: '2024-01-21T08:00:00Z',
+        eta: "2024-01-20T14:30:00Z",
+        etd: "2024-01-21T08:00:00Z",
         cargo: {
-          type: 'Containers',
+          type: "Containers",
           capacity: 12000,
           current_load: 8500
         },
@@ -135,28 +135,28 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
           current: 2800
         },
         route: {
-          origin: 'Santos, Brazil',
-          destination: 'Hamburg, Germany',
-          waypoints: ['Las Palmas', 'Algeciras']
+          origin: "Santos, Brazil",
+          destination: "Hamburg, Germany",
+          waypoints: ["Las Palmas", "Algeciras"]
         },
-        lastUpdate: '2024-01-15T10:30:00Z'
+        lastUpdate: "2024-01-15T10:30:00Z"
       },
       {
-        id: '2',
-        name: 'MV Atlantic Explorer',
-        imo: 'IMO 9567890',
-        type: 'tanker',
-        flag: 'Brazil',
-        status: 'in_port',
+        id: "2",
+        name: "MV Atlantic Explorer",
+        imo: "IMO 9567890",
+        type: "tanker",
+        flag: "Brazil",
+        status: "in_port",
         location: {
           lat: -23.9608,
           lng: -46.3334,
-          port: 'Santos',
-          country: 'Brazil'
+          port: "Santos",
+          country: "Brazil"
         },
-        eta: '2024-01-15T09:00:00Z',
+        eta: "2024-01-15T09:00:00Z",
         cargo: {
-          type: 'Crude Oil',
+          type: "Crude Oil",
           capacity: 85000,
           current_load: 78000
         },
@@ -169,65 +169,65 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
           current: 3900
         },
         route: {
-          origin: 'Santos, Brazil',
-          destination: 'Houston, USA',
-          waypoints: ['Panama Canal']
+          origin: "Santos, Brazil",
+          destination: "Houston, USA",
+          waypoints: ["Panama Canal"]
         },
-        lastUpdate: '2024-01-15T11:00:00Z'
+        lastUpdate: "2024-01-15T11:00:00Z"
       }
     ];
 
     const mockOperations: LogisticsOperation[] = [
       {
-        id: '1',
-        vesselId: '1',
-        type: 'loading',
-        port: 'Santos',
-        scheduled: '2024-01-20T15:00:00Z',
+        id: "1",
+        vesselId: "1",
+        type: "loading",
+        port: "Santos",
+        scheduled: "2024-01-20T15:00:00Z",
         estimated_duration: 18,
-        status: 'scheduled',
+        status: "scheduled",
         cargo: {
-          type: 'Containers',
+          type: "Containers",
           quantity: 1200,
-          unit: 'TEU'
+          unit: "TEU"
         }
       },
       {
-        id: '2',
-        vesselId: '2',
-        type: 'unloading',
-        port: 'Santos',
-        scheduled: '2024-01-15T10:00:00Z',
+        id: "2",
+        vesselId: "2",
+        type: "unloading",
+        port: "Santos",
+        scheduled: "2024-01-15T10:00:00Z",
         estimated_duration: 24,
-        status: 'in_progress',
+        status: "in_progress",
         cargo: {
-          type: 'Crude Oil',
+          type: "Crude Oil",
           quantity: 78000,
-          unit: 'MT'
+          unit: "MT"
         }
       }
     ];
 
     const mockPortSchedules: PortSchedule[] = [
       {
-        id: '1',
-        port: 'Santos',
-        country: 'Brazil',
+        id: "1",
+        port: "Santos",
+        country: "Brazil",
         vessels_expected: 15,
         berth_availability: 8,
         avg_waiting_time: 6.5,
-        weather_conditions: 'Calm seas, 2m waves',
-        tidal_info: 'High tide 14:30 UTC'
+        weather_conditions: "Calm seas, 2m waves",
+        tidal_info: "High tide 14:30 UTC"
       },
       {
-        id: '2',
-        port: 'Hamburg',
-        country: 'Germany',
+        id: "2",
+        port: "Hamburg",
+        country: "Germany",
         vessels_expected: 22,
         berth_availability: 12,
         avg_waiting_time: 4.2,
-        weather_conditions: 'Moderate seas, wind 15 knots',
-        tidal_info: 'High tide 09:15 UTC'
+        weather_conditions: "Moderate seas, wind 15 knots",
+        tidal_info: "High tide 09:15 UTC"
       }
     ];
 
@@ -239,23 +239,23 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'at_sea': return 'text-primary bg-primary/10';
-      case 'in_port': return 'text-green-600 bg-green-100';
-      case 'anchored': return 'text-yellow-600 bg-yellow-100';
-      case 'maintenance': return 'text-orange-600 bg-orange-100';
-      case 'emergency': return 'text-destructive bg-destructive/10';
-      default: return 'text-muted-foreground bg-muted';
+    case "at_sea": return "text-primary bg-primary/10";
+    case "in_port": return "text-green-600 bg-green-100";
+    case "anchored": return "text-yellow-600 bg-yellow-100";
+    case "maintenance": return "text-orange-600 bg-orange-100";
+    case "emergency": return "text-destructive bg-destructive/10";
+    default: return "text-muted-foreground bg-muted";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'at_sea': return 'Em Navegação';
-      case 'in_port': return 'No Porto';
-      case 'anchored': return 'Fundeado';
-      case 'maintenance': return 'Manutenção';
-      case 'emergency': return 'Emergência';
-      default: return 'Desconhecido';
+    case "at_sea": return "Em Navegação";
+    case "in_port": return "No Porto";
+    case "anchored": return "Fundeado";
+    case "maintenance": return "Manutenção";
+    case "emergency": return "Emergência";
+    default: return "Desconhecido";
     }
   };
 
@@ -279,7 +279,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
       {/* Header Section */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-900 p-8 text-azure-50">
         <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
         }}></div>
         <div className="relative z-10">
           <div className="flex items-center gap-4 mb-6">
@@ -449,13 +449,13 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                         <div>
                           <h3 className="font-semibold">{vessel?.name}</h3>
                           <p className="text-sm text-muted-foreground">
-                            {operation.type === 'loading' ? 'Carregamento' : 'Descarregamento'} - {operation.port}
+                            {operation.type === "loading" ? "Carregamento" : "Descarregamento"} - {operation.port}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <Badge variant={operation.status === 'in_progress' ? 'default' : 'secondary'}>
-                          {operation.status === 'in_progress' ? 'Em Andamento' : 'Agendado'}
+                        <Badge variant={operation.status === "in_progress" ? "default" : "secondary"}>
+                          {operation.status === "in_progress" ? "Em Andamento" : "Agendado"}
                         </Badge>
                         <p className="text-sm text-muted-foreground mt-1">
                           {operation.estimated_duration}h estimadas
@@ -482,7 +482,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                     <div 
                       key={vessel.id}
                       className={`p-3 border rounded-lg cursor-pointer transition-colors ${
-                        selectedVessel?.id === vessel.id ? 'bg-primary/10 border-primary' : 'hover:bg-muted/50'
+                        selectedVessel?.id === vessel.id ? "bg-primary/10 border-primary" : "hover:bg-muted/50"
                       }`}
                       onClick={() => setSelectedVessel(vessel)}
                     >
@@ -518,7 +518,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                           </div>
                           <div className="flex justify-between">
                             <span>Tipo:</span>
-                            <span className="font-medium capitalize">{selectedVessel.type.replace('_', ' ')}</span>
+                            <span className="font-medium capitalize">{selectedVessel.type.replace("_", " ")}</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Bandeira:</span>
@@ -547,8 +547,8 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                           <div className="flex justify-between">
                             <span>ETA:</span>
                             <span className="font-medium">
-                              {new Date(selectedVessel.eta).toLocaleDateString('pt-BR')} às{' '}
-                              {new Date(selectedVessel.eta).toLocaleTimeString('pt-BR')}
+                              {new Date(selectedVessel.eta).toLocaleDateString("pt-BR")} às{" "}
+                              {new Date(selectedVessel.eta).toLocaleTimeString("pt-BR")}
                             </span>
                           </div>
                         </div>
@@ -683,7 +683,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                       <span className="text-sm font-medium">94.2%</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-green-600 h-2 rounded-full" style={{ width: '94.2%' }}></div>
+                      <div className="bg-green-600 h-2 rounded-full" style={{ width: "94.2%" }}></div>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -692,7 +692,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                       <span className="text-sm font-medium">87.8%</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-blue-600 h-2 rounded-full" style={{ width: '87.8%' }}></div>
+                      <div className="bg-blue-600 h-2 rounded-full" style={{ width: "87.8%" }}></div>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -701,7 +701,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                       <span className="text-sm font-medium">91.5%</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-purple-600 h-2 rounded-full" style={{ width: '91.5%' }}></div>
+                      <div className="bg-purple-600 h-2 rounded-full" style={{ width: "91.5%" }}></div>
                     </div>
                   </div>
                 </div>

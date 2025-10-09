@@ -3,7 +3,7 @@
  * Provides comprehensive logging and debugging capabilities
  */
 
-import { logger } from './logger';
+import { logger } from "./logger";
 
 export interface LogEntry {
   timestamp: string;
@@ -28,16 +28,16 @@ export const logUserAction = (action: string, details?: any): void => {
     url: window.location.href
   };
   
-  logger.log(`🎯 User Action:`, logEntry);
+  logger.log("🎯 User Action:", logEntry);
   
   // Persist to localStorage for debugging (keep last 50)
   try {
-    const logs = JSON.parse(localStorage.getItem('user-actions') || '[]');
+    const logs = JSON.parse(localStorage.getItem("user-actions") || "[]");
     logs.push(logEntry);
     const recentLogs = logs.slice(-50); // Keep only last 50 logs
-    localStorage.setItem('user-actions', JSON.stringify(recentLogs));
+    localStorage.setItem("user-actions", JSON.stringify(recentLogs));
   } catch (error) {
-    logger.error('Error saving log to localStorage:', error);
+    logger.error("Error saving log to localStorage:", error);
   }
 };
 
@@ -47,9 +47,9 @@ export const logUserAction = (action: string, details?: any): void => {
  */
 export const getUserActionLogs = (): LogEntry[] => {
   try {
-    return JSON.parse(localStorage.getItem('user-actions') || '[]');
+    return JSON.parse(localStorage.getItem("user-actions") || "[]");
   } catch (error) {
-    logger.error('Error reading logs from localStorage:', error);
+    logger.error("Error reading logs from localStorage:", error);
     return [];
   }
 };
@@ -59,10 +59,10 @@ export const getUserActionLogs = (): LogEntry[] => {
  */
 export const clearUserActionLogs = (): void => {
   try {
-    localStorage.removeItem('user-actions');
-    logger.log('✅ User action logs cleared');
+    localStorage.removeItem("user-actions");
+    logger.log("✅ User action logs cleared");
   } catch (error) {
-    logger.error('Error clearing logs:', error);
+    logger.error("Error clearing logs:", error);
   }
 };
 
@@ -73,17 +73,17 @@ export const exportUserActionLogs = (): void => {
   try {
     const logs = getUserActionLogs();
     const dataStr = JSON.stringify(logs, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
     
     const exportFileDefaultName = `user-actions-${new Date().toISOString()}.json`;
     
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
     
-    logger.log('✅ Logs exported successfully');
+    logger.log("✅ Logs exported successfully");
   } catch (error) {
-    logger.error('Error exporting logs:', error);
+    logger.error("Error exporting logs:", error);
   }
 };

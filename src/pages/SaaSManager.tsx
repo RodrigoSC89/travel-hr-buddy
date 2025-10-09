@@ -1,8 +1,8 @@
-import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import { CompleteSaaSManager } from '@/components/saas/complete-saas-manager';
-import { Crown } from 'lucide-react';
+import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import { CompleteSaaSManager } from "@/components/saas/complete-saas-manager";
+import { Crown } from "lucide-react";
 
 
 const SaaSManager = () => {

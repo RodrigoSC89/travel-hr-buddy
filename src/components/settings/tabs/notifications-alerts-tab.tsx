@@ -1,11 +1,11 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { 
   Bell, 
   Mail, 
@@ -18,7 +18,7 @@ import {
   Ship,
   Award,
   MessageSquare
-} from 'lucide-react';
+} from "lucide-react";
 
 interface NotificationSettings {
   emailAlerts: boolean;
@@ -51,25 +51,25 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
 
   const notificationTypes = [
     {
-      id: 'email',
-      title: 'Notificações por E-mail',
-      description: 'Alertas importantes enviados para o e-mail',
+      id: "email",
+      title: "Notificações por E-mail",
+      description: "Alertas importantes enviados para o e-mail",
       icon: Mail,
       enabled: settings.emailAlerts,
       onToggle: (enabled: boolean) => onUpdate({ emailAlerts: enabled })
     },
     {
-      id: 'push',
-      title: 'Notificações Push',
-      description: 'Notificações em tempo real no navegador',
+      id: "push",
+      title: "Notificações Push",
+      description: "Notificações em tempo real no navegador",
       icon: Smartphone,
       enabled: settings.pushNotifications,
       onToggle: (enabled: boolean) => onUpdate({ pushNotifications: enabled })
     },
     {
-      id: 'system',
-      title: 'Alertas do Sistema',
-      description: 'Notificações internas do sistema',
+      id: "system",
+      title: "Alertas do Sistema",
+      description: "Notificações internas do sistema",
       icon: Monitor,
       enabled: settings.systemAlerts,
       onToggle: (enabled: boolean) => onUpdate({ systemAlerts: enabled })
@@ -78,44 +78,44 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
 
   const moduleNotifications = [
     {
-      id: 'communication',
-      name: 'Comunicação',
-      description: 'Novas mensagens e atualizações de canais',
+      id: "communication",
+      name: "Comunicação",
+      description: "Novas mensagens e atualizações de canais",
       icon: MessageSquare,
-      color: 'text-blue-600',
+      color: "text-blue-600",
       enabled: settings.moduleSettings.communication || false
     },
     {
-      id: 'crew',
-      name: 'Tripulação',
-      description: 'Embarques, desembarques e atualizações de pessoal',
+      id: "crew",
+      name: "Tripulação",
+      description: "Embarques, desembarques e atualizações de pessoal",
       icon: Users,
-      color: 'text-green-600',
+      color: "text-green-600",
       enabled: settings.moduleSettings.crew || false
     },
     {
-      id: 'vessels',
-      name: 'Embarcações',
-      description: 'Status das embarcações e manutenções',
+      id: "vessels",
+      name: "Embarcações",
+      description: "Status das embarcações e manutenções",
       icon: Ship,
-      color: 'text-purple-600',
+      color: "text-purple-600",
       enabled: settings.moduleSettings.vessels || false
     },
     {
-      id: 'certificates',
-      name: 'Certificações',
-      description: 'Vencimentos e renovações de certificados',
+      id: "certificates",
+      name: "Certificações",
+      description: "Vencimentos e renovações de certificados",
       icon: Award,
-      color: 'text-orange-600',
+      color: "text-orange-600",
       enabled: settings.moduleSettings.certificates || false
     }
   ];
 
   const frequencies = [
-    { value: 'immediate', label: 'Imediata' },
-    { value: 'hourly', label: 'A cada hora' },
-    { value: 'daily', label: 'Diariamente' },
-    { value: 'weekly', label: 'Semanalmente' }
+    { value: "immediate", label: "Imediata" },
+    { value: "hourly", label: "A cada hora" },
+    { value: "daily", label: "Diariamente" },
+    { value: "weekly", label: "Semanalmente" }
   ];
 
   return (

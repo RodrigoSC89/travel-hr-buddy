@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import { 
   HelpCircle, 
   BookOpen, 
@@ -22,7 +22,7 @@ import {
   Users,
   Settings,
   Zap
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Article {
   id: string;
@@ -40,65 +40,65 @@ interface VideoTutorial {
   duration: string;
   thumbnail: string;
   category: string;
-  level: 'beginner' | 'intermediate' | 'advanced';
+  level: "beginner" | "intermediate" | "advanced";
 }
 
 const HelpCenter = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const categories = [
-    { id: 'all', name: 'Todos', icon: BookOpen },
-    { id: 'getting-started', name: 'Primeiros Passos', icon: Lightbulb },
-    { id: 'user-management', name: 'Gestão de Usuários', icon: Users },
-    { id: 'certificates', name: 'Certificados', icon: FileText },
-    { id: 'reports', name: 'Relatórios', icon: FileText },
-    { id: 'integration', name: 'Integrações', icon: Zap },
-    { id: 'settings', name: 'Configurações', icon: Settings }
+    { id: "all", name: "Todos", icon: BookOpen },
+    { id: "getting-started", name: "Primeiros Passos", icon: Lightbulb },
+    { id: "user-management", name: "Gestão de Usuários", icon: Users },
+    { id: "certificates", name: "Certificados", icon: FileText },
+    { id: "reports", name: "Relatórios", icon: FileText },
+    { id: "integration", name: "Integrações", icon: Zap },
+    { id: "settings", name: "Configurações", icon: Settings }
   ];
 
   const articles: Article[] = [
     {
-      id: '1',
-      title: 'Como criar um novo usuário no sistema',
-      description: 'Guia passo a passo para adicionar novos usuários e configurar permissões',
-      category: 'user-management',
+      id: "1",
+      title: "Como criar um novo usuário no sistema",
+      description: "Guia passo a passo para adicionar novos usuários e configurar permissões",
+      category: "user-management",
       readTime: 5,
       rating: 4.8,
       views: 1250
     },
     {
-      id: '2',
-      title: 'Configurando alertas de certificados',
-      description: 'Configure notificações automáticas para certificados próximos do vencimento',
-      category: 'certificates',
+      id: "2",
+      title: "Configurando alertas de certificados",
+      description: "Configure notificações automáticas para certificados próximos do vencimento",
+      category: "certificates",
       readTime: 8,
       rating: 4.9,
       views: 890
     },
     {
-      id: '3',
-      title: 'Gerando relatórios financeiros',
-      description: 'Como criar e personalizar relatórios financeiros detalhados',
-      category: 'reports',
+      id: "3",
+      title: "Gerando relatórios financeiros",
+      description: "Como criar e personalizar relatórios financeiros detalhados",
+      category: "reports",
       readTime: 12,
       rating: 4.7,
       views: 650
     },
     {
-      id: '4',
-      title: 'Primeiros passos no Nautilus One',
-      description: 'Guia completo para novos usuários começarem a usar o sistema',
-      category: 'getting-started',
+      id: "4",
+      title: "Primeiros passos no Nautilus One",
+      description: "Guia completo para novos usuários começarem a usar o sistema",
+      category: "getting-started",
       readTime: 15,
       rating: 4.9,
       views: 2100
     },
     {
-      id: '5',
-      title: 'Configurando integrações com Zapier',
-      description: 'Como conectar o sistema com outras ferramentas através do Zapier',
-      category: 'integration',
+      id: "5",
+      title: "Configurando integrações com Zapier",
+      description: "Como conectar o sistema com outras ferramentas através do Zapier",
+      category: "integration",
       readTime: 10,
       rating: 4.6,
       views: 420
@@ -107,86 +107,86 @@ const HelpCenter = () => {
 
   const videoTutorials: VideoTutorial[] = [
     {
-      id: '1',
-      title: 'Visão Geral do Sistema',
-      duration: '15:30',
-      thumbnail: '/placeholder-video-1.jpg',
-      category: 'getting-started',
-      level: 'beginner'
+      id: "1",
+      title: "Visão Geral do Sistema",
+      duration: "15:30",
+      thumbnail: "/placeholder-video-1.jpg",
+      category: "getting-started",
+      level: "beginner"
     },
     {
-      id: '2',
-      title: 'Gestão Avançada de Certificados',
-      duration: '22:45',
-      thumbnail: '/placeholder-video-2.jpg',
-      category: 'certificates',
-      level: 'intermediate'
+      id: "2",
+      title: "Gestão Avançada de Certificados",
+      duration: "22:45",
+      thumbnail: "/placeholder-video-2.jpg",
+      category: "certificates",
+      level: "intermediate"
     },
     {
-      id: '3',
-      title: 'Configurações Avançadas do Sistema',
-      duration: '18:20',
-      thumbnail: '/placeholder-video-3.jpg',
-      category: 'settings',
-      level: 'advanced'
+      id: "3",
+      title: "Configurações Avançadas do Sistema",
+      duration: "18:20",
+      thumbnail: "/placeholder-video-3.jpg",
+      category: "settings",
+      level: "advanced"
     }
   ];
 
   const faqItems = [
     {
-      question: 'Como posso alterar minha senha?',
-      answer: 'Vá para Configurações > Perfil > Alterar Senha. Digite sua senha atual e a nova senha duas vezes.'
+      question: "Como posso alterar minha senha?",
+      answer: "Vá para Configurações > Perfil > Alterar Senha. Digite sua senha atual e a nova senha duas vezes."
     },
     {
-      question: 'Por que não consigo ver alguns módulos?',
-      answer: 'Os módulos visíveis dependem das suas permissões. Entre em contato com o administrador para solicitar acesso.'
+      question: "Por que não consigo ver alguns módulos?",
+      answer: "Os módulos visíveis dependem das suas permissões. Entre em contato com o administrador para solicitar acesso."
     },
     {
-      question: 'Como funciona o sistema de backup?',
-      answer: 'O sistema realiza backups automáticos diários. Você pode configurar a frequência em Administração > Backup.'
+      question: "Como funciona o sistema de backup?",
+      answer: "O sistema realiza backups automáticos diários. Você pode configurar a frequência em Administração > Backup."
     },
     {
-      question: 'Posso exportar relatórios?',
-      answer: 'Sim! Todos os relatórios podem ser exportados em PDF, Excel ou CSV usando o botão "Exportar".'
+      question: "Posso exportar relatórios?",
+      answer: "Sim! Todos os relatórios podem ser exportados em PDF, Excel ou CSV usando o botão \"Exportar\"."
     }
   ];
 
   const filteredArticles = articles.filter(article => {
-    const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || article.category === selectedCategory;
     const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          article.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   const filteredVideos = videoTutorials.filter(video => {
-    const matchesCategory = selectedCategory === 'all' || video.category === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || video.category === selectedCategory;
     const matchesSearch = video.title.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case 'beginner':
-        return 'text-green-600 bg-green-100';
-      case 'intermediate':
-        return 'text-yellow-600 bg-yellow-100';
-      case 'advanced':
-        return 'text-red-600 bg-red-100';
-      default:
-        return 'text-muted-foreground bg-gray-100';
+    case "beginner":
+      return "text-green-600 bg-green-100";
+    case "intermediate":
+      return "text-yellow-600 bg-yellow-100";
+    case "advanced":
+      return "text-red-600 bg-red-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getLevelText = (level: string) => {
     switch (level) {
-      case 'beginner':
-        return 'Iniciante';
-      case 'intermediate':
-        return 'Intermediário';
-      case 'advanced':
-        return 'Avançado';
-      default:
-        return level;
+    case "beginner":
+      return "Iniciante";
+    case "intermediate":
+      return "Intermediário";
+    case "advanced":
+      return "Avançado";
+    default:
+      return level;
     }
   };
 

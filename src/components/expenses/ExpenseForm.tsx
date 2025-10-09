@@ -1,25 +1,25 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { ExpenseFormData } from '@/hooks/useExpenses';
+} from "@/components/ui/select";
+import { ExpenseFormData } from "@/hooks/useExpenses";
 
 const expenseSchema = z.object({
-  amount: z.number().positive('O valor deve ser positivo'),
-  category: z.string().min(1, 'Selecione uma categoria'),
-  description: z.string().min(3, 'Descrição deve ter no mínimo 3 caracteres').max(200),
-  date: z.string().min(1, 'Data é obrigatória'),
+  amount: z.number().positive("O valor deve ser positivo"),
+  category: z.string().min(1, "Selecione uma categoria"),
+  description: z.string().min(3, "Descrição deve ter no mínimo 3 caracteres").max(200),
+  date: z.string().min(1, "Data é obrigatória"),
   notes: z.string().max(500).optional(),
 });
 
@@ -31,12 +31,12 @@ interface ExpenseFormProps {
 }
 
 const categoryLabels: Record<string, string> = {
-  travel: 'Viagem',
-  accommodation: 'Hospedagem',
-  meals: 'Alimentação',
-  transport: 'Transporte',
-  equipment: 'Equipamentos',
-  other: 'Outros',
+  travel: "Viagem",
+  accommodation: "Hospedagem",
+  meals: "Alimentação",
+  transport: "Transporte",
+  equipment: "Equipamentos",
+  other: "Outros",
 };
 
 export const ExpenseForm: React.FC<ExpenseFormProps> = ({
@@ -54,11 +54,11 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
   } = useForm<ExpenseFormData>({
     resolver: zodResolver(expenseSchema),
     defaultValues: defaultValues || {
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split("T")[0],
     },
   });
 
-  const category = watch('category');
+  const category = watch("category");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -77,7 +77,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
             step="0.01"
             placeholder="0,00"
             className="pl-10 bg-card border-border text-foreground"
-            {...register('amount', { valueAsNumber: true })}
+            {...register("amount", { valueAsNumber: true })}
           />
         </div>
         {errors.amount && (
@@ -92,7 +92,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
         </Label>
         <Select
           value={category}
-          onValueChange={(value) => setValue('category', value)}
+          onValueChange={(value) => setValue("category", value)}
         >
           <SelectTrigger className="bg-card border-border text-foreground">
             <SelectValue placeholder="Selecione uma categoria" />
@@ -119,7 +119,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
           id="description"
           placeholder="Ex: Jantar com cliente"
           className="bg-card border-border text-foreground"
-          {...register('description')}
+          {...register("description")}
         />
         {errors.description && (
           <p className="text-sm text-danger">{errors.description.message}</p>
@@ -135,7 +135,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
           id="date"
           type="date"
           className="bg-card border-border text-foreground"
-          {...register('date')}
+          {...register("date")}
         />
         {errors.date && (
           <p className="text-sm text-danger">{errors.date.message}</p>
@@ -152,7 +152,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
           placeholder="Informações adicionais (opcional)"
           rows={3}
           className="bg-card border-border text-foreground resize-none"
-          {...register('notes')}
+          {...register("notes")}
         />
         {errors.notes && (
           <p className="text-sm text-danger">{errors.notes.message}</p>
@@ -166,7 +166,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
           disabled={isLoading}
           className="flex-1 bg-primary hover:bg-primary-dark text-primary-foreground font-semibold transition-colors"
         >
-          {isLoading ? 'Salvando...' : 'Salvar Despesa'}
+          {isLoading ? "Salvando..." : "Salvar Despesa"}
         </Button>
         <Button
           type="button"

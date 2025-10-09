@@ -1,10 +1,10 @@
-import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { EnhancedDocumentScanner } from '@/components/documents/enhanced-document-scanner';
-import { AdvancedDocumentCenter } from '@/components/documents/advanced-document-center';
-import IntelligentDocumentManager from '@/components/documents/intelligent-document-manager';
-import { DocumentValidator } from '@/components/ui/document-validator';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import React from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { EnhancedDocumentScanner } from "@/components/documents/enhanced-document-scanner";
+import { AdvancedDocumentCenter } from "@/components/documents/advanced-document-center";
+import IntelligentDocumentManager from "@/components/documents/intelligent-document-manager";
+import { DocumentValidator } from "@/components/ui/document-validator";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   FileText, 
   Scan, 
@@ -14,7 +14,7 @@ import {
   Archive,
   Settings,
   BarChart3
-} from 'lucide-react';
+} from "lucide-react";
 
 const AdvancedDocumentsPage = () => {
   return (
@@ -178,7 +178,7 @@ const AdvancedDocumentsPage = () => {
                     <h3 className="text-lg font-semibold mb-3">Certificados Marítimos</h3>
                     <DocumentValidator 
                       documentType="certificate" 
-                      onValidationComplete={(result) => console.log('Certificado validado:', result)}
+                      onValidationComplete={(result) => console.log("Certificado validado:", result)}
                     />
                   </div>
                   
@@ -186,7 +186,7 @@ const AdvancedDocumentsPage = () => {
                     <h3 className="text-lg font-semibold mb-3">Licenças e Permissões</h3>
                     <DocumentValidator 
                       documentType="license"
-                      onValidationComplete={(result) => console.log('Licença validada:', result)}
+                      onValidationComplete={(result) => console.log("Licença validada:", result)}
                     />
                   </div>
                 </div>

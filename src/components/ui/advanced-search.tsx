@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, FileText, Users, Anchor, TrendingUp, Calendar, MessageSquare, Settings, Filter, Clock, Star } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { useOfflineStorage } from '@/hooks/use-offline-storage';
+import React, { useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search, FileText, Users, Anchor, TrendingUp, Calendar, MessageSquare, Settings, Filter, Clock, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useOfflineStorage } from "@/hooks/use-offline-storage";
 
 interface SearchResult {
   id: string;
   title: string;
   description: string;
-  type: 'page' | 'document' | 'employee' | 'alert' | 'reservation' | 'task';
+  type: "page" | "document" | "employee" | "alert" | "reservation" | "task";
   route?: string;
   icon: React.ReactNode;
   category: string;
   tags?: string[];
   lastAccessed?: Date;
-  priority?: 'low' | 'medium' | 'high';
+  priority?: "low" | "medium" | "high";
 }
 
 interface AdvancedSearchProps {
@@ -28,9 +28,9 @@ interface AdvancedSearchProps {
 }
 
 export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChange }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [activeFilter, setActiveFilter] = useState<string>("all");
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [favorites, setFavorites] = useState<SearchResult[]>([]);
   const navigate = useNavigate();
@@ -38,81 +38,81 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
 
   const searchableItems: SearchResult[] = [
     {
-      id: 'dashboard',
-      title: 'Dashboard Principal',
-      description: 'Visão geral do sistema e métricas importantes',
-      type: 'page',
-      route: '/',
+      id: "dashboard",
+      title: "Dashboard Principal",
+      description: "Visão geral do sistema e métricas importantes",
+      type: "page",
+      route: "/",
       icon: <FileText className="h-4 w-4" />,
-      category: 'Navegação',
-      tags: ['overview', 'metrics', 'home']
+      category: "Navegação",
+      tags: ["overview", "metrics", "home"]
     },
     {
-      id: 'travel',
-      title: 'Viagens',
-      description: 'Busca de voos, hotéis e planejamento de viagens',
-      type: 'page',
-      route: '/travel',
+      id: "travel",
+      title: "Viagens",
+      description: "Busca de voos, hotéis e planejamento de viagens",
+      type: "page",
+      route: "/travel",
       icon: <Calendar className="h-4 w-4" />,
-      category: 'Navegação',
-      tags: ['flights', 'hotels', 'booking']
+      category: "Navegação",
+      tags: ["flights", "hotels", "booking"]
     },
     {
-      id: 'maritime',
-      title: 'Sistema Marítimo',
-      description: 'Gestão de embarcações, tripulação e certificados',
-      type: 'page',
-      route: '/maritime',
+      id: "maritime",
+      title: "Sistema Marítimo",
+      description: "Gestão de embarcações, tripulação e certificados",
+      type: "page",
+      route: "/maritime",
       icon: <Anchor className="h-4 w-4" />,
-      category: 'Navegação',
-      tags: ['vessels', 'crew', 'certificates']
+      category: "Navegação",
+      tags: ["vessels", "crew", "certificates"]
     },
     {
-      id: 'hr',
-      title: 'Recursos Humanos',
-      description: 'Gestão de pessoal e certificações',
-      type: 'page',
-      route: '/hr',
+      id: "hr",
+      title: "Recursos Humanos",
+      description: "Gestão de pessoal e certificações",
+      type: "page",
+      route: "/hr",
       icon: <Users className="h-4 w-4" />,
-      category: 'Navegação',
-      tags: ['employees', 'hr', 'staff']
+      category: "Navegação",
+      tags: ["employees", "hr", "staff"]
     },
     {
-      id: 'price-alerts',
-      title: 'Alertas de Preços',
-      description: 'Monitoramento e alertas de preços de combustível',
-      type: 'page',
-      route: '/price-alerts',
+      id: "price-alerts",
+      title: "Alertas de Preços",
+      description: "Monitoramento e alertas de preços de combustível",
+      type: "page",
+      route: "/price-alerts",
       icon: <TrendingUp className="h-4 w-4" />,
-      category: 'Navegação',
-      tags: ['prices', 'fuel', 'alerts']
+      category: "Navegação",
+      tags: ["prices", "fuel", "alerts"]
     },
     {
-      id: 'communication',
-      title: 'Comunicação',
-      description: 'Sistema de mensagens e comunicação interna',
-      type: 'page',
-      route: '/communication',
+      id: "communication",
+      title: "Comunicação",
+      description: "Sistema de mensagens e comunicação interna",
+      type: "page",
+      route: "/communication",
       icon: <MessageSquare className="h-4 w-4" />,
-      category: 'Navegação',
-      tags: ['messages', 'chat', 'communication']
+      category: "Navegação",
+      tags: ["messages", "chat", "communication"]
     },
     {
-      id: 'settings',
-      title: 'Configurações',
-      description: 'Configurações do sistema e perfil do usuário',
-      type: 'page',
-      route: '/settings',
+      id: "settings",
+      title: "Configurações",
+      description: "Configurações do sistema e perfil do usuário",
+      type: "page",
+      route: "/settings",
       icon: <Settings className="h-4 w-4" />,
-      category: 'Navegação',
-      tags: ['settings', 'config', 'profile']
+      category: "Navegação",
+      tags: ["settings", "config", "profile"]
     }
   ];
 
   useEffect(() => {
     // Load recent searches and favorites from cache
     const loadCachedData = async () => {
-      const cached = await getFromCache('search_data');
+      const cached = await getFromCache("search_data");
       if (cached) {
         setRecentSearches(cached.recent || []);
         setFavorites(cached.favorites || []);
@@ -139,7 +139,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
     });
 
     // Apply filter
-    const filteredByType = activeFilter === 'all' 
+    const filteredByType = activeFilter === "all" 
       ? filtered 
       : filtered.filter(item => item.type === activeFilter);
 
@@ -153,14 +153,14 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
       setRecentSearches(newRecent);
       
       // Save to cache
-      saveToCache('search_data', {
+      saveToCache("search_data", {
         recent: newRecent,
         favorites
       });
 
       navigate(result.route);
       onOpenChange(false);
-      setQuery('');
+      setQuery("");
     }
   };
 
@@ -171,7 +171,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
       : [...favorites, result];
     
     setFavorites(newFavorites);
-    saveToCache('search_data', {
+    saveToCache("search_data", {
       recent: recentSearches,
       favorites: newFavorites
     });
@@ -182,18 +182,18 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && results.length > 0) {
+    if (e.key === "Enter" && results.length > 0) {
       handleResultClick(results[0]);
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       onOpenChange(false);
     }
   };
 
   const filterTypes = [
-    { key: 'all', label: 'Todos', icon: <Search className="h-3 w-3" /> },
-    { key: 'page', label: 'Páginas', icon: <FileText className="h-3 w-3" /> },
-    { key: 'document', label: 'Documentos', icon: <FileText className="h-3 w-3" /> },
-    { key: 'employee', label: 'Funcionários', icon: <Users className="h-3 w-3" /> },
+    { key: "all", label: "Todos", icon: <Search className="h-3 w-3" /> },
+    { key: "page", label: "Páginas", icon: <FileText className="h-3 w-3" /> },
+    { key: "document", label: "Documentos", icon: <FileText className="h-3 w-3" /> },
+    { key: "employee", label: "Funcionários", icon: <Users className="h-3 w-3" /> },
   ];
 
   return (
@@ -282,8 +282,8 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                           <Star 
                             className={`h-4 w-4 ${
                               favorites.some(f => f.id === result.id) 
-                                ? 'fill-yellow-400 text-yellow-400' 
-                                : ''
+                                ? "fill-yellow-400 text-yellow-400" 
+                                : ""
                             }`} 
                           />
                         </Button>

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { 
   TrendingUp,
   TrendingDown,
@@ -19,100 +19,100 @@ import {
   BarChart3,
   Activity,
   Clock
-} from 'lucide-react';
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from 'recharts';
+} from "lucide-react";
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
 
 const ExecutiveMetricsPanel = () => {
   const executiveMetrics = [
     {
-      title: 'EBITDA',
-      value: 'R$ 1.85M',
-      change: '+15.2%',
-      trend: 'up',
-      target: 'R$ 2.1M',
+      title: "EBITDA",
+      value: "R$ 1.85M",
+      change: "+15.2%",
+      trend: "up",
+      target: "R$ 2.1M",
       progress: 88.1,
-      benchmark: 'Acima do setor',
-      period: 'Mensal'
+      benchmark: "Acima do setor",
+      period: "Mensal"
     },
     {
-      title: 'ROE',
-      value: '18.7%',
-      change: '+3.4%',
-      trend: 'up',
-      target: '20%',
+      title: "ROE",
+      value: "18.7%",
+      change: "+3.4%",
+      trend: "up",
+      target: "20%",
       progress: 93.5,
-      benchmark: 'Top 10%',
-      period: 'Anual'
+      benchmark: "Top 10%",
+      period: "Anual"
     },
     {
-      title: 'Margem Operacional',
-      value: '15.3%',
-      change: '-1.2%',
-      trend: 'down',
-      target: '16%',
+      title: "Margem Operacional",
+      value: "15.3%",
+      change: "-1.2%",
+      trend: "down",
+      target: "16%",
       progress: 95.6,
-      benchmark: 'Dentro da meta',
-      period: 'Trimestral'
+      benchmark: "Dentro da meta",
+      period: "Trimestral"
     },
     {
-      title: 'Fluxo de Caixa',
-      value: 'R$ 980K',
-      change: '+8.9%',
-      trend: 'up',
-      target: 'R$ 1.2M',
+      title: "Fluxo de Caixa",
+      value: "R$ 980K",
+      change: "+8.9%",
+      trend: "up",
+      target: "R$ 1.2M",
       progress: 81.7,
-      benchmark: 'Saudável',
-      period: 'Mensal'
+      benchmark: "Saudável",
+      period: "Mensal"
     }
   ];
 
   const operationalKPIs = [
     {
-      title: 'Utilização da Frota',
-      value: '87.3%',
-      target: '90%',
-      status: 'warning',
-      improvement: '+2.1% vs mês anterior'
+      title: "Utilização da Frota",
+      value: "87.3%",
+      target: "90%",
+      status: "warning",
+      improvement: "+2.1% vs mês anterior"
     },
     {
-      title: 'Eficiência Combustível',
-      value: '92.1%',
-      target: '88%',
-      status: 'excellent',
-      improvement: '+4.2% vs mês anterior'
+      title: "Eficiência Combustível",
+      value: "92.1%",
+      target: "88%",
+      status: "excellent",
+      improvement: "+4.2% vs mês anterior"
     },
     {
-      title: 'Score de Segurança',
-      value: '98.5%',
-      target: '95%',
-      status: 'excellent',
-      improvement: 'Líder do setor'
+      title: "Score de Segurança",
+      value: "98.5%",
+      target: "95%",
+      status: "excellent",
+      improvement: "Líder do setor"
     },
     {
-      title: 'Compliance Rate',
-      value: '99.2%',
-      target: '98%',
-      status: 'excellent',
-      improvement: '100% das auditorias'
+      title: "Compliance Rate",
+      value: "99.2%",
+      target: "98%",
+      status: "excellent",
+      improvement: "100% das auditorias"
     }
   ];
 
   const revenueData = [
-    { month: 'Jul', revenue: 2100, forecast: 2200, expenses: 1580 },
-    { month: 'Ago', revenue: 2250, forecast: 2300, expenses: 1690 },
-    { month: 'Set', revenue: 2180, forecast: 2400, expenses: 1640 },
-    { month: 'Out', revenue: 2350, forecast: 2500, expenses: 1750 },
-    { month: 'Nov', revenue: 2420, forecast: 2600, expenses: 1820 },
-    { month: 'Dez', revenue: 2450, forecast: 2700, expenses: 1840 }
+    { month: "Jul", revenue: 2100, forecast: 2200, expenses: 1580 },
+    { month: "Ago", revenue: 2250, forecast: 2300, expenses: 1690 },
+    { month: "Set", revenue: 2180, forecast: 2400, expenses: 1640 },
+    { month: "Out", revenue: 2350, forecast: 2500, expenses: 1750 },
+    { month: "Nov", revenue: 2420, forecast: 2600, expenses: 1820 },
+    { month: "Dez", revenue: 2450, forecast: 2700, expenses: 1840 }
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'excellent': return 'text-green-700 bg-green-100 border-green-200';
-      case 'good': return 'text-blue-700 bg-blue-100 border-blue-200';
-      case 'warning': return 'text-orange-700 bg-orange-100 border-orange-200';
-      case 'critical': return 'text-red-700 bg-red-100 border-red-200';
-      default: return 'text-secondary-foreground bg-secondary border-border';
+    case "excellent": return "text-green-700 bg-green-100 border-green-200";
+    case "good": return "text-blue-700 bg-blue-100 border-blue-200";
+    case "warning": return "text-orange-700 bg-orange-100 border-orange-200";
+    case "critical": return "text-red-700 bg-red-100 border-red-200";
+    default: return "text-secondary-foreground bg-secondary border-border";
     }
   };
 
@@ -140,9 +140,9 @@ const ExecutiveMetricsPanel = () => {
                       <div className="text-sm text-muted-foreground">{metric.title}</div>
                     </div>
                     <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                      metric.trend === 'up' ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
+                      metric.trend === "up" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"
                     }`}>
-                      {metric.trend === 'up' ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                      {metric.trend === "up" ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                       {metric.change}
                     </div>
                   </div>
@@ -190,13 +190,13 @@ const ExecutiveMetricsPanel = () => {
                 <YAxis stroke="#64748b" />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))', 
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--card))", 
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px"
                   }}
                   formatter={(value: any, name: string) => [
                     `R$ ${(value/1000).toFixed(0)}K`,
-                    name === 'revenue' ? 'Receita' : name === 'forecast' ? 'Previsão' : 'Despesas'
+                    name === "revenue" ? "Receita" : name === "forecast" ? "Previsão" : "Despesas"
                   ]}
                 />
                 <Bar dataKey="revenue" fill="#3b82f6" name="Receita" radius={[4, 4, 0, 0]} />
@@ -223,9 +223,9 @@ const ExecutiveMetricsPanel = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">{kpi.title}</span>
                     <Badge className={getStatusColor(kpi.status)} variant="outline">
-                      {kpi.status === 'excellent' ? 'Excelente' :
-                       kpi.status === 'good' ? 'Bom' :
-                       kpi.status === 'warning' ? 'Atenção' : 'Crítico'}
+                      {kpi.status === "excellent" ? "Excelente" :
+                        kpi.status === "good" ? "Bom" :
+                          kpi.status === "warning" ? "Atenção" : "Crítico"}
                     </Badge>
                   </div>
                   

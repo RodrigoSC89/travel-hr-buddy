@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Filter, SortAsc, SortDesc, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
+import React, { useState, useEffect } from "react";
+import { Search, Filter, SortAsc, SortDesc, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 interface SearchFiltersProps {
   searchQuery: string;
@@ -17,10 +17,10 @@ interface SearchFiltersProps {
   };
   onFiltersChange?: (filters: any) => void;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  onSortChange?: (sortBy: string, order: 'asc' | 'desc') => void;
+  sortOrder?: "asc" | "desc";
+  onSortChange?: (sortBy: string, order: "asc" | "desc") => void;
   placeholder?: string;
-  enabledFilters?: ('categories' | 'status' | 'dateRange')[];
+  enabledFilters?: ("categories" | "status" | "dateRange")[];
 }
 
 export const SearchFilters: React.FC<SearchFiltersProps> = ({
@@ -28,11 +28,11 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
   onSearchChange,
   filters = {},
   onFiltersChange,
-  sortBy = 'name',
-  sortOrder = 'asc',
+  sortBy = "name",
+  sortOrder = "asc",
   onSortChange,
   placeholder = "Buscar...",
-  enabledFilters = ['categories', 'status']
+  enabledFilters = ["categories", "status"]
 }) => {
   const [localFilters, setLocalFilters] = useState(filters);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -52,7 +52,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
   };
 
   const toggleSort = () => {
-    const newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    const newOrder = sortOrder === "asc" ? "desc" : "asc";
     onSortChange?.(sortBy, newOrder);
   };
 
@@ -72,7 +72,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
             variant="ghost"
             size="sm"
             className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7 w-7 p-0"
-            onClick={() => onSearchChange('')}
+            onClick={() => onSearchChange("")}
           >
             <X className="h-3 w-3" />
           </Button>
@@ -107,11 +107,11 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
             </div>
 
             {/* Categories Filter */}
-            {enabledFilters.includes('categories') && (
+            {enabledFilters.includes("categories") && (
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Categorias</Label>
                 <div className="space-y-2">
-                  {['RH', 'Financeiro', 'Vendas', 'Marketing', 'TI'].map((category) => (
+                  {["RH", "Financeiro", "Vendas", "Marketing", "TI"].map((category) => (
                     <div key={category} className="flex items-center space-x-2">
                       <Checkbox
                         id={category}
@@ -121,7 +121,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
                           const updated = checked
                             ? [...current, category]
                             : current.filter(c => c !== category);
-                          handleFilterChange('categories', updated);
+                          handleFilterChange("categories", updated);
                         }}
                       />
                       <Label htmlFor={category} className="text-sm">
@@ -134,11 +134,11 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
             )}
 
             {/* Status Filter */}
-            {enabledFilters.includes('status') && (
+            {enabledFilters.includes("status") && (
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Status</Label>
                 <div className="space-y-2">
-                  {['Ativo', 'Inativo', 'Pendente', 'Concluído'].map((status) => (
+                  {["Ativo", "Inativo", "Pendente", "Concluído"].map((status) => (
                     <div key={status} className="flex items-center space-x-2">
                       <Checkbox
                         id={status}
@@ -148,7 +148,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
                           const updated = checked
                             ? [...current, status]
                             : current.filter(s => s !== status);
-                          handleFilterChange('status', updated);
+                          handleFilterChange("status", updated);
                         }}
                       />
                       <Label htmlFor={status} className="text-sm">
@@ -165,7 +165,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
 
       {/* Sort */}
       <Button variant="outline" onClick={toggleSort}>
-        {sortOrder === 'asc' ? (
+        {sortOrder === "asc" ? (
           <SortAsc className="h-4 w-4 mr-2" />
         ) : (
           <SortDesc className="h-4 w-4 mr-2" />
@@ -183,7 +183,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
                 className="h-3 w-3 ml-1 cursor-pointer"
                 onClick={() => {
                   const updated = localFilters.categories?.filter(c => c !== category) || [];
-                  handleFilterChange('categories', updated);
+                  handleFilterChange("categories", updated);
                 }}
               />
             </Badge>
@@ -195,7 +195,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
                 className="h-3 w-3 ml-1 cursor-pointer"
                 onClick={() => {
                   const updated = localFilters.status?.filter(s => s !== status) || [];
-                  handleFilterChange('status', updated);
+                  handleFilterChange("status", updated);
                 }}
               />
             </Badge>

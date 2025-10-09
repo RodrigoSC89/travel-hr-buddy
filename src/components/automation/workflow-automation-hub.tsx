@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   CheckCircle, 
   Clock, 
@@ -28,17 +28,17 @@ import {
   Search,
   Download,
   Plus
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface WorkflowStep {
   id: string;
   name: string;
   description: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  status: "pending" | "in_progress" | "completed" | "failed";
   assignee?: string;
   dueDate?: Date;
   duration?: number;
@@ -49,8 +49,8 @@ interface Workflow {
   id: string;
   name: string;
   description: string;
-  category: 'hr' | 'finance' | 'operations' | 'marketing' | 'custom';
-  status: 'draft' | 'active' | 'paused' | 'completed';
+  category: "hr" | "finance" | "operations" | "marketing" | "custom";
+  status: "draft" | "active" | "paused" | "completed";
   progress: number;
   steps: WorkflowStep[];
   createdAt: Date;
@@ -58,7 +58,7 @@ interface Workflow {
   createdBy: string;
   estimatedDuration: number;
   actualDuration?: number;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  priority: "low" | "medium" | "high" | "urgent";
 }
 
 interface AutomationRule {
@@ -81,123 +81,123 @@ export const WorkflowAutomationHub: React.FC = () => {
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [automationRules, setAutomationRules] = useState<AutomationRule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   // Dados simulados para demonstração
   const generateMockData = () => {
     const mockWorkflows: Workflow[] = [
       {
-        id: '1',
-        name: 'Processo de Onboarding',
-        description: 'Fluxo completo de integração de novos funcionários',
-        category: 'hr',
-        status: 'active',
+        id: "1",
+        name: "Processo de Onboarding",
+        description: "Fluxo completo de integração de novos funcionários",
+        category: "hr",
+        status: "active",
         progress: 65,
         createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
         updatedAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
-        createdBy: 'Admin',
+        createdBy: "Admin",
         estimatedDuration: 2880, // 48 horas
         actualDuration: 1920, // 32 horas
-        priority: 'high',
+        priority: "high",
         steps: [
           {
-            id: 's1',
-            name: 'Criação de Usuário',
-            description: 'Criar conta no sistema',
-            status: 'completed',
-            assignee: 'TI',
+            id: "s1",
+            name: "Criação de Usuário",
+            description: "Criar conta no sistema",
+            status: "completed",
+            assignee: "TI",
             duration: 30
           },
           {
-            id: 's2',
-            name: 'Documentação',
-            description: 'Coleta de documentos pessoais',
-            status: 'completed',
-            assignee: 'RH',
+            id: "s2",
+            name: "Documentação",
+            description: "Coleta de documentos pessoais",
+            status: "completed",
+            assignee: "RH",
             duration: 120
           },
           {
-            id: 's3',
-            name: 'Treinamento Inicial',
-            description: 'Curso de integração',
-            status: 'in_progress',
-            assignee: 'Supervisor',
+            id: "s3",
+            name: "Treinamento Inicial",
+            description: "Curso de integração",
+            status: "in_progress",
+            assignee: "Supervisor",
             dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
           },
           {
-            id: 's4',
-            name: 'Avaliação 30 dias',
-            description: 'Primeira avaliação de desempenho',
-            status: 'pending',
-            assignee: 'Gerente',
-            dependencies: ['s3']
+            id: "s4",
+            name: "Avaliação 30 dias",
+            description: "Primeira avaliação de desempenho",
+            status: "pending",
+            assignee: "Gerente",
+            dependencies: ["s3"]
           }
         ]
       },
       {
-        id: '2',
-        name: 'Aprovação de Despesas',
-        description: 'Fluxo de aprovação para reembolsos',
-        category: 'finance',
-        status: 'active',
+        id: "2",
+        name: "Aprovação de Despesas",
+        description: "Fluxo de aprovação para reembolsos",
+        category: "finance",
+        status: "active",
         progress: 80,
         createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
         updatedAt: new Date(Date.now() - 30 * 60 * 1000),
-        createdBy: 'Financeiro',
+        createdBy: "Financeiro",
         estimatedDuration: 480, // 8 horas
-        priority: 'medium',
+        priority: "medium",
         steps: [
           {
-            id: 's5',
-            name: 'Submissão',
-            description: 'Funcionário submete despesa',
-            status: 'completed',
-            assignee: 'Funcionário'
+            id: "s5",
+            name: "Submissão",
+            description: "Funcionário submete despesa",
+            status: "completed",
+            assignee: "Funcionário"
           },
           {
-            id: 's6',
-            name: 'Revisão Supervisor',
-            description: 'Aprovação do supervisor direto',
-            status: 'completed',
-            assignee: 'Supervisor'
+            id: "s6",
+            name: "Revisão Supervisor",
+            description: "Aprovação do supervisor direto",
+            status: "completed",
+            assignee: "Supervisor"
           },
           {
-            id: 's7',
-            name: 'Aprovação Financeira',
-            description: 'Validação do departamento financeiro',
-            status: 'in_progress',
-            assignee: 'Financeiro'
+            id: "s7",
+            name: "Aprovação Financeira",
+            description: "Validação do departamento financeiro",
+            status: "in_progress",
+            assignee: "Financeiro"
           }
         ]
       },
       {
-        id: '3',
-        name: 'Manutenção Preventiva',
-        description: 'Rotina de manutenção de equipamentos',
-        category: 'operations',
-        status: 'paused',
+        id: "3",
+        name: "Manutenção Preventiva",
+        description: "Rotina de manutenção de equipamentos",
+        category: "operations",
+        status: "paused",
         progress: 40,
         createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
         updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-        createdBy: 'Operações',
+        createdBy: "Operações",
         estimatedDuration: 720, // 12 horas
-        priority: 'low',
+        priority: "low",
         steps: [
           {
-            id: 's8',
-            name: 'Inspeção Visual',
-            description: 'Verificação inicial dos equipamentos',
-            status: 'completed',
-            assignee: 'Técnico'
+            id: "s8",
+            name: "Inspeção Visual",
+            description: "Verificação inicial dos equipamentos",
+            status: "completed",
+            assignee: "Técnico"
           },
           {
-            id: 's9',
-            name: 'Testes Funcionais',
-            description: 'Execução de testes operacionais',
-            status: 'failed',
-            assignee: 'Especialista'
+            id: "s9",
+            name: "Testes Funcionais",
+            description: "Execução de testes operacionais",
+            status: "failed",
+            assignee: "Especialista"
           }
         ]
       }
@@ -205,39 +205,39 @@ export const WorkflowAutomationHub: React.FC = () => {
 
     const mockAutomationRules: AutomationRule[] = [
       {
-        id: 'r1',
-        name: 'Auto-aprovação Despesas Baixo Valor',
-        description: 'Aprova automaticamente despesas abaixo de R$ 100',
-        trigger: 'expense_submitted',
-        condition: 'amount < 100',
-        action: 'auto_approve',
+        id: "r1",
+        name: "Auto-aprovação Despesas Baixo Valor",
+        description: "Aprova automaticamente despesas abaixo de R$ 100",
+        trigger: "expense_submitted",
+        condition: "amount < 100",
+        action: "auto_approve",
         isActive: true,
         executionCount: 47,
         lastExecuted: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        category: 'finance'
+        category: "finance"
       },
       {
-        id: 'r2',
-        name: 'Notificação Certificado Vencendo',
-        description: 'Envia alerta 30 dias antes do vencimento',
-        trigger: 'certificate_check',
-        condition: 'days_to_expiry <= 30',
-        action: 'send_notification',
+        id: "r2",
+        name: "Notificação Certificado Vencendo",
+        description: "Envia alerta 30 dias antes do vencimento",
+        trigger: "certificate_check",
+        condition: "days_to_expiry <= 30",
+        action: "send_notification",
         isActive: true,
         executionCount: 12,
         lastExecuted: new Date(Date.now() - 24 * 60 * 60 * 1000),
-        category: 'hr'
+        category: "hr"
       },
       {
-        id: 'r3',
-        name: 'Escalação de Tickets',
-        description: 'Escala tickets não resolvidos em 24h',
-        trigger: 'ticket_created',
-        condition: 'hours_open > 24',
-        action: 'escalate_to_manager',
+        id: "r3",
+        name: "Escalação de Tickets",
+        description: "Escala tickets não resolvidos em 24h",
+        trigger: "ticket_created",
+        condition: "hours_open > 24",
+        action: "escalate_to_manager",
         isActive: false,
         executionCount: 8,
-        category: 'operations'
+        category: "operations"
       }
     ];
 
@@ -252,54 +252,54 @@ export const WorkflowAutomationHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100';
-      case 'in_progress': return 'text-blue-600 bg-blue-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'failed': return 'text-red-600 bg-red-100';
-      case 'active': return 'text-green-600 bg-green-100';
-      case 'paused': return 'text-orange-600 bg-orange-100';
-      case 'draft': return 'text-muted-foreground bg-gray-100';
-      default: return 'text-muted-foreground bg-gray-100';
+    case "completed": return "text-green-600 bg-green-100";
+    case "in_progress": return "text-blue-600 bg-blue-100";
+    case "pending": return "text-yellow-600 bg-yellow-100";
+    case "failed": return "text-red-600 bg-red-100";
+    case "active": return "text-green-600 bg-green-100";
+    case "paused": return "text-orange-600 bg-orange-100";
+    case "draft": return "text-muted-foreground bg-gray-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="h-4 w-4" />;
-      case 'in_progress': return <RefreshCw className="h-4 w-4 animate-spin" />;
-      case 'pending': return <Clock className="h-4 w-4" />;
-      case 'failed': return <AlertTriangle className="h-4 w-4" />;
-      case 'active': return <Play className="h-4 w-4" />;
-      case 'paused': return <Pause className="h-4 w-4" />;
-      default: return <Clock className="h-4 w-4" />;
+    case "completed": return <CheckCircle className="h-4 w-4" />;
+    case "in_progress": return <RefreshCw className="h-4 w-4 animate-spin" />;
+    case "pending": return <Clock className="h-4 w-4" />;
+    case "failed": return <AlertTriangle className="h-4 w-4" />;
+    case "active": return <Play className="h-4 w-4" />;
+    case "paused": return <Pause className="h-4 w-4" />;
+    default: return <Clock className="h-4 w-4" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'text-red-600 bg-red-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'low': return 'text-green-600 bg-green-100';
-      default: return 'text-muted-foreground bg-gray-100';
+    case "urgent": return "text-red-600 bg-red-100";
+    case "high": return "text-orange-600 bg-orange-100";
+    case "medium": return "text-yellow-600 bg-yellow-100";
+    case "low": return "text-green-600 bg-green-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'hr': return <Users className="h-4 w-4" />;
-      case 'finance': return <TrendingUp className="h-4 w-4" />;
-      case 'operations': return <Settings className="h-4 w-4" />;
-      case 'marketing': return <Target className="h-4 w-4" />;
-      default: return <Workflow className="h-4 w-4" />;
+    case "hr": return <Users className="h-4 w-4" />;
+    case "finance": return <TrendingUp className="h-4 w-4" />;
+    case "operations": return <Settings className="h-4 w-4" />;
+    case "marketing": return <Target className="h-4 w-4" />;
+    default: return <Workflow className="h-4 w-4" />;
     }
   };
 
   const filteredWorkflows = workflows.filter(workflow => {
     const matchesSearch = workflow.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          workflow.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || workflow.status === statusFilter;
-    const matchesCategory = categoryFilter === 'all' || workflow.category === categoryFilter;
+    const matchesStatus = statusFilter === "all" || workflow.status === statusFilter;
+    const matchesCategory = categoryFilter === "all" || workflow.category === categoryFilter;
     
     return matchesSearch && matchesStatus && matchesCategory;
   });
@@ -307,7 +307,7 @@ export const WorkflowAutomationHub: React.FC = () => {
   const handleStartWorkflow = (workflowId: string) => {
     setWorkflows(prev => prev.map(wf => 
       wf.id === workflowId 
-        ? { ...wf, status: 'active' as const, updatedAt: new Date() }
+        ? { ...wf, status: "active" as const, updatedAt: new Date() }
         : wf
     ));
     
@@ -320,7 +320,7 @@ export const WorkflowAutomationHub: React.FC = () => {
   const handlePauseWorkflow = (workflowId: string) => {
     setWorkflows(prev => prev.map(wf => 
       wf.id === workflowId 
-        ? { ...wf, status: 'paused' as const, updatedAt: new Date() }
+        ? { ...wf, status: "paused" as const, updatedAt: new Date() }
         : wf
     ));
     
@@ -382,7 +382,7 @@ export const WorkflowAutomationHub: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {workflows.filter(w => w.status === 'active').length}
+              {workflows.filter(w => w.status === "active").length}
             </div>
             <p className="text-xs text-muted-foreground">
               de {workflows.length} workflows
@@ -567,7 +567,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                           Detalhes
                         </Button>
                         
-                        {workflow.status === 'draft' || workflow.status === 'paused' ? (
+                        {workflow.status === "draft" || workflow.status === "paused" ? (
                           <Button 
                             size="sm" 
                             onClick={() => handleStartWorkflow(workflow.id)}
@@ -575,7 +575,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                             <Play className="h-3 w-3 mr-1" />
                             Iniciar
                           </Button>
-                        ) : workflow.status === 'active' ? (
+                        ) : workflow.status === "active" ? (
                           <Button 
                             size="sm" 
                             variant="outline"
@@ -610,8 +610,8 @@ export const WorkflowAutomationHub: React.FC = () => {
                       <div className="flex items-center space-x-3 mb-2">
                         <h4 className="font-medium">{rule.name}</h4>
                         <Badge variant="outline">{rule.category}</Badge>
-                        <Badge className={rule.isActive ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-muted-foreground'}>
-                          {rule.isActive ? 'Ativa' : 'Inativa'}
+                        <Badge className={rule.isActive ? "bg-green-100 text-green-600" : "bg-gray-100 text-muted-foreground"}>
+                          {rule.isActive ? "Ativa" : "Inativa"}
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">{rule.description}</p>
@@ -632,7 +632,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                         variant={rule.isActive ? "destructive" : "default"}
                         onClick={() => toggleAutomationRule(rule.id)}
                       >
-                        {rule.isActive ? 'Desativar' : 'Ativar'}
+                        {rule.isActive ? "Desativar" : "Ativar"}
                       </Button>
                     </div>
                   </div>
@@ -653,12 +653,12 @@ export const WorkflowAutomationHub: React.FC = () => {
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {[
-                  { name: 'Onboarding de Funcionários', category: 'RH', steps: 8 },
-                  { name: 'Aprovação de Despesas', category: 'Financeiro', steps: 4 },
-                  { name: 'Processo de Compras', category: 'Operações', steps: 6 },
-                  { name: 'Campanha de Marketing', category: 'Marketing', steps: 10 },
-                  { name: 'Manutenção Preventiva', category: 'Operações', steps: 5 },
-                  { name: 'Avaliação de Desempenho', category: 'RH', steps: 7 }
+                  { name: "Onboarding de Funcionários", category: "RH", steps: 8 },
+                  { name: "Aprovação de Despesas", category: "Financeiro", steps: 4 },
+                  { name: "Processo de Compras", category: "Operações", steps: 6 },
+                  { name: "Campanha de Marketing", category: "Marketing", steps: 10 },
+                  { name: "Manutenção Preventiva", category: "Operações", steps: 5 },
+                  { name: "Avaliação de Desempenho", category: "RH", steps: 7 }
                 ].map((template, index) => (
                   <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow">
                     <CardHeader>
@@ -692,10 +692,10 @@ export const WorkflowAutomationHub: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { category: 'RH', avgTime: '2.3 dias', efficiency: 87 },
-                    { category: 'Financeiro', avgTime: '4.1 horas', efficiency: 94 },
-                    { category: 'Operações', avgTime: '1.8 dias', efficiency: 76 },
-                    { category: 'Marketing', avgTime: '5.2 dias', efficiency: 82 }
+                    { category: "RH", avgTime: "2.3 dias", efficiency: 87 },
+                    { category: "Financeiro", avgTime: "4.1 horas", efficiency: 94 },
+                    { category: "Operações", avgTime: "1.8 dias", efficiency: 76 },
+                    { category: "Marketing", avgTime: "5.2 dias", efficiency: 82 }
                   ].map((item, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <div>
@@ -720,16 +720,16 @@ export const WorkflowAutomationHub: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { category: 'RH', executions: 156, trend: '+12%' },
-                    { category: 'Financeiro', executions: 289, trend: '+8%' },
-                    { category: 'Operações', executions: 97, trend: '-3%' },
-                    { category: 'Marketing', executions: 43, trend: '+25%' }
+                    { category: "RH", executions: 156, trend: "+12%" },
+                    { category: "Financeiro", executions: 289, trend: "+8%" },
+                    { category: "Operações", executions: 97, trend: "-3%" },
+                    { category: "Marketing", executions: 43, trend: "+25%" }
                   ].map((item, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <p className="font-medium">{item.category}</p>
                       <div className="text-right">
                         <p className="font-bold">{item.executions}</p>
-                        <p className={`text-sm ${item.trend.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                        <p className={`text-sm ${item.trend.startsWith("+") ? "text-green-600" : "text-red-600"}`}>
                           {item.trend}
                         </p>
                       </div>

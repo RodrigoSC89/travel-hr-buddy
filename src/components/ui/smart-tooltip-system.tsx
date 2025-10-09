@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 import { 
   HelpCircle, 
   Lightbulb, 
@@ -19,16 +19,16 @@ import {
   Anchor,
   Ship,
   Target
-} from 'lucide-react';
+} from "lucide-react";
 
 interface TooltipData {
   id: string;
   element: string;
   title: string;
   description: string;
-  category: 'navigation' | 'feature' | 'optimization' | 'help';
-  priority: 'high' | 'medium' | 'low';
-  position: 'top' | 'bottom' | 'left' | 'right';
+  category: "navigation" | "feature" | "optimization" | "help";
+  priority: "high" | "medium" | "low";
+  position: "top" | "bottom" | "left" | "right";
 }
 
 interface ContextualAssistant {
@@ -36,7 +36,7 @@ interface ContextualAssistant {
   trigger: string;
   title: string;
   message: string;
-  type: 'tip' | 'warning' | 'success' | 'info';
+  type: "tip" | "warning" | "success" | "info";
   actions?: Array<{
     label: string;
     action: () => void;
@@ -52,94 +52,94 @@ const SmartTooltipSystem: React.FC = () => {
 
   const tooltipDatabase: TooltipData[] = [
     {
-      id: 'nautical-copilot',
-      element: '[data-tour="copilot"]',
-      title: 'Nautilus Copilot IA',
-      description: 'Seu assistente marítimo inteligente. Faça perguntas sobre operações, solicite relatórios ou execute comandos por voz.',
-      category: 'feature',
-      priority: 'high',
-      position: 'right'
+      id: "nautical-copilot",
+      element: "[data-tour=\"copilot\"]",
+      title: "Nautilus Copilot IA",
+      description: "Seu assistente marítimo inteligente. Faça perguntas sobre operações, solicite relatórios ou execute comandos por voz.",
+      category: "feature",
+      priority: "high",
+      position: "right"
     },
     {
-      id: 'fleet-status',
-      element: '[data-tour="fleet"]',
-      title: 'Status da Frota',
-      description: 'Monitore em tempo real todas as embarcações, suas posições, status operacional e próximas manutenções.',
-      category: 'navigation',
-      priority: 'high',
-      position: 'bottom'
+      id: "fleet-status",
+      element: "[data-tour=\"fleet\"]",
+      title: "Status da Frota",
+      description: "Monitore em tempo real todas as embarcações, suas posições, status operacional e próximas manutenções.",
+      category: "navigation",
+      priority: "high",
+      position: "bottom"
     },
     {
-      id: 'integration-hub',
-      element: '[data-tour="integrations"]',
-      title: 'Hub de Integrações',
-      description: 'Conecte-se com APIs marítimas, dados meteorológicos e sistemas governamentais para automação completa.',
-      category: 'feature',
-      priority: 'medium',
-      position: 'left'
+      id: "integration-hub",
+      element: "[data-tour=\"integrations\"]",
+      title: "Hub de Integrações",
+      description: "Conecte-se com APIs marítimas, dados meteorológicos e sistemas governamentais para automação completa.",
+      category: "feature",
+      priority: "medium",
+      position: "left"
     },
     {
-      id: 'custom-theme',
-      element: '[data-tour="theme"]',
-      title: 'Personalização Náutica',
-      description: 'Customize cores, temas e terminologia para adequar o sistema à identidade da sua empresa marítima.',
-      category: 'feature',
-      priority: 'medium',
-      position: 'top'
+      id: "custom-theme",
+      element: "[data-tour=\"theme\"]",
+      title: "Personalização Náutica",
+      description: "Customize cores, temas e terminologia para adequar o sistema à identidade da sua empresa marítima.",
+      category: "feature",
+      priority: "medium",
+      position: "top"
     },
     {
-      id: 'quick-actions',
-      element: '[data-tour="actions"]',
-      title: 'Ações Rápidas',
-      description: 'Acesse rapidamente as funções mais utilizadas: relatórios, alertas, comunicação e monitoramento.',
-      category: 'navigation',
-      priority: 'high',
-      position: 'bottom'
+      id: "quick-actions",
+      element: "[data-tour=\"actions\"]",
+      title: "Ações Rápidas",
+      description: "Acesse rapidamente as funções mais utilizadas: relatórios, alertas, comunicação e monitoramento.",
+      category: "navigation",
+      priority: "high",
+      position: "bottom"
     }
   ];
 
   const contextualAssistants: ContextualAssistant[] = [
     {
-      id: 'first-visit',
-      trigger: 'new_user',
-      title: 'Bem-vindo ao Nautilus One!',
-      message: 'Detectamos que é sua primeira vez aqui. Gostaria de fazer um tour guiado pelas principais funcionalidades?',
-      type: 'info',
+      id: "first-visit",
+      trigger: "new_user",
+      title: "Bem-vindo ao Nautilus One!",
+      message: "Detectamos que é sua primeira vez aqui. Gostaria de fazer um tour guiado pelas principais funcionalidades?",
+      type: "info",
       actions: [
-        { label: 'Iniciar Tour', action: () => startGuidedTour() },
-        { label: 'Pular', action: () => dismissAssistant('first-visit') }
+        { label: "Iniciar Tour", action: () => startGuidedTour() },
+        { label: "Pular", action: () => dismissAssistant("first-visit") }
       ]
     },
     {
-      id: 'low-efficiency',
-      trigger: 'efficiency_below_threshold',
-      title: 'Oportunidade de Otimização',
-      message: 'Detectamos que a eficiência operacional está abaixo do esperado. O Copilot IA pode sugerir melhorias automáticas.',
-      type: 'warning',
+      id: "low-efficiency",
+      trigger: "efficiency_below_threshold",
+      title: "Oportunidade de Otimização",
+      message: "Detectamos que a eficiência operacional está abaixo do esperado. O Copilot IA pode sugerir melhorias automáticas.",
+      type: "warning",
       actions: [
-        { label: 'Ver Sugestões', action: () => openOptimizationPanel() },
-        { label: 'Ignorar', action: () => dismissAssistant('low-efficiency') }
+        { label: "Ver Sugestões", action: () => openOptimizationPanel() },
+        { label: "Ignorar", action: () => dismissAssistant("low-efficiency") }
       ]
     },
     {
-      id: 'new-feature',
-      trigger: 'feature_announcement',
-      title: 'Nova Funcionalidade Disponível',
-      message: 'Acabamos de lançar o Sistema de Identidade Marítima. Personalize completamente a aparência do sistema!',
-      type: 'success',
+      id: "new-feature",
+      trigger: "feature_announcement",
+      title: "Nova Funcionalidade Disponível",
+      message: "Acabamos de lançar o Sistema de Identidade Marítima. Personalize completamente a aparência do sistema!",
+      type: "success",
       actions: [
-        { label: 'Explorar', action: () => openIdentitySystem() },
-        { label: 'Mais Tarde', action: () => dismissAssistant('new-feature') }
+        { label: "Explorar", action: () => openIdentitySystem() },
+        { label: "Mais Tarde", action: () => dismissAssistant("new-feature") }
       ]
     },
     {
-      id: 'performance-tip',
-      trigger: 'idle_time',
-      title: 'Dica de Produtividade',
-      message: 'Você pode usar Ctrl+K para abrir a busca global rapidamente e navegar entre módulos.',
-      type: 'tip',
+      id: "performance-tip",
+      trigger: "idle_time",
+      title: "Dica de Produtividade",
+      message: "Você pode usar Ctrl+K para abrir a busca global rapidamente e navegar entre módulos.",
+      type: "tip",
       actions: [
-        { label: 'Entendi', action: () => dismissAssistant('performance-tip') }
+        { label: "Entendi", action: () => dismissAssistant("performance-tip") }
       ]
     }
   ];
@@ -148,10 +148,10 @@ const SmartTooltipSystem: React.FC = () => {
     // Simular detecção de contexto
     const checkContext = () => {
       // Verificar se é novo usuário
-      const isNewUser = !localStorage.getItem('nautilus_visited');
+      const isNewUser = !localStorage.getItem("nautilus_visited");
       if (isNewUser) {
-        showAssistant('first-visit');
-        localStorage.setItem('nautilus_visited', 'true');
+        showAssistant("first-visit");
+        localStorage.setItem("nautilus_visited", "true");
       }
 
       // Verificar tempo de inatividade
@@ -160,19 +160,19 @@ const SmartTooltipSystem: React.FC = () => {
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => {
           if (Math.random() > 0.7) { // 30% de chance
-            showAssistant('performance-tip');
+            showAssistant("performance-tip");
           }
         }, 30000); // 30 segundos
       };
 
-      document.addEventListener('mousemove', resetTimer);
-      document.addEventListener('keypress', resetTimer);
+      document.addEventListener("mousemove", resetTimer);
+      document.addEventListener("keypress", resetTimer);
       resetTimer();
 
       return () => {
         clearTimeout(idleTimer);
-        document.removeEventListener('mousemove', resetTimer);
-        document.removeEventListener('keypress', resetTimer);
+        document.removeEventListener("mousemove", resetTimer);
+        document.removeEventListener("keypress", resetTimer);
       };
     };
 
@@ -193,7 +193,7 @@ const SmartTooltipSystem: React.FC = () => {
   const startGuidedTour = () => {
     setCurrentTour(0);
     setIsHelpMode(true);
-    dismissAssistant('first-visit');
+    dismissAssistant("first-visit");
     toast({
       title: "Tour Iniciado",
       description: "Siga as instruções para conhecer o sistema",
@@ -222,7 +222,7 @@ const SmartTooltipSystem: React.FC = () => {
       title: "Painel de Otimização",
       description: "Redirecionando para sugestões de melhoria...",
     });
-    dismissAssistant('low-efficiency');
+    dismissAssistant("low-efficiency");
   };
 
   const openIdentitySystem = () => {
@@ -230,26 +230,26 @@ const SmartTooltipSystem: React.FC = () => {
       title: "Sistema de Identidade",
       description: "Abrindo painel de customização...",
     });
-    dismissAssistant('new-feature');
+    dismissAssistant("new-feature");
   };
 
-  const getAssistantIcon = (type: ContextualAssistant['type']) => {
+  const getAssistantIcon = (type: ContextualAssistant["type"]) => {
     switch (type) {
-      case 'tip': return <Lightbulb className="w-5 h-5 text-blue-500" />;
-      case 'warning': return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
-      case 'success': return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case 'info': return <Info className="w-5 h-5 text-blue-500" />;
-      default: return <HelpCircle className="w-5 h-5 text-muted-foreground" />;
+    case "tip": return <Lightbulb className="w-5 h-5 text-blue-500" />;
+    case "warning": return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
+    case "success": return <CheckCircle className="w-5 h-5 text-green-500" />;
+    case "info": return <Info className="w-5 h-5 text-blue-500" />;
+    default: return <HelpCircle className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
-  const getCategoryIcon = (category: TooltipData['category']) => {
+  const getCategoryIcon = (category: TooltipData["category"]) => {
     switch (category) {
-      case 'navigation': return <Compass className="w-4 h-4" />;
-      case 'feature': return <Star className="w-4 h-4" />;
-      case 'optimization': return <TrendingUp className="w-4 h-4" />;
-      case 'help': return <HelpCircle className="w-4 h-4" />;
-      default: return <Navigation className="w-4 h-4" />;
+    case "navigation": return <Compass className="w-4 h-4" />;
+    case "feature": return <Star className="w-4 h-4" />;
+    case "optimization": return <TrendingUp className="w-4 h-4" />;
+    case "help": return <HelpCircle className="w-4 h-4" />;
+    default: return <Navigation className="w-4 h-4" />;
     }
   };
 
@@ -283,9 +283,9 @@ const SmartTooltipSystem: React.FC = () => {
                     <Button
                       key={index}
                       size="sm"
-                      variant={index === 0 ? 'default' : 'outline'}
+                      variant={index === 0 ? "default" : "outline"}
                       onClick={action.action}
-                      className={index === 0 ? 'btn-maritime' : 'btn-harbor'}
+                      className={index === 0 ? "btn-maritime" : "btn-harbor"}
                     >
                       {action.label}
                     </Button>
@@ -321,7 +321,7 @@ const SmartTooltipSystem: React.FC = () => {
                       <div className="flex items-center gap-2">
                         {getCategoryIcon(tooltipDatabase[currentTour].category)}
                         <h3 className="font-semibold">{tooltipDatabase[currentTour].title}</h3>
-                        <Badge className={`badge-${tooltipDatabase[currentTour].priority === 'high' ? 'captain' : 'crew'}`}>
+                        <Badge className={`badge-${tooltipDatabase[currentTour].priority === "high" ? "captain" : "crew"}`}>
                           {tooltipDatabase[currentTour].category}
                         </Badge>
                       </div>
@@ -333,7 +333,7 @@ const SmartTooltipSystem: React.FC = () => {
                           Pular Tour
                         </Button>
                         <Button onClick={nextTourStep} className="btn-maritime">
-                          {currentTour === tooltipDatabase.length - 1 ? 'Finalizar' : 'Próximo'}
+                          {currentTour === tooltipDatabase.length - 1 ? "Finalizar" : "Próximo"}
                           <ChevronRight className="w-4 h-4 ml-1" />
                         </Button>
                       </div>
@@ -369,7 +369,7 @@ const SmartTooltipSystem: React.FC = () => {
             <Button
               variant="outline"
               className="w-full justify-start btn-harbor"
-              onClick={() => showAssistant('performance-tip')}
+              onClick={() => showAssistant("performance-tip")}
             >
               <Zap className="w-4 h-4 mr-2" />
               Dicas de Produtividade
@@ -378,7 +378,7 @@ const SmartTooltipSystem: React.FC = () => {
             <Button
               variant="outline"
               className="w-full justify-start btn-harbor"
-              onClick={() => showAssistant('new-feature')}
+              onClick={() => showAssistant("new-feature")}
             >
               <Star className="w-4 h-4 mr-2" />
               Novidades do Sistema

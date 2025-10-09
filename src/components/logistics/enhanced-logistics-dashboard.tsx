@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import { 
   Truck, 
   Package, 
@@ -35,24 +35,24 @@ import {
   Ship,
   Navigation,
   Anchor
-} from 'lucide-react';
+} from "lucide-react";
 
 interface LogisticsData {
   id: string;
-  type: 'shipping' | 'air' | 'ground' | 'maritime';
+  type: "shipping" | "air" | "ground" | "maritime";
   origin: string;
   destination: string;
-  status: 'pending' | 'in_transit' | 'delivered' | 'delayed';
+  status: "pending" | "in_transit" | "delivered" | "delayed";
   progress: number;
   estimatedDelivery: string;
   cost: number;
   weight: number;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
 }
 
 const EnhancedLogisticsDashboard: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('overview');
+  const [selectedTab, setSelectedTab] = useState("overview");
 
   useEffect(() => {
     setIsLoaded(true);
@@ -60,83 +60,83 @@ const EnhancedLogisticsDashboard: React.FC = () => {
 
   const logisticsData: LogisticsData[] = [
     {
-      id: 'LOG-001',
-      type: 'maritime',
-      origin: 'Porto de Santos',
-      destination: 'Porto de Vitória',
-      status: 'in_transit',
+      id: "LOG-001",
+      type: "maritime",
+      origin: "Porto de Santos",
+      destination: "Porto de Vitória",
+      status: "in_transit",
       progress: 75,
-      estimatedDelivery: '2024-01-20',
+      estimatedDelivery: "2024-01-20",
       cost: 15000,
       weight: 25000,
-      priority: 'high'
+      priority: "high"
     },
     {
-      id: 'LOG-002',
-      type: 'air',
-      origin: 'São Paulo',
-      destination: 'Rio de Janeiro',
-      status: 'delivered',
+      id: "LOG-002",
+      type: "air",
+      origin: "São Paulo",
+      destination: "Rio de Janeiro",
+      status: "delivered",
       progress: 100,
-      estimatedDelivery: '2024-01-18',
+      estimatedDelivery: "2024-01-18",
       cost: 8500,
       weight: 500,
-      priority: 'critical'
+      priority: "critical"
     },
     {
-      id: 'LOG-003',
-      type: 'ground',
-      origin: 'Belo Horizonte',
-      destination: 'Brasília',
-      status: 'pending',
+      id: "LOG-003",
+      type: "ground",
+      origin: "Belo Horizonte",
+      destination: "Brasília",
+      status: "pending",
       progress: 0,
-      estimatedDelivery: '2024-01-25',
+      estimatedDelivery: "2024-01-25",
       cost: 3200,
       weight: 1200,
-      priority: 'medium'
+      priority: "medium"
     }
   ];
 
   const quickStats = [
-    { icon: Package, label: 'Cargas Ativas', value: '124', color: 'primary', trend: '+12%' },
-    { icon: Truck, label: 'Em Trânsito', value: '89', color: 'info', trend: '+8%' },
-    { icon: CheckCircle, label: 'Entregues Hoje', value: '45', color: 'success', trend: '+15%' },
-    { icon: AlertTriangle, label: 'Atrasadas', value: '3', color: 'warning', trend: '-5%' }
+    { icon: Package, label: "Cargas Ativas", value: "124", color: "primary", trend: "+12%" },
+    { icon: Truck, label: "Em Trânsito", value: "89", color: "info", trend: "+8%" },
+    { icon: CheckCircle, label: "Entregues Hoje", value: "45", color: "success", trend: "+15%" },
+    { icon: AlertTriangle, label: "Atrasadas", value: "3", color: "warning", trend: "-5%" }
   ];
 
   const transportModes = [
-    { icon: Ship, name: 'Marítimo', count: 45, percentage: 36, color: 'info' },
-    { icon: Plane, name: 'Aéreo', count: 32, percentage: 26, color: 'primary' },
-    { icon: Truck, name: 'Terrestre', count: 38, percentage: 31, color: 'success' },
-    { icon: Navigation, name: 'Multimodal', count: 9, percentage: 7, color: 'warning' }
+    { icon: Ship, name: "Marítimo", count: 45, percentage: 36, color: "info" },
+    { icon: Plane, name: "Aéreo", count: 32, percentage: 26, color: "primary" },
+    { icon: Truck, name: "Terrestre", count: 38, percentage: 31, color: "success" },
+    { icon: Navigation, name: "Multimodal", count: 9, percentage: 7, color: "warning" }
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'delivered': return 'success';
-      case 'in_transit': return 'info';
-      case 'delayed': return 'destructive';
-      case 'pending': return 'warning';
-      default: return 'secondary';
+    case "delivered": return "success";
+    case "in_transit": return "info";
+    case "delayed": return "destructive";
+    case "pending": return "warning";
+    default: return "secondary";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'destructive';
-      case 'high': return 'warning';
-      case 'medium': return 'info';
-      case 'low': return 'success';
-      default: return 'secondary';
+    case "critical": return "destructive";
+    case "high": return "warning";
+    case "medium": return "info";
+    case "low": return "success";
+    default: return "secondary";
     }
   };
 
   const getTransportIcon = (type: string) => {
     switch (type) {
-      case 'maritime': return Ship;
-      case 'air': return Plane;
-      case 'ground': return Truck;
-      default: return Package;
+    case "maritime": return Ship;
+    case "air": return Plane;
+    case "ground": return Truck;
+    default: return Package;
     }
   };
 
@@ -165,7 +165,7 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Icon className="w-4 h-4" />
                     <span className="capitalize">
-                      {item.type === 'maritime' ? 'Marítimo' : item.type === 'air' ? 'Aéreo' : 'Terrestre'}
+                      {item.type === "maritime" ? "Marítimo" : item.type === "air" ? "Aéreo" : "Terrestre"}
                     </span>
                   </div>
                 </TableCell>
@@ -175,9 +175,9 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                     variant="outline" 
                     className={`bg-${getStatusColor(item.status)}/10 text-${getStatusColor(item.status)} border-${getStatusColor(item.status)}/30`}
                   >
-                    {item.status === 'in_transit' ? 'Em Trânsito' : 
-                     item.status === 'delivered' ? 'Entregue' : 
-                     item.status === 'pending' ? 'Pendente' : 'Atrasado'}
+                    {item.status === "in_transit" ? "Em Trânsito" : 
+                      item.status === "delivered" ? "Entregue" : 
+                        item.status === "pending" ? "Pendente" : "Atrasado"}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -191,13 +191,13 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                     variant="outline" 
                     className={`bg-${getPriorityColor(item.priority)}/10 text-${getPriorityColor(item.priority)} border-${getPriorityColor(item.priority)}/30`}
                   >
-                    {item.priority === 'critical' ? 'Crítica' : 
-                     item.priority === 'high' ? 'Alta' : 
-                     item.priority === 'medium' ? 'Média' : 'Baixa'}
+                    {item.priority === "critical" ? "Crítica" : 
+                      item.priority === "high" ? "Alta" : 
+                        item.priority === "medium" ? "Média" : "Baixa"}
                   </Badge>
                 </TableCell>
-                <TableCell>{new Date(item.estimatedDelivery).toLocaleDateString('pt-BR')}</TableCell>
-                <TableCell>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cost)}</TableCell>
+                <TableCell>{new Date(item.estimatedDelivery).toLocaleDateString("pt-BR")}</TableCell>
+                <TableCell>{new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(item.cost)}</TableCell>
               </TableRow>
             );
           })}
@@ -216,12 +216,12 @@ const EnhancedLogisticsDashboard: React.FC = () => {
       <div className="relative z-10 container mx-auto p-6 space-y-8">
         {/* Enhanced Hero Section */}
         <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-info via-info/90 to-info-glow p-8 text-info-foreground 
-          transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           
           {/* Animated Background Pattern */}
           <div className="absolute inset-0 bg-mesh opacity-20" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/15 to-transparent rounded-full blur-2xl animate-pulse" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-success/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-success/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: "1s" }} />
           
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-6">

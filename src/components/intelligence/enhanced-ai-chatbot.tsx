@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
 import { 
   Mic, 
   MicOff, 
@@ -35,15 +35,15 @@ import {
   AlertCircle,
   Info,
   HelpCircle
-} from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+} from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Message {
   id: string;
-  type: 'user' | 'ai';
+  type: "user" | "ai";
   content: string;
   timestamp: Date;
-  category?: 'general' | 'analysis' | 'prediction' | 'recommendation' | 'voice' | 'image';
+  category?: "general" | "analysis" | "prediction" | "recommendation" | "voice" | "image";
   confidence?: number;
   sources?: string[];
 }
@@ -61,10 +61,10 @@ interface AICapability {
 
 const EnhancedAIChatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const [isVoiceActive, setIsVoiceActive] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [selectedCapability, setSelectedCapability] = useState<string>('general');
+  const [selectedCapability, setSelectedCapability] = useState<string>("general");
   const [isLoaded, setIsLoaded] = useState(false);
   const [voiceSupported, setVoiceSupported] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -73,17 +73,17 @@ const EnhancedAIChatbot: React.FC = () => {
 
   useEffect(() => {
     setIsLoaded(true);
-    setVoiceSupported('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
+    setVoiceSupported("webkitSpeechRecognition" in window || "SpeechRecognition" in window);
     
     // Mensagem de boas-vindas com delay para efeito visual
     setTimeout(() => {
       setMessages([
         {
-          id: 'welcome',
-          type: 'ai',
-          content: '🌊 Olá! Sou o Assistente IA do Nautilus One, seu companheiro inteligente para operações marítimas. Como posso ajudá-lo hoje? \n\n💡 **Dicas rápidas:**\n• Use comandos de voz clicando no 🎙️\n• Envie imagens para análise\n• Digite "/" para ver comandos especiais\n• Pressione Tab para navegar rapidamente',
+          id: "welcome",
+          type: "ai",
+          content: "🌊 Olá! Sou o Assistente IA do Nautilus One, seu companheiro inteligente para operações marítimas. Como posso ajudá-lo hoje? \n\n💡 **Dicas rápidas:**\n• Use comandos de voz clicando no 🎙️\n• Envie imagens para análise\n• Digite \"/\" para ver comandos especiais\n• Pressione Tab para navegar rapidamente",
           timestamp: new Date(),
-          category: 'general',
+          category: "general",
           confidence: 100
         }
       ]);
@@ -91,7 +91,7 @@ const EnhancedAIChatbot: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   // Suporte a teclas de atalho
@@ -99,97 +99,97 @@ const EnhancedAIChatbot: React.FC = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey) {
         switch (e.key) {
-          case 'k':
-            e.preventDefault();
-            inputRef.current?.focus();
-            break;
-          case 'Enter':
-            e.preventDefault();
-            handleSendMessage();
-            break;
+        case "k":
+          e.preventDefault();
+          inputRef.current?.focus();
+          break;
+        case "Enter":
+          e.preventDefault();
+          handleSendMessage();
+          break;
         }
       }
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         setIsVoiceActive(false);
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [inputMessage]);
 
   const aiCapabilities: AICapability[] = [
     {
-      id: 'general',
-      name: 'Assistente Geral',
-      description: 'Perguntas gerais e navegação do sistema',
+      id: "general",
+      name: "Assistente Geral",
+      description: "Perguntas gerais e navegação do sistema",
       icon: MessageCircle,
-      color: 'primary',
+      color: "primary",
       active: true,
-      shortcut: 'Ctrl+1',
-      tooltip: 'Assistência geral com navegação e funcionalidades do sistema'
+      shortcut: "Ctrl+1",
+      tooltip: "Assistência geral com navegação e funcionalidades do sistema"
     },
     {
-      id: 'analysis',
-      name: 'Análise de Dados',
-      description: 'Análise profunda de métricas e KPIs',
+      id: "analysis",
+      name: "Análise de Dados",
+      description: "Análise profunda de métricas e KPIs",
       icon: BarChart3,
-      color: 'info',
+      color: "info",
       active: true,
-      shortcut: 'Ctrl+2',
-      tooltip: 'Análise avançada de dados operacionais e relatórios inteligentes'
+      shortcut: "Ctrl+2",
+      tooltip: "Análise avançada de dados operacionais e relatórios inteligentes"
     },
     {
-      id: 'prediction',
-      name: 'IA Preditiva',
-      description: 'Previsões baseadas em machine learning',
+      id: "prediction",
+      name: "IA Preditiva",
+      description: "Previsões baseadas em machine learning",
       icon: Brain,
-      color: 'success',
+      color: "success",
       active: true,
-      shortcut: 'Ctrl+3',
-      tooltip: 'Previsões e tendências baseadas em algoritmos avançados'
+      shortcut: "Ctrl+3",
+      tooltip: "Previsões e tendências baseadas em algoritmos avançados"
     },
     {
-      id: 'recommendation',
-      name: 'Recomendações',
-      description: 'Sugestões inteligentes e otimizações',
+      id: "recommendation",
+      name: "Recomendações",
+      description: "Sugestões inteligentes e otimizações",
       icon: Target,
-      color: 'warning',
+      color: "warning",
       active: true,
-      shortcut: 'Ctrl+4',
-      tooltip: 'Recomendações personalizadas para otimização operacional'
+      shortcut: "Ctrl+4",
+      tooltip: "Recomendações personalizadas para otimização operacional"
     },
     {
-      id: 'voice',
-      name: 'Comando de Voz',
-      description: 'Interação por voz em tempo real',
+      id: "voice",
+      name: "Comando de Voz",
+      description: "Interação por voz em tempo real",
       icon: Mic,
-      color: 'secondary',
+      color: "secondary",
       active: voiceSupported,
-      shortcut: 'Espaço',
-      tooltip: 'Controle por comandos de voz para operação hands-free'
+      shortcut: "Espaço",
+      tooltip: "Controle por comandos de voz para operação hands-free"
     },
     {
-      id: 'image',
-      name: 'Análise Visual',
-      description: 'Processamento de imagens e documentos',
+      id: "image",
+      name: "Análise Visual",
+      description: "Processamento de imagens e documentos",
       icon: Camera,
-      color: 'accent',
+      color: "accent",
       active: true,
-      shortcut: 'Ctrl+U',
-      tooltip: 'Análise inteligente de imagens, documentos e capturas de tela'
+      shortcut: "Ctrl+U",
+      tooltip: "Análise inteligente de imagens, documentos e capturas de tela"
     }
   ];
 
   const quickCommands = [
-    { text: '📊 Mostrar dashboard de performance', category: 'analysis', icon: BarChart3 },
-    { text: '🔮 Previsão de demanda para próximo mês', category: 'prediction', icon: TrendingUp },
-    { text: '⚡ Como otimizar workflow de checklists?', category: 'recommendation', icon: Zap },
-    { text: '📋 Relatório de conformidade PEOTRAM', category: 'analysis', icon: FileText },
-    { text: '🌊 Tendências de operações marítimas', category: 'prediction', icon: Activity },
-    { text: '💡 Sugestões para reduzir custos operacionais', category: 'recommendation', icon: Target },
-    { text: '🚢 Status atual da frota', category: 'general', icon: Info },
-    { text: '📈 Análise de KPIs em tempo real', category: 'analysis', icon: TrendingUp }
+    { text: "📊 Mostrar dashboard de performance", category: "analysis", icon: BarChart3 },
+    { text: "🔮 Previsão de demanda para próximo mês", category: "prediction", icon: TrendingUp },
+    { text: "⚡ Como otimizar workflow de checklists?", category: "recommendation", icon: Zap },
+    { text: "📋 Relatório de conformidade PEOTRAM", category: "analysis", icon: FileText },
+    { text: "🌊 Tendências de operações marítimas", category: "prediction", icon: Activity },
+    { text: "💡 Sugestões para reduzir custos operacionais", category: "recommendation", icon: Target },
+    { text: "🚢 Status atual da frota", category: "general", icon: Info },
+    { text: "📈 Análise de KPIs em tempo real", category: "analysis", icon: TrendingUp }
   ];
 
   const handleSendMessage = async () => {
@@ -197,14 +197,14 @@ const EnhancedAIChatbot: React.FC = () => {
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
-      type: 'user',
+      type: "user",
       content: inputMessage,
       timestamp: new Date(),
       category: selectedCapability as any
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
+    setInputMessage("");
     setIsProcessing(true);
 
     // Simular processamento da IA com feedback visual
@@ -212,7 +212,7 @@ const EnhancedAIChatbot: React.FC = () => {
       const aiResponse = generateEnhancedAIResponse(inputMessage, selectedCapability);
       const aiMessage: Message = {
         id: `ai-${Date.now()}`,
-        type: 'ai',
+        type: "ai",
         content: aiResponse.content,
         timestamp: new Date(),
         category: selectedCapability as any,
@@ -230,32 +230,32 @@ const EnhancedAIChatbot: React.FC = () => {
       general: {
         content: `🌊 **Nautilus One Analysis**\n\nBaseado na sua consulta "${input}", identifiquei informações relevantes no sistema:\n\n✅ **Status Operacional**: Todos os módulos funcionando normalmente\n📊 **Métricas Atuais**: Performance acima da média (94.2%)\n🔄 **Última Sincronização**: Dados atualizados há 2 minutos\n\n💡 **Sugestão**: Quer que eu detalhe algum aspecto específico?`,
         confidence: 92,
-        sources: ['Sistema Nautilus One', 'Base de Conhecimento', 'Logs Operacionais']
+        sources: ["Sistema Nautilus One", "Base de Conhecimento", "Logs Operacionais"]
       },
       analysis: {
         content: `📊 **Análise Detalhada Concluída**\n\nProcessei ${Math.floor(Math.random() * 5000 + 1000)} pontos de dados relacionados à sua consulta:\n\n📈 **Tendências Identificadas**:\n• Crescimento de 18% nas métricas principais\n• Eficiência operacional em 94.7%\n• 3 oportunidades de otimização detectadas\n\n🎯 **Insights Principais**:\n• Performance superior à média do setor\n• Padrão sazonal identificado nos dados\n• Recomendo revisão dos processos do Módulo B\n\n🔍 **Próximos Passos**: Implementar as otimizações sugeridas pode resultar em 12% de melhoria adicional.`,
         confidence: 96,
-        sources: ['Analytics Engine', 'Historical Data', 'Benchmarking DB']
+        sources: ["Analytics Engine", "Historical Data", "Benchmarking DB"]
       },
       prediction: {
         content: `🔮 **Previsão Avançada - Modelo ML v3.2**\n\nAnálise preditiva baseada em ${Math.floor(Math.random() * 50 + 20)} variáveis:\n\n📊 **Previsões para próximos 30 dias**:\n• Probabilidade de 87% de atingir metas estabelecidas\n• Aumento previsto de 23% na demanda\n• Otimização de recursos pode economizar R$ 45.000\n\n⚠️ **Alertas Preditivos**:\n• Possível pico de demanda na semana 3\n• Manutenção preventiva recomendada para 2 equipamentos\n• Ajuste de equipe sugerido para período de alta\n\n🎯 **Confiança do Modelo**: ${90 + Math.floor(Math.random() * 8)}% (baseado em histórico de 24 meses)`,
         confidence: 94,
-        sources: ['ML Model v3.2', 'Predictive Analytics', 'Historical Patterns']
+        sources: ["ML Model v3.2", "Predictive Analytics", "Historical Patterns"]
       },
       recommendation: {
         content: `💡 **Recomendações Inteligentes**\n\nCom base na análise da sua solicitação, identifiquei ${Math.floor(Math.random() * 8 + 3)} oportunidades:\n\n🚀 **Implementação Imediata** (ROI: 2-4 semanas):\n• Automatizar aprovações no módulo de checklists\n• Otimizar roteamento de notificações\n• Implementar cache inteligente de dados\n\n⭐ **Melhorias Estratégicas** (ROI: 2-3 meses):\n• Integração com APIs externas para dados meteorológicos\n• Dashboard preditivo personalizado\n• Sistema de alertas proativos\n\n🎯 **Impacto Estimado**:\n• ⬆️ 28% de eficiência operacional\n• ⬇️ 15% de redução de custos\n• ⬆️ 35% de satisfação da equipe\n\n📋 **Plano de Ação**: Quer que eu detalhe a implementação de alguma recomendação específica?`,
         confidence: 91,
-        sources: ['Best Practices DB', 'Industry Benchmarks', 'Optimization Engine']
+        sources: ["Best Practices DB", "Industry Benchmarks", "Optimization Engine"]
       },
       voice: {
         content: `🎙️ **Comando de Voz Processado**\n\nReconheci sua solicitação por voz com precisão de ${95 + Math.floor(Math.random() * 5)}%:\n\n✅ **Comando Interpretado**: "${input}"\n🔄 **Ação Executada**: Processamento em andamento\n📊 **Contexto Detectado**: ${selectedCapability}\n\n🗣️ **Dica**: Para melhor reconhecimento, fale claramente e evite ruídos de fundo.\n\n💬 **Resposta**: Processando sua solicitação via comando de voz...`,
         confidence: 88,
-        sources: ['Speech Recognition API', 'Voice Processing Engine', 'Context Analyzer']
+        sources: ["Speech Recognition API", "Voice Processing Engine", "Context Analyzer"]
       },
       image: {
-        content: `📸 **Análise Visual Completa**\n\nProcessei a imagem/documento enviado:\n\n🔍 **Elementos Detectados**:\n• Formato: ${['PDF', 'JPG', 'PNG', 'DOC'][Math.floor(Math.random() * 4)]}\n• Qualidade: ${85 + Math.floor(Math.random() * 15)}%\n• Texto extraído: ${Math.floor(Math.random() * 500 + 100)} caracteres\n• Objetos identificados: ${Math.floor(Math.random() * 10 + 3)}\n\n📋 **Informações Extraídas**:\n• Tipo de documento: Operacional\n• Data identificada: ${new Date().toLocaleDateString('pt-BR')}\n• Status de conformidade: ✅ Aprovado\n\n🔄 **Processamento OCR**: Texto convertido e indexado para busca.\n\n💡 **Sugestão**: Documento processado com sucesso. Posso ajudar com análise específica do conteúdo?`,
+        content: `📸 **Análise Visual Completa**\n\nProcessei a imagem/documento enviado:\n\n🔍 **Elementos Detectados**:\n• Formato: ${["PDF", "JPG", "PNG", "DOC"][Math.floor(Math.random() * 4)]}\n• Qualidade: ${85 + Math.floor(Math.random() * 15)}%\n• Texto extraído: ${Math.floor(Math.random() * 500 + 100)} caracteres\n• Objetos identificados: ${Math.floor(Math.random() * 10 + 3)}\n\n📋 **Informações Extraídas**:\n• Tipo de documento: Operacional\n• Data identificada: ${new Date().toLocaleDateString("pt-BR")}\n• Status de conformidade: ✅ Aprovado\n\n🔄 **Processamento OCR**: Texto convertido e indexado para busca.\n\n💡 **Sugestão**: Documento processado com sucesso. Posso ajudar com análise específica do conteúdo?`,
         confidence: 89,
-        sources: ['OCR Engine', 'Image Recognition API', 'Document Parser']
+        sources: ["OCR Engine", "Image Recognition API", "Document Parser"]
       }
     };
 
@@ -266,10 +266,10 @@ const EnhancedAIChatbot: React.FC = () => {
     if (!voiceSupported) {
       setMessages(prev => [...prev, {
         id: `error-${Date.now()}`,
-        type: 'ai',
-        content: '❌ **Comando de Voz Não Suportado**\n\nSeu navegador não suporta reconhecimento de voz. Recomendo usar Chrome, Edge ou Firefox atualizado.',
+        type: "ai",
+        content: "❌ **Comando de Voz Não Suportado**\n\nSeu navegador não suporta reconhecimento de voz. Recomendo usar Chrome, Edge ou Firefox atualizado.",
         timestamp: new Date(),
-        category: 'general'
+        category: "general"
       }]);
       return;
     }
@@ -279,15 +279,15 @@ const EnhancedAIChatbot: React.FC = () => {
       // Simular reconhecimento de voz
       setTimeout(() => {
         const voiceCommands = [
-          'Mostrar status da frota',
-          'Gerar relatório de performance',
-          'Como está o clima para navegação?',
-          'Verificar conformidade PEOTRAM',
-          'Mostrar alertas pendentes'
+          "Mostrar status da frota",
+          "Gerar relatório de performance",
+          "Como está o clima para navegação?",
+          "Verificar conformidade PEOTRAM",
+          "Mostrar alertas pendentes"
         ];
         const randomCommand = voiceCommands[Math.floor(Math.random() * voiceCommands.length)];
         setInputMessage(randomCommand);
-        setSelectedCapability('voice');
+        setSelectedCapability("voice");
         setIsVoiceActive(false);
       }, 3000);
     }
@@ -304,7 +304,7 @@ const EnhancedAIChatbot: React.FC = () => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedCapability('image');
+      setSelectedCapability("image");
       setInputMessage(`📎 Arquivo enviado: ${file.name}`);
       setTimeout(() => {
         handleSendMessage();
@@ -313,7 +313,7 @@ const EnhancedAIChatbot: React.FC = () => {
   };
 
   const getCapabilityColor = (capability: AICapability) => {
-    return selectedCapability === capability.id ? capability.color : 'muted';
+    return selectedCapability === capability.id ? capability.color : "muted";
   };
 
   return (
@@ -327,12 +327,12 @@ const EnhancedAIChatbot: React.FC = () => {
         <div className="relative z-10 container mx-auto p-6 space-y-8">
           {/* Enhanced Hero Section */}
           <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary-glow p-8 text-primary-foreground 
-            transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
+            transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"}`}>
             
             {/* Animated Background Pattern */}
             <div className="absolute inset-0 bg-mesh opacity-20" />
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-success/15 to-transparent rounded-full blur-2xl animate-pulse" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: "1s" }} />
             
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-6">
@@ -379,8 +379,8 @@ const EnhancedAIChatbot: React.FC = () => {
                 <TooltipTrigger asChild>
                   <Card 
                     className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
-                      ${selectedCapability === capability.id ? 'ring-2 ring-primary shadow-primary/25 bg-primary/5' : ''}
-                      ${capability.active ? 'opacity-100' : 'opacity-50 cursor-not-allowed'}
+                      ${selectedCapability === capability.id ? "ring-2 ring-primary shadow-primary/25 bg-primary/5" : ""}
+                      ${capability.active ? "opacity-100" : "opacity-50 cursor-not-allowed"}
                       bg-gradient-to-br from-card via-card/95 to-${capability.color}/5 border-${capability.color}/20 hover:border-${capability.color}/40`}
                     onClick={() => capability.active && setSelectedCapability(capability.id)}
                   >
@@ -439,25 +439,25 @@ const EnhancedAIChatbot: React.FC = () => {
                         <div
                           key={message.id}
                           className={`flex items-start gap-4 animate-fade-in ${
-                            message.type === 'user' ? 'flex-row-reverse' : 'flex-row'
+                            message.type === "user" ? "flex-row-reverse" : "flex-row"
                           }`}
                           style={{ animationDelay: `${index * 100}ms` }}
                         >
                           <div className={`p-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 ${
-                            message.type === 'user' 
-                              ? 'bg-primary text-primary-foreground' 
-                              : 'bg-gradient-to-br from-success/20 to-success/10 border border-success/30'
+                            message.type === "user" 
+                              ? "bg-primary text-primary-foreground" 
+                              : "bg-gradient-to-br from-success/20 to-success/10 border border-success/30"
                           }`}>
-                            {message.type === 'user' ? (
+                            {message.type === "user" ? (
                               <User className="w-5 h-5" />
                             ) : (
                               <Bot className="w-5 h-5 text-success" />
                             )}
                           </div>
                           <div className={`max-w-2xl px-6 py-4 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl ${
-                            message.type === 'user'
-                              ? 'bg-primary text-primary-foreground ml-auto'
-                              : 'bg-card border border-border/50'
+                            message.type === "user"
+                              ? "bg-primary text-primary-foreground ml-auto"
+                              : "bg-card border border-border/50"
                           }`}>
                             <div className="space-y-2">
                               <div className="prose prose-sm max-w-none">
@@ -467,7 +467,7 @@ const EnhancedAIChatbot: React.FC = () => {
                               </div>
                               
                               <div className="flex items-center justify-between text-xs opacity-70">
-                                <span>{message.timestamp.toLocaleTimeString('pt-BR')}</span>
+                                <span>{message.timestamp.toLocaleTimeString("pt-BR")}</span>
                                 {message.confidence && (
                                   <div className="flex items-center gap-1">
                                     <Sparkles className="w-3 h-3" />
@@ -499,8 +499,8 @@ const EnhancedAIChatbot: React.FC = () => {
                             <div className="flex items-center gap-3">
                               <div className="flex gap-1">
                                 <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
-                                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+                                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+                                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.4s" }} />
                               </div>
                               <span className="text-sm text-muted-foreground">IA processando sua solicitação...</span>
                               <Sparkles className="w-4 h-4 text-primary animate-spin" />
@@ -523,7 +523,7 @@ const EnhancedAIChatbot: React.FC = () => {
                           onChange={(e) => setInputMessage(e.target.value)}
                           placeholder="Digite sua pergunta... (Ctrl+K para focar, Ctrl+Enter para enviar)"
                           onKeyPress={(e) => {
-                            if (e.key === 'Enter' && !e.shiftKey) {
+                            if (e.key === "Enter" && !e.shiftKey) {
                               e.preventDefault();
                               handleSendMessage();
                             }

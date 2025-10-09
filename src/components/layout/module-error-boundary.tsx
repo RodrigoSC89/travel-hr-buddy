@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { ErrorBoundary } from './error-boundary';
+import React, { ReactNode } from "react";
+import { ErrorBoundary } from "./error-boundary";
 
 interface ModuleErrorBoundaryProps {
   children: ReactNode;
@@ -12,7 +12,7 @@ interface ModuleErrorBoundaryProps {
  */
 export const ModuleErrorBoundary: React.FC<ModuleErrorBoundaryProps> = ({ 
   children, 
-  moduleName = 'Módulo' 
+  moduleName = "Módulo" 
 }) => {
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
     // Log error to monitoring service (if available)

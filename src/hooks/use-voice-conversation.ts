@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useRef, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export class VoiceRecorder {
   private mediaRecorder: MediaRecorder | null = null;
@@ -19,7 +19,7 @@ export class VoiceRecorder {
       });
       
       this.mediaRecorder = new MediaRecorder(this.stream, {
-        mimeType: 'audio/webm;codecs=opus'
+        mimeType: "audio/webm;codecs=opus"
       });
       
       this.audioChunks = [];
@@ -31,9 +31,9 @@ export class VoiceRecorder {
       };
       
       this.mediaRecorder.start(1000); // Collect data every second
-      console.log('Recording started');
+      console.log("Recording started");
     } catch (error) {
-      console.error('Error starting recording:', error);
+      console.error("Error starting recording:", error);
       throw error;
     }
   }
@@ -41,13 +41,13 @@ export class VoiceRecorder {
   async stopRecording(): Promise<string> {
     return new Promise((resolve, reject) => {
       if (!this.mediaRecorder) {
-        reject(new Error('No media recorder'));
+        reject(new Error("No media recorder"));
         return;
       }
 
       this.mediaRecorder.onstop = async () => {
         try {
-          const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+          const audioBlob = new Blob(this.audioChunks, { type: "audio/webm" });
           const base64Audio = await this.blobToBase64(audioBlob);
           
           // Cleanup
@@ -63,7 +63,7 @@ export class VoiceRecorder {
       };
 
       this.mediaRecorder.stop();
-      console.log('Recording stopped');
+      console.log("Recording stopped");
     });
   }
 
@@ -72,7 +72,7 @@ export class VoiceRecorder {
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as string;
-        const base64 = result.split(',')[1]; // Remove data:audio/webm;base64, prefix
+        const base64 = result.split(",")[1]; // Remove data:audio/webm;base64, prefix
         resolve(base64);
       };
       reader.onerror = reject;
@@ -81,7 +81,7 @@ export class VoiceRecorder {
   }
 
   isRecording(): boolean {
-    return this.mediaRecorder?.state === 'recording';
+    return this.mediaRecorder?.state === "recording";
   }
 }
 
@@ -99,7 +99,7 @@ export const useVoiceRecording = () => {
       await recorderRef.current.startRecording();
       setIsRecording(true);
     } catch (error) {
-      console.error('Failed to start recording:', error);
+      console.error("Failed to start recording:", error);
       throw error;
     }
   };
@@ -107,7 +107,7 @@ export const useVoiceRecording = () => {
   const stopRecording = async (): Promise<string | null> => {
     try {
       if (!recorderRef.current) {
-        throw new Error('No recorder available');
+        throw new Error("No recorder available");
       }
 
       setIsProcessing(true);
@@ -115,22 +115,22 @@ export const useVoiceRecording = () => {
       setIsRecording(false);
 
       // Send to Supabase Edge Function for transcription
-      const { data, error } = await supabase.functions.invoke('voice-to-text', {
+      const { data, error } = await supabase.functions.invoke("voice-to-text", {
         body: { 
           audio: audioBase64,
-          language: 'pt'
+          language: "pt"
         }
       });
 
       if (error) {
-        console.error('Transcription error:', error);
+        console.error("Transcription error:", error);
         throw error;
       }
 
-      console.log('Transcription result:', data);
+      console.log("Transcription result:", data);
       return data?.text || null;
     } catch (error) {
-      console.error('Failed to stop recording:', error);
+      console.error("Failed to stop recording:", error);
       throw error;
     } finally {
       setIsProcessing(false);
@@ -149,12 +149,12 @@ export const useTextToSpeech = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const speak = async (text: string, voice: string = 'alloy'): Promise<void> => {
+  const speak = async (text: string, voice: string = "alloy"): Promise<void> => {
     try {
       setIsSpeaking(true);
-      console.log('Generating speech for:', text.substring(0, 50) + '...');
+      console.log("Generating speech for:", text.substring(0, 50) + "...");
 
-      const { data, error } = await supabase.functions.invoke('text-to-speech', {
+      const { data, error } = await supabase.functions.invoke("text-to-speech", {
         body: { 
           text,
           voice,
@@ -163,7 +163,7 @@ export const useTextToSpeech = () => {
       });
 
       if (error) {
-        console.error('Text-to-speech error:', error);
+        console.error("Text-to-speech error:", error);
         throw error;
       }
 
@@ -171,15 +171,15 @@ export const useTextToSpeech = () => {
         // Create audio from base64
         const audioBlob = new Blob([
           new Uint8Array(
-            atob(data.audioContent).split('').map(c => c.charCodeAt(0))
+            atob(data.audioContent).split("").map(c => c.charCodeAt(0))
           )
-        ], { type: 'audio/mp3' });
+        ], { type: "audio/mp3" });
 
         const audioUrl = URL.createObjectURL(audioBlob);
         
         if (audioRef.current) {
           audioRef.current.pause();
-          audioRef.current.src = '';
+          audioRef.current.src = "";
         }
 
         audioRef.current = new Audio(audioUrl);
@@ -189,10 +189,10 @@ export const useTextToSpeech = () => {
         };
 
         await audioRef.current.play();
-        console.log('Speech playback started');
+        console.log("Speech playback started");
       }
     } catch (error) {
-      console.error('Failed to generate speech:', error);
+      console.error("Failed to generate speech:", error);
       setIsSpeaking(false);
       throw error;
     }
@@ -216,28 +216,28 @@ export const useTextToSpeech = () => {
 export const useAIChat = () => {
   const [isThinking, setIsThinking] = useState(false);
 
-  const sendMessage = async (message: string, context: string = ''): Promise<string> => {
+  const sendMessage = async (message: string, context: string = ""): Promise<string> => {
     try {
       setIsThinking(true);
-      console.log('Sending message to AI:', message);
+      console.log("Sending message to AI:", message);
 
-      const { data, error } = await supabase.functions.invoke('ai-chat', {
+      const { data, error } = await supabase.functions.invoke("ai-chat", {
         body: { 
           message,
           context,
-          language: 'pt'
+          language: "pt"
         }
       });
 
       if (error) {
-        console.error('AI chat error:', error);
+        console.error("AI chat error:", error);
         throw error;
       }
 
-      console.log('AI response received:', data?.reply);
-      return data?.reply || 'Desculpe, não consegui processar sua solicitação.';
+      console.log("AI response received:", data?.reply);
+      return data?.reply || "Desculpe, não consegui processar sua solicitação.";
     } catch (error) {
-      console.error('Failed to send message to AI:', error);
+      console.error("Failed to send message to AI:", error);
       throw error;
     } finally {
       setIsThinking(false);

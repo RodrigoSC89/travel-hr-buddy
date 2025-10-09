@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Lightbulb, 
   TrendingUp, 
@@ -17,16 +17,16 @@ import {
   RefreshCw,
   ChevronRight,
   X
-} from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Recommendation {
   id: string;
   title: string;
   description: string;
   category: string;
-  priority: 'high' | 'medium' | 'low';
-  actionType: 'navigate' | 'configure' | 'learn' | 'optimize';
+  priority: "high" | "medium" | "low";
+  actionType: "navigate" | "configure" | "learn" | "optimize";
   actionData?: {
     module?: string;
     action?: string;
@@ -43,12 +43,12 @@ interface QuickAction {
 }
 
 interface PersonalizedRecommendationsProps {
-  context?: 'dashboard' | 'hr' | 'travel' | 'finance' | 'general';
+  context?: "dashboard" | "hr" | "travel" | "finance" | "general";
   onNavigate?: (module: string) => void;
 }
 
 export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsProps> = ({ 
-  context = 'general',
+  context = "general",
   onNavigate
 }) => {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
@@ -72,7 +72,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('generate-recommendations', {
+      const { data, error } = await supabase.functions.invoke("generate-recommendations", {
         body: {
           userId: user.id,
           context,
@@ -81,7 +81,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
             activeModule: context
           },
           preferences: {
-            language: 'pt-BR',
+            language: "pt-BR",
             notificationsEnabled: true
           }
         }
@@ -100,61 +100,61 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
           description: `${data.recommendations?.length || 0} recomendações personalizadas geradas`,
         });
       } else {
-        throw new Error(data.error || 'Erro ao gerar recomendações');
+        throw new Error(data.error || "Erro ao gerar recomendações");
       }
     } catch (error) {
-      console.error('Error generating recommendations:', error);
+      console.error("Error generating recommendations:", error);
       
       // Mock recommendations for demonstration
       const mockRecommendations: Recommendation[] = [
         {
-          id: '1',
-          title: 'Configurar Alertas de Certificados',
-          description: 'Configure alertas automáticos para certificados que expiram em 30 dias para evitar problemas de compliance.',
-          category: 'Compliance',
-          priority: 'high',
-          actionType: 'configure',
-          actionData: { module: 'hr', action: 'certificates' },
-          benefits: ['Evita multas', 'Melhora compliance', 'Reduz riscos'],
-          estimatedImpact: 'Alto',
-          timeToImplement: '15 minutos'
+          id: "1",
+          title: "Configurar Alertas de Certificados",
+          description: "Configure alertas automáticos para certificados que expiram em 30 dias para evitar problemas de compliance.",
+          category: "Compliance",
+          priority: "high",
+          actionType: "configure",
+          actionData: { module: "hr", action: "certificates" },
+          benefits: ["Evita multas", "Melhora compliance", "Reduz riscos"],
+          estimatedImpact: "Alto",
+          timeToImplement: "15 minutos"
         },
         {
-          id: '2',
-          title: 'Otimizar Gastos com Viagens',
-          description: 'Baseado no seu histórico, você pode economizar 23% usando nosso sistema de recomendações de voos.',
-          category: 'Economia',
-          priority: 'medium',
-          actionType: 'learn',
-          actionData: { module: 'travel', action: 'flights' },
-          benefits: ['Economia de custos', 'Melhores opções', 'Processo simplificado'],
-          estimatedImpact: 'Médio',
-          timeToImplement: '5 minutos'
+          id: "2",
+          title: "Otimizar Gastos com Viagens",
+          description: "Baseado no seu histórico, você pode economizar 23% usando nosso sistema de recomendações de voos.",
+          category: "Economia",
+          priority: "medium",
+          actionType: "learn",
+          actionData: { module: "travel", action: "flights" },
+          benefits: ["Economia de custos", "Melhores opções", "Processo simplificado"],
+          estimatedImpact: "Médio",
+          timeToImplement: "5 minutos"
         },
         {
-          id: '3',
-          title: 'Automatizar Relatórios Semanais',
-          description: 'Configure a geração automática de relatórios para economizar 2 horas por semana.',
-          category: 'Produtividade',
-          priority: 'medium',
-          actionType: 'configure',
-          actionData: { module: 'reports', action: 'automation' },
-          benefits: ['Economia de tempo', 'Relatórios consistentes', 'Menos trabalho manual'],
-          estimatedImpact: 'Alto',
-          timeToImplement: '10 minutos'
+          id: "3",
+          title: "Automatizar Relatórios Semanais",
+          description: "Configure a geração automática de relatórios para economizar 2 horas por semana.",
+          category: "Produtividade",
+          priority: "medium",
+          actionType: "configure",
+          actionData: { module: "reports", action: "automation" },
+          benefits: ["Economia de tempo", "Relatórios consistentes", "Menos trabalho manual"],
+          estimatedImpact: "Alto",
+          timeToImplement: "10 minutos"
         }
       ];
 
       setRecommendations(mockRecommendations);
       setInsights([
-        'Você tem usado principalmente os módulos de RH e Viagens',
-        'Seus alertas de preço têm 85% de efetividade',
-        'Implementar automação pode economizar 5 horas por semana'
+        "Você tem usado principalmente os módulos de RH e Viagens",
+        "Seus alertas de preço têm 85% de efetividade",
+        "Implementar automação pode economizar 5 horas por semana"
       ]);
       setQuickActions([
-        { title: 'Ver Certificados', action: 'navigate_hr', icon: 'certificate' },
-        { title: 'Buscar Voos', action: 'navigate_travel', icon: 'plane' },
-        { title: 'Criar Relatório', action: 'navigate_reports', icon: 'file-text' }
+        { title: "Ver Certificados", action: "navigate_hr", icon: "certificate" },
+        { title: "Buscar Voos", action: "navigate_travel", icon: "plane" },
+        { title: "Criar Relatório", action: "navigate_reports", icon: "file-text" }
       ]);
       setLastUpdated(new Date());
       
@@ -169,13 +169,13 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
   };
 
   const handleRecommendationAction = (recommendation: Recommendation) => {
-    if (recommendation.actionType === 'navigate' && recommendation.actionData?.module) {
+    if (recommendation.actionType === "navigate" && recommendation.actionData?.module) {
       onNavigate?.(recommendation.actionData.module);
       toast({
         title: "Navegando",
         description: `Abrindo módulo: ${recommendation.actionData.module}`,
       });
-    } else if (recommendation.actionType === 'configure') {
+    } else if (recommendation.actionType === "configure") {
       // Handle configuration actions
       toast({
         title: "Configuração",
@@ -194,17 +194,17 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      default: return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+    case "high": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+    case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+    default: return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact.toLowerCase()) {
-      case 'alto': return 'text-green-600';
-      case 'médio': return 'text-yellow-600';
-      default: return 'text-blue-600';
+    case "alto": return "text-green-600";
+    case "médio": return "text-yellow-600";
+    default: return "text-blue-600";
     }
   };
 
@@ -225,13 +225,13 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
               variant="outline"
               size="sm"
             >
-              <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
               Atualizar
             </Button>
           </div>
           {lastUpdated && (
             <p className="text-sm text-muted-foreground">
-              Última atualização: {lastUpdated.toLocaleString('pt-BR')}
+              Última atualização: {lastUpdated.toLocaleString("pt-BR")}
             </p>
           )}
         </CardHeader>
@@ -315,7 +315,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
                                   onClick={() => handleRecommendationAction(recommendation)}
                                   size="sm"
                                 >
-                                  {recommendation.actionType === 'navigate' ? (
+                                  {recommendation.actionType === "navigate" ? (
                                     <>
                                       <ArrowRight className="w-4 h-4 mr-2" />
                                       Ir para {recommendation.actionData?.module}

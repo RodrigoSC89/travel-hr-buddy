@@ -1,10 +1,10 @@
-import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { usePermissions } from '@/hooks/use-permissions';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { User, Mail, Building, Calendar } from 'lucide-react';
+import React from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { usePermissions } from "@/hooks/use-permissions";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { User, Mail, Building, Calendar } from "lucide-react";
 
 interface UserProfileBadgeProps {
   showDetails?: boolean;
@@ -29,14 +29,14 @@ export const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({
 
   const getInitials = (name: string) => {
     return name
-      .split(' ')
+      .split(" ")
       .map(word => word[0])
-      .join('')
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
 
-  const displayName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuário';
+  const displayName = user.user_metadata?.full_name || user.email?.split("@")[0] || "Usuário";
   
   if (!showDetails) {
     return (
@@ -94,7 +94,7 @@ export const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({
         )}
         <div className="flex items-center space-x-2">
           <Calendar className="h-4 w-4" />
-          <span>Membro desde {new Date(user.created_at).toLocaleDateString('pt-BR')}</span>
+          <span>Membro desde {new Date(user.created_at).toLocaleDateString("pt-BR")}</span>
         </div>
       </CardContent>
     </Card>

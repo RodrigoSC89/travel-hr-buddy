@@ -1,8 +1,8 @@
-import React from 'react';
-import { useOrganization } from '@/contexts/OrganizationContext';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertTriangle } from 'lucide-react';
+import React from "react";
+import { useOrganization } from "@/contexts/OrganizationContext";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertTriangle } from "lucide-react";
 
 interface MultiTenantWrapperProps {
   children: React.ReactNode;

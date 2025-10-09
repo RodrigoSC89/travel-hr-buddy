@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Activity, 
   TrendingUp, 
@@ -15,14 +15,14 @@ import {
   Gauge,
   RefreshCw,
   Download
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MetricData {
   name: string;
   value: number;
   change: number;
-  trend: 'up' | 'down' | 'stable';
-  status: 'good' | 'warning' | 'critical';
+  trend: "up" | "down" | "stable";
+  status: "good" | "warning" | "critical";
 }
 
 interface PerformanceMetric {
@@ -37,38 +37,38 @@ interface PerformanceMetric {
 export const IntegrationMonitoring: React.FC = () => {
   const [metrics, setMetrics] = useState<MetricData[]>([
     {
-      name: 'Requisições Totais',
+      name: "Requisições Totais",
       value: 12847,
       change: 8.2,
-      trend: 'up',
-      status: 'good'
+      trend: "up",
+      status: "good"
     },
     {
-      name: 'Taxa de Sucesso',
+      name: "Taxa de Sucesso",
       value: 98.7,
       change: -0.3,
-      trend: 'down',
-      status: 'warning'
+      trend: "down",
+      status: "warning"
     },
     {
-      name: 'Tempo de Resposta',
+      name: "Tempo de Resposta",
       value: 245,
       change: -12.4,
-      trend: 'down',
-      status: 'good'
+      trend: "down",
+      status: "good"
     },
     {
-      name: 'Uptime Médio',
+      name: "Uptime Médio",
       value: 99.2,
       change: 0.5,
-      trend: 'up',
-      status: 'good'
+      trend: "up",
+      status: "good"
     }
   ]);
 
   const [performanceData, setPerformanceData] = useState<PerformanceMetric[]>([
     {
-      integration: 'Supabase Database',
+      integration: "Supabase Database",
       responseTime: 120,
       successRate: 99.8,
       requestCount: 4521,
@@ -76,7 +76,7 @@ export const IntegrationMonitoring: React.FC = () => {
       uptime: 99.9
     },
     {
-      integration: 'Nautilus AI Analytics',
+      integration: "Nautilus AI Analytics",
       responseTime: 340,
       successRate: 97.2,
       requestCount: 1243,
@@ -84,7 +84,7 @@ export const IntegrationMonitoring: React.FC = () => {
       uptime: 97.1
     },
     {
-      integration: 'WhatsApp Business',
+      integration: "WhatsApp Business",
       responseTime: 560,
       successRate: 94.5,
       requestCount: 892,
@@ -92,7 +92,7 @@ export const IntegrationMonitoring: React.FC = () => {
       uptime: 94.8
     },
     {
-      integration: 'Microsoft Outlook',
+      integration: "Microsoft Outlook",
       responseTime: 280,
       successRate: 96.7,
       requestCount: 524,
@@ -122,19 +122,19 @@ export const IntegrationMonitoring: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const getStatusColor = (status: MetricData['status']) => {
+  const getStatusColor = (status: MetricData["status"]) => {
     switch (status) {
-      case 'good': return 'text-success';
-      case 'warning': return 'text-warning';
-      case 'critical': return 'text-destructive';
+    case "good": return "text-success";
+    case "warning": return "text-warning";
+    case "critical": return "text-destructive";
     }
   };
 
-  const getTrendIcon = (trend: MetricData['trend']) => {
+  const getTrendIcon = (trend: MetricData["trend"]) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="w-4 h-4 text-success" />;
-      case 'down': return <TrendingDown className="w-4 h-4 text-destructive" />;
-      default: return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "up": return <TrendingUp className="w-4 h-4 text-success" />;
+    case "down": return <TrendingDown className="w-4 h-4 text-destructive" />;
+    default: return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -191,12 +191,12 @@ export const IntegrationMonitoring: React.FC = () => {
               <div className="flex items-end justify-between">
                 <div>
                   <p className={`text-2xl font-bold ${getStatusColor(metric.status)}`}>
-                    {metric.name.includes('Tempo') ? `${metric.value}ms` : 
-                     metric.name.includes('Taxa') || metric.name.includes('Uptime') ? `${metric.value}%` : 
-                     metric.value.toLocaleString()}
+                    {metric.name.includes("Tempo") ? `${metric.value}ms` : 
+                      metric.name.includes("Taxa") || metric.name.includes("Uptime") ? `${metric.value}%` : 
+                        metric.value.toLocaleString()}
                   </p>
-                  <p className={`text-xs ${metric.change >= 0 ? 'text-success' : 'text-destructive'}`}>
-                    {metric.change >= 0 ? '+' : ''}{metric.change}% vs. período anterior
+                  <p className={`text-xs ${metric.change >= 0 ? "text-success" : "text-destructive"}`}>
+                    {metric.change >= 0 ? "+" : ""}{metric.change}% vs. período anterior
                   </p>
                 </div>
               </div>
@@ -304,9 +304,9 @@ export const IntegrationMonitoring: React.FC = () => {
                     <h4 className="font-medium text-foreground">{integration.integration}</h4>
                     <Badge 
                       className={
-                        getPerformanceScore(integration) >= 90 ? 'bg-success/20 text-success border-success/30' :
-                        getPerformanceScore(integration) >= 70 ? 'bg-warning/20 text-warning border-warning/30' :
-                        'bg-destructive/20 text-destructive border-destructive/30'
+                        getPerformanceScore(integration) >= 90 ? "bg-success/20 text-success border-success/30" :
+                          getPerformanceScore(integration) >= 70 ? "bg-warning/20 text-warning border-warning/30" :
+                            "bg-destructive/20 text-destructive border-destructive/30"
                       }
                     >
                       Score: {getPerformanceScore(integration)}%

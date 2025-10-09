@@ -1,9 +1,9 @@
-import React, { useState, Suspense } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import React, { useState, Suspense } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { 
   Ship, 
   Users, 
@@ -19,31 +19,31 @@ import {
   Heart,
   Brain,
   Zap
-} from 'lucide-react';
+} from "lucide-react";
 
 // Lazy loading dos componentes pesados
 const VesselManagement = React.lazy(() => 
-  import('./vessel-management').then(module => ({
+  import("./vessel-management").then(module => ({
     default: module.VesselManagement
   }))
 );
 const CrewRotationPlanner = React.lazy(() => 
-  import('./crew-management-dashboard').then(module => ({
+  import("./crew-management-dashboard").then(module => ({
     default: module.CrewManagementDashboard
   }))
 );
 const CertificationManager = React.lazy(() => 
-  import('./maritime-certification-manager').then(module => ({
+  import("./maritime-certification-manager").then(module => ({
     default: module.MaritimeCertificationManager
   }))
 );
 
 export const MaritimeDashboard: React.FC = () => {
-  const [activeModule, setActiveModule] = useState('overview');
+  const [activeModule, setActiveModule] = useState("overview");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleModuleChange = async (module: string) => {
-    if (module !== 'overview') {
+    if (module !== "overview") {
       setIsLoading(true);
       // Simular delay para mostrar o loading
       setTimeout(() => {
@@ -68,38 +68,38 @@ export const MaritimeDashboard: React.FC = () => {
     }
 
     switch (activeModule) {
-      case 'vessels':
-        return (
-          <Suspense fallback={
-            <div className="flex items-center justify-center p-8">
-              <LoadingSpinner size="lg" />
-            </div>
-          }>
-            <VesselManagement />
-          </Suspense>
-        );
-      case 'crew':
-        return (
-          <Suspense fallback={
-            <div className="flex items-center justify-center p-8">
-              <LoadingSpinner size="lg" />
-            </div>
-          }>
-            <CrewRotationPlanner />
-          </Suspense>
-        );
-      case 'certifications':
-        return (
-          <Suspense fallback={
-            <div className="flex items-center justify-center p-8">
-              <LoadingSpinner size="lg" />
-            </div>
-          }>
-            <CertificationManager />
-          </Suspense>
-        );
-      default:
-        return <OverviewDashboard onNavigate={handleModuleChange} />;
+    case "vessels":
+      return (
+        <Suspense fallback={
+          <div className="flex items-center justify-center p-8">
+            <LoadingSpinner size="lg" />
+          </div>
+        }>
+          <VesselManagement />
+        </Suspense>
+      );
+    case "crew":
+      return (
+        <Suspense fallback={
+          <div className="flex items-center justify-center p-8">
+            <LoadingSpinner size="lg" />
+          </div>
+        }>
+          <CrewRotationPlanner />
+        </Suspense>
+      );
+    case "certifications":
+      return (
+        <Suspense fallback={
+          <div className="flex items-center justify-center p-8">
+            <LoadingSpinner size="lg" />
+          </div>
+        }>
+          <CertificationManager />
+        </Suspense>
+      );
+    default:
+      return <OverviewDashboard onNavigate={handleModuleChange} />;
     }
   };
 
@@ -166,7 +166,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
       {/* Hero Section */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-900 p-8 text-azure-50">
         <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
         }}></div>
         <div className="relative z-10">
           <h2 className="text-3xl font-bold mb-4">
@@ -264,7 +264,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div 
                 className="p-4 border rounded-lg cursor-pointer hover:bg-blue-50 transition-colors"
-                onClick={() => onNavigate('vessels')}
+                onClick={() => onNavigate("vessels")}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-blue-100 rounded-lg">
@@ -284,7 +284,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
 
               <div 
                 className="p-4 border rounded-lg cursor-pointer hover:bg-green-50 transition-colors"
-                onClick={() => onNavigate('crew')}
+                onClick={() => onNavigate("crew")}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-green-100 rounded-lg">
@@ -304,7 +304,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
 
               <div 
                 className="p-4 border rounded-lg cursor-pointer hover:bg-purple-50 transition-colors"
-                onClick={() => onNavigate('certifications')}
+                onClick={() => onNavigate("certifications")}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-purple-100 rounded-lg">

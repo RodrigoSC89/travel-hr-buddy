@@ -1,9 +1,9 @@
-import { useMaritimeActions } from '@/hooks/useMaritimeActions';
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { useMaritimeActions } from "@/hooks/useMaritimeActions";
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   Users,
   CheckCircle,
@@ -14,13 +14,13 @@ import {
   TrendingUp,
   FileText,
   Award
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Training {
   id: string;
   name: string;
-  category: 'sgso' | 'safety' | 'environmental' | 'operational' | 'technical';
-  status: 'valid' | 'expiring_soon' | 'expired' | 'pending';
+  category: "sgso" | "safety" | "environmental" | "operational" | "technical";
+  status: "valid" | "expiring_soon" | "expired" | "pending";
   completion_rate: number;
   certified: number;
   total: number;
@@ -31,63 +31,63 @@ interface Training {
 
 const SAMPLE_TRAININGS: Training[] = [
   {
-    id: '1',
-    name: 'SGSO - 17 Práticas ANP',
-    category: 'sgso',
-    status: 'valid',
+    id: "1",
+    name: "SGSO - 17 Práticas ANP",
+    category: "sgso",
+    status: "valid",
     completion_rate: 92,
     certified: 23,
     total: 25,
     validity_months: 24,
-    last_conducted: '2023-05-15',
-    next_due: '2025-05-15'
+    last_conducted: "2023-05-15",
+    next_due: "2025-05-15"
   },
   {
-    id: '2',
-    name: 'Investigação de Incidentes',
-    category: 'safety',
-    status: 'expiring_soon',
+    id: "2",
+    name: "Investigação de Incidentes",
+    category: "safety",
+    status: "expiring_soon",
     completion_rate: 88,
     certified: 22,
     total: 25,
     validity_months: 12,
-    last_conducted: '2024-01-10',
-    next_due: '2025-01-10'
+    last_conducted: "2024-01-10",
+    next_due: "2025-01-10"
   },
   {
-    id: '3',
-    name: 'Resposta a Emergências',
-    category: 'safety',
-    status: 'valid',
+    id: "3",
+    name: "Resposta a Emergências",
+    category: "safety",
+    status: "valid",
     completion_rate: 96,
     certified: 24,
     total: 25,
     validity_months: 12,
-    last_conducted: '2024-03-20',
-    next_due: '2025-03-20'
+    last_conducted: "2024-03-20",
+    next_due: "2025-03-20"
   },
   {
-    id: '4',
-    name: 'Gestão de Mudanças (MOC)',
-    category: 'sgso',
-    status: 'expired',
+    id: "4",
+    name: "Gestão de Mudanças (MOC)",
+    category: "sgso",
+    status: "expired",
     completion_rate: 64,
     certified: 16,
     total: 25,
     validity_months: 24,
-    last_conducted: '2022-08-15',
-    next_due: '2024-08-15'
+    last_conducted: "2022-08-15",
+    next_due: "2024-08-15"
   },
   {
-    id: '5',
-    name: 'Integridade Mecânica',
-    category: 'technical',
-    status: 'pending',
+    id: "5",
+    name: "Integridade Mecânica",
+    category: "technical",
+    status: "pending",
     completion_rate: 0,
     certified: 0,
     total: 25,
     validity_months: 12,
-    next_due: '2025-12-31'
+    next_due: "2025-12-31"
   }
 ];
 
@@ -95,43 +95,43 @@ const getStatusConfig = (status: string) => {
   const configs = {
     valid: { 
       icon: CheckCircle, 
-      color: 'bg-green-600 text-white', 
-      label: 'Válido',
-      badgeVariant: 'default' as const
+      color: "bg-green-600 text-white", 
+      label: "Válido",
+      badgeVariant: "default" as const
     },
     expiring_soon: { 
       icon: AlertTriangle, 
-      color: 'bg-yellow-600 text-white', 
-      label: 'Expirando',
-      badgeVariant: 'default' as const
+      color: "bg-yellow-600 text-white", 
+      label: "Expirando",
+      badgeVariant: "default" as const
     },
     expired: { 
       icon: XCircle, 
-      color: 'bg-red-600 text-white', 
-      label: 'Expirado',
-      badgeVariant: 'destructive' as const
+      color: "bg-red-600 text-white", 
+      label: "Expirado",
+      badgeVariant: "destructive" as const
     },
     pending: { 
       icon: Clock, 
-      color: 'bg-gray-600 text-white', 
-      label: 'Pendente',
-      badgeVariant: 'outline' as const
+      color: "bg-gray-600 text-white", 
+      label: "Pendente",
+      badgeVariant: "outline" as const
     }
   };
   return configs[status as keyof typeof configs] || configs.pending;
 };
 
 export const TrainingCompliance: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(false);
   const { handleViewDetails, showInfo, handleCreate } = useMaritimeActions();
 
-  const validCount = SAMPLE_TRAININGS.filter(t => t.status === 'valid').length;
-  const expiringCount = SAMPLE_TRAININGS.filter(t => t.status === 'expiring_soon').length;
-  const expiredCount = SAMPLE_TRAININGS.filter(t => t.status === 'expired').length;
-  const pendingCount = SAMPLE_TRAININGS.filter(t => t.status === 'pending').length;
+  const validCount = SAMPLE_TRAININGS.filter(t => t.status === "valid").length;
+  const expiringCount = SAMPLE_TRAININGS.filter(t => t.status === "expiring_soon").length;
+  const expiredCount = SAMPLE_TRAININGS.filter(t => t.status === "expired").length;
+  const pendingCount = SAMPLE_TRAININGS.filter(t => t.status === "pending").length;
 
-  const filteredTrainings = selectedCategory === 'all' 
+  const filteredTrainings = selectedCategory === "all" 
     ? SAMPLE_TRAININGS 
     : SAMPLE_TRAININGS.filter(t => t.category === selectedCategory);
 
@@ -200,43 +200,43 @@ export const TrainingCompliance: React.FC = () => {
         <CardContent>
           <div className="flex flex-wrap gap-2">
             <Button
-              variant={selectedCategory === 'all' ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory('all')}
+              variant={selectedCategory === "all" ? "default" : "outline"}
+              onClick={() => setSelectedCategory("all")}
               className="min-h-[44px]"
             >
               Todos
             </Button>
             <Button
-              variant={selectedCategory === 'sgso' ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory('sgso')}
+              variant={selectedCategory === "sgso" ? "default" : "outline"}
+              onClick={() => setSelectedCategory("sgso")}
               className="min-h-[44px]"
             >
               SGSO
             </Button>
             <Button
-              variant={selectedCategory === 'safety' ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory('safety')}
+              variant={selectedCategory === "safety" ? "default" : "outline"}
+              onClick={() => setSelectedCategory("safety")}
               className="min-h-[44px]"
             >
               Segurança
             </Button>
             <Button
-              variant={selectedCategory === 'environmental' ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory('environmental')}
+              variant={selectedCategory === "environmental" ? "default" : "outline"}
+              onClick={() => setSelectedCategory("environmental")}
               className="min-h-[44px]"
             >
               Ambiental
             </Button>
             <Button
-              variant={selectedCategory === 'operational' ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory('operational')}
+              variant={selectedCategory === "operational" ? "default" : "outline"}
+              onClick={() => setSelectedCategory("operational")}
               className="min-h-[44px]"
             >
               Operacional
             </Button>
             <Button
-              variant={selectedCategory === 'technical' ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory('technical')}
+              variant={selectedCategory === "technical" ? "default" : "outline"}
+              onClick={() => setSelectedCategory("technical")}
               className="min-h-[44px]"
             >
               Técnico
@@ -294,7 +294,7 @@ export const TrainingCompliance: React.FC = () => {
                               <p className="text-xs text-muted-foreground font-medium">Próxima Data</p>
                               <p className="text-sm font-bold text-gray-900">
                                 <Calendar className="h-3 w-3 inline mr-1" />
-                                {training.next_due || 'A definir'}
+                                {training.next_due || "A definir"}
                               </p>
                               <p className="text-xs text-muted-foreground mt-1">
                                 Validade: {training.validity_months} meses
@@ -308,7 +308,7 @@ export const TrainingCompliance: React.FC = () => {
                           variant="outline" 
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => handleViewDetails('training', training.id)} disabled={isLoading}
+                          onClick={() => handleViewDetails("training", training.id)} disabled={isLoading}
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Detalhes
@@ -316,7 +316,7 @@ export const TrainingCompliance: React.FC = () => {
                         <Button 
                           size="sm"
                           className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
-                          onClick={() => showInfo('Agendando Treinamento', 'Abrindo agenda')} disabled={isLoading}
+                          onClick={() => showInfo("Agendando Treinamento", "Abrindo agenda")} disabled={isLoading}
                         >
                           <Calendar className="h-4 w-4 mr-2" />
                           Agendar
@@ -348,28 +348,28 @@ export const TrainingCompliance: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button 
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleCreate('Treinamento')} disabled={isLoading}
+              onClick={() => handleCreate("Treinamento")} disabled={isLoading}
             >
               <Award className="h-6 w-6" />
               <span className="font-semibold">Novo Treinamento</span>
             </Button>
             <Button 
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Relatório compliance')}
+              onClick={() => console.log("Relatório compliance")}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button 
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Certificados expirados')}
+              onClick={() => console.log("Certificados expirados")}
             >
               <AlertTriangle className="h-6 w-6" />
               <span className="font-semibold">Expirados</span>
             </Button>
             <Button 
               className="bg-purple-600 hover:bg-purple-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log('Matriz competências')}
+              onClick={() => console.log("Matriz competências")}
             >
               <Users className="h-6 w-6" />
               <span className="font-semibold">Matriz</span>

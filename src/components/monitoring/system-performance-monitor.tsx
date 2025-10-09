@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Activity, 
   Server, 
@@ -24,21 +24,21 @@ import {
   Shield,
   RefreshCw,
   Download
-} from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+} from "lucide-react";
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface SystemMetric {
   name: string;
   value: number;
   unit: string;
-  status: 'healthy' | 'warning' | 'critical';
+  status: "healthy" | "warning" | "critical";
   threshold: { warning: number; critical: number };
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
 }
 
 interface ServiceStatus {
   name: string;
-  status: 'online' | 'offline' | 'degraded';
+  status: "online" | "offline" | "degraded";
   uptime: number;
   responseTime: number;
   lastCheck: Date;
@@ -47,84 +47,84 @@ interface ServiceStatus {
 const SystemPerformanceMonitor = () => {
   const { toast } = useToast();
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedTimeRange, setSelectedTimeRange] = useState('1h');
+  const [selectedTimeRange, setSelectedTimeRange] = useState("1h");
   const [isExporting, setIsExporting] = useState(false);
 
   // Dados simulados de métricas do sistema
   const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>([
-    { name: 'CPU Usage', value: 45, unit: '%', status: 'healthy', threshold: { warning: 70, critical: 90 }, trend: 'stable' },
-    { name: 'Memory Usage', value: 68, unit: '%', status: 'warning', threshold: { warning: 70, critical: 85 }, trend: 'up' },
-    { name: 'Disk Usage', value: 55, unit: '%', status: 'healthy', threshold: { warning: 80, critical: 95 }, trend: 'up' },
-    { name: 'Network I/O', value: 23, unit: 'MB/s', status: 'healthy', threshold: { warning: 50, critical: 80 }, trend: 'down' },
-    { name: 'Active Connections', value: 142, unit: 'conn', status: 'healthy', threshold: { warning: 200, critical: 300 }, trend: 'stable' },
-    { name: 'Database Queries/sec', value: 85, unit: 'q/s', status: 'healthy', threshold: { warning: 150, critical: 200 }, trend: 'up' }
+    { name: "CPU Usage", value: 45, unit: "%", status: "healthy", threshold: { warning: 70, critical: 90 }, trend: "stable" },
+    { name: "Memory Usage", value: 68, unit: "%", status: "warning", threshold: { warning: 70, critical: 85 }, trend: "up" },
+    { name: "Disk Usage", value: 55, unit: "%", status: "healthy", threshold: { warning: 80, critical: 95 }, trend: "up" },
+    { name: "Network I/O", value: 23, unit: "MB/s", status: "healthy", threshold: { warning: 50, critical: 80 }, trend: "down" },
+    { name: "Active Connections", value: 142, unit: "conn", status: "healthy", threshold: { warning: 200, critical: 300 }, trend: "stable" },
+    { name: "Database Queries/sec", value: 85, unit: "q/s", status: "healthy", threshold: { warning: 150, critical: 200 }, trend: "up" }
   ]);
 
   const [services, setServices] = useState<ServiceStatus[]>([
-    { name: 'Web Server', status: 'online', uptime: 99.9, responseTime: 120, lastCheck: new Date() },
-    { name: 'Database', status: 'online', uptime: 99.8, responseTime: 15, lastCheck: new Date() },
-    { name: 'API Gateway', status: 'online', uptime: 99.7, responseTime: 45, lastCheck: new Date() },
-    { name: 'Cache Server', status: 'degraded', uptime: 95.2, responseTime: 8, lastCheck: new Date() },
-    { name: 'File Storage', status: 'online', uptime: 99.9, responseTime: 25, lastCheck: new Date() },
-    { name: 'Backup Service', status: 'online', uptime: 98.5, responseTime: 200, lastCheck: new Date() }
+    { name: "Web Server", status: "online", uptime: 99.9, responseTime: 120, lastCheck: new Date() },
+    { name: "Database", status: "online", uptime: 99.8, responseTime: 15, lastCheck: new Date() },
+    { name: "API Gateway", status: "online", uptime: 99.7, responseTime: 45, lastCheck: new Date() },
+    { name: "Cache Server", status: "degraded", uptime: 95.2, responseTime: 8, lastCheck: new Date() },
+    { name: "File Storage", status: "online", uptime: 99.9, responseTime: 25, lastCheck: new Date() },
+    { name: "Backup Service", status: "online", uptime: 98.5, responseTime: 200, lastCheck: new Date() }
   ]);
 
   // Dados históricos para gráficos
   const performanceData = [
-    { time: '00:00', cpu: 35, memory: 55, disk: 52, network: 15 },
-    { time: '04:00', cpu: 42, memory: 58, disk: 53, network: 18 },
-    { time: '08:00', cpu: 65, memory: 72, disk: 54, network: 28 },
-    { time: '12:00', cpu: 58, memory: 68, disk: 55, network: 23 },
-    { time: '16:00', cpu: 45, memory: 65, disk: 55, network: 20 },
-    { time: '20:00', cpu: 38, memory: 60, disk: 55, network: 16 }
+    { time: "00:00", cpu: 35, memory: 55, disk: 52, network: 15 },
+    { time: "04:00", cpu: 42, memory: 58, disk: 53, network: 18 },
+    { time: "08:00", cpu: 65, memory: 72, disk: 54, network: 28 },
+    { time: "12:00", cpu: 58, memory: 68, disk: 55, network: 23 },
+    { time: "16:00", cpu: 45, memory: 65, disk: 55, network: 20 },
+    { time: "20:00", cpu: 38, memory: 60, disk: 55, network: 16 }
   ];
 
   const responseTimeData = [
-    { time: '00:00', api: 45, database: 12, web: 120 },
-    { time: '04:00', api: 42, database: 15, web: 115 },
-    { time: '08:00', api: 65, database: 25, web: 180 },
-    { time: '12:00', api: 55, database: 20, web: 145 },
-    { time: '16:00', api: 48, database: 18, web: 130 },
-    { time: '20:00', api: 45, database: 15, web: 120 }
+    { time: "00:00", api: 45, database: 12, web: 120 },
+    { time: "04:00", api: 42, database: 15, web: 115 },
+    { time: "08:00", api: 65, database: 25, web: 180 },
+    { time: "12:00", api: 55, database: 20, web: 145 },
+    { time: "16:00", api: 48, database: 18, web: 130 },
+    { time: "20:00", api: 45, database: 15, web: 120 }
   ];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'online':
-      case 'healthy':
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'warning':
-      case 'degraded':
-        return <AlertTriangle className="w-4 h-4 text-orange-600" />;
-      case 'critical':
-      case 'offline':
-        return <AlertTriangle className="w-4 h-4 text-red-600" />;
-      default:
-        return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "online":
+    case "healthy":
+      return <CheckCircle className="w-4 h-4 text-green-600" />;
+    case "warning":
+    case "degraded":
+      return <AlertTriangle className="w-4 h-4 text-orange-600" />;
+    case "critical":
+    case "offline":
+      return <AlertTriangle className="w-4 h-4 text-red-600" />;
+    default:
+      return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'online':
-      case 'healthy':
-        return 'text-green-600 bg-green-100';
-      case 'warning':
-      case 'degraded':
-        return 'text-orange-600 bg-orange-100';
-      case 'critical':
-      case 'offline':
-        return 'text-red-600 bg-red-100';
-      default:
-        return 'text-muted-foreground bg-gray-100';
+    case "online":
+    case "healthy":
+      return "text-green-600 bg-green-100";
+    case "warning":
+    case "degraded":
+      return "text-orange-600 bg-orange-100";
+    case "critical":
+    case "offline":
+      return "text-red-600 bg-red-100";
+    default:
+      return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="w-4 h-4 text-red-600" />;
-      case 'down': return <TrendingDown className="w-4 h-4 text-green-600" />;
-      default: return <Activity className="w-4 h-4 text-muted-foreground" />;
+    case "up": return <TrendingUp className="w-4 h-4 text-red-600" />;
+    case "down": return <TrendingDown className="w-4 h-4 text-green-600" />;
+    default: return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -152,7 +152,7 @@ const SystemPerformanceMonitor = () => {
         systemMetrics,
         services,
         performanceData,
-        alerts: systemMetrics.filter(m => m.status !== 'healthy').length,
+        alerts: systemMetrics.filter(m => m.status !== "healthy").length,
         overallStatus: overallStatus
       };
 
@@ -161,11 +161,11 @@ const SystemPerformanceMonitor = () => {
 
       toast({
         title: "Relatório Exportado",
-        description: `Relatório de performance do sistema exportado com sucesso!`,
+        description: "Relatório de performance do sistema exportado com sucesso!",
       });
 
       // In production, this would trigger a file download
-      console.log('Performance report data:', reportData);
+      console.log("Performance report data:", reportData);
     } catch (error) {
       toast({
         title: "Erro na Exportação",
@@ -177,10 +177,10 @@ const SystemPerformanceMonitor = () => {
     }
   };
 
-  const overallStatus = systemMetrics.every(m => m.status === 'healthy') && 
-                       services.every(s => s.status === 'online') ? 'healthy' : 
-                       systemMetrics.some(m => m.status === 'critical') || 
-                       services.some(s => s.status === 'offline') ? 'critical' : 'warning';
+  const overallStatus = systemMetrics.every(m => m.status === "healthy") && 
+                       services.every(s => s.status === "online") ? "healthy" : 
+    systemMetrics.some(m => m.status === "critical") || 
+                       services.some(s => s.status === "offline") ? "critical" : "warning";
 
   return (
     <div className="space-y-6">
@@ -196,8 +196,8 @@ const SystemPerformanceMonitor = () => {
           <div className="flex items-center gap-2">
             {getStatusIcon(overallStatus)}
             <Badge className={getStatusColor(overallStatus)}>
-              {overallStatus === 'healthy' ? 'Sistema Saudável' : 
-               overallStatus === 'warning' ? 'Atenção Necessária' : 'Problemas Críticos'}
+              {overallStatus === "healthy" ? "Sistema Saudável" : 
+                overallStatus === "warning" ? "Atenção Necessária" : "Problemas Críticos"}
             </Badge>
           </div>
         </div>
@@ -207,18 +207,18 @@ const SystemPerformanceMonitor = () => {
             onClick={refreshMetrics}
             disabled={isRefreshing}
           >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
           <Button onClick={exportReport} disabled={isExporting}>
-            <Download className={`w-4 h-4 mr-2 ${isExporting ? 'animate-pulse' : ''}`} />
-            {isExporting ? 'Exportando...' : 'Exportar'}
+            <Download className={`w-4 h-4 mr-2 ${isExporting ? "animate-pulse" : ""}`} />
+            {isExporting ? "Exportando..." : "Exportar"}
           </Button>
         </div>
       </div>
 
       {/* Alertas Críticos */}
-      {systemMetrics.some(m => m.status === 'critical') && (
+      {systemMetrics.some(m => m.status === "critical") && (
         <Alert className="border-red-200 bg-red-50">
           <AlertTriangle className="h-4 w-4 text-red-600" />
           <AlertDescription className="text-red-800">
@@ -244,12 +244,12 @@ const SystemPerformanceMonitor = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
-                      {metric.name.includes('CPU') && <Cpu className="w-5 h-5 text-blue-600" />}
-                      {metric.name.includes('Memory') && <MemoryStick className="w-5 h-5 text-green-600" />}
-                      {metric.name.includes('Disk') && <HardDrive className="w-5 h-5 text-orange-600" />}
-                      {metric.name.includes('Network') && <Wifi className="w-5 h-5 text-purple-600" />}
-                      {metric.name.includes('Connection') && <Globe className="w-5 h-5 text-cyan-600" />}
-                      {metric.name.includes('Database') && <Database className="w-5 h-5 text-red-600" />}
+                      {metric.name.includes("CPU") && <Cpu className="w-5 h-5 text-blue-600" />}
+                      {metric.name.includes("Memory") && <MemoryStick className="w-5 h-5 text-green-600" />}
+                      {metric.name.includes("Disk") && <HardDrive className="w-5 h-5 text-orange-600" />}
+                      {metric.name.includes("Network") && <Wifi className="w-5 h-5 text-purple-600" />}
+                      {metric.name.includes("Connection") && <Globe className="w-5 h-5 text-cyan-600" />}
+                      {metric.name.includes("Database") && <Database className="w-5 h-5 text-red-600" />}
                       <h3 className="font-semibold text-sm">{metric.name}</h3>
                     </div>
                     <div className="flex items-center gap-1">
@@ -266,7 +266,7 @@ const SystemPerformanceMonitor = () => {
                     </div>
                     
                     <Progress 
-                      value={metric.unit === '%' ? metric.value : (metric.value / metric.threshold.critical) * 100} 
+                      value={metric.unit === "%" ? metric.value : (metric.value / metric.threshold.critical) * 100} 
                       className="h-2"
                     />
                     

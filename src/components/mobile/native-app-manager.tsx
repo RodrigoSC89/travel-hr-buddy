@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Smartphone, 
   Download, 
@@ -15,27 +15,27 @@ import {
   MapPin,
   Bell,
   RotateCcw
-} from 'lucide-react';
+} from "lucide-react";
 
 export const NativeAppManager: React.FC = () => {
-  const [appStatus, setAppStatus] = useState('ready');
+  const [appStatus, setAppStatus] = useState("ready");
   const [installProgress, setInstallProgress] = useState(0);
   const [features] = useState([
-    { name: 'Offline Sync', status: 'active', icon: RotateCcw },
-    { name: 'Push Notifications', status: 'active', icon: Bell },
-    { name: 'Camera Integration', status: 'active', icon: Camera },
-    { name: 'GPS Tracking', status: 'active', icon: MapPin },
-    { name: 'Biometric Auth', status: 'pending', icon: Shield },
-    { name: 'Background Sync', status: 'active', icon: Wifi }
+    { name: "Offline Sync", status: "active", icon: RotateCcw },
+    { name: "Push Notifications", status: "active", icon: Bell },
+    { name: "Camera Integration", status: "active", icon: Camera },
+    { name: "GPS Tracking", status: "active", icon: MapPin },
+    { name: "Biometric Auth", status: "pending", icon: Shield },
+    { name: "Background Sync", status: "active", icon: Wifi }
   ]);
 
   const handleInstallApp = () => {
-    setAppStatus('installing');
+    setAppStatus("installing");
     const interval = setInterval(() => {
       setInstallProgress(prev => {
         if (prev >= 100) {
           clearInterval(interval);
-          setAppStatus('installed');
+          setAppStatus("installed");
           return 100;
         }
         return prev + 10;
@@ -68,14 +68,14 @@ export const NativeAppManager: React.FC = () => {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <span>Status do App:</span>
-            <Badge variant={appStatus === 'installed' ? 'default' : 'secondary'}>
-              {appStatus === 'ready' && 'Pronto para Instalar'}
-              {appStatus === 'installing' && 'Instalando...'}
-              {appStatus === 'installed' && 'Instalado'}
+            <Badge variant={appStatus === "installed" ? "default" : "secondary"}>
+              {appStatus === "ready" && "Pronto para Instalar"}
+              {appStatus === "installing" && "Instalando..."}
+              {appStatus === "installed" && "Instalado"}
             </Badge>
           </div>
           
-          {appStatus === 'installing' && (
+          {appStatus === "installing" && (
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span>Instalando recursos nativos...</span>
@@ -85,14 +85,14 @@ export const NativeAppManager: React.FC = () => {
             </div>
           )}
 
-          {appStatus === 'ready' && (
+          {appStatus === "ready" && (
             <Button onClick={handleInstallApp} className="w-full">
               <Download className="w-4 h-4 mr-2" />
               Instalar App Nativo
             </Button>
           )}
 
-          {appStatus === 'installed' && (
+          {appStatus === "installed" && (
             <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
               <p className="text-green-800 dark:text-green-200">
                 ✅ App instalado com sucesso! Agora você pode usar recursos offline e nativos.
@@ -129,9 +129,9 @@ export const NativeAppManager: React.FC = () => {
                         <span>{feature.name}</span>
                       </div>
                       <Badge 
-                        variant={feature.status === 'active' ? 'default' : 'secondary'}
+                        variant={feature.status === "active" ? "default" : "secondary"}
                       >
-                        {feature.status === 'active' ? 'Ativo' : 'Pendente'}
+                        {feature.status === "active" ? "Ativo" : "Pendente"}
                       </Badge>
                     </div>
                   );

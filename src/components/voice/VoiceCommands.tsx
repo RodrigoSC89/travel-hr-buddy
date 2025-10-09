@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Navigation, 
   BarChart3, 
@@ -12,7 +12,7 @@ import {
   Users,
   Play,
   Volume2
-} from 'lucide-react';
+} from "lucide-react";
 
 interface VoiceCommand {
   category: string;
@@ -26,65 +26,65 @@ interface VoiceCommand {
 
 const voiceCommands: VoiceCommand[] = [
   {
-    category: 'Navegação',
+    category: "Navegação",
     commands: [
       {
-        phrase: 'ir para dashboard',
-        action: 'Abre o painel principal',
+        phrase: "ir para dashboard",
+        action: "Abre o painel principal",
         icon: <Navigation className="h-4 w-4" />,
-        example: '"Ir para o dashboard" ou "Abrir painel principal"'
+        example: "\"Ir para o dashboard\" ou \"Abrir painel principal\""
       },
       {
-        phrase: 'mostrar analytics',
-        action: 'Abre a página de análises',
+        phrase: "mostrar analytics",
+        action: "Abre a página de análises",
         icon: <BarChart3 className="h-4 w-4" />,
-        example: '"Mostrar analytics" ou "Abrir análises"'
+        example: "\"Mostrar analytics\" ou \"Abrir análises\""
       },
       {
-        phrase: 'abrir relatórios',
-        action: 'Navega para relatórios',
+        phrase: "abrir relatórios",
+        action: "Navega para relatórios",
         icon: <FileText className="h-4 w-4" />,
-        example: '"Abrir relatórios" ou "Ver relatórios"'
+        example: "\"Abrir relatórios\" ou \"Ver relatórios\""
       }
     ]
   },
   {
-    category: 'Módulos',
+    category: "Módulos",
     commands: [
       {
-        phrase: 'gestão marítima',
-        action: 'Abre o módulo marítimo',
+        phrase: "gestão marítima",
+        action: "Abre o módulo marítimo",
         icon: <Ship className="h-4 w-4" />,
-        example: '"Gestão marítima" ou "Módulo naval"'
+        example: "\"Gestão marítima\" ou \"Módulo naval\""
       },
       {
-        phrase: 'abrir comunicação',
-        action: 'Acessa o chat e mensagens',
+        phrase: "abrir comunicação",
+        action: "Acessa o chat e mensagens",
         icon: <MessageSquare className="h-4 w-4" />,
-        example: '"Abrir comunicação" ou "Ver mensagens"'
+        example: "\"Abrir comunicação\" ou \"Ver mensagens\""
       },
       {
-        phrase: 'painel administrativo',
-        action: 'Acessa área de administração',
+        phrase: "painel administrativo",
+        action: "Acessa área de administração",
         icon: <Users className="h-4 w-4" />,
-        example: '"Painel administrativo" ou "Área admin"'
+        example: "\"Painel administrativo\" ou \"Área admin\""
       }
     ]
   },
   {
-    category: 'Sistema',
+    category: "Sistema",
     commands: [
       {
-        phrase: 'abrir configurações',
-        action: 'Acessa as configurações',
+        phrase: "abrir configurações",
+        action: "Acessa as configurações",
         icon: <Settings className="h-4 w-4" />,
-        example: '"Abrir configurações" ou "Ver settings"'
+        example: "\"Abrir configurações\" ou \"Ver settings\""
       },
       {
-        phrase: 'ajuda',
-        action: 'Mostra comandos disponíveis',
+        phrase: "ajuda",
+        action: "Mostra comandos disponíveis",
         icon: <Volume2 className="h-4 w-4" />,
-        example: '"Ajuda" ou "Que comandos posso usar?"'
+        example: "\"Ajuda\" ou \"Que comandos posso usar?\""
       }
     ]
   }

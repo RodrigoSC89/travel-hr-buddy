@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TrendingUp, BarChart3, Brain, Target } from 'lucide-react';
-import PredictiveAnalytics from './PredictiveAnalytics';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TrendingUp, BarChart3, Brain, Target } from "lucide-react";
+import PredictiveAnalytics from "./PredictiveAnalytics";
 
 const AnalyticsDashboard = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('30d');
+  const [selectedPeriod, setSelectedPeriod] = useState("30d");
 
   return (
     <div className="space-y-6">
@@ -224,11 +224,11 @@ const AnalyticsDashboard = () => {
               <CardContent>
                 <div className="space-y-6">
                   {[
-                    { name: 'Receita Anual', current: 85, target: 100, color: 'bg-blue-500' },
-                    { name: 'Satisfação Cliente', current: 94, target: 96, color: 'bg-green-500' },
-                    { name: 'Eficiência Operacional', current: 87, target: 90, color: 'bg-purple-500' },
-                    { name: 'Redução de Custos', current: 76, target: 85, color: 'bg-orange-500' },
-                    { name: 'Inovação (IA)', current: 68, target: 80, color: 'bg-pink-500' }
+                    { name: "Receita Anual", current: 85, target: 100, color: "bg-blue-500" },
+                    { name: "Satisfação Cliente", current: 94, target: 96, color: "bg-green-500" },
+                    { name: "Eficiência Operacional", current: 87, target: 90, color: "bg-purple-500" },
+                    { name: "Redução de Custos", current: 76, target: 85, color: "bg-orange-500" },
+                    { name: "Inovação (IA)", current: 68, target: 80, color: "bg-pink-500" }
                   ].map((goal, index) => (
                     <div key={index} className="space-y-2">
                       <div className="flex items-center justify-between">

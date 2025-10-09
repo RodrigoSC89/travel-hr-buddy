@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 import { 
   FileText, 
   Download, 
@@ -15,20 +15,20 @@ import {
   Clock,
   CheckCircle,
   AlertCircle
-} from 'lucide-react';
+} from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 interface Report {
   id: string;
   title: string;
   type: string;
-  status: 'generating' | 'completed' | 'failed';
+  status: "generating" | "completed" | "failed";
   createdAt: string;
   size: string;
   format: string;
@@ -38,36 +38,36 @@ export const FunctionalReportsDashboard: React.FC = () => {
   const { toast } = useToast();
   const [reports, setReports] = useState<Report[]>([
     {
-      id: '1',
-      title: 'Relatório Mensal de RH',
-      type: 'hr',
-      status: 'completed',
-      createdAt: '2024-01-15',
-      size: '2.4 MB',
-      format: 'PDF'
+      id: "1",
+      title: "Relatório Mensal de RH",
+      type: "hr",
+      status: "completed",
+      createdAt: "2024-01-15",
+      size: "2.4 MB",
+      format: "PDF"
     },
     {
-      id: '2',
-      title: 'Analytics de Viagens',
-      type: 'travel',
-      status: 'completed',
-      createdAt: '2024-01-14',
-      size: '1.8 MB',
-      format: 'Excel'
+      id: "2",
+      title: "Analytics de Viagens",
+      type: "travel",
+      status: "completed",
+      createdAt: "2024-01-14",
+      size: "1.8 MB",
+      format: "Excel"
     },
     {
-      id: '3',
-      title: 'Dashboard Executivo',
-      type: 'executive',
-      status: 'generating',
-      createdAt: '2024-01-15',
-      size: '...',
-      format: 'PDF'
+      id: "3",
+      title: "Dashboard Executivo",
+      type: "executive",
+      status: "generating",
+      createdAt: "2024-01-15",
+      size: "...",
+      format: "PDF"
     }
   ]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [selectedModule, setSelectedModule] = useState('all');
-  const [selectedPeriod, setSelectedPeriod] = useState('30');
+  const [selectedModule, setSelectedModule] = useState("all");
+  const [selectedPeriod, setSelectedPeriod] = useState("30");
 
   const generateReport = async (type: string) => {
     setIsGenerating(true);
@@ -76,10 +76,10 @@ export const FunctionalReportsDashboard: React.FC = () => {
       id: Date.now().toString(),
       title: `Relatório ${type} - ${new Date().toLocaleDateString()}`,
       type,
-      status: 'generating',
-      createdAt: new Date().toISOString().split('T')[0],
-      size: '...',
-      format: 'PDF'
+      status: "generating",
+      createdAt: new Date().toISOString().split("T")[0],
+      size: "...",
+      format: "PDF"
     };
 
     setReports(prev => [newReport, ...prev]);
@@ -93,7 +93,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
     setTimeout(() => {
       setReports(prev => prev.map(report => 
         report.id === newReport.id 
-          ? { ...report, status: 'completed', size: '2.1 MB' }
+          ? { ...report, status: "completed", size: "2.1 MB" }
           : report
       ));
       
@@ -113,35 +113,35 @@ export const FunctionalReportsDashboard: React.FC = () => {
     });
   };
 
-  const getStatusIcon = (status: Report['status']) => {
+  const getStatusIcon = (status: Report["status"]) => {
     switch (status) {
-      case 'completed':
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'generating':
-        return <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />;
-      case 'failed':
-        return <AlertCircle className="h-4 w-4 text-red-600" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case "generating":
+      return <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />;
+    case "failed":
+      return <AlertCircle className="h-4 w-4 text-red-600" />;
     }
   };
 
-  const getStatusText = (status: Report['status']) => {
+  const getStatusText = (status: Report["status"]) => {
     switch (status) {
-      case 'completed':
-        return 'Concluído';
-      case 'generating':
-        return 'Gerando...';
-      case 'failed':
-        return 'Falhou';
+    case "completed":
+      return "Concluído";
+    case "generating":
+      return "Gerando...";
+    case "failed":
+      return "Falhou";
     }
   };
 
   const reportTypes = [
-    { id: 'hr', name: 'Recursos Humanos', description: 'Funcionários, certificados e métricas de RH' },
-    { id: 'analytics', name: 'Analytics', description: 'Métricas de uso e performance' },
-    { id: 'travel', name: 'Viagens', description: 'Relatório de viagens e hospedagens' },
-    { id: 'executive', name: 'Executivo', description: 'Visão estratégica e KPIs principais' },
-    { id: 'financial', name: 'Financeiro', description: 'Alertas de preços e economias' },
-    { id: 'custom', name: 'Personalizado', description: 'Relatório customizado por módulos' }
+    { id: "hr", name: "Recursos Humanos", description: "Funcionários, certificados e métricas de RH" },
+    { id: "analytics", name: "Analytics", description: "Métricas de uso e performance" },
+    { id: "travel", name: "Viagens", description: "Relatório de viagens e hospedagens" },
+    { id: "executive", name: "Executivo", description: "Visão estratégica e KPIs principais" },
+    { id: "financial", name: "Financeiro", description: "Alertas de preços e economias" },
+    { id: "custom", name: "Personalizado", description: "Relatório customizado por módulos" }
   ];
 
   return (
@@ -218,7 +218,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
                   disabled={isGenerating}
                 >
                   <FileText className="h-4 w-4 mr-2" />
-                  {isGenerating ? 'Gerando...' : 'Gerar Relatório'}
+                  {isGenerating ? "Gerando..." : "Gerar Relatório"}
                 </Button>
               </CardContent>
             </Card>
@@ -317,7 +317,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
                         <h4 className="font-medium">{report.title}</h4>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Calendar className="h-3 w-3" />
-                          {new Date(report.createdAt).toLocaleDateString('pt-BR')}
+                          {new Date(report.createdAt).toLocaleDateString("pt-BR")}
                           <span>•</span>
                           <span>{report.size}</span>
                           <span>•</span>
@@ -334,7 +334,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
                         <span className="text-sm">{getStatusText(report.status)}</span>
                       </div>
                       
-                      {report.status === 'completed' && (
+                      {report.status === "completed" && (
                         <Button 
                           size="sm" 
                           variant="outline"

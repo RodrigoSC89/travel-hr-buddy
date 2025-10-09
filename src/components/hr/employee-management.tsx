@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import { 
   UserPlus, 
   Search, 
@@ -21,7 +21,7 @@ import {
   Calendar,
   Edit,
   Trash2
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Employee {
   id: string;
@@ -32,7 +32,7 @@ interface Employee {
   phone: string;
   location: string;
   startDate: string;
-  status: 'active' | 'vacation' | 'travel' | 'inactive';
+  status: "active" | "vacation" | "travel" | "inactive";
   certifications: string[];
   rating: number;
   avatar?: string;
@@ -42,59 +42,59 @@ interface Employee {
 
 const mockEmployees: Employee[] = [
   {
-    id: '001',
-    name: 'Ana Silva',
-    position: 'Gerente de Operações',
-    department: 'Operações',
-    email: 'ana.silva@nautilus.com',
-    phone: '+55 11 99999-9999',
-    location: 'São Paulo, SP',
-    startDate: '2022-03-15',
-    status: 'active',
-    certifications: ['STCW Basic Safety', 'DP Certificate', 'Leadership'],
+    id: "001",
+    name: "Ana Silva",
+    position: "Gerente de Operações",
+    department: "Operações",
+    email: "ana.silva@nautilus.com",
+    phone: "+55 11 99999-9999",
+    location: "São Paulo, SP",
+    startDate: "2022-03-15",
+    status: "active",
+    certifications: ["STCW Basic Safety", "DP Certificate", "Leadership"],
     rating: 4.8,
     salary: 12000,
-    manager: 'Carlos Santos'
+    manager: "Carlos Santos"
   },
   {
-    id: '002',
-    name: 'Carlos Santos',
-    position: 'Especialista em Viagens',
-    department: 'Travel Management',
-    email: 'carlos.santos@nautilus.com',
-    phone: '+55 21 88888-8888',
-    location: 'Rio de Janeiro, RJ',
-    startDate: '2021-07-20',
-    status: 'travel',
-    certifications: ['IATA Certified', 'Corporate Travel', 'GDS Expert'],
+    id: "002",
+    name: "Carlos Santos",
+    position: "Especialista em Viagens",
+    department: "Travel Management",
+    email: "carlos.santos@nautilus.com",
+    phone: "+55 21 88888-8888",
+    location: "Rio de Janeiro, RJ",
+    startDate: "2021-07-20",
+    status: "travel",
+    certifications: ["IATA Certified", "Corporate Travel", "GDS Expert"],
     rating: 4.6,
     salary: 8500
   },
   {
-    id: '003',
-    name: 'Marina Costa',
-    position: 'Analista de RH',
-    department: 'Recursos Humanos',
-    email: 'marina.costa@nautilus.com',
-    phone: '+55 85 77777-7777',
-    location: 'Fortaleza, CE',
-    startDate: '2023-01-10',
-    status: 'vacation',
-    certifications: ['HR Management', 'Recruitment Specialist'],
+    id: "003",
+    name: "Marina Costa",
+    position: "Analista de RH",
+    department: "Recursos Humanos",
+    email: "marina.costa@nautilus.com",
+    phone: "+55 85 77777-7777",
+    location: "Fortaleza, CE",
+    startDate: "2023-01-10",
+    status: "vacation",
+    certifications: ["HR Management", "Recruitment Specialist"],
     rating: 4.9,
     salary: 7000
   },
   {
-    id: '004',
-    name: 'Roberto Lima',
-    position: 'Coordenador de Hospedagem',
-    department: 'Accommodation',
-    email: 'roberto.lima@nautilus.com',
-    phone: '+55 71 66666-6666',
-    location: 'Salvador, BA',
-    startDate: '2020-11-05',
-    status: 'active',
-    certifications: ['Hotel Management', 'Revenue Management', 'Customer Service'],
+    id: "004",
+    name: "Roberto Lima",
+    position: "Coordenador de Hospedagem",
+    department: "Accommodation",
+    email: "roberto.lima@nautilus.com",
+    phone: "+55 71 66666-6666",
+    location: "Salvador, BA",
+    startDate: "2020-11-05",
+    status: "active",
+    certifications: ["Hotel Management", "Revenue Management", "Customer Service"],
     rating: 4.7,
     salary: 9000
   }
@@ -103,20 +103,20 @@ const mockEmployees: Employee[] = [
 export const EmployeeManagement = () => {
   const { toast } = useToast();
   const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDepartment, setSelectedDepartment] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
   const [isCreatingEmployee, setIsCreatingEmployee] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [isViewingEmployee, setIsViewingEmployee] = useState(false);
   const [newEmployee, setNewEmployee] = useState<Partial<Employee>>({
-    name: '',
-    position: '',
-    department: '',
-    email: '',
-    phone: '',
-    location: '',
-    status: 'active',
+    name: "",
+    position: "",
+    department: "",
+    email: "",
+    phone: "",
+    location: "",
+    status: "active",
     certifications: [],
     rating: 4.0,
     salary: 0
@@ -133,15 +133,15 @@ export const EmployeeManagement = () => {
     }
 
     const employee: Employee = {
-      id: `EMP${(employees.length + 1).toString().padStart(3, '0')}`,
+      id: `EMP${(employees.length + 1).toString().padStart(3, "0")}`,
       name: newEmployee.name!,
       position: newEmployee.position!,
       department: newEmployee.department!,
       email: newEmployee.email!,
-      phone: newEmployee.phone || '',
-      location: newEmployee.location || '',
-      startDate: new Date().toISOString().split('T')[0],
-      status: newEmployee.status as Employee['status'] || 'active',
+      phone: newEmployee.phone || "",
+      location: newEmployee.location || "",
+      startDate: new Date().toISOString().split("T")[0],
+      status: newEmployee.status as Employee["status"] || "active",
       certifications: newEmployee.certifications || [],
       rating: newEmployee.rating || 4.0,
       salary: newEmployee.salary || 0
@@ -149,13 +149,13 @@ export const EmployeeManagement = () => {
 
     setEmployees(prev => [...prev, employee]);
     setNewEmployee({
-      name: '',
-      position: '',
-      department: '',
-      email: '',
-      phone: '',
-      location: '',
-      status: 'active',
+      name: "",
+      position: "",
+      department: "",
+      email: "",
+      phone: "",
+      location: "",
+      status: "active",
       certifications: [],
       rating: 4.0,
       salary: 0
@@ -177,7 +177,7 @@ export const EmployeeManagement = () => {
     });
   };
 
-  const handleStatusChange = (employeeId: string, newStatus: Employee['status']) => {
+  const handleStatusChange = (employeeId: string, newStatus: Employee["status"]) => {
     setEmployees(prev => prev.map(emp => 
       emp.id === employeeId ? { ...emp, status: newStatus } : emp
     ));
@@ -191,30 +191,30 @@ export const EmployeeManagement = () => {
     const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          employee.department.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDepartment = selectedDepartment === 'all' || employee.department === selectedDepartment;
-    const matchesStatus = selectedStatus === 'all' || employee.status === selectedStatus;
+    const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
+    const matchesStatus = selectedStatus === "all" || employee.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
   });
 
   const departments = [...new Set(employees.map(emp => emp.department))];
 
-  const getStatusColor = (status: Employee['status']) => {
+  const getStatusColor = (status: Employee["status"]) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800 border-green-200';
-      case 'vacation': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'travel': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'inactive': return 'bg-secondary text-secondary-foreground border-border';
-      default: return 'bg-secondary text-secondary-foreground border-border';
+    case "active": return "bg-green-100 text-green-800 border-green-200";
+    case "vacation": return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    case "travel": return "bg-blue-100 text-blue-800 border-blue-200";
+    case "inactive": return "bg-secondary text-secondary-foreground border-border";
+    default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
-  const getStatusLabel = (status: Employee['status']) => {
+  const getStatusLabel = (status: Employee["status"]) => {
     switch (status) {
-      case 'active': return 'Ativo';
-      case 'vacation': return 'Férias';
-      case 'travel': return 'Viagem';
-      case 'inactive': return 'Inativo';
-      default: return 'N/A';
+    case "active": return "Ativo";
+    case "vacation": return "Férias";
+    case "travel": return "Viagem";
+    case "inactive": return "Inativo";
+    default: return "N/A";
     }
   };
 
@@ -244,7 +244,7 @@ export const EmployeeManagement = () => {
                 <Label htmlFor="name" className="text-right">Nome *</Label>
                 <Input
                   id="name"
-                  value={newEmployee.name || ''}
+                  value={newEmployee.name || ""}
                   onChange={(e) => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
                   className="col-span-3"
                 />
@@ -253,14 +253,14 @@ export const EmployeeManagement = () => {
                 <Label htmlFor="position" className="text-right">Cargo *</Label>
                 <Input
                   id="position"
-                  value={newEmployee.position || ''}
+                  value={newEmployee.position || ""}
                   onChange={(e) => setNewEmployee(prev => ({ ...prev, position: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="department" className="text-right">Departamento *</Label>
-                <Select value={newEmployee.department || ''} onValueChange={(value) => setNewEmployee(prev => ({ ...prev, department: value }))}>
+                <Select value={newEmployee.department || ""} onValueChange={(value) => setNewEmployee(prev => ({ ...prev, department: value }))}>
                   <SelectTrigger className="col-span-3">
                     <SelectValue placeholder="Selecione o departamento" />
                   </SelectTrigger>
@@ -279,7 +279,7 @@ export const EmployeeManagement = () => {
                 <Input
                   id="email"
                   type="email"
-                  value={newEmployee.email || ''}
+                  value={newEmployee.email || ""}
                   onChange={(e) => setNewEmployee(prev => ({ ...prev, email: e.target.value }))}
                   className="col-span-3"
                 />
@@ -288,7 +288,7 @@ export const EmployeeManagement = () => {
                 <Label htmlFor="phone" className="text-right">Telefone</Label>
                 <Input
                   id="phone"
-                  value={newEmployee.phone || ''}
+                  value={newEmployee.phone || ""}
                   onChange={(e) => setNewEmployee(prev => ({ ...prev, phone: e.target.value }))}
                   className="col-span-3"
                 />
@@ -297,7 +297,7 @@ export const EmployeeManagement = () => {
                 <Label htmlFor="location" className="text-right">Localização</Label>
                 <Input
                   id="location"
-                  value={newEmployee.location || ''}
+                  value={newEmployee.location || ""}
                   onChange={(e) => setNewEmployee(prev => ({ ...prev, location: e.target.value }))}
                   className="col-span-3"
                 />
@@ -307,7 +307,7 @@ export const EmployeeManagement = () => {
                 <Input
                   id="salary"
                   type="number"
-                  value={newEmployee.salary || ''}
+                  value={newEmployee.salary || ""}
                   onChange={(e) => setNewEmployee(prev => ({ ...prev, salary: parseFloat(e.target.value) || 0 }))}
                   className="col-span-3"
                 />
@@ -375,7 +375,7 @@ export const EmployeeManagement = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-azure-50 font-bold text-lg">
-                      {employee.name.split(' ').map(n => n[0]).join('')}
+                      {employee.name.split(" ").map(n => n[0]).join("")}
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold">{employee.name}</h3>
@@ -400,7 +400,7 @@ export const EmployeeManagement = () => {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <Phone className="w-4 h-4" />
-                        {employee.phone || 'N/A'}
+                        {employee.phone || "N/A"}
                       </div>
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <MapPin className="w-4 h-4" />
@@ -410,7 +410,7 @@ export const EmployeeManagement = () => {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <Calendar className="w-4 h-4" />
-                        Desde {new Date(employee.startDate).toLocaleDateString('pt-BR')}
+                        Desde {new Date(employee.startDate).toLocaleDateString("pt-BR")}
                       </div>
                       <div className="flex items-center gap-2">
                         <Star className="w-4 h-4 text-yellow-500" />
@@ -431,7 +431,7 @@ export const EmployeeManagement = () => {
                 </div>
 
                 <div className="flex flex-col gap-2 mt-4 md:mt-0">
-                  <Select value={employee.status} onValueChange={(value) => handleStatusChange(employee.id, value as Employee['status'])}>
+                  <Select value={employee.status} onValueChange={(value) => handleStatusChange(employee.id, value as Employee["status"])}>
                     <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>
@@ -480,7 +480,7 @@ export const EmployeeManagement = () => {
             <div className="space-y-6 py-4">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-azure-50 font-bold text-xl">
-                  {selectedEmployee.name.split(' ').map(n => n[0]).join('')}
+                  {selectedEmployee.name.split(" ").map(n => n[0]).join("")}
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold">{selectedEmployee.name}</h3>
@@ -502,7 +502,7 @@ export const EmployeeManagement = () => {
                 </div>
                 <div>
                   <Label className="text-sm font-medium">Telefone</Label>
-                  <p className="text-sm text-muted-foreground">{selectedEmployee.phone || 'N/A'}</p>
+                  <p className="text-sm text-muted-foreground">{selectedEmployee.phone || "N/A"}</p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium">Localização</Label>
@@ -511,7 +511,7 @@ export const EmployeeManagement = () => {
                 <div>
                   <Label className="text-sm font-medium">Data de Admissão</Label>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(selectedEmployee.startDate).toLocaleDateString('pt-BR')}
+                    {new Date(selectedEmployee.startDate).toLocaleDateString("pt-BR")}
                   </p>
                 </div>
                 <div>

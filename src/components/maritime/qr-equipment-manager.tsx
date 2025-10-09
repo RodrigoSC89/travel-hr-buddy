@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { QrCode, Scan, Plus, Edit, Trash2, MapPin, AlertTriangle } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { QrCode, Scan, Plus, Edit, Trash2, MapPin, AlertTriangle } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 
 interface QREquipment {
   id: string;
@@ -16,7 +16,7 @@ interface QREquipment {
   name: string;
   type: string;
   location: string;
-  status: 'operational' | 'maintenance' | 'critical';
+  status: "operational" | "maintenance" | "critical";
   lastInspection: Date;
   nextInspection: Date;
   checklist?: string;
@@ -26,26 +26,26 @@ interface QREquipment {
 export const QREquipmentManager = () => {
   const [equipment, setEquipment] = useState<QREquipment[]>([
     {
-      id: '1',
-      qrCode: 'EQ001-SAFETY-VALVE',
-      name: 'Válvula de Segurança Principal',
-      type: 'Safety Equipment',
-      location: 'Sala de Máquinas - Deck A',
-      status: 'operational',
-      lastInspection: new Date('2024-12-01'),
-      nextInspection: new Date('2024-12-15'),
-      checklist: 'safety',
+      id: "1",
+      qrCode: "EQ001-SAFETY-VALVE",
+      name: "Válvula de Segurança Principal",
+      type: "Safety Equipment",
+      location: "Sala de Máquinas - Deck A",
+      status: "operational",
+      lastInspection: new Date("2024-12-01"),
+      nextInspection: new Date("2024-12-15"),
+      checklist: "safety",
     },
     {
-      id: '2',
-      qrCode: 'EQ002-FIRE-EXT',
-      name: 'Extintor de Incêndio 001',
-      type: 'Fire Safety',
-      location: 'Corredor Principal',
-      status: 'maintenance',
-      lastInspection: new Date('2024-11-15'),
-      nextInspection: new Date('2024-12-10'),
-      checklist: 'safety',
+      id: "2",
+      qrCode: "EQ002-FIRE-EXT",
+      name: "Extintor de Incêndio 001",
+      type: "Fire Safety",
+      location: "Corredor Principal",
+      status: "maintenance",
+      lastInspection: new Date("2024-11-15"),
+      nextInspection: new Date("2024-12-10"),
+      checklist: "safety",
     },
   ]);
 
@@ -55,19 +55,19 @@ export const QREquipmentManager = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'operational': return 'bg-green-100 text-green-800';
-      case 'maintenance': return 'bg-yellow-100 text-yellow-800';
-      case 'critical': return 'bg-red-100 text-red-800';
-      default: return 'bg-secondary text-secondary-foreground';
+    case "operational": return "bg-green-100 text-green-800";
+    case "maintenance": return "bg-yellow-100 text-yellow-800";
+    case "critical": return "bg-red-100 text-red-800";
+    default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'operational': return <div className="w-2 h-2 bg-green-500 rounded-full" />;
-      case 'maintenance': return <div className="w-2 h-2 bg-yellow-500 rounded-full" />;
-      case 'critical': return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      default: return <div className="w-2 h-2 bg-gray-500 rounded-full" />;
+    case "operational": return <div className="w-2 h-2 bg-green-500 rounded-full" />;
+    case "maintenance": return <div className="w-2 h-2 bg-yellow-500 rounded-full" />;
+    case "critical": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    default: return <div className="w-2 h-2 bg-gray-500 rounded-full" />;
     }
   };
 
@@ -177,8 +177,8 @@ export const QREquipmentManager = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Badge className={getStatusColor(item.status)}>
-                        {item.status === 'operational' ? 'Operacional' : 
-                         item.status === 'maintenance' ? 'Manutenção' : 'Crítico'}
+                        {item.status === "operational" ? "Operacional" : 
+                          item.status === "maintenance" ? "Manutenção" : "Crítico"}
                       </Badge>
                       <Button variant="outline" size="sm">
                         <QrCode className="h-4 w-4" />
@@ -194,15 +194,15 @@ export const QREquipmentManager = () => {
                     </div>
                     <div>
                       <div className="font-medium">Última Inspeção</div>
-                      <div className="text-muted-foreground">{item.lastInspection.toLocaleDateString('pt-BR')}</div>
+                      <div className="text-muted-foreground">{item.lastInspection.toLocaleDateString("pt-BR")}</div>
                     </div>
                     <div>
                       <div className="font-medium">Próxima Inspeção</div>
-                      <div className="text-muted-foreground">{item.nextInspection.toLocaleDateString('pt-BR')}</div>
+                      <div className="text-muted-foreground">{item.nextInspection.toLocaleDateString("pt-BR")}</div>
                     </div>
                     <div>
                       <div className="font-medium">Checklist</div>
-                      <div className="text-muted-foreground capitalize">{item.checklist || 'N/A'}</div>
+                      <div className="text-muted-foreground capitalize">{item.checklist || "N/A"}</div>
                     </div>
                   </div>
                   <div className="flex justify-end space-x-2 mt-4">
@@ -247,7 +247,7 @@ export const QREquipmentManager = () => {
 
         <TabsContent value="maintenance" className="space-y-4">
           <div className="grid gap-4">
-            {equipment.filter(item => item.status !== 'operational').map((item) => (
+            {equipment.filter(item => item.status !== "operational").map((item) => (
               <Card key={item.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -259,7 +259,7 @@ export const QREquipmentManager = () => {
                       </div>
                     </div>
                     <Badge className={getStatusColor(item.status)}>
-                      {item.status === 'maintenance' ? 'Manutenção Agendada' : 'Crítico'}
+                      {item.status === "maintenance" ? "Manutenção Agendada" : "Crítico"}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -267,7 +267,7 @@ export const QREquipmentManager = () => {
                   <div className="space-y-2">
                     <div className="text-sm">
                       <span className="font-medium">Próxima Inspeção: </span>
-                      {item.nextInspection.toLocaleDateString('pt-BR')}
+                      {item.nextInspection.toLocaleDateString("pt-BR")}
                     </div>
                     {item.notes && (
                       <div className="text-sm">

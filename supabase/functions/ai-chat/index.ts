@@ -2,8 +2,8 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 // Retry configuration
@@ -23,7 +23,7 @@ const getRetryDelay = (attempt: number): number => {
 const isRetryableError = (status?: number, error?: Error): boolean => {
   if (!status && error) {
     // Network errors are retryable
-    return error.message.includes('fetch') || error.message.includes('network');
+    return error.message.includes("fetch") || error.message.includes("network");
   }
   // Retry on 429 (rate limit), 500s (server errors), and 503 (service unavailable)
   return status === 429 || (status !== undefined && status >= 500 && status < 600);
@@ -49,7 +49,7 @@ const fetchWithTimeout = async (url: string, options: RequestInit, timeoutMs: nu
 
 serve(async (req) => {
   // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
@@ -57,15 +57,15 @@ serve(async (req) => {
     const { message, context } = await req.json();
     
     if (!message) {
-      throw new Error('Message is required');
+      throw new Error("Message is required");
     }
 
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY is not set');
+      throw new Error("OPENAI_API_KEY is not set");
     }
 
-    console.log('Processing chat request:', message);
+    console.log("Processing chat request:", message);
 
     const systemPrompt = `Você é um assistente corporativo inteligente chamado Nautilus Assistant. 
 
@@ -85,13 +85,13 @@ serve(async (req) => {
     - Se não souber algo específico, seja honesto
     - Sugira próximos passos quando apropriado
 
-    ${context ? `Contexto adicional: ${context}` : ''}`;
+    ${context ? `Contexto adicional: ${context}` : ""}`;
 
     const requestBody = {
-      model: 'gpt-4o-mini',
+      model: "gpt-4o-mini",
       messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: message }
+        { role: "system", content: systemPrompt },
+        { role: "user", content: message }
       ],
       temperature: 0.7,
       max_tokens: 1000,
@@ -105,11 +105,11 @@ serve(async (req) => {
       try {
         console.log(`API request attempt ${attempt + 1}/${MAX_RETRIES + 1}`);
         
-        response = await fetchWithTimeout('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
+        response = await fetchWithTimeout("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
           headers: {
-            'Authorization': `Bearer ${OPENAI_API_KEY}`,
-            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(requestBody),
         }, REQUEST_TIMEOUT);
@@ -121,7 +121,7 @@ serve(async (req) => {
         // Check if we should retry
         if (!isRetryableError(response.status)) {
           const errorText = await response.text();
-          console.error('OpenAI API non-retryable error:', errorText);
+          console.error("OpenAI API non-retryable error:", errorText);
           throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
         }
 
@@ -150,34 +150,34 @@ serve(async (req) => {
     }
 
     if (!response || !response.ok) {
-      throw new Error(`OpenAI API failed: ${lastError?.message || 'Unknown error'}`);
+      throw new Error(`OpenAI API failed: ${lastError?.message || "Unknown error"}`);
     }
 
     const data = await response.json();
     
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      throw new Error('Invalid response format from OpenAI API');
+      throw new Error("Invalid response format from OpenAI API");
     }
     
     const reply = data.choices[0].message.content;
 
-    console.log('Generated response:', reply.substring(0, 100) + '...');
+    console.log("Generated response:", reply.substring(0, 100) + "...");
 
     return new Response(JSON.stringify({ 
       reply,
       timestamp: new Date().toISOString()
     }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error) {
-    console.error('Error in ai-chat function:', error);
+    console.error("Error in ai-chat function:", error);
     return new Response(JSON.stringify({ 
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : "Unknown error occurred",
       timestamp: new Date().toISOString()
     }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });

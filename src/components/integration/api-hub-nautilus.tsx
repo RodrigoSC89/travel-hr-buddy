@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +11,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { useToast } from '@/hooks/use-toast';
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Network, 
   Code,
@@ -27,18 +27,18 @@ import {
   Shield,
   Clock,
   TrendingUp
-} from 'lucide-react';
+} from "lucide-react";
 
 interface APIEndpoint {
   id: string;
   name: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   path: string;
   description: string;
-  category: 'vessel' | 'crew' | 'weather' | 'routes' | 'analytics' | 'iot';
-  authentication: 'api_key' | 'oauth' | 'jwt';
+  category: "vessel" | "crew" | "weather" | "routes" | "analytics" | "iot";
+  authentication: "api_key" | "oauth" | "jwt";
   rateLimit: string;
-  status: 'active' | 'beta' | 'deprecated';
+  status: "active" | "beta" | "deprecated";
   version: string;
   usageToday: number;
   avgResponseTime: number;
@@ -48,8 +48,8 @@ interface Integration {
   id: string;
   name: string;
   provider: string;
-  type: 'weather' | 'navigation' | 'iot' | 'erp' | 'satellite' | 'customs';
-  status: 'active' | 'inactive' | 'error';
+  type: "weather" | "navigation" | "iot" | "erp" | "satellite" | "customs";
+  status: "active" | "inactive" | "error";
   lastSync: string;
   apiCalls: number;
   uptime: number;
@@ -62,86 +62,86 @@ interface Integration {
 export const APIHubNautilus: React.FC = () => {
   const [endpoints] = useState<APIEndpoint[]>([
     {
-      id: '1',
-      name: 'Get Vessel Position',
-      method: 'GET',
-      path: '/api/v1/vessels/{id}/position',
-      description: 'Retorna posição atual e dados de navegação da embarcação',
-      category: 'vessel',
-      authentication: 'api_key',
-      rateLimit: '1000/hour',
-      status: 'active',
-      version: 'v1.0',
+      id: "1",
+      name: "Get Vessel Position",
+      method: "GET",
+      path: "/api/v1/vessels/{id}/position",
+      description: "Retorna posição atual e dados de navegação da embarcação",
+      category: "vessel",
+      authentication: "api_key",
+      rateLimit: "1000/hour",
+      status: "active",
+      version: "v1.0",
       usageToday: 4523,
       avgResponseTime: 145
     },
     {
-      id: '2',
-      name: 'Get Weather Forecast',
-      method: 'GET',
-      path: '/api/v1/weather/forecast',
-      description: 'Previsão meteorológica e oceânica para coordenadas específicas',
-      category: 'weather',
-      authentication: 'api_key',
-      rateLimit: '500/hour',
-      status: 'active',
-      version: 'v1.0',
+      id: "2",
+      name: "Get Weather Forecast",
+      method: "GET",
+      path: "/api/v1/weather/forecast",
+      description: "Previsão meteorológica e oceânica para coordenadas específicas",
+      category: "weather",
+      authentication: "api_key",
+      rateLimit: "500/hour",
+      status: "active",
+      version: "v1.0",
       usageToday: 2341,
       avgResponseTime: 312
     },
     {
-      id: '3',
-      name: 'Optimize Route',
-      method: 'POST',
-      path: '/api/v1/routes/optimize',
-      description: 'Calcula rota otimizada considerando clima, consumo e tempo',
-      category: 'routes',
-      authentication: 'jwt',
-      rateLimit: '100/hour',
-      status: 'active',
-      version: 'v1.2',
+      id: "3",
+      name: "Optimize Route",
+      method: "POST",
+      path: "/api/v1/routes/optimize",
+      description: "Calcula rota otimizada considerando clima, consumo e tempo",
+      category: "routes",
+      authentication: "jwt",
+      rateLimit: "100/hour",
+      status: "active",
+      version: "v1.2",
       usageToday: 156,
       avgResponseTime: 2450
     },
     {
-      id: '4',
-      name: 'Get Crew Schedule',
-      method: 'GET',
-      path: '/api/v1/crew/schedule',
-      description: 'Retorna escala atual e próximas rotações da tripulação',
-      category: 'crew',
-      authentication: 'oauth',
-      rateLimit: '2000/hour',
-      status: 'active',
-      version: 'v1.0',
+      id: "4",
+      name: "Get Crew Schedule",
+      method: "GET",
+      path: "/api/v1/crew/schedule",
+      description: "Retorna escala atual e próximas rotações da tripulação",
+      category: "crew",
+      authentication: "oauth",
+      rateLimit: "2000/hour",
+      status: "active",
+      version: "v1.0",
       usageToday: 1823,
       avgResponseTime: 98
     },
     {
-      id: '5',
-      name: 'IoT Sensor Data',
-      method: 'GET',
-      path: '/api/v1/iot/sensors/{id}/data',
-      description: 'Dados em tempo real de sensores IoT embarcados',
-      category: 'iot',
-      authentication: 'api_key',
-      rateLimit: '10000/hour',
-      status: 'beta',
-      version: 'v2.0-beta',
+      id: "5",
+      name: "IoT Sensor Data",
+      method: "GET",
+      path: "/api/v1/iot/sensors/{id}/data",
+      description: "Dados em tempo real de sensores IoT embarcados",
+      category: "iot",
+      authentication: "api_key",
+      rateLimit: "10000/hour",
+      status: "beta",
+      version: "v2.0-beta",
       usageToday: 8734,
       avgResponseTime: 67
     },
     {
-      id: '6',
-      name: 'Analytics Dashboard',
-      method: 'POST',
-      path: '/api/v1/analytics/dashboard',
-      description: 'Gera métricas e KPIs customizados para dashboards',
-      category: 'analytics',
-      authentication: 'jwt',
-      rateLimit: '200/hour',
-      status: 'active',
-      version: 'v1.1',
+      id: "6",
+      name: "Analytics Dashboard",
+      method: "POST",
+      path: "/api/v1/analytics/dashboard",
+      description: "Gera métricas e KPIs customizados para dashboards",
+      category: "analytics",
+      authentication: "jwt",
+      rateLimit: "200/hour",
+      status: "active",
+      version: "v1.1",
       usageToday: 542,
       avgResponseTime: 1234
     }
@@ -149,88 +149,88 @@ export const APIHubNautilus: React.FC = () => {
 
   const [integrations] = useState<Integration[]>([
     {
-      id: '1',
-      name: 'OpenWeatherMap',
-      provider: 'OpenWeather',
-      type: 'weather',
-      status: 'active',
-      lastSync: '2025-05-12T14:30:00',
+      id: "1",
+      name: "OpenWeatherMap",
+      provider: "OpenWeather",
+      type: "weather",
+      status: "active",
+      lastSync: "2025-05-12T14:30:00",
       apiCalls: 45234,
       uptime: 99.8,
-      credentials: { type: 'API Key', configured: true }
+      credentials: { type: "API Key", configured: true }
     },
     {
-      id: '2',
-      name: 'MarineTraffic AIS',
-      provider: 'MarineTraffic',
-      type: 'navigation',
-      status: 'active',
-      lastSync: '2025-05-12T14:32:00',
+      id: "2",
+      name: "MarineTraffic AIS",
+      provider: "MarineTraffic",
+      type: "navigation",
+      status: "active",
+      lastSync: "2025-05-12T14:32:00",
       apiCalls: 23145,
       uptime: 99.5,
-      credentials: { type: 'OAuth 2.0', configured: true }
+      credentials: { type: "OAuth 2.0", configured: true }
     },
     {
-      id: '3',
-      name: 'AWS IoT Core',
-      provider: 'Amazon Web Services',
-      type: 'iot',
-      status: 'active',
-      lastSync: '2025-05-12T14:33:00',
+      id: "3",
+      name: "AWS IoT Core",
+      provider: "Amazon Web Services",
+      type: "iot",
+      status: "active",
+      lastSync: "2025-05-12T14:33:00",
       apiCalls: 156789,
       uptime: 99.9,
-      credentials: { type: 'IAM Role', configured: true }
+      credentials: { type: "IAM Role", configured: true }
     },
     {
-      id: '4',
-      name: 'SAP Maritime',
-      provider: 'SAP',
-      type: 'erp',
-      status: 'inactive',
-      lastSync: '2025-05-10T08:15:00',
+      id: "4",
+      name: "SAP Maritime",
+      provider: "SAP",
+      type: "erp",
+      status: "inactive",
+      lastSync: "2025-05-10T08:15:00",
       apiCalls: 8934,
       uptime: 97.2,
-      credentials: { type: 'API Key', configured: false }
+      credentials: { type: "API Key", configured: false }
     },
     {
-      id: '5',
-      name: 'Inmarsat FleetBroadband',
-      provider: 'Inmarsat',
-      type: 'satellite',
-      status: 'active',
-      lastSync: '2025-05-12T14:31:00',
+      id: "5",
+      name: "Inmarsat FleetBroadband",
+      provider: "Inmarsat",
+      type: "satellite",
+      status: "active",
+      lastSync: "2025-05-12T14:31:00",
       apiCalls: 12456,
       uptime: 98.7,
-      credentials: { type: 'Custom Auth', configured: true }
+      credentials: { type: "Custom Auth", configured: true }
     }
   ]);
 
   const getMethodColor = (method: string) => {
     switch (method) {
-      case 'GET': return 'bg-green-600';
-      case 'POST': return 'bg-blue-600';
-      case 'PUT': return 'bg-yellow-600';
-      case 'DELETE': return 'bg-red-600';
-      case 'PATCH': return 'bg-purple-600';
-      default: return 'bg-gray-600';
+    case "GET": return "bg-green-600";
+    case "POST": return "bg-blue-600";
+    case "PUT": return "bg-yellow-600";
+    case "DELETE": return "bg-red-600";
+    case "PATCH": return "bg-purple-600";
+    default: return "bg-gray-600";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'default';
-      case 'beta': return 'secondary';
-      case 'deprecated': return 'destructive';
-      default: return 'outline';
+    case "active": return "default";
+    case "beta": return "secondary";
+    case "deprecated": return "destructive";
+    default: return "outline";
     }
   };
 
   const getIntegrationStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'text-green-600';
-      case 'inactive': return 'text-muted-foreground';
-      case 'error': return 'text-red-600';
-      default: return 'text-muted-foreground';
+    case "active": return "text-green-600";
+    case "inactive": return "text-muted-foreground";
+    case "error": return "text-red-600";
+    default: return "text-muted-foreground";
     }
   };
 
@@ -238,7 +238,7 @@ export const APIHubNautilus: React.FC = () => {
   const avgResponseTime = Math.round(
     endpoints.reduce((sum, e) => sum + e.avgResponseTime, 0) / endpoints.length
   );
-  const activeIntegrations = integrations.filter(i => i.status === 'active').length;
+  const activeIntegrations = integrations.filter(i => i.status === "active").length;
   
   const { toast } = useToast();
   const [filterCategory, setFilterCategory] = useState({
@@ -569,7 +569,7 @@ export const APIHubNautilus: React.FC = () => {
                       </div>
                       <div className="text-right">
                         <div className={`flex items-center gap-1 ${getIntegrationStatusColor(integration.status)}`}>
-                          {integration.status === 'active' ? (
+                          {integration.status === "active" ? (
                             <CheckCircle className="h-4 w-4" />
                           ) : (
                             <AlertCircle className="h-4 w-4" />
@@ -593,7 +593,7 @@ export const APIHubNautilus: React.FC = () => {
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="text-xs text-muted-foreground mb-1">Última Sync</div>
                         <div className="text-sm font-medium">
-                          {new Date(integration.lastSync).toLocaleTimeString('pt-BR')}
+                          {new Date(integration.lastSync).toLocaleTimeString("pt-BR")}
                         </div>
                       </div>
                     </div>
@@ -644,10 +644,10 @@ export const APIHubNautilus: React.FC = () => {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {[
-                    { name: 'JavaScript/TypeScript SDK', version: 'v2.1.0', downloads: '45.2k' },
-                    { name: 'Python SDK', version: 'v1.8.3', downloads: '32.1k' },
-                    { name: 'Java SDK', version: 'v1.5.0', downloads: '18.7k' },
-                    { name: 'C# .NET SDK', version: 'v1.3.2', downloads: '12.4k' }
+                    { name: "JavaScript/TypeScript SDK", version: "v2.1.0", downloads: "45.2k" },
+                    { name: "Python SDK", version: "v1.8.3", downloads: "32.1k" },
+                    { name: "Java SDK", version: "v1.5.0", downloads: "18.7k" },
+                    { name: "C# .NET SDK", version: "v1.3.2", downloads: "12.4k" }
                   ].map((sdk, idx) => (
                     <div key={idx} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                       <div>
@@ -669,12 +669,12 @@ export const APIHubNautilus: React.FC = () => {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   {[
-                    'Guia de Início Rápido',
-                    'Referência Completa da API',
-                    'Exemplos de Código',
-                    'Webhooks e Callbacks',
-                    'Autenticação e Segurança',
-                    'Limites e Quotas'
+                    "Guia de Início Rápido",
+                    "Referência Completa da API",
+                    "Exemplos de Código",
+                    "Webhooks e Callbacks",
+                    "Autenticação e Segurança",
+                    "Limites e Quotas"
                   ].map((doc, idx) => (
                     <Button key={idx} variant="ghost" className="w-full justify-start">
                       <Book className="h-4 w-4 mr-2" />
@@ -699,7 +699,7 @@ export const APIHubNautilus: React.FC = () => {
                           <span className="font-medium">99.87%</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-green-500" style={{width: '99.87%'}}></div>
+                          <div className="h-full bg-green-500" style={{width: "99.87%"}}></div>
                         </div>
                       </div>
                       <div>
@@ -708,7 +708,7 @@ export const APIHubNautilus: React.FC = () => {
                           <span className="font-medium">245ms</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-blue-500" style={{width: '78%'}}></div>
+                          <div className="h-full bg-blue-500" style={{width: "78%"}}></div>
                         </div>
                       </div>
                       <div>
@@ -717,7 +717,7 @@ export const APIHubNautilus: React.FC = () => {
                           <span className="font-medium">0.13%</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-red-500" style={{width: '0.13%'}}></div>
+                          <div className="h-full bg-red-500" style={{width: "0.13%"}}></div>
                         </div>
                       </div>
                     </div>
@@ -731,11 +731,11 @@ export const APIHubNautilus: React.FC = () => {
                   <CardContent>
                     <div className="space-y-3">
                       {[
-                        { category: 'IoT Sensors', percentage: 48, color: 'bg-purple-500' },
-                        { category: 'Vessel Data', percentage: 25, color: 'bg-blue-500' },
-                        { category: 'Weather', percentage: 13, color: 'bg-green-500' },
-                        { category: 'Analytics', percentage: 9, color: 'bg-yellow-500' },
-                        { category: 'Crew', percentage: 5, color: 'bg-red-500' }
+                        { category: "IoT Sensors", percentage: 48, color: "bg-purple-500" },
+                        { category: "Vessel Data", percentage: 25, color: "bg-blue-500" },
+                        { category: "Weather", percentage: 13, color: "bg-green-500" },
+                        { category: "Analytics", percentage: 9, color: "bg-yellow-500" },
+                        { category: "Crew", percentage: 5, color: "bg-red-500" }
                       ].map((item, idx) => (
                         <div key={idx}>
                           <div className="flex justify-between text-sm mb-1">

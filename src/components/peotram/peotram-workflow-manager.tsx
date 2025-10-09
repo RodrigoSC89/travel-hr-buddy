@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Workflow, 
   Plus, 
@@ -25,7 +25,7 @@ import {
   Settings,
   Calendar,
   Target
-} from 'lucide-react';
+} from "lucide-react";
 
 interface WorkflowStep {
   id: string;
@@ -33,7 +33,7 @@ interface WorkflowStep {
   description: string;
   assignee: string;
   estimatedDuration: number;
-  status: 'pending' | 'in-progress' | 'completed' | 'blocked';
+  status: "pending" | "in-progress" | "completed" | "blocked";
   dependencies: string[];
 }
 
@@ -41,9 +41,9 @@ interface PeotramWorkflow {
   id: string;
   name: string;
   description: string;
-  type: 'audit-preparation' | 'non-conformity-resolution' | 'compliance-check' | 'training' | 'custom';
-  status: 'draft' | 'active' | 'paused' | 'completed';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  type: "audit-preparation" | "non-conformity-resolution" | "compliance-check" | "training" | "custom";
+  status: "draft" | "active" | "paused" | "completed";
+  priority: "low" | "medium" | "high" | "critical";
   steps: WorkflowStep[];
   createdAt: string;
   updatedAt: string;
@@ -54,78 +54,78 @@ export const PeotramWorkflowManager: React.FC = () => {
   const [workflows, setWorkflows] = useState<PeotramWorkflow[]>(getDemoWorkflows());
   const [selectedWorkflow, setSelectedWorkflow] = useState<PeotramWorkflow | null>(null);
   const [isNewWorkflowOpen, setIsNewWorkflowOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   function getDemoWorkflows(): PeotramWorkflow[] {
     return [
       {
-        id: 'WF001',
-        name: 'Preparação Auditoria Embarcação',
-        description: 'Fluxo completo para preparação de auditoria PEOTRAM em embarcação',
-        type: 'audit-preparation',
-        status: 'active',
-        priority: 'high',
+        id: "WF001",
+        name: "Preparação Auditoria Embarcação",
+        description: "Fluxo completo para preparação de auditoria PEOTRAM em embarcação",
+        type: "audit-preparation",
+        status: "active",
+        priority: "high",
         progress: 65,
-        createdAt: '2024-01-15',
-        updatedAt: '2024-01-20',
+        createdAt: "2024-01-15",
+        updatedAt: "2024-01-20",
         steps: [
           {
-            id: 'STEP001',
-            name: 'Planejamento da Auditoria',
-            description: 'Definir escopo, objetivos e cronograma da auditoria',
-            assignee: 'João Silva',
+            id: "STEP001",
+            name: "Planejamento da Auditoria",
+            description: "Definir escopo, objetivos e cronograma da auditoria",
+            assignee: "João Silva",
             estimatedDuration: 2,
-            status: 'completed',
+            status: "completed",
             dependencies: []
           },
           {
-            id: 'STEP002',
-            name: 'Preparação de Documentos',
-            description: 'Reunir e organizar toda documentação necessária',
-            assignee: 'Maria Santos',
+            id: "STEP002",
+            name: "Preparação de Documentos",
+            description: "Reunir e organizar toda documentação necessária",
+            assignee: "Maria Santos",
             estimatedDuration: 3,
-            status: 'in-progress',
-            dependencies: ['STEP001']
+            status: "in-progress",
+            dependencies: ["STEP001"]
           },
           {
-            id: 'STEP003',
-            name: 'Coordenação com Embarcação',
-            description: 'Alinhar disponibilidade e requisitos com a tripulação',
-            assignee: 'Carlos Eduardo',
+            id: "STEP003",
+            name: "Coordenação com Embarcação",
+            description: "Alinhar disponibilidade e requisitos com a tripulação",
+            assignee: "Carlos Eduardo",
             estimatedDuration: 1,
-            status: 'pending',
-            dependencies: ['STEP001']
+            status: "pending",
+            dependencies: ["STEP001"]
           }
         ]
       },
       {
-        id: 'WF002',
-        name: 'Resolução de Não Conformidade',
-        description: 'Processo padronizado para resolução de não conformidades críticas',
-        type: 'non-conformity-resolution',
-        status: 'active',
-        priority: 'critical',
+        id: "WF002",
+        name: "Resolução de Não Conformidade",
+        description: "Processo padronizado para resolução de não conformidades críticas",
+        type: "non-conformity-resolution",
+        status: "active",
+        priority: "critical",
         progress: 30,
-        createdAt: '2024-01-18',
-        updatedAt: '2024-01-22',
+        createdAt: "2024-01-18",
+        updatedAt: "2024-01-22",
         steps: [
           {
-            id: 'STEP004',
-            name: 'Análise da Não Conformidade',
-            description: 'Investigar causas raiz e impactos da não conformidade',
-            assignee: 'Ana Costa',
+            id: "STEP004",
+            name: "Análise da Não Conformidade",
+            description: "Investigar causas raiz e impactos da não conformidade",
+            assignee: "Ana Costa",
             estimatedDuration: 1,
-            status: 'completed',
+            status: "completed",
             dependencies: []
           },
           {
-            id: 'STEP005',
-            name: 'Plano de Ação Corretiva',
-            description: 'Desenvolver plano detalhado de correção',
-            assignee: 'Pedro Oliveira',
+            id: "STEP005",
+            name: "Plano de Ação Corretiva",
+            description: "Desenvolver plano detalhado de correção",
+            assignee: "Pedro Oliveira",
             estimatedDuration: 2,
-            status: 'in-progress',
-            dependencies: ['STEP004']
+            status: "in-progress",
+            dependencies: ["STEP004"]
           }
         ]
       }
@@ -134,30 +134,30 @@ export const PeotramWorkflowManager: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-success/20 text-success border-success/30';
-      case 'active': case 'in-progress': return 'bg-info/20 text-info border-info/30';
-      case 'paused': case 'blocked': return 'bg-warning/20 text-warning border-warning/30';
-      case 'draft': case 'pending': return 'bg-muted/20 text-muted-foreground border-muted/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "completed": return "bg-success/20 text-success border-success/30";
+    case "active": case "in-progress": return "bg-info/20 text-info border-info/30";
+    case "paused": case "blocked": return "bg-warning/20 text-warning border-warning/30";
+    case "draft": case "pending": return "bg-muted/20 text-muted-foreground border-muted/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'high': return 'bg-warning/20 text-warning border-warning/30';
-      case 'medium': return 'bg-info/20 text-info border-info/30';
-      case 'low': return 'bg-muted/20 text-muted-foreground border-muted/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high": return "bg-warning/20 text-warning border-warning/30";
+    case "medium": return "bg-info/20 text-info border-info/30";
+    case "low": return "bg-muted/20 text-muted-foreground border-muted/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStepStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="w-4 h-4 text-success" />;
-      case 'in-progress': return <Clock className="w-4 h-4 text-info" />;
-      case 'blocked': return <AlertCircle className="w-4 h-4 text-destructive" />;
-      default: return <Clock className="w-4 h-4 text-muted-foreground" />;
+    case "completed": return <CheckCircle className="w-4 h-4 text-success" />;
+    case "in-progress": return <Clock className="w-4 h-4 text-info" />;
+    case "blocked": return <AlertCircle className="w-4 h-4 text-destructive" />;
+    default: return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -249,7 +249,7 @@ export const PeotramWorkflowManager: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Play className="w-8 h-8 text-success" />
                   <div>
-                    <p className="text-2xl font-bold">{workflows.filter(w => w.status === 'active').length}</p>
+                    <p className="text-2xl font-bold">{workflows.filter(w => w.status === "active").length}</p>
                     <p className="text-sm text-muted-foreground">Ativos</p>
                   </div>
                 </div>
@@ -261,7 +261,7 @@ export const PeotramWorkflowManager: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Clock className="w-8 h-8 text-warning" />
                   <div>
-                    <p className="text-2xl font-bold">{workflows.filter(w => w.status === 'paused').length}</p>
+                    <p className="text-2xl font-bold">{workflows.filter(w => w.status === "paused").length}</p>
                     <p className="text-sm text-muted-foreground">Pausados</p>
                   </div>
                 </div>
@@ -273,7 +273,7 @@ export const PeotramWorkflowManager: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-8 h-8 text-info" />
                   <div>
-                    <p className="text-2xl font-bold">{workflows.filter(w => w.status === 'completed').length}</p>
+                    <p className="text-2xl font-bold">{workflows.filter(w => w.status === "completed").length}</p>
                     <p className="text-sm text-muted-foreground">Concluídos</p>
                   </div>
                 </div>
@@ -284,7 +284,7 @@ export const PeotramWorkflowManager: React.FC = () => {
 
         <TabsContent value="active" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {workflows.filter(w => w.status === 'active').map((workflow) => (
+            {workflows.filter(w => w.status === "active").map((workflow) => (
               <Card key={workflow.id} className="cursor-pointer hover:shadow-lg transition-all">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -310,13 +310,13 @@ export const PeotramWorkflowManager: React.FC = () => {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Progresso: {workflow.progress}%</span>
                     <span className="text-muted-foreground">
-                      {workflow.steps.filter(s => s.status === 'completed').length}/{workflow.steps.length} etapas
+                      {workflow.steps.filter(s => s.status === "completed").length}/{workflow.steps.length} etapas
                     </span>
                   </div>
                   
                   <div className="space-y-2">
                     <h4 className="font-medium">Próximas Etapas:</h4>
-                    {workflow.steps.filter(s => s.status === 'in-progress' || s.status === 'pending').slice(0, 2).map((step) => (
+                    {workflow.steps.filter(s => s.status === "in-progress" || s.status === "pending").slice(0, 2).map((step) => (
                       <div key={step.id} className="flex items-center gap-2 p-2 bg-muted/50 rounded-lg">
                         {getStepStatusIcon(step.status)}
                         <div className="flex-1 min-w-0">

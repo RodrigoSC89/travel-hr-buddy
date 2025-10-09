@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import React, { useState, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   Paperclip, 
   Upload, 
@@ -13,9 +13,9 @@ import {
   File,
   Trash2,
   Eye
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface AttachmentFile {
   id: string;
@@ -53,15 +53,15 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('reservation_attachments')
-        .select('*')
-        .eq('reservation_id', reservationId)
-        .order('created_at', { ascending: false });
+        .from("reservation_attachments")
+        .select("*")
+        .eq("reservation_id", reservationId)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setAttachments(data || []);
     } catch (error) {
-      console.error('Error fetching attachments:', error);
+      console.error("Error fetching attachments:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar anexos",
@@ -91,24 +91,24 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
         }
 
         // Upload file to Supabase Storage
-        const fileExt = file.name.split('.').pop();
+        const fileExt = file.name.split(".").pop();
         const fileName = `${reservationId}_${Date.now()}.${fileExt}`;
         const filePath = `reservations/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
-          .from('certificates') // Using existing bucket
+          .from("certificates") // Using existing bucket
           .upload(filePath, file);
 
         if (uploadError) throw uploadError;
 
         // Get public URL
         const { data: { publicUrl } } = supabase.storage
-          .from('certificates')
+          .from("certificates")
           .getPublicUrl(filePath);
 
         // Save attachment record
         const { error: dbError } = await supabase
-          .from('reservation_attachments')
+          .from("reservation_attachments")
           .insert({
             reservation_id: reservationId,
             file_name: file.name,
@@ -128,7 +128,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
 
       fetchAttachments();
     } catch (error) {
-      console.error('Error uploading files:', error);
+      console.error("Error uploading files:", error);
       toast({
         title: "Erro",
         description: "Erro ao enviar anexos",
@@ -137,25 +137,25 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     }
   };
 
   const handleDeleteAttachment = async (attachmentId: string, filePath: string) => {
-    if (!confirm('Tem certeza que deseja excluir este anexo?')) return;
+    if (!confirm("Tem certeza que deseja excluir este anexo?")) return;
 
     try {
       // Delete from storage
       const { error: storageError } = await supabase.storage
-        .from('certificates')
+        .from("certificates")
         .remove([filePath]);
 
       // Delete from database
       const { error: dbError } = await supabase
-        .from('reservation_attachments')
+        .from("reservation_attachments")
         .delete()
-        .eq('id', attachmentId);
+        .eq("id", attachmentId);
 
       if (dbError) throw dbError;
 
@@ -166,7 +166,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
 
       fetchAttachments();
     } catch (error) {
-      console.error('Error deleting attachment:', error);
+      console.error("Error deleting attachment:", error);
       toast({
         title: "Erro",
         description: "Erro ao excluir anexo",
@@ -176,23 +176,23 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
   };
 
   const getFileIcon = (fileType: string) => {
-    if (fileType.startsWith('image/')) return <Image className="h-4 w-4" />;
-    if (fileType === 'application/pdf') return <FileText className="h-4 w-4" />;
+    if (fileType.startsWith("image/")) return <Image className="h-4 w-4" />;
+    if (fileType === "application/pdf") return <FileText className="h-4 w-4" />;
     return <File className="h-4 w-4" />;
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const getFilePathFromUrl = (url: string) => {
     // Extract file path from Supabase storage URL
-    const urlParts = url.split('/');
-    return urlParts.slice(-2).join('/'); // Get 'reservations/filename'
+    const urlParts = url.split("/");
+    return urlParts.slice(-2).join("/"); // Get 'reservations/filename'
   };
 
   return (
@@ -233,7 +233,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
                 >
-                  {uploading ? 'Enviando...' : 'Selecionar Arquivos'}
+                  {uploading ? "Enviando..." : "Selecionar Arquivos"}
                 </Button>
               </div>
             </CardContent>
@@ -276,7 +276,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                                 {formatFileSize(attachment.file_size)}
                               </Badge>
                               <span className="text-xs text-muted-foreground">
-                                {new Date(attachment.created_at).toLocaleDateString('pt-BR')}
+                                {new Date(attachment.created_at).toLocaleDateString("pt-BR")}
                               </span>
                             </div>
                           </div>
@@ -285,7 +285,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => window.open(attachment.file_url, '_blank')}
+                            onClick={() => window.open(attachment.file_url, "_blank")}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
@@ -293,7 +293,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                             size="sm"
                             variant="outline"
                             onClick={() => {
-                              const link = document.createElement('a');
+                              const link = document.createElement("a");
                               link.href = attachment.file_url;
                               link.download = attachment.file_name;
                               link.click();

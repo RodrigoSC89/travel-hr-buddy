@@ -1,6 +1,6 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, TrendingUp, Activity, Fuel } from 'lucide-react';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarChart3, TrendingUp, Activity, Fuel } from "lucide-react";
 
 const FleetAnalytics: React.FC = () => {
   return (

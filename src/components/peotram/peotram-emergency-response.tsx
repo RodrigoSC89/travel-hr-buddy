@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   AlertTriangle, 
   Siren, 
@@ -23,7 +23,7 @@ import {
   Flame,
   Waves,
   Plus
-} from 'lucide-react';
+} from "lucide-react";
 
 interface EmergencyContact {
   id: string;
@@ -32,13 +32,13 @@ interface EmergencyContact {
   phone: string;
   email: string;
   department: string;
-  priority: 'primary' | 'secondary' | 'backup';
+  priority: "primary" | "secondary" | "backup";
 }
 
 interface EmergencyProcedure {
   id: string;
   title: string;
-  type: 'fire' | 'medical' | 'collision' | 'pollution' | 'security' | 'weather';
+  type: "fire" | "medical" | "collision" | "pollution" | "security" | "weather";
   description: string;
   steps: string[];
   contacts: string[];
@@ -48,9 +48,9 @@ interface EmergencyProcedure {
 
 interface EmergencyIncident {
   id: string;
-  type: 'fire' | 'medical' | 'collision' | 'pollution' | 'security' | 'weather';
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  status: 'active' | 'contained' | 'resolved';
+  type: "fire" | "medical" | "collision" | "pollution" | "security" | "weather";
+  severity: "low" | "medium" | "high" | "critical";
+  status: "active" | "contained" | "resolved";
   location: string;
   description: string;
   reportedBy: string;
@@ -68,25 +68,25 @@ export const PeotramEmergencyResponse: React.FC = () => {
   function getDemoIncidents(): EmergencyIncident[] {
     return [
       {
-        id: 'INC001',
-        type: 'fire',
-        severity: 'high',
-        status: 'active',
-        location: 'Deck Principal - Seção 3',
-        description: 'Princípio de incêndio detectado no sistema elétrico',
-        reportedBy: 'João Silva',
-        reportedAt: '2024-01-22T10:30:00Z'
+        id: "INC001",
+        type: "fire",
+        severity: "high",
+        status: "active",
+        location: "Deck Principal - Seção 3",
+        description: "Princípio de incêndio detectado no sistema elétrico",
+        reportedBy: "João Silva",
+        reportedAt: "2024-01-22T10:30:00Z"
       },
       {
-        id: 'INC002',
-        type: 'medical',
-        severity: 'medium',
-        status: 'contained',
-        location: 'Praça de Máquinas',
-        description: 'Tripulante com ferimento no braço',
-        reportedBy: 'Maria Santos',
-        reportedAt: '2024-01-22T08:15:00Z',
-        respondedAt: '2024-01-22T08:18:00Z'
+        id: "INC002",
+        type: "medical",
+        severity: "medium",
+        status: "contained",
+        location: "Praça de Máquinas",
+        description: "Tripulante com ferimento no braço",
+        reportedBy: "Maria Santos",
+        reportedAt: "2024-01-22T08:15:00Z",
+        respondedAt: "2024-01-22T08:18:00Z"
       }
     ];
   }
@@ -94,22 +94,22 @@ export const PeotramEmergencyResponse: React.FC = () => {
   function getDemoContacts(): EmergencyContact[] {
     return [
       {
-        id: 'CONT001',
-        name: 'Capitão Roberto Silva',
-        role: 'Comandante',
-        phone: '+55 11 99999-0001',
-        email: 'capitao@embarcacao.com',
-        department: 'Comando',
-        priority: 'primary'
+        id: "CONT001",
+        name: "Capitão Roberto Silva",
+        role: "Comandante",
+        phone: "+55 11 99999-0001",
+        email: "capitao@embarcacao.com",
+        department: "Comando",
+        priority: "primary"
       },
       {
-        id: 'CONT002',
-        name: 'Enfermeiro Carlos Lima',
-        role: 'Responsável Médico',
-        phone: '+55 11 99999-0002',
-        email: 'medico@embarcacao.com',
-        department: 'Saúde',
-        priority: 'primary'
+        id: "CONT002",
+        name: "Enfermeiro Carlos Lima",
+        role: "Responsável Médico",
+        phone: "+55 11 99999-0002",
+        email: "medico@embarcacao.com",
+        department: "Saúde",
+        priority: "primary"
       }
     ];
   }
@@ -117,52 +117,52 @@ export const PeotramEmergencyResponse: React.FC = () => {
   function getDemoProcedures(): EmergencyProcedure[] {
     return [
       {
-        id: 'PROC001',
-        title: 'Combate a Incêndio',
-        type: 'fire',
-        description: 'Procedimento padrão para combate a incêndios em embarcações',
+        id: "PROC001",
+        title: "Combate a Incêndio",
+        type: "fire",
+        description: "Procedimento padrão para combate a incêndios em embarcações",
         steps: [
-          'Acionar alarme geral',
-          'Comunicar à ponte de comando',
-          'Isolar área afetada',
-          'Utilizar equipamentos de combate apropriados',
-          'Avaliar necessidade de abandono'
+          "Acionar alarme geral",
+          "Comunicar à ponte de comando",
+          "Isolar área afetada",
+          "Utilizar equipamentos de combate apropriados",
+          "Avaliar necessidade de abandono"
         ],
-        contacts: ['CONT001', 'CONT002'],
-        resources: ['Extintores CO2', 'Mangueiras', 'Equipamentos de proteção'],
-        lastUpdated: '2024-01-15'
+        contacts: ["CONT001", "CONT002"],
+        resources: ["Extintores CO2", "Mangueiras", "Equipamentos de proteção"],
+        lastUpdated: "2024-01-15"
       }
     ];
   }
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'high': return 'bg-destructive/10 text-destructive border-destructive/20';
-      case 'medium': return 'bg-warning/20 text-warning border-warning/30';
-      case 'low': return 'bg-info/20 text-info border-info/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high": return "bg-destructive/10 text-destructive border-destructive/20";
+    case "medium": return "bg-warning/20 text-warning border-warning/30";
+    case "low": return "bg-info/20 text-info border-info/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'resolved': return 'bg-success/20 text-success border-success/30';
-      case 'contained': return 'bg-warning/20 text-warning border-warning/30';
-      case 'active': return 'bg-destructive/20 text-destructive border-destructive/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "resolved": return "bg-success/20 text-success border-success/30";
+    case "contained": return "bg-warning/20 text-warning border-warning/30";
+    case "active": return "bg-destructive/20 text-destructive border-destructive/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'fire': return <Flame className="w-4 h-4" />;
-      case 'medical': return <Heart className="w-4 h-4" />;
-      case 'collision': return <Zap className="w-4 h-4" />;
-      case 'pollution': return <Waves className="w-4 h-4" />;
-      case 'security': return <Shield className="w-4 h-4" />;
-      case 'weather': return <Activity className="w-4 h-4" />;
-      default: return <AlertTriangle className="w-4 h-4" />;
+    case "fire": return <Flame className="w-4 h-4" />;
+    case "medical": return <Heart className="w-4 h-4" />;
+    case "collision": return <Zap className="w-4 h-4" />;
+    case "pollution": return <Waves className="w-4 h-4" />;
+    case "security": return <Shield className="w-4 h-4" />;
+    case "weather": return <Activity className="w-4 h-4" />;
+    default: return <AlertTriangle className="w-4 h-4" />;
     }
   };
 
@@ -360,9 +360,9 @@ export const PeotramEmergencyResponse: React.FC = () => {
                     {contact.department}
                   </div>
                   <Badge variant="outline" className={
-                    contact.priority === 'primary' ? 'bg-success/20 text-success border-success/30' :
-                    contact.priority === 'secondary' ? 'bg-warning/20 text-warning border-warning/30' :
-                    'bg-muted/20 text-muted-foreground border-muted/30'
+                    contact.priority === "primary" ? "bg-success/20 text-success border-success/30" :
+                      contact.priority === "secondary" ? "bg-warning/20 text-warning border-warning/30" :
+                        "bg-muted/20 text-muted-foreground border-muted/30"
                   }>
                     {contact.priority}
                   </Badge>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSystemActions } from '@/hooks/use-system-actions';
+import React, { useState } from "react";
+import { useSystemActions } from "@/hooks/use-system-actions";
 import { 
   Settings, 
   User, 
@@ -10,18 +10,18 @@ import {
   Database,
   Save,
   RotateCcw
-} from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/hooks/use-toast';
-import { useProfile } from '@/hooks/use-profile';
-import { TwoFactorSettings } from '@/components/auth/two-factor-settings';
+} from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { useProfile } from "@/hooks/use-profile";
+import { TwoFactorSettings } from "@/components/auth/two-factor-settings";
 
 export const SettingsModule: React.FC = () => {
   const { toast } = useToast();
@@ -40,10 +40,10 @@ export const SettingsModule: React.FC = () => {
       dataSharing: false
     },
     preferences: {
-      language: 'pt-BR',
-      timezone: 'America/Sao_Paulo',
-      currency: 'BRL',
-      theme: 'system'
+      language: "pt-BR",
+      timezone: "America/Sao_Paulo",
+      currency: "BRL",
+      theme: "system"
     }
   });
 
@@ -68,10 +68,10 @@ export const SettingsModule: React.FC = () => {
         dataSharing: false
       },
       preferences: {
-        language: 'pt-BR',
-        timezone: 'America/Sao_Paulo',
-        currency: 'BRL',
-        theme: 'system'
+        language: "pt-BR",
+        timezone: "America/Sao_Paulo",
+        currency: "BRL",
+        theme: "system"
       }
     });
     toast({
@@ -134,7 +134,7 @@ export const SettingsModule: React.FC = () => {
                   <Label htmlFor="fullName">Nome Completo</Label>
                   <Input 
                     id="fullName" 
-                    defaultValue={profile?.full_name || ''} 
+                    defaultValue={profile?.full_name || ""} 
                     placeholder="Seu nome completo"
                   />
                 </div>
@@ -143,7 +143,7 @@ export const SettingsModule: React.FC = () => {
                   <Input 
                     id="email" 
                     type="email" 
-                    defaultValue={profile?.email || ''} 
+                    defaultValue={profile?.email || ""} 
                     placeholder="seu@email.com"
                   />
                 </div>
@@ -151,7 +151,7 @@ export const SettingsModule: React.FC = () => {
                   <Label htmlFor="phone">Telefone</Label>
                   <Input 
                     id="phone" 
-                    defaultValue={profile?.phone || ''} 
+                    defaultValue={profile?.phone || ""} 
                     placeholder="(11) 99999-9999"
                   />
                 </div>
@@ -159,7 +159,7 @@ export const SettingsModule: React.FC = () => {
                   <Label htmlFor="department">Departamento</Label>
                   <Input 
                     id="department" 
-                    defaultValue={profile?.department || ''} 
+                    defaultValue={profile?.department || ""} 
                     placeholder="Seu departamento"
                   />
                 </div>

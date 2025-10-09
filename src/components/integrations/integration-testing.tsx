@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { 
   Play,
   Settings,
@@ -19,12 +19,12 @@ import {
   Zap,
   Download,
   Copy
-} from 'lucide-react';
+} from "lucide-react";
 
 interface TestResult {
   id: string;
   name: string;
-  status: 'success' | 'error' | 'warning';
+  status: "success" | "error" | "warning";
   duration: number;
   details: string;
   response?: any;
@@ -44,35 +44,35 @@ interface LoadTestResult {
 export const IntegrationTesting: React.FC = () => {
   const [isRunningTest, setIsRunningTest] = useState(false);
   const [testProgress, setTestProgress] = useState(0);
-  const [selectedEndpoint, setSelectedEndpoint] = useState('supabase-db');
+  const [selectedEndpoint, setSelectedEndpoint] = useState("supabase-db");
   
   const [testResults, setTestResults] = useState<TestResult[]>([
     {
-      id: '1',
-      name: 'Conexão com Database',
-      status: 'success',
+      id: "1",
+      name: "Conexão com Database",
+      status: "success",
       duration: 124,
-      details: 'Conexão estabelecida com sucesso. Latência baixa.',
-      response: { status: 200, data: 'Connected successfully' },
-      timestamp: '2024-01-20 15:30:25'
+      details: "Conexão estabelecida com sucesso. Latência baixa.",
+      response: { status: 200, data: "Connected successfully" },
+      timestamp: "2024-01-20 15:30:25"
     },
     {
-      id: '2',
-      name: 'Autenticação OAuth',
-      status: 'error',
+      id: "2",
+      name: "Autenticação OAuth",
+      status: "error",
       duration: 5240,
-      details: 'Falha na autenticação. Token expirado.',
-      response: { status: 401, error: 'Unauthorized' },
-      timestamp: '2024-01-20 15:30:30'
+      details: "Falha na autenticação. Token expirado.",
+      response: { status: 401, error: "Unauthorized" },
+      timestamp: "2024-01-20 15:30:30"
     },
     {
-      id: '3',
-      name: 'Webhook WhatsApp',
-      status: 'warning',
+      id: "3",
+      name: "Webhook WhatsApp",
+      status: "warning",
       duration: 890,
-      details: 'Conexão lenta. Verificar rate limits.',
-      response: { status: 200, warning: 'Rate limit approaching' },
-      timestamp: '2024-01-20 15:30:35'
+      details: "Conexão lenta. Verificar rate limits.",
+      response: { status: 200, warning: "Rate limit approaching" },
+      timestamp: "2024-01-20 15:30:35"
     }
   ]);
 
@@ -87,10 +87,10 @@ export const IntegrationTesting: React.FC = () => {
   });
 
   const endpoints = [
-    { id: 'supabase-db', name: 'Supabase Database', url: 'https://api.supabase.io/rest/v1/' },
-    { id: 'whatsapp-api', name: 'WhatsApp Business API', url: 'https://graph.facebook.com/v18.0/' },
-    { id: 'google-calendar', name: 'Google Calendar API', url: 'https://www.googleapis.com/calendar/v3/' },
-    { id: 'slack-webhook', name: 'Slack Webhook', url: 'https://hooks.slack.com/services/' }
+    { id: "supabase-db", name: "Supabase Database", url: "https://api.supabase.io/rest/v1/" },
+    { id: "whatsapp-api", name: "WhatsApp Business API", url: "https://graph.facebook.com/v18.0/" },
+    { id: "google-calendar", name: "Google Calendar API", url: "https://www.googleapis.com/calendar/v3/" },
+    { id: "slack-webhook", name: "Slack Webhook", url: "https://hooks.slack.com/services/" }
   ];
 
   const runSingleTest = async () => {
@@ -107,11 +107,11 @@ export const IntegrationTesting: React.FC = () => {
     const newResult: TestResult = {
       id: Date.now().toString(),
       name: `Teste ${endpoints.find(e => e.id === selectedEndpoint)?.name}`,
-      status: Math.random() > 0.3 ? 'success' : Math.random() > 0.5 ? 'warning' : 'error',
+      status: Math.random() > 0.3 ? "success" : Math.random() > 0.5 ? "warning" : "error",
       duration: Math.floor(Math.random() * 1000) + 100,
-      details: 'Teste executado com sucesso',
-      response: { status: 200, data: 'Test completed' },
-      timestamp: new Date().toLocaleString('pt-BR')
+      details: "Teste executado com sucesso",
+      response: { status: 200, data: "Test completed" },
+      timestamp: new Date().toLocaleString("pt-BR")
     };
     
     setTestResults(prev => [newResult, ...prev]);
@@ -119,19 +119,19 @@ export const IntegrationTesting: React.FC = () => {
     setTestProgress(0);
   };
 
-  const getStatusIcon = (status: TestResult['status']) => {
+  const getStatusIcon = (status: TestResult["status"]) => {
     switch (status) {
-      case 'success': return <CheckCircle className="w-4 h-4 text-success" />;
-      case 'error': return <XCircle className="w-4 h-4 text-destructive" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "success": return <CheckCircle className="w-4 h-4 text-success" />;
+    case "error": return <XCircle className="w-4 h-4 text-destructive" />;
+    case "warning": return <AlertTriangle className="w-4 h-4 text-warning" />;
     }
   };
 
-  const getStatusColor = (status: TestResult['status']) => {
+  const getStatusColor = (status: TestResult["status"]) => {
     switch (status) {
-      case 'success': return 'bg-success/20 text-success border-success/30';
-      case 'error': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'warning': return 'bg-warning/20 text-warning border-warning/30';
+    case "success": return "bg-success/20 text-success border-success/30";
+    case "error": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "warning": return "bg-warning/20 text-warning border-warning/30";
     }
   };
 
@@ -201,7 +201,7 @@ export const IntegrationTesting: React.FC = () => {
                     URL do Endpoint
                   </label>
                   <Input 
-                    value={endpoints.find(e => e.id === selectedEndpoint)?.url || ''}
+                    value={endpoints.find(e => e.id === selectedEndpoint)?.url || ""}
                     placeholder="https://api.exemplo.com/v1/"
                     className="font-mono text-sm"
                   />
@@ -387,8 +387,8 @@ export const IntegrationTesting: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge className={getStatusColor(result.status)}>
-                          {result.status === 'success' ? 'Sucesso' : 
-                           result.status === 'error' ? 'Erro' : 'Aviso'}
+                          {result.status === "success" ? "Sucesso" : 
+                            result.status === "error" ? "Erro" : "Aviso"}
                         </Badge>
                         <Badge variant="outline">
                           {result.duration}ms

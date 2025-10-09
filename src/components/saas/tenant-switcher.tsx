@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,9 +7,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Building2, 
   ChevronDown, 
@@ -18,8 +18,8 @@ import {
   Zap,
   Users,
   Check
-} from 'lucide-react';
-import { useTenant } from '@/contexts/TenantContext';
+} from "lucide-react";
+import { useTenant } from "@/contexts/TenantContext";
 
 export const TenantSwitcher: React.FC = () => {
   const { 
@@ -32,20 +32,20 @@ export const TenantSwitcher: React.FC = () => {
 
   const getPlanBadgeVariant = (planType: string) => {
     switch (planType) {
-      case 'enterprise': return 'default';
-      case 'professional': return 'secondary';
-      case 'starter': return 'outline';
-      case 'trial': return 'destructive';
-      default: return 'outline';
+    case "enterprise": return "default";
+    case "professional": return "secondary";
+    case "starter": return "outline";
+    case "trial": return "destructive";
+    default: return "outline";
     }
   };
 
   const getPlanIcon = (planType: string) => {
     switch (planType) {
-      case 'enterprise': return Crown;
-      case 'professional': return Zap;
-      case 'starter': return Users;
-      default: return Building2;
+    case "enterprise": return Crown;
+    case "professional": return Zap;
+    case "starter": return Users;
+    default: return Building2;
     }
   };
 
@@ -67,7 +67,7 @@ export const TenantSwitcher: React.FC = () => {
             <Avatar className="h-8 w-8">
               <AvatarImage src={currentBranding?.logo_url} />
               <AvatarFallback className="bg-primary text-primary-foreground">
-                {currentBranding?.company_name?.substring(0, 2).toUpperCase() || 'NT'}
+                {currentBranding?.company_name?.substring(0, 2).toUpperCase() || "NT"}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col items-start">

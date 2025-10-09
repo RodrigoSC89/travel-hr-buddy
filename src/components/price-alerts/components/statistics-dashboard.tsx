@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { TrendingUp, TrendingDown, Target, DollarSign, Bell, Activity } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { TrendingUp, TrendingDown, Target, DollarSign, Bell, Activity } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface UserStatistics {
   total_alerts: number;
@@ -49,13 +49,13 @@ export const StatisticsDashboard = () => {
   const loadStatistics = async () => {
     try {
       const { data, error } = await supabase
-        .from('user_statistics')
-        .select('*')
-        .eq('user_id', user?.id)
+        .from("user_statistics")
+        .select("*")
+        .eq("user_id", user?.id)
         .single();
 
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error loading statistics:', error);
+      if (error && error.code !== "PGRST116") {
+        console.error("Error loading statistics:", error);
         return;
       }
 
@@ -63,19 +63,19 @@ export const StatisticsDashboard = () => {
         setStatistics(data);
       }
     } catch (error) {
-      console.error('Error loading statistics:', error);
+      console.error("Error loading statistics:", error);
     }
   };
 
   const loadMetrics = async () => {
     try {
       const { data: alerts, error } = await supabase
-        .from('price_alerts')
-        .select('*')
-        .eq('user_id', user?.id);
+        .from("price_alerts")
+        .select("*")
+        .eq("user_id", user?.id);
 
       if (error) {
-        console.error('Error loading alerts:', error);
+        console.error("Error loading alerts:", error);
         return;
       }
 
@@ -96,7 +96,7 @@ export const StatisticsDashboard = () => {
 
         // Agrupar por categorias
         const categories = alerts.reduce((acc, alert) => {
-          const category = alert.category || 'Outros';
+          const category = alert.category || "Outros";
           acc[category] = (acc[category] || 0) + 1;
           return acc;
         }, {} as { [key: string]: number });
@@ -112,7 +112,7 @@ export const StatisticsDashboard = () => {
         });
       }
     } catch (error) {
-      console.error('Error loading metrics:', error);
+      console.error("Error loading metrics:", error);
     } finally {
       setLoading(false);
     }

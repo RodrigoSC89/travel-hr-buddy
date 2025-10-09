@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import React, { useState, useEffect, useRef } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { 
   Search, 
   Filter, 
@@ -18,9 +18,9 @@ import {
   Command,
   Star,
   TrendingUp
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 interface GlobalSearchProps {
   isOpen: boolean;
@@ -44,7 +44,7 @@ interface SearchResult {
 }
 
 const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -55,71 +55,71 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
   // Dados simulados para busca inteligente
   const searchData: SearchResult[] = [
     {
-      id: '1',
-      title: 'Auditoria PEOTRAM #2024-001',
-      description: 'Auditoria completa da embarcação MV Ocean Explorer',
-      category: 'Auditorias',
+      id: "1",
+      title: "Auditoria PEOTRAM #2024-001",
+      description: "Auditoria completa da embarcação MV Ocean Explorer",
+      category: "Auditorias",
       icon: FileText,
-      path: '/peotram',
+      path: "/peotram",
       relevance: 0.95,
       metadata: {
-        module: 'PEOTRAM',
-        lastAccessed: '2h atrás',
+        module: "PEOTRAM",
+        lastAccessed: "2h atrás",
         popular: true,
-        tags: ['auditoria', 'ocean-explorer', 'certificação']
+        tags: ["auditoria", "ocean-explorer", "certificação"]
       }
     },
     {
-      id: '2',
-      title: 'Gestão da Frota',
-      description: 'Painel de controle das embarcações',
-      category: 'Módulos',
+      id: "2",
+      title: "Gestão da Frota",
+      description: "Painel de controle das embarcações",
+      category: "Módulos",
       icon: Ship,
-      path: '/fleet-dashboard',
+      path: "/fleet-dashboard",
       relevance: 0.9,
       metadata: {
-        module: 'Fleet',
+        module: "Fleet",
         popular: true,
-        tags: ['frota', 'embarcações', 'monitoramento']
+        tags: ["frota", "embarcações", "monitoramento"]
       }
     },
     {
-      id: '3',
-      title: 'Certificados Marítimos',
-      description: 'Gestão de certificações da tripulação',
-      category: 'RH',
+      id: "3",
+      title: "Certificados Marítimos",
+      description: "Gestão de certificações da tripulação",
+      category: "RH",
       icon: Users,
-      path: '/hr',
+      path: "/hr",
       relevance: 0.85,
       metadata: {
-        module: 'HR',
-        tags: ['certificados', 'tripulação', 'stcw']
+        module: "HR",
+        tags: ["certificados", "tripulação", "stcw"]
       }
     },
     {
-      id: '4',
-      title: 'Analytics Avançado',
-      description: 'Relatórios e Business Intelligence',
-      category: 'Relatórios',
+      id: "4",
+      title: "Analytics Avançado",
+      description: "Relatórios e Business Intelligence",
+      category: "Relatórios",
       icon: TrendingUp,
-      path: '/advanced-analytics',
+      path: "/advanced-analytics",
       relevance: 0.8,
       metadata: {
-        module: 'Analytics',
-        tags: ['relatórios', 'bi', 'métricas']
+        module: "Analytics",
+        tags: ["relatórios", "bi", "métricas"]
       }
     },
     {
-      id: '5',
-      title: 'IA e Insights',
-      description: 'Inteligência artificial aplicada',
-      category: 'IA',
+      id: "5",
+      title: "IA e Insights",
+      description: "Inteligência artificial aplicada",
+      category: "IA",
       icon: Zap,
-      path: '/ai-insights',
+      path: "/ai-insights",
       relevance: 0.75,
       metadata: {
-        module: 'AI',
-        tags: ['ia', 'automação', 'insights']
+        module: "AI",
+        tags: ["ia", "automação", "insights"]
       }
     }
   ];
@@ -151,28 +151,28 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
       if (!isOpen) return;
 
       switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault();
-          setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          setSelectedIndex(prev => Math.max(prev - 1, 0));
-          break;
-        case 'Enter':
-          e.preventDefault();
-          if (results[selectedIndex]) {
-            handleResultClick(results[selectedIndex]);
-          }
-          break;
-        case 'Escape':
-          onOpenChange(false);
-          break;
+      case "ArrowDown":
+        e.preventDefault();
+        setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setSelectedIndex(prev => Math.max(prev - 1, 0));
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (results[selectedIndex]) {
+          handleResultClick(results[selectedIndex]);
+        }
+        break;
+      case "Escape":
+        onOpenChange(false);
+        break;
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, results, selectedIndex]);
 
   // Foco automático no input
@@ -192,7 +192,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
     // Navegar
     navigate(result.path);
     onOpenChange(false);
-    setQuery('');
+    setQuery("");
 
     toast({
       title: "Navegando",
@@ -203,23 +203,23 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
 
   const getCategoryIcon = (category: string): React.ComponentType<{ className?: string }> => {
     switch (category.toLowerCase()) {
-      case 'auditorias': return FileText;
-      case 'módulos': return Hash;
-      case 'rh': return Users;
-      case 'relatórios': return Calculator;
-      case 'ia': return Zap;
-      default: return FileText;
+    case "auditorias": return FileText;
+    case "módulos": return Hash;
+    case "rh": return Users;
+    case "relatórios": return Calculator;
+    case "ia": return Zap;
+    default: return FileText;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
-      case 'auditorias': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'módulos': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
-      case 'rh': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'relatórios': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
-      case 'ia': return 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+    case "auditorias": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    case "módulos": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
+    case "rh": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+    case "relatórios": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+    case "ia": return "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200";
+    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
     }
   };
 
@@ -256,7 +256,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
 
         {/* Resultados */}
         <div className="max-h-96 overflow-y-auto">
-          {query.trim() === '' && (
+          {query.trim() === "" && (
             <div className="p-6 pt-0">
               <div className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
                 <Star className="w-4 h-4" />
@@ -276,8 +276,8 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
                     key={result.id}
                     className={`cursor-pointer transition-all duration-200 border-0 ${
                       index === selectedIndex
-                        ? 'bg-primary/10 shadow-md scale-[1.02] border-primary/30 border-2'
-                        : 'bg-background/50 hover:bg-accent/50 hover:shadow-sm'
+                        ? "bg-primary/10 shadow-md scale-[1.02] border-primary/30 border-2"
+                        : "bg-background/50 hover:bg-accent/50 hover:shadow-sm"
                     }`}
                     onClick={() => handleResultClick(result)}
                   >
@@ -285,8 +285,8 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
                       <div className="flex items-start gap-3">
                         <div className={`p-2 rounded-lg ${
                           index === selectedIndex 
-                            ? 'bg-primary text-primary-foreground' 
-                            : 'bg-primary/10 text-primary'
+                            ? "bg-primary text-primary-foreground" 
+                            : "bg-primary/10 text-primary"
                         }`}>
                           <IconComponent className="w-5 h-5" />
                         </div>
@@ -329,7 +329,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
                 );
               })}
             </div>
-          ) : query.trim() !== '' ? (
+          ) : query.trim() !== "" ? (
             <div className="p-8 text-center">
               <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
               <p className="text-muted-foreground">Nenhum resultado encontrado para "{query}"</p>

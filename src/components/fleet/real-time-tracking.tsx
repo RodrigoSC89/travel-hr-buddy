@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { 
   MapPin, 
   Navigation, 
@@ -20,7 +20,7 @@ import {
   Satellite,
   Fuel,
   Users
-} from 'lucide-react';
+} from "lucide-react";
 
 interface VesselLocation {
   id: string;
@@ -29,7 +29,7 @@ interface VesselLocation {
     lat: number;
     lng: number;
   };
-  status: 'sailing' | 'anchored' | 'docked' | 'emergency';
+  status: "sailing" | "anchored" | "docked" | "emergency";
   speed: number; // knots
   heading: number; // degrees
   destination: string;
@@ -56,7 +56,7 @@ interface VesselLocation {
 const RealTimeTracking: React.FC = () => {
   const [vessels, setVessels] = useState<VesselLocation[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselLocation | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -74,14 +74,14 @@ const RealTimeTracking: React.FC = () => {
     // Mock real-time vessel data
     const mockVessels: VesselLocation[] = [
       {
-        id: '1',
-        name: 'MV Atlântico Explorer',
+        id: "1",
+        name: "MV Atlântico Explorer",
         coordinates: { lat: -23.96, lng: -46.33 }, // Santos area
-        status: 'sailing',
+        status: "sailing",
         speed: 18.5,
         heading: 45,
-        destination: 'Rio de Janeiro',
-        eta: '2024-01-20T14:30:00Z',
+        destination: "Rio de Janeiro",
+        eta: "2024-01-20T14:30:00Z",
         lastUpdate: new Date().toISOString(),
         weather: {
           windSpeed: 12,
@@ -101,14 +101,14 @@ const RealTimeTracking: React.FC = () => {
         }
       },
       {
-        id: '2',
-        name: 'MV Pacífico Star',
+        id: "2",
+        name: "MV Pacífico Star",
         coordinates: { lat: -25.52, lng: -48.52 }, // Paranaguá area
-        status: 'docked',
+        status: "docked",
         speed: 0,
         heading: 180,
-        destination: 'Salvador',
-        eta: '2024-01-22T08:00:00Z',
+        destination: "Salvador",
+        eta: "2024-01-22T08:00:00Z",
         lastUpdate: new Date().toISOString(),
         weather: {
           windSpeed: 8,
@@ -128,14 +128,14 @@ const RealTimeTracking: React.FC = () => {
         }
       },
       {
-        id: '3',
-        name: 'MV Índico Pioneer',
+        id: "3",
+        name: "MV Índico Pioneer",
         coordinates: { lat: -8.05, lng: -34.95 }, // Recife area
-        status: 'anchored',
+        status: "anchored",
         speed: 0,
         heading: 90,
-        destination: 'Fortaleza',
-        eta: '2024-01-24T16:00:00Z',
+        destination: "Fortaleza",
+        eta: "2024-01-24T16:00:00Z",
         lastUpdate: new Date().toISOString(),
         weather: {
           windSpeed: 15,
@@ -155,14 +155,14 @@ const RealTimeTracking: React.FC = () => {
         }
       },
       {
-        id: '4',
-        name: 'MV Mediterrâneo',
+        id: "4",
+        name: "MV Mediterrâneo",
         coordinates: { lat: -20.32, lng: -40.34 }, // Vitória area
-        status: 'emergency',
+        status: "emergency",
         speed: 2.1,
         heading: 270,
-        destination: 'Emergency Port',
-        eta: '2024-01-19T20:00:00Z',
+        destination: "Emergency Port",
+        eta: "2024-01-19T20:00:00Z",
         lastUpdate: new Date().toISOString(),
         weather: {
           windSpeed: 25,
@@ -195,43 +195,43 @@ const RealTimeTracking: React.FC = () => {
         lat: vessel.coordinates.lat + (Math.random() - 0.5) * 0.01,
         lng: vessel.coordinates.lng + (Math.random() - 0.5) * 0.01
       },
-      speed: vessel.status === 'sailing' ? vessel.speed + (Math.random() - 0.5) * 2 : 0,
+      speed: vessel.status === "sailing" ? vessel.speed + (Math.random() - 0.5) * 2 : 0,
       lastUpdate: new Date().toISOString()
     })));
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'sailing': return 'bg-success text-success-foreground';
-      case 'docked': return 'bg-info text-info-foreground';
-      case 'anchored': return 'bg-warning text-warning-foreground';
-      case 'emergency': return 'bg-destructive text-destructive-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "sailing": return "bg-success text-success-foreground";
+    case "docked": return "bg-info text-info-foreground";
+    case "anchored": return "bg-warning text-warning-foreground";
+    case "emergency": return "bg-destructive text-destructive-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'sailing': return 'Navegando';
-      case 'docked': return 'Atracada';
-      case 'anchored': return 'Fundeada';
-      case 'emergency': return 'Emergência';
-      default: return 'Desconhecido';
+    case "sailing": return "Navegando";
+    case "docked": return "Atracada";
+    case "anchored": return "Fundeada";
+    case "emergency": return "Emergência";
+    default: return "Desconhecido";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'sailing': return <Ship className="h-4 w-4" />;
-      case 'docked': return <Anchor className="h-4 w-4" />;
-      case 'anchored': return <Navigation className="h-4 w-4" />;
-      case 'emergency': return <AlertTriangle className="h-4 w-4" />;
-      default: return <MapPin className="h-4 w-4" />;
+    case "sailing": return <Ship className="h-4 w-4" />;
+    case "docked": return <Anchor className="h-4 w-4" />;
+    case "anchored": return <Navigation className="h-4 w-4" />;
+    case "emergency": return <AlertTriangle className="h-4 w-4" />;
+    default: return <MapPin className="h-4 w-4" />;
     }
   };
 
   const formatCoordinates = (lat: number, lng: number) => {
-    return `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? 'N' : 'S'}, ${Math.abs(lng).toFixed(4)}°${lng >= 0 ? 'E' : 'W'}`;
+    return `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(4)}°${lng >= 0 ? "E" : "W"}`;
   };
 
   const filteredVessels = vessels.filter(vessel =>
@@ -259,7 +259,7 @@ const RealTimeTracking: React.FC = () => {
             <span>Sistema Online</span>
           </div>
           <Badge variant="outline" className="text-xs">
-            Última atualização: {new Date().toLocaleTimeString('pt-BR')}
+            Última atualização: {new Date().toLocaleTimeString("pt-BR")}
           </Badge>
         </div>
       </div>
@@ -297,8 +297,8 @@ const RealTimeTracking: React.FC = () => {
                     key={vessel.id}
                     className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 hover:shadow-md ${
                       selectedVessel?.id === vessel.id 
-                        ? 'border-primary bg-primary/5' 
-                        : 'border-border hover:border-primary/30'
+                        ? "border-primary bg-primary/5" 
+                        : "border-border hover:border-primary/30"
                     }`}
                     onClick={() => setSelectedVessel(vessel)}
                   >
@@ -342,7 +342,7 @@ const RealTimeTracking: React.FC = () => {
                         {selectedVessel.name}
                       </CardTitle>
                       <CardDescription>
-                        Última atualização: {new Date(selectedVessel.lastUpdate).toLocaleString('pt-BR')}
+                        Última atualização: {new Date(selectedVessel.lastUpdate).toLocaleString("pt-BR")}
                       </CardDescription>
                     </div>
                     <Badge className={getStatusColor(selectedVessel.status)} variant="secondary">
@@ -375,7 +375,7 @@ const RealTimeTracking: React.FC = () => {
                     <div className="text-center p-3 border rounded-lg">
                       <Clock className="h-5 w-5 mx-auto mb-1 text-warning" />
                       <div className="text-xs font-medium">
-                        {new Date(selectedVessel.eta).toLocaleDateString('pt-BR')}
+                        {new Date(selectedVessel.eta).toLocaleDateString("pt-BR")}
                       </div>
                       <div className="text-xs text-muted-foreground">ETA {selectedVessel.destination}</div>
                     </div>

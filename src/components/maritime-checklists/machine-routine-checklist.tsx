@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Settings, 
   Cog, 
@@ -39,8 +39,8 @@ import {
   Battery,
   Radio,
   Shield
-} from 'lucide-react';
-import type { Checklist, ChecklistItem } from './checklist-types';
+} from "lucide-react";
+import type { Checklist, ChecklistItem } from "./checklist-types";
 
 interface MachineRoutineChecklistProps {
   checklist: Checklist;
@@ -66,52 +66,52 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
   // Machine Routine specific sections
   const sections = [
     {
-      id: 'main_engine',
-      title: 'Motor Principal',
+      id: "main_engine",
+      title: "Motor Principal",
       icon: <Cog className="w-5 h-5" />,
-      description: 'Verificações do motor principal e sistemas relacionados'
+      description: "Verificações do motor principal e sistemas relacionados"
     },
     {
-      id: 'auxiliary_engines',
-      title: 'Motores Auxiliares',
+      id: "auxiliary_engines",
+      title: "Motores Auxiliares",
       icon: <Settings className="w-5 h-5" />,
-      description: 'Verificação dos geradores e motores auxiliares'
+      description: "Verificação dos geradores e motores auxiliares"
     },
     {
-      id: 'fuel_systems',
-      title: 'Sistema de Combustível',
+      id: "fuel_systems",
+      title: "Sistema de Combustível",
       icon: <Fuel className="w-5 h-5" />,
-      description: 'Verificação do sistema de combustível e tanques'
+      description: "Verificação do sistema de combustível e tanques"
     },
     {
-      id: 'lubrication',
-      title: 'Sistema de Lubrificação',
+      id: "lubrication",
+      title: "Sistema de Lubrificação",
       icon: <Droplets className="w-5 h-5" />,
-      description: 'Verificação do sistema de óleo lubrificante'
+      description: "Verificação do sistema de óleo lubrificante"
     },
     {
-      id: 'cooling_system',
-      title: 'Sistema de Resfriamento',
+      id: "cooling_system",
+      title: "Sistema de Resfriamento",
       icon: <Thermometer className="w-5 h-5" />,
-      description: 'Verificação do sistema de água de resfriamento'
+      description: "Verificação do sistema de água de resfriamento"
     },
     {
-      id: 'electrical',
-      title: 'Sistema Elétrico',
+      id: "electrical",
+      title: "Sistema Elétrico",
       icon: <Battery className="w-5 h-5" />,
-      description: 'Verificação dos sistemas elétricos e baterias'
+      description: "Verificação dos sistemas elétricos e baterias"
     },
     {
-      id: 'hydraulic',
-      title: 'Sistema Hidráulico',
+      id: "hydraulic",
+      title: "Sistema Hidráulico",
       icon: <Gauge className="w-5 h-5" />,
-      description: 'Verificação do sistema hidráulico'
+      description: "Verificação do sistema hidráulico"
     },
     {
-      id: 'safety_systems',
-      title: 'Sistemas de Segurança',
+      id: "safety_systems",
+      title: "Sistemas de Segurança",
       icon: <Shield className="w-5 h-5" />,
-      description: 'Verificação dos sistemas de segurança da praça de máquinas'
+      description: "Verificação dos sistemas de segurança da praça de máquinas"
     }
   ];
 
@@ -140,363 +140,363 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
     return [
       // Main Engine
       {
-        id: 'me_001',
-        title: 'Temperatura da Água de Resfriamento',
-        description: 'Verificar temperatura da água de resfriamento do motor principal',
-        type: 'measurement',
+        id: "me_001",
+        title: "Temperatura da Água de Resfriamento",
+        description: "Verificar temperatura da água de resfriamento do motor principal",
+        type: "measurement",
         required: true,
-        category: 'main_engine',
+        category: "main_engine",
         order: 1,
-        status: 'pending',
-        unit: '°C',
+        status: "pending",
+        unit: "°C",
         minValue: 70,
         maxValue: 85,
-        iotSensorId: 'TEMP_MAIN_ENGINE_001',
+        iotSensorId: "TEMP_MAIN_ENGINE_001",
         validationRules: [
           {
-            type: 'range',
+            type: "range",
             value: { min: 70, max: 85 },
-            message: 'Temperatura fora do range operacional normal',
-            severity: 'warning'
+            message: "Temperatura fora do range operacional normal",
+            severity: "warning"
           }
         ]
       },
       {
-        id: 'me_002',
-        title: 'Pressão do Óleo Lubrificante',
-        description: 'Verificar pressão do óleo lubrificante do motor principal',
-        type: 'measurement',
+        id: "me_002",
+        title: "Pressão do Óleo Lubrificante",
+        description: "Verificar pressão do óleo lubrificante do motor principal",
+        type: "measurement",
         required: true,
-        category: 'main_engine',
+        category: "main_engine",
         order: 2,
-        status: 'pending',
-        unit: 'bar',
+        status: "pending",
+        unit: "bar",
         minValue: 3.5,
         maxValue: 6.0,
-        iotSensorId: 'PRESS_OIL_ME_001'
+        iotSensorId: "PRESS_OIL_ME_001"
       },
       {
-        id: 'me_003',
-        title: 'RPM do Motor',
-        description: 'Verificar RPM atual do motor principal',
-        type: 'measurement',
+        id: "me_003",
+        title: "RPM do Motor",
+        description: "Verificar RPM atual do motor principal",
+        type: "measurement",
         required: true,
-        category: 'main_engine',
+        category: "main_engine",
         order: 3,
-        status: 'pending',
-        unit: 'RPM',
-        iotSensorId: 'RPM_MAIN_ENGINE_001'
+        status: "pending",
+        unit: "RPM",
+        iotSensorId: "RPM_MAIN_ENGINE_001"
       },
       {
-        id: 'me_004',
-        title: 'Vibração do Motor',
-        description: 'Verificar nível de vibração do motor principal',
-        type: 'select',
+        id: "me_004",
+        title: "Vibração do Motor",
+        description: "Verificar nível de vibração do motor principal",
+        type: "select",
         required: true,
-        category: 'main_engine',
+        category: "main_engine",
         order: 4,
-        status: 'pending',
-        options: ['Normal', 'Ligeiramente Elevada', 'Elevada', 'Crítica']
+        status: "pending",
+        options: ["Normal", "Ligeiramente Elevada", "Elevada", "Crítica"]
       },
       {
-        id: 'me_005',
-        title: 'Ruído Anormal',
-        description: 'Verificar presença de ruídos anormais no motor',
-        type: 'boolean',
+        id: "me_005",
+        title: "Ruído Anormal",
+        description: "Verificar presença de ruídos anormais no motor",
+        type: "boolean",
         required: true,
-        category: 'main_engine',
+        category: "main_engine",
         order: 5,
-        status: 'pending'
+        status: "pending"
       },
 
       // Auxiliary Engines
       {
-        id: 'aux_001',
-        title: 'Gerador 1 - Status',
-        description: 'Verificar status operacional do gerador 1',
-        type: 'select',
+        id: "aux_001",
+        title: "Gerador 1 - Status",
+        description: "Verificar status operacional do gerador 1",
+        type: "select",
         required: true,
-        category: 'auxiliary_engines',
+        category: "auxiliary_engines",
         order: 1,
-        status: 'pending',
-        options: ['Operacional', 'Standby', 'Manutenção', 'Falha']
+        status: "pending",
+        options: ["Operacional", "Standby", "Manutenção", "Falha"]
       },
       {
-        id: 'aux_002',
-        title: 'Gerador 1 - Voltagem',
-        description: 'Verificar voltagem de saída do gerador 1',
-        type: 'measurement',
+        id: "aux_002",
+        title: "Gerador 1 - Voltagem",
+        description: "Verificar voltagem de saída do gerador 1",
+        type: "measurement",
         required: true,
-        category: 'auxiliary_engines',
+        category: "auxiliary_engines",
         order: 2,
-        status: 'pending',
-        unit: 'V',
+        status: "pending",
+        unit: "V",
         minValue: 380,
         maxValue: 420,
-        iotSensorId: 'VOLT_GEN1_001'
+        iotSensorId: "VOLT_GEN1_001"
       },
       {
-        id: 'aux_003',
-        title: 'Gerador 1 - Frequência',
-        description: 'Verificar frequência de saída do gerador 1',
-        type: 'measurement',
+        id: "aux_003",
+        title: "Gerador 1 - Frequência",
+        description: "Verificar frequência de saída do gerador 1",
+        type: "measurement",
         required: true,
-        category: 'auxiliary_engines',
+        category: "auxiliary_engines",
         order: 3,
-        status: 'pending',
-        unit: 'Hz',
+        status: "pending",
+        unit: "Hz",
         minValue: 58,
         maxValue: 62,
-        iotSensorId: 'FREQ_GEN1_001'
+        iotSensorId: "FREQ_GEN1_001"
       },
       {
-        id: 'aux_004',
-        title: 'Gerador 2 - Status',
-        description: 'Verificar status operacional do gerador 2',
-        type: 'select',
+        id: "aux_004",
+        title: "Gerador 2 - Status",
+        description: "Verificar status operacional do gerador 2",
+        type: "select",
         required: true,
-        category: 'auxiliary_engines',
+        category: "auxiliary_engines",
         order: 4,
-        status: 'pending',
-        options: ['Operacional', 'Standby', 'Manutenção', 'Falha']
+        status: "pending",
+        options: ["Operacional", "Standby", "Manutenção", "Falha"]
       },
 
       // Fuel Systems
       {
-        id: 'fuel_001',
-        title: 'Nível Tanque Combustível Principal',
-        description: 'Verificar nível do tanque de combustível principal',
-        type: 'measurement',
+        id: "fuel_001",
+        title: "Nível Tanque Combustível Principal",
+        description: "Verificar nível do tanque de combustível principal",
+        type: "measurement",
         required: true,
-        category: 'fuel_systems',
+        category: "fuel_systems",
         order: 1,
-        status: 'pending',
-        unit: '%',
+        status: "pending",
+        unit: "%",
         minValue: 0,
         maxValue: 100,
-        iotSensorId: 'LEVEL_FUEL_MAIN_001'
+        iotSensorId: "LEVEL_FUEL_MAIN_001"
       },
       {
-        id: 'fuel_002',
-        title: 'Pressão Sistema Combustível',
-        description: 'Verificar pressão no sistema de combustível',
-        type: 'measurement',
+        id: "fuel_002",
+        title: "Pressão Sistema Combustível",
+        description: "Verificar pressão no sistema de combustível",
+        type: "measurement",
         required: true,
-        category: 'fuel_systems',
+        category: "fuel_systems",
         order: 2,
-        status: 'pending',
-        unit: 'bar',
+        status: "pending",
+        unit: "bar",
         minValue: 2.0,
         maxValue: 8.0,
-        iotSensorId: 'PRESS_FUEL_001'
+        iotSensorId: "PRESS_FUEL_001"
       },
       {
-        id: 'fuel_003',
-        title: 'Filtros de Combustível',
-        description: 'Verificar estado dos filtros de combustível',
-        type: 'select',
+        id: "fuel_003",
+        title: "Filtros de Combustível",
+        description: "Verificar estado dos filtros de combustível",
+        type: "select",
         required: true,
-        category: 'fuel_systems',
+        category: "fuel_systems",
         order: 3,
-        status: 'pending',
-        options: ['Limpo', 'Sujo', 'Precisa Troca', 'Trocado']
+        status: "pending",
+        options: ["Limpo", "Sujo", "Precisa Troca", "Trocado"]
       },
       {
-        id: 'fuel_004',
-        title: 'Vazamentos de Combustível',
-        description: 'Verificar presença de vazamentos no sistema',
-        type: 'boolean',
+        id: "fuel_004",
+        title: "Vazamentos de Combustível",
+        description: "Verificar presença de vazamentos no sistema",
+        type: "boolean",
         required: true,
-        category: 'fuel_systems',
+        category: "fuel_systems",
         order: 4,
-        status: 'pending'
+        status: "pending"
       },
 
       // Lubrication
       {
-        id: 'lub_001',
-        title: 'Nível Óleo Motor Principal',
-        description: 'Verificar nível do óleo do motor principal',
-        type: 'select',
+        id: "lub_001",
+        title: "Nível Óleo Motor Principal",
+        description: "Verificar nível do óleo do motor principal",
+        type: "select",
         required: true,
-        category: 'lubrication',
+        category: "lubrication",
         order: 1,
-        status: 'pending',
-        options: ['Mínimo', 'Normal', 'Máximo', 'Acima do Máximo']
+        status: "pending",
+        options: ["Mínimo", "Normal", "Máximo", "Acima do Máximo"]
       },
       {
-        id: 'lub_002',
-        title: 'Temperatura Óleo',
-        description: 'Verificar temperatura do óleo lubrificante',
-        type: 'measurement',
+        id: "lub_002",
+        title: "Temperatura Óleo",
+        description: "Verificar temperatura do óleo lubrificante",
+        type: "measurement",
         required: true,
-        category: 'lubrication',
+        category: "lubrication",
         order: 2,
-        status: 'pending',
-        unit: '°C',
+        status: "pending",
+        unit: "°C",
         minValue: 60,
         maxValue: 90,
-        iotSensorId: 'TEMP_OIL_001'
+        iotSensorId: "TEMP_OIL_001"
       },
       {
-        id: 'lub_003',
-        title: 'Filtro de Óleo',
-        description: 'Verificar estado do filtro de óleo',
-        type: 'select',
+        id: "lub_003",
+        title: "Filtro de Óleo",
+        description: "Verificar estado do filtro de óleo",
+        type: "select",
         required: true,
-        category: 'lubrication',
+        category: "lubrication",
         order: 3,
-        status: 'pending',
-        options: ['Novo', 'Bom', 'Regular', 'Precisa Troca']
+        status: "pending",
+        options: ["Novo", "Bom", "Regular", "Precisa Troca"]
       },
 
       // Cooling System
       {
-        id: 'cool_001',
-        title: 'Nível Água Resfriamento',
-        description: 'Verificar nível do tanque de expansão',
-        type: 'select',
+        id: "cool_001",
+        title: "Nível Água Resfriamento",
+        description: "Verificar nível do tanque de expansão",
+        type: "select",
         required: true,
-        category: 'cooling_system',
+        category: "cooling_system",
         order: 1,
-        status: 'pending',
-        options: ['Baixo', 'Normal', 'Alto']
+        status: "pending",
+        options: ["Baixo", "Normal", "Alto"]
       },
       {
-        id: 'cool_002',
-        title: 'Bomba Água Mar',
-        description: 'Verificar funcionamento da bomba de água do mar',
-        type: 'boolean',
+        id: "cool_002",
+        title: "Bomba Água Mar",
+        description: "Verificar funcionamento da bomba de água do mar",
+        type: "boolean",
         required: true,
-        category: 'cooling_system',
+        category: "cooling_system",
         order: 2,
-        status: 'pending'
+        status: "pending"
       },
       {
-        id: 'cool_003',
-        title: 'Trocador de Calor',
-        description: 'Verificar condição do trocador de calor',
-        type: 'select',
+        id: "cool_003",
+        title: "Trocador de Calor",
+        description: "Verificar condição do trocador de calor",
+        type: "select",
         required: true,
-        category: 'cooling_system',
+        category: "cooling_system",
         order: 3,
-        status: 'pending',
-        options: ['Limpo', 'Sujo', 'Obstruído', 'Manutenção Necessária']
+        status: "pending",
+        options: ["Limpo", "Sujo", "Obstruído", "Manutenção Necessária"]
       },
 
       // Electrical
       {
-        id: 'elec_001',
-        title: 'Voltagem Bateria Principal',
-        description: 'Verificar voltagem da bateria principal',
-        type: 'measurement',
+        id: "elec_001",
+        title: "Voltagem Bateria Principal",
+        description: "Verificar voltagem da bateria principal",
+        type: "measurement",
         required: true,
-        category: 'electrical',
+        category: "electrical",
         order: 1,
-        status: 'pending',
-        unit: 'V',
+        status: "pending",
+        unit: "V",
         minValue: 22,
         maxValue: 28,
-        iotSensorId: 'VOLT_BATTERY_MAIN_001'
+        iotSensorId: "VOLT_BATTERY_MAIN_001"
       },
       {
-        id: 'elec_002',
-        title: 'Alternador',
-        description: 'Verificar funcionamento do alternador',
-        type: 'boolean',
+        id: "elec_002",
+        title: "Alternador",
+        description: "Verificar funcionamento do alternador",
+        type: "boolean",
         required: true,
-        category: 'electrical',
+        category: "electrical",
         order: 2,
-        status: 'pending'
+        status: "pending"
       },
       {
-        id: 'elec_003',
-        title: 'Painel Elétrico',
-        description: 'Verificar alarmes no painel elétrico',
-        type: 'boolean',
+        id: "elec_003",
+        title: "Painel Elétrico",
+        description: "Verificar alarmes no painel elétrico",
+        type: "boolean",
         required: true,
-        category: 'electrical',
+        category: "electrical",
         order: 3,
-        status: 'pending'
+        status: "pending"
       },
 
       // Hydraulic
       {
-        id: 'hyd_001',
-        title: 'Pressão Sistema Hidráulico',
-        description: 'Verificar pressão do sistema hidráulico',
-        type: 'measurement',
+        id: "hyd_001",
+        title: "Pressão Sistema Hidráulico",
+        description: "Verificar pressão do sistema hidráulico",
+        type: "measurement",
         required: true,
-        category: 'hydraulic',
+        category: "hydraulic",
         order: 1,
-        status: 'pending',
-        unit: 'bar',
+        status: "pending",
+        unit: "bar",
         minValue: 150,
         maxValue: 200,
-        iotSensorId: 'PRESS_HYD_001'
+        iotSensorId: "PRESS_HYD_001"
       },
       {
-        id: 'hyd_002',
-        title: 'Nível Óleo Hidráulico',
-        description: 'Verificar nível do reservatório de óleo hidráulico',
-        type: 'select',
+        id: "hyd_002",
+        title: "Nível Óleo Hidráulico",
+        description: "Verificar nível do reservatório de óleo hidráulico",
+        type: "select",
         required: true,
-        category: 'hydraulic',
+        category: "hydraulic",
         order: 2,
-        status: 'pending',
-        options: ['Baixo', 'Normal', 'Alto']
+        status: "pending",
+        options: ["Baixo", "Normal", "Alto"]
       },
       {
-        id: 'hyd_003',
-        title: 'Vazamentos Hidráulicos',
-        description: 'Verificar presença de vazamentos hidráulicos',
-        type: 'boolean',
+        id: "hyd_003",
+        title: "Vazamentos Hidráulicos",
+        description: "Verificar presença de vazamentos hidráulicos",
+        type: "boolean",
         required: true,
-        category: 'hydraulic',
+        category: "hydraulic",
         order: 3,
-        status: 'pending'
+        status: "pending"
       },
 
       // Safety Systems
       {
-        id: 'safe_001',
-        title: 'Sistema Combate Incêndio',
-        description: 'Verificar sistema de combate a incêndio da praça de máquinas',
-        type: 'boolean',
+        id: "safe_001",
+        title: "Sistema Combate Incêndio",
+        description: "Verificar sistema de combate a incêndio da praça de máquinas",
+        type: "boolean",
         required: true,
-        category: 'safety_systems',
+        category: "safety_systems",
         order: 1,
-        status: 'pending'
+        status: "pending"
       },
       {
-        id: 'safe_002',
-        title: 'Ventilação Praça Máquinas',
-        description: 'Verificar funcionamento da ventilação',
-        type: 'boolean',
+        id: "safe_002",
+        title: "Ventilação Praça Máquinas",
+        description: "Verificar funcionamento da ventilação",
+        type: "boolean",
         required: true,
-        category: 'safety_systems',
+        category: "safety_systems",
         order: 2,
-        status: 'pending'
+        status: "pending"
       },
       {
-        id: 'safe_003',
-        title: 'Iluminação Emergência',
-        description: 'Verificar funcionamento da iluminação de emergência',
-        type: 'boolean',
+        id: "safe_003",
+        title: "Iluminação Emergência",
+        description: "Verificar funcionamento da iluminação de emergência",
+        type: "boolean",
         required: true,
-        category: 'safety_systems',
+        category: "safety_systems",
         order: 3,
-        status: 'pending'
+        status: "pending"
       },
       {
-        id: 'safe_004',
-        title: 'Detectores Fumaça',
-        description: 'Verificar funcionamento dos detectores de fumaça',
-        type: 'boolean',
+        id: "safe_004",
+        title: "Detectores Fumaça",
+        description: "Verificar funcionamento dos detectores de fumaça",
+        type: "boolean",
         required: true,
-        category: 'safety_systems',
+        category: "safety_systems",
         order: 4,
-        status: 'pending'
+        status: "pending"
       }
     ];
   };
@@ -511,7 +511,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
   const getCompletionProgress = () => {
     const totalItems = checklist.items.length;
     const completedItems = checklist.items.filter(item => 
-      item.status === 'completed' || item.status === 'failed' || item.status === 'na'
+      item.status === "completed" || item.status === "failed" || item.status === "na"
     ).length;
     return totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
   };
@@ -519,7 +519,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
   const getSectionProgress = (sectionId: string) => {
     const sectionItems = checklist.items.filter(item => item.category === sectionId);
     const completedItems = sectionItems.filter(item => 
-      item.status === 'completed' || item.status === 'failed' || item.status === 'na'
+      item.status === "completed" || item.status === "failed" || item.status === "na"
     ).length;
     return sectionItems.length > 0 ? (completedItems / sectionItems.length) * 100 : 0;
   };
@@ -530,12 +530,12 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       items: prev.items.map(item => 
         item.id === itemId 
           ? { 
-              ...item, 
-              value, 
-              timestamp: new Date().toISOString(),
-              inspector: checklist.inspector.name,
-              status: value !== undefined && value !== null && value !== '' ? 'completed' : 'pending'
-            } 
+            ...item, 
+            value, 
+            timestamp: new Date().toISOString(),
+            inspector: checklist.inspector.name,
+            status: value !== undefined && value !== null && value !== "" ? "completed" : "pending"
+          } 
           : item
       ),
       updatedAt: new Date().toISOString()
@@ -547,7 +547,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       await onSave(checklist);
       setLastSaved(new Date());
     } catch (error) {
-      console.error('Auto-save failed:', error);
+      console.error("Auto-save failed:", error);
     }
   };
 
@@ -606,13 +606,13 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
               <div>
                 <p className="text-muted-foreground">Concluídos</p>
                 <p className="font-semibold text-success">
-                  {checklist.items.filter(i => i.status === 'completed').length}
+                  {checklist.items.filter(i => i.status === "completed").length}
                 </p>
               </div>
               <div>
                 <p className="text-muted-foreground">Pendentes</p>
                 <p className="font-semibold text-warning">
-                  {checklist.items.filter(i => i.status === 'pending').length}
+                  {checklist.items.filter(i => i.status === "pending").length}
                 </p>
               </div>
               <div>
@@ -642,7 +642,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
               return (
                 <Button
                   key={section.id}
-                  variant={currentSection === index ? 'default' : 'outline'}
+                  variant={currentSection === index ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentSection(index)}
                   className="h-auto p-3 flex flex-col items-center gap-1"
@@ -698,13 +698,13 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                   
                   <div className="space-y-3">
                     {/* Render different input types based on item.type */}
-                    {item.type === 'measurement' && (
+                    {item.type === "measurement" && (
                       <div className="flex gap-2">
                         <Input
                           type="number"
-                          value={item.value || ''}
+                          value={item.value || ""}
                           onChange={(e) => handleItemValueChange(item.id, parseFloat(e.target.value) || 0)}
-                          placeholder={`Valor${item.unit ? ` (${item.unit})` : ''}`}
+                          placeholder={`Valor${item.unit ? ` (${item.unit})` : ""}`}
                           disabled={readOnly}
                           min={item.minValue}
                           max={item.maxValue}
@@ -733,7 +733,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                       </div>
                     )}
 
-                    {item.type === 'boolean' && (
+                    {item.type === "boolean" && (
                       <div className="flex items-center space-x-2">
                         <Switch
                           checked={item.value === true}
@@ -741,14 +741,14 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                           disabled={readOnly}
                         />
                         <Label>
-                          {item.value === true ? 'Conforme' : 'Não conforme'}
+                          {item.value === true ? "Conforme" : "Não conforme"}
                         </Label>
                       </div>
                     )}
 
-                    {item.type === 'select' && (
+                    {item.type === "select" && (
                       <Select
-                        value={item.value || ''}
+                        value={item.value || ""}
                         onValueChange={(value) => handleItemValueChange(item.id, value)}
                         disabled={readOnly}
                       >

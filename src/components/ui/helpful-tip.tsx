@@ -1,7 +1,7 @@
-import React from 'react';
-import { Lightbulb, X } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { Lightbulb, X } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface TipProps {
   title: string;

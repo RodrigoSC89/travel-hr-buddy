@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   GraduationCap, 
   Play, 
@@ -19,13 +19,13 @@ import {
   Headphones,
   Monitor,
   User
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Course {
   id: string;
   title: string;
   description: string;
-  level: 'beginner' | 'intermediate' | 'advanced';
+  level: "beginner" | "intermediate" | "advanced";
   duration: string;
   lessons: number;
   students: number;
@@ -33,138 +33,138 @@ interface Course {
   instructor: string;
   category: string;
   progress?: number;
-  type: 'video' | 'text' | 'interactive' | 'live';
+  type: "video" | "text" | "interactive" | "live";
   certificate: boolean;
 }
 
 export const NautilusAcademy: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('courses');
+  const [selectedTab, setSelectedTab] = useState("courses");
 
   const courses: Course[] = [
     {
-      id: '1',
-      title: 'Fundamentos do Sistema Nautilus',
-      description: 'Aprenda os conceitos básicos e navegação inicial no sistema',
-      level: 'beginner',
-      duration: '2h 30min',
+      id: "1",
+      title: "Fundamentos do Sistema Nautilus",
+      description: "Aprenda os conceitos básicos e navegação inicial no sistema",
+      level: "beginner",
+      duration: "2h 30min",
       lessons: 12,
       students: 1847,
       rating: 4.9,
-      instructor: 'Capt. Maria Silva',
-      category: 'basics',
+      instructor: "Capt. Maria Silva",
+      category: "basics",
       progress: 0,
-      type: 'video',
+      type: "video",
       certificate: true
     },
     {
-      id: '2',
-      title: 'Gestão Avançada de Frotas',
-      description: 'Técnicas avançadas para otimização e gestão de frotas marítimas',
-      level: 'advanced',
-      duration: '4h 15min',
+      id: "2",
+      title: "Gestão Avançada de Frotas",
+      description: "Técnicas avançadas para otimização e gestão de frotas marítimas",
+      level: "advanced",
+      duration: "4h 15min",
       lessons: 18,
       students: 923,
       rating: 4.8,
-      instructor: 'Eng. João Santos',
-      category: 'fleet',
+      instructor: "Eng. João Santos",
+      category: "fleet",
       progress: 65,
-      type: 'interactive',
+      type: "interactive",
       certificate: true
     },
     {
-      id: '3',
-      title: 'Compliance e Regulamentações Marítimas',
-      description: 'Normas internacionais e requisitos de compliance',
-      level: 'intermediate',
-      duration: '3h 45min',
+      id: "3",
+      title: "Compliance e Regulamentações Marítimas",
+      description: "Normas internacionais e requisitos de compliance",
+      level: "intermediate",
+      duration: "3h 45min",
       lessons: 15,
       students: 1256,
       rating: 4.7,
-      instructor: 'Dr. Ana Costa',
-      category: 'compliance',
+      instructor: "Dr. Ana Costa",
+      category: "compliance",
       progress: 25,
-      type: 'text',
+      type: "text",
       certificate: true
     },
     {
-      id: '4',
-      title: 'Analytics e Business Intelligence',
-      description: 'Usando dados para tomada de decisões estratégicas',
-      level: 'intermediate',
-      duration: '5h 20min',
+      id: "4",
+      title: "Analytics e Business Intelligence",
+      description: "Usando dados para tomada de decisões estratégicas",
+      level: "intermediate",
+      duration: "5h 20min",
       lessons: 22,
       students: 745,
       rating: 4.9,
-      instructor: 'Prof. Carlos Mendes',
-      category: 'analytics',
+      instructor: "Prof. Carlos Mendes",
+      category: "analytics",
       progress: 0,
-      type: 'video',
+      type: "video",
       certificate: true
     },
     {
-      id: '5',
-      title: 'Segurança Marítima Digital',
-      description: 'Protocolos de segurança e gestão de riscos digitais',
-      level: 'advanced',
-      duration: '3h 10min',
+      id: "5",
+      title: "Segurança Marítima Digital",
+      description: "Protocolos de segurança e gestão de riscos digitais",
+      level: "advanced",
+      duration: "3h 10min",
       lessons: 14,
       students: 567,
       rating: 4.6,
-      instructor: 'Sec. Roberto Lima',
-      category: 'security',
+      instructor: "Sec. Roberto Lima",
+      category: "security",
       progress: 0,
-      type: 'live',
+      type: "live",
       certificate: true
     },
     {
-      id: '6',
-      title: 'Automação e IA no Maritmo',
-      description: 'Implementando soluções de IA e automação',
-      level: 'advanced',
-      duration: '6h 30min',
+      id: "6",
+      title: "Automação e IA no Maritmo",
+      description: "Implementando soluções de IA e automação",
+      level: "advanced",
+      duration: "6h 30min",
       lessons: 28,
       students: 432,
       rating: 4.8,
-      instructor: 'Dr. Patricia Tech',
-      category: 'ai',
+      instructor: "Dr. Patricia Tech",
+      category: "ai",
       progress: 0,
-      type: 'interactive',
+      type: "interactive",
       certificate: true
     }
   ];
 
   const achievements = [
-    { title: 'Primeira Certificação', description: 'Complete seu primeiro curso', earned: true },
-    { title: 'Especialista em Frotas', description: 'Complete 3 cursos de gestão de frotas', earned: true },
-    { title: 'Mentor da Comunidade', description: 'Ajude 10 outros estudantes', earned: false },
-    { title: 'Inovador Marítimo', description: 'Complete curso avançado de IA', earned: false }
+    { title: "Primeira Certificação", description: "Complete seu primeiro curso", earned: true },
+    { title: "Especialista em Frotas", description: "Complete 3 cursos de gestão de frotas", earned: true },
+    { title: "Mentor da Comunidade", description: "Ajude 10 outros estudantes", earned: false },
+    { title: "Inovador Marítimo", description: "Complete curso avançado de IA", earned: false }
   ];
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case 'beginner': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      case 'advanced': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300';
+    case "beginner": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "intermediate": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "advanced": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getLevelText = (level: string) => {
     switch (level) {
-      case 'beginner': return 'Iniciante';
-      case 'intermediate': return 'Intermediário';
-      case 'advanced': return 'Avançado';
-      default: return level;
+    case "beginner": return "Iniciante";
+    case "intermediate": return "Intermediário";
+    case "advanced": return "Avançado";
+    default: return level;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'video': return Video;
-      case 'text': return FileText;
-      case 'interactive': return Monitor;
-      case 'live': return Headphones;
-      default: return BookOpen;
+    case "video": return Video;
+    case "text": return FileText;
+    case "interactive": return Monitor;
+    case "live": return Headphones;
+    default: return BookOpen;
     }
   };
 
@@ -358,7 +358,7 @@ export const NautilusAcademy: React.FC = () => {
             <h3 className="text-lg font-semibold">Suas Conquistas</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {achievements.map((achievement, index) => (
-                <Card key={index} className={achievement.earned ? 'border-green-200 bg-green-50/50 dark:bg-green-900/10' : ''}>
+                <Card key={index} className={achievement.earned ? "border-green-200 bg-green-50/50 dark:bg-green-900/10" : ""}>
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3">
                       {achievement.earned ? (
@@ -382,7 +382,7 @@ export const NautilusAcademy: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Seus Certificados</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {courses.filter(course => course.progress === 100 || course.id === '1').map((course) => (
+              {courses.filter(course => course.progress === 100 || course.id === "1").map((course) => (
                 <Card key={course.id} className="border-green-200 bg-green-50/50 dark:bg-green-900/10">
                   <CardHeader>
                     <div className="flex items-center gap-3">

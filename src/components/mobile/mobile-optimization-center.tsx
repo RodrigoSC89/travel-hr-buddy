@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Smartphone,
   Tablet,
@@ -38,15 +38,15 @@ import {
   Settings,
   Target,
   Trophy
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface UserSession {
   id: string;
   userId: string;
-  device: 'mobile' | 'tablet' | 'desktop';
+  device: "mobile" | "tablet" | "desktop";
   os: string;
   browser: string;
   location: string;
@@ -85,18 +85,18 @@ export const MobileOptimizationCenter: React.FC = () => {
   const [performance, setPerformance] = useState<PerformanceMetric[]>([]);
   const [behavior, setBehavior] = useState<UserBehavior[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [dateRange, setDateRange] = useState('7d');
-  const [deviceFilter, setDeviceFilter] = useState('all');
+  const [dateRange, setDateRange] = useState("7d");
+  const [deviceFilter, setDeviceFilter] = useState("all");
 
   // Dados simulados para demonstração
   const generateMockData = () => {
     const mockSessions: UserSession[] = Array.from({ length: 50 }, (_, i) => ({
       id: `session-${i}`,
       userId: `user-${Math.floor(Math.random() * 20)}`,
-      device: ['mobile', 'tablet', 'desktop'][Math.floor(Math.random() * 3)] as any,
-      os: ['iOS', 'Android', 'Windows', 'macOS'][Math.floor(Math.random() * 4)],
-      browser: ['Chrome', 'Safari', 'Firefox', 'Edge'][Math.floor(Math.random() * 4)],
-      location: ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Recife'][Math.floor(Math.random() * 4)],
+      device: ["mobile", "tablet", "desktop"][Math.floor(Math.random() * 3)] as any,
+      os: ["iOS", "Android", "Windows", "macOS"][Math.floor(Math.random() * 4)],
+      browser: ["Chrome", "Safari", "Firefox", "Edge"][Math.floor(Math.random() * 4)],
+      location: ["São Paulo", "Rio de Janeiro", "Brasília", "Recife"][Math.floor(Math.random() * 4)],
       startTime: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
       duration: Math.floor(Math.random() * 1800) + 60, // 1-31 minutos
       pages: Math.floor(Math.random() * 10) + 1,
@@ -115,13 +115,13 @@ export const MobileOptimizationCenter: React.FC = () => {
     }));
 
     const mockBehavior: UserBehavior[] = [
-      { page: '/dashboard', sessions: 342, bounceRate: 24, avgTimeOnPage: 180, conversions: 89, exitRate: 32 },
-      { page: '/hr', sessions: 156, bounceRate: 18, avgTimeOnPage: 240, conversions: 45, exitRate: 28 },
-      { page: '/analytics', sessions: 89, bounceRate: 31, avgTimeOnPage: 320, conversions: 23, exitRate: 41 },
-      { page: '/reports', sessions: 78, bounceRate: 29, avgTimeOnPage: 280, conversions: 34, exitRate: 38 },
-      { page: '/maritime', sessions: 67, bounceRate: 22, avgTimeOnPage: 200, conversions: 12, exitRate: 35 },
-      { page: '/travel', sessions: 54, bounceRate: 45, avgTimeOnPage: 120, conversions: 8, exitRate: 52 },
-      { page: '/settings', sessions: 43, bounceRate: 38, avgTimeOnPage: 90, conversions: 15, exitRate: 48 }
+      { page: "/dashboard", sessions: 342, bounceRate: 24, avgTimeOnPage: 180, conversions: 89, exitRate: 32 },
+      { page: "/hr", sessions: 156, bounceRate: 18, avgTimeOnPage: 240, conversions: 45, exitRate: 28 },
+      { page: "/analytics", sessions: 89, bounceRate: 31, avgTimeOnPage: 320, conversions: 23, exitRate: 41 },
+      { page: "/reports", sessions: 78, bounceRate: 29, avgTimeOnPage: 280, conversions: 34, exitRate: 38 },
+      { page: "/maritime", sessions: 67, bounceRate: 22, avgTimeOnPage: 200, conversions: 12, exitRate: 35 },
+      { page: "/travel", sessions: 54, bounceRate: 45, avgTimeOnPage: 120, conversions: 8, exitRate: 52 },
+      { page: "/settings", sessions: 43, bounceRate: 38, avgTimeOnPage: 90, conversions: 15, exitRate: 48 }
     ];
 
     setSessions(mockSessions);
@@ -136,19 +136,19 @@ export const MobileOptimizationCenter: React.FC = () => {
 
   const getDeviceIcon = (device: string) => {
     switch (device) {
-      case 'mobile': return <Smartphone className="h-4 w-4" />;
-      case 'tablet': return <Tablet className="h-4 w-4" />;
-      case 'desktop': return <Monitor className="h-4 w-4" />;
-      default: return <Monitor className="h-4 w-4" />;
+    case "mobile": return <Smartphone className="h-4 w-4" />;
+    case "tablet": return <Tablet className="h-4 w-4" />;
+    case "desktop": return <Monitor className="h-4 w-4" />;
+    default: return <Monitor className="h-4 w-4" />;
     }
   };
 
   const getDeviceStats = () => {
     const total = sessions.length;
     return {
-      mobile: Math.round((sessions.filter(s => s.device === 'mobile').length / total) * 100),
-      tablet: Math.round((sessions.filter(s => s.device === 'tablet').length / total) * 100),
-      desktop: Math.round((sessions.filter(s => s.device === 'desktop').length / total) * 100)
+      mobile: Math.round((sessions.filter(s => s.device === "mobile").length / total) * 100),
+      tablet: Math.round((sessions.filter(s => s.device === "tablet").length / total) * 100),
+      desktop: Math.round((sessions.filter(s => s.device === "desktop").length / total) * 100)
     };
   };
 
@@ -166,7 +166,7 @@ export const MobileOptimizationCenter: React.FC = () => {
   };
 
   const filteredSessions = sessions.filter(session => 
-    deviceFilter === 'all' || session.device === deviceFilter
+    deviceFilter === "all" || session.device === deviceFilter
   );
 
   const activeSessions = sessions.filter(s => s.isActive).length;
@@ -175,20 +175,20 @@ export const MobileOptimizationCenter: React.FC = () => {
   const deviceStats = getDeviceStats();
   const performanceScore = getPerformanceScore();
 
-  const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--accent))', '#8884d8', '#82ca9d'];
+  const COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "hsl(var(--accent))", "#8884d8", "#82ca9d"];
 
   const performanceChartData = performance.map(p => ({
     date: p.timestamp.toLocaleDateString(),
-    'Page Load': p.pageLoad,
-    'FCP': p.firstContentfulPaint,
-    'LCP': p.largestContentfulPaint,
-    'TTI': p.timeToInteractive
+    "Page Load": p.pageLoad,
+    "FCP": p.firstContentfulPaint,
+    "LCP": p.largestContentfulPaint,
+    "TTI": p.timeToInteractive
   }));
 
   const deviceDistribution = [
-    { name: 'Mobile', value: deviceStats.mobile, color: COLORS[0] },
-    { name: 'Desktop', value: deviceStats.desktop, color: COLORS[1] },
-    { name: 'Tablet', value: deviceStats.tablet, color: COLORS[2] }
+    { name: "Mobile", value: deviceStats.mobile, color: COLORS[0] },
+    { name: "Desktop", value: deviceStats.desktop, color: COLORS[1] },
+    { name: "Tablet", value: deviceStats.tablet, color: COLORS[2] }
   ];
 
   const handleOptimizeImages = () => {
@@ -296,7 +296,7 @@ export const MobileOptimizationCenter: React.FC = () => {
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${performanceScore >= 90 ? 'text-green-600' : performanceScore >= 70 ? 'text-yellow-600' : 'text-red-600'}`}>
+            <div className={`text-2xl font-bold ${performanceScore >= 90 ? "text-green-600" : performanceScore >= 70 ? "text-yellow-600" : "text-red-600"}`}>
               {performanceScore}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -365,7 +365,7 @@ export const MobileOptimizationCenter: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {['iOS', 'Android', 'Windows', 'macOS'].map((os) => {
+                  {["iOS", "Android", "Windows", "macOS"].map((os) => {
                     const count = sessions.filter(s => s.os === os).length;
                     const percentage = (count / sessions.length) * 100;
                     
@@ -518,7 +518,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
                         <p className="text-sm font-medium">Taxa de Rejeição</p>
-                        <p className={`text-lg font-bold ${page.bounceRate < 30 ? 'text-green-600' : page.bounceRate < 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                        <p className={`text-lg font-bold ${page.bounceRate < 30 ? "text-green-600" : page.bounceRate < 50 ? "text-yellow-600" : "text-red-600"}`}>
                           {page.bounceRate}%
                         </p>
                       </div>

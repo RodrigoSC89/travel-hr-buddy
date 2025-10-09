@@ -1,8 +1,8 @@
-import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import ProductionDeployCenter from '@/components/deploy/production-deploy-center';
-import { Rocket } from 'lucide-react';
+import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import ProductionDeployCenter from "@/components/deploy/production-deploy-center";
+import { Rocket } from "lucide-react";
 
 
 const ProductionDeployPage = () => {
