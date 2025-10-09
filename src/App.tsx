@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
 import { ErrorBoundary } from './components/layout/error-boundary';
+import { AuthProvider } from './contexts/AuthContext';
+import { TenantProvider } from './contexts/TenantContext';
 
 // Lazy load all pages
 const Index = React.lazy(() => import('./pages/Index'));
@@ -91,8 +93,10 @@ const SimpleNavigation = () => {
 function App() {
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <Router>
+      <AuthProvider>
+        <TenantProvider>
+          <QueryClientProvider client={queryClient}>
+            <Router>
           <div className="min-h-screen bg-gray-100">
             <SimpleNavigation />
             <main className="container mx-auto p-6">
@@ -132,8 +136,10 @@ function App() {
             </main>
           </div>
           <Toaster position="top-right" />
-        </Router>
-      </QueryClientProvider>
+            </Router>
+          </QueryClientProvider>
+        </TenantProvider>
+      </AuthProvider>
     </ErrorBoundary>
   );
 }
