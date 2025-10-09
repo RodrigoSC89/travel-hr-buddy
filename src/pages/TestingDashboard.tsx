@@ -5,6 +5,7 @@ import { TestEnvironmentConfig } from '@/components/testing/test-environment-con
 import { PerformanceMonitor } from '@/components/performance/performance-monitor';
 import { PWAStatus } from '@/components/mobile/pwa-status';
 import { FinalHomologationReport } from '@/components/testing/final-homologation-report';
+import { ExternalAPITestCenter } from '@/components/integration/external-api-test-center';
 
 const TestingDashboard = () => {
   return (
@@ -17,8 +18,9 @@ const TestingDashboard = () => {
       </div>
 
       <Tabs defaultValue="homologation" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="homologation">Homologação Final</TabsTrigger>
+          <TabsTrigger value="apis">APIs Externas</TabsTrigger>
           <TabsTrigger value="health">Saúde do Sistema</TabsTrigger>
           <TabsTrigger value="config">Configuração</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
@@ -27,6 +29,10 @@ const TestingDashboard = () => {
 
         <TabsContent value="homologation" className="space-y-6">
           <FinalHomologationReport />
+        </TabsContent>
+
+        <TabsContent value="apis" className="space-y-6">
+          <ExternalAPITestCenter />
         </TabsContent>
 
         <TabsContent value="health" className="space-y-6">
