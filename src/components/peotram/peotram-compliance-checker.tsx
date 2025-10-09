@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Separator } from '@/components/ui/separator';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
 import { 
   Shield, 
   AlertTriangle, 
@@ -24,21 +24,21 @@ import {
   Star,
   Award,
   Zap
-} from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+} from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ComplianceItem {
   id: string;
   category: string;
   element: string;
   requirement: string;
-  status: 'compliant' | 'non-compliant' | 'partial' | 'not-assessed';
+  status: "compliant" | "non-compliant" | "partial" | "not-assessed";
   score: number;
   maxScore: number;
   lastAssessment: string;
   nextDue: string;
-  criticality: 'low' | 'medium' | 'high' | 'critical';
-  trend: 'improving' | 'stable' | 'declining';
+  criticality: "low" | "medium" | "high" | "critical";
+  trend: "improving" | "stable" | "declining";
   evidence: string[];
   recommendations: string[];
   responsible: string;
@@ -56,19 +56,19 @@ interface ComplianceReport {
     score: number;
     improvement: number;
   }[];
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: "low" | "medium" | "high" | "critical";
   recommendations: string[];
   nextActions: {
     action: string;
-    priority: 'low' | 'medium' | 'high' | 'critical';
+    priority: "low" | "medium" | "high" | "critical";
     deadline: string;
     responsible: string;
   }[];
 }
 
 export const PeotramComplianceChecker: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('2024-Q4');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedPeriod, setSelectedPeriod] = useState("2024-Q4");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [complianceItems, setComplianceItems] = useState<ComplianceItem[]>([]);
   const [complianceReport, setComplianceReport] = useState<ComplianceReport | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -86,7 +86,7 @@ export const PeotramComplianceChecker: React.FC = () => {
       setComplianceItems(getMockComplianceItems());
       setComplianceReport(getMockComplianceReport());
     } catch (error) {
-      console.error('Erro ao carregar dados de conformidade:', error);
+      console.error("Erro ao carregar dados de conformidade:", error);
     } finally {
       setIsLoading(false);
     }
@@ -94,130 +94,130 @@ export const PeotramComplianceChecker: React.FC = () => {
 
   const getMockComplianceItems = (): ComplianceItem[] => [
     {
-      id: 'COMP_001',
-      category: 'Elemento 01',
-      element: 'Liderança e Responsabilidade',
-      requirement: 'Compromisso da alta administração com SMS',
-      status: 'compliant',
+      id: "COMP_001",
+      category: "Elemento 01",
+      element: "Liderança e Responsabilidade",
+      requirement: "Compromisso da alta administração com SMS",
+      status: "compliant",
       score: 4,
       maxScore: 4,
-      lastAssessment: '2024-12-15',
-      nextDue: '2025-06-15',
-      criticality: 'high',
-      trend: 'stable',
-      evidence: ['Política SMS assinada', 'Reuniões de gestão', 'Relatórios de visitas'],
-      recommendations: ['Manter práticas atuais', 'Documentar melhor as visitas'],
-      responsible: 'Diretor de Operações'
+      lastAssessment: "2024-12-15",
+      nextDue: "2025-06-15",
+      criticality: "high",
+      trend: "stable",
+      evidence: ["Política SMS assinada", "Reuniões de gestão", "Relatórios de visitas"],
+      recommendations: ["Manter práticas atuais", "Documentar melhor as visitas"],
+      responsible: "Diretor de Operações"
     },
     {
-      id: 'COMP_002',
-      category: 'Elemento 02',
-      element: 'Conformidade Legal',
-      requirement: 'Sistema de identificação de requisitos legais',
-      status: 'partial',
+      id: "COMP_002",
+      category: "Elemento 02",
+      element: "Conformidade Legal",
+      requirement: "Sistema de identificação de requisitos legais",
+      status: "partial",
       score: 2,
       maxScore: 4,
-      lastAssessment: '2024-12-10',
-      nextDue: '2025-03-10',
-      criticality: 'critical',
-      trend: 'improving',
-      evidence: ['Planilha de requisitos', 'Software em implementação'],
-      recommendations: ['Implementar software de gestão legal', 'Treinar equipe'],
-      responsible: 'Gerente de Compliance'
+      lastAssessment: "2024-12-10",
+      nextDue: "2025-03-10",
+      criticality: "critical",
+      trend: "improving",
+      evidence: ["Planilha de requisitos", "Software em implementação"],
+      recommendations: ["Implementar software de gestão legal", "Treinar equipe"],
+      responsible: "Gerente de Compliance"
     },
     {
-      id: 'COMP_003',
-      category: 'Elemento 03',
-      element: 'Gestão de Riscos',
-      requirement: 'Processo sistemático de análise de riscos',
-      status: 'non-compliant',
+      id: "COMP_003",
+      category: "Elemento 03",
+      element: "Gestão de Riscos",
+      requirement: "Processo sistemático de análise de riscos",
+      status: "non-compliant",
       score: 1,
       maxScore: 4,
-      lastAssessment: '2024-12-08',
-      nextDue: '2025-01-08',
-      criticality: 'critical',
-      trend: 'declining',
-      evidence: ['Análises pontuais', 'Falta de sistemática'],
-      recommendations: ['Implementar metodologia HAZOP', 'Treinar analistas'],
-      responsible: 'Gerente de Segurança'
+      lastAssessment: "2024-12-08",
+      nextDue: "2025-01-08",
+      criticality: "critical",
+      trend: "declining",
+      evidence: ["Análises pontuais", "Falta de sistemática"],
+      recommendations: ["Implementar metodologia HAZOP", "Treinar analistas"],
+      responsible: "Gerente de Segurança"
     }
   ];
 
   const getMockComplianceReport = (): ComplianceReport => ({
-    id: 'REP_2024_Q4',
-    period: '2024-Q4',
+    id: "REP_2024_Q4",
+    period: "2024-Q4",
     overallScore: 78.5,
     complianceRate: 65.2,
     nonConformities: 8,
     criticalIssues: 2,
     trends: [
-      { period: 'Q1', score: 72.1, improvement: 0 },
-      { period: 'Q2', score: 75.3, improvement: 3.2 },
-      { period: 'Q3', score: 76.8, improvement: 1.5 },
-      { period: 'Q4', score: 78.5, improvement: 1.7 }
+      { period: "Q1", score: 72.1, improvement: 0 },
+      { period: "Q2", score: 75.3, improvement: 3.2 },
+      { period: "Q3", score: 76.8, improvement: 1.5 },
+      { period: "Q4", score: 78.5, improvement: 1.7 }
     ],
-    riskLevel: 'medium',
+    riskLevel: "medium",
     recommendations: [
-      'Priorizar implementação do sistema de gestão legal',
-      'Desenvolver metodologia sistemática de análise de riscos',
-      'Aumentar frequência de auditorias internas'
+      "Priorizar implementação do sistema de gestão legal",
+      "Desenvolver metodologia sistemática de análise de riscos",
+      "Aumentar frequência de auditorias internas"
     ],
     nextActions: [
       {
-        action: 'Implementar software de gestão legal',
-        priority: 'critical',
-        deadline: '2025-01-30',
-        responsible: 'Gerente de Compliance'
+        action: "Implementar software de gestão legal",
+        priority: "critical",
+        deadline: "2025-01-30",
+        responsible: "Gerente de Compliance"
       },
       {
-        action: 'Desenvolver procedimento de análise de riscos',
-        priority: 'high',
-        deadline: '2025-02-15',
-        responsible: 'Gerente de Segurança'
+        action: "Desenvolver procedimento de análise de riscos",
+        priority: "high",
+        deadline: "2025-02-15",
+        responsible: "Gerente de Segurança"
       }
     ]
   });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'compliant': return <CheckCircle className="w-5 h-5 text-success" />;
-      case 'partial': return <AlertTriangle className="w-5 h-5 text-warning" />;
-      case 'non-compliant': return <XCircle className="w-5 h-5 text-destructive" />;
-      default: return <Minus className="w-5 h-5 text-muted-foreground" />;
+    case "compliant": return <CheckCircle className="w-5 h-5 text-success" />;
+    case "partial": return <AlertTriangle className="w-5 h-5 text-warning" />;
+    case "non-compliant": return <XCircle className="w-5 h-5 text-destructive" />;
+    default: return <Minus className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'compliant': return 'bg-success/20 text-success border-success/30';
-      case 'partial': return 'bg-warning/20 text-warning border-warning/30';
-      case 'non-compliant': return 'bg-destructive/20 text-destructive border-destructive/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "compliant": return "bg-success/20 text-success border-success/30";
+    case "partial": return "bg-warning/20 text-warning border-warning/30";
+    case "non-compliant": return "bg-destructive/20 text-destructive border-destructive/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving': return <TrendingUp className="w-4 h-4 text-success" />;
-      case 'declining': return <TrendingDown className="w-4 h-4 text-destructive" />;
-      default: return <Minus className="w-4 h-4 text-muted-foreground" />;
+    case "improving": return <TrendingUp className="w-4 h-4 text-success" />;
+    case "declining": return <TrendingDown className="w-4 h-4 text-destructive" />;
+    default: return <Minus className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCriticalityColor = (criticality: string) => {
     switch (criticality) {
-      case 'critical': return 'text-destructive';
-      case 'high': return 'text-warning';
-      case 'medium': return 'text-info';
-      default: return 'text-muted-foreground';
+    case "critical": return "text-destructive";
+    case "high": return "text-warning";
+    case "medium": return "text-info";
+    default: return "text-muted-foreground";
     }
   };
 
   const getScoreColor = (score: number, maxScore: number) => {
     const percentage = (score / maxScore) * 100;
-    if (percentage >= 90) return 'text-success';
-    if (percentage >= 70) return 'text-warning';
-    return 'text-destructive';
+    if (percentage >= 90) return "text-success";
+    if (percentage >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   if (isLoading) {
@@ -344,11 +344,11 @@ export const PeotramComplianceChecker: React.FC = () => {
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <Calendar className="w-3 h-3" />
-                            Última avaliação: {new Date(item.lastAssessment).toLocaleDateString('pt-BR')}
+                            Última avaliação: {new Date(item.lastAssessment).toLocaleDateString("pt-BR")}
                           </span>
                           <span className="flex items-center gap-1">
                             <Clock className="w-3 h-3" />
-                            Próxima: {new Date(item.nextDue).toLocaleDateString('pt-BR')}
+                            Próxima: {new Date(item.nextDue).toLocaleDateString("pt-BR")}
                           </span>
                           <span className="flex items-center gap-1">
                             <Target className="w-3 h-3" />
@@ -373,17 +373,17 @@ export const PeotramComplianceChecker: React.FC = () => {
                             variant="outline" 
                             className={getStatusColor(item.status)}
                           >
-                            {item.status === 'compliant' ? 'Conforme' :
-                             item.status === 'partial' ? 'Parcial' :
-                             item.status === 'non-compliant' ? 'Não Conforme' : 'Não Avaliado'}
+                            {item.status === "compliant" ? "Conforme" :
+                              item.status === "partial" ? "Parcial" :
+                                item.status === "non-compliant" ? "Não Conforme" : "Não Avaliado"}
                           </Badge>
                           
                           <div className="flex items-center gap-1">
                             {getTrendIcon(item.trend)}
                             <span className={`text-xs ${getCriticalityColor(item.criticality)}`}>
-                              {item.criticality === 'critical' ? 'Crítico' :
-                               item.criticality === 'high' ? 'Alto' :
-                               item.criticality === 'medium' ? 'Médio' : 'Baixo'}
+                              {item.criticality === "critical" ? "Crítico" :
+                                item.criticality === "high" ? "Alto" :
+                                  item.criticality === "medium" ? "Médio" : "Baixo"}
                             </span>
                           </div>
                         </div>
@@ -401,7 +401,7 @@ export const PeotramComplianceChecker: React.FC = () => {
                       </div>
                     </div>
 
-                    {item.status !== 'compliant' && (
+                    {item.status !== "compliant" && (
                       <Alert className="mt-4">
                         <AlertTriangle className="h-4 w-4" />
                         <AlertDescription>
@@ -448,11 +448,11 @@ export const PeotramComplianceChecker: React.FC = () => {
                           <div className="flex justify-between">
                             <span>Nível de Risco:</span>
                             <Badge className={
-                              complianceReport.riskLevel === 'low' ? 'bg-success' :
-                              complianceReport.riskLevel === 'medium' ? 'bg-warning' : 'bg-destructive'
+                              complianceReport.riskLevel === "low" ? "bg-success" :
+                                complianceReport.riskLevel === "medium" ? "bg-warning" : "bg-destructive"
                             }>
-                              {complianceReport.riskLevel === 'low' ? 'Baixo' :
-                               complianceReport.riskLevel === 'medium' ? 'Médio' : 'Alto'}
+                              {complianceReport.riskLevel === "low" ? "Baixo" :
+                                complianceReport.riskLevel === "medium" ? "Médio" : "Alto"}
                             </Badge>
                           </div>
                         </div>
@@ -531,7 +531,7 @@ export const PeotramComplianceChecker: React.FC = () => {
                               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                                 <span className="flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
-                                  {new Date(action.deadline).toLocaleDateString('pt-BR')}
+                                  {new Date(action.deadline).toLocaleDateString("pt-BR")}
                                 </span>
                                 <span className="flex items-center gap-1">
                                   <Target className="w-3 h-3" />
@@ -540,13 +540,13 @@ export const PeotramComplianceChecker: React.FC = () => {
                               </div>
                             </div>
                             <Badge className={
-                              action.priority === 'critical' ? 'bg-destructive' :
-                              action.priority === 'high' ? 'bg-warning' :
-                              action.priority === 'medium' ? 'bg-info' : 'bg-muted'
+                              action.priority === "critical" ? "bg-destructive" :
+                                action.priority === "high" ? "bg-warning" :
+                                  action.priority === "medium" ? "bg-info" : "bg-muted"
                             }>
-                              {action.priority === 'critical' ? 'Crítica' :
-                               action.priority === 'high' ? 'Alta' :
-                               action.priority === 'medium' ? 'Média' : 'Baixa'}
+                              {action.priority === "critical" ? "Crítica" :
+                                action.priority === "high" ? "Alta" :
+                                  action.priority === "medium" ? "Média" : "Baixa"}
                             </Badge>
                           </div>
                         </div>

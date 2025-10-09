@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Plane, 
   Hotel, 
@@ -28,13 +28,13 @@ import {
   Coffee,
   Car as CarIcon,
   Utensils
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface BookingOption {
   id: string;
-  type: 'flight' | 'hotel' | 'car';
+  type: "flight" | "hotel" | "car";
   provider: string;
   price: number;
   duration?: string;
@@ -63,52 +63,52 @@ export const TravelBookingSystem = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [searchCriteria, setSearchCriteria] = useState({
-    origin: '',
-    destination: '',
+    origin: "",
+    destination: "",
     departureDate: undefined as Date | undefined,
     returnDate: undefined as Date | undefined,
     passengers: 1,
-    tripType: 'round-trip',
-    cabinClass: 'economy',
+    tripType: "round-trip",
+    cabinClass: "economy",
     hotelRooms: 1,
-    carType: 'compact'
+    carType: "compact"
   });
 
   const steps: BookingStep[] = [
-    { id: 'search', title: 'Buscar', completed: false, current: true },
-    { id: 'select', title: 'Selecionar', completed: false, current: false },
-    { id: 'details', title: 'Detalhes', completed: false, current: false },
-    { id: 'payment', title: 'Pagamento', completed: false, current: false },
-    { id: 'confirmation', title: 'Confirmação', completed: false, current: false }
+    { id: "search", title: "Buscar", completed: false, current: true },
+    { id: "select", title: "Selecionar", completed: false, current: false },
+    { id: "details", title: "Detalhes", completed: false, current: false },
+    { id: "payment", title: "Pagamento", completed: false, current: false },
+    { id: "confirmation", title: "Confirmação", completed: false, current: false }
   ];
 
   // Mock data for search results
   const mockFlights: BookingOption[] = [
     {
-      id: 'flight-1',
-      type: 'flight',
-      provider: 'LATAM Airlines',
+      id: "flight-1",
+      type: "flight",
+      provider: "LATAM Airlines",
       price: 850,
-      duration: '2h 30m',
+      duration: "2h 30m",
       rating: 4.2,
       details: {
-        departure: '08:00',
-        arrival: '10:30',
-        aircraft: 'Airbus A320',
+        departure: "08:00",
+        arrival: "10:30",
+        aircraft: "Airbus A320",
         stops: 0
       }
     },
     {
-      id: 'flight-2',
-      type: 'flight',
-      provider: 'GOL',
+      id: "flight-2",
+      type: "flight",
+      provider: "GOL",
       price: 720,
-      duration: '2h 45m',
+      duration: "2h 45m",
       rating: 4.0,
       details: {
-        departure: '14:20',
-        arrival: '17:05',
-        aircraft: 'Boeing 737',
+        departure: "14:20",
+        arrival: "17:05",
+        aircraft: "Boeing 737",
         stops: 0
       }
     }
@@ -116,47 +116,47 @@ export const TravelBookingSystem = () => {
 
   const mockHotels: BookingOption[] = [
     {
-      id: 'hotel-1',
-      type: 'hotel',
-      provider: 'Marriott',
+      id: "hotel-1",
+      type: "hotel",
+      provider: "Marriott",
       price: 320,
       rating: 4.5,
-      amenities: ['Wifi', 'Piscina', 'Academia', 'Spa'],
+      amenities: ["Wifi", "Piscina", "Academia", "Spa"],
       details: {
-        roomType: 'Quarto Executivo',
-        address: 'Centro da cidade',
-        checkIn: '15:00',
-        checkOut: '12:00'
+        roomType: "Quarto Executivo",
+        address: "Centro da cidade",
+        checkIn: "15:00",
+        checkOut: "12:00"
       }
     },
     {
-      id: 'hotel-2',
-      type: 'hotel',
-      provider: 'Hilton',
+      id: "hotel-2",
+      type: "hotel",
+      provider: "Hilton",
       price: 280,
       rating: 4.3,
-      amenities: ['Wifi', 'Business Center', 'Restaurante'],
+      amenities: ["Wifi", "Business Center", "Restaurante"],
       details: {
-        roomType: 'Quarto Standard',
-        address: 'Zona Empresarial',
-        checkIn: '14:00',
-        checkOut: '11:00'
+        roomType: "Quarto Standard",
+        address: "Zona Empresarial",
+        checkIn: "14:00",
+        checkOut: "11:00"
       }
     }
   ];
 
   const mockCars: BookingOption[] = [
     {
-      id: 'car-1',
-      type: 'car',
-      provider: 'Hertz',
+      id: "car-1",
+      type: "car",
+      provider: "Hertz",
       price: 150,
       rating: 4.1,
       details: {
-        model: 'Nissan Versa',
-        category: 'Econômico',
-        transmission: 'Automático',
-        fuel: 'Flex'
+        model: "Nissan Versa",
+        category: "Econômico",
+        transmission: "Automático",
+        fuel: "Flex"
       }
     }
   ];
@@ -165,29 +165,29 @@ export const TravelBookingSystem = () => {
     const errors: Record<string, string> = {};
     
     if (!searchCriteria.origin.trim()) {
-      errors.origin = 'Origem é obrigatória';
+      errors.origin = "Origem é obrigatória";
     }
     
     if (!searchCriteria.destination.trim()) {
-      errors.destination = 'Destino é obrigatório';
+      errors.destination = "Destino é obrigatório";
     }
     
     if (!searchCriteria.departureDate) {
-      errors.departureDate = 'Data de ida é obrigatória';
+      errors.departureDate = "Data de ida é obrigatória";
     }
     
-    if (searchCriteria.tripType === 'round-trip' && !searchCriteria.returnDate) {
-      errors.returnDate = 'Data de volta é obrigatória para viagens ida e volta';
+    if (searchCriteria.tripType === "round-trip" && !searchCriteria.returnDate) {
+      errors.returnDate = "Data de volta é obrigatória para viagens ida e volta";
     }
     
     if (searchCriteria.departureDate && searchCriteria.returnDate) {
       if (searchCriteria.returnDate < searchCriteria.departureDate) {
-        errors.returnDate = 'Data de volta deve ser posterior à data de ida';
+        errors.returnDate = "Data de volta deve ser posterior à data de ida";
       }
     }
     
     if (searchCriteria.passengers < 1 || searchCriteria.passengers > 9) {
-      errors.passengers = 'Número de passageiros deve estar entre 1 e 9';
+      errors.passengers = "Número de passageiros deve estar entre 1 e 9";
     }
     
     setFormErrors(errors);
@@ -262,7 +262,7 @@ export const TravelBookingSystem = () => {
               onChange={(e) => {
                 setSearchCriteria(prev => ({ ...prev, origin: e.target.value }));
                 if (formErrors.origin) {
-                  setFormErrors(prev => ({ ...prev, origin: '' }));
+                  setFormErrors(prev => ({ ...prev, origin: "" }));
                 }
               }}
               className={cn("pl-10", formErrors.origin && "border-destructive")}
@@ -283,7 +283,7 @@ export const TravelBookingSystem = () => {
               onChange={(e) => {
                 setSearchCriteria(prev => ({ ...prev, destination: e.target.value }));
                 if (formErrors.destination) {
-                  setFormErrors(prev => ({ ...prev, destination: '' }));
+                  setFormErrors(prev => ({ ...prev, destination: "" }));
                 }
               }}
               className={cn("pl-10", formErrors.destination && "border-destructive")}
@@ -319,7 +319,7 @@ export const TravelBookingSystem = () => {
                 onSelect={(date) => {
                   setSearchCriteria(prev => ({ ...prev, departureDate: date }));
                   if (formErrors.departureDate) {
-                    setFormErrors(prev => ({ ...prev, departureDate: '' }));
+                    setFormErrors(prev => ({ ...prev, departureDate: "" }));
                   }
                 }}
                 initialFocus
@@ -332,7 +332,7 @@ export const TravelBookingSystem = () => {
           )}
         </div>
         <div>
-          <Label>Data de Volta {searchCriteria.tripType === 'round-trip' && '*'}</Label>
+          <Label>Data de Volta {searchCriteria.tripType === "round-trip" && "*"}</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -354,7 +354,7 @@ export const TravelBookingSystem = () => {
                 onSelect={(date) => {
                   setSearchCriteria(prev => ({ ...prev, returnDate: date }));
                   if (formErrors.returnDate) {
-                    setFormErrors(prev => ({ ...prev, returnDate: '' }));
+                    setFormErrors(prev => ({ ...prev, returnDate: "" }));
                   }
                 }}
                 initialFocus
@@ -424,7 +424,7 @@ export const TravelBookingSystem = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-4 mb-2">
                       <span className="font-semibold">{flight.provider}</span>
-                      <Badge variant="secondary">{flight.details.stops === 0 ? 'Direto' : `${flight.details.stops} parada(s)`}</Badge>
+                      <Badge variant="secondary">{flight.details.stops === 0 ? "Direto" : `${flight.details.stops} parada(s)`}</Badge>
                       <div className="flex items-center gap-1">
                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                         <span className="text-sm">{flight.rating}</span>
@@ -442,7 +442,7 @@ export const TravelBookingSystem = () => {
                       onClick={() => handleSelectOption(flight)}
                       variant={selectedOptions.flight?.id === flight.id ? "default" : "outline"}
                     >
-                      {selectedOptions.flight?.id === flight.id ? 'Selecionado' : 'Selecionar'}
+                      {selectedOptions.flight?.id === flight.id ? "Selecionado" : "Selecionar"}
                     </Button>
                   </div>
                 </div>
@@ -468,8 +468,8 @@ export const TravelBookingSystem = () => {
                     <div className="flex gap-2 flex-wrap">
                       {hotel.amenities?.map((amenity) => (
                         <Badge key={amenity} variant="outline" className="text-xs">
-                          {amenity === 'Wifi' && <Wifi className="mr-1 h-3 w-3" />}
-                          {amenity === 'Restaurante' && <Utensils className="mr-1 h-3 w-3" />}
+                          {amenity === "Wifi" && <Wifi className="mr-1 h-3 w-3" />}
+                          {amenity === "Restaurante" && <Utensils className="mr-1 h-3 w-3" />}
                           {amenity}
                         </Badge>
                       ))}
@@ -483,7 +483,7 @@ export const TravelBookingSystem = () => {
                       variant={selectedOptions.hotel?.id === hotel.id ? "default" : "outline"}
                       className="mt-2"
                     >
-                      {selectedOptions.hotel?.id === hotel.id ? 'Selecionado' : 'Selecionar'}
+                      {selectedOptions.hotel?.id === hotel.id ? "Selecionado" : "Selecionar"}
                     </Button>
                   </div>
                 </div>
@@ -517,7 +517,7 @@ export const TravelBookingSystem = () => {
                       variant={selectedOptions.car?.id === car.id ? "default" : "outline"}
                       className="mt-2"
                     >
-                      {selectedOptions.car?.id === car.id ? 'Selecionado' : 'Selecionar'}
+                      {selectedOptions.car?.id === car.id ? "Selecionado" : "Selecionar"}
                     </Button>
                   </div>
                 </div>

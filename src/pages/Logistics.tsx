@@ -1,6 +1,6 @@
-import React from 'react';
-import EnhancedLogisticsDashboard from '@/components/logistics/enhanced-logistics-dashboard';
-import { BackToDashboard } from '@/components/ui/back-to-dashboard';
+import React from "react";
+import EnhancedLogisticsDashboard from "@/components/logistics/enhanced-logistics-dashboard";
+import { BackToDashboard } from "@/components/ui/back-to-dashboard";
 
 const Logistics = () => {
   return (

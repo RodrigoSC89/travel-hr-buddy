@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   MessageSquare, 
   Star, 
@@ -18,10 +18,10 @@ import {
   Users,
   Target,
   Lightbulb
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Feedback {
   id: string;
@@ -47,10 +47,10 @@ export const UserFeedbackSystem: React.FC = () => {
 
   // Form state
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    type: 'suggestion',
-    priority: 'medium',
+    title: "",
+    description: "",
+    type: "suggestion",
+    priority: "medium",
     rating: 5,
     page_url: window.location.href,
     browser_info: navigator.userAgent
@@ -63,19 +63,19 @@ export const UserFeedbackSystem: React.FC = () => {
     try {
       setIsLoading(true);
       const { data, error } = await supabase
-        .from('user_feedback')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .from("user_feedback")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setFeedbacks(data || []);
     } catch (error) {
-      console.error('Error loading feedbacks:', error);
+      console.error("Error loading feedbacks:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível carregar os feedbacks',
-        variant: 'destructive'
+        title: "Erro",
+        description: "Não foi possível carregar os feedbacks",
+        variant: "destructive"
       });
     } finally {
       setIsLoading(false);
@@ -86,9 +86,9 @@ export const UserFeedbackSystem: React.FC = () => {
   const submitFeedback = async () => {
     if (!user || !formData.title.trim() || !formData.description.trim()) {
       toast({
-        title: 'Campos obrigatórios',
-        description: 'Por favor, preencha título e descrição',
-        variant: 'destructive'
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha título e descrição",
+        variant: "destructive"
       });
       return;
     }
@@ -97,7 +97,7 @@ export const UserFeedbackSystem: React.FC = () => {
       setIsSubmitting(true);
       
       const { error } = await supabase
-        .from('user_feedback')
+        .from("user_feedback")
         .insert({
           user_id: user.id,
           title: formData.title,
@@ -107,22 +107,22 @@ export const UserFeedbackSystem: React.FC = () => {
           rating: formData.rating,
           page_url: formData.page_url,
           browser_info: formData.browser_info,
-          status: 'open'
+          status: "open"
         });
 
       if (error) throw error;
 
       toast({
-        title: 'Feedback enviado!',
-        description: 'Obrigado pelo seu feedback. Nossa equipe irá analisá-lo.',
+        title: "Feedback enviado!",
+        description: "Obrigado pelo seu feedback. Nossa equipe irá analisá-lo.",
       });
 
       // Reset form
       setFormData({
-        title: '',
-        description: '',
-        type: 'suggestion',
-        priority: 'medium',
+        title: "",
+        description: "",
+        type: "suggestion",
+        priority: "medium",
         rating: 5,
         page_url: window.location.href,
         browser_info: navigator.userAgent
@@ -131,11 +131,11 @@ export const UserFeedbackSystem: React.FC = () => {
       // Reload feedbacks
       loadFeedbacks();
     } catch (error) {
-      console.error('Error submitting feedback:', error);
+      console.error("Error submitting feedback:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível enviar o feedback',
-        variant: 'destructive'
+        title: "Erro",
+        description: "Não foi possível enviar o feedback",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
@@ -148,49 +148,49 @@ export const UserFeedbackSystem: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'bug': return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'suggestion': return <Lightbulb className="h-4 w-4 text-blue-500" />;
-      case 'improvement': return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'question': return <MessageSquare className="h-4 w-4 text-purple-500" />;
-      default: return <MessageSquare className="h-4 w-4 text-muted-foreground" />;
+    case "bug": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "suggestion": return <Lightbulb className="h-4 w-4 text-blue-500" />;
+    case "improvement": return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "question": return <MessageSquare className="h-4 w-4 text-purple-500" />;
+    default: return <MessageSquare className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'open':
-        return <Badge variant="outline">Aberto</Badge>;
-      case 'in_progress':
-        return <Badge variant="secondary" className="bg-blue-500 text-azure-50">Em Análise</Badge>;
-      case 'resolved':
-        return <Badge variant="default" className="bg-green-500 text-azure-50">Resolvido</Badge>;
-      case 'closed':
-        return <Badge variant="secondary">Fechado</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "open":
+      return <Badge variant="outline">Aberto</Badge>;
+    case "in_progress":
+      return <Badge variant="secondary" className="bg-blue-500 text-azure-50">Em Análise</Badge>;
+    case "resolved":
+      return <Badge variant="default" className="bg-green-500 text-azure-50">Resolvido</Badge>;
+    case "closed":
+      return <Badge variant="secondary">Fechado</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case 'urgent':
-        return <Badge variant="destructive">Urgente</Badge>;
-      case 'high':
-        return <Badge variant="secondary" className="bg-orange-500 text-azure-50">Alto</Badge>;
-      case 'medium':
-        return <Badge variant="outline">Médio</Badge>;
-      default:
-        return <Badge variant="secondary">Baixo</Badge>;
+    case "urgent":
+      return <Badge variant="destructive">Urgente</Badge>;
+    case "high":
+      return <Badge variant="secondary" className="bg-orange-500 text-azure-50">Alto</Badge>;
+    case "medium":
+      return <Badge variant="outline">Médio</Badge>;
+    default:
+      return <Badge variant="secondary">Baixo</Badge>;
     }
   };
 
   const feedbackStats = {
     total: feedbacks.length,
-    open: feedbacks.filter(f => f.status === 'open').length,
-    resolved: feedbacks.filter(f => f.status === 'resolved').length,
+    open: feedbacks.filter(f => f.status === "open").length,
+    resolved: feedbacks.filter(f => f.status === "resolved").length,
     avgRating: feedbacks.length > 0 
       ? (feedbacks.reduce((acc, f) => acc + (f.rating || 0), 0) / feedbacks.length).toFixed(1)
-      : '0.0'
+      : "0.0"
   };
 
   return (
@@ -326,8 +326,8 @@ export const UserFeedbackSystem: React.FC = () => {
                       key={rating}
                       className={`h-6 w-6 cursor-pointer transition-colors ${
                         rating <= formData.rating 
-                          ? 'text-yellow-500 fill-current' 
-                          : 'text-muted-foreground'
+                          ? "text-yellow-500 fill-current" 
+                          : "text-muted-foreground"
                       }`}
                       onClick={() => setFormData(prev => ({ ...prev, rating }))}
                     />
@@ -354,10 +354,10 @@ export const UserFeedbackSystem: React.FC = () => {
                 <Button 
                   variant="outline"
                   onClick={() => setFormData({
-                    title: '',
-                    description: '',
-                    type: 'suggestion',
-                    priority: 'medium',
+                    title: "",
+                    description: "",
+                    type: "suggestion",
+                    priority: "medium",
                     rating: 5,
                     page_url: window.location.href,
                     browser_info: navigator.userAgent
@@ -399,7 +399,7 @@ export const UserFeedbackSystem: React.FC = () => {
                           {feedback.description}
                         </p>
                         <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                          <span>Criado: {new Date(feedback.created_at).toLocaleDateString('pt-BR')}</span>
+                          <span>Criado: {new Date(feedback.created_at).toLocaleDateString("pt-BR")}</span>
                           {feedback.rating && (
                             <div className="flex items-center gap-1">
                               <Star className="h-3 w-3 text-yellow-500 fill-current" />

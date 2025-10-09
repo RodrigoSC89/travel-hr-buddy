@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
   UserCheck, 
@@ -18,14 +18,14 @@ import {
   Search,
   Filter,
   Plus
-} from 'lucide-react';
+} from "lucide-react";
 
 interface CrewMember {
   id: string;
   full_name: string;
   position: string;
   rank: string;
-  status: 'available' | 'assigned' | 'on_leave' | 'training';
+  status: "available" | "assigned" | "on_leave" | "training";
   vessel_assignment?: string;
   contract_start: string;
   contract_end: string;
@@ -42,15 +42,15 @@ interface CrewAssignment {
   position: string;
   start_date: string;
   end_date?: string;
-  status: 'active' | 'completed' | 'scheduled';
+  status: "active" | "completed" | "scheduled";
 }
 
 export const CrewManagementDashboard = () => {
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
   const [assignments, setAssignments] = useState<CrewAssignment[]>([]);
-  const [activeTab, setActiveTab] = useState('overview');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [activeTab, setActiveTab] = useState("overview");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -64,9 +64,9 @@ export const CrewManagementDashboard = () => {
       
       // Load crew members
       const { data: crewData, error: crewError } = await supabase
-        .from('crew_members')
-        .select('*')
-        .order('full_name');
+        .from("crew_members")
+        .select("*")
+        .order("full_name");
 
       if (crewError) throw crewError;
 
@@ -75,7 +75,7 @@ export const CrewManagementDashboard = () => {
         id: member.id,
         full_name: member.full_name,
         position: member.position,
-        rank: member.rank || 'N/A',
+        rank: member.rank || "N/A",
         status: member.status as any,
         vessel_assignment: member.vessel_id,
         contract_start: member.contract_start,
@@ -83,7 +83,7 @@ export const CrewManagementDashboard = () => {
         certification_count: Math.floor(Math.random() * 10) + 1,
         experience_years: member.experience_years || 0,
         nationality: member.nationality,
-        last_assignment: 'MV Atlantic Explorer'
+        last_assignment: "MV Atlantic Explorer"
       })) || [];
 
       setCrewMembers(transformedCrew);
@@ -91,27 +91,27 @@ export const CrewManagementDashboard = () => {
       // Mock assignments data
       const mockAssignments: CrewAssignment[] = [
         {
-          id: '1',
-          crew_member_name: 'João Silva',
-          vessel_name: 'MV Atlantic Explorer',
-          position: 'Capitão',
-          start_date: '2024-01-15',
-          status: 'active'
+          id: "1",
+          crew_member_name: "João Silva",
+          vessel_name: "MV Atlantic Explorer",
+          position: "Capitão",
+          start_date: "2024-01-15",
+          status: "active"
         },
         {
-          id: '2',
-          crew_member_name: 'Maria Santos',
-          vessel_name: 'MS Ocean Pioneer',
-          position: 'Imediato',
-          start_date: '2024-02-01',
-          end_date: '2024-06-01',
-          status: 'scheduled'
+          id: "2",
+          crew_member_name: "Maria Santos",
+          vessel_name: "MS Ocean Pioneer",
+          position: "Imediato",
+          start_date: "2024-02-01",
+          end_date: "2024-06-01",
+          status: "scheduled"
         }
       ];
 
       setAssignments(mockAssignments);
     } catch (error) {
-      console.error('Error loading crew data:', error);
+      console.error("Error loading crew data:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar dados da tripulação",
@@ -122,39 +122,39 @@ export const CrewManagementDashboard = () => {
     }
   };
 
-  const getStatusColor = (status: CrewMember['status']) => {
+  const getStatusColor = (status: CrewMember["status"]) => {
     switch (status) {
-      case 'available': return 'bg-green-500';
-      case 'assigned': return 'bg-blue-500';
-      case 'on_leave': return 'bg-yellow-500';
-      case 'training': return 'bg-purple-500';
-      default: return 'bg-gray-500';
+    case "available": return "bg-green-500";
+    case "assigned": return "bg-blue-500";
+    case "on_leave": return "bg-yellow-500";
+    case "training": return "bg-purple-500";
+    default: return "bg-gray-500";
     }
   };
 
-  const getStatusText = (status: CrewMember['status']) => {
+  const getStatusText = (status: CrewMember["status"]) => {
     switch (status) {
-      case 'available': return 'Disponível';
-      case 'assigned': return 'Designado';
-      case 'on_leave': return 'De Licença';
-      case 'training': return 'Treinamento';
-      default: return 'Desconhecido';
+    case "available": return "Disponível";
+    case "assigned": return "Designado";
+    case "on_leave": return "De Licença";
+    case "training": return "Treinamento";
+    default: return "Desconhecido";
     }
   };
 
   const filteredCrewMembers = crewMembers.filter(member => {
     const matchesSearch = member.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          member.position.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || member.status === statusFilter;
+    const matchesStatus = statusFilter === "all" || member.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   const crewStats = {
     total: crewMembers.length,
-    available: crewMembers.filter(m => m.status === 'available').length,
-    assigned: crewMembers.filter(m => m.status === 'assigned').length,
-    on_leave: crewMembers.filter(m => m.status === 'on_leave').length,
-    training: crewMembers.filter(m => m.status === 'training').length
+    available: crewMembers.filter(m => m.status === "available").length,
+    assigned: crewMembers.filter(m => m.status === "assigned").length,
+    on_leave: crewMembers.filter(m => m.status === "on_leave").length,
+    training: crewMembers.filter(m => m.status === "training").length
   };
 
   if (loading) {
@@ -345,14 +345,14 @@ export const CrewManagementDashboard = () => {
                           <Clock className="h-3 w-3 text-muted-foreground" />
                           <span className="text-xs text-muted-foreground">
                             {new Date(assignment.start_date).toLocaleDateString()} - 
-                            {assignment.end_date ? new Date(assignment.end_date).toLocaleDateString() : 'Em aberto'}
+                            {assignment.end_date ? new Date(assignment.end_date).toLocaleDateString() : "Em aberto"}
                           </span>
                         </div>
                       </div>
                       
-                      <Badge variant={assignment.status === 'active' ? 'default' : 'secondary'}>
-                        {assignment.status === 'active' ? 'Ativo' : 
-                         assignment.status === 'scheduled' ? 'Agendado' : 'Concluído'}
+                      <Badge variant={assignment.status === "active" ? "default" : "secondary"}>
+                        {assignment.status === "active" ? "Ativo" : 
+                          assignment.status === "scheduled" ? "Agendado" : "Concluído"}
                       </Badge>
                     </div>
                   </div>

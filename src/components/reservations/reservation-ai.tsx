@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { 
   Bot, 
   AlertTriangle, 
@@ -11,9 +11,9 @@ import {
   TrendingUp,
   Calendar,
   RefreshCw
-} from 'lucide-react';
-import { EnhancedReservation } from './enhanced-reservations-dashboard';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { EnhancedReservation } from "./enhanced-reservations-dashboard";
+import { useToast } from "@/hooks/use-toast";
 
 interface ReservationAIProps {
   reservations: EnhancedReservation[];
@@ -22,10 +22,10 @@ interface ReservationAIProps {
 
 interface AIInsight {
   id: string;
-  type: 'conflict' | 'optimization' | 'reminder' | 'cost_saving';
+  type: "conflict" | "optimization" | "reminder" | "cost_saving";
   title: string;
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   reservationIds: string[];
   suggestion: string;
   automatable: boolean;
@@ -60,12 +60,12 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       if (conflicts.length > 0) {
         newInsights.push({
           id: `conflict_${reservation.id}`,
-          type: 'conflict',
-          title: 'Conflito de Agendamento Detectado',
+          type: "conflict",
+          title: "Conflito de Agendamento Detectado",
           description: `A reserva "${reservation.title}" conflita com ${conflicts.length} outra(s) reserva(s).`,
-          severity: 'critical',
+          severity: "critical",
           reservationIds: [reservation.id, ...conflicts.map(c => c.id)],
-          suggestion: 'Considere reagendar uma das reservas ou verificar se há sobreposição intencional.',
+          suggestion: "Considere reagendar uma das reservas ou verificar se há sobreposição intencional.",
           automatable: false
         });
       }
@@ -76,7 +76,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       const startDate = new Date(r.start_date);
       const now = new Date();
       const daysDiff = (startDate.getTime() - now.getTime()) / (1000 * 3600 * 24);
-      return daysDiff <= 7 && daysDiff > 0 && r.status === 'confirmed';
+      return daysDiff <= 7 && daysDiff > 0 && r.status === "confirmed";
     });
 
     upcomingReservations.forEach(reservation => {
@@ -85,19 +85,19 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       
       newInsights.push({
         id: `reminder_${reservation.id}`,
-        type: 'reminder',
-        title: 'Lembrete de Check-in',
+        type: "reminder",
+        title: "Lembrete de Check-in",
         description: `Check-in em ${daysDiff} dia(s) para "${reservation.title}".`,
-        severity: daysDiff <= 2 ? 'high' : 'medium',
+        severity: daysDiff <= 2 ? "high" : "medium",
         reservationIds: [reservation.id],
-        suggestion: 'Confirme os detalhes da reserva e prepare a documentação necessária.',
+        suggestion: "Confirme os detalhes da reserva e prepare a documentação necessária.",
         automatable: true
       });
     });
 
     // Detect cost optimization opportunities
     const hotelReservations = reservations.filter(r => 
-      r.reservation_type === 'hotel' && r.total_amount && r.total_amount > 500
+      r.reservation_type === "hotel" && r.total_amount && r.total_amount > 500
     );
 
     if (hotelReservations.length > 0) {
@@ -106,13 +106,13 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
 
       if (expensiveReservations.length > 0) {
         newInsights.push({
-          id: 'cost_optimization',
-          type: 'cost_saving',
-          title: 'Oportunidade de Economia',
+          id: "cost_optimization",
+          type: "cost_saving",
+          title: "Oportunidade de Economia",
           description: `${expensiveReservations.length} reserva(s) estão acima da média de custo.`,
-          severity: 'medium',
+          severity: "medium",
           reservationIds: expensiveReservations.map(r => r.id),
-          suggestion: 'Considere negociar tarifas corporativas ou buscar alternativas mais econômicas.',
+          suggestion: "Considere negociar tarifas corporativas ou buscar alternativas mais econômicas.",
           automatable: false
         });
       }
@@ -125,13 +125,13 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
 
     if (incompleteReservations.length > 0) {
       newInsights.push({
-        id: 'incomplete_info',
-        type: 'optimization',
-        title: 'Informações Incompletas',
+        id: "incomplete_info",
+        type: "optimization",
+        title: "Informações Incompletas",
         description: `${incompleteReservations.length} reserva(s) possuem informações incompletas.`,
-        severity: 'medium',
+        severity: "medium",
         reservationIds: incompleteReservations.map(r => r.id),
-        suggestion: 'Complete as informações faltantes para melhor organização e controle.',
+        suggestion: "Complete as informações faltantes para melhor organização e controle.",
         automatable: false
       });
     }
@@ -142,21 +142,21 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'low': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      default: return 'bg-secondary text-secondary-foreground';
+    case "critical": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+    case "high": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+    case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+    case "low": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'conflict': return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case 'reminder': return <Clock className="h-5 w-5 text-blue-500" />;
-      case 'cost_saving': return <TrendingUp className="h-5 w-5 text-green-500" />;
-      case 'optimization': return <Lightbulb className="h-5 w-5 text-yellow-500" />;
-      default: return <Bot className="h-5 w-5" />;
+    case "conflict": return <AlertTriangle className="h-5 w-5 text-red-500" />;
+    case "reminder": return <Clock className="h-5 w-5 text-blue-500" />;
+    case "cost_saving": return <TrendingUp className="h-5 w-5 text-green-500" />;
+    case "optimization": return <Lightbulb className="h-5 w-5 text-yellow-500" />;
+    default: return <Bot className="h-5 w-5" />;
     }
   };
 
@@ -193,7 +193,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
           onClick={generateInsights}
           disabled={loading}
         >
-          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
           Atualizar Análise
         </Button>
       </div>
@@ -207,7 +207,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
               <div>
                 <p className="text-sm text-muted-foreground">Conflitos</p>
                 <p className="text-2xl font-bold">
-                  {insights.filter(i => i.type === 'conflict').length}
+                  {insights.filter(i => i.type === "conflict").length}
                 </p>
               </div>
             </div>
@@ -221,7 +221,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
               <div>
                 <p className="text-sm text-muted-foreground">Lembretes</p>
                 <p className="text-2xl font-bold">
-                  {insights.filter(i => i.type === 'reminder').length}
+                  {insights.filter(i => i.type === "reminder").length}
                 </p>
               </div>
             </div>
@@ -235,7 +235,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
               <div>
                 <p className="text-sm text-muted-foreground">Economia</p>
                 <p className="text-2xl font-bold">
-                  {insights.filter(i => i.type === 'cost_saving').length}
+                  {insights.filter(i => i.type === "cost_saving").length}
                 </p>
               </div>
             </div>
@@ -249,7 +249,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
               <div>
                 <p className="text-sm text-muted-foreground">Otimizações</p>
                 <p className="text-2xl font-bold">
-                  {insights.filter(i => i.type === 'optimization').length}
+                  {insights.filter(i => i.type === "optimization").length}
                 </p>
               </div>
             </div>
@@ -283,9 +283,9 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge className={getSeverityColor(insight.severity)}>
-                      {insight.severity === 'critical' ? 'Crítico' :
-                       insight.severity === 'high' ? 'Alto' :
-                       insight.severity === 'medium' ? 'Médio' : 'Baixo'}
+                      {insight.severity === "critical" ? "Crítico" :
+                        insight.severity === "high" ? "Alto" :
+                          insight.severity === "medium" ? "Médio" : "Baixo"}
                     </Badge>
                     {insight.automatable && (
                       <Badge variant="outline">Automatizável</Badge>
@@ -322,7 +322,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
                       onClick={() => handleApplySuggestion(insight)}
                       disabled={!insight.automatable}
                     >
-                      {insight.automatable ? 'Aplicar Automaticamente' : 'Ação Manual'}
+                      {insight.automatable ? "Aplicar Automaticamente" : "Ação Manual"}
                     </Button>
                     <Button
                       size="sm"

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 interface QuickLoadCardProps {
   title: string;
@@ -19,7 +19,7 @@ export const QuickLoadCard: React.FC<QuickLoadCardProps> = ({
   description,
   icon: Icon,
   onClick,
-  status = 'Disponível',
+  status = "Disponível",
   isLoading = false,
   badge
 }) => {
@@ -54,7 +54,7 @@ export const QuickLoadCard: React.FC<QuickLoadCardProps> = ({
                 Carregando...
               </>
             ) : (
-              'Acessar'
+              "Acessar"
             )}
           </Button>
         </div>

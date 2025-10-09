@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import { 
   Activity, 
   TestTube, 
@@ -21,7 +21,7 @@ import {
   BarChart3,
   LineChart,
   PieChart
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MonitoringSettings {
   enableMetrics: boolean;
@@ -54,36 +54,36 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
 
   const metrics = [
     {
-      label: 'CPU',
+      label: "CPU",
       value: realTimeData.cpu,
       threshold: settings.alertThresholds.cpu || 80,
-      unit: '%',
+      unit: "%",
       icon: Cpu,
-      color: realTimeData.cpu > 80 ? 'red' : realTimeData.cpu > 60 ? 'yellow' : 'green'
+      color: realTimeData.cpu > 80 ? "red" : realTimeData.cpu > 60 ? "yellow" : "green"
     },
     {
-      label: 'Memória',
+      label: "Memória",
       value: realTimeData.memory,
       threshold: settings.alertThresholds.memory || 85,
-      unit: '%',
+      unit: "%",
       icon: Server,
-      color: realTimeData.memory > 85 ? 'red' : realTimeData.memory > 70 ? 'yellow' : 'green'
+      color: realTimeData.memory > 85 ? "red" : realTimeData.memory > 70 ? "yellow" : "green"
     },
     {
-      label: 'Disco',
+      label: "Disco",
       value: realTimeData.disk,
       threshold: settings.alertThresholds.disk || 90,
-      unit: '%',
+      unit: "%",
       icon: HardDrive,
-      color: realTimeData.disk > 90 ? 'red' : realTimeData.disk > 75 ? 'yellow' : 'green'
+      color: realTimeData.disk > 90 ? "red" : realTimeData.disk > 75 ? "yellow" : "green"
     },
     {
-      label: 'Rede',
+      label: "Rede",
       value: realTimeData.network,
       threshold: 100,
-      unit: 'Mbps',
+      unit: "Mbps",
       icon: Network,
-      color: 'green'
+      color: "green"
     }
   ];
 
@@ -98,10 +98,10 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
 
   const getStatusColor = (color: string) => {
     switch (color) {
-      case 'red': return 'text-red-600 bg-red-100';
-      case 'yellow': return 'text-yellow-600 bg-yellow-100';
-      case 'green': return 'text-green-600 bg-green-100';
-      default: return 'text-muted-foreground bg-secondary';
+    case "red": return "text-red-600 bg-red-100";
+    case "yellow": return "text-yellow-600 bg-yellow-100";
+    case "green": return "text-green-600 bg-green-100";
+    default: return "text-muted-foreground bg-secondary";
     }
   };
 
@@ -129,7 +129,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                   <div className="flex items-center justify-between mb-2">
                     <Icon className="w-5 h-5 text-primary" />
                     <Badge className={getStatusColor(metric.color)}>
-                      {metric.color === 'red' ? 'Crítico' : metric.color === 'yellow' ? 'Atenção' : 'Normal'}
+                      {metric.color === "red" ? "Crítico" : metric.color === "yellow" ? "Atenção" : "Normal"}
                     </Badge>
                   </div>
                   <div className="space-y-2">
@@ -140,8 +140,8 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     <Progress 
                       value={metric.value} 
                       className={`h-2 ${
-                        metric.color === 'red' ? '[&>div]:bg-red-500' : 
-                        metric.color === 'yellow' ? '[&>div]:bg-yellow-500' : '[&>div]:bg-green-500'
+                        metric.color === "red" ? "[&>div]:bg-red-500" : 
+                          metric.color === "yellow" ? "[&>div]:bg-yellow-500" : "[&>div]:bg-green-500"
                       }`}
                     />
                     <div className="text-xs text-muted-foreground">
@@ -240,7 +240,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="0"
                     max="100"
                     value={settings.alertThresholds.cpu || 80}
-                    onChange={(e) => updateThreshold('cpu', parseInt(e.target.value))}
+                    onChange={(e) => updateThreshold("cpu", parseInt(e.target.value))}
                     className="w-20"
                   />
                 </div>
@@ -252,7 +252,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="0"
                     max="100"
                     value={settings.alertThresholds.memory || 85}
-                    onChange={(e) => updateThreshold('memory', parseInt(e.target.value))}
+                    onChange={(e) => updateThreshold("memory", parseInt(e.target.value))}
                     className="w-20"
                   />
                 </div>
@@ -264,7 +264,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="0"
                     max="100"
                     value={settings.alertThresholds.disk || 90}
-                    onChange={(e) => updateThreshold('disk', parseInt(e.target.value))}
+                    onChange={(e) => updateThreshold("disk", parseInt(e.target.value))}
                     className="w-20"
                   />
                 </div>
@@ -275,7 +275,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     type="number"
                     min="0"
                     value={settings.alertThresholds.responseTime || 2000}
-                    onChange={(e) => updateThreshold('responseTime', parseInt(e.target.value))}
+                    onChange={(e) => updateThreshold("responseTime", parseInt(e.target.value))}
                     className="w-24"
                   />
                 </div>

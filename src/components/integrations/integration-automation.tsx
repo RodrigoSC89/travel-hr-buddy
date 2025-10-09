@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Settings,
   Zap,
@@ -32,7 +32,7 @@ import {
   Target,
   Filter,
   Layers
-} from 'lucide-react';
+} from "lucide-react";
 
 interface AutomationRule {
   id: string;
@@ -42,7 +42,7 @@ interface AutomationRule {
   condition: string;
   action: string;
   isActive: boolean;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
   lastTriggered?: string;
   successRate: number;
 }
@@ -50,10 +50,10 @@ interface AutomationRule {
 interface IntegrationConfig {
   id: string;
   endpoint: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   headers: Record<string, string>;
   authentication: {
-    type: 'none' | 'api_key' | 'bearer' | 'oauth' | 'basic';
+    type: "none" | "api_key" | "bearer" | "oauth" | "basic";
     credentials: Record<string, string>;
   };
   rateLimit: {
@@ -78,12 +78,12 @@ interface IntegrationConfig {
 }
 
 export const IntegrationAutomation: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('rules');
+  const [selectedTab, setSelectedTab] = useState("rules");
   const [isCreatingRule, setIsCreatingRule] = useState(false);
   const [config, setConfig] = useState<Partial<IntegrationConfig>>({
-    method: 'GET',
+    method: "GET",
     headers: {},
-    authentication: { type: 'none', credentials: {} },
+    authentication: { type: "none", credentials: {} },
     rateLimit: { enabled: true, requestsPerMinute: 60, burstLimit: 10 },
     retry: { enabled: true, maxAttempts: 3, backoffMultiplier: 2 },
     caching: { enabled: false, ttlSeconds: 300 },
@@ -94,92 +94,92 @@ export const IntegrationAutomation: React.FC = () => {
 
   const [automationRules] = useState<AutomationRule[]>([
     {
-      id: '1',
-      name: 'Auto-Retry em Falhas',
-      description: 'Reexecuta automaticamente requisições que falharam com erro 5xx',
-      trigger: 'integration_error',
-      condition: 'status_code >= 500',
-      action: 'retry_request',
+      id: "1",
+      name: "Auto-Retry em Falhas",
+      description: "Reexecuta automaticamente requisições que falharam com erro 5xx",
+      trigger: "integration_error",
+      condition: "status_code >= 500",
+      action: "retry_request",
       isActive: true,
-      priority: 'high',
-      lastTriggered: '2024-01-20T15:30:00Z',
+      priority: "high",
+      lastTriggered: "2024-01-20T15:30:00Z",
       successRate: 85.2
     },
     {
-      id: '2',
-      name: 'Escalação de Alertas',
-      description: 'Notifica equipe quando taxa de erro excede 10% em 5 minutos',
-      trigger: 'error_rate_threshold',
-      condition: 'error_rate > 10% in 5min',
-      action: 'send_alert',
+      id: "2",
+      name: "Escalação de Alertas",
+      description: "Notifica equipe quando taxa de erro excede 10% em 5 minutos",
+      trigger: "error_rate_threshold",
+      condition: "error_rate > 10% in 5min",
+      action: "send_alert",
       isActive: true,
-      priority: 'critical',
-      lastTriggered: '2024-01-20T14:15:00Z',
+      priority: "critical",
+      lastTriggered: "2024-01-20T14:15:00Z",
       successRate: 98.7
     },
     {
-      id: '3',
-      name: 'Renovação Automática de Token',
-      description: 'Renova tokens de autenticação antes do vencimento',
-      trigger: 'token_expiring',
-      condition: 'expires_in < 24h',
-      action: 'refresh_token',
+      id: "3",
+      name: "Renovação Automática de Token",
+      description: "Renova tokens de autenticação antes do vencimento",
+      trigger: "token_expiring",
+      condition: "expires_in < 24h",
+      action: "refresh_token",
       isActive: true,
-      priority: 'medium',
-      lastTriggered: '2024-01-19T09:00:00Z',
+      priority: "medium",
+      lastTriggered: "2024-01-19T09:00:00Z",
       successRate: 94.1
     },
     {
-      id: '4',
-      name: 'Cache Inteligente',
-      description: 'Ativa cache automaticamente para endpoints com baixa variação',
-      trigger: 'response_pattern',
-      condition: 'response_similarity > 90%',
-      action: 'enable_caching',
+      id: "4",
+      name: "Cache Inteligente",
+      description: "Ativa cache automaticamente para endpoints com baixa variação",
+      trigger: "response_pattern",
+      condition: "response_similarity > 90%",
+      action: "enable_caching",
       isActive: false,
-      priority: 'low',
+      priority: "low",
       successRate: 76.3
     },
     {
-      id: '5',
-      name: 'Balanceamento de Carga',
-      description: 'Redistribui requisições quando servidor está sobrecarregado',
-      trigger: 'high_latency',
-      condition: 'response_time > 5s',
-      action: 'load_balance',
+      id: "5",
+      name: "Balanceamento de Carga",
+      description: "Redistribui requisições quando servidor está sobrecarregado",
+      trigger: "high_latency",
+      condition: "response_time > 5s",
+      action: "load_balance",
       isActive: true,
-      priority: 'high',
-      lastTriggered: '2024-01-20T16:45:00Z',
+      priority: "high",
+      lastTriggered: "2024-01-20T16:45:00Z",
       successRate: 91.8
     }
   ]);
 
   const triggerTypes = [
-    { value: 'integration_error', label: 'Erro de Integração', icon: AlertTriangle },
-    { value: 'error_rate_threshold', label: 'Limite de Taxa de Erro', icon: BarChart3 },
-    { value: 'token_expiring', label: 'Token Expirando', icon: Clock },
-    { value: 'response_pattern', label: 'Padrão de Resposta', icon: Brain },
-    { value: 'high_latency', label: 'Alta Latência', icon: Timer },
-    { value: 'resource_usage', label: 'Uso de Recursos', icon: Cpu },
-    { value: 'scheduled', label: 'Agendado', icon: RefreshCw }
+    { value: "integration_error", label: "Erro de Integração", icon: AlertTriangle },
+    { value: "error_rate_threshold", label: "Limite de Taxa de Erro", icon: BarChart3 },
+    { value: "token_expiring", label: "Token Expirando", icon: Clock },
+    { value: "response_pattern", label: "Padrão de Resposta", icon: Brain },
+    { value: "high_latency", label: "Alta Latência", icon: Timer },
+    { value: "resource_usage", label: "Uso de Recursos", icon: Cpu },
+    { value: "scheduled", label: "Agendado", icon: RefreshCw }
   ];
 
   const actionTypes = [
-    { value: 'retry_request', label: 'Reexecutar Requisição', icon: RefreshCw },
-    { value: 'send_alert', label: 'Enviar Alerta', icon: AlertTriangle },
-    { value: 'refresh_token', label: 'Renovar Token', icon: Lock },
-    { value: 'enable_caching', label: 'Ativar Cache', icon: Database },
-    { value: 'load_balance', label: 'Balancear Carga', icon: Layers },
-    { value: 'scale_resources', label: 'Escalar Recursos', icon: Cpu },
-    { value: 'circuit_breaker', label: 'Circuit Breaker', icon: Shield }
+    { value: "retry_request", label: "Reexecutar Requisição", icon: RefreshCw },
+    { value: "send_alert", label: "Enviar Alerta", icon: AlertTriangle },
+    { value: "refresh_token", label: "Renovar Token", icon: Lock },
+    { value: "enable_caching", label: "Ativar Cache", icon: Database },
+    { value: "load_balance", label: "Balancear Carga", icon: Layers },
+    { value: "scale_resources", label: "Escalar Recursos", icon: Cpu },
+    { value: "circuit_breaker", label: "Circuit Breaker", icon: Shield }
   ];
 
-  const getPriorityColor = (priority: AutomationRule['priority']) => {
+  const getPriorityColor = (priority: AutomationRule["priority"]) => {
     switch (priority) {
-      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'high': return 'bg-warning/20 text-warning border-warning/30';
-      case 'medium': return 'bg-primary/20 text-primary border-primary/30';
-      case 'low': return 'bg-muted text-muted-foreground border-border';
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high": return "bg-warning/20 text-warning border-warning/30";
+    case "medium": return "bg-primary/20 text-primary border-primary/30";
+    case "low": return "bg-muted text-muted-foreground border-border";
     }
   };
 
@@ -287,7 +287,7 @@ export const IntegrationAutomation: React.FC = () => {
                   
                   {rule.lastTriggered && (
                     <div className="text-xs text-muted-foreground">
-                      Última execução: {new Date(rule.lastTriggered).toLocaleString('pt-BR')}
+                      Última execução: {new Date(rule.lastTriggered).toLocaleString("pt-BR")}
                     </div>
                   )}
                   
@@ -322,7 +322,7 @@ export const IntegrationAutomation: React.FC = () => {
                   <Label htmlFor="endpoint">Endpoint</Label>
                   <Input
                     id="endpoint"
-                    value={config.endpoint || ''}
+                    value={config.endpoint || ""}
                     onChange={(e) => setConfig({...config, endpoint: e.target.value})}
                     placeholder="https://api.exemplo.com/v1"
                   />
@@ -389,7 +389,7 @@ export const IntegrationAutomation: React.FC = () => {
                   </Select>
                 </div>
                 
-                {config.authentication?.type !== 'none' && (
+                {config.authentication?.type !== "none" && (
                   <div className="space-y-2">
                     <Label htmlFor="token">Token/Chave</Label>
                     <Input

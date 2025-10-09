@@ -8,4 +8,4 @@ export {
   Loading as MaritimeLoading,
   LoadingCard as MaritimeCardSkeleton,
   type LoadingProps as MaritimeLoadingProps
-} from './Loading';
+} from "./Loading";

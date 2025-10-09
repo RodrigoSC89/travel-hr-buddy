@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Smartphone, 
   Wifi, 
@@ -16,14 +16,14 @@ import {
   Compass,
   Battery,
   Signal
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MobileFeature {
   id: string;
   name: string;
   description: string;
-  priority: 'core' | 'important' | 'nice-to-have';
-  complexity: 'low' | 'medium' | 'high';
+  priority: "core" | "important" | "nice-to-have";
+  complexity: "low" | "medium" | "high";
   estimatedDays: number;
   dependencies: string[];
 }
@@ -36,163 +36,163 @@ interface TechnicalSpec {
 export const MobileSpecifications = () => {
   const coreFeatures: MobileFeature[] = [
     {
-      id: '1',
-      name: 'Modo Offline Avançado',
-      description: 'Sincronização inteligente de dados essenciais para operação sem internet',
-      priority: 'core',
-      complexity: 'high',
+      id: "1",
+      name: "Modo Offline Avançado",
+      description: "Sincronização inteligente de dados essenciais para operação sem internet",
+      priority: "core",
+      complexity: "high",
       estimatedDays: 21,
-      dependencies: ['Local Database', 'Sync Engine']
+      dependencies: ["Local Database", "Sync Engine"]
     },
     {
-      id: '2',
-      name: 'Check-in/Check-out Tripulação',
-      description: 'Sistema de controle de embarque e desembarque com geolocalização',
-      priority: 'core',
-      complexity: 'medium',
+      id: "2",
+      name: "Check-in/Check-out Tripulação",
+      description: "Sistema de controle de embarque e desembarque com geolocalização",
+      priority: "core",
+      complexity: "medium",
       estimatedDays: 14,
-      dependencies: ['GPS', 'Camera', 'Biometrics']
+      dependencies: ["GPS", "Camera", "Biometrics"]
     },
     {
-      id: '3',
-      name: 'Comunicação Push',
-      description: 'Notificações push inteligentes baseadas em contexto e urgência',
-      priority: 'core',
-      complexity: 'medium',
+      id: "3",
+      name: "Comunicação Push",
+      description: "Notificações push inteligentes baseadas em contexto e urgência",
+      priority: "core",
+      complexity: "medium",
       estimatedDays: 10,
-      dependencies: ['Firebase/FCM', 'WebSocket']
+      dependencies: ["Firebase/FCM", "WebSocket"]
     },
     {
-      id: '4',
-      name: 'Scanner QR/Barcode',
-      description: 'Leitura de códigos para equipamentos, cargas e documentos',
-      priority: 'important',
-      complexity: 'low',
+      id: "4",
+      name: "Scanner QR/Barcode",
+      description: "Leitura de códigos para equipamentos, cargas e documentos",
+      priority: "important",
+      complexity: "low",
       estimatedDays: 7,
-      dependencies: ['Camera', 'ML Kit']
+      dependencies: ["Camera", "ML Kit"]
     },
     {
-      id: '5',
-      name: 'Relatórios de Campo',
-      description: 'Criação e envio de relatórios com fotos e dados coletados offline',
-      priority: 'core',
-      complexity: 'medium',
+      id: "5",
+      name: "Relatórios de Campo",
+      description: "Criação e envio de relatórios com fotos e dados coletados offline",
+      priority: "core",
+      complexity: "medium",
       estimatedDays: 12,
-      dependencies: ['Camera', 'File Upload', 'Forms']
+      dependencies: ["Camera", "File Upload", "Forms"]
     },
     {
-      id: '6',
-      name: 'Navegação Marítima',
-      description: 'GPS náutico com rotas, waypoints e informações meteorológicas',
-      priority: 'important',
-      complexity: 'high',
+      id: "6",
+      name: "Navegação Marítima",
+      description: "GPS náutico com rotas, waypoints e informações meteorológicas",
+      priority: "important",
+      complexity: "high",
       estimatedDays: 28,
-      dependencies: ['Maps API', 'Weather API', 'GPS']
+      dependencies: ["Maps API", "Weather API", "GPS"]
     },
     {
-      id: '7',
-      name: 'Emergência & SOS',
-      description: 'Botão de emergência com localização automática e alertas',
-      priority: 'core',
-      complexity: 'medium',
+      id: "7",
+      name: "Emergência & SOS",
+      description: "Botão de emergência com localização automática e alertas",
+      priority: "core",
+      complexity: "medium",
       estimatedDays: 8,
-      dependencies: ['GPS', 'Emergency Services API']
+      dependencies: ["GPS", "Emergency Services API"]
     },
     {
-      id: '8',
-      name: 'Biometria e Segurança',
-      description: 'Autenticação por impressão digital, face ID e PIN',
-      priority: 'important',
-      complexity: 'medium',
+      id: "8",
+      name: "Biometria e Segurança",
+      description: "Autenticação por impressão digital, face ID e PIN",
+      priority: "important",
+      complexity: "medium",
       estimatedDays: 15,
-      dependencies: ['Biometric APIs', 'Encryption']
+      dependencies: ["Biometric APIs", "Encryption"]
     }
   ];
 
   const technicalSpecs: TechnicalSpec[] = [
     {
-      category: 'Plataformas Suportadas',
+      category: "Plataformas Suportadas",
       requirements: [
-        'iOS 14.0+ (iPhone 8 ou superior)',
-        'Android 8.0+ (API Level 26)',
-        'React Native 0.73+ ou Flutter 3.16+',
-        'Suporte a tablets (iPad, Android tablets)'
+        "iOS 14.0+ (iPhone 8 ou superior)",
+        "Android 8.0+ (API Level 26)",
+        "React Native 0.73+ ou Flutter 3.16+",
+        "Suporte a tablets (iPad, Android tablets)"
       ]
     },
     {
-      category: 'Conectividade',
+      category: "Conectividade",
       requirements: [
-        'WiFi 802.11 b/g/n/ac',
-        'Bluetooth 5.0+ (para sensores)',
-        'NFC (para check-ins)',
-        'Satélite (Iridium para emergências)',
-        'Modo offline completo'
+        "WiFi 802.11 b/g/n/ac",
+        "Bluetooth 5.0+ (para sensores)",
+        "NFC (para check-ins)",
+        "Satélite (Iridium para emergências)",
+        "Modo offline completo"
       ]
     },
     {
-      category: 'Hardware',
+      category: "Hardware",
       requirements: [
-        'GPS/GLONASS/Galileo',
-        'Câmera traseira 8MP+',
-        'Sensor de movimento (acelerômetro, giroscópio)',
-        'Microfone para comandos de voz',
-        'Mínimo 4GB RAM, 64GB storage'
+        "GPS/GLONASS/Galileo",
+        "Câmera traseira 8MP+",
+        "Sensor de movimento (acelerômetro, giroscópio)",
+        "Microfone para comandos de voz",
+        "Mínimo 4GB RAM, 64GB storage"
       ]
     },
     {
-      category: 'Segurança',
+      category: "Segurança",
       requirements: [
-        'Criptografia AES-256',
-        'Certificado SSL/TLS 1.3',
-        'Biometria nativa do dispositivo',
-        'Wipe remoto em caso de perda',
-        'VPN automática para dados sensíveis'
+        "Criptografia AES-256",
+        "Certificado SSL/TLS 1.3",
+        "Biometria nativa do dispositivo",
+        "Wipe remoto em caso de perda",
+        "VPN automática para dados sensíveis"
       ]
     },
     {
-      category: 'Performance',
+      category: "Performance",
       requirements: [
-        'Tempo de inicialização < 3 segundos',
-        'Sincronização em background',
-        'Cache inteligente (até 500MB)',
-        'Compressão de dados automática',
-        'Bateria otimizada (8h+ uso contínuo)'
+        "Tempo de inicialização < 3 segundos",
+        "Sincronização em background",
+        "Cache inteligente (até 500MB)",
+        "Compressão de dados automática",
+        "Bateria otimizada (8h+ uso contínuo)"
       ]
     }
   ];
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'core': return 'bg-danger text-danger-foreground';
-      case 'important': return 'bg-warning text-warning-foreground';
-      case 'nice-to-have': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "core": return "bg-danger text-danger-foreground";
+    case "important": return "bg-warning text-warning-foreground";
+    case "nice-to-have": return "bg-info text-info-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-      case 'high': return 'bg-danger text-danger-foreground';
-      case 'medium': return 'bg-warning text-warning-foreground';
-      case 'low': return 'bg-success text-success-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "high": return "bg-danger text-danger-foreground";
+    case "medium": return "bg-warning text-warning-foreground";
+    case "low": return "bg-success text-success-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getFeatureIcon = (name: string) => {
-    if (name.includes('Offline')) return <WifiOff className="h-5 w-5" />;
-    if (name.includes('Check')) return <Users className="h-5 w-5" />;
-    if (name.includes('Push')) return <Bell className="h-5 w-5" />;
-    if (name.includes('Scanner')) return <QrCode className="h-5 w-5" />;
-    if (name.includes('Relatórios')) return <Camera className="h-5 w-5" />;
-    if (name.includes('Navegação')) return <Compass className="h-5 w-5" />;
-    if (name.includes('Emergência')) return <Shield className="h-5 w-5" />;
-    if (name.includes('Biometria')) return <Shield className="h-5 w-5" />;
+    if (name.includes("Offline")) return <WifiOff className="h-5 w-5" />;
+    if (name.includes("Check")) return <Users className="h-5 w-5" />;
+    if (name.includes("Push")) return <Bell className="h-5 w-5" />;
+    if (name.includes("Scanner")) return <QrCode className="h-5 w-5" />;
+    if (name.includes("Relatórios")) return <Camera className="h-5 w-5" />;
+    if (name.includes("Navegação")) return <Compass className="h-5 w-5" />;
+    if (name.includes("Emergência")) return <Shield className="h-5 w-5" />;
+    if (name.includes("Biometria")) return <Shield className="h-5 w-5" />;
     return <Smartphone className="h-5 w-5" />;
   };
 
   const totalDays = coreFeatures.reduce((sum, feature) => sum + feature.estimatedDays, 0);
-  const averageComplexity = coreFeatures.filter(f => f.complexity === 'high').length / coreFeatures.length;
+  const averageComplexity = coreFeatures.filter(f => f.complexity === "high").length / coreFeatures.length;
 
   return (
     <div className="space-y-6">

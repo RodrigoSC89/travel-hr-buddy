@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { AlertTriangle, CheckCircle, Clock, Eye, Edit, Calendar, MapPin, Ship, Building, TrendingUp, Filter, Search } from 'lucide-react';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertTriangle, CheckCircle, Clock, Eye, Edit, Calendar, MapPin, Ship, Building, TrendingUp, Filter, Search } from "lucide-react";
 
 interface NonConformity {
   id: string;
   audit_id: string;
   element_number: string;
   element_name: string;
-  non_conformity_type: 'critical' | 'grave' | 'moderate' | 'light';
+  non_conformity_type: "critical" | "grave" | "moderate" | "light";
   description: string;
   corrective_action: string;
   responsible_person: string;
   target_date: string;
-  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  status: "open" | "in_progress" | "resolved" | "closed";
   severity_score: number;
   audit_date: string;
   vessel_name?: string;
@@ -33,17 +33,17 @@ interface NonConformitiesProps {
 
 // Updated to match the PEOTRAM classification system
 const TYPE_COLORS = {
-  critical: 'bg-destructive/20 text-destructive border-destructive/30',
-  grave: 'bg-orange-500/20 text-orange-600 border-orange-500/30',
-  moderate: 'bg-warning/20 text-warning border-warning/30',
-  light: 'bg-info/20 text-info border-info/30'
+  critical: "bg-destructive/20 text-destructive border-destructive/30",
+  grave: "bg-orange-500/20 text-orange-600 border-orange-500/30",
+  moderate: "bg-warning/20 text-warning border-warning/30",
+  light: "bg-info/20 text-info border-info/30"
 };
 
 const STATUS_COLORS = {
-  open: 'bg-destructive/20 text-destructive border-destructive/30',
-  in_progress: 'bg-warning/20 text-warning border-warning/30',
-  resolved: 'bg-info/20 text-info border-info/30',
-  closed: 'bg-success/20 text-success border-success/30'
+  open: "bg-destructive/20 text-destructive border-destructive/30",
+  in_progress: "bg-warning/20 text-warning border-warning/30",
+  resolved: "bg-info/20 text-info border-info/30",
+  closed: "bg-success/20 text-success border-success/30"
 };
 
 const STATUS_ICONS = {
@@ -57,38 +57,38 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
   nonConformities, 
   onUpdate 
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedNC, setSelectedNC] = useState<NonConformity | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const filteredNCs = nonConformities.filter(nc => {
     const matchesSearch = nc.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          nc.element_name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = selectedType === 'all' || nc.non_conformity_type === selectedType;
-    const matchesStatus = selectedStatus === 'all' || nc.status === selectedStatus;
+    const matchesType = selectedType === "all" || nc.non_conformity_type === selectedType;
+    const matchesStatus = selectedStatus === "all" || nc.status === selectedStatus;
     
     return matchesSearch && matchesType && matchesStatus;
   });
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'critical': return 'Crítica';
-      case 'grave': return 'Grave';
-      case 'moderate': return 'Moderada';
-      case 'light': return 'Leve';
-      default: return type;
+    case "critical": return "Crítica";
+    case "grave": return "Grave";
+    case "moderate": return "Moderada";
+    case "light": return "Leve";
+    default: return type;
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'open': return 'Aberta';
-      case 'in_progress': return 'Em Andamento';
-      case 'resolved': return 'Resolvida';
-      case 'closed': return 'Fechada';
-      default: return status;
+    case "open": return "Aberta";
+    case "in_progress": return "Em Andamento";
+    case "resolved": return "Resolvida";
+    case "closed": return "Fechada";
+    default: return status;
     }
   };
 
@@ -98,7 +98,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
       setIsEditDialogOpen(false);
       setSelectedNC(null);
     } catch (error) {
-      console.error('Erro ao atualizar não conformidade:', error);
+      console.error("Erro ao atualizar não conformidade:", error);
     }
   };
 
@@ -117,9 +117,9 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
   // Statistics
   const stats = {
     total: nonConformities.length,
-    open: nonConformities.filter(nc => nc.status === 'open').length,
-    critical: nonConformities.filter(nc => nc.non_conformity_type === 'critical').length,
-    overdue: nonConformities.filter(nc => isOverdue(nc.target_date) && nc.status !== 'closed').length
+    open: nonConformities.filter(nc => nc.status === "open").length,
+    critical: nonConformities.filter(nc => nc.non_conformity_type === "critical").length,
+    overdue: nonConformities.filter(nc => isOverdue(nc.target_date) && nc.status !== "closed").length
   };
 
   return (
@@ -227,9 +227,9 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
                       <StatusIcon className={`w-5 h-5 ${
-                        nc.status === 'open' ? 'text-destructive' :
-                        nc.status === 'in_progress' ? 'text-warning' :
-                        'text-success'
+                        nc.status === "open" ? "text-destructive" :
+                          nc.status === "in_progress" ? "text-warning" :
+                            "text-success"
                       }`} />
                       
                       <Badge variant="outline" className={TYPE_COLORS[nc.non_conformity_type]}>
@@ -240,7 +240,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                         {getStatusLabel(nc.status)}
                       </Badge>
                       
-                      {overdue && nc.status !== 'closed' && (
+                      {overdue && nc.status !== "closed" && (
                         <Badge variant="destructive">
                           Em Atraso
                         </Badge>
@@ -255,12 +255,12 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                         <Calendar className="w-4 h-4 text-muted-foreground" />
                         <div>
                           <span className="text-muted-foreground">Prazo: </span>
-                          <span className={overdue ? 'text-destructive font-medium' : ''}>
-                            {new Date(nc.target_date).toLocaleDateString('pt-BR')}
+                          <span className={overdue ? "text-destructive font-medium" : ""}>
+                            {new Date(nc.target_date).toLocaleDateString("pt-BR")}
                           </span>
-                          {!overdue && nc.status !== 'closed' && (
+                          {!overdue && nc.status !== "closed" && (
                             <span className="text-muted-foreground">
-                              {daysUntilDue > 0 ? ` (${daysUntilDue} dias)` : ' (hoje)'}
+                              {daysUntilDue > 0 ? ` (${daysUntilDue} dias)` : " (hoje)"}
                             </span>
                           )}
                         </div>
@@ -393,9 +393,9 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
               <AlertTriangle className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">Nenhuma não conformidade encontrada</h3>
               <p className="text-muted-foreground">
-                {searchTerm || selectedType !== 'all' || selectedStatus !== 'all' 
-                  ? 'Tente ajustar os filtros de busca.'
-                  : 'Não há não conformidades registradas.'}
+                {searchTerm || selectedType !== "all" || selectedStatus !== "all" 
+                  ? "Tente ajustar os filtros de busca."
+                  : "Não há não conformidades registradas."}
               </p>
             </CardContent>
           </Card>

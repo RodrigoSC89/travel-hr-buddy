@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { 
   Calendar, 
   Target, 
@@ -17,12 +17,12 @@ import {
   Users,
   Rocket,
   BarChart3
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Sprint {
   id: number;
   name: string;
-  status: 'completed' | 'in-progress' | 'planned';
+  status: "completed" | "in-progress" | "planned";
   progress: number;
   startDate: string;
   endDate: string;
@@ -36,7 +36,7 @@ interface Phase {
   description: string;
   icon: React.ReactNode;
   sprints: Sprint[];
-  status: 'completed' | 'in-progress' | 'planned';
+  status: "completed" | "in-progress" | "planned";
   overallProgress: number;
   expectedResult: string;
   color: string;
@@ -240,27 +240,27 @@ const ProductRoadmap: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'in-progress':
-        return <Clock className="w-4 h-4 text-blue-500" />;
-      case 'planned':
-        return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
-      default:
-        return <Clock className="w-4 h-4 text-muted-foreground" />;
+    case "completed":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "in-progress":
+      return <Clock className="w-4 h-4 text-blue-500" />;
+    case "planned":
+      return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
+    default:
+      return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'text-green-600 bg-green-50 border-green-200';
-      case 'in-progress':
-        return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'planned':
-        return 'text-muted-foreground bg-gray-50 border-gray-200';
-      default:
-        return 'text-muted-foreground bg-gray-50 border-gray-200';
+    case "completed":
+      return "text-green-600 bg-green-50 border-green-200";
+    case "in-progress":
+      return "text-blue-600 bg-blue-50 border-blue-200";
+    case "planned":
+      return "text-muted-foreground bg-gray-50 border-gray-200";
+    default:
+      return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
@@ -356,8 +356,8 @@ const ProductRoadmap: React.FC = () => {
                           <div className="flex items-center gap-2">
                             {getStatusIcon(phase.status)}
                             <Badge className={getStatusColor(phase.status)}>
-                              {phase.status === 'completed' ? 'Concluída' : 
-                               phase.status === 'in-progress' ? 'Em Andamento' : 'Planejada'}
+                              {phase.status === "completed" ? "Concluída" : 
+                                phase.status === "in-progress" ? "Em Andamento" : "Planejada"}
                             </Badge>
                           </div>
                         </div>
@@ -424,7 +424,7 @@ const ProductRoadmap: React.FC = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {currentPhase.sprints.map((sprint) => (
-                      <Card key={sprint.id} className="border-l-4" style={{ borderLeftColor: currentPhase.color.replace('bg-', '#') }}>
+                      <Card key={sprint.id} className="border-l-4" style={{ borderLeftColor: currentPhase.color.replace("bg-", "#") }}>
                         <CardHeader className="pb-3">
                           <div className="flex items-center justify-between">
                             <CardTitle className="text-base">Sprint {sprint.id}</CardTitle>
@@ -489,7 +489,7 @@ const ProductRoadmap: React.FC = () => {
               <CardContent className="space-y-4">
                 {roadmapData
                   .flatMap(phase => phase.sprints)
-                  .filter(sprint => sprint.status === 'in-progress')
+                  .filter(sprint => sprint.status === "in-progress")
                   .map((sprint) => (
                     <div key={sprint.id} className="border rounded-lg p-4">
                       <div className="flex justify-between items-start mb-2">
@@ -517,7 +517,7 @@ const ProductRoadmap: React.FC = () => {
               <CardContent className="space-y-4">
                 {roadmapData
                   .flatMap(phase => phase.sprints)
-                  .filter(sprint => sprint.status === 'planned')
+                  .filter(sprint => sprint.status === "planned")
                   .slice(0, 3)
                   .map((sprint) => (
                     <div key={sprint.id} className="border rounded-lg p-4">

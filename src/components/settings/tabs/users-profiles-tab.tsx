@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Users, 
   UserPlus, 
@@ -22,74 +22,74 @@ import {
   Edit,
   Trash2,
   Settings
-} from 'lucide-react';
+} from "lucide-react";
 
 interface UsersProfilesTabProps {
   testMode: boolean;
 }
 
 export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedRole, setSelectedRole] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedRole, setSelectedRole] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
 
   // Mock user data
   const users = [
     {
-      id: '1',
-      name: 'Carlos Silva',
-      email: 'carlos.silva@nautilus.com',
-      role: 'admin',
-      status: 'active',
-      department: 'TI',
-      lastLogin: '2024-09-29T10:30:00Z',
-      avatar: '/api/placeholder/32/32'
+      id: "1",
+      name: "Carlos Silva",
+      email: "carlos.silva@nautilus.com",
+      role: "admin",
+      status: "active",
+      department: "TI",
+      lastLogin: "2024-09-29T10:30:00Z",
+      avatar: "/api/placeholder/32/32"
     },
     {
-      id: '2',
-      name: 'Maria Santos',
-      email: 'maria.santos@nautilus.com',
-      role: 'hr_manager',
-      status: 'active',
-      department: 'Recursos Humanos',
-      lastLogin: '2024-09-29T09:15:00Z',
-      avatar: '/api/placeholder/32/32'
+      id: "2",
+      name: "Maria Santos",
+      email: "maria.santos@nautilus.com",
+      role: "hr_manager",
+      status: "active",
+      department: "Recursos Humanos",
+      lastLogin: "2024-09-29T09:15:00Z",
+      avatar: "/api/placeholder/32/32"
     },
     {
-      id: '3',
-      name: 'João Oliveira',
-      email: 'joao.oliveira@nautilus.com',
-      role: 'employee',
-      status: 'active',
-      department: 'Operações',
-      lastLogin: '2024-09-28T16:45:00Z',
-      avatar: '/api/placeholder/32/32'
+      id: "3",
+      name: "João Oliveira",
+      email: "joao.oliveira@nautilus.com",
+      role: "employee",
+      status: "active",
+      department: "Operações",
+      lastLogin: "2024-09-28T16:45:00Z",
+      avatar: "/api/placeholder/32/32"
     },
     {
-      id: '4',
-      name: 'Ana Costa',
-      email: 'ana.costa@nautilus.com',
-      role: 'employee',
-      status: 'inactive',
-      department: 'Navegação',
-      lastLogin: '2024-09-20T14:20:00Z',
-      avatar: '/api/placeholder/32/32'
+      id: "4",
+      name: "Ana Costa",
+      email: "ana.costa@nautilus.com",
+      role: "employee",
+      status: "inactive",
+      department: "Navegação",
+      lastLogin: "2024-09-20T14:20:00Z",
+      avatar: "/api/placeholder/32/32"
     }
   ];
 
   const roles = [
-    { value: 'admin', label: 'Administrador', color: 'bg-red-100 text-red-800' },
-    { value: 'hr_manager', label: 'Gerente RH', color: 'bg-blue-100 text-blue-800' },
-    { value: 'employee', label: 'Funcionário', color: 'bg-green-100 text-green-800' }
+    { value: "admin", label: "Administrador", color: "bg-red-100 text-red-800" },
+    { value: "hr_manager", label: "Gerente RH", color: "bg-blue-100 text-blue-800" },
+    { value: "employee", label: "Funcionário", color: "bg-green-100 text-green-800" }
   ];
 
   const modulePermissions = [
-    { id: 'communication', name: 'Comunicação', description: 'Acesso ao módulo de comunicação' },
-    { id: 'crew', name: 'Tripulação', description: 'Gestão de tripulação e equipagem' },
-    { id: 'vessels', name: 'Embarcações', description: 'Gestão de embarcações e frotas' },
-    { id: 'certificates', name: 'Certificações', description: 'Gestão de certificados e documentos' },
-    { id: 'reports', name: 'Relatórios', description: 'Acesso aos relatórios do sistema' },
-    { id: 'settings', name: 'Configurações', description: 'Acesso às configurações do sistema' }
+    { id: "communication", name: "Comunicação", description: "Acesso ao módulo de comunicação" },
+    { id: "crew", name: "Tripulação", description: "Gestão de tripulação e equipagem" },
+    { id: "vessels", name: "Embarcações", description: "Gestão de embarcações e frotas" },
+    { id: "certificates", name: "Certificações", description: "Gestão de certificados e documentos" },
+    { id: "reports", name: "Relatórios", description: "Acesso aos relatórios do sistema" },
+    { id: "settings", name: "Configurações", description: "Acesso às configurações do sistema" }
   ];
 
   const getRoleInfo = (role: string) => {
@@ -97,7 +97,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
   };
 
   const getStatusBadge = (status: string) => {
-    return status === 'active' 
+    return status === "active" 
       ? <Badge className="bg-green-100 text-green-800">Ativo</Badge>
       : <Badge variant="outline" className="text-muted-foreground">Inativo</Badge>;
   };
@@ -105,8 +105,8 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = selectedRole === 'all' || user.role === selectedRole;
-    const matchesStatus = selectedStatus === 'all' || user.status === selectedStatus;
+    const matchesRole = selectedRole === "all" || user.role === selectedRole;
+    const matchesStatus = selectedStatus === "all" || user.status === selectedStatus;
     
     return matchesSearch && matchesRole && matchesStatus;
   });
@@ -199,7 +199,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                         <Avatar>
                           <AvatarImage src={user.avatar} />
                           <AvatarFallback>
-                            {user.name.split(' ').map(n => n[0]).join('')}
+                            {user.name.split(" ").map(n => n[0]).join("")}
                           </AvatarFallback>
                         </Avatar>
                         
@@ -226,7 +226,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                           {roleInfo.label}
                         </Badge>
                         <div className="text-xs text-muted-foreground">
-                          Último login: {new Date(user.lastLogin).toLocaleDateString('pt-BR')}
+                          Último login: {new Date(user.lastLogin).toLocaleDateString("pt-BR")}
                         </div>
                         <Button variant="ghost" size="sm">
                           <MoreHorizontal className="w-4 h-4" />
@@ -267,7 +267,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                   </div>
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-                    {role.value === 'admin' && (
+                    {role.value === "admin" && (
                       <>
                         <span className="text-green-600">✓ Todos os módulos</span>
                         <span className="text-green-600">✓ Gerenciar usuários</span>
@@ -275,7 +275,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                         <span className="text-green-600">✓ Relatórios</span>
                       </>
                     )}
-                    {role.value === 'hr_manager' && (
+                    {role.value === "hr_manager" && (
                       <>
                         <span className="text-green-600">✓ Gestão de pessoal</span>
                         <span className="text-green-600">✓ Certificações</span>
@@ -283,7 +283,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                         <span className="text-muted-foreground">✗ Configurações</span>
                       </>
                     )}
-                    {role.value === 'employee' && (
+                    {role.value === "employee" && (
                       <>
                         <span className="text-green-600">✓ Dados pessoais</span>
                         <span className="text-green-600">✓ Comunicação</span>
@@ -334,14 +334,14 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                           <span className="text-green-600 text-lg">✓</span>
                         </td>
                         <td className="text-center p-3">
-                          {['crew', 'certificates', 'reports'].includes(module.id) ? (
+                          {["crew", "certificates", "reports"].includes(module.id) ? (
                             <span className="text-green-600 text-lg">✓</span>
                           ) : (
                             <span className="text-muted-foreground text-lg">✗</span>
                           )}
                         </td>
                         <td className="text-center p-3">
-                          {['communication'].includes(module.id) ? (
+                          {["communication"].includes(module.id) ? (
                             <span className="text-green-600 text-lg">✓</span>
                           ) : (
                             <span className="text-muted-foreground text-lg">✗</span>

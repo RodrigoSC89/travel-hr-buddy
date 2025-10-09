@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
   UserPlus, 
@@ -22,54 +22,54 @@ import {
   Settings,
   Edit,
   Trash2
-} from 'lucide-react';
+} from "lucide-react";
 
 const UserManagementDashboard = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [roleFilter, setRoleFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const { toast } = useToast();
 
   const users = [
     {
       id: 1,
-      name: 'João Silva',
-      email: 'joao.silva@nautilus.com',
-      role: 'Admin',
-      status: 'Ativo',
-      lastLogin: '2024-01-15 14:30',
-      department: 'TI',
-      phone: '+55 11 99999-9999'
+      name: "João Silva",
+      email: "joao.silva@nautilus.com",
+      role: "Admin",
+      status: "Ativo",
+      lastLogin: "2024-01-15 14:30",
+      department: "TI",
+      phone: "+55 11 99999-9999"
     },
     {
       id: 2,
-      name: 'Maria Santos',
-      email: 'maria.santos@nautilus.com',
-      role: 'HR Manager',
-      status: 'Ativo',
-      lastLogin: '2024-01-15 13:45',
-      department: 'Recursos Humanos',
-      phone: '+55 11 88888-8888'
+      name: "Maria Santos",
+      email: "maria.santos@nautilus.com",
+      role: "HR Manager",
+      status: "Ativo",
+      lastLogin: "2024-01-15 13:45",
+      department: "Recursos Humanos",
+      phone: "+55 11 88888-8888"
     },
     {
       id: 3,
-      name: 'Pedro Costa',
-      email: 'pedro.costa@nautilus.com',
-      role: 'Employee',
-      status: 'Inativo',
-      lastLogin: '2024-01-10 09:15',
-      department: 'Operações',
-      phone: '+55 11 77777-7777'
+      name: "Pedro Costa",
+      email: "pedro.costa@nautilus.com",
+      role: "Employee",
+      status: "Inativo",
+      lastLogin: "2024-01-10 09:15",
+      department: "Operações",
+      phone: "+55 11 77777-7777"
     },
     {
       id: 4,
-      name: 'Ana Oliveira',
-      email: 'ana.oliveira@nautilus.com',
-      role: 'Manager',
-      status: 'Ativo',
-      lastLogin: '2024-01-15 12:20',
-      department: 'Logística',
-      phone: '+55 11 66666-6666'
+      name: "Ana Oliveira",
+      email: "ana.oliveira@nautilus.com",
+      role: "Manager",
+      status: "Ativo",
+      lastLogin: "2024-01-15 12:20",
+      department: "Logística",
+      phone: "+55 11 66666-6666"
     }
   ];
 
@@ -82,20 +82,20 @@ const UserManagementDashboard = () => {
 
   const getRoleBadge = (role: string) => {
     const roleColors = {
-      'Admin': 'bg-red-100 text-red-800',
-      'HR Manager': 'bg-blue-100 text-blue-800',
-      'Manager': 'bg-green-100 text-green-800',
-      'Employee': 'bg-secondary text-secondary-foreground'
+      "Admin": "bg-red-100 text-red-800",
+      "HR Manager": "bg-blue-100 text-blue-800",
+      "Manager": "bg-green-100 text-green-800",
+      "Employee": "bg-secondary text-secondary-foreground"
     };
     return (
-      <Badge className={roleColors[role as keyof typeof roleColors] || 'bg-secondary text-secondary-foreground'}>
+      <Badge className={roleColors[role as keyof typeof roleColors] || "bg-secondary text-secondary-foreground"}>
         {role}
       </Badge>
     );
   };
 
   const getStatusBadge = (status: string) => {
-    return status === 'Ativo' ? (
+    return status === "Ativo" ? (
       <Badge variant="default" className="bg-green-100 text-green-800">
         <UserCheck className="w-3 h-3 mr-1" />
         Ativo
@@ -111,8 +111,8 @@ const UserManagementDashboard = () => {
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
-    const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
+    const matchesRole = roleFilter === "all" || user.role === roleFilter;
+    const matchesStatus = statusFilter === "all" || user.status === statusFilter;
     
     return matchesSearch && matchesRole && matchesStatus;
   });
@@ -338,21 +338,21 @@ const UserManagementDashboard = () => {
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => handleUserAction('Editar', user.id)}
+                            onClick={() => handleUserAction("Editar", user.id)}
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => handleUserAction('Configurar', user.id)}
+                            onClick={() => handleUserAction("Configurar", user.id)}
                           >
                             <Settings className="w-4 h-4" />
                           </Button>
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => handleUserAction('Desativar', user.id)}
+                            onClick={() => handleUserAction("Desativar", user.id)}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>

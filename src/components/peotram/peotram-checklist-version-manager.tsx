@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Plus,
   Edit,
@@ -23,8 +23,8 @@ import {
   FileSpreadsheet,
   FileText,
   Settings2
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface ChecklistRequirement {
   id: string;
@@ -47,7 +47,7 @@ interface ChecklistTemplate {
   id: string;
   year: number;
   version: string;
-  vesselType: 'PSV' | 'OSRV' | 'AHTS' | 'ALL';
+  vesselType: "PSV" | "OSRV" | "AHTS" | "ALL";
   isActive: boolean;
   elements: ChecklistElement[];
   createdAt: Date;
@@ -56,24 +56,24 @@ interface ChecklistTemplate {
 }
 
 const VESSEL_TYPES = [
-  { value: 'PSV', label: 'PSV - Platform Supply Vessel', color: 'bg-blue-100 text-blue-800' },
-  { value: 'OSRV', label: 'OSRV - Oil Spill Response Vessel', color: 'bg-green-100 text-green-800' },
-  { value: 'AHTS', label: 'AHTS - Anchor Handling Tug Supply', color: 'bg-purple-100 text-purple-800' },
-  { value: 'ALL', label: 'Todos os Tipos', color: 'bg-secondary text-secondary-foreground' },
+  { value: "PSV", label: "PSV - Platform Supply Vessel", color: "bg-blue-100 text-blue-800" },
+  { value: "OSRV", label: "OSRV - Oil Spill Response Vessel", color: "bg-green-100 text-green-800" },
+  { value: "AHTS", label: "AHTS - Anchor Handling Tug Supply", color: "bg-purple-100 text-purple-800" },
+  { value: "ALL", label: "Todos os Tipos", color: "bg-secondary text-secondary-foreground" },
 ];
 
 export const PeotramChecklistVersionManager: React.FC = () => {
   const [templates, setTemplates] = useState<ChecklistTemplate[]>([
     {
-      id: 'tpl-2024-1',
+      id: "tpl-2024-1",
       year: 2024,
-      version: '2024.1',
-      vesselType: 'ALL',
+      version: "2024.1",
+      vesselType: "ALL",
       isActive: true,
       elements: [],
-      createdAt: new Date('2024-01-01'),
+      createdAt: new Date("2024-01-01"),
       updatedAt: new Date(),
-      description: 'Template padrão PEOTRAM 2024',
+      description: "Template padrão PEOTRAM 2024",
     },
   ]);
 
@@ -87,7 +87,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       id: `tpl-${Date.now()}`,
       year: new Date().getFullYear(),
       version: `${new Date().getFullYear()}.1`,
-      vesselType: 'ALL',
+      vesselType: "ALL",
       isActive: false,
       elements: [],
       createdAt: new Date(),
@@ -97,21 +97,21 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     setTemplates([...templates, newTemplate]);
     setSelectedTemplate(newTemplate);
     setIsEditing(true);
-    toast.success('Novo template criado!');
+    toast.success("Novo template criado!");
   };
 
   const duplicateTemplate = (template: ChecklistTemplate) => {
     const newTemplate: ChecklistTemplate = {
       ...template,
       id: `tpl-${Date.now()}`,
-      version: `${template.year}.${parseInt(template.version.split('.')[1] || '1') + 1}`,
+      version: `${template.year}.${parseInt(template.version.split(".")[1] || "1") + 1}`,
       isActive: false,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
 
     setTemplates([...templates, newTemplate]);
-    toast.success('Template duplicado!');
+    toast.success("Template duplicado!");
   };
 
   const deleteTemplate = (templateId: string) => {
@@ -119,7 +119,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     if (selectedTemplate?.id === templateId) {
       setSelectedTemplate(null);
     }
-    toast.success('Template removido!');
+    toast.success("Template removido!");
   };
 
   const activateTemplate = (templateId: string) => {
@@ -127,7 +127,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       ...t,
       isActive: t.id === templateId,
     })));
-    toast.success('Template ativado!');
+    toast.success("Template ativado!");
   };
 
   const addElement = () => {
@@ -136,7 +136,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     const newElement: ChecklistElement = {
       id: `elem-${Date.now()}`,
       number: `ELEM_${selectedTemplate.elements.length + 1}`,
-      name: 'Novo Elemento',
+      name: "Novo Elemento",
       requirements: [],
       totalWeight: 0,
     };
@@ -156,7 +156,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     const newRequirement: ChecklistRequirement = {
       id: `req-${Date.now()}`,
       code: `REQ_${Date.now()}`,
-      description: 'Novo requisito',
+      description: "Novo requisito",
       weight: 1,
       mandatory: false,
     };
@@ -166,10 +166,10 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       elements: selectedTemplate.elements.map(elem =>
         elem.id === elementId
           ? {
-              ...elem,
-              requirements: [...elem.requirements, newRequirement],
-              totalWeight: elem.totalWeight + newRequirement.weight,
-            }
+            ...elem,
+            requirements: [...elem.requirements, newRequirement],
+            totalWeight: elem.totalWeight + newRequirement.weight,
+          }
           : elem
       ),
       updatedAt: new Date(),
@@ -184,14 +184,14 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       elements: selectedTemplate.elements.map(elem =>
         elem.id === elementId
           ? {
-              ...elem,
-              requirements: elem.requirements.map(req =>
-                req.id === reqId ? { ...req, ...updates } : req
-              ),
-              totalWeight: elem.requirements.reduce((sum, req) =>
-                sum + (req.id === reqId ? (updates.weight || req.weight) : req.weight), 0
-              ),
-            }
+            ...elem,
+            requirements: elem.requirements.map(req =>
+              req.id === reqId ? { ...req, ...updates } : req
+            ),
+            totalWeight: elem.requirements.reduce((sum, req) =>
+              sum + (req.id === reqId ? (updates.weight || req.weight) : req.weight), 0
+            ),
+          }
           : elem
       ),
       updatedAt: new Date(),
@@ -206,12 +206,12 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       elements: selectedTemplate.elements.map(elem =>
         elem.id === elementId
           ? {
-              ...elem,
-              requirements: elem.requirements.filter(req => req.id !== reqId),
-              totalWeight: elem.requirements
-                .filter(req => req.id !== reqId)
-                .reduce((sum, req) => sum + req.weight, 0),
-            }
+            ...elem,
+            requirements: elem.requirements.filter(req => req.id !== reqId),
+            totalWeight: elem.requirements
+              .filter(req => req.id !== reqId)
+              .reduce((sum, req) => sum + req.weight, 0),
+          }
           : elem
       ),
       updatedAt: new Date(),
@@ -226,32 +226,32 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     ));
 
     setIsEditing(false);
-    toast.success('Template salvo com sucesso!');
+    toast.success("Template salvo com sucesso!");
   };
 
-  const exportTemplate = (format: 'json' | 'excel' | 'pdf') => {
+  const exportTemplate = (format: "json" | "excel" | "pdf") => {
     if (!selectedTemplate) return;
 
     switch (format) {
-      case 'json': {
-        const blob = new Blob([JSON.stringify(selectedTemplate, null, 2)], {
-          type: 'application/json',
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `peotram-template-${selectedTemplate.version}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        toast.success('Template exportado como JSON!');
-        break;
-      }
-      case 'excel':
-        toast.info('Exportação Excel em desenvolvimento');
-        break;
-      case 'pdf':
-        toast.info('Exportação PDF em desenvolvimento');
-        break;
+    case "json": {
+      const blob = new Blob([JSON.stringify(selectedTemplate, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `peotram-template-${selectedTemplate.version}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("Template exportado como JSON!");
+      break;
+    }
+    case "excel":
+      toast.info("Exportação Excel em desenvolvimento");
+      break;
+    case "pdf":
+      toast.info("Exportação PDF em desenvolvimento");
+      break;
     }
   };
 
@@ -321,8 +321,8 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                 key={template.id}
                 className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                   selectedTemplate?.id === template.id
-                    ? 'bg-primary/5 border-primary'
-                    : 'hover:bg-muted/50'
+                    ? "bg-primary/5 border-primary"
+                    : "hover:bg-muted/50"
                 }`}
                 onClick={() => setSelectedTemplate(template)}
               >
@@ -398,7 +398,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => exportTemplate('json')}
+                      onClick={() => exportTemplate("json")}
                     >
                       <FileJson className="h-4 w-4 mr-2" />
                       JSON
@@ -406,7 +406,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => exportTemplate('excel')}
+                      onClick={() => exportTemplate("excel")}
                     >
                       <FileSpreadsheet className="h-4 w-4 mr-2" />
                       Excel
@@ -414,7 +414,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => exportTemplate('pdf')}
+                      onClick={() => exportTemplate("pdf")}
                     >
                       <FileText className="h-4 w-4 mr-2" />
                       PDF

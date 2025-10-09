@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Brain, 
   MessageSquare, 
@@ -17,12 +17,12 @@ import {
   BarChart3,
   Lightbulb,
   Zap
-} from 'lucide-react';
+} from "lucide-react";
 
 interface AITask {
   id: string;
   title: string;
-  status: 'analyzing' | 'completed' | 'failed';
+  status: "analyzing" | "completed" | "failed";
   progress: number;
   module: string;
   result?: string;
@@ -31,16 +31,16 @@ interface AITask {
 
 interface AIInsight {
   id: string;
-  type: 'optimization' | 'risk' | 'opportunity';
+  type: "optimization" | "risk" | "opportunity";
   title: string;
   description: string;
   confidence: number;
-  impact: 'high' | 'medium' | 'low';
+  impact: "high" | "medium" | "low";
   actionable: boolean;
 }
 
 export const AIAssistantPanel = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [aiInsights, setAiInsights] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,85 +48,85 @@ export const AIAssistantPanel = () => {
 
   const activeTasks: AITask[] = [
     {
-      id: '1',
-      title: 'Análise de Otimização de Rotas',
-      status: 'analyzing',
+      id: "1",
+      title: "Análise de Otimização de Rotas",
+      status: "analyzing",
       progress: 67,
-      module: 'Logística',
-      estimatedTime: '2min restantes'
+      module: "Logística",
+      estimatedTime: "2min restantes"
     },
     {
-      id: '2',
-      title: 'Previsão de Demanda Q1 2025',
-      status: 'completed',
+      id: "2",
+      title: "Previsão de Demanda Q1 2025",
+      status: "completed",
       progress: 100,
-      module: 'Analytics',
-      result: 'Aumento de 23% previsto'
+      module: "Analytics",
+      result: "Aumento de 23% previsto"
     },
     {
-      id: '3',
-      title: 'Auditoria de Certificações',
-      status: 'analyzing',
+      id: "3",
+      title: "Auditoria de Certificações",
+      status: "analyzing",
       progress: 34,
-      module: 'RH Marítimo',
-      estimatedTime: '5min restantes'
+      module: "RH Marítimo",
+      estimatedTime: "5min restantes"
     }
   ];
 
   const insights: AIInsight[] = [
     {
-      id: '1',
-      type: 'optimization',
-      title: 'Redução de Custos Portuários',
-      description: 'Alterando horários de atracação em 3 portos, economia estimada de R$ 45k/mês',
+      id: "1",
+      type: "optimization",
+      title: "Redução de Custos Portuários",
+      description: "Alterando horários de atracação em 3 portos, economia estimada de R$ 45k/mês",
       confidence: 89,
-      impact: 'high',
+      impact: "high",
       actionable: true
     },
     {
-      id: '2',
-      type: 'risk',
-      title: 'Risco de Atraso - Rota Santos',
-      description: 'Condições climáticas adversas detectadas. Sugerido adiamento de 6h',
+      id: "2",
+      type: "risk",
+      title: "Risco de Atraso - Rota Santos",
+      description: "Condições climáticas adversas detectadas. Sugerido adiamento de 6h",
       confidence: 94,
-      impact: 'medium',
+      impact: "medium",
       actionable: true
     },
     {
-      id: '3',
-      type: 'opportunity',
-      title: 'Nova Janela de Mercado',
-      description: 'Demanda elevada para cargas especiais no Q4. Potencial revenue +15%',
+      id: "3",
+      type: "opportunity",
+      title: "Nova Janela de Mercado",
+      description: "Demanda elevada para cargas especiais no Q4. Potencial revenue +15%",
       confidence: 76,
-      impact: 'high',
+      impact: "high",
       actionable: false
     }
   ];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'analyzing': return <Clock className="h-4 w-4 text-warning animate-pulse" />;
-      case 'completed': return <CheckCircle className="h-4 w-4 text-success" />;
-      case 'failed': return <AlertTriangle className="h-4 w-4 text-danger" />;
-      default: return <Clock className="h-4 w-4" />;
+    case "analyzing": return <Clock className="h-4 w-4 text-warning animate-pulse" />;
+    case "completed": return <CheckCircle className="h-4 w-4 text-success" />;
+    case "failed": return <AlertTriangle className="h-4 w-4 text-danger" />;
+    default: return <Clock className="h-4 w-4" />;
     }
   };
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case 'optimization': return <TrendingUp className="h-4 w-4 text-success" />;
-      case 'risk': return <AlertTriangle className="h-4 w-4 text-danger" />;
-      case 'opportunity': return <Lightbulb className="h-4 w-4 text-warning" />;
-      default: return <Brain className="h-4 w-4" />;
+    case "optimization": return <TrendingUp className="h-4 w-4 text-success" />;
+    case "risk": return <AlertTriangle className="h-4 w-4 text-danger" />;
+    case "opportunity": return <Lightbulb className="h-4 w-4 text-warning" />;
+    default: return <Brain className="h-4 w-4" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'high': return 'bg-danger text-danger-foreground';
-      case 'medium': return 'bg-warning text-warning-foreground';
-      case 'low': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "high": return "bg-danger text-danger-foreground";
+    case "medium": return "bg-warning text-warning-foreground";
+    case "low": return "bg-info text-info-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -137,15 +137,15 @@ export const AIAssistantPanel = () => {
   const fetchAIInsights = async () => {
     try {
       const { data, error } = await supabase
-        .from('ai_insights')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("ai_insights")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(5);
       
       if (error) throw error;
       setAiInsights(data || []);
     } catch (error) {
-      console.error('Error fetching AI insights:', error);
+      console.error("Error fetching AI insights:", error);
     } finally {
       setIsLoading(false);
     }
@@ -155,10 +155,10 @@ export const AIAssistantPanel = () => {
     if (query.trim()) {
       setIsProcessing(true);
       try {
-        const { data, error } = await supabase.functions.invoke('smart-insights-generator', {
+        const { data, error } = await supabase.functions.invoke("smart-insights-generator", {
           body: { 
             query: query,
-            context: 'ai_assistant_query'
+            context: "ai_assistant_query"
           }
         });
         
@@ -169,10 +169,10 @@ export const AIAssistantPanel = () => {
           description: "Nova análise foi gerada com base em sua consulta.",
         });
         
-        setQuery('');
+        setQuery("");
         fetchAIInsights(); // Refresh insights
       } catch (error) {
-        console.error('Error processing query:', error);
+        console.error("Error processing query:", error);
         toast({
           title: "Erro na análise",
           description: "Não foi possível processar sua consulta.",
@@ -230,7 +230,7 @@ export const AIAssistantPanel = () => {
               placeholder="Ex: 'Analisar eficiência da frota no último trimestre'"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleQuery()}
+              onKeyPress={(e) => e.key === "Enter" && handleQuery()}
               disabled={isProcessing}
             />
             <Button 
@@ -243,7 +243,7 @@ export const AIAssistantPanel = () => {
                   <Zap className="h-4 w-4" />
                 </div>
               ) : (
-                'Analisar'
+                "Analisar"
               )}
             </Button>
           </div>
@@ -338,7 +338,7 @@ export const AIAssistantPanel = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Badge 
-                      variant={insight.type === 'risk' ? 'destructive' : insight.type === 'optimization' ? 'default' : 'secondary'}
+                      variant={insight.type === "risk" ? "destructive" : insight.type === "optimization" ? "default" : "secondary"}
                     >
                       {insight.type}
                     </Badge>

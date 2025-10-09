@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useOrganization } from '@/contexts/OrganizationContext';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useOrganization } from "@/contexts/OrganizationContext";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   AlertTriangle, 
   CheckCircle, 
@@ -16,16 +16,16 @@ import {
   BarChart3,
   ArrowRight,
   Sparkles
-} from 'lucide-react';
+} from "lucide-react";
 
 interface HealthCheck {
   id: string;
   title: string;
   description: string;
-  status: 'completed' | 'pending' | 'warning';
+  status: "completed" | "pending" | "warning";
   action?: string;
   actionUrl?: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
 }
 
 export const OrganizationHealthCheck: React.FC = () => {
@@ -53,18 +53,18 @@ export const OrganizationHealthCheck: React.FC = () => {
       // Load organization stats
       const [usersData, vesselsData, certificatesData] = await Promise.all([
         supabase
-          .from('organization_users')
-          .select('id')
-          .eq('organization_id', currentOrganization.id)
-          .eq('status', 'active'),
+          .from("organization_users")
+          .select("id")
+          .eq("organization_id", currentOrganization.id)
+          .eq("status", "active"),
         supabase
-          .from('vessels')
-          .select('id')
-          .eq('organization_id', currentOrganization.id),
+          .from("vessels")
+          .select("id")
+          .eq("organization_id", currentOrganization.id),
         supabase
-          .from('maritime_certificates')
-          .select('id')
-          .in('crew_member_id', []) // Will be empty for now, but structure is ready
+          .from("maritime_certificates")
+          .select("id")
+          .in("crew_member_id", []) // Will be empty for now, but structure is ready
       ]);
 
       const newStats = {
@@ -73,8 +73,8 @@ export const OrganizationHealthCheck: React.FC = () => {
         certificates: certificatesData.data?.length || 0,
         modules: currentBranding?.enabled_modules 
           ? (Array.isArray(currentBranding.enabled_modules) 
-              ? currentBranding.enabled_modules.length 
-              : Object.keys(currentBranding.enabled_modules).length)
+            ? currentBranding.enabled_modules.length 
+            : Object.keys(currentBranding.enabled_modules).length)
           : 0
       };
 
@@ -86,131 +86,131 @@ export const OrganizationHealthCheck: React.FC = () => {
       // Organization setup check
       const hasEnabledModules = currentBranding?.enabled_modules 
         && (Array.isArray(currentBranding.enabled_modules) 
-            ? currentBranding.enabled_modules.length > 0 
-            : Object.keys(currentBranding.enabled_modules).length > 0);
+          ? currentBranding.enabled_modules.length > 0 
+          : Object.keys(currentBranding.enabled_modules).length > 0);
             
       if (!currentBranding || !hasEnabledModules) {
         checks.push({
-          id: 'setup',
-          title: 'Configuração Inicial',
-          description: 'Complete a configuração inicial da sua organização para aproveitar todos os recursos.',
-          status: 'warning',
-          action: 'Configurar Agora',
-          actionUrl: '/organization-setup',
-          priority: 'high'
+          id: "setup",
+          title: "Configuração Inicial",
+          description: "Complete a configuração inicial da sua organização para aproveitar todos os recursos.",
+          status: "warning",
+          action: "Configurar Agora",
+          actionUrl: "/organization-setup",
+          priority: "high"
         });
       } else {
         checks.push({
-          id: 'setup',
-          title: 'Configuração Inicial',
-          description: 'Organização configurada com sucesso.',
-          status: 'completed',
-          priority: 'low'
+          id: "setup",
+          title: "Configuração Inicial",
+          description: "Organização configurada com sucesso.",
+          status: "completed",
+          priority: "low"
         });
       }
 
       // Users check
       if (newStats.users <= 1) {
         checks.push({
-          id: 'users',
-          title: 'Adicionar Usuários',
-          description: 'Convide membros da sua equipe para colaborar na plataforma.',
-          status: 'pending',
-          action: 'Gerenciar Usuários',
-          actionUrl: '/users',
-          priority: 'medium'
+          id: "users",
+          title: "Adicionar Usuários",
+          description: "Convide membros da sua equipe para colaborar na plataforma.",
+          status: "pending",
+          action: "Gerenciar Usuários",
+          actionUrl: "/users",
+          priority: "medium"
         });
       } else {
         checks.push({
-          id: 'users',
-          title: 'Usuários Ativos',
+          id: "users",
+          title: "Usuários Ativos",
           description: `${newStats.users} usuários ativos na organização.`,
-          status: 'completed',
-          priority: 'low'
+          status: "completed",
+          priority: "low"
         });
       }
 
       // Maritime module checks
       const hasFleetModule = Array.isArray(currentBranding?.enabled_modules)
-        ? currentBranding?.enabled_modules.includes('fleet')
+        ? currentBranding?.enabled_modules.includes("fleet")
         : currentBranding?.enabled_modules?.fleet_management;
         
       if (hasFleetModule) {
         if (newStats.vessels === 0) {
           checks.push({
-            id: 'vessels',
-            title: 'Cadastrar Embarcações',
-            description: 'Adicione suas embarcações para começar o monitoramento da frota.',
-            status: 'pending',
-            action: 'Gestão de Frota',
-            actionUrl: '/fleet-management',
-            priority: 'medium'
+            id: "vessels",
+            title: "Cadastrar Embarcações",
+            description: "Adicione suas embarcações para começar o monitoramento da frota.",
+            status: "pending",
+            action: "Gestão de Frota",
+            actionUrl: "/fleet-management",
+            priority: "medium"
           });
         } else {
           checks.push({
-            id: 'vessels',
-            title: 'Frota Cadastrada',
+            id: "vessels",
+            title: "Frota Cadastrada",
             description: `${newStats.vessels} embarcações registradas no sistema.`,
-            status: 'completed',
-            priority: 'low'
+            status: "completed",
+            priority: "low"
           });
         }
       }
 
       // Analytics check
       const hasAnalyticsModule = Array.isArray(currentBranding?.enabled_modules)
-        ? currentBranding?.enabled_modules.includes('analytics')
+        ? currentBranding?.enabled_modules.includes("analytics")
         : currentBranding?.enabled_modules?.analytics;
         
       if (hasAnalyticsModule) {
         checks.push({
-          id: 'analytics',
-          title: 'Dashboard Analytics',
-          description: 'Visualize métricas e relatórios detalhados da sua operação.',
-          status: 'completed',
-          action: 'Ver Analytics',
-          actionUrl: '/analytics',
-          priority: 'low'
+          id: "analytics",
+          title: "Dashboard Analytics",
+          description: "Visualize métricas e relatórios detalhados da sua operação.",
+          status: "completed",
+          action: "Ver Analytics",
+          actionUrl: "/analytics",
+          priority: "low"
         });
       }
 
       setHealthChecks(checks);
     } catch (error) {
-      console.error('Error loading health data:', error);
+      console.error("Error loading health data:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const completedChecks = healthChecks.filter(check => check.status === 'completed').length;
+  const completedChecks = healthChecks.filter(check => check.status === "completed").length;
   const totalChecks = healthChecks.length;
   const completionPercentage = totalChecks > 0 ? (completedChecks / totalChecks) * 100 : 0;
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'warning':
-        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      default:
-        return <AlertTriangle className="w-4 h-4 text-blue-500" />;
+    case "completed":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+    default:
+      return <AlertTriangle className="w-4 h-4 text-blue-500" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'text-green-600 bg-green-50 border-green-200';
-      case 'warning':
-        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      default:
-        return 'text-blue-600 bg-blue-50 border-blue-200';
+    case "completed":
+      return "text-green-600 bg-green-50 border-green-200";
+    case "warning":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    default:
+      return "text-blue-600 bg-blue-50 border-blue-200";
     }
   };
 
   const getPriorityChecks = () => {
     return healthChecks
-      .filter(check => check.status !== 'completed')
+      .filter(check => check.status !== "completed")
       .sort((a, b) => {
         const priorityOrder = { high: 3, medium: 2, low: 1 };
         return priorityOrder[b.priority] - priorityOrder[a.priority];
@@ -347,8 +347,8 @@ export const OrganizationHealthCheck: React.FC = () => {
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
                           <h4 className="font-medium">{check.title}</h4>
-                          <Badge variant={check.priority === 'high' ? 'destructive' : 'secondary'}>
-                            {check.priority === 'high' ? 'Importante' : 'Recomendado'}
+                          <Badge variant={check.priority === "high" ? "destructive" : "secondary"}>
+                            {check.priority === "high" ? "Importante" : "Recomendado"}
                           </Badge>
                         </div>
                         <p className="text-sm mt-1 text-foreground/80">{check.description}</p>

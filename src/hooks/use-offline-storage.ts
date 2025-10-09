@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 interface OfflineData {
   id: string;
@@ -19,10 +19,10 @@ interface UseOfflineStorageReturn {
   cacheSize: number;
 }
 
-const DB_NAME = 'NautilusOfflineDB';
+const DB_NAME = "NautilusOfflineDB";
 const DB_VERSION = 1;
-const CACHE_STORE = 'cache';
-const OFFLINE_STORE = 'offline_actions';
+const CACHE_STORE = "cache";
+const OFFLINE_STORE = "offline_actions";
 
 export const useOfflineStorage = (): UseOfflineStorageReturn => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -41,15 +41,15 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         
         // Create cache store
         if (!db.objectStoreNames.contains(CACHE_STORE)) {
-          const cacheStore = db.createObjectStore(CACHE_STORE, { keyPath: 'key' });
-          cacheStore.createIndex('timestamp', 'timestamp', { unique: false });
+          const cacheStore = db.createObjectStore(CACHE_STORE, { keyPath: "key" });
+          cacheStore.createIndex("timestamp", "timestamp", { unique: false });
         }
         
         // Create offline actions store
         if (!db.objectStoreNames.contains(OFFLINE_STORE)) {
-          const offlineStore = db.createObjectStore(OFFLINE_STORE, { keyPath: 'id' });
-          offlineStore.createIndex('timestamp', 'timestamp', { unique: false });
-          offlineStore.createIndex('synced', 'synced', { unique: false });
+          const offlineStore = db.createObjectStore(OFFLINE_STORE, { keyPath: "id" });
+          offlineStore.createIndex("timestamp", "timestamp", { unique: false });
+          offlineStore.createIndex("synced", "synced", { unique: false });
         }
       };
     });
@@ -59,7 +59,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   const saveToCache = useCallback(async (key: string, data: any) => {
     try {
       const db = await initDB();
-      const transaction = db.transaction([CACHE_STORE], 'readwrite');
+      const transaction = db.transaction([CACHE_STORE], "readwrite");
       const store = transaction.objectStore(CACHE_STORE);
       
       await store.put({
@@ -70,7 +70,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       updateCacheSize();
     } catch (error) {
-      console.error('Error saving to cache:', error);
+      console.error("Error saving to cache:", error);
     }
   }, [initDB, updateCacheSize]);
 
@@ -78,7 +78,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   const getFromCache = useCallback(async (key: string) => {
     try {
       const db = await initDB();
-      const transaction = db.transaction([CACHE_STORE], 'readonly');
+      const transaction = db.transaction([CACHE_STORE], "readonly");
       const store = transaction.objectStore(CACHE_STORE);
       
       return new Promise((resolve, reject) => {
@@ -90,7 +90,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         request.onerror = () => reject(request.error);
       });
     } catch (error) {
-      console.error('Error getting from cache:', error);
+      console.error("Error getting from cache:", error);
       return null;
     }
   }, [initDB]);
@@ -99,7 +99,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   const addPendingChange = useCallback(async (action: string, data: any) => {
     try {
       const db = await initDB();
-      const transaction = db.transaction([OFFLINE_STORE], 'readwrite');
+      const transaction = db.transaction([OFFLINE_STORE], "readwrite");
       const store = transaction.objectStore(OFFLINE_STORE);
       
       const offlineData: OfflineData = {
@@ -111,9 +111,9 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       };
       
       await store.add(offlineData);
-      console.log('Added pending change:', offlineData);
+      console.log("Added pending change:", offlineData);
     } catch (error) {
-      console.error('Error adding pending change:', error);
+      console.error("Error adding pending change:", error);
     }
   }, [initDB]);
 
@@ -121,9 +121,9 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   const getPendingChanges = useCallback(async (): Promise<OfflineData[]> => {
     try {
       const db = await initDB();
-      const transaction = db.transaction([OFFLINE_STORE], 'readonly');
+      const transaction = db.transaction([OFFLINE_STORE], "readonly");
       const store = transaction.objectStore(OFFLINE_STORE);
-      const index = store.index('synced');
+      const index = store.index("synced");
       
       return new Promise((resolve, reject) => {
         const request = index.getAll(IDBKeyRange.only(false));
@@ -131,7 +131,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         request.onerror = () => reject(request.error);
       });
     } catch (error) {
-      console.error('Error getting pending changes:', error);
+      console.error("Error getting pending changes:", error);
       return [];
     }
   }, [initDB]);
@@ -142,16 +142,16 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
     
     try {
       const pendingChanges = await getPendingChanges();
-      console.log('Syncing pending changes:', pendingChanges.length);
+      console.log("Syncing pending changes:", pendingChanges.length);
       
       const db = await initDB();
-      const transaction = db.transaction([OFFLINE_STORE], 'readwrite');
+      const transaction = db.transaction([OFFLINE_STORE], "readwrite");
       const store = transaction.objectStore(OFFLINE_STORE);
       
       for (const change of pendingChanges) {
         try {
           // Simulate API sync - replace with actual API calls
-          console.log('Syncing change:', change.action, change.data);
+          console.log("Syncing change:", change.action, change.data);
           
           // Mark as synced
           change.synced = true;
@@ -161,13 +161,13 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
           // await syncToAPI(change.action, change.data);
           
         } catch (error) {
-          console.error('Error syncing change:', change.id, error);
+          console.error("Error syncing change:", change.id, error);
         }
       }
       
-      console.log('Sync completed');
+      console.log("Sync completed");
     } catch (error) {
-      console.error('Error during sync:', error);
+      console.error("Error during sync:", error);
     }
   }, [isOnline, getPendingChanges, initDB]);
 
@@ -177,13 +177,13 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       const db = await initDB();
       
       // Clear cache store
-      const cacheTransaction = db.transaction([CACHE_STORE], 'readwrite');
+      const cacheTransaction = db.transaction([CACHE_STORE], "readwrite");
       await cacheTransaction.objectStore(CACHE_STORE).clear();
       
       // Clear synced offline actions
-      const offlineTransaction = db.transaction([OFFLINE_STORE], 'readwrite');
+      const offlineTransaction = db.transaction([OFFLINE_STORE], "readwrite");
       const offlineStore = offlineTransaction.objectStore(OFFLINE_STORE);
-      const index = offlineStore.index('synced');
+      const index = offlineStore.index("synced");
       
       const request = index.openCursor(IDBKeyRange.only(true));
       request.onsuccess = (event) => {
@@ -195,9 +195,9 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       };
       
       updateCacheSize();
-      console.log('Cache cleared');
+      console.log("Cache cleared");
     } catch (error) {
-      console.error('Error clearing cache:', error);
+      console.error("Error clearing cache:", error);
     }
   }, [initDB, updateCacheSize]);
 
@@ -205,7 +205,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   const updateCacheSize = useCallback(async () => {
     try {
       const db = await initDB();
-      const transaction = db.transaction([CACHE_STORE, OFFLINE_STORE], 'readonly');
+      const transaction = db.transaction([CACHE_STORE, OFFLINE_STORE], "readonly");
       
       const cacheCount = await new Promise<number>((resolve) => {
         const request = transaction.objectStore(CACHE_STORE).count();
@@ -219,7 +219,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       setCacheSize(cacheCount + offlineCount);
     } catch (error) {
-      console.error('Error updating cache size:', error);
+      console.error("Error updating cache size:", error);
     }
   }, [initDB]);
 
@@ -235,31 +235,31 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
     
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     // Initial cache size calculation
     updateCacheSize();
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, [syncPendingChanges, updateCacheSize]);
 
   // Listen for service worker messages
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data.type === 'OFFLINE_SYNC_COMPLETE') {
-        console.log('Offline sync completed:', event.data.data);
+      if (event.data.type === "OFFLINE_SYNC_COMPLETE") {
+        console.log("Offline sync completed:", event.data.data);
         updateCacheSize();
       }
     };
 
-    navigator.serviceWorker?.addEventListener('message', handleMessage);
+    navigator.serviceWorker?.addEventListener("message", handleMessage);
     
     return () => {
-      navigator.serviceWorker?.removeEventListener('message', handleMessage);
+      navigator.serviceWorker?.removeEventListener("message", handleMessage);
     };
   }, [updateCacheSize]);
 

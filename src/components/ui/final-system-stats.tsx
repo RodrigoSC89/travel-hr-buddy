@@ -1,6 +1,6 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { 
   CheckCircle, 
   Star, 
@@ -12,7 +12,7 @@ import {
   Award,
   Target,
   Clock
-} from 'lucide-react';
+} from "lucide-react";
 
 export const FinalSystemStats: React.FC = () => {
   const systemStats = [

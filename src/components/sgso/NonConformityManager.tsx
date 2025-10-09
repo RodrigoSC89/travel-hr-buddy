@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { useMaritimeActions } from '@/hooks/useMaritimeActions';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import {
   XCircle,
   AlertTriangle,
@@ -13,17 +13,17 @@ import {
   TrendingDown,
   Plus,
   Eye
-} from 'lucide-react';
+} from "lucide-react";
 
 interface NonConformity {
   id: string;
   number: string;
   title: string;
-  type: 'major' | 'minor' | 'observation';
+  type: "major" | "minor" | "observation";
   practice_id: number;
   practice_name: string;
-  status: 'open' | 'in_treatment' | 'closed' | 'verified';
-  severity: 'critical' | 'high' | 'medium' | 'low';
+  status: "open" | "in_treatment" | "closed" | "verified";
+  severity: "critical" | "high" | "medium" | "low";
   identified_date: string;
   due_date: string;
   responsible: string;
@@ -34,62 +34,62 @@ interface NonConformity {
 
 const SAMPLE_NCS: NonConformity[] = [
   {
-    id: '1',
-    number: 'NC-2024-001',
-    title: 'Ausência de matriz de competências atualizada',
-    type: 'major',
+    id: "1",
+    number: "NC-2024-001",
+    title: "Ausência de matriz de competências atualizada",
+    type: "major",
     practice_id: 4,
-    practice_name: 'Prática 4 - Treinamento',
-    status: 'in_treatment',
-    severity: 'high',
-    identified_date: '2024-09-15',
-    due_date: '2024-11-15',
-    responsible: 'Ana Paula - RH',
-    corrective_action: 'Criar matriz de competências completa',
+    practice_name: "Prática 4 - Treinamento",
+    status: "in_treatment",
+    severity: "high",
+    identified_date: "2024-09-15",
+    due_date: "2024-11-15",
+    responsible: "Ana Paula - RH",
+    corrective_action: "Criar matriz de competências completa",
     completion_percentage: 65
   },
   {
-    id: '2',
-    number: 'NC-2024-002',
-    title: 'Procedimento MOC não implementado',
-    type: 'major',
+    id: "2",
+    number: "NC-2024-002",
+    title: "Procedimento MOC não implementado",
+    type: "major",
     practice_id: 13,
-    practice_name: 'Prática 13 - Gestão de Mudanças',
-    status: 'open',
-    severity: 'critical',
-    identified_date: '2024-10-01',
-    due_date: '2024-12-01',
-    responsible: 'Eng. Roberto Santos',
+    practice_name: "Prática 13 - Gestão de Mudanças",
+    status: "open",
+    severity: "critical",
+    identified_date: "2024-10-01",
+    due_date: "2024-12-01",
+    responsible: "Eng. Roberto Santos",
     completion_percentage: 0
   },
   {
-    id: '3',
-    number: 'NC-2024-003',
-    title: 'Plano de integridade mecânica desatualizado',
-    type: 'major',
+    id: "3",
+    number: "NC-2024-003",
+    title: "Plano de integridade mecânica desatualizado",
+    type: "major",
     practice_id: 17,
-    practice_name: 'Prática 17 - Integridade Mecânica',
-    status: 'in_treatment',
-    severity: 'high',
-    identified_date: '2024-09-20',
-    due_date: '2024-11-20',
-    responsible: 'Eng. João Oliveira',
-    corrective_action: 'Atualizar plano com novos equipamentos',
+    practice_name: "Prática 17 - Integridade Mecânica",
+    status: "in_treatment",
+    severity: "high",
+    identified_date: "2024-09-20",
+    due_date: "2024-11-20",
+    responsible: "Eng. João Oliveira",
+    corrective_action: "Atualizar plano com novos equipamentos",
     completion_percentage: 45
   },
   {
-    id: '4',
-    number: 'OBS-2024-001',
-    title: 'Registros de treinamento incompletos',
-    type: 'observation',
+    id: "4",
+    number: "OBS-2024-001",
+    title: "Registros de treinamento incompletos",
+    type: "observation",
     practice_id: 4,
-    practice_name: 'Prática 4 - Treinamento',
-    status: 'closed',
-    severity: 'medium',
-    identified_date: '2024-08-10',
-    due_date: '2024-09-10',
-    responsible: 'Ana Paula - RH',
-    corrective_action: 'Digitalizar todos os registros',
+    practice_name: "Prática 4 - Treinamento",
+    status: "closed",
+    severity: "medium",
+    identified_date: "2024-08-10",
+    due_date: "2024-09-10",
+    responsible: "Ana Paula - RH",
+    corrective_action: "Digitalizar todos os registros",
     completion_percentage: 100
   }
 ];
@@ -98,21 +98,21 @@ const getTypeConfig = (type: string) => {
   const configs = {
     major: {
       icon: XCircle,
-      color: 'bg-red-600 text-white',
-      label: 'NC Maior',
-      badgeColor: 'bg-red-600'
+      color: "bg-red-600 text-white",
+      label: "NC Maior",
+      badgeColor: "bg-red-600"
     },
     minor: {
       icon: AlertTriangle,
-      color: 'bg-yellow-600 text-white',
-      label: 'NC Menor',
-      badgeColor: 'bg-yellow-600'
+      color: "bg-yellow-600 text-white",
+      label: "NC Menor",
+      badgeColor: "bg-yellow-600"
     },
     observation: {
       icon: Eye,
-      color: 'bg-blue-600 text-white',
-      label: 'Observação',
-      badgeColor: 'bg-blue-600'
+      color: "bg-blue-600 text-white",
+      label: "Observação",
+      badgeColor: "bg-blue-600"
     }
   };
   return configs[type as keyof typeof configs] || configs.observation;
@@ -121,35 +121,35 @@ const getTypeConfig = (type: string) => {
 const getStatusConfig = (status: string) => {
   const configs = {
     open: {
-      color: 'bg-red-600 text-white',
-      label: 'Aberta'
+      color: "bg-red-600 text-white",
+      label: "Aberta"
     },
     in_treatment: {
-      color: 'bg-yellow-600 text-white',
-      label: 'Em Tratamento'
+      color: "bg-yellow-600 text-white",
+      label: "Em Tratamento"
     },
     closed: {
-      color: 'bg-green-600 text-white',
-      label: 'Fechada'
+      color: "bg-green-600 text-white",
+      label: "Fechada"
     },
     verified: {
-      color: 'bg-blue-600 text-white',
-      label: 'Verificada'
+      color: "bg-blue-600 text-white",
+      label: "Verificada"
     }
   };
   return configs[status as keyof typeof configs] || configs.open;
 };
 
 export const NonConformityManager: React.FC = () => {
-  const [selectedType, setSelectedType] = useState<string>('all');
+  const [selectedType, setSelectedType] = useState<string>("all");
   const { handleViewDetails, handleUpdate, handleCreate, handleGenerateReport, showInfo, isLoading } = useMaritimeActions();
 
-  const openCount = SAMPLE_NCS.filter(nc => nc.status === 'open').length;
-  const inTreatmentCount = SAMPLE_NCS.filter(nc => nc.status === 'in_treatment').length;
-  const closedCount = SAMPLE_NCS.filter(nc => nc.status === 'closed').length;
+  const openCount = SAMPLE_NCS.filter(nc => nc.status === "open").length;
+  const inTreatmentCount = SAMPLE_NCS.filter(nc => nc.status === "in_treatment").length;
+  const closedCount = SAMPLE_NCS.filter(nc => nc.status === "closed").length;
   const totalOpen = openCount + inTreatmentCount;
 
-  const filteredNCs = selectedType === 'all'
+  const filteredNCs = selectedType === "all"
     ? SAMPLE_NCS
     : SAMPLE_NCS.filter(nc => nc.type === selectedType);
 
@@ -222,29 +222,29 @@ export const NonConformityManager: React.FC = () => {
         <CardContent>
           <div className="flex flex-wrap gap-2">
             <Button
-              variant={selectedType === 'all' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('all')}
+              variant={selectedType === "all" ? "default" : "outline"}
+              onClick={() => setSelectedType("all")}
               className="min-h-[44px]"
             >
               Todas
             </Button>
             <Button
-              variant={selectedType === 'major' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('major')}
+              variant={selectedType === "major" ? "default" : "outline"}
+              onClick={() => setSelectedType("major")}
               className="min-h-[44px]"
             >
               NC Maior
             </Button>
             <Button
-              variant={selectedType === 'minor' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('minor')}
+              variant={selectedType === "minor" ? "default" : "outline"}
+              onClick={() => setSelectedType("minor")}
               className="min-h-[44px]"
             >
               NC Menor
             </Button>
             <Button
-              variant={selectedType === 'observation' ? 'default' : 'outline'}
-              onClick={() => setSelectedType('observation')}
+              variant={selectedType === "observation" ? "default" : "outline"}
+              onClick={() => setSelectedType("observation")}
               className="min-h-[44px]"
             >
               Observações
@@ -279,7 +279,7 @@ export const NonConformityManager: React.FC = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h3 className="text-lg font-bold text-gray-900">{nc.title}</h3>
-                            <Badge className={typeConfig.badgeColor + ' text-white'}>
+                            <Badge className={typeConfig.badgeColor + " text-white"}>
                               {typeConfig.label}
                             </Badge>
                             <Badge className={statusConfig.color}>
@@ -293,13 +293,13 @@ export const NonConformityManager: React.FC = () => {
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Data Identificação</p>
                               <p className="text-sm font-bold text-gray-900">
-                                {new Date(nc.identified_date).toLocaleDateString('pt-BR')}
+                                {new Date(nc.identified_date).toLocaleDateString("pt-BR")}
                               </p>
                             </div>
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Prazo</p>
                               <p className="text-sm font-bold text-gray-900">
-                                {new Date(nc.due_date).toLocaleDateString('pt-BR')}
+                                {new Date(nc.due_date).toLocaleDateString("pt-BR")}
                               </p>
                             </div>
                             <div>
@@ -333,7 +333,7 @@ export const NonConformityManager: React.FC = () => {
                           <FileText className="h-4 w-4 mr-2" />
                           Detalhes
                         </Button>
-                        {nc.status !== 'closed' && (
+                        {nc.status !== "closed" && (
                           <Button
                             size="sm"
                             className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
@@ -371,7 +371,7 @@ export const NonConformityManager: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-red-600 hover:bg-red-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleCreate('Não Conformidade')}
+              onClick={() => handleCreate("Não Conformidade")}
               disabled={isLoading}
             >
               <Plus className="h-6 w-6" />
@@ -379,7 +379,7 @@ export const NonConformityManager: React.FC = () => {
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleGenerateReport('Relatório de Não Conformidades')}
+              onClick={() => handleGenerateReport("Relatório de Não Conformidades")}
               disabled={isLoading}
             >
               <FileText className="h-6 w-6" />
@@ -387,7 +387,7 @@ export const NonConformityManager: React.FC = () => {
             </Button>
             <Button
               className="bg-yellow-600 hover:bg-yellow-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo('NCs Vencendo', 'Abrindo lista de não conformidades próximas do vencimento')}
+              onClick={() => showInfo("NCs Vencendo", "Abrindo lista de não conformidades próximas do vencimento")}
               disabled={isLoading}
             >
               <AlertTriangle className="h-6 w-6" />
@@ -395,7 +395,7 @@ export const NonConformityManager: React.FC = () => {
             </Button>
             <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo('Estatísticas', 'Abrindo painel de estatísticas de NCs')}
+              onClick={() => showInfo("Estatísticas", "Abrindo painel de estatísticas de NCs")}
               disabled={isLoading}
             >
               <TrendingDown className="h-6 w-6" />

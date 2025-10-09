@@ -1,6 +1,6 @@
-import React from 'react';
-import { MultiTenantWrapper } from './multi-tenant-wrapper';
-import { BackToDashboard } from '@/components/ui/back-to-dashboard';
+import React from "react";
+import { MultiTenantWrapper } from "./multi-tenant-wrapper";
+import { BackToDashboard } from "@/components/ui/back-to-dashboard";
 
 interface OrganizationLayoutProps {
   children: React.ReactNode;

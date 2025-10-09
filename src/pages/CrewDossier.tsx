@@ -1,5 +1,5 @@
-import React from 'react';
-import { CrewDossier } from '@/components/portal/crew-dossier';
+import React from "react";
+import { CrewDossier } from "@/components/portal/crew-dossier";
 
 const CrewDossierPage: React.FC = () => {
   return <CrewDossier />;

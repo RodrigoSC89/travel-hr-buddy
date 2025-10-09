@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import {
   Hash,
   Users,
@@ -31,13 +31,13 @@ import {
   Trash2,
   Eye,
   EyeOff
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Channel {
   id: string;
   name: string;
   description?: string;
-  type: 'group' | 'department' | 'broadcast' | 'emergency';
+  type: "group" | "department" | "broadcast" | "emergency";
   is_public: boolean;
   is_active: boolean;
   created_by: string;
@@ -51,7 +51,7 @@ interface ChannelMember {
   id: string;
   user_id: string;
   user_name?: string;
-  role: 'member' | 'moderator' | 'admin';
+  role: "member" | "moderator" | "admin";
   joined_at: string;
   last_read_at?: string;
 }
@@ -70,16 +70,16 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
   const [channelMembers, setChannelMembers] = useState<ChannelMember[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedType, setSelectedType] = useState<string>("all");
   const [isNewChannelOpen, setIsNewChannelOpen] = useState(false);
   const [isChannelDetailOpen, setIsChannelDetailOpen] = useState(false);
   const { toast } = useToast();
 
   const [newChannel, setNewChannel] = useState({
-    name: '',
-    description: '',
-    type: 'group' as const,
+    name: "",
+    description: "",
+    type: "group" as const,
     is_public: true
   });
 
@@ -90,78 +90,78 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       // Mock channels data - replace with real Supabase query
       const mockChannels: Channel[] = [
         {
-          id: '1',
-          name: 'Geral',
-          description: 'Canal geral de comunicação da empresa',
-          type: 'broadcast',
+          id: "1",
+          name: "Geral",
+          description: "Canal geral de comunicação da empresa",
+          type: "broadcast",
           is_public: true,
           is_active: true,
-          created_by: 'admin',
+          created_by: "admin",
           member_count: 156,
           last_message_at: new Date().toISOString(),
           settings: { notifications: true },
           created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
-          id: '2',
-          name: 'RH - Recursos Humanos',
-          description: 'Comunicações oficiais do departamento de RH',
-          type: 'department',
+          id: "2",
+          name: "RH - Recursos Humanos",
+          description: "Comunicações oficiais do departamento de RH",
+          type: "department",
           is_public: true,
           is_active: true,
-          created_by: 'hr-admin',
+          created_by: "hr-admin",
           member_count: 89,
           last_message_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
           settings: { notifications: true },
           created_at: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
-          id: '3',
-          name: 'Operações Marítimas',
-          description: 'Canal para coordenação de operações e embarques',
-          type: 'department',
+          id: "3",
+          name: "Operações Marítimas",
+          description: "Canal para coordenação de operações e embarques",
+          type: "department",
           is_public: false,
           is_active: true,
-          created_by: 'ops-admin',
+          created_by: "ops-admin",
           member_count: 34,
           last_message_at: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
           settings: { notifications: true },
           created_at: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
-          id: '4',
-          name: 'Emergência',
-          description: 'Canal de emergência - apenas para situações críticas',
-          type: 'emergency',
+          id: "4",
+          name: "Emergência",
+          description: "Canal de emergência - apenas para situações críticas",
+          type: "emergency",
           is_public: true,
           is_active: true,
-          created_by: 'system',
+          created_by: "system",
           member_count: 78,
           last_message_at: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
           settings: { notifications: true },
           created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
-          id: '5',
-          name: 'DPO Team',
-          description: 'Grupo privado para Dynamic Positioning Officers',
-          type: 'group',
+          id: "5",
+          name: "DPO Team",
+          description: "Grupo privado para Dynamic Positioning Officers",
+          type: "group",
           is_public: false,
           is_active: true,
-          created_by: 'dpo-lead',
+          created_by: "dpo-lead",
           member_count: 12,
           last_message_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
           settings: { notifications: true },
           created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
-          id: '6',
-          name: 'Máquinas e Engenharia',
-          description: 'Canal para engineers e equipe de máquinas',
-          type: 'department',
+          id: "6",
+          name: "Máquinas e Engenharia",
+          description: "Canal para engineers e equipe de máquinas",
+          type: "department",
           is_public: false,
           is_active: true,
-          created_by: 'eng-admin',
+          created_by: "eng-admin",
           member_count: 28,
           last_message_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
           settings: { notifications: true },
@@ -171,7 +171,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
       setChannels(mockChannels);
     } catch (error) {
-      console.error('Error loading channels:', error);
+      console.error("Error loading channels:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar canais",
@@ -184,13 +184,13 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
   const setupRealTimeSubscription = useCallback(() => {
     const channel = supabase
-      .channel('channels-changes')
+      .channel("channels-changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'communication_channels'
+          event: "*",
+          schema: "public",
+          table: "communication_channels"
         },
         () => {
           loadChannels();
@@ -213,7 +213,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       );
     }
 
-    if (selectedType !== 'all') {
+    if (selectedType !== "all") {
       filtered = filtered.filter(c => c.type === selectedType);
     }
 
@@ -248,14 +248,14 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         type: newChannel.type,
         is_public: newChannel.is_public,
         is_active: true,
-        created_by: 'current-user',
+        created_by: "current-user",
         member_count: 1,
         settings: { notifications: true },
         created_at: new Date().toISOString()
       };
 
       setChannels(prev => [channel, ...prev]);
-      setNewChannel({ name: '', description: '', type: 'group', is_public: true });
+      setNewChannel({ name: "", description: "", type: "group", is_public: true });
       setIsNewChannelOpen(false);
 
       toast({
@@ -263,7 +263,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         description: "Canal criado com sucesso"
       });
     } catch (error) {
-      console.error('Error creating channel:', error);
+      console.error("Error creating channel:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar canal",
@@ -288,48 +288,48 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         description: "Você entrou no canal"
       });
     } catch (error) {
-      console.error('Error joining channel:', error);
+      console.error("Error joining channel:", error);
     }
   };
 
   const getChannelIcon = (type: string) => {
     switch (type) {
-      case 'department': return Building;
-      case 'broadcast': return Megaphone;
-      case 'emergency': return AlertTriangle;
-      case 'group': return Users;
-      default: return Hash;
+    case "department": return Building;
+    case "broadcast": return Megaphone;
+    case "emergency": return AlertTriangle;
+    case "group": return Users;
+    default: return Hash;
     }
   };
 
   const getChannelTypeLabel = (type: string) => {
     switch (type) {
-      case 'department': return 'Departamento';
-      case 'broadcast': return 'Transmissão';
-      case 'emergency': return 'Emergência';
-      case 'group': return 'Grupo';
-      default: return 'Canal';
+    case "department": return "Departamento";
+    case "broadcast": return "Transmissão";
+    case "emergency": return "Emergência";
+    case "group": return "Grupo";
+    default: return "Canal";
     }
   };
 
   const getChannelTypeColor = (type: string) => {
     switch (type) {
-      case 'emergency': return 'bg-destructive text-destructive-foreground';
-      case 'department': return 'bg-info text-info-foreground';
-      case 'broadcast': return 'bg-warning text-warning-foreground';
-      case 'group': return 'bg-success text-success-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "emergency": return "bg-destructive text-destructive-foreground";
+    case "department": return "bg-info text-info-foreground";
+    case "broadcast": return "bg-warning text-warning-foreground";
+    case "group": return "bg-success text-success-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const formatTimeAgo = (dateString?: string) => {
-    if (!dateString) return 'Nunca';
+    if (!dateString) return "Nunca";
     
     const now = new Date();
     const date = new Date(dateString);
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
     
-    if (diffInHours < 1) return 'Agora mesmo';
+    if (diffInHours < 1) return "Agora mesmo";
     if (diffInHours < 24) return `${diffInHours}h atrás`;
     return `${Math.floor(diffInHours / 24)}d atrás`;
   };
@@ -462,16 +462,16 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg ${
-                        channel.type === 'emergency' ? 'bg-destructive/10' :
-                        channel.type === 'department' ? 'bg-info/10' :
-                        channel.type === 'broadcast' ? 'bg-warning/10' :
-                        'bg-success/10'
+                        channel.type === "emergency" ? "bg-destructive/10" :
+                          channel.type === "department" ? "bg-info/10" :
+                            channel.type === "broadcast" ? "bg-warning/10" :
+                              "bg-success/10"
                       }`}>
                         <ChannelIcon className={`h-4 w-4 ${
-                          channel.type === 'emergency' ? 'text-destructive' :
-                          channel.type === 'department' ? 'text-info' :
-                          channel.type === 'broadcast' ? 'text-warning' :
-                          'text-success'
+                          channel.type === "emergency" ? "text-destructive" :
+                            channel.type === "department" ? "text-info" :
+                              channel.type === "broadcast" ? "text-warning" :
+                                "text-success"
                         }`} />
                       </div>
                       <div className="flex-1 min-w-0">

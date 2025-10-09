@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 import { 
   MessageSquare, 
   Star, 
@@ -20,19 +20,19 @@ import {
   Clock,
   Filter,
   Search
-} from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+} from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Feedback {
   id: string;
   user_id: string;
   module: string;
-  type: 'bug' | 'feature' | 'improvement' | 'praise';
+  type: "bug" | "feature" | "improvement" | "praise";
   title: string;
   description: string;
   rating: number;
-  status: 'pending' | 'in_review' | 'in_progress' | 'completed' | 'rejected';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: "pending" | "in_review" | "in_progress" | "completed" | "rejected";
+  priority: "low" | "medium" | "high" | "urgent";
   created_at: string;
   updated_at: string;
   admin_response?: string;
@@ -61,33 +61,33 @@ export const EnhancedFeedbackSystem: React.FC = () => {
   
   // Formulário para novo feedback
   const [newFeedback, setNewFeedback] = useState({
-    module: '',
-    type: 'feature' as const,
-    title: '',
-    description: '',
+    module: "",
+    type: "feature" as const,
+    title: "",
+    description: "",
     rating: 5
   });
 
   const { toast } = useToast();
 
   const modules = [
-    'dashboard', 'hr', 'maritime', 'travel', 'analytics', 'reports', 
-    'notifications', 'settings', 'communication', 'fleet'
+    "dashboard", "hr", "maritime", "travel", "analytics", "reports", 
+    "notifications", "settings", "communication", "fleet"
   ];
 
   const feedbackTypes = [
-    { value: 'bug', label: 'Bug Report', color: 'bg-destructive' },
-    { value: 'feature', label: 'Nova Funcionalidade', color: 'bg-info' },
-    { value: 'improvement', label: 'Melhoria', color: 'bg-warning' },
-    { value: 'praise', label: 'Elogio', color: 'bg-success' }
+    { value: "bug", label: "Bug Report", color: "bg-destructive" },
+    { value: "feature", label: "Nova Funcionalidade", color: "bg-info" },
+    { value: "improvement", label: "Melhoria", color: "bg-warning" },
+    { value: "praise", label: "Elogio", color: "bg-success" }
   ];
 
   const statusOptions = [
-    { value: 'pending', label: 'Pendente', color: 'bg-muted' },
-    { value: 'in_review', label: 'Em Análise', color: 'bg-info' },
-    { value: 'in_progress', label: 'Em Desenvolvimento', color: 'bg-warning' },
-    { value: 'completed', label: 'Concluído', color: 'bg-success' },
-    { value: 'rejected', label: 'Rejeitado', color: 'bg-destructive' }
+    { value: "pending", label: "Pendente", color: "bg-muted" },
+    { value: "in_review", label: "Em Análise", color: "bg-info" },
+    { value: "in_progress", label: "Em Desenvolvimento", color: "bg-warning" },
+    { value: "completed", label: "Concluído", color: "bg-success" },
+    { value: "rejected", label: "Rejeitado", color: "bg-destructive" }
   ];
 
   const loadFeedbacks = async () => {
@@ -97,57 +97,57 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       // Simular dados de feedback para demonstração
       const mockFeedbacks: Feedback[] = [
         {
-          id: '1',
-          user_id: 'user1',
-          module: 'dashboard',
-          type: 'feature',
-          title: 'Adicionar gráficos interativos',
-          description: 'Seria útil ter gráficos que permitem drill-down nos dados.',
+          id: "1",
+          user_id: "user1",
+          module: "dashboard",
+          type: "feature",
+          title: "Adicionar gráficos interativos",
+          description: "Seria útil ter gráficos que permitem drill-down nos dados.",
           rating: 4,
-          status: 'in_progress',
-          priority: 'medium',
+          status: "in_progress",
+          priority: "medium",
           created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
           updated_at: new Date().toISOString(),
-          user_email: 'usuario@empresa.com',
-          user_name: 'João Silva'
+          user_email: "usuario@empresa.com",
+          user_name: "João Silva"
         },
         {
-          id: '2',
-          user_id: 'user2',
-          module: 'hr',
-          type: 'bug',
-          title: 'Erro ao exportar relatório de certificados',
-          description: 'O sistema retorna erro 500 ao tentar exportar relatório em PDF.',
+          id: "2",
+          user_id: "user2",
+          module: "hr",
+          type: "bug",
+          title: "Erro ao exportar relatório de certificados",
+          description: "O sistema retorna erro 500 ao tentar exportar relatório em PDF.",
           rating: 2,
-          status: 'completed',
-          priority: 'high',
+          status: "completed",
+          priority: "high",
           created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
           updated_at: new Date().toISOString(),
-          admin_response: 'Bug corrigido na versão 1.2.3',
-          user_email: 'maria@empresa.com',
-          user_name: 'Maria Santos'
+          admin_response: "Bug corrigido na versão 1.2.3",
+          user_email: "maria@empresa.com",
+          user_name: "Maria Santos"
         },
         {
-          id: '3',
-          user_id: 'user3',
-          module: 'maritime',
-          type: 'praise',
-          title: 'Excelente sistema de gestão marítima',
-          description: 'O módulo marítimo está muito completo e intuitivo. Parabéns!',
+          id: "3",
+          user_id: "user3",
+          module: "maritime",
+          type: "praise",
+          title: "Excelente sistema de gestão marítima",
+          description: "O módulo marítimo está muito completo e intuitivo. Parabéns!",
           rating: 5,
-          status: 'pending',
-          priority: 'low',
+          status: "pending",
+          priority: "low",
           created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
           updated_at: new Date().toISOString(),
-          user_email: 'carlos@empresa.com',
-          user_name: 'Carlos Oliveira'
+          user_email: "carlos@empresa.com",
+          user_name: "Carlos Oliveira"
         }
       ];
 
       // Calcular estatísticas
       const mockStats: FeedbackStats = {
         total: mockFeedbacks.length,
-        pending: mockFeedbacks.filter(f => f.status === 'pending').length,
+        pending: mockFeedbacks.filter(f => f.status === "pending").length,
         averageRating: mockFeedbacks.reduce((acc, f) => acc + f.rating, 0) / mockFeedbacks.length,
         byType: mockFeedbacks.reduce((acc, f) => {
           acc[f.type] = (acc[f.type] || 0) + 1;
@@ -192,10 +192,10 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
       // Resetar formulário
       setNewFeedback({
-        module: '',
-        type: 'feature',
-        title: '',
-        description: '',
+        module: "",
+        type: "feature",
+        title: "",
+        description: "",
         rating: 5
       });
 
@@ -213,27 +213,27 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'bug':
-        return <AlertTriangle className="w-4 h-4" />;
-      case 'feature':
-        return <TrendingUp className="w-4 h-4" />;
-      case 'improvement':
-        return <Star className="w-4 h-4" />;
-      case 'praise':
-        return <CheckCircle className="w-4 h-4" />;
-      default:
-        return <MessageSquare className="w-4 h-4" />;
+    case "bug":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "feature":
+      return <TrendingUp className="w-4 h-4" />;
+    case "improvement":
+      return <Star className="w-4 h-4" />;
+    case "praise":
+      return <CheckCircle className="w-4 h-4" />;
+    default:
+      return <MessageSquare className="w-4 h-4" />;
     }
   };
 
   const getTypeColor = (type: string) => {
     const typeConfig = feedbackTypes.find(t => t.value === type);
-    return typeConfig?.color || 'bg-muted';
+    return typeConfig?.color || "bg-muted";
   };
 
   const getStatusColor = (status: string) => {
     const statusConfig = statusOptions.find(s => s.value === status);
-    return statusConfig?.color || 'bg-muted';
+    return statusConfig?.color || "bg-muted";
   };
 
   const filteredFeedbacks = feedbacks.filter(feedback => {
@@ -350,7 +350,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                     <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
                     <Input
                       placeholder="Título, descrição ou usuário..."
-                      value={filter.search || ''}
+                      value={filter.search || ""}
                       onChange={(e) => setFilter({...filter, search: e.target.value})}
                       className="pl-10"
                     />
@@ -359,7 +359,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Tipo</Label>
-                  <Select value={filter.type || ''} onValueChange={(value) => setFilter({...filter, type: value || undefined})}>
+                  <Select value={filter.type || ""} onValueChange={(value) => setFilter({...filter, type: value || undefined})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os tipos" />
                     </SelectTrigger>
@@ -376,7 +376,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Status</Label>
-                  <Select value={filter.status || ''} onValueChange={(value) => setFilter({...filter, status: value || undefined})}>
+                  <Select value={filter.status || ""} onValueChange={(value) => setFilter({...filter, status: value || undefined})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os status" />
                     </SelectTrigger>
@@ -393,7 +393,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Módulo</Label>
-                  <Select value={filter.module || ''} onValueChange={(value) => setFilter({...filter, module: value || undefined})}>
+                  <Select value={filter.module || ""} onValueChange={(value) => setFilter({...filter, module: value || undefined})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os módulos" />
                     </SelectTrigger>
@@ -441,7 +441,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                           <span>Por: {feedback.user_name}</span>
                           <span>Módulo: {feedback.module}</span>
                           <span>Avaliação: {feedback.rating}/5 ⭐</span>
-                          <span>{new Date(feedback.created_at).toLocaleDateString('pt-BR')}</span>
+                          <span>{new Date(feedback.created_at).toLocaleDateString("pt-BR")}</span>
                         </div>
                       </div>
                     </div>
@@ -539,7 +539,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                   <SelectContent>
                     {[1, 2, 3, 4, 5].map(rating => (
                       <SelectItem key={rating} value={rating.toString()}>
-                        {rating} estrela{rating > 1 ? 's' : ''} {'⭐'.repeat(rating)}
+                        {rating} estrela{rating > 1 ? "s" : ""} {"⭐".repeat(rating)}
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -1,9 +1,9 @@
-import React from 'react';
-import { useOrganization } from '@/contexts/OrganizationContext';
-import { useOrganizationPermissions } from '@/hooks/use-organization-permissions';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React from "react";
+import { useOrganization } from "@/contexts/OrganizationContext";
+import { useOrganizationPermissions } from "@/hooks/use-organization-permissions";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Building2, 
   Users, 
@@ -11,8 +11,8 @@ import {
   BarChart3, 
   Shield,
   Crown
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const OrganizationManagementToolbar: React.FC = () => {
   const { currentOrganization, userRole } = useOrganization();
@@ -31,36 +31,36 @@ export const OrganizationManagementToolbar: React.FC = () => {
 
   const quickActions = [
     {
-      title: 'Configurações',
-      description: 'Personalizar organização',
+      title: "Configurações",
+      description: "Personalizar organização",
       icon: Settings,
-      action: () => navigate('/organization-settings'),
+      action: () => navigate("/organization-settings"),
       available: canManageSettings(),
-      variant: 'outline' as const
+      variant: "outline" as const
     },
     {
-      title: 'Usuários',
-      description: 'Gerenciar equipe',
+      title: "Usuários",
+      description: "Gerenciar equipe",
       icon: Users,
-      action: () => navigate('/users'),
+      action: () => navigate("/users"),
       available: canManageUsers(),
-      variant: 'outline' as const
+      variant: "outline" as const
     },
     {
-      title: 'Analytics',
-      description: 'Relatórios da organização',
+      title: "Analytics",
+      description: "Relatórios da organização",
       icon: BarChart3,
-      action: () => navigate('/analytics'),
+      action: () => navigate("/analytics"),
       available: canViewAnalytics(),
-      variant: 'outline' as const
+      variant: "outline" as const
     },
     {
-      title: 'Super Admin',
-      description: 'Painel administrativo',
+      title: "Super Admin",
+      description: "Painel administrativo",
       icon: Crown,
-      action: () => navigate('/super-admin'),
+      action: () => navigate("/super-admin"),
       available: isAdmin(),
-      variant: 'default' as const
+      variant: "default" as const
     }
   ];
 

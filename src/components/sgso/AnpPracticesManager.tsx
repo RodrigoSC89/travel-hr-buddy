@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   CheckCircle,
   XCircle,
@@ -14,13 +14,13 @@ import {
   Users,
   TrendingUp,
   Shield
-} from 'lucide-react';
+} from "lucide-react";
 
 interface AnpPractice {
   id: number;
   name: string;
   description: string;
-  status: 'compliant' | 'non_compliant' | 'pending' | 'in_progress';
+  status: "compliant" | "non_compliant" | "pending" | "in_progress";
   compliance_level: number;
   last_audit?: string;
   next_audit?: string;
@@ -49,32 +49,32 @@ const ANP_PRACTICES: AnpPractice[] = [
 
 const getStatusIcon = (status: string) => {
   switch (status) {
-    case 'compliant':
-      return <CheckCircle className="h-5 w-5 text-green-600" />;
-    case 'non_compliant':
-      return <XCircle className="h-5 w-5 text-red-600" />;
-    case 'in_progress':
-      return <Clock className="h-5 w-5 text-yellow-600" />;
-    case 'pending':
-      return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
-    default:
-      return null;
+  case "compliant":
+    return <CheckCircle className="h-5 w-5 text-green-600" />;
+  case "non_compliant":
+    return <XCircle className="h-5 w-5 text-red-600" />;
+  case "in_progress":
+    return <Clock className="h-5 w-5 text-yellow-600" />;
+  case "pending":
+    return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
+  default:
+    return null;
   }
 };
 
 const getStatusBadge = (status: string) => {
   const styles = {
-    compliant: 'bg-green-100 text-green-800 border-green-200',
-    non_compliant: 'bg-red-100 text-red-800 border-red-200',
-    in_progress: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    pending: 'bg-secondary text-secondary-foreground border-border'
+    compliant: "bg-green-100 text-green-800 border-green-200",
+    non_compliant: "bg-red-100 text-red-800 border-red-200",
+    in_progress: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    pending: "bg-secondary text-secondary-foreground border-border"
   };
 
   const labels = {
-    compliant: 'Conforme',
-    non_compliant: 'Não Conforme',
-    in_progress: 'Em Andamento',
-    pending: 'Pendente'
+    compliant: "Conforme",
+    non_compliant: "Não Conforme",
+    in_progress: "Em Andamento",
+    pending: "Pendente"
   };
 
   return (
@@ -87,9 +87,9 @@ const getStatusBadge = (status: string) => {
 export const AnpPracticesManager: React.FC = () => {
   const [selectedPractice, setSelectedPractice] = useState<AnpPractice | null>(null);
 
-  const compliantCount = ANP_PRACTICES.filter(p => p.status === 'compliant').length;
-  const nonCompliantCount = ANP_PRACTICES.filter(p => p.status === 'non_compliant').length;
-  const inProgressCount = ANP_PRACTICES.filter(p => p.status === 'in_progress').length;
+  const compliantCount = ANP_PRACTICES.filter(p => p.status === "compliant").length;
+  const nonCompliantCount = ANP_PRACTICES.filter(p => p.status === "non_compliant").length;
+  const inProgressCount = ANP_PRACTICES.filter(p => p.status === "in_progress").length;
   const overallCompliance = Math.round(ANP_PRACTICES.reduce((acc, p) => acc + p.compliance_level, 0) / 17);
 
   return (
@@ -214,7 +214,7 @@ export const AnpPracticesManager: React.FC = () => {
               ))}
             </TabsContent>
 
-            {['compliant', 'non_compliant', 'in_progress', 'pending'].map((status) => (
+            {["compliant", "non_compliant", "in_progress", "pending"].map((status) => (
               <TabsContent key={status} value={status} className="space-y-3">
                 {ANP_PRACTICES.filter(p => p.status === status).map((practice) => (
                   <Card 

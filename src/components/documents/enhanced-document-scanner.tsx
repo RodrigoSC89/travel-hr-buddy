@@ -1,11 +1,11 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState, useRef, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Camera, 
   Upload, 
@@ -27,10 +27,10 @@ import {
   Crop,
   RotateCw,
   Contrast
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { supabase } from "@/integrations/supabase/client";
 
 interface DocumentScanResult {
   id: string;
@@ -57,11 +57,11 @@ interface DocumentScanResult {
 }
 
 interface ScanSettings {
-  quality: 'low' | 'medium' | 'high' | 'ultra';
+  quality: "low" | "medium" | "high" | "ultra";
   autoEnhance: boolean;
   multipage: boolean;
-  ocrLanguage: 'pt' | 'en' | 'es' | 'auto';
-  outputFormat: 'pdf' | 'jpg' | 'png';
+  ocrLanguage: "pt" | "en" | "es" | "auto";
+  outputFormat: "pdf" | "jpg" | "png";
 }
 
 export const EnhancedDocumentScanner: React.FC = () => {
@@ -70,13 +70,13 @@ export const EnhancedDocumentScanner: React.FC = () => {
   const [scanProgress, setScanProgress] = useState(0);
   const [selectedResult, setSelectedResult] = useState<DocumentScanResult | null>(null);
   const [scanSettings, setScanSettings] = useState<ScanSettings>({
-    quality: 'high',
+    quality: "high",
     autoEnhance: true,
     multipage: false,
-    ocrLanguage: 'pt',
-    outputFormat: 'pdf'
+    ocrLanguage: "pt",
+    outputFormat: "pdf"
   });
-  const [currentStep, setCurrentStep] = useState<'capture' | 'preview' | 'enhance' | 'ocr' | 'analysis'>('capture');
+  const [currentStep, setCurrentStep] = useState<"capture" | "preview" | "enhance" | "ocr" | "analysis">("capture");
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   
@@ -91,12 +91,12 @@ export const EnhancedDocumentScanner: React.FC = () => {
   const startCamera = useCallback(async () => {
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error('Camera não suportada neste dispositivo');
+        throw new Error("Camera não suportada neste dispositivo");
       }
 
       const constraints = {
         video: {
-          facingMode: isMobile ? 'environment' : 'user',
+          facingMode: isMobile ? "environment" : "user",
           width: { ideal: 1920 },
           height: { ideal: 1080 }
         }
@@ -115,7 +115,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
         description: "Posicione o documento e capture a imagem"
       });
     } catch (error) {
-      console.error('Erro ao acessar câmera:', error);
+      console.error("Erro ao acessar câmera:", error);
       toast({
         title: "Erro na câmera",
         description: "Não foi possível acessar a câmera. Use o upload de arquivo.",
@@ -139,7 +139,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
 
     if (!context) return;
 
@@ -147,9 +147,9 @@ export const EnhancedDocumentScanner: React.FC = () => {
     canvas.height = video.videoHeight;
     context.drawImage(video, 0, 0);
 
-    const imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+    const imageDataUrl = canvas.toDataURL("image/jpeg", 0.8);
     setCapturedImage(imageDataUrl);
-    setCurrentStep('preview');
+    setCurrentStep("preview");
     stopCamera();
 
     toast({
@@ -162,7 +162,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
     setIsProcessing(true);
     setIsScanning(true);
     setScanProgress(0);
-    setCurrentStep('ocr');
+    setCurrentStep("ocr");
 
     try {
       // Simular progresso
@@ -182,9 +182,9 @@ export const EnhancedDocumentScanner: React.FC = () => {
       // Simular resultado OCR
       const mockResult: DocumentScanResult = {
         id: Date.now().toString(),
-        fileName: typeof imageFile === 'string' ? 'camera_capture.jpg' : imageFile.name,
-        fileType: 'image/jpeg',
-        imageUrl: typeof imageFile === 'string' ? imageFile : URL.createObjectURL(imageFile),
+        fileName: typeof imageFile === "string" ? "camera_capture.jpg" : imageFile.name,
+        fileType: "image/jpeg",
+        imageUrl: typeof imageFile === "string" ? imageFile : URL.createObjectURL(imageFile),
         extractedText: `Documento digitalizado com sucesso.\n\nEste é um exemplo de texto extraído via OCR do documento capturado. O sistema conseguiu identificar:\n\n- Texto principal do documento\n- Números e códigos\n- Datas e valores\n- Assinaturas e carimbos\n\nA qualidade da extração foi excelente com ${95 + Math.floor(Math.random() * 5)}% de confiança.`,
         confidence: 95 + Math.floor(Math.random() * 5),
         processedAt: new Date(),
@@ -198,15 +198,15 @@ export const EnhancedDocumentScanner: React.FC = () => {
         },
         metadata: {
           pages: 1,
-          language: 'pt-BR',
-          resolution: '1920x1080',
-          fileSize: typeof imageFile === 'string' ? 256000 : imageFile.size
+          language: "pt-BR",
+          resolution: "1920x1080",
+          fileSize: typeof imageFile === "string" ? 256000 : imageFile.size
         }
       };
 
       setScanResults(prev => [mockResult, ...prev]);
       setSelectedResult(mockResult);
-      setCurrentStep('analysis');
+      setCurrentStep("analysis");
 
       toast({
         title: "Processamento concluído",
@@ -214,7 +214,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
       });
 
     } catch (error) {
-      console.error('Erro no processamento:', error);
+      console.error("Erro no processamento:", error);
       toast({
         title: "Erro no processamento",
         description: "Não foi possível processar o documento",
@@ -230,7 +230,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.type.startsWith('image/') || file.type === 'application/pdf') {
+      if (file.type.startsWith("image/") || file.type === "application/pdf") {
         processDocument(file);
       } else {
         toast({
@@ -244,7 +244,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
 
   const retakePhoto = () => {
     setCapturedImage(null);
-    setCurrentStep('capture');
+    setCurrentStep("capture");
     startCamera();
   };
 
@@ -265,7 +265,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
   };
 
   const downloadResult = (result: DocumentScanResult) => {
-    const element = document.createElement('a');
+    const element = document.createElement("a");
     element.href = result.imageUrl;
     element.download = result.fileName;
     element.click();
@@ -293,7 +293,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
           <div className="flex flex-wrap gap-4">
             <Button onClick={startCamera} variant="default" className="gap-2">
               <Camera className="h-4 w-4" />
-              {isMobile ? 'Abrir Câmera' : 'Usar Webcam'}
+              {isMobile ? "Abrir Câmera" : "Usar Webcam"}
             </Button>
             
             <input
@@ -317,7 +317,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
       </Card>
 
       {/* Camera/Preview Section */}
-      {currentStep === 'capture' && (
+      {currentStep === "capture" && (
         <Card>
           <CardContent className="p-4">
             <div className="relative">
@@ -344,7 +344,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
       )}
 
       {/* Preview Section */}
-      {currentStep === 'preview' && capturedImage && (
+      {currentStep === "preview" && capturedImage && (
         <Card>
           <CardHeader>
             <CardTitle>Prévia da Imagem</CardTitle>
@@ -423,7 +423,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                     <div>
                       <h3 className="font-medium truncate">{result.fileName}</h3>
                       <p className="text-xs text-muted-foreground">
-                        {result.processedAt.toLocaleString('pt-BR')}
+                        {result.processedAt.toLocaleString("pt-BR")}
                       </p>
                     </div>
                     

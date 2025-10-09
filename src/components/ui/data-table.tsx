@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState, useMemo } from "react";
+import { cn } from "@/lib/utils";
 import { 
   ChevronUp, 
   ChevronDown, 
@@ -10,10 +10,10 @@ import {
   Eye,
   Edit,
   Trash2
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 export interface Column<T = any> {
   key: string;
@@ -22,7 +22,7 @@ export interface Column<T = any> {
   filterable?: boolean;
   render?: (value: any, row: T) => React.ReactNode;
   width?: string;
-  align?: 'left' | 'center' | 'right';
+  align?: "left" | "center" | "right";
 }
 
 export interface DataTableProps<T = any> {
@@ -50,7 +50,7 @@ export interface DataTableProps<T = any> {
   description?: string;
 }
 
-type SortDirection = 'asc' | 'desc' | null;
+type SortDirection = "asc" | "desc" | null;
 
 export function DataTable<T extends Record<string, any>>({
   data,
@@ -66,7 +66,7 @@ export function DataTable<T extends Record<string, any>>({
   title,
   description
 }: DataTableProps<T>) {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -107,7 +107,7 @@ export function DataTable<T extends Record<string, any>>({
         if (aValue === bValue) return 0;
         
         const comparison = aValue > bValue ? 1 : -1;
-        return sortDirection === 'asc' ? comparison : -comparison;
+        return sortDirection === "asc" ? comparison : -comparison;
       });
     }
 
@@ -128,38 +128,38 @@ export function DataTable<T extends Record<string, any>>({
     if (!column?.sortable) return;
 
     if (sortColumn === columnKey) {
-      if (sortDirection === 'asc') {
-        setSortDirection('desc');
-      } else if (sortDirection === 'desc') {
+      if (sortDirection === "asc") {
+        setSortDirection("desc");
+      } else if (sortDirection === "desc") {
         setSortDirection(null);
         setSortColumn(null);
       } else {
-        setSortDirection('asc');
+        setSortDirection("asc");
       }
     } else {
       setSortColumn(columnKey);
-      setSortDirection('asc');
+      setSortDirection("asc");
     }
   };
 
   const exportData = () => {
     const csv = [
-      columns.map(col => col.header).join(','),
+      columns.map(col => col.header).join(","),
       ...filteredData.map(row => 
         columns.map(col => {
           const value = row[col.key];
-          return typeof value === 'string' && value.includes(',') 
+          return typeof value === "string" && value.includes(",") 
             ? `"${value}"` 
             : value;
-        }).join(',')
+        }).join(",")
       )
-    ].join('\n');
+    ].join("\n");
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `data-export-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `data-export-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -221,8 +221,8 @@ export function DataTable<T extends Record<string, any>>({
                   className={cn(
                     "px-6 py-4 text-left text-sm font-medium text-muted-foreground",
                     column.sortable && sortable && "cursor-pointer hover:text-foreground",
-                    column.align === 'center' && "text-center",
-                    column.align === 'right' && "text-right"
+                    column.align === "center" && "text-center",
+                    column.align === "right" && "text-right"
                   )}
                   style={{ width: column.width }}
                   onClick={() => handleSort(column.key)}
@@ -235,7 +235,7 @@ export function DataTable<T extends Record<string, any>>({
                           size={12} 
                           className={cn(
                             "transition-colors",
-                            sortColumn === column.key && sortDirection === 'asc'
+                            sortColumn === column.key && sortDirection === "asc"
                               ? "text-primary" 
                               : "text-muted-foreground/50"
                           )}
@@ -244,7 +244,7 @@ export function DataTable<T extends Record<string, any>>({
                           size={12} 
                           className={cn(
                             "transition-colors -mt-1",
-                            sortColumn === column.key && sortDirection === 'desc'
+                            sortColumn === column.key && sortDirection === "desc"
                               ? "text-primary" 
                               : "text-muted-foreground/50"
                           )}
@@ -282,8 +282,8 @@ export function DataTable<T extends Record<string, any>>({
                       key={column.key}
                       className={cn(
                         "px-6 py-4 text-sm",
-                        column.align === 'center' && "text-center",
-                        column.align === 'right' && "text-right"
+                        column.align === "center" && "text-center",
+                        column.align === "right" && "text-right"
                       )}
                     >
                       {column.render 

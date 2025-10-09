@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Zap, 
   Clock, 
@@ -18,83 +18,83 @@ import {
   CheckCircle,
   ArrowUp,
   ArrowDown
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MetricData {
   label: string;
   value: number;
   unit: string;
   trend: number;
-  status: 'good' | 'warning' | 'critical';
+  status: "good" | "warning" | "critical";
 }
 
 export const RealTimeSystemMonitor: React.FC = () => {
   const [metrics, setMetrics] = useState<MetricData[]>([
     {
-      label: 'CPU Usage',
+      label: "CPU Usage",
       value: 45.2,
-      unit: '%',
+      unit: "%",
       trend: -2.1,
-      status: 'good'
+      status: "good"
     },
     {
-      label: 'Memory Usage',
+      label: "Memory Usage",
       value: 67.8,
-      unit: '%',
+      unit: "%",
       trend: 1.5,
-      status: 'warning'
+      status: "warning"
     },
     {
-      label: 'Network I/O',
+      label: "Network I/O",
       value: 234.5,
-      unit: 'MB/s',
+      unit: "MB/s",
       trend: 12.3,
-      status: 'good'
+      status: "good"
     },
     {
-      label: 'Disk Usage',
+      label: "Disk Usage",
       value: 78.9,
-      unit: '%',
+      unit: "%",
       trend: 0.8,
-      status: 'warning'
+      status: "warning"
     },
     {
-      label: 'Active Users',
+      label: "Active Users",
       value: 1247,
-      unit: '',
+      unit: "",
       trend: 8.2,
-      status: 'good'
+      status: "good"
     },
     {
-      label: 'Response Time',
+      label: "Response Time",
       value: 245,
-      unit: 'ms',
+      unit: "ms",
       trend: -15.6,
-      status: 'good'
+      status: "good"
     }
   ]);
 
   const [alerts] = useState([
     {
-      id: '1',
-      type: 'warning',
-      message: 'Alto uso de memória detectado',
-      timestamp: '2 minutos atrás',
-      component: 'Sistema'
+      id: "1",
+      type: "warning",
+      message: "Alto uso de memória detectado",
+      timestamp: "2 minutos atrás",
+      component: "Sistema"
     },
     {
-      id: '2',
-      type: 'info',
-      message: 'Backup automático completado',
-      timestamp: '15 minutos atrás',
-      component: 'Database'
+      id: "2",
+      type: "info",
+      message: "Backup automático completado",
+      timestamp: "15 minutos atrás",
+      component: "Database"
     },
     {
-      id: '3',
-      type: 'critical',
-      message: 'Falha na sincronização de dados',
-      timestamp: '1 hora atrás',
-      component: 'Sync Service'
+      id: "3",
+      type: "critical",
+      message: "Falha na sincronização de dados",
+      timestamp: "1 hora atrás",
+      component: "Sync Service"
     }
   ]);
 
@@ -124,26 +124,26 @@ export const RealTimeSystemMonitor: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'good': return 'text-green-500';
-      case 'warning': return 'text-yellow-500';
-      case 'critical': return 'text-red-500';
-      default: return 'text-muted-foreground';
+    case "good": return "text-green-500";
+    case "warning": return "text-yellow-500";
+    case "critical": return "text-red-500";
+    default: return "text-muted-foreground";
     }
   };
 
   const getAlertColor = (type: string) => {
     switch (type) {
-      case 'critical': return 'border-red-200 bg-red-50 dark:bg-red-900/20';
-      case 'warning': return 'border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20';
-      case 'info': return 'border-blue-200 bg-blue-50 dark:bg-blue-900/20';
-      default: return 'border-gray-200 bg-gray-50 dark:bg-gray-900/20';
+    case "critical": return "border-red-200 bg-red-50 dark:bg-red-900/20";
+    case "warning": return "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20";
+    case "info": return "border-blue-200 bg-blue-50 dark:bg-blue-900/20";
+    default: return "border-gray-200 bg-gray-50 dark:bg-gray-900/20";
     }
   };
 
   const getHealthColor = (health: number) => {
-    if (health >= 90) return 'text-green-500';
-    if (health >= 70) return 'text-yellow-500';
-    return 'text-red-500';
+    if (health >= 90) return "text-green-500";
+    if (health >= 70) return "text-yellow-500";
+    return "text-red-500";
   };
 
   return (
@@ -220,16 +220,16 @@ export const RealTimeSystemMonitor: React.FC = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  {metric.label === 'CPU Usage' && <Cpu className="w-5 h-5 text-blue-500" />}
-                  {metric.label === 'Memory Usage' && <HardDrive className="w-5 h-5 text-purple-500" />}
-                  {metric.label === 'Network I/O' && <Wifi className="w-5 h-5 text-green-500" />}
-                  {metric.label === 'Disk Usage' && <Database className="w-5 h-5 text-orange-500" />}
-                  {metric.label === 'Active Users' && <Users className="w-5 h-5 text-pink-500" />}
-                  {metric.label === 'Response Time' && <Clock className="w-5 h-5 text-indigo-500" />}
+                  {metric.label === "CPU Usage" && <Cpu className="w-5 h-5 text-blue-500" />}
+                  {metric.label === "Memory Usage" && <HardDrive className="w-5 h-5 text-purple-500" />}
+                  {metric.label === "Network I/O" && <Wifi className="w-5 h-5 text-green-500" />}
+                  {metric.label === "Disk Usage" && <Database className="w-5 h-5 text-orange-500" />}
+                  {metric.label === "Active Users" && <Users className="w-5 h-5 text-pink-500" />}
+                  {metric.label === "Response Time" && <Clock className="w-5 h-5 text-indigo-500" />}
                   <span className="font-medium">{metric.label}</span>
                 </div>
                 <div className={`flex items-center gap-1 text-sm ${
-                  metric.trend > 0 ? 'text-green-500' : 'text-red-500'
+                  metric.trend > 0 ? "text-green-500" : "text-red-500"
                 }`}>
                   {metric.trend > 0 ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
                   {Math.abs(metric.trend).toFixed(1)}%
@@ -242,19 +242,19 @@ export const RealTimeSystemMonitor: React.FC = () => {
                     {metric.value.toFixed(1)}{metric.unit}
                   </span>
                   <Badge 
-                    variant={metric.status === 'good' ? 'default' : 
-                           metric.status === 'warning' ? 'secondary' : 'destructive'}
+                    variant={metric.status === "good" ? "default" : 
+                      metric.status === "warning" ? "secondary" : "destructive"}
                   >
-                    {metric.status === 'good' ? 'OK' : 
-                     metric.status === 'warning' ? 'Atenção' : 'Crítico'}
+                    {metric.status === "good" ? "OK" : 
+                      metric.status === "warning" ? "Atenção" : "Crítico"}
                   </Badge>
                 </div>
                 
-                {metric.label.includes('Usage') && (
+                {metric.label.includes("Usage") && (
                   <Progress 
                     value={metric.value} 
-                    className={`h-2 ${metric.status === 'critical' ? 'bg-red-100' : 
-                                     metric.status === 'warning' ? 'bg-yellow-100' : 'bg-green-100'}`}
+                    className={`h-2 ${metric.status === "critical" ? "bg-red-100" : 
+                      metric.status === "warning" ? "bg-yellow-100" : "bg-green-100"}`}
                   />
                 )}
               </div>

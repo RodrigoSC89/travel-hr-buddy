@@ -26,9 +26,9 @@ const Optimization = () => {
         description="Otimização inteligente de performance, experiência do usuário e insights estratégicos"
         gradient="green"
         badges={[
-          { icon: Gauge, label: '92.5% Performance' },
-          { icon: TrendingUp, label: '47 Melhorias' },
-          { icon: Target, label: '+34% Eficiência' }
+          { icon: Gauge, label: "92.5% Performance" },
+          { icon: TrendingUp, label: "47 Melhorias" },
+          { icon: Target, label: "+34% Eficiência" }
         ]}
       />
 

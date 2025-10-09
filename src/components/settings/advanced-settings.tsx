@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Settings as SettingsIcon,
   User,
@@ -20,7 +20,7 @@ import {
   Save,
   RefreshCw,
   Check
-} from 'lucide-react';
+} from "lucide-react";
 
 interface UserSettings {
   notifications: {
@@ -61,10 +61,10 @@ export const AdvancedSettings: React.FC = () => {
       dataSharing: false
     },
     preferences: {
-      language: 'pt-BR',
-      timezone: 'America/Sao_Paulo',
-      theme: 'system',
-      currency: 'BRL'
+      language: "pt-BR",
+      timezone: "America/Sao_Paulo",
+      theme: "system",
+      currency: "BRL"
     },
     security: {
       twoFactor: false,
@@ -128,10 +128,10 @@ export const AdvancedSettings: React.FC = () => {
         dataSharing: false
       },
       preferences: {
-        language: 'pt-BR',
-        timezone: 'America/Sao_Paulo',
-        theme: 'system',
-        currency: 'BRL'
+        language: "pt-BR",
+        timezone: "America/Sao_Paulo",
+        theme: "system",
+        currency: "BRL"
       },
       security: {
         twoFactor: false,
@@ -210,7 +210,7 @@ export const AdvancedSettings: React.FC = () => {
                 <Switch
                   checked={settings.notifications.email}
                   onCheckedChange={(checked) => 
-                    handleSettingChange('notifications', 'email', checked)
+                    handleSettingChange("notifications", "email", checked)
                   }
                 />
               </div>
@@ -225,7 +225,7 @@ export const AdvancedSettings: React.FC = () => {
                 <Switch
                   checked={settings.notifications.push}
                   onCheckedChange={(checked) => 
-                    handleSettingChange('notifications', 'push', checked)
+                    handleSettingChange("notifications", "push", checked)
                   }
                 />
               </div>
@@ -240,7 +240,7 @@ export const AdvancedSettings: React.FC = () => {
                 <Switch
                   checked={settings.notifications.sms}
                   onCheckedChange={(checked) => 
-                    handleSettingChange('notifications', 'sms', checked)
+                    handleSettingChange("notifications", "sms", checked)
                   }
                 />
               </div>
@@ -255,7 +255,7 @@ export const AdvancedSettings: React.FC = () => {
                 <Switch
                   checked={settings.notifications.marketing}
                   onCheckedChange={(checked) => 
-                    handleSettingChange('notifications', 'marketing', checked)
+                    handleSettingChange("notifications", "marketing", checked)
                   }
                 />
               </div>
@@ -279,7 +279,7 @@ export const AdvancedSettings: React.FC = () => {
                 <Switch
                   checked={settings.privacy.profileVisible}
                   onCheckedChange={(checked) => 
-                    handleSettingChange('privacy', 'profileVisible', checked)
+                    handleSettingChange("privacy", "profileVisible", checked)
                   }
                 />
               </div>
@@ -294,7 +294,7 @@ export const AdvancedSettings: React.FC = () => {
                 <Switch
                   checked={settings.privacy.activityTracking}
                   onCheckedChange={(checked) => 
-                    handleSettingChange('privacy', 'activityTracking', checked)
+                    handleSettingChange("privacy", "activityTracking", checked)
                   }
                 />
               </div>
@@ -309,7 +309,7 @@ export const AdvancedSettings: React.FC = () => {
                 <Switch
                   checked={settings.privacy.dataSharing}
                   onCheckedChange={(checked) => 
-                    handleSettingChange('privacy', 'dataSharing', checked)
+                    handleSettingChange("privacy", "dataSharing", checked)
                   }
                 />
               </div>
@@ -331,7 +331,7 @@ export const AdvancedSettings: React.FC = () => {
                     className="w-full p-2 border rounded-md"
                     value={settings.preferences.language}
                     onChange={(e) => 
-                      handleSettingChange('preferences', 'language', e.target.value)
+                      handleSettingChange("preferences", "language", e.target.value)
                     }
                   >
                     <option value="pt-BR">Português (Brasil)</option>
@@ -347,7 +347,7 @@ export const AdvancedSettings: React.FC = () => {
                     className="w-full p-2 border rounded-md"
                     value={settings.preferences.timezone}
                     onChange={(e) => 
-                      handleSettingChange('preferences', 'timezone', e.target.value)
+                      handleSettingChange("preferences", "timezone", e.target.value)
                     }
                   >
                     <option value="America/Sao_Paulo">São Paulo (GMT-3)</option>
@@ -363,7 +363,7 @@ export const AdvancedSettings: React.FC = () => {
                     className="w-full p-2 border rounded-md"
                     value={settings.preferences.theme}
                     onChange={(e) => 
-                      handleSettingChange('preferences', 'theme', e.target.value)
+                      handleSettingChange("preferences", "theme", e.target.value)
                     }
                   >
                     <option value="system">Sistema</option>
@@ -379,7 +379,7 @@ export const AdvancedSettings: React.FC = () => {
                     className="w-full p-2 border rounded-md"
                     value={settings.preferences.currency}
                     onChange={(e) => 
-                      handleSettingChange('preferences', 'currency', e.target.value)
+                      handleSettingChange("preferences", "currency", e.target.value)
                     }
                   >
                     <option value="BRL">Real (R$)</option>
@@ -408,7 +408,7 @@ export const AdvancedSettings: React.FC = () => {
                 <Switch
                   checked={settings.security.twoFactor}
                   onCheckedChange={(checked) => 
-                    handleSettingChange('security', 'twoFactor', checked)
+                    handleSettingChange("security", "twoFactor", checked)
                   }
                 />
               </div>
@@ -422,7 +422,7 @@ export const AdvancedSettings: React.FC = () => {
                   max="480"
                   value={settings.security.sessionTimeout}
                   onChange={(e) => 
-                    handleSettingChange('security', 'sessionTimeout', parseInt(e.target.value))
+                    handleSettingChange("security", "sessionTimeout", parseInt(e.target.value))
                   }
                 />
               </div>
@@ -437,7 +437,7 @@ export const AdvancedSettings: React.FC = () => {
                 <Switch
                   checked={settings.security.loginAlerts}
                   onCheckedChange={(checked) => 
-                    handleSettingChange('security', 'loginAlerts', checked)
+                    handleSettingChange("security", "loginAlerts", checked)
                   }
                 />
               </div>

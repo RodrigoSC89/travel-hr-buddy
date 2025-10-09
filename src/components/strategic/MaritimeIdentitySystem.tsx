@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Anchor, 
   Ship, 
@@ -24,7 +24,7 @@ import {
   Heart,
   Flag,
   Shield
-} from 'lucide-react';
+} from "lucide-react";
 
 interface ThemePreset {
   id: string;
@@ -47,136 +47,136 @@ interface CustomizationSettings {
   accentColor: string;
   theme: string;
   maritimeElements: boolean;
-  navigationStyle: 'classic' | 'modern' | 'compact';
-  terminology: 'standard' | 'maritime' | 'corporate';
+  navigationStyle: "classic" | "modern" | "compact";
+  terminology: "standard" | "maritime" | "corporate";
 }
 
 const MaritimeIdentitySystem: React.FC = () => {
   const [settings, setSettings] = useState<CustomizationSettings>({
-    companyName: 'Nautilus One',
-    logo: '',
-    primaryColor: '#2563eb',
-    secondaryColor: '#f59e0b',
-    accentColor: '#059669',
-    theme: 'nautical-professional',
+    companyName: "Nautilus One",
+    logo: "",
+    primaryColor: "#2563eb",
+    secondaryColor: "#f59e0b",
+    accentColor: "#059669",
+    theme: "nautical-professional",
     maritimeElements: true,
-    navigationStyle: 'modern',
-    terminology: 'maritime'
+    navigationStyle: "modern",
+    terminology: "maritime"
   });
   
   const [previewMode, setPreviewMode] = useState(false);
-  const [activeSection, setActiveSection] = useState<'branding' | 'colors' | 'layout' | 'terminology'>('branding');
+  const [activeSection, setActiveSection] = useState<"branding" | "colors" | "layout" | "terminology">("branding");
   const { toast } = useToast();
 
   const themePresets: ThemePreset[] = [
     {
-      id: 'nautical-professional',
-      name: 'Nautical Professional',
-      description: 'Azul oceânico com elementos dourados portuários',
+      id: "nautical-professional",
+      name: "Nautical Professional",
+      description: "Azul oceânico com elementos dourados portuários",
       colors: {
-        primary: '#2563eb',
-        secondary: '#f59e0b', 
-        accent: '#059669'
+        primary: "#2563eb",
+        secondary: "#f59e0b", 
+        accent: "#059669"
       },
-      preview: 'bg-gradient-to-br from-blue-500 to-blue-600',
+      preview: "bg-gradient-to-br from-blue-500 to-blue-600",
       maritime: true
     },
     {
-      id: 'deep-ocean',
-      name: 'Deep Ocean',
-      description: 'Tons profundos do oceano com ciano',
+      id: "deep-ocean",
+      name: "Deep Ocean",
+      description: "Tons profundos do oceano com ciano",
       colors: {
-        primary: '#1e3a8a',
-        secondary: '#0891b2',
-        accent: '#06b6d4'
+        primary: "#1e3a8a",
+        secondary: "#0891b2",
+        accent: "#06b6d4"
       },
-      preview: 'bg-gradient-to-br from-blue-900 to-cyan-600',
+      preview: "bg-gradient-to-br from-blue-900 to-cyan-600",
       maritime: true
     },
     {
-      id: 'harbor-sunset',
-      name: 'Harbor Sunset',
-      description: 'Cores quentes do pôr do sol portuário',
+      id: "harbor-sunset",
+      name: "Harbor Sunset",
+      description: "Cores quentes do pôr do sol portuário",
       colors: {
-        primary: '#dc2626',
-        secondary: '#ea580c',
-        accent: '#fbbf24'
+        primary: "#dc2626",
+        secondary: "#ea580c",
+        accent: "#fbbf24"
       },
-      preview: 'bg-gradient-to-br from-red-600 to-yellow-400',
+      preview: "bg-gradient-to-br from-red-600 to-yellow-400",
       maritime: true
     },
     {
-      id: 'arctic-navigation',
-      name: 'Arctic Navigation',
-      description: 'Tons frios e limpos do ártico',
+      id: "arctic-navigation",
+      name: "Arctic Navigation",
+      description: "Tons frios e limpos do ártico",
       colors: {
-        primary: '#0f766e',
-        secondary: '#0d9488',
-        accent: '#14b8a6'
+        primary: "#0f766e",
+        secondary: "#0d9488",
+        accent: "#14b8a6"
       },
-      preview: 'bg-gradient-to-br from-teal-700 to-teal-400',
+      preview: "bg-gradient-to-br from-teal-700 to-teal-400",
       maritime: true
     },
     {
-      id: 'corporate-classic',
-      name: 'Corporate Classic',
-      description: 'Estilo corporativo tradicional',
+      id: "corporate-classic",
+      name: "Corporate Classic",
+      description: "Estilo corporativo tradicional",
       colors: {
-        primary: '#374151',
-        secondary: '#6b7280',
-        accent: '#3b82f6'
+        primary: "#374151",
+        secondary: "#6b7280",
+        accent: "#3b82f6"
       },
-      preview: 'bg-gradient-to-br from-gray-700 to-blue-500',
+      preview: "bg-gradient-to-br from-gray-700 to-blue-500",
       maritime: false
     }
   ];
 
   const navigationStyles = [
     {
-      id: 'classic',
-      name: 'Clássico',
-      description: 'Navegação tradicional com estrutura hierárquica',
+      id: "classic",
+      name: "Clássico",
+      description: "Navegação tradicional com estrutura hierárquica",
       icon: Flag
     },
     {
-      id: 'modern',
-      name: 'Moderno',
-      description: 'Interface contemporânea com elementos fluidos',
+      id: "modern",
+      name: "Moderno",
+      description: "Interface contemporânea com elementos fluidos",
       icon: Sparkles
     },
     {
-      id: 'compact',
-      name: 'Compacto',
-      description: 'Maximiza espaço útil com navegação condensada',
+      id: "compact",
+      name: "Compacto",
+      description: "Maximiza espaço útil com navegação condensada",
       icon: Zap
     }
   ];
 
   const terminologyOptions = [
     {
-      id: 'maritime',
-      name: 'Marítimo',
-      description: 'Terminologia específica do setor naval',
-      examples: ['Tripulação', 'Embarcação', 'Porto', 'Escala'],
+      id: "maritime",
+      name: "Marítimo",
+      description: "Terminologia específica do setor naval",
+      examples: ["Tripulação", "Embarcação", "Porto", "Escala"],
       icon: Anchor
     },
     {
-      id: 'corporate',
-      name: 'Corporativo',
-      description: 'Linguagem empresarial padrão',
-      examples: ['Equipe', 'Sistema', 'Local', 'Agenda'],
+      id: "corporate",
+      name: "Corporativo",
+      description: "Linguagem empresarial padrão",
+      examples: ["Equipe", "Sistema", "Local", "Agenda"],
       icon: Crown
     },
     {
-      id: 'standard',
-      name: 'Padrão',
-      description: 'Terminologia mista e adaptável',
-      examples: ['Pessoas', 'Recursos', 'Destino', 'Cronograma'],
+      id: "standard",
+      name: "Padrão",
+      description: "Terminologia mista e adaptável",
+      examples: ["Pessoas", "Recursos", "Destino", "Cronograma"],
       icon: Globe
     }
   ];
 
-  const handleColorChange = (colorType: keyof Pick<CustomizationSettings, 'primaryColor' | 'secondaryColor' | 'accentColor'>, value: string) => {
+  const handleColorChange = (colorType: keyof Pick<CustomizationSettings, "primaryColor" | "secondaryColor" | "accentColor">, value: string) => {
     setSettings(prev => ({
       ...prev,
       [colorType]: value
@@ -208,9 +208,9 @@ const MaritimeIdentitySystem: React.FC = () => {
     const root = document.documentElement;
     
     // Converter hex para HSL e aplicar
-    root.style.setProperty('--primary', hexToHsl(settings.primaryColor));
-    root.style.setProperty('--secondary', hexToHsl(settings.secondaryColor));
-    root.style.setProperty('--accent', hexToHsl(settings.accentColor));
+    root.style.setProperty("--primary", hexToHsl(settings.primaryColor));
+    root.style.setProperty("--secondary", hexToHsl(settings.secondaryColor));
+    root.style.setProperty("--accent", hexToHsl(settings.accentColor));
     
     toast({
       title: "Preview Aplicado",
@@ -234,9 +234,9 @@ const MaritimeIdentitySystem: React.FC = () => {
       const d = max - min;
       s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
       switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
       }
       h /= 6;
     }
@@ -245,7 +245,7 @@ const MaritimeIdentitySystem: React.FC = () => {
   };
 
   const saveConfiguration = () => {
-    localStorage.setItem('nautilus-customization', JSON.stringify(settings));
+    localStorage.setItem("nautilus-customization", JSON.stringify(settings));
     toast({
       title: "Configuração Salva",
       description: "Personalização aplicada permanentemente",
@@ -254,11 +254,11 @@ const MaritimeIdentitySystem: React.FC = () => {
 
   const exportConfiguration = () => {
     const dataStr = JSON.stringify(settings, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'nautilus-theme-config.json';
+    link.download = "nautilus-theme-config.json";
     link.click();
   };
 
@@ -282,14 +282,14 @@ const MaritimeIdentitySystem: React.FC = () => {
             
             <div className="flex gap-3">
               <Button
-                variant={previewMode ? 'default' : 'outline'}
+                variant={previewMode ? "default" : "outline"}
                 onClick={() => {
                   setPreviewMode(!previewMode);
                   if (!previewMode) applyThemePreview();
                 }}
               >
                 <Eye className="w-4 h-4 mr-2" />
-                {previewMode ? 'Preview Ativo' : 'Ativar Preview'}
+                {previewMode ? "Preview Ativo" : "Ativar Preview"}
               </Button>
               <Button onClick={saveConfiguration} className="bg-green-600 hover:bg-green-700">
                 <Shield className="w-4 h-4 mr-2" />
@@ -303,16 +303,16 @@ const MaritimeIdentitySystem: React.FC = () => {
       {/* Navegação entre seções */}
       <div className="flex gap-2 p-1 bg-muted/30 rounded-xl w-fit">
         {[
-          { id: 'branding', label: 'Marca', icon: Flag },
-          { id: 'colors', label: 'Cores', icon: Palette },
-          { id: 'layout', label: 'Layout', icon: Navigation },
-          { id: 'terminology', label: 'Terminologia', icon: Globe }
+          { id: "branding", label: "Marca", icon: Flag },
+          { id: "colors", label: "Cores", icon: Palette },
+          { id: "layout", label: "Layout", icon: Navigation },
+          { id: "terminology", label: "Terminologia", icon: Globe }
         ].map((section) => {
           const Icon = section.icon;
           return (
             <Button
               key={section.id}
-              variant={activeSection === section.id ? 'default' : 'ghost'}
+              variant={activeSection === section.id ? "default" : "ghost"}
               onClick={() => setActiveSection(section.id as any)}
               className="flex items-center gap-2"
             >
@@ -328,7 +328,7 @@ const MaritimeIdentitySystem: React.FC = () => {
         <div className="lg:col-span-2">
           <Card className="min-h-[500px]">
             <CardContent className="p-6">
-              {activeSection === 'branding' && (
+              {activeSection === "branding" && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold flex items-center gap-2">
                     <Flag className="w-5 h-5 text-primary" />
@@ -368,7 +368,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                           <div className="w-16 h-16 mx-auto mb-3 bg-primary/20 rounded-full flex items-center justify-center">
                             <Anchor className="w-8 h-8 text-primary" />
                           </div>
-                          <h3 className="text-lg font-bold">{settings.companyName || 'Sua Empresa'}</h3>
+                          <h3 className="text-lg font-bold">{settings.companyName || "Sua Empresa"}</h3>
                           <p className="text-sm text-muted-foreground">Sistema Marítimo Integrado</p>
                         </div>
                       </div>
@@ -377,7 +377,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                 </div>
               )}
 
-              {activeSection === 'colors' && (
+              {activeSection === "colors" && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold flex items-center gap-2">
                     <Palette className="w-5 h-5 text-primary" />
@@ -393,7 +393,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                           key={preset.id}
                           onClick={() => handlePresetSelect(preset)}
                           className={`p-4 border rounded-lg cursor-pointer transition-all hover:scale-105 ${
-                            settings.theme === preset.id ? 'border-primary bg-primary/5' : 'border-muted'
+                            settings.theme === preset.id ? "border-primary bg-primary/5" : "border-muted"
                           }`}
                         >
                           <div className="flex items-center gap-3 mb-2">
@@ -425,12 +425,12 @@ const MaritimeIdentitySystem: React.FC = () => {
                             id="primaryColor"
                             type="color"
                             value={settings.primaryColor}
-                            onChange={(e) => handleColorChange('primaryColor', e.target.value)}
+                            onChange={(e) => handleColorChange("primaryColor", e.target.value)}
                             className="w-16 h-10 p-1"
                           />
                           <Input
                             value={settings.primaryColor}
-                            onChange={(e) => handleColorChange('primaryColor', e.target.value)}
+                            onChange={(e) => handleColorChange("primaryColor", e.target.value)}
                             placeholder="#2563eb"
                             className="flex-1"
                           />
@@ -444,12 +444,12 @@ const MaritimeIdentitySystem: React.FC = () => {
                             id="secondaryColor"
                             type="color"
                             value={settings.secondaryColor}
-                            onChange={(e) => handleColorChange('secondaryColor', e.target.value)}
+                            onChange={(e) => handleColorChange("secondaryColor", e.target.value)}
                             className="w-16 h-10 p-1"
                           />
                           <Input
                             value={settings.secondaryColor}
-                            onChange={(e) => handleColorChange('secondaryColor', e.target.value)}
+                            onChange={(e) => handleColorChange("secondaryColor", e.target.value)}
                             placeholder="#f59e0b"
                             className="flex-1"
                           />
@@ -463,12 +463,12 @@ const MaritimeIdentitySystem: React.FC = () => {
                             id="accentColor"
                             type="color"
                             value={settings.accentColor}
-                            onChange={(e) => handleColorChange('accentColor', e.target.value)}
+                            onChange={(e) => handleColorChange("accentColor", e.target.value)}
                             className="w-16 h-10 p-1"
                           />
                           <Input
                             value={settings.accentColor}
-                            onChange={(e) => handleColorChange('accentColor', e.target.value)}
+                            onChange={(e) => handleColorChange("accentColor", e.target.value)}
                             placeholder="#059669"
                             className="flex-1"
                           />
@@ -479,7 +479,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                 </div>
               )}
 
-              {activeSection === 'layout' && (
+              {activeSection === "layout" && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold flex items-center gap-2">
                     <Navigation className="w-5 h-5 text-primary" />
@@ -494,7 +494,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                           key={style.id}
                           onClick={() => setSettings(prev => ({ ...prev, navigationStyle: style.id as any }))}
                           className={`p-4 border rounded-lg cursor-pointer transition-all hover:scale-105 ${
-                            settings.navigationStyle === style.id ? 'border-primary bg-primary/5' : 'border-muted'
+                            settings.navigationStyle === style.id ? "border-primary bg-primary/5" : "border-muted"
                           }`}
                         >
                           <div className="text-center">
@@ -511,7 +511,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                 </div>
               )}
 
-              {activeSection === 'terminology' && (
+              {activeSection === "terminology" && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold flex items-center gap-2">
                     <Globe className="w-5 h-5 text-primary" />
@@ -526,7 +526,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                           key={option.id}
                           onClick={() => setSettings(prev => ({ ...prev, terminology: option.id as any }))}
                           className={`p-4 border rounded-lg cursor-pointer transition-all hover:scale-[1.02] ${
-                            settings.terminology === option.id ? 'border-primary bg-primary/5' : 'border-muted'
+                            settings.terminology === option.id ? "border-primary bg-primary/5" : "border-muted"
                           }`}
                         >
                           <div className="flex items-start gap-4">

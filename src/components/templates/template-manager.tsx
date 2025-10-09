@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   FileText, 
   Plus, 
@@ -24,15 +24,15 @@ import {
   Tags,
   Archive,
   Share
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Template {
   id: string;
   name: string;
   description: string;
   category: string;
-  type: 'report' | 'document' | 'email' | 'certificate';
+  type: "report" | "document" | "email" | "certificate";
   createdBy: string;
   createdAt: Date;
   lastUsed?: Date;
@@ -44,9 +44,9 @@ interface Template {
 
 const TemplateManager = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedType, setSelectedType] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<Template | null>(null);
   const { toast } = useToast();
@@ -55,71 +55,71 @@ const TemplateManager = () => {
   React.useEffect(() => {
     const mockTemplates: Template[] = [
       {
-        id: '1',
-        name: 'Relatório Mensal de Vendas',
-        description: 'Template padrão para relatórios mensais de performance de vendas',
-        category: 'business',
-        type: 'report',
-        createdBy: 'admin@empresa.com',
+        id: "1",
+        name: "Relatório Mensal de Vendas",
+        description: "Template padrão para relatórios mensais de performance de vendas",
+        category: "business",
+        type: "report",
+        createdBy: "admin@empresa.com",
         createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         lastUsed: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
         usageCount: 45,
         isPublic: true,
-        tags: ['vendas', 'mensal', 'kpi'],
-        content: '# Relatório Mensal de Vendas\n\n## Período: {{periodo}}\n\n### Métricas Principais\n- Receita Total: {{receita}}\n- Número de Vendas: {{vendas}}'
+        tags: ["vendas", "mensal", "kpi"],
+        content: "# Relatório Mensal de Vendas\n\n## Período: {{periodo}}\n\n### Métricas Principais\n- Receita Total: {{receita}}\n- Número de Vendas: {{vendas}}"
       },
       {
-        id: '2',
-        name: 'Certificado de Conclusão STCW',
-        description: 'Template oficial para certificados STCW básicos',
-        category: 'hr',
-        type: 'certificate',
-        createdBy: 'hr@empresa.com',
+        id: "2",
+        name: "Certificado de Conclusão STCW",
+        description: "Template oficial para certificados STCW básicos",
+        category: "hr",
+        type: "certificate",
+        createdBy: "hr@empresa.com",
         createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
         lastUsed: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
         usageCount: 123,
         isPublic: false,
-        tags: ['certificado', 'stcw', 'maritimo'],
-        content: 'CERTIFICADO DE CONCLUSÃO\n\nCertificamos que {{nome}} concluiu com aproveitamento o curso {{curso}}'
+        tags: ["certificado", "stcw", "maritimo"],
+        content: "CERTIFICADO DE CONCLUSÃO\n\nCertificamos que {{nome}} concluiu com aproveitamento o curso {{curso}}"
       },
       {
-        id: '3',
-        name: 'Email de Boas-vindas',
-        description: 'Email automático para novos funcionários',
-        category: 'hr',
-        type: 'email',
-        createdBy: 'hr@empresa.com',
+        id: "3",
+        name: "Email de Boas-vindas",
+        description: "Email automático para novos funcionários",
+        category: "hr",
+        type: "email",
+        createdBy: "hr@empresa.com",
         createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000),
         lastUsed: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
         usageCount: 78,
         isPublic: true,
-        tags: ['email', 'boas-vindas', 'onboarding'],
-        content: 'Assunto: Bem-vindo(a) à {{empresa}}!\n\nOlá {{nome}},\n\nSeja bem-vindo(a) à nossa equipe!'
+        tags: ["email", "boas-vindas", "onboarding"],
+        content: "Assunto: Bem-vindo(a) à {{empresa}}!\n\nOlá {{nome}},\n\nSeja bem-vindo(a) à nossa equipe!"
       }
     ];
     setTemplates(mockTemplates);
   }, []);
 
   const categories = [
-    { id: 'all', name: 'Todas as Categorias' },
-    { id: 'business', name: 'Negócios' },
-    { id: 'hr', name: 'Recursos Humanos' },
-    { id: 'finance', name: 'Financeiro' },
-    { id: 'operations', name: 'Operações' },
-    { id: 'maritime', name: 'Marítimo' }
+    { id: "all", name: "Todas as Categorias" },
+    { id: "business", name: "Negócios" },
+    { id: "hr", name: "Recursos Humanos" },
+    { id: "finance", name: "Financeiro" },
+    { id: "operations", name: "Operações" },
+    { id: "maritime", name: "Marítimo" }
   ];
 
   const types = [
-    { id: 'all', name: 'Todos os Tipos' },
-    { id: 'report', name: 'Relatórios' },
-    { id: 'document', name: 'Documentos' },
-    { id: 'email', name: 'Emails' },
-    { id: 'certificate', name: 'Certificados' }
+    { id: "all", name: "Todos os Tipos" },
+    { id: "report", name: "Relatórios" },
+    { id: "document", name: "Documentos" },
+    { id: "email", name: "Emails" },
+    { id: "certificate", name: "Certificados" }
   ];
 
   const filteredTemplates = templates.filter(template => {
-    const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory;
-    const matchesType = selectedType === 'all' || template.type === selectedType;
+    const matchesCategory = selectedCategory === "all" || template.category === selectedCategory;
+    const matchesType = selectedType === "all" || template.type === selectedType;
     const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          template.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          template.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -128,21 +128,21 @@ const TemplateManager = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'report': return <FileText className="w-4 h-4" />;
-      case 'document': return <FileText className="w-4 h-4" />;
-      case 'email': return <FileText className="w-4 h-4" />;
-      case 'certificate': return <FileText className="w-4 h-4" />;
-      default: return <FileText className="w-4 h-4" />;
+    case "report": return <FileText className="w-4 h-4" />;
+    case "document": return <FileText className="w-4 h-4" />;
+    case "email": return <FileText className="w-4 h-4" />;
+    case "certificate": return <FileText className="w-4 h-4" />;
+    default: return <FileText className="w-4 h-4" />;
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'report': return 'text-blue-600 bg-blue-100';
-      case 'document': return 'text-green-600 bg-green-100';
-      case 'email': return 'text-purple-600 bg-purple-100';
-      case 'certificate': return 'text-orange-600 bg-orange-100';
-      default: return 'text-muted-foreground bg-secondary';
+    case "report": return "text-blue-600 bg-blue-100";
+    case "document": return "text-green-600 bg-green-100";
+    case "email": return "text-purple-600 bg-purple-100";
+    case "certificate": return "text-orange-600 bg-orange-100";
+    default: return "text-muted-foreground bg-secondary";
     }
   };
 
@@ -184,12 +184,12 @@ const TemplateManager = () => {
   };
 
   const getRelativeTime = (date?: Date) => {
-    if (!date) return 'Nunca';
+    if (!date) return "Nunca";
     const now = new Date();
     const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
     
-    if (diffInDays === 0) return 'Hoje';
-    if (diffInDays === 1) return 'Ontem';
+    if (diffInDays === 0) return "Hoje";
+    if (diffInDays === 1) return "Ontem";
     if (diffInDays < 30) return `${diffInDays} dias atrás`;
     if (diffInDays < 365) return `${Math.floor(diffInDays / 30)} meses atrás`;
     return `${Math.floor(diffInDays / 365)} anos atrás`;

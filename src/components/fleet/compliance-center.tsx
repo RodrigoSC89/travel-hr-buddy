@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
 import { 
   Shield, 
   FileText,
@@ -28,12 +28,12 @@ import {
   Globe,
   TrendingUp,
   AlertCircle
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface CertificationRecord {
   id: string;
-  type: 'vessel' | 'crew' | 'company';
+  type: "vessel" | "crew" | "company";
   category: string;
   certificate_name: string;
   certificate_number: string;
@@ -42,7 +42,7 @@ interface CertificationRecord {
   vessel_name?: string;
   issue_date: string;
   expiry_date: string;
-  status: 'valid' | 'expiring' | 'expired' | 'suspended' | 'pending';
+  status: "valid" | "expiring" | "expired" | "suspended" | "pending";
   compliance_score: number; // 0-100
   file_url?: string;
   renewal_cost?: number;
@@ -50,15 +50,15 @@ interface CertificationRecord {
   last_inspection?: string;
   next_inspection?: string;
   regulatory_body: string;
-  risk_level: 'low' | 'medium' | 'high' | 'critical';
+  risk_level: "low" | "medium" | "high" | "critical";
 }
 
 const ComplianceCenter: React.FC = () => {
   const [certificates, setCertificates] = useState<CertificationRecord[]>([]);
   const [selectedCertificate, setSelectedCertificate] = useState<CertificationRecord | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
   const [showUploadDialog, setShowUploadDialog] = useState(false);
   const { toast } = useToast();
@@ -70,93 +70,93 @@ const ComplianceCenter: React.FC = () => {
   const loadCertificates = () => {
     const mockCertificates: CertificationRecord[] = [
       {
-        id: '1',
-        type: 'vessel',
-        category: 'Safety',
-        certificate_name: 'Certificado de Segurança para Navios de Passageiros (CSSP)',
-        certificate_number: 'CSSP-2024-001',
-        issuing_authority: 'Marinha do Brasil',
-        holder_name: 'MV Atlântico Explorer',
-        vessel_name: 'MV Atlântico Explorer',
-        issue_date: '2023-01-15',
-        expiry_date: '2024-01-15',
-        status: 'expiring',
+        id: "1",
+        type: "vessel",
+        category: "Safety",
+        certificate_name: "Certificado de Segurança para Navios de Passageiros (CSSP)",
+        certificate_number: "CSSP-2024-001",
+        issuing_authority: "Marinha do Brasil",
+        holder_name: "MV Atlântico Explorer",
+        vessel_name: "MV Atlântico Explorer",
+        issue_date: "2023-01-15",
+        expiry_date: "2024-01-15",
+        status: "expiring",
         compliance_score: 92,
         renewal_cost: 15000,
-        notes: 'Renovação agendada para dezembro',
-        last_inspection: '2023-12-01',
-        next_inspection: '2024-06-01',
-        regulatory_body: 'IMO/SOLAS',
-        risk_level: 'medium'
+        notes: "Renovação agendada para dezembro",
+        last_inspection: "2023-12-01",
+        next_inspection: "2024-06-01",
+        regulatory_body: "IMO/SOLAS",
+        risk_level: "medium"
       },
       {
-        id: '2',
-        type: 'crew',
-        category: 'STCW',
-        certificate_name: 'Certificado de Competência - Oficial de Convés',
-        certificate_number: 'STCW-COC-2023-456',
-        issuing_authority: 'Marinha do Brasil',
-        holder_name: 'Capitão João Silva',
-        issue_date: '2022-03-10',
-        expiry_date: '2025-03-10',
-        status: 'valid',
+        id: "2",
+        type: "crew",
+        category: "STCW",
+        certificate_name: "Certificado de Competência - Oficial de Convés",
+        certificate_number: "STCW-COC-2023-456",
+        issuing_authority: "Marinha do Brasil",
+        holder_name: "Capitão João Silva",
+        issue_date: "2022-03-10",
+        expiry_date: "2025-03-10",
+        status: "valid",
         compliance_score: 98,
         renewal_cost: 2500,
-        regulatory_body: 'IMO/STCW',
-        risk_level: 'low'
+        regulatory_body: "IMO/STCW",
+        risk_level: "low"
       },
       {
-        id: '3',
-        type: 'vessel',
-        category: 'Environmental',
-        certificate_name: 'Certificado Internacional de Prevenção da Poluição (IOPP)',
-        certificate_number: 'IOPP-2023-789',
-        issuing_authority: 'Marinha do Brasil',
-        holder_name: 'MV Pacífico Star',
-        vessel_name: 'MV Pacífico Star',
-        issue_date: '2023-06-20',
-        expiry_date: '2026-06-20',
-        status: 'valid',
+        id: "3",
+        type: "vessel",
+        category: "Environmental",
+        certificate_name: "Certificado Internacional de Prevenção da Poluição (IOPP)",
+        certificate_number: "IOPP-2023-789",
+        issuing_authority: "Marinha do Brasil",
+        holder_name: "MV Pacífico Star",
+        vessel_name: "MV Pacífico Star",
+        issue_date: "2023-06-20",
+        expiry_date: "2026-06-20",
+        status: "valid",
         compliance_score: 95,
         renewal_cost: 8000,
-        last_inspection: '2023-11-15',
-        next_inspection: '2024-05-15',
-        regulatory_body: 'IMO/MARPOL',
-        risk_level: 'low'
+        last_inspection: "2023-11-15",
+        next_inspection: "2024-05-15",
+        regulatory_body: "IMO/MARPOL",
+        risk_level: "low"
       },
       {
-        id: '4',
-        type: 'crew',
-        category: 'Medical',
-        certificate_name: 'Atestado Médico Marítimo',
-        certificate_number: 'AMM-2023-321',
-        issuing_authority: 'Médico Credenciado DPC',
-        holder_name: 'Maria Santos - Oficial de Máquinas',
-        issue_date: '2023-08-01',
-        expiry_date: '2024-02-01',
-        status: 'expired',
+        id: "4",
+        type: "crew",
+        category: "Medical",
+        certificate_name: "Atestado Médico Marítimo",
+        certificate_number: "AMM-2023-321",
+        issuing_authority: "Médico Credenciado DPC",
+        holder_name: "Maria Santos - Oficial de Máquinas",
+        issue_date: "2023-08-01",
+        expiry_date: "2024-02-01",
+        status: "expired",
         compliance_score: 0,
         renewal_cost: 300,
-        regulatory_body: 'DPC/Marinha',
-        risk_level: 'critical'
+        regulatory_body: "DPC/Marinha",
+        risk_level: "critical"
       },
       {
-        id: '5',
-        type: 'company',
-        category: 'ISM',
-        certificate_name: 'Certificado de Gestão de Segurança (SMC)',
-        certificate_number: 'SMC-2023-100',
-        issuing_authority: 'Bureau Veritas',
-        holder_name: 'Companhia Marítima XYZ',
-        issue_date: '2023-04-15',
-        expiry_date: '2026-04-15',
-        status: 'valid',
+        id: "5",
+        type: "company",
+        category: "ISM",
+        certificate_name: "Certificado de Gestão de Segurança (SMC)",
+        certificate_number: "SMC-2023-100",
+        issuing_authority: "Bureau Veritas",
+        holder_name: "Companhia Marítima XYZ",
+        issue_date: "2023-04-15",
+        expiry_date: "2026-04-15",
+        status: "valid",
         compliance_score: 89,
         renewal_cost: 25000,
-        last_inspection: '2023-10-20',
-        next_inspection: '2024-04-20',
-        regulatory_body: 'IMO/ISM Code',
-        risk_level: 'medium'
+        last_inspection: "2023-10-20",
+        next_inspection: "2024-04-20",
+        regulatory_body: "IMO/ISM Code",
+        risk_level: "medium"
       }
     ];
 
@@ -165,53 +165,53 @@ const ComplianceCenter: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'valid': return 'bg-success text-success-foreground';
-      case 'expiring': return 'bg-warning text-warning-foreground';
-      case 'expired': return 'bg-destructive text-destructive-foreground';
-      case 'suspended': return 'bg-orange-500 text-white';
-      case 'pending': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "valid": return "bg-success text-success-foreground";
+    case "expiring": return "bg-warning text-warning-foreground";
+    case "expired": return "bg-destructive text-destructive-foreground";
+    case "suspended": return "bg-orange-500 text-white";
+    case "pending": return "bg-info text-info-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'valid': return 'Válido';
-      case 'expiring': return 'Vencendo';
-      case 'expired': return 'Vencido';
-      case 'suspended': return 'Suspenso';
-      case 'pending': return 'Pendente';
-      default: return 'Desconhecido';
+    case "valid": return "Válido";
+    case "expiring": return "Vencendo";
+    case "expired": return "Vencido";
+    case "suspended": return "Suspenso";
+    case "pending": return "Pendente";
+    default: return "Desconhecido";
     }
   };
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'low': return 'text-success';
-      case 'medium': return 'text-warning';
-      case 'high': return 'text-orange-500';
-      case 'critical': return 'text-destructive';
-      default: return 'text-muted-foreground';
+    case "low": return "text-success";
+    case "medium": return "text-warning";
+    case "high": return "text-orange-500";
+    case "critical": return "text-destructive";
+    default: return "text-muted-foreground";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'vessel': return <Ship className="h-4 w-4" />;
-      case 'crew': return <Users className="h-4 w-4" />;
-      case 'company': return <Briefcase className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+    case "vessel": return <Ship className="h-4 w-4" />;
+    case "crew": return <Users className="h-4 w-4" />;
+    case "company": return <Briefcase className="h-4 w-4" />;
+    default: return <FileText className="h-4 w-4" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
-      case 'safety': return <Shield className="h-4 w-4 text-primary" />;
-      case 'stcw': return <Award className="h-4 w-4 text-success" />;
-      case 'environmental': return <Globe className="h-4 w-4 text-azure-600" />;
-      case 'medical': return <BookOpen className="h-4 w-4 text-info" />;
-      case 'ism': return <CheckCircle className="h-4 w-4 text-warning" />;
-      default: return <FileText className="h-4 w-4 text-muted-foreground" />;
+    case "safety": return <Shield className="h-4 w-4 text-primary" />;
+    case "stcw": return <Award className="h-4 w-4 text-success" />;
+    case "environmental": return <Globe className="h-4 w-4 text-azure-600" />;
+    case "medical": return <BookOpen className="h-4 w-4 text-info" />;
+    case "ism": return <CheckCircle className="h-4 w-4 text-warning" />;
+    default: return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -227,8 +227,8 @@ const ComplianceCenter: React.FC = () => {
                          cert.holder_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          cert.certificate_number.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesStatus = statusFilter === 'all' || cert.status === statusFilter;
-    const matchesType = typeFilter === 'all' || cert.type === typeFilter;
+    const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
+    const matchesType = typeFilter === "all" || cert.type === typeFilter;
     
     return matchesSearch && matchesStatus && matchesType;
   });
@@ -236,12 +236,12 @@ const ComplianceCenter: React.FC = () => {
   // Calculate compliance stats
   const stats = {
     total: certificates.length,
-    valid: certificates.filter(c => c.status === 'valid').length,
-    expiring: certificates.filter(c => c.status === 'expiring').length,
-    expired: certificates.filter(c => c.status === 'expired').length,
+    valid: certificates.filter(c => c.status === "valid").length,
+    expiring: certificates.filter(c => c.status === "expiring").length,
+    expired: certificates.filter(c => c.status === "expired").length,
     avgCompliance: certificates.length > 0 ? Math.round(certificates.reduce((sum, c) => sum + c.compliance_score, 0) / certificates.length) : 0,
     totalRenewalCost: certificates.reduce((sum, c) => sum + (c.renewal_cost || 0), 0),
-    criticalRisk: certificates.filter(c => c.risk_level === 'critical').length
+    criticalRisk: certificates.filter(c => c.risk_level === "critical").length
   };
 
   return (
@@ -326,10 +326,10 @@ const ComplianceCenter: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Custo Renovação</p>
                 <p className="text-lg font-bold text-info">
-                  {new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                    notation: 'compact'
+                  {new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                    notation: "compact"
                   }).format(stats.totalRenewalCost)}
                 </p>
               </div>
@@ -559,11 +559,11 @@ const ComplianceCenter: React.FC = () => {
                         <div>
                           <p className="text-xs text-muted-foreground">Vencimento</p>
                           <p className="text-sm font-medium">
-                            {new Date(cert.expiry_date).toLocaleDateString('pt-BR')}
+                            {new Date(cert.expiry_date).toLocaleDateString("pt-BR")}
                           </p>
                           {daysToExpiry <= 90 && (
-                            <p className={`text-xs ${daysToExpiry <= 30 ? 'text-destructive' : 'text-warning'}`}>
-                              {daysToExpiry > 0 ? `${daysToExpiry} dias` : 'Vencido'}
+                            <p className={`text-xs ${daysToExpiry <= 30 ? "text-destructive" : "text-warning"}`}>
+                              {daysToExpiry > 0 ? `${daysToExpiry} dias` : "Vencido"}
                             </p>
                           )}
                         </div>
@@ -578,11 +578,11 @@ const ComplianceCenter: React.FC = () => {
                           <p className="text-xs text-muted-foreground">Custo Renovação</p>
                           <p className="text-sm font-medium">
                             {cert.renewal_cost ? 
-                              new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
+                              new Intl.NumberFormat("pt-BR", {
+                                style: "currency",
+                                currency: "BRL"
                               }).format(cert.renewal_cost)
-                              : 'N/A'
+                              : "N/A"
                             }
                           </p>
                         </div>
@@ -640,11 +640,11 @@ const ComplianceCenter: React.FC = () => {
                             <div className="grid grid-cols-2 gap-4">
                               <div>
                                 <Label className="text-sm font-medium">Data de Emissão</Label>
-                                <p className="text-sm mt-1">{new Date(selectedCertificate.issue_date).toLocaleDateString('pt-BR')}</p>
+                                <p className="text-sm mt-1">{new Date(selectedCertificate.issue_date).toLocaleDateString("pt-BR")}</p>
                               </div>
                               <div>
                                 <Label className="text-sm font-medium">Data de Vencimento</Label>
-                                <p className="text-sm mt-1">{new Date(selectedCertificate.expiry_date).toLocaleDateString('pt-BR')}</p>
+                                <p className="text-sm mt-1">{new Date(selectedCertificate.expiry_date).toLocaleDateString("pt-BR")}</p>
                               </div>
                             </div>
 
@@ -652,11 +652,11 @@ const ComplianceCenter: React.FC = () => {
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <Label className="text-sm font-medium">Última Inspeção</Label>
-                                  <p className="text-sm mt-1">{new Date(selectedCertificate.last_inspection).toLocaleDateString('pt-BR')}</p>
+                                  <p className="text-sm mt-1">{new Date(selectedCertificate.last_inspection).toLocaleDateString("pt-BR")}</p>
                                 </div>
                                 <div>
                                   <Label className="text-sm font-medium">Próxima Inspeção</Label>
-                                  <p className="text-sm mt-1">{selectedCertificate.next_inspection ? new Date(selectedCertificate.next_inspection).toLocaleDateString('pt-BR') : 'N/A'}</p>
+                                  <p className="text-sm mt-1">{selectedCertificate.next_inspection ? new Date(selectedCertificate.next_inspection).toLocaleDateString("pt-BR") : "N/A"}</p>
                                 </div>
                               </div>
                             )}

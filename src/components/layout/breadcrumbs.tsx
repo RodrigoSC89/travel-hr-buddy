@@ -1,6 +1,6 @@
-import React from 'react';
-import { ChevronRight, Home } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { ChevronRight, Home } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface BreadcrumbItem {
   label: string;
@@ -13,7 +13,7 @@ interface BreadcrumbsProps {
   className?: string;
 }
 
-export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = '' }) => {
+export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = "" }) => {
   return (
     <nav className={`flex items-center space-x-1 text-sm text-muted-foreground ${className}`} aria-label="Breadcrumb">
       <Link 
@@ -36,8 +36,8 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = '' 
             </Link>
           ) : (
             <span 
-              className={`${item.current ? 'text-foreground font-medium' : 'text-muted-foreground'}`}
-              aria-current={item.current ? 'page' : undefined}
+              className={`${item.current ? "text-foreground font-medium" : "text-muted-foreground"}`}
+              aria-current={item.current ? "page" : undefined}
             >
               {item.label}
             </span>

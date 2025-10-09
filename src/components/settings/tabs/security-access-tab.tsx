@@ -1,12 +1,12 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Shield, 
   Key, 
@@ -16,8 +16,8 @@ import {
   CheckCircle,
   TestTube,
   Settings
-} from 'lucide-react';
-import { TwoFactorSettings } from '@/components/auth/two-factor-settings';
+} from "lucide-react";
+import { TwoFactorSettings } from "@/components/auth/two-factor-settings";
 
 interface SecuritySettings {
   passwordRules: {
@@ -42,7 +42,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
   onUpdate,
   testMode
 }) => {
-  const updatePasswordRule = (rule: keyof SecuritySettings['passwordRules'], value: any) => {
+  const updatePasswordRule = (rule: keyof SecuritySettings["passwordRules"], value: any) => {
     onUpdate({
       passwordRules: {
         ...settings.passwordRules,
@@ -60,9 +60,9 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
     if (passwordRules.requireSymbols) score++;
     if (passwordRules.requireUppercase) score++;
     
-    if (score <= 2) return { level: 'Baixa', color: 'text-red-600', bg: 'bg-red-100' };
-    if (score <= 3) return { level: 'Média', color: 'text-yellow-600', bg: 'bg-yellow-100' };
-    return { level: 'Alta', color: 'text-green-600', bg: 'bg-green-100' };
+    if (score <= 2) return { level: "Baixa", color: "text-red-600", bg: "bg-red-100" };
+    if (score <= 3) return { level: "Média", color: "text-yellow-600", bg: "bg-yellow-100" };
+    return { level: "Alta", color: "text-green-600", bg: "bg-green-100" };
   };
 
   const strength = getPasswordStrength();
@@ -92,7 +92,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                   min="6"
                   max="32"
                   value={settings.passwordRules.minLength}
-                  onChange={(e) => updatePasswordRule('minLength', parseInt(e.target.value))}
+                  onChange={(e) => updatePasswordRule("minLength", parseInt(e.target.value))}
                 />
                 <p className="text-xs text-muted-foreground">
                   Número mínimo de caracteres (recomendado: 12+)
@@ -109,7 +109,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                   </div>
                   <Switch
                     checked={settings.passwordRules.requireNumbers}
-                    onCheckedChange={(checked) => updatePasswordRule('requireNumbers', checked)}
+                    onCheckedChange={(checked) => updatePasswordRule("requireNumbers", checked)}
                   />
                 </div>
 
@@ -120,7 +120,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                   </div>
                   <Switch
                     checked={settings.passwordRules.requireSymbols}
-                    onCheckedChange={(checked) => updatePasswordRule('requireSymbols', checked)}
+                    onCheckedChange={(checked) => updatePasswordRule("requireSymbols", checked)}
                   />
                 </div>
 
@@ -131,7 +131,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                   </div>
                   <Switch
                     checked={settings.passwordRules.requireUppercase}
-                    onCheckedChange={(checked) => updatePasswordRule('requireUppercase', checked)}
+                    onCheckedChange={(checked) => updatePasswordRule("requireUppercase", checked)}
                   />
                 </div>
               </div>
@@ -144,14 +144,14 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                   Força da Política
                 </h4>
                 <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${strength.color} ${strength.bg}`}>
-                  {strength.level === 'Alta' ? <CheckCircle className="w-4 h-4 mr-1" /> : <AlertTriangle className="w-4 h-4 mr-1" />}
+                  {strength.level === "Alta" ? <CheckCircle className="w-4 h-4 mr-1" /> : <AlertTriangle className="w-4 h-4 mr-1" />}
                   Segurança {strength.level}
                 </div>
                 
                 <div className="mt-3 text-sm text-muted-foreground">
                   <p>Exemplo de senha válida:</p>
                   <code className="mt-1 p-1 bg-muted rounded text-xs">
-                    MinhaSenh@123{settings.passwordRules.minLength > 12 ? 'Segura' : ''}
+                    MinhaSenh@123{settings.passwordRules.minLength > 12 ? "Segura" : ""}
                   </code>
                 </div>
               </div>

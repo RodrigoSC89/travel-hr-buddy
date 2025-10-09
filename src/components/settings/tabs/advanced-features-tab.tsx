@@ -1,12 +1,12 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { 
   Zap, 
   TestTube, 
@@ -22,7 +22,7 @@ import {
   Beaker,
   Lightbulb,
   Cpu
-} from 'lucide-react';
+} from "lucide-react";
 
 interface AdvancedSettings {
   enableFeatureFlags: boolean;
@@ -47,54 +47,54 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
 }) => {
   const features = [
     {
-      id: 'featureFlags',
-      title: 'Feature Flags',
-      description: 'Controle de recursos por flags dinâmicas',
+      id: "featureFlags",
+      title: "Feature Flags",
+      description: "Controle de recursos por flags dinâmicas",
       icon: Flag,
       enabled: settings.enableFeatureFlags,
       onToggle: (enabled: boolean) => onUpdate({ enableFeatureFlags: enabled }),
       danger: false
     },
     {
-      id: 'debugMode',
-      title: 'Modo Debug',
-      description: 'Logs detalhados e informações de desenvolvimento',
+      id: "debugMode",
+      title: "Modo Debug",
+      description: "Logs detalhados e informações de desenvolvimento",
       icon: Bug,
       enabled: settings.debugMode,
       onToggle: (enabled: boolean) => onUpdate({ debugMode: enabled }),
       danger: true
     },
     {
-      id: 'performanceMonitoring',
-      title: 'Monitoramento de Performance',
-      description: 'Coleta métricas de performance em tempo real',
+      id: "performanceMonitoring",
+      title: "Monitoramento de Performance",
+      description: "Coleta métricas de performance em tempo real",
       icon: TrendingUp,
       enabled: settings.performanceMonitoring,
       onToggle: (enabled: boolean) => onUpdate({ performanceMonitoring: enabled }),
       danger: false
     },
     {
-      id: 'errorTracking',
-      title: 'Rastreamento de Erros',
-      description: 'Captura e análise automática de erros',
+      id: "errorTracking",
+      title: "Rastreamento de Erros",
+      description: "Captura e análise automática de erros",
       icon: Activity,
       enabled: settings.errorTracking,
       onToggle: (enabled: boolean) => onUpdate({ errorTracking: enabled }),
       danger: false
     },
     {
-      id: 'workflowAutomation',
-      title: 'Automação de Workflows',
-      description: 'Automatização inteligente de processos',
+      id: "workflowAutomation",
+      title: "Automação de Workflows",
+      description: "Automatização inteligente de processos",
       icon: Workflow,
       enabled: settings.workflowAutomation,
       onToggle: (enabled: boolean) => onUpdate({ workflowAutomation: enabled }),
       danger: false
     },
     {
-      id: 'betaFeatures',
-      title: 'Recursos Beta',
-      description: 'Acesso antecipado a novos recursos',
+      id: "betaFeatures",
+      title: "Recursos Beta",
+      description: "Acesso antecipado a novos recursos",
       icon: Beaker,
       enabled: settings.enableBetaFeatures,
       onToggle: (enabled: boolean) => onUpdate({ enableBetaFeatures: enabled }),
@@ -103,7 +103,7 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
   ];
 
   const customFieldTypes = [
-    'text', 'number', 'boolean', 'date', 'select', 'multiselect', 'json'
+    "text", "number", "boolean", "date", "select", "multiselect", "json"
   ];
 
   return (
@@ -127,11 +127,11 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
               return (
                 <div 
                   key={feature.id} 
-                  className={`p-4 border rounded-lg ${feature.danger ? 'border-orange-200 bg-orange-50 dark:bg-orange-900/10' : ''}`}
+                  className={`p-4 border rounded-lg ${feature.danger ? "border-orange-200 bg-orange-50 dark:bg-orange-900/10" : ""}`}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <Icon className={`w-5 h-5 ${feature.danger ? 'text-orange-600' : 'text-primary'}`} />
+                      <Icon className={`w-5 h-5 ${feature.danger ? "text-orange-600" : "text-primary"}`} />
                       <div>
                         <h4 className="font-medium">{feature.title}</h4>
                         <p className="text-sm text-muted-foreground">{feature.description}</p>

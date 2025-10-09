@@ -37,7 +37,7 @@ export class AudioRecorder {
       this.source.connect(this.processor);
       this.processor.connect(this.audioContext.destination);
     } catch (error) {
-      logger.error('Error accessing microphone:', error);
+      logger.error("Error accessing microphone:", error);
       throw error;
     }
   }
@@ -86,11 +86,11 @@ export class RealtimeChat {
 
   async init() {
     try {
-      logger.log('Initializing realtime chat...');
+      logger.log("Initializing realtime chat...");
       
       // Check if we can make request (circuit breaker)
-      if (!apiHealthMonitor.canMakeRequest('realtime')) {
-        throw new Error('Realtime API circuit breaker is open. Service temporarily unavailable.');
+      if (!apiHealthMonitor.canMakeRequest("realtime")) {
+        throw new Error("Realtime API circuit breaker is open. Service temporarily unavailable.");
       }
       
       // Get ephemeral token from our Supabase Edge Function with retry
@@ -107,7 +107,7 @@ export class RealtimeChat {
           
           if (!error && data?.client_secret?.value) {
             const responseTime = Date.now() - startTime;
-            apiHealthMonitor.recordSuccess('supabase', responseTime);
+            apiHealthMonitor.recordSuccess("supabase", responseTime);
             break;
           }
           
@@ -123,13 +123,13 @@ export class RealtimeChat {
       }
       
       if (error || !data?.client_secret?.value) {
-        logger.error('Failed to get ephemeral token after retries:', error);
-        apiHealthMonitor.recordFailure('supabase', error as Error);
+        logger.error("Failed to get ephemeral token after retries:", error);
+        apiHealthMonitor.recordFailure("supabase", error as Error);
         throw new Error("Failed to get ephemeral token");
       }
 
       const EPHEMERAL_KEY = data.client_secret.value;
-      logger.log('Got ephemeral token, setting up WebRTC...');
+      logger.log("Got ephemeral token, setting up WebRTC...");
 
       // Create peer connection
       this.pc = new RTCPeerConnection();
@@ -137,13 +137,13 @@ export class RealtimeChat {
       // Monitor connection state
       this.pc.onconnectionstatechange = () => {
         const state = this.pc?.connectionState;
-        logger.log('Connection state changed:', state);
-        this.onConnectionStateChange?.(state || 'unknown');
+        logger.log("Connection state changed:", state);
+        this.onConnectionStateChange?.(state || "unknown");
         
-        if (state === 'failed' || state === 'disconnected') {
-          logger.log('Connection lost, attempting to reconnect...');
+        if (state === "failed" || state === "disconnected") {
+          logger.log("Connection lost, attempting to reconnect...");
           this.handleConnectionLoss();
-        } else if (state === 'connected') {
+        } else if (state === "connected") {
           this.reconnectAttempts = 0;
           this.reconnectDelay = 2000;
           this.isReconnecting = false;
@@ -151,12 +151,12 @@ export class RealtimeChat {
       };
 
       this.pc.onicecandidateerror = (event) => {
-        logger.error('ICE candidate error:', event);
+        logger.error("ICE candidate error:", event);
       };
 
       // Set up remote audio
       this.pc.ontrack = (e) => {
-        logger.log('Received remote audio track');
+        logger.log("Received remote audio track");
         this.audioEl.srcObject = e.streams[0];
       };
 
@@ -179,7 +179,7 @@ export class RealtimeChat {
         logger.log("Received event:", event.type, event);
         
         // Processo de navegação por comandos de voz
-        if (event.type === 'conversation.item.input_audio_transcription.completed') {
+        if (event.type === "conversation.item.input_audio_transcription.completed") {
           logger.log("User said:", event.transcript);
           // Processar comando de navegação
           this.processVoiceNavigation(event.transcript);
@@ -197,8 +197,8 @@ export class RealtimeChat {
       const model = "gpt-4o-realtime-preview-2024-12-17";
       
       // Check circuit breaker
-      if (!apiHealthMonitor.canMakeRequest('openai')) {
-        throw new Error('OpenAI API circuit breaker is open. Service temporarily unavailable.');
+      if (!apiHealthMonitor.canMakeRequest("openai")) {
+        throw new Error("OpenAI API circuit breaker is open. Service temporarily unavailable.");
       }
       
       const apiStartTime = Date.now();
@@ -212,12 +212,12 @@ export class RealtimeChat {
       });
 
       if (!sdpResponse.ok) {
-        apiHealthMonitor.recordFailure('openai', new Error(`HTTP ${sdpResponse.status}`));
+        apiHealthMonitor.recordFailure("openai", new Error(`HTTP ${sdpResponse.status}`));
         throw new Error(`Failed to connect to OpenAI: ${sdpResponse.status}`);
       }
       
       const apiResponseTime = Date.now() - apiStartTime;
-      apiHealthMonitor.recordSuccess('openai', apiResponseTime);
+      apiHealthMonitor.recordSuccess("openai", apiResponseTime);
 
       const answer = {
         type: "answer" as RTCSdpType,
@@ -229,9 +229,9 @@ export class RealtimeChat {
 
       // Start recording
       this.recorder = new AudioRecorder((audioData) => {
-        if (this.dc?.readyState === 'open') {
+        if (this.dc?.readyState === "open") {
           this.dc.send(JSON.stringify({
-            type: 'input_audio_buffer.append',
+            type: "input_audio_buffer.append",
             audio: this.encodeAudioData(audioData)
           }));
         }
@@ -240,7 +240,7 @@ export class RealtimeChat {
 
     } catch (error) {
       logger.error("Error initializing chat:", error);
-      apiHealthMonitor.recordFailure('realtime', error as Error);
+      apiHealthMonitor.recordFailure("realtime", error as Error);
       throw error;
     }
   }
@@ -253,7 +253,7 @@ export class RealtimeChat {
     }
     
     const uint8Array = new Uint8Array(int16Array.buffer);
-    let binary = '';
+    let binary = "";
     const chunkSize = 0x8000;
     
     for (let i = 0; i < uint8Array.length; i += chunkSize) {
@@ -265,18 +265,18 @@ export class RealtimeChat {
   }
 
   async sendMessage(text: string) {
-    if (!this.dc || this.dc.readyState !== 'open') {
-      throw new Error('Data channel not ready');
+    if (!this.dc || this.dc.readyState !== "open") {
+      throw new Error("Data channel not ready");
     }
 
     const event = {
-      type: 'conversation.item.create',
+      type: "conversation.item.create",
       item: {
-        type: 'message',
-        role: 'user',
+        type: "message",
+        role: "user",
         content: [
           {
-            type: 'input_text',
+            type: "input_text",
             text
           }
         ]
@@ -284,7 +284,7 @@ export class RealtimeChat {
     };
 
     this.dc.send(JSON.stringify(event));
-    this.dc.send(JSON.stringify({type: 'response.create'}));
+    this.dc.send(JSON.stringify({type: "response.create"}));
   }
 
   // Processar comandos de navegação por voz
@@ -296,69 +296,69 @@ export class RealtimeChat {
     
     // Mapeamento de comandos para módulos
     const navigationMap: Record<string, string> = {
-      'dashboard': 'dashboard',
-      'painel': 'dashboard',
-      'início': 'dashboard',
-      'home': 'dashboard',
+      "dashboard": "dashboard",
+      "painel": "dashboard",
+      "início": "dashboard",
+      "home": "dashboard",
       
-      'recursos humanos': 'hr',
-      'rh': 'hr',
-      'funcionários': 'hr',
-      'tripulação': 'hr',
+      "recursos humanos": "hr",
+      "rh": "hr",
+      "funcionários": "hr",
+      "tripulação": "hr",
       
-      'viagens': 'travel',
-      'travel': 'travel',
-      'voos': 'travel',
-      'voo': 'travel',
-      'hotéis': 'travel',
-      'hotel': 'travel',
-      'passagens': 'travel',
-      'passagem': 'travel',
+      "viagens": "travel",
+      "travel": "travel",
+      "voos": "travel",
+      "voo": "travel",
+      "hotéis": "travel",
+      "hotel": "travel",
+      "passagens": "travel",
+      "passagem": "travel",
       
-      'marítimo': 'maritime',
-      'maritime': 'maritime',
-      'frota': 'maritime',
-      'navios': 'maritime',
-      'navio': 'maritime',
-      'embarcações': 'maritime',
+      "marítimo": "maritime",
+      "maritime": "maritime",
+      "frota": "maritime",
+      "navios": "maritime",
+      "navio": "maritime",
+      "embarcações": "maritime",
       
-      'alertas': 'price-alerts',
-      'preços': 'price-alerts',
-      'monitoramento': 'price-alerts',
+      "alertas": "price-alerts",
+      "preços": "price-alerts",
+      "monitoramento": "price-alerts",
       
-      'analytics': 'analytics',
-      'análises': 'analytics',
-      'estatísticas': 'analytics',
-      'métricas': 'analytics',
+      "analytics": "analytics",
+      "análises": "analytics",
+      "estatísticas": "analytics",
+      "métricas": "analytics",
       
-      'relatórios': 'reports',
-      'reports': 'reports',
-      'relatório': 'reports',
+      "relatórios": "reports",
+      "reports": "reports",
+      "relatório": "reports",
       
-      'comunicação': 'communication',
-      'communication': 'communication',
-      'mensagens': 'communication',
-      'chat': 'communication',
+      "comunicação": "communication",
+      "communication": "communication",
+      "mensagens": "communication",
+      "chat": "communication",
       
-      'configurações': 'settings',
-      'settings': 'settings',
-      'preferências': 'settings',
+      "configurações": "settings",
+      "settings": "settings",
+      "preferências": "settings",
       
-      'inovação': 'innovation',
-      'innovation': 'innovation',
-      'automação': 'innovation',
+      "inovação": "innovation",
+      "innovation": "innovation",
+      "automação": "innovation",
       
-      'inteligência': 'intelligence',
-      'intelligence': 'intelligence',
-      'documentos': 'intelligence',
+      "inteligência": "intelligence",
+      "intelligence": "intelligence",
+      "documentos": "intelligence",
       
-      'otimização': 'optimization',
-      'optimization': 'optimization',
-      'performance': 'optimization',
+      "otimização": "optimization",
+      "optimization": "optimization",
+      "performance": "optimization",
       
-      'estratégico': 'strategic',
-      'strategic': 'strategic',
-      'estratégia': 'strategic'
+      "estratégico": "strategic",
+      "strategic": "strategic",
+      "estratégia": "strategic"
     };
     
     // Procurar correspondência
@@ -371,24 +371,24 @@ export class RealtimeChat {
     }
     
     // Verificar palavras-chave adicionais
-    if (text.includes('buscar') && (text.includes('voo') || text.includes('passagem'))) {
-      this.onNavigate('travel');
-    } else if (text.includes('buscar') && text.includes('hotel')) {
-      this.onNavigate('travel');
-    } else if (text.includes('certificado')) {
-      this.onNavigate('hr');
+    if (text.includes("buscar") && (text.includes("voo") || text.includes("passagem"))) {
+      this.onNavigate("travel");
+    } else if (text.includes("buscar") && text.includes("hotel")) {
+      this.onNavigate("travel");
+    } else if (text.includes("certificado")) {
+      this.onNavigate("hr");
     }
   }
 
   private async handleConnectionLoss() {
     if (this.isReconnecting) {
-      logger.log('Already reconnecting, skipping...');
+      logger.log("Already reconnecting, skipping...");
       return;
     }
 
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      logger.error('Max reconnection attempts reached');
-      this.onConnectionStateChange?.('failed');
+      logger.error("Max reconnection attempts reached");
+      this.onConnectionStateChange?.("failed");
       return;
     }
 
@@ -406,9 +406,9 @@ export class RealtimeChat {
 
     try {
       await this.init();
-      logger.log('Reconnection successful');
+      logger.log("Reconnection successful");
     } catch (error) {
-      logger.error('Reconnection failed:', error);
+      logger.error("Reconnection failed:", error);
       this.isReconnecting = false;
       
       // Try again if we haven't exhausted attempts
@@ -428,7 +428,7 @@ export class RealtimeChat {
       try {
         this.recorder.stop();
       } catch (error) {
-        logger.error('Error stopping recorder:', error);
+        logger.error("Error stopping recorder:", error);
       }
       this.recorder = null;
     }
@@ -437,7 +437,7 @@ export class RealtimeChat {
       try {
         this.dc.close();
       } catch (error) {
-        logger.error('Error closing data channel:', error);
+        logger.error("Error closing data channel:", error);
       }
       this.dc = null;
     }
@@ -446,7 +446,7 @@ export class RealtimeChat {
       try {
         this.pc.close();
       } catch (error) {
-        logger.error('Error closing peer connection:', error);
+        logger.error("Error closing peer connection:", error);
       }
       this.pc = null;
     }
@@ -459,8 +459,8 @@ export class RealtimeChat {
   }
 
   disconnect() {
-    logger.log('Disconnecting realtime chat...');
+    logger.log("Disconnecting realtime chat...");
     this.cleanupConnection(true);
-    this.onConnectionStateChange?.('closed');
+    this.onConnectionStateChange?.("closed");
   }
 }

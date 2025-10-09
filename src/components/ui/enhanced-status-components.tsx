@@ -9,21 +9,21 @@
  * This file is kept for backward compatibility only.
  */
 
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 // Re-export from new unified components
-export { StatusBadge, StatusIndicator, type StatusBadgeProps, type StatusIndicatorProps } from './StatusBadge';
-export { Loading as LoadingState, type LoadingProps as LoadingStateProps } from './Loading';
-export { EmptyState, type EmptyStateProps } from './EmptyState';
-export { InfoCard, type InfoCardProps } from './InfoCard';
+export { StatusBadge, StatusIndicator, type StatusBadgeProps, type StatusIndicatorProps } from "./StatusBadge";
+export { Loading as LoadingState, type LoadingProps as LoadingStateProps } from "./Loading";
+export { EmptyState, type EmptyStateProps } from "./EmptyState";
+export { InfoCard, type InfoCardProps } from "./InfoCard";
 
 // ActionButton - kept here for backward compatibility, but use Button component with loading prop instead
 export interface ActionButtonProps {
   onClick: () => void;
   children: React.ReactNode;
-  variant?: 'default' | 'success' | 'warning' | 'destructive';
+  variant?: "default" | "success" | "warning" | "destructive";
   disabled?: boolean;
   loading?: boolean;
   className?: string;
@@ -33,7 +33,7 @@ export interface ActionButtonProps {
 export const ActionButton: React.FC<ActionButtonProps> = ({
   onClick,
   children,
-  variant = 'default',
+  variant = "default",
   disabled = false,
   loading = false,
   className,

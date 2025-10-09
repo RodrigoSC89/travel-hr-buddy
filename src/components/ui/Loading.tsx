@@ -1,19 +1,19 @@
-import React from 'react';
-import { Loader2, Anchor, Ship, Waves } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Loader2, Anchor, Ship, Waves } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface LoadingProps {
   message?: string;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'spinner' | 'maritime' | 'offshore';
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "spinner" | "maritime" | "offshore";
   fullScreen?: boolean;
   className?: string;
 }
 
 const sizeClasses = {
-  sm: 'h-4 w-4',
-  md: 'h-8 w-8',
-  lg: 'h-12 w-12',
+  sm: "h-4 w-4",
+  md: "h-8 w-8",
+  lg: "h-12 w-12",
 };
 
 const iconSizes = {
@@ -27,57 +27,57 @@ const iconSizes = {
  * Consolidates loading-state, loading-spinner, and maritime-loading
  */
 export const Loading: React.FC<LoadingProps> = ({
-  message = 'Carregando...',
-  size = 'md',
-  variant = 'default',
+  message = "Carregando...",
+  size = "md",
+  variant = "default",
   fullScreen = false,
   className,
 }) => {
   const renderIcon = () => {
     switch (variant) {
-      case 'maritime':
-        return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
-      case 'offshore':
-        return (
-          <div className="relative">
-            <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
-            <Waves 
-              className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse" 
-              size={iconSizes[size] / 2} 
-            />
-          </div>
-        );
-      case 'spinner':
-        return (
-          <div 
-            className={cn(
-              'animate-spin rounded-full border-b-2 border-primary',
-              sizeClasses[size]
-            )}
-            role="status"
-            aria-label="Carregando"
+    case "maritime":
+      return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
+    case "offshore":
+      return (
+        <div className="relative">
+          <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
+          <Waves 
+            className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse" 
+            size={iconSizes[size] / 2} 
           />
-        );
-      default:
-        return <Loader2 className={cn('animate-spin text-primary', sizeClasses[size])} />;
+        </div>
+      );
+    case "spinner":
+      return (
+        <div 
+          className={cn(
+            "animate-spin rounded-full border-b-2 border-primary",
+            sizeClasses[size]
+          )}
+          role="status"
+          aria-label="Carregando"
+        />
+      );
+    default:
+      return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />;
     }
   };
 
   const content = (
-    <div className={cn('flex flex-col items-center justify-center gap-3', className)}>
+    <div className={cn("flex flex-col items-center justify-center gap-3", className)}>
       {renderIcon()}
       {message && (
         <p className="text-sm text-muted-foreground font-medium">
           {message}
         </p>
       )}
-      {variant === 'offshore' && (
+      {variant === "offshore" && (
         <>
           <p className="text-xs text-muted-foreground mt-1">
             Otimizado para uso offshore
           </p>
           <div className="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-600 rounded-full animate-pulse" style={{ width: '100%' }} />
+            <div className="h-full bg-blue-600 rounded-full animate-pulse" style={{ width: "100%" }} />
           </div>
         </>
       )}
@@ -104,8 +104,8 @@ export interface LoadingOverlayProps {
   isLoading: boolean;
   message?: string;
   children: React.ReactNode;
-  variant?: LoadingProps['variant'];
-  size?: LoadingProps['size'];
+  variant?: LoadingProps["variant"];
+  size?: LoadingProps["size"];
 }
 
 /**
@@ -115,8 +115,8 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   isLoading,
   message,
   children,
-  variant = 'default',
-  size = 'md',
+  variant = "default",
+  size = "md",
 }) => {
   return (
     <div className="relative">
@@ -141,7 +141,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ className }) =
   return (
     <div
       className={cn(
-        'animate-pulse rounded-md bg-muted',
+        "animate-pulse rounded-md bg-muted",
         className
       )}
       aria-hidden="true"
@@ -150,14 +150,14 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ className }) =
 };
 
 export interface LoadingCardProps {
-  variant?: 'default' | 'maritime';
+  variant?: "default" | "maritime";
 }
 
 /**
  * Skeleton loader for card components
  */
-export const LoadingCard: React.FC<LoadingCardProps> = ({ variant = 'default' }) => {
-  if (variant === 'maritime') {
+export const LoadingCard: React.FC<LoadingCardProps> = ({ variant = "default" }) => {
+  if (variant === "maritime") {
     return (
       <div className="card-maritime p-6 space-y-4 animate-pulse">
         <div className="flex items-center gap-4">

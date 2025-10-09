@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useCallback } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Upload, 
   FileText, 
@@ -15,9 +15,9 @@ import {
   Loader2,
   Camera,
   Scan
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ValidationResult {
   isValid: boolean;
@@ -87,9 +87,9 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       const base64 = await fileToBase64(file);
       
       // Enviar para validação de IA
-      const { data, error } = await supabase.functions.invoke('crew-ai-insights', {
+      const { data, error } = await supabase.functions.invoke("crew-ai-insights", {
         body: {
-          type: 'document_validation',
+          type: "document_validation",
           file: base64,
           fileName: file.name,
           fileType: file.type,
@@ -107,7 +107,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
         confidence: data.confidence || 0,
         issues: data.issues || [],
         suggestions: data.suggestions || [],
-        documentType: data.documentType || 'unknown',
+        documentType: data.documentType || "unknown",
         extractedData: data.extractedData || {}
       };
 
@@ -116,15 +116,15 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
 
       // Save validation result to database
       if (crewMemberId) {
-        await supabase.from('crew_dossier_documents').insert([{
+        await supabase.from("crew_dossier_documents").insert([{
           crew_member_id: crewMemberId,
           document_name: file.name,
           document_category: result.documentType,
           file_url: `temp/${file.name}`, // Temporary URL
           file_type: file.type,
           file_size: file.size,
-          verification_status: result.isValid ? 'verified' : 'needs_review',
-          notes: `Validação automática: ${result.confidence}% de confiança. ${result.issues.join(', ')}`
+          verification_status: result.isValid ? "verified" : "needs_review",
+          notes: `Validação automática: ${result.confidence}% de confiança. ${result.issues.join(", ")}`
         }]);
       }
 
@@ -135,7 +135,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       });
 
     } catch (error) {
-      console.error('Erro na validação:', error);
+      console.error("Erro na validação:", error);
       toast({
         title: "Erro na validação",
         description: "Não foi possível validar o documento",
@@ -153,7 +153,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as string;
-        resolve(result.split(',')[1]); // Remove data URL prefix
+        resolve(result.split(",")[1]); // Remove data URL prefix
       };
       reader.onerror = reject;
       reader.readAsDataURL(file);
@@ -162,9 +162,9 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
 
   // Get validation status color
   const getStatusColor = (isValid: boolean, confidence: number) => {
-    if (isValid && confidence >= 80) return 'text-green-600 bg-green-50';
-    if (isValid && confidence >= 60) return 'text-yellow-600 bg-yellow-50';
-    return 'text-red-600 bg-red-50';
+    if (isValid && confidence >= 80) return "text-green-600 bg-green-50";
+    if (isValid && confidence >= 60) return "text-yellow-600 bg-yellow-50";
+    return "text-red-600 bg-red-50";
   };
 
   // Clear results
@@ -190,8 +190,8 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               isDragOver 
-                ? 'border-primary bg-primary/5' 
-                : 'border-muted-foreground/25'
+                ? "border-primary bg-primary/5" 
+                : "border-muted-foreground/25"
             }`}
             onDrop={handleDrop}
             onDragOver={(e) => {
@@ -229,7 +229,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                   onChange={handleFileSelect}
                 />
                 <Button 
-                  onClick={() => document.getElementById('doc-upload')?.click()}
+                  onClick={() => document.getElementById("doc-upload")?.click()}
                   disabled={isValidating}
                 >
                   <Camera className="h-4 w-4 mr-2" />
@@ -272,7 +272,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                     )}
                     <div>
                       <p className="font-medium">
-                        {result.documentType === 'unknown' ? 'Documento' : result.documentType}
+                        {result.documentType === "unknown" ? "Documento" : result.documentType}
                       </p>
                       <p className="text-sm text-muted-foreground">
                         Confiança: {result.confidence}%
@@ -280,7 +280,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                     </div>
                   </div>
                   <Badge className={getStatusColor(result.isValid, result.confidence)}>
-                    {result.isValid ? 'Válido' : 'Revisar'}
+                    {result.isValid ? "Válido" : "Revisar"}
                   </Badge>
                 </div>
 

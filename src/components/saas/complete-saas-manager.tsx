@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
 import { 
   Building2, 
   Users, 
@@ -22,16 +22,16 @@ import {
   CheckCircle,
   UserPlus,
   Trash2
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Tenant {
   id: string;
   name: string;
   domain: string;
-  plan: 'starter' | 'professional' | 'enterprise';
+  plan: "starter" | "professional" | "enterprise";
   users: number;
   maxUsers: number;
-  status: 'active' | 'suspended' | 'trial';
+  status: "active" | "suspended" | "trial";
   created: string;
   revenue: number;
   storage: number;
@@ -41,40 +41,40 @@ interface Tenant {
 export const CompleteSaaSManager: React.FC = () => {
   const [tenants, setTenants] = useState<Tenant[]>([
     {
-      id: '1',
-      name: 'Navegação Atlântica',
-      domain: 'atlantica.nautilus.app',
-      plan: 'enterprise',
+      id: "1",
+      name: "Navegação Atlântica",
+      domain: "atlantica.nautilus.app",
+      plan: "enterprise",
       users: 247,
       maxUsers: 500,
-      status: 'active',
-      created: '2024-01-15',
+      status: "active",
+      created: "2024-01-15",
       revenue: 15999,
       storage: 850,
       maxStorage: 1000
     },
     {
-      id: '2',
-      name: 'Porto do Mar',
-      domain: 'portomar.nautilus.app', 
-      plan: 'professional',
+      id: "2",
+      name: "Porto do Mar",
+      domain: "portomar.nautilus.app", 
+      plan: "professional",
       users: 89,
       maxUsers: 100,
-      status: 'active',
-      created: '2024-02-20',
+      status: "active",
+      created: "2024-02-20",
       revenue: 2999,
       storage: 340,
       maxStorage: 500
     },
     {
-      id: '3',
-      name: 'Marinha Comercial',
-      domain: 'comercial.nautilus.app',
-      plan: 'starter',
+      id: "3",
+      name: "Marinha Comercial",
+      domain: "comercial.nautilus.app",
+      plan: "starter",
       users: 25,
       maxUsers: 50,
-      status: 'trial',
-      created: '2024-03-10',
+      status: "trial",
+      created: "2024-03-10",
       revenue: 0,
       storage: 85,
       maxStorage: 100
@@ -92,19 +92,19 @@ export const CompleteSaaSManager: React.FC = () => {
 
   const getPlanColor = (plan: string) => {
     switch (plan) {
-      case 'starter': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300';
-      case 'professional': return 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300';
-      case 'enterprise': return 'bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300';
+    case "starter": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+    case "professional": return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300";
+    case "enterprise": return "bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300";
+    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-      case 'trial': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      case 'suspended': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300';
+    case "active": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "trial": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "suspended": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
@@ -225,7 +225,7 @@ export const CompleteSaaSManager: React.FC = () => {
                         <Avatar className="h-12 w-12">
                           <AvatarImage src={`/api/placeholder/avatar/${tenant.id}`} />
                           <AvatarFallback>
-                            {tenant.name.split(' ').map(n => n[0]).join('')}
+                            {tenant.name.split(" ").map(n => n[0]).join("")}
                           </AvatarFallback>
                         </Avatar>
                         <div>

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   CalendarIcon, 
   MapPin, 
@@ -18,12 +18,12 @@ import {
   ExternalLink,
   AlertTriangle,
   Bookmark
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import { EnhancedReservation } from './enhanced-reservations-dashboard';
-import { ReservationTemplates } from './reservation-templates';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { EnhancedReservation } from "./enhanced-reservations-dashboard";
+import { ReservationTemplates } from "./reservation-templates";
 
 interface ReservationFormProps {
   isOpen: boolean;
@@ -41,21 +41,21 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   const [loading, setLoading] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    reservation_type: 'hotel' as EnhancedReservation['reservation_type'],
-    start_date: '',
-    end_date: '',
-    location: '',
-    address: '',
-    contact_info: '',
-    confirmation_number: '',
-    supplier_url: '',
-    room_type: '',
-    total_amount: '',
-    currency: 'BRL',
-    status: 'confirmed' as EnhancedReservation['status'],
-    notes: ''
+    title: "",
+    description: "",
+    reservation_type: "hotel" as EnhancedReservation["reservation_type"],
+    start_date: "",
+    end_date: "",
+    location: "",
+    address: "",
+    contact_info: "",
+    confirmation_number: "",
+    supplier_url: "",
+    room_type: "",
+    total_amount: "",
+    currency: "BRL",
+    status: "confirmed" as EnhancedReservation["status"],
+    notes: ""
   });
 
   const { toast } = useToast();
@@ -65,20 +65,20 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     if (reservation) {
       setFormData({
         title: reservation.title,
-        description: reservation.description || '',
+        description: reservation.description || "",
         reservation_type: reservation.reservation_type,
         start_date: new Date(reservation.start_date).toISOString().slice(0, 16),
         end_date: new Date(reservation.end_date).toISOString().slice(0, 16),
-        location: reservation.location || '',
-        address: reservation.address || '',
-        contact_info: reservation.contact_info || '',
-        confirmation_number: reservation.confirmation_number || '',
-        supplier_url: reservation.supplier_url || '',
-        room_type: reservation.room_type || '',
-        total_amount: reservation.total_amount?.toString() || '',
-        currency: reservation.currency || 'BRL',
+        location: reservation.location || "",
+        address: reservation.address || "",
+        contact_info: reservation.contact_info || "",
+        confirmation_number: reservation.confirmation_number || "",
+        supplier_url: reservation.supplier_url || "",
+        room_type: reservation.room_type || "",
+        total_amount: reservation.total_amount?.toString() || "",
+        currency: reservation.currency || "BRL",
         status: reservation.status,
-        notes: reservation.notes || ''
+        notes: reservation.notes || ""
       });
     } else {
       resetForm();
@@ -87,37 +87,37 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
 
   const resetForm = () => {
     setFormData({
-      title: '',
-      description: '',
-      reservation_type: 'hotel',
-      start_date: '',
-      end_date: '',
-      location: '',
-      address: '',
-      contact_info: '',
-      confirmation_number: '',
-      supplier_url: '',
-      room_type: '',
-      total_amount: '',
-      currency: 'BRL',
-      status: 'confirmed',
-      notes: ''
+      title: "",
+      description: "",
+      reservation_type: "hotel",
+      start_date: "",
+      end_date: "",
+      location: "",
+      address: "",
+      contact_info: "",
+      confirmation_number: "",
+      supplier_url: "",
+      room_type: "",
+      total_amount: "",
+      currency: "BRL",
+      status: "confirmed",
+      notes: ""
     });
   };
 
   const handleTemplateUse = (templateData: any) => {
     setFormData({
       ...formData,
-      title: templateData.title || '',
-      description: templateData.description || '',
-      reservation_type: templateData.reservation_type || 'hotel',
-      location: templateData.location || '',
-      address: templateData.address || '',
-      contact_info: templateData.contact_info || '',
-      supplier_url: templateData.supplier_url || '',
-      room_type: templateData.room_type || '',
-      currency: templateData.currency || 'BRL',
-      notes: templateData.notes || ''
+      title: templateData.title || "",
+      description: templateData.description || "",
+      reservation_type: templateData.reservation_type || "hotel",
+      location: templateData.location || "",
+      address: templateData.address || "",
+      contact_info: templateData.contact_info || "",
+      supplier_url: templateData.supplier_url || "",
+      room_type: templateData.room_type || "",
+      currency: templateData.currency || "BRL",
+      notes: templateData.notes || ""
     });
   };
 
@@ -181,9 +181,9 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
 
       if (reservation) {
         const { error } = await supabase
-          .from('reservations')
+          .from("reservations")
           .update(reservationData)
-          .eq('id', reservation.id);
+          .eq("id", reservation.id);
 
         if (error) throw error;
 
@@ -193,7 +193,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         });
       } else {
         const { error } = await supabase
-          .from('reservations')
+          .from("reservations")
           .insert([{
             ...reservationData,
             created_at: new Date().toISOString()
@@ -209,7 +209,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
 
       onSaved();
     } catch (error) {
-      console.error('Error saving reservation:', error);
+      console.error("Error saving reservation:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar reserva. Tente novamente.",
@@ -222,12 +222,12 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'hotel': return 'Hotel / Hospedagem';
-      case 'flight': return 'Voo';
-      case 'transport': return 'Transporte Terrestre';
-      case 'embarkation': return 'Embarque';
-      case 'other': return 'Outro';
-      default: return type;
+    case "hotel": return "Hotel / Hospedagem";
+    case "flight": return "Voo";
+    case "transport": return "Transporte Terrestre";
+    case "embarkation": return "Embarque";
+    case "other": return "Outro";
+    default: return type;
     }
   };
 
@@ -240,10 +240,10 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
               <div>
                 <DialogTitle className="flex items-center gap-2">
                   <CalendarIcon className="h-5 w-5" />
-                  {reservation ? 'Editar Reserva' : 'Nova Reserva'}
+                  {reservation ? "Editar Reserva" : "Nova Reserva"}
                 </DialogTitle>
                 <DialogDescription>
-                  {reservation ? 'Edite os detalhes da reserva' : 'Crie uma nova reserva com todas as informações necessárias'}
+                  {reservation ? "Edite os detalhes da reserva" : "Crie uma nova reserva com todas as informações necessárias"}
                 </DialogDescription>
               </div>
               <Button
@@ -280,7 +280,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Label htmlFor="type">Tipo de Reserva *</Label>
                     <Select
                       value={formData.reservation_type}
-                      onValueChange={(value: EnhancedReservation['reservation_type']) => 
+                      onValueChange={(value: EnhancedReservation["reservation_type"]) => 
                         setFormData({ ...formData, reservation_type: value })
                       }
                     >
@@ -434,7 +434,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Label htmlFor="status">Status</Label>
                     <Select
                       value={formData.status}
-                      onValueChange={(value: EnhancedReservation['status']) => 
+                      onValueChange={(value: EnhancedReservation["status"]) => 
                         setFormData({ ...formData, status: value })
                       }
                     >
@@ -509,7 +509,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                 disabled={loading} 
                 className="flex-1"
               >
-                {loading ? 'Salvando...' : (reservation ? 'Atualizar Reserva' : 'Criar Reserva')}
+                {loading ? "Salvando..." : (reservation ? "Atualizar Reserva" : "Criar Reserva")}
               </Button>
               <Button
                 type="button"

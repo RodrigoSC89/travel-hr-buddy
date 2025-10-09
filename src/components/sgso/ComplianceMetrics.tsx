@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   TrendingUp,
   TrendingDown,
@@ -11,7 +11,7 @@ import {
   Award,
   AlertTriangle,
   CheckCircle
-} from 'lucide-react';
+} from "lucide-react";
 import {
   LineChart,
   Line,
@@ -26,44 +26,44 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend
-} from 'recharts';
+} from "recharts";
 
 const complianceTrend = [
-  { month: 'Mai', compliance: 78, target: 85 },
-  { month: 'Jun', compliance: 81, target: 85 },
-  { month: 'Jul', compliance: 83, target: 85 },
-  { month: 'Ago', compliance: 82, target: 85 },
-  { month: 'Set', compliance: 84, target: 85 },
-  { month: 'Out', compliance: 84, target: 85 }
+  { month: "Mai", compliance: 78, target: 85 },
+  { month: "Jun", compliance: 81, target: 85 },
+  { month: "Jul", compliance: 83, target: 85 },
+  { month: "Ago", compliance: 82, target: 85 },
+  { month: "Set", compliance: 84, target: 85 },
+  { month: "Out", compliance: 84, target: 85 }
 ];
 
 const practiceCompliance = [
-  { practice: 'P1', name: 'Liderança', score: 95 },
-  { practice: 'P2', name: 'Riscos', score: 78 },
-  { practice: 'P3', name: 'Controles', score: 92 },
-  { practice: 'P4', name: 'Treinamento', score: 65 },
-  { practice: 'P5', name: 'Comunicação', score: 88 },
-  { practice: 'P13', name: 'Mudanças', score: 58 },
-  { practice: 'P17', name: 'Integridade', score: 62 }
+  { practice: "P1", name: "Liderança", score: 95 },
+  { practice: "P2", name: "Riscos", score: 78 },
+  { practice: "P3", name: "Controles", score: 92 },
+  { practice: "P4", name: "Treinamento", score: 65 },
+  { practice: "P5", name: "Comunicação", score: 88 },
+  { practice: "P13", name: "Mudanças", score: 58 },
+  { practice: "P17", name: "Integridade", score: 62 }
 ];
 
 const incidentStats = [
-  { name: 'Críticos', value: 1, color: '#dc2626' },
-  { name: 'Altos', value: 3, color: '#ea580c' },
-  { name: 'Médios', value: 5, color: '#eab308' },
-  { name: 'Baixos', value: 3, color: '#3b82f6' }
+  { name: "Críticos", value: 1, color: "#dc2626" },
+  { name: "Altos", value: 3, color: "#ea580c" },
+  { name: "Médios", value: 5, color: "#eab308" },
+  { name: "Baixos", value: 3, color: "#3b82f6" }
 ];
 
 const auditResults = [
-  { category: 'Conformidades', value: 85, color: '#16a34a' },
-  { category: 'Não Conformidades', value: 10, color: '#dc2626' },
-  { category: 'Observações', value: 5, color: '#3b82f6' }
+  { category: "Conformidades", value: 85, color: "#16a34a" },
+  { category: "Não Conformidades", value: 10, color: "#dc2626" },
+  { category: "Observações", value: 5, color: "#3b82f6" }
 ];
 
 export const ComplianceMetrics: React.FC = () => {
   const currentCompliance = 84;
   const targetCompliance = 90;
-  const trend = '+2%';
+  const trend = "+2%";
 
   return (
     <div className="space-y-6">
@@ -186,7 +186,7 @@ export const ComplianceMetrics: React.FC = () => {
                   {practiceCompliance.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={entry.score >= 85 ? '#16a34a' : entry.score >= 70 ? '#eab308' : '#dc2626'}
+                      fill={entry.score >= 85 ? "#16a34a" : entry.score >= 70 ? "#eab308" : "#dc2626"}
                     />
                   ))}
                 </Bar>
@@ -278,10 +278,10 @@ export const ComplianceMetrics: React.FC = () => {
                     <Badge
                       className={
                         practice.score >= 85
-                          ? 'bg-green-600 text-white'
+                          ? "bg-green-600 text-white"
                           : practice.score >= 70
-                          ? 'bg-yellow-600 text-white'
-                          : 'bg-red-600 text-white'
+                            ? "bg-yellow-600 text-white"
+                            : "bg-red-600 text-white"
                       }
                     >
                       {practice.practice}

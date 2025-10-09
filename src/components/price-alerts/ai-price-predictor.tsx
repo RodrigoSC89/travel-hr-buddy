@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Brain, 
   TrendingUp, 
@@ -21,8 +21,8 @@ import {
   BarChart3,
   Lightbulb,
   Loader2
-} from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+} from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 interface PricePrediction {
   product_name: string;
@@ -32,7 +32,7 @@ interface PricePrediction {
     next_month: number;
     confidence: number;
   };
-  trend: 'rising' | 'falling' | 'stable';
+  trend: "rising" | "falling" | "stable";
   best_time_to_buy: {
     recommendation: string;
     timeframe: string;
@@ -43,7 +43,7 @@ interface PricePrediction {
 }
 
 interface AIInsight {
-  type: 'opportunity' | 'warning' | 'neutral';
+  type: "opportunity" | "warning" | "neutral";
   message: string;
   confidence: number;
   action_required: boolean;
@@ -53,8 +53,8 @@ export const AIPricePredictor: React.FC = () => {
   const [predictions, setPredictions] = useState<PricePrediction[]>([]);
   const [insights, setInsights] = useState<AIInsight[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState('');
-  const [productUrl, setProductUrl] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState("");
+  const [productUrl, setProductUrl] = useState("");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export const AIPricePredictor: React.FC = () => {
 
   const loadExistingPredictions = async () => {
     // Load existing predictions from localStorage or API
-    const stored = localStorage.getItem('ai_price_predictions');
+    const stored = localStorage.getItem("ai_price_predictions");
     if (stored) {
       setPredictions(JSON.parse(stored));
     }
@@ -83,7 +83,7 @@ export const AIPricePredictor: React.FC = () => {
     setIsLoading(true);
     try {
       // Call price check function first
-      const { data: priceData } = await supabase.functions.invoke('check-price', {
+      const { data: priceData } = await supabase.functions.invoke("check-price", {
         body: {
           product_name: selectedProduct,
           product_url: productUrl
@@ -99,7 +99,7 @@ export const AIPricePredictor: React.FC = () => {
       setPredictions(newPredictions);
       
       // Store predictions
-      localStorage.setItem('ai_price_predictions', JSON.stringify(newPredictions));
+      localStorage.setItem("ai_price_predictions", JSON.stringify(newPredictions));
       
       toast({
         title: "Previsão gerada!",
@@ -107,14 +107,14 @@ export const AIPricePredictor: React.FC = () => {
       });
 
       // Clear form
-      setSelectedProduct('');
-      setProductUrl('');
+      setSelectedProduct("");
+      setProductUrl("");
       
       // Regenerate insights
       generateAIInsights();
 
     } catch (error) {
-      console.error('Error generating prediction:', error);
+      console.error("Error generating prediction:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar a previsão",
@@ -127,12 +127,12 @@ export const AIPricePredictor: React.FC = () => {
 
   const generateAIPredictionData = async (productName: string, currentPrice: number): Promise<PricePrediction> => {
     // Simulated AI prediction logic - in production, this would use real ML models
-    const trendOptions: ('rising' | 'falling' | 'stable')[] = ['rising', 'falling', 'stable'];
+    const trendOptions: ("rising" | "falling" | "stable")[] = ["rising", "falling", "stable"];
     const trend = trendOptions[Math.floor(Math.random() * trendOptions.length)];
     
     // Generate price variations based on trend
     const baseVariation = Math.random() * 0.2 - 0.1; // -10% to +10%
-    const trendMultiplier = trend === 'rising' ? 1.1 : trend === 'falling' ? 0.9 : 1.0;
+    const trendMultiplier = trend === "rising" ? 1.1 : trend === "falling" ? 0.9 : 1.0;
     
     const nextWeekPrice = currentPrice * trendMultiplier * (1 + baseVariation);
     const nextMonthPrice = currentPrice * trendMultiplier * (1 + baseVariation * 2);
@@ -144,12 +144,12 @@ export const AIPricePredictor: React.FC = () => {
       date.setDate(date.getDate() - i);
       const priceVariation = (Math.random() - 0.5) * 0.3; // ±15% variation
       historicalData.push({
-        date: date.toISOString().split('T')[0],
+        date: date.toISOString().split("T")[0],
         price: currentPrice * (1 + priceVariation)
       });
     }
 
-    const expectedSavings = trend === 'falling' ? 
+    const expectedSavings = trend === "falling" ? 
       Math.abs(currentPrice - nextWeekPrice) : 
       Math.random() * 200 + 50;
 
@@ -163,15 +163,15 @@ export const AIPricePredictor: React.FC = () => {
       },
       trend,
       best_time_to_buy: {
-        recommendation: trend === 'falling' ? 'Aguardar' : trend === 'rising' ? 'Comprar agora' : 'Monitorar',
-        timeframe: trend === 'falling' ? '1-2 semanas' : trend === 'rising' ? 'Imediatamente' : '1 semana',
+        recommendation: trend === "falling" ? "Aguardar" : trend === "rising" ? "Comprar agora" : "Monitorar",
+        timeframe: trend === "falling" ? "1-2 semanas" : trend === "rising" ? "Imediatamente" : "1 semana",
         expected_savings: expectedSavings
       },
       market_factors: [
-        'Sazonalidade do mercado',
-        'Demanda histórica',
-        'Tendências de preços similares',
-        'Fatores econômicos externos'
+        "Sazonalidade do mercado",
+        "Demanda histórica",
+        "Tendências de preços similares",
+        "Fatores econômicos externos"
       ],
       historical_data: historicalData
     };
@@ -180,20 +180,20 @@ export const AIPricePredictor: React.FC = () => {
   const generateAIInsights = () => {
     const mockInsights: AIInsight[] = [
       {
-        type: 'opportunity',
-        message: 'Detectamos uma tendência de queda nos preços de passagens SP-RJ. Recomendamos aguardar mais 1 semana para comprar.',
+        type: "opportunity",
+        message: "Detectamos uma tendência de queda nos preços de passagens SP-RJ. Recomendamos aguardar mais 1 semana para comprar.",
         confidence: 0.87,
         action_required: true
       },
       {
-        type: 'warning',
-        message: 'Preços de hospedagem em Copacabana estão em alta devido à temporada. Considere reservas antecipadas.',
+        type: "warning",
+        message: "Preços de hospedagem em Copacabana estão em alta devido à temporada. Considere reservas antecipadas.",
         confidence: 0.92,
         action_required: true
       },
       {
-        type: 'neutral',
-        message: 'Combustível náutico mantém estabilidade. Momento neutro para aquisição.',
+        type: "neutral",
+        message: "Combustível náutico mantém estabilidade. Momento neutro para aquisição.",
         confidence: 0.74,
         action_required: false
       }
@@ -204,17 +204,17 @@ export const AIPricePredictor: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'rising': return <TrendingUp className="w-4 h-4 text-destructive" />;
-      case 'falling': return <TrendingDown className="w-4 h-4 text-success" />;
-      default: return <BarChart3 className="w-4 h-4 text-muted-foreground" />;
+    case "rising": return <TrendingUp className="w-4 h-4 text-destructive" />;
+    case "falling": return <TrendingDown className="w-4 h-4 text-success" />;
+    default: return <BarChart3 className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-      case 'rising': return 'text-destructive bg-destructive/10 border-destructive/20';
-      case 'falling': return 'text-success bg-success/10 border-success/20';
-      default: return 'text-muted-foreground bg-muted/10 border-muted/20';
+    case "rising": return "text-destructive bg-destructive/10 border-destructive/20";
+    case "falling": return "text-success bg-success/10 border-success/20";
+    default: return "text-muted-foreground bg-muted/10 border-muted/20";
     }
   };
 
@@ -304,22 +304,22 @@ export const AIPricePredictor: React.FC = () => {
             <div 
               key={index}
               className={`p-4 rounded-lg border ${
-                insight.type === 'opportunity' ? 'border-success/20 bg-success/5' :
-                insight.type === 'warning' ? 'border-warning/20 bg-warning/5' :
-                'border-muted/20 bg-muted/5'
+                insight.type === "opportunity" ? "border-success/20 bg-success/5" :
+                  insight.type === "warning" ? "border-warning/20 bg-warning/5" :
+                    "border-muted/20 bg-muted/5"
               }`}
             >
               <div className="flex items-start gap-3">
                 <div className={`p-2 rounded-full ${
-                  insight.type === 'opportunity' ? 'bg-success/10' :
-                  insight.type === 'warning' ? 'bg-warning/10' :
-                  'bg-muted/10'
+                  insight.type === "opportunity" ? "bg-success/10" :
+                    insight.type === "warning" ? "bg-warning/10" :
+                      "bg-muted/10"
                 }`}>
-                  {insight.type === 'opportunity' ? 
+                  {insight.type === "opportunity" ? 
                     <CheckCircle className="w-4 h-4 text-success" /> :
-                    insight.type === 'warning' ?
-                    <AlertTriangle className="w-4 h-4 text-warning" /> :
-                    <BarChart3 className="w-4 h-4 text-muted-foreground" />
+                    insight.type === "warning" ?
+                      <AlertTriangle className="w-4 h-4 text-warning" /> :
+                      <BarChart3 className="w-4 h-4 text-muted-foreground" />
                   }
                 </div>
                 <div className="flex-1">
@@ -351,8 +351,8 @@ export const AIPricePredictor: React.FC = () => {
                 <Badge className={getTrendColor(prediction.trend)}>
                   {getTrendIcon(prediction.trend)}
                   <span className="ml-1">
-                    {prediction.trend === 'rising' ? 'Alta' : 
-                     prediction.trend === 'falling' ? 'Queda' : 'Estável'}
+                    {prediction.trend === "rising" ? "Alta" : 
+                      prediction.trend === "falling" ? "Queda" : "Estável"}
                   </span>
                 </Badge>
               </div>
@@ -368,7 +368,7 @@ export const AIPricePredictor: React.FC = () => {
                 <div className="text-center">
                   <p className="text-xs text-muted-foreground">Próxima Semana</p>
                   <p className={`font-bold text-lg ${
-                    prediction.predicted_prices.next_week < prediction.current_price ? 'text-success' : 'text-destructive'
+                    prediction.predicted_prices.next_week < prediction.current_price ? "text-success" : "text-destructive"
                   }`}>
                     {formatCurrency(prediction.predicted_prices.next_week)}
                   </p>
@@ -376,7 +376,7 @@ export const AIPricePredictor: React.FC = () => {
                 <div className="text-center">
                   <p className="text-xs text-muted-foreground">Próximo Mês</p>
                   <p className={`font-bold text-lg ${
-                    prediction.predicted_prices.next_month < prediction.current_price ? 'text-success' : 'text-destructive'
+                    prediction.predicted_prices.next_month < prediction.current_price ? "text-success" : "text-destructive"
                   }`}>
                     {formatCurrency(prediction.predicted_prices.next_month)}
                   </p>
@@ -424,13 +424,13 @@ export const AIPricePredictor: React.FC = () => {
                     />
                     <Tooltip 
                       contentStyle={{
-                        backgroundColor: 'hsl(var(--background))',
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '8px',
-                        fontSize: '12px'
+                        backgroundColor: "hsl(var(--background))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "8px",
+                        fontSize: "12px"
                       }}
-                      formatter={(value: any) => [`R$ ${value.toFixed(2)}`, 'Preço']}
-                      labelFormatter={(label) => new Date(label).toLocaleDateString('pt-BR')}
+                      formatter={(value: any) => [`R$ ${value.toFixed(2)}`, "Preço"]}
+                      labelFormatter={(label) => new Date(label).toLocaleDateString("pt-BR")}
                     />
                     <Line 
                       type="monotone" 
@@ -476,7 +476,7 @@ export const AIPricePredictor: React.FC = () => {
               Use nossa IA para gerar previsões inteligentes de preços
             </p>
             <Button 
-              onClick={() => document.getElementById('product_name')?.focus()}
+              onClick={() => document.getElementById("product_name")?.focus()}
               className="bg-primary hover:bg-primary/90"
             >
               <Brain className="w-4 h-4 mr-2" />

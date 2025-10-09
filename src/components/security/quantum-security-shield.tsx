@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Shield, 
   Lock,
@@ -25,17 +25,17 @@ import {
   FileCheck,
   Link,
   Layers
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ThreatDetection {
   id: string;
-  type: 'intrusion' | 'malware' | 'phishing' | 'ddos' | 'unauthorized-access';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "intrusion" | "malware" | "phishing" | "ddos" | "unauthorized-access";
+  severity: "low" | "medium" | "high" | "critical";
   timestamp: Date;
   source: string;
   target: string;
-  status: 'detected' | 'blocked' | 'investigating' | 'resolved';
+  status: "detected" | "blocked" | "investigating" | "resolved";
   aiConfidence: number;
   action: string;
 }
@@ -43,8 +43,8 @@ interface ThreatDetection {
 interface SecurityMetric {
   metric: string;
   value: number;
-  status: 'excellent' | 'good' | 'warning' | 'critical';
-  trend: 'up' | 'down' | 'stable';
+  status: "excellent" | "good" | "warning" | "critical";
+  trend: "up" | "down" | "stable";
 }
 
 interface BlockchainAudit {
@@ -54,7 +54,7 @@ interface BlockchainAudit {
   timestamp: Date;
   hash: string;
   verified: boolean;
-  category: 'access' | 'modification' | 'approval' | 'security';
+  category: "access" | "modification" | "approval" | "security";
 }
 
 export const QuantumSecurityShield: React.FC = () => {
@@ -73,85 +73,85 @@ export const QuantumSecurityShield: React.FC = () => {
   const loadSecurityData = () => {
     const mockThreats: ThreatDetection[] = [
       {
-        id: 't1',
-        type: 'intrusion',
-        severity: 'high',
+        id: "t1",
+        type: "intrusion",
+        severity: "high",
         timestamp: new Date(Date.now() - 300000),
-        source: '185.220.101.45',
-        target: 'Maritime Operations Portal',
-        status: 'blocked',
+        source: "185.220.101.45",
+        target: "Maritime Operations Portal",
+        status: "blocked",
         aiConfidence: 99.7,
-        action: 'Conexão bloqueada automaticamente. Firewall atualizado.'
+        action: "Conexão bloqueada automaticamente. Firewall atualizado."
       },
       {
-        id: 't2',
-        type: 'phishing',
-        severity: 'medium',
+        id: "t2",
+        type: "phishing",
+        severity: "medium",
         timestamp: new Date(Date.now() - 1800000),
-        source: 'external-email@suspicious.com',
-        target: 'crew@nautilus.com',
-        status: 'blocked',
+        source: "external-email@suspicious.com",
+        target: "crew@nautilus.com",
+        status: "blocked",
         aiConfidence: 98.5,
-        action: 'Email bloqueado. Usuário notificado.'
+        action: "Email bloqueado. Usuário notificado."
       },
       {
-        id: 't3',
-        type: 'unauthorized-access',
-        severity: 'critical',
+        id: "t3",
+        type: "unauthorized-access",
+        severity: "critical",
         timestamp: new Date(Date.now() - 600000),
-        source: '192.168.1.250',
-        target: 'Certification Database',
-        status: 'investigating',
+        source: "192.168.1.250",
+        target: "Certification Database",
+        status: "investigating",
         aiConfidence: 99.2,
-        action: 'Acesso negado. Investigação em andamento.'
+        action: "Acesso negado. Investigação em andamento."
       }
     ];
 
     const mockMetrics: SecurityMetric[] = [
-      { metric: 'Detecção de Ameaças', value: 99.9, status: 'excellent', trend: 'up' },
-      { metric: 'Tempo de Resposta', value: 98.5, status: 'excellent', trend: 'up' },
-      { metric: 'Integridade de Dados', value: 100, status: 'excellent', trend: 'stable' },
-      { metric: 'Compliance Regulatório', value: 100, status: 'excellent', trend: 'stable' },
-      { metric: 'Segurança de Rede', value: 97.8, status: 'excellent', trend: 'up' },
-      { metric: 'Proteção de Endpoints', value: 99.1, status: 'excellent', trend: 'stable' }
+      { metric: "Detecção de Ameaças", value: 99.9, status: "excellent", trend: "up" },
+      { metric: "Tempo de Resposta", value: 98.5, status: "excellent", trend: "up" },
+      { metric: "Integridade de Dados", value: 100, status: "excellent", trend: "stable" },
+      { metric: "Compliance Regulatório", value: 100, status: "excellent", trend: "stable" },
+      { metric: "Segurança de Rede", value: 97.8, status: "excellent", trend: "up" },
+      { metric: "Proteção de Endpoints", value: 99.1, status: "excellent", trend: "stable" }
     ];
 
     const mockAudit: BlockchainAudit[] = [
       {
-        id: 'b1',
-        action: 'Certificação STCW aprovada',
-        user: 'system@nautilus.com',
+        id: "b1",
+        action: "Certificação STCW aprovada",
+        user: "system@nautilus.com",
         timestamp: new Date(Date.now() - 900000),
-        hash: '0x7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
+        hash: "0x7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
         verified: true,
-        category: 'approval'
+        category: "approval"
       },
       {
-        id: 'b2',
-        action: 'Acesso ao módulo de tripulação',
-        user: 'admin@nautilus.com',
+        id: "b2",
+        action: "Acesso ao módulo de tripulação",
+        user: "admin@nautilus.com",
         timestamp: new Date(Date.now() - 1200000),
-        hash: '0x2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae',
+        hash: "0x2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
         verified: true,
-        category: 'access'
+        category: "access"
       },
       {
-        id: 'b3',
-        action: 'Modificação de dados de embarcação',
-        user: 'fleet-manager@nautilus.com',
+        id: "b3",
+        action: "Modificação de dados de embarcação",
+        user: "fleet-manager@nautilus.com",
         timestamp: new Date(Date.now() - 1500000),
-        hash: '0xfcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9',
+        hash: "0xfcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9",
         verified: true,
-        category: 'modification'
+        category: "modification"
       },
       {
-        id: 'b4',
-        action: 'Tentativa de acesso bloqueada',
-        user: 'unknown@external.com',
+        id: "b4",
+        action: "Tentativa de acesso bloqueada",
+        user: "unknown@external.com",
         timestamp: new Date(Date.now() - 600000),
-        hash: '0xef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f',
+        hash: "0xef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
         verified: true,
-        category: 'security'
+        category: "security"
       }
     ];
 
@@ -170,44 +170,44 @@ export const QuantumSecurityShield: React.FC = () => {
 
       toast({
         title: "✅ Varredura de Segurança Completa",
-        description: `Sistema seguro. ${threats.filter(t => t.status === 'blocked').length} ameaças bloqueadas automaticamente.`,
+        description: `Sistema seguro. ${threats.filter(t => t.status === "blocked").length} ameaças bloqueadas automaticamente.`,
       });
     }, 3000);
   };
 
-  const getSeverityColor = (severity: ThreatDetection['severity']) => {
+  const getSeverityColor = (severity: ThreatDetection["severity"]) => {
     switch (severity) {
-      case 'critical': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-      case 'high': return 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      case 'low': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
+    case "critical": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "high": return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
+    case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "low": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
     }
   };
 
-  const getStatusColor = (status: ThreatDetection['status']) => {
+  const getStatusColor = (status: ThreatDetection["status"]) => {
     switch (status) {
-      case 'blocked': return 'text-green-600 dark:text-green-400';
-      case 'detected': return 'text-yellow-600 dark:text-yellow-400';
-      case 'investigating': return 'text-orange-600 dark:text-orange-400';
-      case 'resolved': return 'text-blue-600 dark:text-blue-400';
+    case "blocked": return "text-green-600 dark:text-green-400";
+    case "detected": return "text-yellow-600 dark:text-yellow-400";
+    case "investigating": return "text-orange-600 dark:text-orange-400";
+    case "resolved": return "text-blue-600 dark:text-blue-400";
     }
   };
 
-  const getMetricStatusColor = (status: SecurityMetric['status']) => {
+  const getMetricStatusColor = (status: SecurityMetric["status"]) => {
     switch (status) {
-      case 'excellent': return 'text-green-600 dark:text-green-400';
-      case 'good': return 'text-blue-600 dark:text-blue-400';
-      case 'warning': return 'text-yellow-600 dark:text-yellow-400';
-      case 'critical': return 'text-red-600 dark:text-red-400';
+    case "excellent": return "text-green-600 dark:text-green-400";
+    case "good": return "text-blue-600 dark:text-blue-400";
+    case "warning": return "text-yellow-600 dark:text-yellow-400";
+    case "critical": return "text-red-600 dark:text-red-400";
     }
   };
 
-  const getCategoryIcon = (category: BlockchainAudit['category']) => {
+  const getCategoryIcon = (category: BlockchainAudit["category"]) => {
     switch (category) {
-      case 'access': return <Eye className="h-4 w-4" />;
-      case 'modification': return <FileCheck className="h-4 w-4" />;
-      case 'approval': return <CheckCircle className="h-4 w-4" />;
-      case 'security': return <Shield className="h-4 w-4" />;
+    case "access": return <Eye className="h-4 w-4" />;
+    case "modification": return <FileCheck className="h-4 w-4" />;
+    case "approval": return <CheckCircle className="h-4 w-4" />;
+    case "security": return <Shield className="h-4 w-4" />;
     }
   };
 
@@ -241,7 +241,7 @@ export const QuantumSecurityShield: React.FC = () => {
               className="bg-white text-red-600 hover:bg-white/90"
             >
               <Brain className="h-5 w-5 mr-2" />
-              {isScanning ? 'Escaneando...' : 'Varredura Completa'}
+              {isScanning ? "Escaneando..." : "Varredura Completa"}
             </Button>
           </div>
         </CardHeader>
@@ -280,7 +280,7 @@ export const QuantumSecurityShield: React.FC = () => {
               <CheckCircle className="h-5 w-5 text-purple-600" />
             </div>
             <div className="text-3xl font-bold text-purple-700 dark:text-purple-400">
-              {threats.filter(t => t.status === 'blocked').length}
+              {threats.filter(t => t.status === "blocked").length}
             </div>
             <div className="text-sm text-muted-foreground">Ameaças Bloqueadas</div>
             <div className="text-xs text-purple-600 mt-1">Últimas 24h</div>
@@ -314,9 +314,9 @@ export const QuantumSecurityShield: React.FC = () => {
         <CardContent className="space-y-4">
           {threats.map((threat) => (
             <Card key={threat.id} className="border-l-4" style={{
-              borderLeftColor: threat.severity === 'critical' ? '#ef4444' :
-                              threat.severity === 'high' ? '#f97316' :
-                              threat.severity === 'medium' ? '#eab308' : '#22c55e'
+              borderLeftColor: threat.severity === "critical" ? "#ef4444" :
+                threat.severity === "high" ? "#f97316" :
+                  threat.severity === "medium" ? "#eab308" : "#22c55e"
             }}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-3">
@@ -324,16 +324,16 @@ export const QuantumSecurityShield: React.FC = () => {
                     <div className="flex items-center gap-2 mb-2">
                       <AlertTriangle className="h-5 w-5 text-primary" />
                       <h3 className="font-semibold">
-                        {threat.type === 'intrusion' ? '🚨 Tentativa de Intrusão' :
-                         threat.type === 'malware' ? '🦠 Malware Detectado' :
-                         threat.type === 'phishing' ? '🎣 Tentativa de Phishing' :
-                         threat.type === 'ddos' ? '💥 Ataque DDoS' :
-                         '🔒 Acesso Não Autorizado'}
+                        {threat.type === "intrusion" ? "🚨 Tentativa de Intrusão" :
+                          threat.type === "malware" ? "🦠 Malware Detectado" :
+                            threat.type === "phishing" ? "🎣 Tentativa de Phishing" :
+                              threat.type === "ddos" ? "💥 Ataque DDoS" :
+                                "🔒 Acesso Não Autorizado"}
                       </h3>
                       <Badge className={getSeverityColor(threat.severity)}>
-                        {threat.severity === 'critical' ? 'CRÍTICO' :
-                         threat.severity === 'high' ? 'ALTO' :
-                         threat.severity === 'medium' ? 'MÉDIO' : 'BAIXO'}
+                        {threat.severity === "critical" ? "CRÍTICO" :
+                          threat.severity === "high" ? "ALTO" :
+                            threat.severity === "medium" ? "MÉDIO" : "BAIXO"}
                       </Badge>
                     </div>
 
@@ -349,10 +349,10 @@ export const QuantumSecurityShield: React.FC = () => {
                       <div>
                         <div className="text-xs text-muted-foreground">Status</div>
                         <div className={`font-medium ${getStatusColor(threat.status)}`}>
-                          {threat.status === 'blocked' ? '🛡️ Bloqueado' :
-                           threat.status === 'detected' ? '👁️ Detectado' :
-                           threat.status === 'investigating' ? '🔍 Investigando' :
-                           '✅ Resolvido'}
+                          {threat.status === "blocked" ? "🛡️ Bloqueado" :
+                            threat.status === "detected" ? "👁️ Detectado" :
+                              threat.status === "investigating" ? "🔍 Investigando" :
+                                "✅ Resolvido"}
                         </div>
                       </div>
                       <div>
@@ -380,7 +380,7 @@ export const QuantumSecurityShield: React.FC = () => {
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {threat.timestamp.toLocaleString('pt-BR')}
+                    {threat.timestamp.toLocaleString("pt-BR")}
                   </span>
                 </div>
               </CardContent>
@@ -407,24 +407,24 @@ export const QuantumSecurityShield: React.FC = () => {
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-medium">{metric.metric}</h4>
                   <div className={`flex items-center gap-1 ${getMetricStatusColor(metric.status)}`}>
-                    {metric.trend === 'up' ? <TrendingUp className="h-4 w-4" /> :
-                     metric.trend === 'down' ? <TrendingUp className="h-4 w-4 rotate-180" /> :
-                     <Activity className="h-4 w-4" />}
+                    {metric.trend === "up" ? <TrendingUp className="h-4 w-4" /> :
+                      metric.trend === "down" ? <TrendingUp className="h-4 w-4 rotate-180" /> :
+                        <Activity className="h-4 w-4" />}
                     <span className="text-sm font-medium">{metric.value}%</span>
                   </div>
                 </div>
                 <Progress value={metric.value} className="h-2 mb-2" />
                 <div className="flex items-center justify-between">
                   <Badge className={
-                    metric.status === 'excellent' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300' :
-                    metric.status === 'good' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300' :
-                    metric.status === 'warning' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300' :
-                    'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300'
+                    metric.status === "excellent" ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" :
+                      metric.status === "good" ? "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300" :
+                        metric.status === "warning" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300" :
+                          "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300"
                   }>
-                    {metric.status === 'excellent' ? '✅ Excelente' :
-                     metric.status === 'good' ? '👍 Bom' :
-                     metric.status === 'warning' ? '⚠️ Atenção' :
-                     '🔴 Crítico'}
+                    {metric.status === "excellent" ? "✅ Excelente" :
+                      metric.status === "good" ? "👍 Bom" :
+                        metric.status === "warning" ? "⚠️ Atenção" :
+                          "🔴 Crítico"}
                   </Badge>
                 </div>
               </div>
@@ -480,7 +480,7 @@ export const QuantumSecurityShield: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Clock className="h-3 w-3" />
-                    {audit.timestamp.toLocaleString('pt-BR')}
+                    {audit.timestamp.toLocaleString("pt-BR")}
                   </div>
                 </div>
               </div>

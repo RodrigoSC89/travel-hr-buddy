@@ -7,4 +7,4 @@
 export { 
   MetricCard as KPICard,
   type MetricCardProps as KPICardProps
-} from '@/components/ui/MetricCard';
+} from "@/components/ui/MetricCard";

@@ -1,100 +1,100 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { PlusCircle, Ship, FileText, Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useMaritimeChecklists } from '@/hooks/use-maritime-checklists';
-import type { Checklist, ChecklistTemplate } from './checklist-types';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PlusCircle, Ship, FileText, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useMaritimeChecklists } from "@/hooks/use-maritime-checklists";
+import type { Checklist, ChecklistTemplate } from "./checklist-types";
 
 // Mock data will be replaced by real Supabase data
 const mockChecklists: Checklist[] = [];
 
 const mockTemplates: ChecklistTemplate[] = [
   {
-    id: 'template-1',
-    name: 'DP Inspection Template',
-    type: 'dp',
-    version: '2.0',
-    description: 'Template padrão para inspeção de Dynamic Positioning',
+    id: "template-1",
+    name: "DP Inspection Template",
+    type: "dp",
+    version: "2.0",
+    description: "Template padrão para inspeção de Dynamic Positioning",
     items: [],
     estimatedDuration: 240,
-    frequency: 'monthly',
-    applicableVesselTypes: ['PSV', 'AHTS', 'OSV'],
-    requiredCertifications: ['DPO'],
+    frequency: "monthly",
+    applicableVesselTypes: ["PSV", "AHTS", "OSV"],
+    requiredCertifications: ["DPO"],
     dependencies: [],
     active: true,
-    createdBy: 'admin',
+    createdBy: "admin",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
-    id: 'template-2',
-    name: 'Machine Routine Template',
-    type: 'machine_routine',
-    version: '1.5',
-    description: 'Template para rotina de inspeção de máquinas',
+    id: "template-2",
+    name: "Machine Routine Template",
+    type: "machine_routine",
+    version: "1.5",
+    description: "Template para rotina de inspeção de máquinas",
     items: [],
     estimatedDuration: 180,
-    frequency: 'weekly',
-    applicableVesselTypes: ['PSV', 'AHTS', 'OSV', 'Drill Ship'],
-    requiredCertifications: ['Chief Engineer'],
+    frequency: "weekly",
+    applicableVesselTypes: ["PSV", "AHTS", "OSV", "Drill Ship"],
+    requiredCertifications: ["Chief Engineer"],
     dependencies: [],
     active: true,
-    createdBy: 'admin',
+    createdBy: "admin",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
-    id: 'template-3',
-    name: 'Nautical Routine Template',
-    type: 'nautical_routine',
-    version: '1.0',
-    description: 'Template para rotina náutica',
+    id: "template-3",
+    name: "Nautical Routine Template",
+    type: "nautical_routine",
+    version: "1.0",
+    description: "Template para rotina náutica",
     items: [],
     estimatedDuration: 120,
-    frequency: 'daily',
-    applicableVesselTypes: ['PSV', 'AHTS', 'OSV', 'Drill Ship'],
-    requiredCertifications: ['Captain', 'Officer'],
+    frequency: "daily",
+    applicableVesselTypes: ["PSV", "AHTS", "OSV", "Drill Ship"],
+    requiredCertifications: ["Captain", "Officer"],
     dependencies: [],
     active: true,
-    createdBy: 'admin',
+    createdBy: "admin",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
-    id: 'template-4',
-    name: 'Safety Inspection Template',
-    type: 'safety',
-    version: '2.1',
-    description: 'Template para inspeção de segurança',
+    id: "template-4",
+    name: "Safety Inspection Template",
+    type: "safety",
+    version: "2.1",
+    description: "Template para inspeção de segurança",
     items: [],
     estimatedDuration: 200,
-    frequency: 'weekly',
-    applicableVesselTypes: ['PSV', 'AHTS', 'OSV', 'Drill Ship'],
-    requiredCertifications: ['Safety Officer'],
+    frequency: "weekly",
+    applicableVesselTypes: ["PSV", "AHTS", "OSV", "Drill Ship"],
+    requiredCertifications: ["Safety Officer"],
     dependencies: [],
     active: true,
-    createdBy: 'admin',
+    createdBy: "admin",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
-    id: 'template-5',
-    name: 'Environmental Assessment Template',
-    type: 'environmental',
-    version: '1.3',
-    description: 'Template para avaliação ambiental',
+    id: "template-5",
+    name: "Environmental Assessment Template",
+    type: "environmental",
+    version: "1.3",
+    description: "Template para avaliação ambiental",
     items: [],
     estimatedDuration: 150,
-    frequency: 'monthly',
-    applicableVesselTypes: ['PSV', 'AHTS', 'OSV', 'Drill Ship'],
-    requiredCertifications: ['Environmental Officer'],
+    frequency: "monthly",
+    applicableVesselTypes: ["PSV", "AHTS", "OSV", "Drill Ship"],
+    requiredCertifications: ["Environmental Officer"],
     dependencies: [],
     active: true,
-    createdBy: 'admin',
+    createdBy: "admin",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
@@ -128,47 +128,47 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
   // Use database data when available, fallback to mock data
   const checklists = dbChecklists.length > 0 ? dbChecklists : mockChecklists;
   const templates = dbTemplates.length > 0 ? dbTemplates : mockTemplates;
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
 
   const filteredChecklists = checklists.filter(checklist => {
     const matchesSearch = checklist.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          checklist.vessel.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || checklist.status === statusFilter;
-    const matchesType = typeFilter === 'all' || checklist.type === typeFilter;
+    const matchesStatus = statusFilter === "all" || checklist.status === statusFilter;
+    const matchesType = typeFilter === "all" || checklist.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
   });
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-500';
-      case 'in_progress': return 'bg-blue-500';
-      case 'pending_review': return 'bg-yellow-500';
-      case 'draft': return 'bg-gray-500';
-      case 'rejected': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "completed": return "bg-green-500";
+    case "in_progress": return "bg-blue-500";
+    case "pending_review": return "bg-yellow-500";
+    case "draft": return "bg-gray-500";
+    case "rejected": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+    case "critical": return "bg-red-500";
+    case "high": return "bg-orange-500";
+    case "medium": return "bg-yellow-500";
+    case "low": return "bg-green-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'dp': return 'Dynamic Positioning';
-      case 'machine_routine': return 'Rotina de Máquinas';
-      case 'nautical_routine': return 'Rotina Náutica';
-      case 'safety': return 'Segurança';
-      case 'environmental': return 'Ambiental';
-      case 'custom': return 'Personalizado';
+    case "dp": return "Dynamic Positioning";
+    case "machine_routine": return "Rotina de Máquinas";
+    case "nautical_routine": return "Rotina Náutica";
+    case "safety": return "Segurança";
+    case "environmental": return "Ambiental";
+    case "custom": return "Personalizado";
     }
   };
 

@@ -1,50 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, FileText, TrendingUp, Users, DollarSign, AlertCircle, Download, Filter, RefreshCw } from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar, FileText, TrendingUp, Users, DollarSign, AlertCircle, Download, Filter, RefreshCw } from "lucide-react";
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { useToast } from "@/hooks/use-toast";
 
 const AdvancedReportsSystem = () => {
   const { toast } = useToast();
-  const [selectedReport, setSelectedReport] = useState('financial');
-  const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const [selectedReport, setSelectedReport] = useState("financial");
+  const [selectedPeriod, setSelectedPeriod] = useState("month");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
   // Dados simulados para relatórios
   const financialData = [
-    { month: 'Jan', revenue: 45000, expenses: 32000, profit: 13000 },
-    { month: 'Fev', revenue: 52000, expenses: 35000, profit: 17000 },
-    { month: 'Mar', revenue: 48000, expenses: 33000, profit: 15000 },
-    { month: 'Abr', revenue: 61000, expenses: 40000, profit: 21000 },
-    { month: 'Mai', revenue: 55000, expenses: 38000, profit: 17000 },
-    { month: 'Jun', revenue: 67000, expenses: 42000, profit: 25000 }
+    { month: "Jan", revenue: 45000, expenses: 32000, profit: 13000 },
+    { month: "Fev", revenue: 52000, expenses: 35000, profit: 17000 },
+    { month: "Mar", revenue: 48000, expenses: 33000, profit: 15000 },
+    { month: "Abr", revenue: 61000, expenses: 40000, profit: 21000 },
+    { month: "Mai", revenue: 55000, expenses: 38000, profit: 17000 },
+    { month: "Jun", revenue: 67000, expenses: 42000, profit: 25000 }
   ];
 
   const performanceData = [
-    { category: 'Vendas', target: 100, actual: 85, variance: -15 },
-    { category: 'Marketing', target: 100, actual: 92, variance: -8 },
-    { category: 'Operações', target: 100, actual: 110, variance: 10 },
-    { category: 'Suporte', target: 100, actual: 88, variance: -12 }
+    { category: "Vendas", target: 100, actual: 85, variance: -15 },
+    { category: "Marketing", target: 100, actual: 92, variance: -8 },
+    { category: "Operações", target: 100, actual: 110, variance: 10 },
+    { category: "Suporte", target: 100, actual: 88, variance: -12 }
   ];
 
   const departmentData = [
-    { name: 'TI', budget: 150000, spent: 135000, employees: 25 },
-    { name: 'Vendas', budget: 200000, spent: 185000, employees: 35 },
-    { name: 'Marketing', budget: 120000, spent: 110000, employees: 15 },
-    { name: 'RH', budget: 80000, spent: 75000, employees: 10 },
-    { name: 'Operações', budget: 180000, spent: 170000, employees: 40 }
+    { name: "TI", budget: 150000, spent: 135000, employees: 25 },
+    { name: "Vendas", budget: 200000, spent: 185000, employees: 35 },
+    { name: "Marketing", budget: 120000, spent: 110000, employees: 15 },
+    { name: "RH", budget: 80000, spent: 75000, employees: 10 },
+    { name: "Operações", budget: 180000, spent: 170000, employees: 40 }
   ];
 
   const reportTypes = [
-    { id: 'financial', name: 'Relatório Financeiro', icon: DollarSign, description: 'Receitas, despesas e análise de lucratividade' },
-    { id: 'performance', name: 'Performance Organizacional', icon: TrendingUp, description: 'KPIs e métricas de desempenho por departamento' },
-    { id: 'hr', name: 'Recursos Humanos', icon: Users, description: 'Análise de pessoal, produtividade e custos' },
-    { id: 'operational', name: 'Operacional', icon: FileText, description: 'Processos, eficiência e qualidade operacional' }
+    { id: "financial", name: "Relatório Financeiro", icon: DollarSign, description: "Receitas, despesas e análise de lucratividade" },
+    { id: "performance", name: "Performance Organizacional", icon: TrendingUp, description: "KPIs e métricas de desempenho por departamento" },
+    { id: "hr", name: "Recursos Humanos", icon: Users, description: "Análise de pessoal, produtividade e custos" },
+    { id: "operational", name: "Operacional", icon: FileText, description: "Processos, eficiência e qualidade operacional" }
   ];
 
   const generateReport = async () => {
@@ -75,9 +75,9 @@ const AdvancedReportsSystem = () => {
         type: selectedReport,
         period: selectedPeriod,
         timestamp: new Date().toISOString(),
-        data: selectedReport === 'financial' ? financialData : 
-              selectedReport === 'performance' ? performanceData : 
-              departmentData
+        data: selectedReport === "financial" ? financialData : 
+          selectedReport === "performance" ? performanceData : 
+            departmentData
       };
 
       // Simulate export delay
@@ -89,7 +89,7 @@ const AdvancedReportsSystem = () => {
       });
 
       // In a real implementation, this would trigger a file download
-      console.log('Export data:', reportData);
+      console.log("Export data:", reportData);
     } catch (error) {
       toast({
         title: "Erro na Exportação",
@@ -167,7 +167,7 @@ const AdvancedReportsSystem = () => {
                   variant="outline" 
                   size="sm" 
                   className="w-full justify-start"
-                  onClick={() => exportReport('pdf')}
+                  onClick={() => exportReport("pdf")}
                   disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -177,7 +177,7 @@ const AdvancedReportsSystem = () => {
                   variant="outline" 
                   size="sm" 
                   className="w-full justify-start"
-                  onClick={() => exportReport('excel')}
+                  onClick={() => exportReport("excel")}
                   disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -187,7 +187,7 @@ const AdvancedReportsSystem = () => {
                   variant="outline" 
                   size="sm" 
                   className="w-full justify-start"
-                  onClick={() => exportReport('csv')}
+                  onClick={() => exportReport("csv")}
                   disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -204,7 +204,7 @@ const AdvancedReportsSystem = () => {
               {reportTypes.map((type) => (
                 <TabsTrigger key={type.id} value={type.id} className="flex items-center gap-2">
                   <type.icon className="w-4 h-4" />
-                  {type.name.split(' ')[0]}
+                  {type.name.split(" ")[0]}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -299,8 +299,8 @@ const AdvancedReportsSystem = () => {
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium">{dept.category}</h4>
-                        <Badge variant={dept.variance >= 0 ? 'default' : 'destructive'}>
-                          {dept.variance >= 0 ? '+' : ''}{dept.variance}%
+                        <Badge variant={dept.variance >= 0 ? "default" : "destructive"}>
+                          {dept.variance >= 0 ? "+" : ""}{dept.variance}%
                         </Badge>
                       </div>
                       <div className="space-y-2">

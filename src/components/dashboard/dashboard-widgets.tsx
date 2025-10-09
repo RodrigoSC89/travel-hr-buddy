@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Calendar,
   Filter,
@@ -18,8 +18,8 @@ import {
   PieChart,
   Activity,
   Target
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface KPIWidget {
   id: string;
@@ -27,15 +27,15 @@ interface KPIWidget {
   value: number | string;
   target?: number;
   unit?: string;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   change: number;
   icon: React.ElementType;
   color: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
 }
 
 interface ExportOption {
-  format: 'pdf' | 'excel' | 'csv';
+  format: "pdf" | "excel" | "csv";
   label: string;
   description: string;
 }
@@ -45,38 +45,38 @@ const DashboardKPIWidget: React.FC<{
   onExport?: (kpiId: string, format: string) => void;
 }> = ({ kpi, onExport }) => {
   const formatValue = (value: number | string, unit?: string): string => {
-    if (typeof value === 'string') return value;
+    if (typeof value === "string") return value;
     
     switch (unit) {
-      case '%':
-        return `${value.toFixed(1)}%`;
-      case 'BRL':
-        return new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(value);
-      case 'days':
-        return `${value} dias`;
-      case 'hours':
-        return `${value}h`;
-      default:
-        return value.toLocaleString('pt-BR');
+    case "%":
+      return `${value.toFixed(1)}%`;
+    case "BRL":
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      }).format(value);
+    case "days":
+      return `${value} dias`;
+    case "hours":
+      return `${value}h`;
+    default:
+      return value.toLocaleString("pt-BR");
     }
   };
 
   const getTrendIcon = () => {
     switch (kpi.trend) {
-      case 'up':
-        return <TrendingUp className="h-3 w-3 text-success" />;
-      case 'down':
-        return <TrendingUp className="h-3 w-3 text-destructive rotate-180" />;
-      default:
-        return <Activity className="h-3 w-3 text-muted-foreground" />;
+    case "up":
+      return <TrendingUp className="h-3 w-3 text-success" />;
+    case "down":
+      return <TrendingUp className="h-3 w-3 text-destructive rotate-180" />;
+    default:
+      return <Activity className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
   const getProgressValue = (): number => {
-    if (!kpi.target || typeof kpi.value !== 'number') return 0;
+    if (!kpi.target || typeof kpi.value !== "number") return 0;
     return Math.min((kpi.value / kpi.target) * 100, 100);
   };
 
@@ -89,7 +89,7 @@ const DashboardKPIWidget: React.FC<{
         <div className="flex items-center gap-2">
           <kpi.icon className={`h-4 w-4 ${kpi.color} group-hover:scale-110 transition-transform`} />
           <Badge 
-            variant={kpi.priority === 'high' ? 'destructive' : kpi.priority === 'medium' ? 'default' : 'secondary'}
+            variant={kpi.priority === "high" ? "destructive" : kpi.priority === "medium" ? "default" : "secondary"}
             className="text-xs"
           >
             {kpi.priority}
@@ -105,11 +105,11 @@ const DashboardKPIWidget: React.FC<{
           <div className="flex items-center gap-1 text-sm">
             {getTrendIcon()}
             <span className={`font-medium ${
-              kpi.trend === 'up' ? 'text-success' : 
-              kpi.trend === 'down' ? 'text-destructive' : 
-              'text-muted-foreground'
+              kpi.trend === "up" ? "text-success" : 
+                kpi.trend === "down" ? "text-destructive" : 
+                  "text-muted-foreground"
             }`}>
-              {kpi.change > 0 ? '+' : ''}{kpi.change.toFixed(1)}%
+              {kpi.change > 0 ? "+" : ""}{kpi.change.toFixed(1)}%
             </span>
           </div>
           
@@ -117,7 +117,7 @@ const DashboardKPIWidget: React.FC<{
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={() => onExport(kpi.id, 'excel')}
+              onClick={() => onExport(kpi.id, "excel")}
               className="opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <Download className="h-3 w-3" />
@@ -125,7 +125,7 @@ const DashboardKPIWidget: React.FC<{
           )}
         </div>
 
-        {kpi.target && typeof kpi.value === 'number' && (
+        {kpi.target && typeof kpi.value === "number" && (
           <div className="space-y-2">
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>Meta</span>
@@ -148,19 +148,19 @@ const DashboardExportPanel: React.FC<{
 }> = ({ onExport, isExporting }) => {
   const exportOptions: ExportOption[] = [
     {
-      format: 'pdf',
-      label: 'Relatório PDF',
-      description: 'Relatório completo com gráficos e análises'
+      format: "pdf",
+      label: "Relatório PDF",
+      description: "Relatório completo com gráficos e análises"
     },
     {
-      format: 'excel',
-      label: 'Planilha Excel',
-      description: 'Dados estruturados para análise avançada'
+      format: "excel",
+      label: "Planilha Excel",
+      description: "Dados estruturados para análise avançada"
     },
     {
-      format: 'csv',
-      label: 'Arquivo CSV',
-      description: 'Dados brutos para importação'
+      format: "csv",
+      label: "Arquivo CSV",
+      description: "Dados brutos para importação"
     }
   ];
 
@@ -196,14 +196,14 @@ const DashboardExportPanel: React.FC<{
               ) : (
                 <Download className="h-4 w-4" />
               )}
-              {isExporting ? 'Exportando...' : 'Exportar'}
+              {isExporting ? "Exportando..." : "Exportar"}
             </Button>
           </div>
         ))}
         
         <div className="pt-4 border-t">
           <Button 
-            onClick={() => onExport('full')}
+            onClick={() => onExport("full")}
             disabled={isExporting}
             className="w-full"
           >
@@ -221,28 +221,28 @@ const DashboardFilters: React.FC<{
   currentFilters: any;
 }> = ({ onFilterChange, currentFilters }) => {
   const [dateRange, setDateRange] = useState({
-    start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    end: new Date().toISOString().split('T')[0]
+    start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+    end: new Date().toISOString().split("T")[0]
   });
 
-  const [selectedModules, setSelectedModules] = useState<string[]>(['all']);
-  const [selectedVessels, setSelectedVessels] = useState<string[]>(['all']);
+  const [selectedModules, setSelectedModules] = useState<string[]>(["all"]);
+  const [selectedVessels, setSelectedVessels] = useState<string[]>(["all"]);
 
   const modules = [
-    { id: 'all', label: 'Todos os Módulos' },
-    { id: 'peotram', label: 'PEOTRAM' },
-    { id: 'hr', label: 'Recursos Humanos' },
-    { id: 'fleet', label: 'Gestão de Frota' },
-    { id: 'checklists', label: 'Checklists' },
-    { id: 'travel', label: 'Viagens' }
+    { id: "all", label: "Todos os Módulos" },
+    { id: "peotram", label: "PEOTRAM" },
+    { id: "hr", label: "Recursos Humanos" },
+    { id: "fleet", label: "Gestão de Frota" },
+    { id: "checklists", label: "Checklists" },
+    { id: "travel", label: "Viagens" }
   ];
 
   const vessels = [
-    { id: 'all', label: 'Todas as Embarcações' },
-    { id: 'mv-alpha', label: 'MV Alpha' },
-    { id: 'mv-beta', label: 'MV Beta' },
-    { id: 'mv-gamma', label: 'MV Gamma' },
-    { id: 'mv-delta', label: 'MV Delta' }
+    { id: "all", label: "Todas as Embarcações" },
+    { id: "mv-alpha", label: "MV Alpha" },
+    { id: "mv-beta", label: "MV Beta" },
+    { id: "mv-gamma", label: "MV Gamma" },
+    { id: "mv-delta", label: "MV Delta" }
   ];
 
   const applyFilters = () => {
