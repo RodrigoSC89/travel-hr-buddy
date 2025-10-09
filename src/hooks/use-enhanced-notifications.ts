@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -23,7 +23,7 @@ export const useEnhancedNotifications = () => {
   const { user } = useAuth();
 
   // Buscar notificações do usuário
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -109,7 +109,7 @@ export const useEnhancedNotifications = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user]);
 
   // Marcar notificação como lida
   const markAsRead = (notificationId: string) => {
@@ -146,13 +146,13 @@ export const useEnhancedNotifications = () => {
   // Carregar notificações quando o usuário mudar
   useEffect(() => {
     fetchNotifications();
-  }, [user]);
+  }, [fetchNotifications]);
 
   // Atualizar notificações periodicamente
   useEffect(() => {
     const interval = setInterval(fetchNotifications, 5 * 60 * 1000); // 5 minutos
     return () => clearInterval(interval);
-  }, [user]);
+  }, [fetchNotifications]);
 
   return {
     notifications,

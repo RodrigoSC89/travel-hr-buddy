@@ -82,7 +82,7 @@ export const useKeyboardShortcuts = (onGlobalSearch?: () => void) => {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [navigate, onGlobalSearch]);
+  }, [navigate, onGlobalSearch, shortcuts]);
 
   return { shortcuts };
 };

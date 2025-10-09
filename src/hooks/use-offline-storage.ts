@@ -72,7 +72,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
     } catch (error) {
       console.error('Error saving to cache:', error);
     }
-  }, [initDB]);
+  }, [initDB, updateCacheSize]);
 
   // Get data from cache
   const getFromCache = useCallback(async (key: string) => {
@@ -199,7 +199,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
     } catch (error) {
       console.error('Error clearing cache:', error);
     }
-  }, [initDB]);
+  }, [initDB, updateCacheSize]);
 
   // Update cache size
   const updateCacheSize = useCallback(async () => {
