@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { CheckCircle, XCircle, AlertCircle, Play, RefreshCw } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { CheckCircle, XCircle, AlertCircle, Play, RefreshCw } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface HealthCheck {
   id: string;
   name: string;
-  status: 'passing' | 'failing' | 'warning' | 'pending';
+  status: "passing" | "failing" | "warning" | "pending";
   message: string;
   lastCheck: Date;
   duration: number;
@@ -24,21 +24,21 @@ export const SystemHealthCheck: React.FC = () => {
 
   const healthChecks = [
     {
-      id: 'database',
-      name: 'Conexão com Banco de Dados',
+      id: "database",
+      name: "Conexão com Banco de Dados",
       check: async () => {
         const start = Date.now();
         try {
-          const { data, error } = await supabase.from('profiles').select('count').limit(1);
+          const { data, error } = await supabase.from("profiles").select("count").limit(1);
           if (error) throw error;
           return {
-            status: 'passing' as const,
-            message: 'Conexão estabelecida com sucesso',
+            status: "passing" as const,
+            message: "Conexão estabelecida com sucesso",
             duration: Date.now() - start
           };
         } catch (error) {
           return {
-            status: 'failing' as const,
+            status: "failing" as const,
             message: `Erro de conexão: ${error}`,
             duration: Date.now() - start
           };
@@ -46,20 +46,20 @@ export const SystemHealthCheck: React.FC = () => {
       }
     },
     {
-      id: 'auth',
-      name: 'Sistema de Autenticação',
+      id: "auth",
+      name: "Sistema de Autenticação",
       check: async () => {
         const start = Date.now();
         try {
           const { data: { session } } = await supabase.auth.getSession();
           return {
-            status: 'passing' as const,
-            message: session ? 'Usuário autenticado' : 'Sistema funcionando (sem sessão)',
+            status: "passing" as const,
+            message: session ? "Usuário autenticado" : "Sistema funcionando (sem sessão)",
             duration: Date.now() - start
           };
         } catch (error) {
           return {
-            status: 'failing' as const,
+            status: "failing" as const,
             message: `Erro de autenticação: ${error}`,
             duration: Date.now() - start
           };
@@ -67,21 +67,21 @@ export const SystemHealthCheck: React.FC = () => {
       }
     },
     {
-      id: 'storage',
-      name: 'Sistema de Armazenamento',
+      id: "storage",
+      name: "Sistema de Armazenamento",
       check: async () => {
         const start = Date.now();
         try {
           const { data, error } = await supabase.storage.listBuckets();
           if (error) throw error;
           return {
-            status: 'passing' as const,
+            status: "passing" as const,
             message: `${data.length} buckets disponíveis`,
             duration: Date.now() - start
           };
         } catch (error) {
           return {
-            status: 'failing' as const,
+            status: "failing" as const,
             message: `Erro no storage: ${error}`,
             duration: Date.now() - start
           };
@@ -89,15 +89,15 @@ export const SystemHealthCheck: React.FC = () => {
       }
     },
     {
-      id: 'performance',
-      name: 'Performance da Aplicação',
+      id: "performance",
+      name: "Performance da Aplicação",
       check: async () => {
         const start = Date.now();
         try {
           // Simular verificação de performance
           await new Promise(resolve => setTimeout(resolve, 100));
           const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-          const status: 'passing' | 'failing' | 'warning' = loadTime < 3000 ? 'passing' : loadTime < 5000 ? 'warning' : 'failing';
+          const status: "passing" | "failing" | "warning" = loadTime < 3000 ? "passing" : loadTime < 5000 ? "warning" : "failing";
           return {
             status,
             message: `Tempo de carregamento: ${loadTime}ms`,
@@ -105,7 +105,7 @@ export const SystemHealthCheck: React.FC = () => {
           };
         } catch (error) {
           return {
-            status: 'failing' as const,
+            status: "failing" as const,
             message: `Erro na verificação: ${error}`,
             duration: Date.now() - start
           };
@@ -113,8 +113,8 @@ export const SystemHealthCheck: React.FC = () => {
       }
     },
     {
-      id: 'api',
-      name: 'APIs Externas',
+      id: "api",
+      name: "APIs Externas",
       check: async () => {
         const start = Date.now();
         try {
@@ -124,20 +124,20 @@ export const SystemHealthCheck: React.FC = () => {
           
           if (!hasMapbox) {
             return {
-              status: 'warning' as const,
-              message: 'Token do Mapbox não configurado',
+              status: "warning" as const,
+              message: "Token do Mapbox não configurado",
               duration: Date.now() - start
             };
           }
           
           return {
-            status: 'passing' as const,
-            message: 'APIs configuradas corretamente',
+            status: "passing" as const,
+            message: "APIs configuradas corretamente",
             duration: Date.now() - start
           };
         } catch (error) {
           return {
-            status: 'failing' as const,
+            status: "failing" as const,
             message: `Erro nas APIs: ${error}`,
             duration: Date.now() - start
           };
@@ -170,7 +170,7 @@ export const SystemHealthCheck: React.FC = () => {
         results.push({
           id: check.id,
           name: check.name,
-          status: 'failing',
+          status: "failing",
           message: `Erro inesperado: ${error}`,
           lastCheck: new Date(),
           duration: 0
@@ -182,43 +182,43 @@ export const SystemHealthCheck: React.FC = () => {
     setChecks(results);
     setIsRunning(false);
     
-    const failing = results.filter(r => r.status === 'failing').length;
-    const warning = results.filter(r => r.status === 'warning').length;
+    const failing = results.filter(r => r.status === "failing").length;
+    const warning = results.filter(r => r.status === "warning").length;
     
     if (failing > 0) {
       toast({
-        title: 'Verificação Concluída',
+        title: "Verificação Concluída",
         description: `${failing} falha(s) detectada(s)`,
-        variant: 'destructive'
+        variant: "destructive"
       });
     } else if (warning > 0) {
       toast({
-        title: 'Verificação Concluída',
+        title: "Verificação Concluída",
         description: `${warning} aviso(s) encontrado(s)`,
       });
     } else {
       toast({
-        title: 'Sistema Saudável',
-        description: 'Todos os testes passaram com sucesso',
+        title: "Sistema Saudável",
+        description: "Todos os testes passaram com sucesso",
       });
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'passing': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'failing': return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'warning': return <AlertCircle className="h-4 w-4 text-yellow-500" />;
-      default: return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
+    case "passing": return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "failing": return <XCircle className="h-4 w-4 text-red-500" />;
+    case "warning": return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+    default: return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'passing': return <Badge variant="default" className="bg-green-500">Passou</Badge>;
-      case 'failing': return <Badge variant="destructive">Falhou</Badge>;
-      case 'warning': return <Badge variant="secondary" className="bg-yellow-500">Aviso</Badge>;
-      default: return <Badge variant="outline">Pendente</Badge>;
+    case "passing": return <Badge variant="default" className="bg-green-500">Passou</Badge>;
+    case "failing": return <Badge variant="destructive">Falhou</Badge>;
+    case "warning": return <Badge variant="secondary" className="bg-yellow-500">Aviso</Badge>;
+    default: return <Badge variant="outline">Pendente</Badge>;
     }
   };
 

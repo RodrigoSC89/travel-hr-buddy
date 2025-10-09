@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { StatsCard } from '@/components/ui/stats-card';
-import { DataTable, Column } from '@/components/ui/data-table';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CertificateManager } from './certificate-manager';
-import { CertificateAlerts } from './certificate-alerts';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { StatsCard } from "@/components/ui/stats-card";
+import { DataTable, Column } from "@/components/ui/data-table";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CertificateManager } from "./certificate-manager";
+import { CertificateAlerts } from "./certificate-alerts";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
   UserPlus, 
@@ -27,7 +27,7 @@ import {
   UserMinus,
   Trash2,
   FileText
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Employee {
   id: string;
@@ -38,7 +38,7 @@ interface Employee {
   phone: string;
   location: string;
   startDate: string;
-  status: 'active' | 'vacation' | 'travel' | 'inactive';
+  status: "active" | "vacation" | "travel" | "inactive";
   certifications: string[];
   rating: number;
   avatar?: string;
@@ -46,55 +46,55 @@ interface Employee {
 
 const mockEmployees: Employee[] = [
   {
-    id: '001',
-    name: 'Ana Silva',
-    position: 'Gerente de Operações',
-    department: 'Operações',
-    email: 'ana.silva@nautilus.com',
-    phone: '+55 11 99999-9999',
-    location: 'São Paulo, SP',
-    startDate: '2022-03-15',
-    status: 'active',
-    certifications: ['STCW Basic Safety', 'DP Certificate', 'Leadership'],
+    id: "001",
+    name: "Ana Silva",
+    position: "Gerente de Operações",
+    department: "Operações",
+    email: "ana.silva@nautilus.com",
+    phone: "+55 11 99999-9999",
+    location: "São Paulo, SP",
+    startDate: "2022-03-15",
+    status: "active",
+    certifications: ["STCW Basic Safety", "DP Certificate", "Leadership"],
     rating: 4.8
   },
   {
-    id: '002',
-    name: 'Carlos Santos',
-    position: 'Especialista em Viagens',
-    department: 'Travel Management',
-    email: 'carlos.santos@nautilus.com',
-    phone: '+55 21 88888-8888',
-    location: 'Rio de Janeiro, RJ',
-    startDate: '2021-07-20',
-    status: 'travel',
-    certifications: ['IATA Certified', 'Corporate Travel', 'GDS Expert'],
+    id: "002",
+    name: "Carlos Santos",
+    position: "Especialista em Viagens",
+    department: "Travel Management",
+    email: "carlos.santos@nautilus.com",
+    phone: "+55 21 88888-8888",
+    location: "Rio de Janeiro, RJ",
+    startDate: "2021-07-20",
+    status: "travel",
+    certifications: ["IATA Certified", "Corporate Travel", "GDS Expert"],
     rating: 4.6
   },
   {
-    id: '003',
-    name: 'Marina Costa',
-    position: 'Analista de RH',
-    department: 'Recursos Humanos',
-    email: 'marina.costa@nautilus.com',
-    phone: '+55 85 77777-7777',
-    location: 'Fortaleza, CE',
-    startDate: '2023-01-10',
-    status: 'vacation',
-    certifications: ['HR Management', 'Recruitment Specialist'],
+    id: "003",
+    name: "Marina Costa",
+    position: "Analista de RH",
+    department: "Recursos Humanos",
+    email: "marina.costa@nautilus.com",
+    phone: "+55 85 77777-7777",
+    location: "Fortaleza, CE",
+    startDate: "2023-01-10",
+    status: "vacation",
+    certifications: ["HR Management", "Recruitment Specialist"],
     rating: 4.9
   },
   {
-    id: '004',
-    name: 'Roberto Lima',
-    position: 'Coordenador de Hospedagem',
-    department: 'Accommodation',
-    email: 'roberto.lima@nautilus.com',
-    phone: '+55 71 66666-6666',
-    location: 'Salvador, BA',
-    startDate: '2020-11-05',
-    status: 'active',
-    certifications: ['Hotel Management', 'Revenue Management', 'Customer Service'],
+    id: "004",
+    name: "Roberto Lima",
+    position: "Coordenador de Hospedagem",
+    department: "Accommodation",
+    email: "roberto.lima@nautilus.com",
+    phone: "+55 71 66666-6666",
+    location: "Salvador, BA",
+    startDate: "2020-11-05",
+    status: "active",
+    certifications: ["Hotel Management", "Revenue Management", "Customer Service"],
     rating: 4.7
   }
 ];
@@ -102,8 +102,8 @@ const mockEmployees: Employee[] = [
 export const HRDashboard = () => {
   const { toast } = useToast();
   const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [showTable, setShowTable] = useState(false);
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
   const [newEmployeeOpen, setNewEmployeeOpen] = useState(false);
@@ -113,13 +113,13 @@ export const HRDashboard = () => {
   const [certificateManagerOpen, setCertificateManagerOpen] = useState(false);
   const [selectedEmployeeForCertificates, setSelectedEmployeeForCertificates] = useState<Employee | null>(null);
   const [newEmployee, setNewEmployee] = useState<Partial<Employee>>({
-    name: '',
-    position: '',
-    department: '',
-    email: '',
-    phone: '',
-    location: '',
-    status: 'active',
+    name: "",
+    position: "",
+    department: "",
+    email: "",
+    phone: "",
+    location: "",
+    status: "active",
     certifications: [],
     rating: 0
   });
@@ -132,7 +132,7 @@ export const HRDashboard = () => {
     );
   };
 
-  const handleStatusChange = (employeeId: string, newStatus: Employee['status']) => {
+  const handleStatusChange = (employeeId: string, newStatus: Employee["status"]) => {
     setEmployees(prev => prev.map(emp => 
       emp.id === employeeId ? { ...emp, status: newStatus } : emp
     ));
@@ -149,28 +149,28 @@ export const HRDashboard = () => {
     }
 
     const employee: Employee = {
-      id: `EMP${(employees.length + 1).toString().padStart(3, '0')}`,
+      id: `EMP${(employees.length + 1).toString().padStart(3, "0")}`,
       name: newEmployee.name!,
       position: newEmployee.position!,
       department: newEmployee.department!,
       email: newEmployee.email!,
-      phone: newEmployee.phone || '',
-      location: newEmployee.location || '',
-      startDate: new Date().toISOString().split('T')[0],
-      status: newEmployee.status as Employee['status'] || 'active',
+      phone: newEmployee.phone || "",
+      location: newEmployee.location || "",
+      startDate: new Date().toISOString().split("T")[0],
+      status: newEmployee.status as Employee["status"] || "active",
       certifications: newEmployee.certifications || [],
       rating: newEmployee.rating || 4.0
     };
 
     setEmployees(prev => [...prev, employee]);
     setNewEmployee({
-      name: '',
-      position: '',
-      department: '',
-      email: '',
-      phone: '',
-      location: '',
-      status: 'active',
+      name: "",
+      position: "",
+      department: "",
+      email: "",
+      phone: "",
+      location: "",
+      status: "active",
       certifications: [],
       rating: 0
     });
@@ -204,13 +204,13 @@ export const HRDashboard = () => {
   // Colunas para a tabela de funcionários
   const employeeColumns: Column[] = [
     {
-      key: 'name',
-      header: 'Nome',
+      key: "name",
+      header: "Nome",
       sortable: true,
       render: (value, row) => (
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 rounded-full gradient-ocean flex items-center justify-center text-azure-50 font-bold text-sm">
-            {value.split(' ').map((n: string) => n[0]).join('')}
+            {value.split(" ").map((n: string) => n[0]).join("")}
           </div>
           <div>
             <div className="font-medium">{value}</div>
@@ -220,32 +220,32 @@ export const HRDashboard = () => {
       )
     },
     {
-      key: 'department',
-      header: 'Departamento',
+      key: "department",
+      header: "Departamento",
       sortable: true
     },
     {
-      key: 'status',
-      header: 'Status',
+      key: "status",
+      header: "Status",
       render: (value) => (
         <Badge 
           className={
-            value === 'active' ? 'bg-success/10 text-success border-success/20' :
-            value === 'vacation' ? 'bg-warning/10 text-warning border-warning/20' :
-            value === 'travel' ? 'bg-info/10 text-info border-info/20' :
-            'bg-muted text-muted-foreground border-muted'
+            value === "active" ? "bg-success/10 text-success border-success/20" :
+              value === "vacation" ? "bg-warning/10 text-warning border-warning/20" :
+                value === "travel" ? "bg-info/10 text-info border-info/20" :
+                  "bg-muted text-muted-foreground border-muted"
           }
         >
-          {value === 'active' ? 'Ativo' :
-           value === 'vacation' ? 'Férias' :
-           value === 'travel' ? 'Viagem' : 'Inativo'}
+          {value === "active" ? "Ativo" :
+            value === "vacation" ? "Férias" :
+              value === "travel" ? "Viagem" : "Inativo"}
         </Badge>
       )
     },
     {
-      key: 'rating',
-      header: 'Avaliação',
-      align: 'center' as const,
+      key: "rating",
+      header: "Avaliação",
+      align: "center" as const,
       render: (value) => (
         <div className="flex items-center justify-center">
           <Star size={16} className="mr-1 text-warning" fill="currentColor" />
@@ -254,9 +254,9 @@ export const HRDashboard = () => {
       )
     },
     {
-      key: 'certifications',
-      header: 'Certificações',
-      align: 'center' as const,
+      key: "certifications",
+      header: "Certificações",
+      align: "center" as const,
       render: (value) => (
         <div className="flex items-center justify-center">
           <Award size={16} className="mr-1 text-primary" />
@@ -265,8 +265,8 @@ export const HRDashboard = () => {
       )
     },
     {
-      key: 'location',
-      header: 'Localização',
+      key: "location",
+      header: "Localização",
       sortable: true
     }
   ];
@@ -276,26 +276,26 @@ export const HRDashboard = () => {
       title: "Total de Funcionários",
       value: employees.length.toString(),
       icon: Users,
-      change: { value: 5, type: 'increase' as const },
-      variant: 'ocean' as const
+      change: { value: 5, type: "increase" as const },
+      variant: "ocean" as const
     },
     {
       title: "Funcionários Ativos",
-      value: employees.filter(e => e.status === 'active').length.toString(),
+      value: employees.filter(e => e.status === "active").length.toString(),
       icon: Briefcase,
-      variant: 'success' as const
+      variant: "success" as const
     },
     {
       title: "Em Viagem",
-      value: employees.filter(e => e.status === 'travel').length.toString(),
+      value: employees.filter(e => e.status === "travel").length.toString(),
       icon: MapPin,
-      variant: 'warning' as const
+      variant: "warning" as const
     },
     {
       title: "Média de Avaliação",
       value: (employees.reduce((acc, emp) => acc + emp.rating, 0) / employees.length).toFixed(1),
       icon: Star,
-      variant: 'default' as const
+      variant: "default" as const
     }
   ];
 
@@ -303,29 +303,29 @@ export const HRDashboard = () => {
     const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          employee.department.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDepartment = selectedDepartment === 'all' || employee.department === selectedDepartment;
+    const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
     return matchesSearch && matchesDepartment;
   });
 
   const departments = [...new Set(employees.map(emp => emp.department))];
 
-  const getStatusColor = (status: Employee['status']) => {
+  const getStatusColor = (status: Employee["status"]) => {
     switch (status) {
-      case 'active': return 'bg-success text-azure-50';
-      case 'vacation': return 'bg-warning text-azure-900';
-      case 'travel': return 'bg-info text-azure-50';
-      case 'inactive': return 'bg-muted text-muted-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "active": return "bg-success text-azure-50";
+    case "vacation": return "bg-warning text-azure-900";
+    case "travel": return "bg-info text-azure-50";
+    case "inactive": return "bg-muted text-muted-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
-  const getStatusLabel = (status: Employee['status']) => {
+  const getStatusLabel = (status: Employee["status"]) => {
     switch (status) {
-      case 'active': return 'Ativo';
-      case 'vacation': return 'Férias';
-      case 'travel': return 'Viagem';
-      case 'inactive': return 'Inativo';
-      default: return 'N/A';
+    case "active": return "Ativo";
+    case "vacation": return "Férias";
+    case "travel": return "Viagem";
+    case "inactive": return "Inativo";
+    default: return "N/A";
     }
   };
 
@@ -347,7 +347,7 @@ export const HRDashboard = () => {
             onClick={() => setShowTable(!showTable)}
             className={showTable ? "bg-accent" : ""}
           >
-            {showTable ? 'Ver Cards' : 'Ver Tabela'}
+            {showTable ? "Ver Cards" : "Ver Tabela"}
           </Button>
           <Dialog open={newEmployeeOpen} onOpenChange={setNewEmployeeOpen}>
             <DialogTrigger asChild>
@@ -370,7 +370,7 @@ export const HRDashboard = () => {
                   </Label>
                   <Input
                     id="name"
-                    value={newEmployee.name || ''}
+                    value={newEmployee.name || ""}
                     onChange={(e) => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
                     className="col-span-3"
                   />
@@ -381,7 +381,7 @@ export const HRDashboard = () => {
                   </Label>
                   <Input
                     id="position"
-                    value={newEmployee.position || ''}
+                    value={newEmployee.position || ""}
                     onChange={(e) => setNewEmployee(prev => ({ ...prev, position: e.target.value }))}
                     className="col-span-3"
                   />
@@ -390,7 +390,7 @@ export const HRDashboard = () => {
                   <Label htmlFor="department" className="text-right">
                     Departamento *
                   </Label>
-                  <Select value={newEmployee.department || ''} onValueChange={(value) => setNewEmployee(prev => ({ ...prev, department: value }))}>
+                  <Select value={newEmployee.department || ""} onValueChange={(value) => setNewEmployee(prev => ({ ...prev, department: value }))}>
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Selecione o departamento" />
                     </SelectTrigger>
@@ -411,7 +411,7 @@ export const HRDashboard = () => {
                   <Input
                     id="email"
                     type="email"
-                    value={newEmployee.email || ''}
+                    value={newEmployee.email || ""}
                     onChange={(e) => setNewEmployee(prev => ({ ...prev, email: e.target.value }))}
                     className="col-span-3"
                   />
@@ -422,7 +422,7 @@ export const HRDashboard = () => {
                   </Label>
                   <Input
                     id="phone"
-                    value={newEmployee.phone || ''}
+                    value={newEmployee.phone || ""}
                     onChange={(e) => setNewEmployee(prev => ({ ...prev, phone: e.target.value }))}
                     className="col-span-3"
                   />
@@ -433,7 +433,7 @@ export const HRDashboard = () => {
                   </Label>
                   <Input
                     id="location"
-                    value={newEmployee.location || ''}
+                    value={newEmployee.location || ""}
                     onChange={(e) => setNewEmployee(prev => ({ ...prev, location: e.target.value }))}
                     className="col-span-3"
                   />
@@ -516,7 +516,7 @@ export const HRDashboard = () => {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 rounded-full gradient-ocean flex items-center justify-center text-azure-50 font-bold text-lg">
-                    {employee.name.split(' ').map(n => n[0]).join('')}
+                    {employee.name.split(" ").map(n => n[0]).join("")}
                   </div>
                   <div>
                     <h3 className="font-semibold text-lg">{employee.name}</h3>
@@ -547,7 +547,7 @@ export const HRDashboard = () => {
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <Calendar size={16} className="mr-2" />
-                  Desde {new Date(employee.startDate).toLocaleDateString('pt-BR')}
+                  Desde {new Date(employee.startDate).toLocaleDateString("pt-BR")}
                 </div>
               </div>
 
@@ -602,11 +602,11 @@ export const HRDashboard = () => {
                 <Button 
                   size="sm" 
                   className={`flex-1 ${
-                    selectedEmployees.includes(employee.id) ? 'bg-success hover:bg-success/90' : 'gradient-ocean'
+                    selectedEmployees.includes(employee.id) ? "bg-success hover:bg-success/90" : "gradient-ocean"
                   }`}
                   onClick={() => handleEmployeeSelect(employee.id)}
                 >
-                  {selectedEmployees.includes(employee.id) ? 'Selecionado ✓' : 'Selecionar'}
+                  {selectedEmployees.includes(employee.id) ? "Selecionado ✓" : "Selecionar"}
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -668,7 +668,7 @@ export const HRDashboard = () => {
             <div className="grid gap-6 py-4">
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 rounded-full gradient-ocean flex items-center justify-center text-azure-50 font-bold text-xl">
-                  {selectedEmployee.name.split(' ').map(n => n[0]).join('')}
+                  {selectedEmployee.name.split(" ").map(n => n[0]).join("")}
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold">{selectedEmployee.name}</h3>
@@ -707,7 +707,7 @@ export const HRDashboard = () => {
                     </div>
                     <div className="flex items-center">
                       <Calendar size={16} className="mr-2 text-muted-foreground" />
-                      Desde {new Date(selectedEmployee.startDate).toLocaleDateString('pt-BR')}
+                      Desde {new Date(selectedEmployee.startDate).toLocaleDateString("pt-BR")}
                     </div>
                     <div className="flex items-center">
                       <Star size={16} className="mr-2 text-warning" fill="currentColor" />

@@ -1,8 +1,8 @@
-import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import SystemAuditor from '@/components/testing/system-auditor';
-import { TestTube } from 'lucide-react';
+import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import SystemAuditor from "@/components/testing/system-auditor";
+import { TestTube } from "lucide-react";
 
 
 const SystemAuditorPage = () => {

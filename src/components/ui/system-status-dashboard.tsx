@@ -1,8 +1,8 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { 
   Server,
   Database,
@@ -19,87 +19,87 @@ import {
   AlertCircle,
   CheckCircle,
   TrendingUp
-} from 'lucide-react';
+} from "lucide-react";
 
 const SystemStatusDashboard = () => {
   const systemMetrics = [
     {
-      name: 'Performance',
+      name: "Performance",
       value: 97.3,
-      status: 'excellent',
+      status: "excellent",
       icon: Cpu,
-      color: 'green',
-      details: 'CPU: 45% | RAM: 68%'
+      color: "green",
+      details: "CPU: 45% | RAM: 68%"
     },
     {
-      name: 'Disponibilidade',
+      name: "Disponibilidade",
       value: 99.95,
-      status: 'excellent', 
+      status: "excellent", 
       icon: Network,
-      color: 'green',
-      details: 'Uptime: 99.95%'
+      color: "green",
+      details: "Uptime: 99.95%"
     },
     {
-      name: 'Usuários Ativos',
+      name: "Usuários Ativos",
       value: 42,
-      status: 'good',
+      status: "good",
       icon: Users,
-      color: 'blue',
-      details: '42 sessões ativas'
+      color: "blue",
+      details: "42 sessões ativas"
     },
     {
-      name: 'API Response',
+      name: "API Response",
       value: 180,
-      status: 'good',
+      status: "good",
       icon: Zap,
-      color: 'orange',
-      details: '180ms média',
-      unit: 'ms'
+      color: "orange",
+      details: "180ms média",
+      unit: "ms"
     },
     {
-      name: 'Armazenamento',
+      name: "Armazenamento",
       value: 2.3,
-      status: 'good',
+      status: "good",
       icon: HardDrive,
-      color: 'cyan',
-      details: '2.3GB / 50GB usado',
+      color: "cyan",
+      details: "2.3GB / 50GB usado",
       max: 50,
-      unit: 'GB'
+      unit: "GB"
     },
     {
-      name: 'Segurança',
+      name: "Segurança",
       value: 98.5,
-      status: 'excellent',
+      status: "excellent",
       icon: Shield,
-      color: 'purple',
-      details: '0 incidentes hoje'
+      color: "purple",
+      details: "0 incidentes hoje"
     }
   ];
 
   const getStatusColor = (status: string) => {
     const statusColors = {
-      excellent: 'text-green-600 bg-green-100',
-      good: 'text-blue-600 bg-blue-100', 
-      warning: 'text-orange-600 bg-orange-100',
-      critical: 'text-red-600 bg-red-100'
+      excellent: "text-green-600 bg-green-100",
+      good: "text-blue-600 bg-blue-100", 
+      warning: "text-orange-600 bg-orange-100",
+      critical: "text-red-600 bg-red-100"
     };
     return statusColors[status as keyof typeof statusColors] || statusColors.good;
   };
 
   const getIconColor = (color: string) => {
     const iconColors = {
-      green: 'bg-green-100 text-green-600',
-      blue: 'bg-blue-100 text-blue-600',
-      orange: 'bg-orange-100 text-orange-600',
-      cyan: 'bg-cyan-100 text-cyan-600',
-      purple: 'bg-purple-100 text-purple-600'
+      green: "bg-green-100 text-green-600",
+      blue: "bg-blue-100 text-blue-600",
+      orange: "bg-orange-100 text-orange-600",
+      cyan: "bg-cyan-100 text-cyan-600",
+      purple: "bg-purple-100 text-purple-600"
     };
     return iconColors[color as keyof typeof iconColors] || iconColors.blue;
   };
 
   const overallHealth = {
     score: 96.8,
-    status: 'excellent',
+    status: "excellent",
     issues: 0,
     warnings: 2
   };
@@ -162,13 +162,13 @@ const SystemStatusDashboard = () => {
               
               <div>
                 <div className={`text-2xl font-bold ${
-                  metric.color === 'green' ? 'text-green-600' :
-                  metric.color === 'blue' ? 'text-blue-600' :
-                  metric.color === 'orange' ? 'text-orange-600' :
-                  metric.color === 'cyan' ? 'text-cyan-600' :
-                  'text-purple-600'
+                  metric.color === "green" ? "text-green-600" :
+                    metric.color === "blue" ? "text-blue-600" :
+                      metric.color === "orange" ? "text-orange-600" :
+                        metric.color === "cyan" ? "text-cyan-600" :
+                          "text-purple-600"
                 }`}>
-                  {metric.value}{metric.unit || (metric.name.includes('Perform') || metric.name.includes('Disp') || metric.name.includes('Seg') ? '%' : '')}
+                  {metric.value}{metric.unit || (metric.name.includes("Perform") || metric.name.includes("Disp") || metric.name.includes("Seg") ? "%" : "")}
                 </div>
                 <div className="text-sm font-medium text-foreground">
                   {metric.name}
@@ -179,14 +179,14 @@ const SystemStatusDashboard = () => {
               </div>
 
               {/* Progress bar for percentage metrics */}
-              {(metric.name.includes('Performance') || metric.name.includes('Disponibilidade') || metric.name.includes('Segurança')) && (
+              {(metric.name.includes("Performance") || metric.name.includes("Disponibilidade") || metric.name.includes("Segurança")) && (
                 <div className="space-y-1">
                   <Progress value={metric.value} className="h-2" />
                 </div>
               )}
 
               {/* Progress bar for storage */}
-              {metric.name.includes('Armazenamento') && metric.max && (
+              {metric.name.includes("Armazenamento") && metric.max && (
                 <div className="space-y-1">
                   <Progress value={(metric.value / metric.max) * 100} className="h-2" />
                   <div className="text-xs text-muted-foreground">

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
-import { ModuleHeader } from '@/components/ui/module-header';
-import { RoleBasedAccess } from '@/components/auth/role-based-access';
-import { ModuleList } from '@/components/admin/ModuleList';
-import { APIStatus } from '@/components/admin/APIStatus';
-import { SystemInfo } from '@/components/admin/SystemInfo';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { RoleBasedAccess } from "@/components/auth/role-based-access";
+import { ModuleList } from "@/components/admin/ModuleList";
+import { APIStatus } from "@/components/admin/APIStatus";
+import { SystemInfo } from "@/components/admin/SystemInfo";
 import { 
   Settings,
   Activity,
@@ -23,13 +23,13 @@ import {
   ExternalLink,
   Terminal,
   FileText
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { usePermissions } from '@/hooks/use-permissions';
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { usePermissions } from "@/hooks/use-permissions";
 
 const ControlPanel = () => {
   const { userRole, isLoading } = usePermissions();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   if (isLoading) {
     return (
@@ -44,7 +44,7 @@ const ControlPanel = () => {
   }
 
   return (
-    <RoleBasedAccess roles={['admin', 'hr_manager']}>
+    <RoleBasedAccess roles={["admin", "hr_manager"]}>
       <MultiTenantWrapper>
         <ModulePageWrapper gradient="purple">
           <ModuleHeader
@@ -53,9 +53,9 @@ const ControlPanel = () => {
             description="Painel central de gerenciamento e monitoramento do Nautilus One"
             gradient="purple"
             badges={[
-              { icon: Activity, label: 'Sistema Ativo' },
-              { icon: Shield, label: userRole === 'admin' ? 'Admin' : 'Gerente' },
-              { icon: CheckCircle, label: '32 Módulos' }
+              { icon: Activity, label: "Sistema Ativo" },
+              { icon: Shield, label: userRole === "admin" ? "Admin" : "Gerente" },
+              { icon: CheckCircle, label: "32 Módulos" }
             ]}
           />
 
@@ -347,7 +347,7 @@ const ControlPanel = () => {
                 </CardContent>
               </Card>
 
-              {userRole === 'admin' && (
+              {userRole === "admin" && (
                 <Card className="border-warning bg-warning/5">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-warning">

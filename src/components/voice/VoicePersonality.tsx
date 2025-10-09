@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 import { 
   Brain, 
   Save, 
@@ -14,11 +14,11 @@ import {
   Zap,
   MessageSquare,
   Settings
-} from 'lucide-react';
+} from "lucide-react";
 
 interface PersonalitySettings {
-  tone: 'formal' | 'casual' | 'friendly' | 'professional';
-  responseLength: 'concise' | 'balanced' | 'detailed';
+  tone: "formal" | "casual" | "friendly" | "professional";
+  responseLength: "concise" | "balanced" | "detailed";
   expertise: string[];
   customInstructions: string;
   contextAwareness: boolean;
@@ -33,14 +33,14 @@ interface VoicePersonalityProps {
 }
 
 const expertiseOptions = [
-  'Recursos Humanos',
-  'Viagens Corporativas', 
-  'Análise de Dados',
-  'Gestão de Projetos',
-  'Finanças',
-  'Tecnologia',
-  'Marketing',
-  'Operações'
+  "Recursos Humanos",
+  "Viagens Corporativas", 
+  "Análise de Dados",
+  "Gestão de Projetos",
+  "Finanças",
+  "Tecnologia",
+  "Marketing",
+  "Operações"
 ];
 
 const VoicePersonality: React.FC<VoicePersonalityProps> = ({
@@ -67,10 +67,10 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
 
   const resetToDefaults = () => {
     setSettings({
-      tone: 'friendly',
-      responseLength: 'balanced',
-      expertise: ['Recursos Humanos', 'Viagens Corporativas'],
-      customInstructions: '',
+      tone: "friendly",
+      responseLength: "balanced",
+      expertise: ["Recursos Humanos", "Viagens Corporativas"],
+      customInstructions: "",
       contextAwareness: true,
       proactiveHelp: true
     });
@@ -193,11 +193,11 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
               <span className="text-sm font-medium">Preview da Personalidade</span>
             </div>
             <div className="text-sm">
-              <strong>Tom:</strong> {settings.tone === 'formal' ? 'Formal e respeitoso' : settings.tone === 'professional' ? 'Profissional' : settings.tone === 'friendly' ? 'Amigável' : 'Casual'}
+              <strong>Tom:</strong> {settings.tone === "formal" ? "Formal e respeitoso" : settings.tone === "professional" ? "Profissional" : settings.tone === "friendly" ? "Amigável" : "Casual"}
               <br />
-              <strong>Especialidades:</strong> {settings.expertise.join(', ') || 'Nenhuma selecionada'}
+              <strong>Especialidades:</strong> {settings.expertise.join(", ") || "Nenhuma selecionada"}
               <br />
-              <strong>Estilo:</strong> Respostas {settings.responseLength === 'concise' ? 'concisas' : settings.responseLength === 'balanced' ? 'equilibradas' : 'detalhadas'}
+              <strong>Estilo:</strong> Respostas {settings.responseLength === "concise" ? "concisas" : settings.responseLength === "balanced" ? "equilibradas" : "detalhadas"}
             </div>
           </div>
         </div>

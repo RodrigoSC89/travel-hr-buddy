@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Users, 
   Award,
@@ -11,7 +11,7 @@ import {
   BookOpen,
   Target,
   Zap
-} from 'lucide-react';
+} from "lucide-react";
 
 interface CrewMember {
   id: string;
@@ -33,64 +33,64 @@ interface CrewMember {
 export const CompetencyHeatmap: React.FC = () => {
   const [crew, setCrew] = useState<CrewMember[]>([
     {
-      id: '1',
-      name: 'João Silva',
-      position: 'Capitão',
-      vessel: 'MV-Atlas',
+      id: "1",
+      name: "João Silva",
+      position: "Capitão",
+      vessel: "MV-Atlas",
       competencies: [
-        { skill: 'Navegação', level: 95, required: 90, certified: true, expiryDate: '2026-03-15' },
-        { skill: 'DP Operations', level: 88, required: 85, certified: true, expiryDate: '2025-08-20' },
-        { skill: 'STCW', level: 100, required: 100, certified: true, expiryDate: '2025-12-10' },
-        { skill: 'Gestão de Crise', level: 92, required: 85, certified: true, expiryDate: '2026-01-05' },
-        { skill: 'Inglês Técnico', level: 85, required: 80, certified: true },
+        { skill: "Navegação", level: 95, required: 90, certified: true, expiryDate: "2026-03-15" },
+        { skill: "DP Operations", level: 88, required: 85, certified: true, expiryDate: "2025-08-20" },
+        { skill: "STCW", level: 100, required: 100, certified: true, expiryDate: "2025-12-10" },
+        { skill: "Gestão de Crise", level: 92, required: 85, certified: true, expiryDate: "2026-01-05" },
+        { skill: "Inglês Técnico", level: 85, required: 80, certified: true },
       ],
       overallScore: 92,
       gaps: 0,
       certifications: 5
     },
     {
-      id: '2',
-      name: 'Maria Santos',
-      position: 'Chefe de Máquinas',
-      vessel: 'MV-Neptune',
+      id: "2",
+      name: "Maria Santos",
+      position: "Chefe de Máquinas",
+      vessel: "MV-Neptune",
       competencies: [
-        { skill: 'Manutenção Diesel', level: 90, required: 85, certified: true, expiryDate: '2025-11-30' },
-        { skill: 'Sistemas Elétricos', level: 75, required: 80, certified: true, expiryDate: '2025-06-15' },
-        { skill: 'STCW', level: 100, required: 100, certified: true, expiryDate: '2026-02-20' },
-        { skill: 'Hidráulica', level: 82, required: 75, certified: true, expiryDate: '2025-09-10' },
-        { skill: 'Automação', level: 68, required: 75, certified: false },
+        { skill: "Manutenção Diesel", level: 90, required: 85, certified: true, expiryDate: "2025-11-30" },
+        { skill: "Sistemas Elétricos", level: 75, required: 80, certified: true, expiryDate: "2025-06-15" },
+        { skill: "STCW", level: 100, required: 100, certified: true, expiryDate: "2026-02-20" },
+        { skill: "Hidráulica", level: 82, required: 75, certified: true, expiryDate: "2025-09-10" },
+        { skill: "Automação", level: 68, required: 75, certified: false },
       ],
       overallScore: 83,
       gaps: 2,
       certifications: 4
     },
     {
-      id: '3',
-      name: 'Pedro Oliveira',
-      position: 'Imediato',
-      vessel: 'MV-Poseidon',
+      id: "3",
+      name: "Pedro Oliveira",
+      position: "Imediato",
+      vessel: "MV-Poseidon",
       competencies: [
-        { skill: 'Navegação', level: 85, required: 85, certified: true, expiryDate: '2025-07-22' },
-        { skill: 'DP Operations', level: 72, required: 80, certified: false },
-        { skill: 'STCW', level: 100, required: 100, certified: true, expiryDate: '2025-05-30' },
-        { skill: 'Carga/Descarga', level: 88, required: 80, certified: true, expiryDate: '2026-04-12' },
-        { skill: 'Primeiros Socorros', level: 78, required: 75, certified: true, expiryDate: '2025-10-08' },
+        { skill: "Navegação", level: 85, required: 85, certified: true, expiryDate: "2025-07-22" },
+        { skill: "DP Operations", level: 72, required: 80, certified: false },
+        { skill: "STCW", level: 100, required: 100, certified: true, expiryDate: "2025-05-30" },
+        { skill: "Carga/Descarga", level: 88, required: 80, certified: true, expiryDate: "2026-04-12" },
+        { skill: "Primeiros Socorros", level: 78, required: 75, certified: true, expiryDate: "2025-10-08" },
       ],
       overallScore: 85,
       gaps: 1,
       certifications: 4
     },
     {
-      id: '4',
-      name: 'Ana Costa',
-      position: 'Oficial de Náutica',
-      vessel: 'MV-Atlas',
+      id: "4",
+      name: "Ana Costa",
+      position: "Oficial de Náutica",
+      vessel: "MV-Atlas",
       competencies: [
-        { skill: 'Navegação', level: 78, required: 75, certified: true, expiryDate: '2025-09-18' },
-        { skill: 'STCW', level: 100, required: 100, certified: true, expiryDate: '2025-04-25' },
-        { skill: 'Comunicações', level: 92, required: 80, certified: true, expiryDate: '2026-06-30' },
-        { skill: 'Meteorologia', level: 65, required: 70, certified: false },
-        { skill: 'Inglês Técnico', level: 88, required: 75, certified: true },
+        { skill: "Navegação", level: 78, required: 75, certified: true, expiryDate: "2025-09-18" },
+        { skill: "STCW", level: 100, required: 100, certified: true, expiryDate: "2025-04-25" },
+        { skill: "Comunicações", level: 92, required: 80, certified: true, expiryDate: "2026-06-30" },
+        { skill: "Meteorologia", level: 65, required: 70, certified: false },
+        { skill: "Inglês Técnico", level: 88, required: 75, certified: true },
       ],
       overallScore: 85,
       gaps: 1,
@@ -99,19 +99,19 @@ export const CompetencyHeatmap: React.FC = () => {
   ]);
 
   const skills = [
-    'Navegação',
-    'DP Operations',
-    'STCW',
-    'Manutenção Diesel',
-    'Sistemas Elétricos',
-    'Gestão de Crise',
-    'Carga/Descarga',
-    'Inglês Técnico',
-    'Primeiros Socorros',
-    'Hidráulica',
-    'Automação',
-    'Comunicações',
-    'Meteorologia'
+    "Navegação",
+    "DP Operations",
+    "STCW",
+    "Manutenção Diesel",
+    "Sistemas Elétricos",
+    "Gestão de Crise",
+    "Carga/Descarga",
+    "Inglês Técnico",
+    "Primeiros Socorros",
+    "Hidráulica",
+    "Automação",
+    "Comunicações",
+    "Meteorologia"
   ];
 
   const getSkillLevel = (member: CrewMember, skill: string) => {
@@ -121,25 +121,25 @@ export const CompetencyHeatmap: React.FC = () => {
 
   const getSkillStatus = (member: CrewMember, skill: string) => {
     const comp = member.competencies.find(c => c.skill === skill);
-    if (!comp) return 'none';
-    if (!comp.certified) return 'gap';
-    if (comp.level < comp.required) return 'gap';
+    if (!comp) return "none";
+    if (!comp.certified) return "gap";
+    if (comp.level < comp.required) return "gap";
     if (comp.expiryDate) {
       const expiryDate = new Date(comp.expiryDate);
       const daysUntilExpiry = Math.floor((expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-      if (daysUntilExpiry < 90) return 'expiring';
+      if (daysUntilExpiry < 90) return "expiring";
     }
-    return 'good';
+    return "good";
   };
 
   const getHeatmapColor = (level: number, status: string) => {
-    if (status === 'none') return 'bg-gray-100 dark:bg-gray-800';
-    if (status === 'gap') return 'bg-red-200 dark:bg-red-900';
-    if (status === 'expiring') return 'bg-yellow-200 dark:bg-yellow-900';
-    if (level >= 90) return 'bg-green-500';
-    if (level >= 75) return 'bg-green-400';
-    if (level >= 60) return 'bg-yellow-400';
-    return 'bg-orange-400';
+    if (status === "none") return "bg-gray-100 dark:bg-gray-800";
+    if (status === "gap") return "bg-red-200 dark:bg-red-900";
+    if (status === "expiring") return "bg-yellow-200 dark:bg-yellow-900";
+    if (level >= 90) return "bg-green-500";
+    if (level >= 75) return "bg-green-400";
+    if (level >= 60) return "bg-yellow-400";
+    return "bg-orange-400";
   };
 
   const totalGaps = crew.reduce((sum, m) => sum + m.gaps, 0);
@@ -297,7 +297,7 @@ export const CompetencyHeatmap: React.FC = () => {
                             <div>Requerido: {member.competencies.find(c => c.skill === skill)?.required}%</div>
                             {member.competencies.find(c => c.skill === skill)?.expiryDate && (
                               <div className="text-yellow-600">
-                                Vence: {new Date(member.competencies.find(c => c.skill === skill)!.expiryDate!).toLocaleDateString('pt-BR')}
+                                Vence: {new Date(member.competencies.find(c => c.skill === skill)!.expiryDate!).toLocaleDateString("pt-BR")}
                               </div>
                             )}
                           </div>
@@ -308,16 +308,16 @@ export const CompetencyHeatmap: React.FC = () => {
                   <div className="w-32 p-3 flex items-center justify-center">
                     <div className="text-center">
                       <div className={`text-2xl font-bold ${
-                        member.overallScore >= 90 ? 'text-green-600' :
-                        member.overallScore >= 75 ? 'text-yellow-600' :
-                        'text-red-600'
+                        member.overallScore >= 90 ? "text-green-600" :
+                          member.overallScore >= 75 ? "text-yellow-600" :
+                            "text-red-600"
                       }`}>
                         {member.overallScore}%
                       </div>
                       <div className="flex items-center justify-center gap-1 mt-1">
                         {member.gaps > 0 ? (
                           <Badge variant="destructive" className="text-xs">
-                            {member.gaps} gap{member.gaps > 1 ? 's' : ''}
+                            {member.gaps} gap{member.gaps > 1 ? "s" : ""}
                           </Badge>
                         ) : (
                           <Badge variant="default" className="text-xs bg-green-600">
@@ -344,7 +344,7 @@ export const CompetencyHeatmap: React.FC = () => {
                       <CardDescription>{member.position} - {member.vessel}</CardDescription>
                     </div>
                     <Badge variant="destructive">
-                      {member.gaps} Gap{member.gaps > 1 ? 's' : ''}
+                      {member.gaps} Gap{member.gaps > 1 ? "s" : ""}
                     </Badge>
                   </div>
                 </CardHeader>

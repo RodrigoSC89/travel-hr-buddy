@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useProfile } from '@/hooks/use-profile';
-import { WelcomeCard } from './welcome-card';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useProfile } from "@/hooks/use-profile";
+import { WelcomeCard } from "./welcome-card";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -33,7 +33,7 @@ import {
   Flame,
   Heart,
   Globe
-} from 'lucide-react';
+} from "lucide-react";
 
 const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, description, color = "blue", delay = 0 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -87,8 +87,8 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
   return (
     <Card 
       className={`relative overflow-hidden group cursor-pointer transition-all duration-700 transform
-        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
-        ${isHovered ? `scale-105 ${colors.glow} shadow-2xl` : 'shadow-lg'}
+        ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
+        ${isHovered ? `scale-105 ${colors.glow} shadow-2xl` : "shadow-lg"}
         bg-gradient-to-br ${colors.gradient} ${colors.border} border backdrop-blur-sm`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -98,9 +98,9 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
       
       {/* Floating Particles Effect */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-4 left-4 w-2 h-2 bg-primary/40 rounded-full animate-ping" style={{ animationDelay: '0s' }} />
-        <div className="absolute top-8 right-6 w-1 h-1 bg-secondary/50 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-6 left-8 w-1.5 h-1.5 bg-accent/40 rounded-full animate-ping" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-4 left-4 w-2 h-2 bg-primary/40 rounded-full animate-ping" style={{ animationDelay: "0s" }} />
+        <div className="absolute top-8 right-6 w-1 h-1 bg-secondary/50 rounded-full animate-ping" style={{ animationDelay: "1s" }} />
+        <div className="absolute bottom-6 left-8 w-1.5 h-1.5 bg-accent/40 rounded-full animate-ping" style={{ animationDelay: "2s" }} />
       </div>
       
       <CardContent className="p-6 relative z-10">
@@ -120,12 +120,12 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
             </div>
             
             <div className="flex items-center gap-2">
-              {trend === 'up' ? (
+              {trend === "up" ? (
                 <TrendingUp className="w-4 h-4 text-success group-hover:scale-110 transition-transform" />
               ) : (
                 <TrendingDown className="w-4 h-4 text-destructive group-hover:scale-110 transition-transform" />
               )}
-              <span className={`text-sm font-medium ${trend === 'up' ? 'text-success-foreground' : 'text-destructive-foreground'}`}>
+              <span className={`text-sm font-medium ${trend === "up" ? "text-success-foreground" : "text-destructive-foreground"}`}>
                 {change}
               </span>
               <Sparkles className="w-3 h-3 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -145,7 +145,7 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
         <div className="mt-4 relative">
           <div className="h-1 bg-muted/30 rounded-full overflow-hidden">
             <div 
-              className={`h-full bg-gradient-to-r ${colors.gradient} transition-all duration-1000 ${isVisible ? 'w-full' : 'w-0'}`}
+              className={`h-full bg-gradient-to-r ${colors.gradient} transition-all duration-1000 ${isVisible ? "w-full" : "w-0"}`}
               style={{ transitionDelay: `${delay + 200}ms` }}
             />
           </div>
@@ -169,7 +169,7 @@ const FloatingActionButton = ({ icon: Icon, label, onClick, color = "primary", d
       aria-label={label}
       className={`group relative overflow-hidden bg-gradient-to-r from-primary to-primary-glow text-azure-50 
         transition-all duration-500 transform hover:scale-110 hover:shadow-2xl hover:-rotate-2
-        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
+        ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
         rounded-2xl p-6 h-auto flex-col gap-3 min-w-[140px] hover:from-primary-glow hover:to-primary
         shadow-lg hover:shadow-primary/25 focus:outline-none focus:ring-4 focus:ring-primary/30`}
     >
@@ -208,7 +208,7 @@ const PulsingNotificationCard = ({ title, description, time, priority = "medium"
             <h4 className="font-medium text-sm group-hover:text-primary transition-colors">{title}</h4>
             <div className="flex items-center gap-2">
               <span className="text-xs text-foreground/70">{time}</span>
-              {priority === 'high' && <div className="w-2 h-2 bg-destructive rounded-full animate-pulse" />}
+              {priority === "high" && <div className="w-2 h-2 bg-destructive rounded-full animate-pulse" />}
             </div>
           </div>
           <p className="text-sm text-foreground/80 group-hover:text-foreground transition-colors">
@@ -221,7 +221,7 @@ const PulsingNotificationCard = ({ title, description, time, priority = "medium"
 };
 
 export const EnhancedDashboard = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('30d');
+  const [selectedPeriod, setSelectedPeriod] = useState("30d");
   const [isLoaded, setIsLoaded] = useState(false);
   const { profile } = useProfile();
   const navigate = useNavigate();
@@ -274,36 +274,28 @@ export const EnhancedDashboard = () => {
     { 
       icon: BarChart3, 
       label: "Relatórios IA", 
-      action: () => {
-        console.log('📊 Relatórios IA clicked');
-        navigate('/reports');
+      action: () => {navigate("/reports");
         toast({ title: "📊 Relatórios IA", description: "Abrindo sistema de relatórios inteligentes" });
       }
     },
     { 
       icon: Brain, 
       label: "Analytics", 
-      action: () => {
-        console.log('🧠 Analytics clicked');
-        navigate('/analytics');
+      action: () => {navigate("/analytics");
         toast({ title: "🧠 Analytics", description: "Abrindo painel de análises" });
       }
     },
     { 
       icon: Users, 
       label: "RH Maritime", 
-      action: () => {
-        console.log('👥 RH Maritime clicked');
-        navigate('/hr');
+      action: () => {navigate("/hr");
         toast({ title: "👥 RH Maritime", description: "Abrindo recursos humanos marítimos" });
       }
     },
     { 
       icon: Rocket, 
       label: "Inovação", 
-      action: () => {
-        console.log('🚀 Inovação clicked');
-        navigate('/intelligence');
+      action: () => {navigate("/intelligence");
         toast({ title: "🚀 Inovação", description: "Abrindo centro de inteligência e inovação" });
       }
     }
@@ -350,12 +342,12 @@ export const EnhancedDashboard = () => {
       <div className="relative z-10 space-y-8 p-6">
         {/* Revolutionary Hero Section */}
         <div className={`relative overflow-hidden rounded-3xl hero-gradient p-8 text-azure-50 
-          transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           
           {/* Animated Background Pattern */}
           <div className="absolute inset-0 bg-mesh opacity-20" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/15 to-transparent rounded-full blur-2xl animate-pulse" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: "1s" }} />
           
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-6">
@@ -367,7 +359,7 @@ export const EnhancedDashboard = () => {
                   Dashboard Revolucionário
                 </h1>
                 <p className="text-xl opacity-95 drop-shadow-md text-primary-foreground font-semibold">
-                  Bem-vindo(a), {profile?.full_name || 'Usuário'} 
+                  Bem-vindo(a), {profile?.full_name || "Usuário"} 
                   <Crown className="inline-block w-6 h-6 ml-2 text-warning animate-bounce drop-shadow-lg" />
                 </p>
               </div>
@@ -396,8 +388,8 @@ export const EnhancedDashboard = () => {
         </div>
 
         {/* Welcome Card */}
-        <div className={`transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} 
-             style={{ transitionDelay: '200ms' }}>
+        <div className={`transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} 
+          style={{ transitionDelay: "200ms" }}>
           <WelcomeCard />
         </div>
 
@@ -452,10 +444,10 @@ export const EnhancedDashboard = () => {
                   </div>
                   
                   <div className="flex gap-2 p-1 bg-muted/30 rounded-xl backdrop-blur-sm">
-                    {['7d', '30d', '90d'].map((period) => (
+                    {["7d", "30d", "90d"].map((period) => (
                       <Button 
                         key={period}
-                        variant={selectedPeriod === period ? 'default' : 'ghost'} 
+                        variant={selectedPeriod === period ? "default" : "ghost"} 
                         size="sm"
                         onClick={() => setSelectedPeriod(period)}
                         className="rounded-lg hover:scale-105 transition-all duration-200 relative overflow-hidden"
@@ -525,7 +517,7 @@ export const EnhancedDashboard = () => {
                           size="sm" 
                           className="justify-start h-14 hover:scale-105 transition-all duration-300 group relative overflow-hidden
                             hover:border-primary/50 hover:bg-primary/5"
-                          onClick={() => window.open(action.url, '_blank')}
+                          onClick={() => window.open(action.url, "_blank")}
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 
                             group-hover:opacity-100 transition-opacity duration-300" />

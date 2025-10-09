@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/components/ui/use-toast';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { User, Session } from "@supabase/supabase-js";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 interface AuthContextType {
   user: User | null;
@@ -18,7 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -36,34 +36,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.id);
-        setSession(session);
+      (event, session) => {setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
         
-        if (event === 'SIGNED_IN') {
+        if (event === "SIGNED_IN") {
           toast({
             title: "Bem-vindo!",
             description: "Login realizado com sucesso.",
           });
-        } else if (event === 'SIGNED_OUT') {
+        } else if (event === "SIGNED_OUT") {
           toast({
             title: "Desconectado",
             description: "Você foi desconectado com sucesso.",
           });
-        } else if (event === 'TOKEN_REFRESHED') {
-          console.log('Session token refreshed successfully');
-        } else if (event === 'USER_UPDATED') {
-          console.log('User data updated');
-        }
+        } else if (event === "TOKEN_REFRESHED") {} else if (event === "USER_UPDATED") {}
       }
     );
 
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (error) {
-        console.error('Error getting session:', error);
+        console.error("Error getting session:", error);
         toast({
           title: "Erro de Sessão",
           description: "Não foi possível recuperar a sessão. Por favor, faça login novamente.",
@@ -74,7 +68,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(session?.user ?? null);
       setIsLoading(false);
     }).catch((error) => {
-      console.error('Unexpected error getting session:', error);
+      console.error("Unexpected error getting session:", error);
       setIsLoading(false);
     });
 

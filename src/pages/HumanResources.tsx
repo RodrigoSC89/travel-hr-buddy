@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { HRDashboard } from '@/components/hr/hr-dashboard';
-import { CertificateManager } from '@/components/hr/certificate-manager';
-import { CertificateAlerts } from '@/components/hr/certificate-alerts';
-import { EmployeeManagement } from '@/components/hr/employee-management';
-import { ThemeProvider } from '@/components/layout/theme-provider';
-import { Header } from '@/components/layout/header';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import ModuleActionButton from '@/components/ui/module-action-button';
-import { BackToDashboard } from '@/components/ui/back-to-dashboard';
+import React, { useState, useEffect } from "react";
+import { HRDashboard } from "@/components/hr/hr-dashboard";
+import { CertificateManager } from "@/components/hr/certificate-manager";
+import { CertificateAlerts } from "@/components/hr/certificate-alerts";
+import { EmployeeManagement } from "@/components/hr/employee-management";
+import { ThemeProvider } from "@/components/layout/theme-provider";
+import { Header } from "@/components/layout/header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import ModuleActionButton from "@/components/ui/module-action-button";
+import { BackToDashboard } from "@/components/ui/back-to-dashboard";
 import { 
   Users, 
   Award, 
@@ -33,7 +33,7 @@ import {
   DollarSign,
   RefreshCw,
   Download
-} from 'lucide-react';
+} from "lucide-react";
 
 const HumanResources = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -63,12 +63,12 @@ const HumanResources = () => {
           
           {/* Enhanced Hero Section */}
           <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-success via-success/90 to-success-glow p-8 text-success-foreground 
-            transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             
             {/* Animated Background Pattern */}
             <div className="absolute inset-0 bg-mesh opacity-20" />
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/15 to-transparent rounded-full blur-2xl animate-pulse" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: "1s" }} />
             
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-6">
@@ -222,47 +222,47 @@ const HumanResources = () => {
           moduleIcon={<Users className="h-4 w-4" />}
           actions={[
             {
-              id: 'new-employee',
-              label: 'Novo Funcionário',
+              id: "new-employee",
+              label: "Novo Funcionário",
               icon: <Plus className="h-4 w-4" />,
-              action: () => console.log('Novo funcionário'),
-              variant: 'default'
+              action: () => {},
+              variant: "default"
             },
             {
-              id: 'reports',
-              label: 'Relatórios',
+              id: "reports",
+              label: "Relatórios",
               icon: <BarChart3 className="h-4 w-4" />,
-              action: () => console.log('Relatórios RH'),
-              variant: 'outline'
+              action: () => {},
+              variant: "outline"
             },
             {
-              id: 'payroll',
-              label: 'Folha de Pagamento',
+              id: "payroll",
+              label: "Folha de Pagamento",
               icon: <DollarSign className="h-4 w-4" />,
-              action: () => console.log('Folha de pagamento'),
-              variant: 'outline'
+              action: () => {},
+              variant: "outline"
             },
             {
-              id: 'training',
-              label: 'Treinamentos',
+              id: "training",
+              label: "Treinamentos",
               icon: <Brain className="h-4 w-4" />,
-              action: () => console.log('Treinamentos'),
-              variant: 'outline'
+              action: () => {},
+              variant: "outline"
             }
           ]}
           quickActions={[
             {
-              id: 'refresh',
-              label: 'Atualizar',
+              id: "refresh",
+              label: "Atualizar",
               icon: <RefreshCw className="h-3 w-3" />,
               action: () => window.location.reload(),
-              shortcut: 'F5'
+              shortcut: "F5"
             },
             {
-              id: 'export',
-              label: 'Exportar',
+              id: "export",
+              label: "Exportar",
               icon: <Download className="h-3 w-3" />,
-              action: () => console.log('Exportar')
+              action: () => {}
             }
           ]}
         />

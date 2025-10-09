@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Activity, Zap, Clock, Gauge } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Activity, Zap, Clock, Gauge } from "lucide-react";
 
 interface PerformanceMetrics {
   loadTime: number;
@@ -23,7 +23,7 @@ export const PerformanceMonitor: React.FC = () => {
   useEffect(() => {
     const measurePerformance = () => {
       // Measure load time
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
       const loadTime = navigation.loadEventEnd - navigation.fetchStart;
 
       // Measure memory (if available)
@@ -49,10 +49,10 @@ export const PerformanceMonitor: React.FC = () => {
     };
 
     // Initial measurement
-    if (document.readyState === 'complete') {
+    if (document.readyState === "complete") {
       measurePerformance();
     } else {
-      window.addEventListener('load', measurePerformance);
+      window.addEventListener("load", measurePerformance);
     }
 
     // Periodic measurements
@@ -67,21 +67,21 @@ export const PerformanceMonitor: React.FC = () => {
     }, 5000);
 
     return () => {
-      window.removeEventListener('load', measurePerformance);
+      window.removeEventListener("load", measurePerformance);
       clearInterval(interval);
     };
   }, []);
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-500';
-    if (score >= 70) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 90) return "text-green-500";
+    if (score >= 70) return "text-yellow-500";
+    return "text-red-500";
   };
 
   const getScoreBadge = (score: number) => {
-    if (score >= 90) return { variant: 'default' as const, text: 'Excelente' };
-    if (score >= 70) return { variant: 'secondary' as const, text: 'Bom' };
-    return { variant: 'destructive' as const, text: 'Precisa Melhorar' };
+    if (score >= 90) return { variant: "default" as const, text: "Excelente" };
+    if (score >= 70) return { variant: "secondary" as const, text: "Bom" };
+    return { variant: "destructive" as const, text: "Precisa Melhorar" };
   };
 
   return (

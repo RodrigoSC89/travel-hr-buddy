@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { FileCheck, FileX, AlertTriangle, CheckCircle, Upload, Eye } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { FileCheck, FileX, AlertTriangle, CheckCircle, Upload, Eye } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface DocumentValidationResult {
   isValid: boolean;
@@ -16,14 +16,14 @@ interface DocumentValidationResult {
 }
 
 interface ValidationIssue {
-  type: 'error' | 'warning' | 'info';
+  type: "error" | "warning" | "info";
   field: string;
   message: string;
-  severity: 'high' | 'medium' | 'low';
+  severity: "high" | "medium" | "low";
 }
 
 interface DocumentValidatorProps {
-  documentType: 'certificate' | 'license' | 'passport' | 'visa' | 'contract';
+  documentType: "certificate" | "license" | "passport" | "visa" | "contract";
   onValidationComplete?: (result: DocumentValidationResult) => void;
 }
 
@@ -35,20 +35,20 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
   const [validationResult, setValidationResult] = useState<DocumentValidationResult | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [manualData, setManualData] = useState({
-    documentNumber: '',
-    issueDate: '',
-    expiryDate: '',
-    issuer: '',
-    notes: ''
+    documentNumber: "",
+    issueDate: "",
+    expiryDate: "",
+    issuer: "",
+    notes: ""
   });
   const { toast } = useToast();
 
   const documentTypeLabels = {
-    certificate: 'Certificado',
-    license: 'Licença',
-    passport: 'Passaporte',
-    visa: 'Visto',
-    contract: 'Contrato'
+    certificate: "Certificado",
+    license: "Licença",
+    passport: "Passaporte",
+    visa: "Visto",
+    contract: "Contrato"
   };
 
   const validateDocument = async () => {
@@ -64,30 +64,30 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       // Validações básicas
       if (!manualData.documentNumber) {
         issues.push({
-          type: 'error',
-          field: 'documentNumber',
-          message: 'Número do documento é obrigatório',
-          severity: 'high'
+          type: "error",
+          field: "documentNumber",
+          message: "Número do documento é obrigatório",
+          severity: "high"
         });
         score -= 25;
       }
 
       if (!manualData.issueDate) {
         issues.push({
-          type: 'error',
-          field: 'issueDate',
-          message: 'Data de emissão é obrigatória',
-          severity: 'high'
+          type: "error",
+          field: "issueDate",
+          message: "Data de emissão é obrigatória",
+          severity: "high"
         });
         score -= 20;
       }
 
       if (!manualData.expiryDate) {
         issues.push({
-          type: 'warning',
-          field: 'expiryDate',
-          message: 'Data de validade não informada',
-          severity: 'medium'
+          type: "warning",
+          field: "expiryDate",
+          message: "Data de validade não informada",
+          severity: "medium"
         });
         score -= 15;
       } else {
@@ -97,18 +97,18 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
         
         if (daysUntilExpiry < 0) {
           issues.push({
-            type: 'error',
-            field: 'expiryDate',
-            message: 'Documento vencido',
-            severity: 'high'
+            type: "error",
+            field: "expiryDate",
+            message: "Documento vencido",
+            severity: "high"
           });
           score -= 30;
         } else if (daysUntilExpiry < 30) {
           issues.push({
-            type: 'warning',
-            field: 'expiryDate',
-            message: 'Documento vence em menos de 30 dias',
-            severity: 'medium'
+            type: "warning",
+            field: "expiryDate",
+            message: "Documento vence em menos de 30 dias",
+            severity: "medium"
           });
           score -= 10;
         }
@@ -116,37 +116,37 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
 
       if (!manualData.issuer) {
         issues.push({
-          type: 'warning',
-          field: 'issuer',
-          message: 'Órgão emissor não informado',
-          severity: 'medium'
+          type: "warning",
+          field: "issuer",
+          message: "Órgão emissor não informado",
+          severity: "medium"
         });
         score -= 10;
       }
 
       // Validações específicas por tipo de documento
-      if (documentType === 'certificate' && manualData.documentNumber.length < 5) {
+      if (documentType === "certificate" && manualData.documentNumber.length < 5) {
         issues.push({
-          type: 'warning',
-          field: 'documentNumber',
-          message: 'Número do certificado parece muito curto',
-          severity: 'low'
+          type: "warning",
+          field: "documentNumber",
+          message: "Número do certificado parece muito curto",
+          severity: "low"
         });
         score -= 5;
       }
 
       const suggestions = [
-        'Verifique se todos os dados estão corretos',
-        'Confirme a autenticidade do documento com o órgão emissor',
-        'Mantenha uma cópia digital segura do documento'
+        "Verifique se todos os dados estão corretos",
+        "Confirme a autenticidade do documento com o órgão emissor",
+        "Mantenha uma cópia digital segura do documento"
       ];
 
-      if (issues.some(i => i.severity === 'high')) {
-        suggestions.unshift('Corrija os erros críticos antes de prosseguir');
+      if (issues.some(i => i.severity === "high")) {
+        suggestions.unshift("Corrija os erros críticos antes de prosseguir");
       }
 
       const result: DocumentValidationResult = {
-        isValid: score >= 70 && !issues.some(i => i.type === 'error'),
+        isValid: score >= 70 && !issues.some(i => i.type === "error"),
         score: Math.max(0, score),
         issues,
         suggestions
@@ -156,18 +156,18 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       onValidationComplete?.(result);
 
       toast({
-        title: result.isValid ? 'Validação concluída' : 'Problemas encontrados',
+        title: result.isValid ? "Validação concluída" : "Problemas encontrados",
         description: result.isValid 
-          ? 'Documento validado com sucesso' 
+          ? "Documento validado com sucesso" 
           : `Encontrados ${issues.length} problema(s)`,
-        variant: result.isValid ? 'default' : 'destructive'
+        variant: result.isValid ? "default" : "destructive"
       });
 
     } catch (error) {
       toast({
-        title: 'Erro na validação',
-        description: 'Não foi possível validar o documento',
-        variant: 'destructive'
+        title: "Erro na validação",
+        description: "Não foi possível validar o documento",
+        variant: "destructive"
       });
     } finally {
       setIsValidating(false);
@@ -179,26 +179,26 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
     if (selectedFile) {
       setFile(selectedFile);
       toast({
-        title: 'Arquivo carregado',
+        title: "Arquivo carregado",
         description: `${selectedFile.name} foi carregado com sucesso`
       });
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
   };
 
-  const getIssueIcon = (type: ValidationIssue['type']) => {
+  const getIssueIcon = (type: ValidationIssue["type"]) => {
     switch (type) {
-      case 'error':
-        return <FileX className="h-4 w-4 text-red-500" />;
-      case 'warning':
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'info':
-        return <CheckCircle className="h-4 w-4 text-blue-500" />;
+    case "error":
+      return <FileX className="h-4 w-4 text-red-500" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "info":
+      return <CheckCircle className="h-4 w-4 text-blue-500" />;
     }
   };
 
@@ -293,7 +293,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             disabled={isValidating}
             className="w-full"
           >
-            {isValidating ? 'Validando...' : 'Validar Documento'}
+            {isValidating ? "Validando..." : "Validar Documento"}
           </Button>
         </CardContent>
       </Card>
@@ -304,7 +304,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>Resultado da Validação</span>
-              <Badge variant={validationResult.isValid ? 'default' : 'destructive'}>
+              <Badge variant={validationResult.isValid ? "default" : "destructive"}>
                 Score: <span className={getScoreColor(validationResult.score)}>
                   {validationResult.score}/100
                 </span>
@@ -327,9 +327,9 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                       <Badge 
                         variant="outline" 
                         className={`text-xs ${
-                          issue.severity === 'high' ? 'border-red-200' :
-                          issue.severity === 'medium' ? 'border-yellow-200' :
-                          'border-blue-200'
+                          issue.severity === "high" ? "border-red-200" :
+                            issue.severity === "medium" ? "border-yellow-200" :
+                              "border-blue-200"
                         }`}
                       >
                         {issue.severity}

@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   LineChart,
   Line,
@@ -29,7 +29,7 @@ import {
   Legend,
   ResponsiveContainer,
   ComposedChart
-} from 'recharts';
+} from "recharts";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -48,14 +48,14 @@ import {
   Zap,
   Eye,
   BarChart3
-} from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface KPI {
   title: string;
   value: string;
   change: string;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   icon: React.ReactNode;
   target: string;
   progress: number;
@@ -66,7 +66,7 @@ interface InsightCard {
   id: string;
   title: string;
   description: string;
-  impact: 'high' | 'medium' | 'low';
+  impact: "high" | "medium" | "low";
   category: string;
   recommendation: string;
   confidence: number;
@@ -78,147 +78,147 @@ interface PredictiveModel {
   accuracy: number;
   prediction: string;
   confidence: number;
-  trend: 'positive' | 'negative' | 'stable';
+  trend: "positive" | "negative" | "stable";
   timeframe: string;
 }
 
 const AdvancedBusinessIntelligence = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('30d');
-  const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [selectedPeriod, setSelectedPeriod] = useState("30d");
+  const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
   // Main KPIs
   const [kpis, setKpis] = useState<KPI[]>([
     {
-      title: 'Receita Total',
-      value: 'R$ 8.437.923',
-      change: '+23.4%',
-      trend: 'up',
+      title: "Receita Total",
+      value: "R$ 8.437.923",
+      change: "+23.4%",
+      trend: "up",
       icon: <DollarSign className="w-5 h-5" />,
-      target: 'R$ 9.000.000',
+      target: "R$ 9.000.000",
       progress: 94,
-      description: 'Receita bruta do período selecionado'
+      description: "Receita bruta do período selecionado"
     },
     {
-      title: 'Clientes Ativos',
-      value: '12.847',
-      change: '+18.2%',
-      trend: 'up',
+      title: "Clientes Ativos",
+      value: "12.847",
+      change: "+18.2%",
+      trend: "up",
       icon: <Users className="w-5 h-5" />,
-      target: '15.000',
+      target: "15.000",
       progress: 86,
-      description: 'Clientes que fizeram ao menos uma compra'
+      description: "Clientes que fizeram ao menos uma compra"
     },
     {
-      title: 'Taxa de Conversão',
-      value: '4.8%',
-      change: '+0.7%',
-      trend: 'up',
+      title: "Taxa de Conversão",
+      value: "4.8%",
+      change: "+0.7%",
+      trend: "up",
       icon: <Target className="w-5 h-5" />,
-      target: '5.5%',
+      target: "5.5%",
       progress: 87,
-      description: 'Visitantes que se tornaram clientes'
+      description: "Visitantes que se tornaram clientes"
     },
     {
-      title: 'Ticket Médio',
-      value: 'R$ 657',
-      change: '-2.1%',
-      trend: 'down',
+      title: "Ticket Médio",
+      value: "R$ 657",
+      change: "-2.1%",
+      trend: "down",
       icon: <ShoppingCart className="w-5 h-5" />,
-      target: 'R$ 750',
+      target: "R$ 750",
       progress: 88,
-      description: 'Valor médio por transação'
+      description: "Valor médio por transação"
     }
   ]);
 
   // AI-driven insights
   const [insights, setInsights] = useState<InsightCard[]>([
     {
-      id: '1',
-      title: 'Oportunidade de Cross-selling',
-      description: 'Clientes que compraram produtos da categoria A têm 67% mais probabilidade de comprar categoria B',
-      impact: 'high',
-      category: 'Vendas',
-      recommendation: 'Implementar campanha de cross-selling automatizada',
+      id: "1",
+      title: "Oportunidade de Cross-selling",
+      description: "Clientes que compraram produtos da categoria A têm 67% mais probabilidade de comprar categoria B",
+      impact: "high",
+      category: "Vendas",
+      recommendation: "Implementar campanha de cross-selling automatizada",
       confidence: 89,
-      estimatedValue: '+R$ 234.000/mês'
+      estimatedValue: "+R$ 234.000/mês"
     },
     {
-      id: '2',
-      title: 'Otimização de Inventário',
-      description: 'Detectado excesso de estoque em 15 produtos com baixa rotatividade',
-      impact: 'medium',
-      category: 'Operações',
-      recommendation: 'Reduzir pedidos e criar promoções direcionadas',
+      id: "2",
+      title: "Otimização de Inventário",
+      description: "Detectado excesso de estoque em 15 produtos com baixa rotatividade",
+      impact: "medium",
+      category: "Operações",
+      recommendation: "Reduzir pedidos e criar promoções direcionadas",
       confidence: 92,
-      estimatedValue: '-R$ 45.000 custos'
+      estimatedValue: "-R$ 45.000 custos"
     },
     {
-      id: '3',
-      title: 'Risco de Churn',
-      description: '234 clientes apresentam sinais de possível abandono nos próximos 30 dias',
-      impact: 'high',
-      category: 'Retenção',
-      recommendation: 'Ativar campanha de retenção personalizada',
+      id: "3",
+      title: "Risco de Churn",
+      description: "234 clientes apresentam sinais de possível abandono nos próximos 30 dias",
+      impact: "high",
+      category: "Retenção",
+      recommendation: "Ativar campanha de retenção personalizada",
       confidence: 84,
-      estimatedValue: 'R$ 156.000 em risco'
+      estimatedValue: "R$ 156.000 em risco"
     }
   ]);
 
   // Predictive models
   const [predictiveModels, setPredictiveModels] = useState<PredictiveModel[]>([
     {
-      name: 'Previsão de Vendas',
+      name: "Previsão de Vendas",
       accuracy: 94.2,
-      prediction: 'R$ 9.2M nos próximos 30 dias',
+      prediction: "R$ 9.2M nos próximos 30 dias",
       confidence: 91,
-      trend: 'positive',
-      timeframe: '30 dias'
+      trend: "positive",
+      timeframe: "30 dias"
     },
     {
-      name: 'Demanda de Produtos',
+      name: "Demanda de Produtos",
       accuracy: 87.6,
-      prediction: 'Aumento de 15% na categoria Tech',
+      prediction: "Aumento de 15% na categoria Tech",
       confidence: 88,
-      trend: 'positive',
-      timeframe: '15 dias'
+      trend: "positive",
+      timeframe: "15 dias"
     },
     {
-      name: 'Comportamento do Cliente',
+      name: "Comportamento do Cliente",
       accuracy: 92.1,
-      prediction: 'Churn reduzirá para 2.3%',
+      prediction: "Churn reduzirá para 2.3%",
       confidence: 85,
-      trend: 'positive',
-      timeframe: '60 dias'
+      trend: "positive",
+      timeframe: "60 dias"
     }
   ]);
 
   // Sample data for charts
   const revenueData = [
-    { month: 'Jan', revenue: 4200000, target: 4000000, costs: 2800000 },
-    { month: 'Fev', revenue: 4800000, target: 4500000, costs: 3100000 },
-    { month: 'Mar', revenue: 5200000, target: 5000000, costs: 3300000 },
-    { month: 'Abr', revenue: 5800000, target: 5500000, costs: 3600000 },
-    { month: 'Mai', revenue: 6400000, target: 6000000, costs: 3900000 },
-    { month: 'Jun', revenue: 7100000, target: 6500000, costs: 4200000 },
-    { month: 'Jul', revenue: 7800000, target: 7000000, costs: 4500000 },
-    { month: 'Ago', revenue: 8400000, target: 7500000, costs: 4800000 }
+    { month: "Jan", revenue: 4200000, target: 4000000, costs: 2800000 },
+    { month: "Fev", revenue: 4800000, target: 4500000, costs: 3100000 },
+    { month: "Mar", revenue: 5200000, target: 5000000, costs: 3300000 },
+    { month: "Abr", revenue: 5800000, target: 5500000, costs: 3600000 },
+    { month: "Mai", revenue: 6400000, target: 6000000, costs: 3900000 },
+    { month: "Jun", revenue: 7100000, target: 6500000, costs: 4200000 },
+    { month: "Jul", revenue: 7800000, target: 7000000, costs: 4500000 },
+    { month: "Ago", revenue: 8400000, target: 7500000, costs: 4800000 }
   ];
 
   const customerSegments = [
-    { name: 'Premium', value: 3247, percentage: 25.3, revenue: 2800000 },
-    { name: 'Regular', value: 5892, percentage: 45.8, revenue: 3200000 },
-    { name: 'Novos', value: 2156, percentage: 16.8, revenue: 1100000 },
-    { name: 'Inativos', value: 1552, percentage: 12.1, revenue: 300000 }
+    { name: "Premium", value: 3247, percentage: 25.3, revenue: 2800000 },
+    { name: "Regular", value: 5892, percentage: 45.8, revenue: 3200000 },
+    { name: "Novos", value: 2156, percentage: 16.8, revenue: 1100000 },
+    { name: "Inativos", value: 1552, percentage: 12.1, revenue: 300000 }
   ];
 
   const productPerformance = [
-    { category: 'Tecnologia', sales: 2800000, margin: 32, growth: 18 },
-    { category: 'Casa & Jardim', sales: 1900000, margin: 28, growth: 12 },
-    { category: 'Moda', sales: 1600000, margin: 45, growth: -3 },
-    { category: 'Esportes', sales: 1200000, margin: 38, growth: 22 },
-    { category: 'Livros', sales: 900000, margin: 25, growth: 8 }
+    { category: "Tecnologia", sales: 2800000, margin: 32, growth: 18 },
+    { category: "Casa & Jardim", sales: 1900000, margin: 28, growth: 12 },
+    { category: "Moda", sales: 1600000, margin: 45, growth: -3 },
+    { category: "Esportes", sales: 1200000, margin: 38, growth: 22 },
+    { category: "Livros", sales: 900000, margin: 25, growth: 8 }
   ];
 
   // Auto-refresh functionality
@@ -240,39 +240,39 @@ const AdvancedBusinessIntelligence = () => {
 
   const updateValue = (currentValue: string): string => {
     // Simple simulation of value updates
-    if (currentValue.includes('R$')) {
-      const number = parseFloat(currentValue.replace(/[R$.,\s]/g, ''));
+    if (currentValue.includes("R$")) {
+      const number = parseFloat(currentValue.replace(/[R$.,\s]/g, ""));
       const variation = (Math.random() - 0.5) * 0.02; // ±1% variation
       const newNumber = number * (1 + variation);
-      return `R$ ${newNumber.toLocaleString('pt-BR')}`;
+      return `R$ ${newNumber.toLocaleString("pt-BR")}`;
     }
     return currentValue;
   };
 
   const generateRandomChange = (): string => {
     const change = (Math.random() * 10 - 5).toFixed(1);
-    return `${Number(change) > 0 ? '+' : ''}${change}%`;
+    return `${Number(change) > 0 ? "+" : ""}${change}%`;
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'down':
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
-      default:
-        return <div className="w-4 h-4 bg-gray-400 rounded-full" />;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case "down":
+      return <TrendingDown className="w-4 h-4 text-red-500" />;
+    default:
+      return <div className="w-4 h-4 bg-gray-400 rounded-full" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'high':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      default:
-        return 'bg-green-100 text-green-800 border-green-200';
+    case "high":
+      return "bg-red-100 text-red-800 border-red-200";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    default:
+      return "bg-green-100 text-green-800 border-green-200";
     }
   };
 
@@ -291,7 +291,7 @@ const AdvancedBusinessIntelligence = () => {
     });
   };
 
-  const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#8dd1e1'];
+  const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#8dd1e1"];
 
   return (
     <div className="p-6 space-y-6 bg-background min-h-screen">
@@ -306,9 +306,9 @@ const AdvancedBusinessIntelligence = () => {
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${autoRefresh ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+            <div className={`w-2 h-2 rounded-full ${autoRefresh ? "bg-green-500 animate-pulse" : "bg-gray-400"}`} />
             <span className="text-sm">
-              {autoRefresh ? 'Auto-refresh ativo' : 'Manual'}
+              {autoRefresh ? "Auto-refresh ativo" : "Manual"}
             </span>
           </div>
 
@@ -379,7 +379,7 @@ const AdvancedBusinessIntelligence = () => {
             <CardContent>
               <div className="text-2xl font-bold mb-2">{kpi.value}</div>
               <div className="flex items-center justify-between mb-3">
-                <span className={`text-sm ${kpi.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                <span className={`text-sm ${kpi.trend === "up" ? "text-green-600" : "text-red-600"}`}>
                   {kpi.change} vs. período anterior
                 </span>
               </div>
@@ -417,8 +417,8 @@ const AdvancedBusinessIntelligence = () => {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <Badge className={getImpactColor(insight.impact)}>
-                        {insight.impact === 'high' ? 'Alto Impacto' : 
-                         insight.impact === 'medium' ? 'Médio Impacto' : 'Baixo Impacto'}
+                        {insight.impact === "high" ? "Alto Impacto" : 
+                          insight.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
                       </Badge>
                       <Badge variant="outline">
                         {insight.confidence}% confiança
@@ -584,7 +584,7 @@ const AdvancedBusinessIntelligence = () => {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      {model.trend === 'positive' ? 
+                      {model.trend === "positive" ? 
                         <TrendingUp className="w-4 h-4 text-green-500" /> :
                         <TrendingDown className="w-4 h-4 text-red-500" />
                       }

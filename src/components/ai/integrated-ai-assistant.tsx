@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useRef, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Bot, 
   Send, 
@@ -25,15 +25,15 @@ import {
   BarChart3,
   Users,
   DollarSign
-} from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Message {
   id: string;
   content: string;
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   timestamp: Date;
   metadata?: {
     function_calls?: string[];
@@ -63,29 +63,29 @@ const IntegratedAIAssistant = () => {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      content: 'Olá! Sou seu assistente IA empresarial. Posso ajudar com análises, relatórios, automações e muito mais. Como posso ajudá-lo hoje?',
-      role: 'assistant',
+      id: "1",
+      content: "Olá! Sou seu assistente IA empresarial. Posso ajudar com análises, relatórios, automações e muito mais. Como posso ajudá-lo hoje?",
+      role: "assistant",
       timestamp: new Date(),
       metadata: { confidence: 95 }
     }
   ]);
   
-  const [currentMessage, setCurrentMessage] = useState('');
+  const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [conversations, setConversations] = useState<Conversation[]>([
     {
-      id: '1',
-      title: 'Análise de Performance Q4',
-      lastMessage: 'Relatório gerado com sucesso',
+      id: "1",
+      title: "Análise de Performance Q4",
+      lastMessage: "Relatório gerado com sucesso",
       timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
       messageCount: 15
     },
     {
-      id: '2',
-      title: 'Automação de Workflows',
-      lastMessage: 'Configuração de aprovações',
+      id: "2",
+      title: "Automação de Workflows",
+      lastMessage: "Configuração de aprovações",
       timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
       messageCount: 8
     }
@@ -96,52 +96,52 @@ const IntegratedAIAssistant = () => {
 
   const quickActions: QuickAction[] = [
     {
-      id: '1',
-      title: 'Análise de Vendas',
-      description: 'Gerar relatório de vendas do período',
+      id: "1",
+      title: "Análise de Vendas",
+      description: "Gerar relatório de vendas do período",
       icon: <TrendingUp className="w-4 h-4" />,
-      prompt: 'Analise as vendas dos últimos 30 dias e forneça insights sobre tendências e oportunidades',
-      category: 'Analytics'
+      prompt: "Analise as vendas dos últimos 30 dias e forneça insights sobre tendências e oportunidades",
+      category: "Analytics"
     },
     {
-      id: '2',
-      title: 'Relatório Financeiro',
-      description: 'Criar relatório financeiro detalhado',
+      id: "2",
+      title: "Relatório Financeiro",
+      description: "Criar relatório financeiro detalhado",
       icon: <DollarSign className="w-4 h-4" />,
-      prompt: 'Crie um relatório financeiro completo incluindo receitas, despesas e projeções',
-      category: 'Financeiro'
+      prompt: "Crie um relatório financeiro completo incluindo receitas, despesas e projeções",
+      category: "Financeiro"
     },
     {
-      id: '3',
-      title: 'Análise de Equipe',
-      description: 'Avaliar performance da equipe',
+      id: "3",
+      title: "Análise de Equipe",
+      description: "Avaliar performance da equipe",
       icon: <Users className="w-4 h-4" />,
-      prompt: 'Analise a performance da equipe e sugira melhorias de produtividade',
-      category: 'RH'
+      prompt: "Analise a performance da equipe e sugira melhorias de produtividade",
+      category: "RH"
     },
     {
-      id: '4',
-      title: 'Dashboard KPI',
-      description: 'Criar dashboard de indicadores',
+      id: "4",
+      title: "Dashboard KPI",
+      description: "Criar dashboard de indicadores",
       icon: <BarChart3 className="w-4 h-4" />,
-      prompt: 'Crie um dashboard com os principais KPIs da empresa e métricas de performance',
-      category: 'Business Intelligence'
+      prompt: "Crie um dashboard com os principais KPIs da empresa e métricas de performance",
+      category: "Business Intelligence"
     },
     {
-      id: '5',
-      title: 'Automatizar Processo',
-      description: 'Configurar automação de workflow',
+      id: "5",
+      title: "Automatizar Processo",
+      description: "Configurar automação de workflow",
       icon: <Zap className="w-4 h-4" />,
-      prompt: 'Ajude-me a configurar uma automação para o processo de aprovação de documentos',
-      category: 'Automação'
+      prompt: "Ajude-me a configurar uma automação para o processo de aprovação de documentos",
+      category: "Automação"
     },
     {
-      id: '6',
-      title: 'Previsão de Demanda',
-      description: 'Análise preditiva de vendas',
+      id: "6",
+      title: "Previsão de Demanda",
+      description: "Análise preditiva de vendas",
       icon: <Brain className="w-4 h-4" />,
-      prompt: 'Use machine learning para prever a demanda dos próximos 3 meses',
-      category: 'Predictive Analytics'
+      prompt: "Use machine learning para prever a demanda dos próximos 3 meses",
+      category: "Predictive Analytics"
     }
   ];
 
@@ -150,7 +150,7 @@ const IntegratedAIAssistant = () => {
   }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleSendMessage = async () => {
@@ -159,12 +159,12 @@ const IntegratedAIAssistant = () => {
     const userMessage: Message = {
       id: Date.now().toString(),
       content: currentMessage,
-      role: 'user',
+      role: "user",
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setCurrentMessage('');
+    setCurrentMessage("");
     setIsLoading(true);
 
     try {
@@ -176,7 +176,7 @@ const IntegratedAIAssistant = () => {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: aiResponse.content,
-        role: 'assistant',
+        role: "assistant",
         timestamp: new Date(),
         metadata: {
           confidence: aiResponse.confidence,
@@ -193,7 +193,7 @@ const IntegratedAIAssistant = () => {
       }
       
     } catch (error) {
-      console.error('Erro ao processar mensagem:', error);
+      console.error("Erro ao processar mensagem:", error);
       toast({
         title: "Erro",
         description: "Falha ao processar mensagem. Tente novamente.",
@@ -208,7 +208,7 @@ const IntegratedAIAssistant = () => {
     // Simulate different types of responses based on keywords
     const lowerPrompt = prompt.toLowerCase();
     
-    if (lowerPrompt.includes('vendas') || lowerPrompt.includes('receita')) {
+    if (lowerPrompt.includes("vendas") || lowerPrompt.includes("receita")) {
       return {
         content: `📊 **Análise de Vendas Concluída**
 
@@ -232,12 +232,12 @@ Com base nos dados disponíveis, identifiquei os seguintes insights:
 
 Deseja que eu gere um relatório detalhado ou configure alertas automáticos?`,
         confidence: 94,
-        functionCalls: ['analytics_query', 'sales_analysis'],
-        sources: ['price_alerts', 'user_statistics']
+        functionCalls: ["analytics_query", "sales_analysis"],
+        sources: ["price_alerts", "user_statistics"]
       };
     }
 
-    if (lowerPrompt.includes('equipe') || lowerPrompt.includes('rh') || lowerPrompt.includes('funcionário')) {
+    if (lowerPrompt.includes("equipe") || lowerPrompt.includes("rh") || lowerPrompt.includes("funcionário")) {
       return {
         content: `👥 **Análise de Equipe - Relatório Executivo**
 
@@ -265,12 +265,12 @@ Deseja que eu gere um relatório detalhado ou configure alertas automáticos?`,
 
 Posso detalhar algum departamento específico ou criar um plano de ação?`,
         confidence: 92,
-        functionCalls: ['hr_analysis', 'performance_metrics'],
-        sources: ['employee_certificates', 'performance_metrics']
+        functionCalls: ["hr_analysis", "performance_metrics"],
+        sources: ["employee_certificates", "performance_metrics"]
       };
     }
 
-    if (lowerPrompt.includes('automatizar') || lowerPrompt.includes('workflow') || lowerPrompt.includes('processo')) {
+    if (lowerPrompt.includes("automatizar") || lowerPrompt.includes("workflow") || lowerPrompt.includes("processo")) {
       return {
         content: `⚙️ **Sistema de Automação Configurado**
 
@@ -306,12 +306,12 @@ Identifiquei oportunidades de automação nos seus processos:
 
 Deseja ativar alguma automação específica ou configurar novos triggers?`,
         confidence: 96,
-        functionCalls: ['workflow_setup', 'automation_config'],
-        sources: ['optimization_actions', 'intelligent_notifications']
+        functionCalls: ["workflow_setup", "automation_config"],
+        sources: ["optimization_actions", "intelligent_notifications"]
       };
     }
 
-    if (lowerPrompt.includes('dashboard') || lowerPrompt.includes('kpi') || lowerPrompt.includes('métricas')) {
+    if (lowerPrompt.includes("dashboard") || lowerPrompt.includes("kpi") || lowerPrompt.includes("métricas")) {
       return {
         content: `📈 **Dashboard de KPIs Criado**
 
@@ -343,8 +343,8 @@ Configurei um dashboard personalizado com suas métricas principais:
 
 O dashboard está disponível em tempo real. Posso configurar alertas adicionais ou criar visualizações específicas?`,
         confidence: 98,
-        functionCalls: ['dashboard_creation', 'kpi_analysis'],
-        sources: ['system_metrics', 'performance_metrics', 'ux_metrics']
+        functionCalls: ["dashboard_creation", "kpi_analysis"],
+        sources: ["system_metrics", "performance_metrics", "ux_metrics"]
       };
     }
 
@@ -379,7 +379,7 @@ Para começar, você pode:
 
 Como posso ajudá-lo especificamente hoje?`,
       confidence: 85,
-      functionCalls: ['general_help'],
+      functionCalls: ["general_help"],
       sources: []
     };
   };
@@ -390,7 +390,7 @@ Como posso ajudá-lo especificamente hoje?`,
       // For now, we'll just show a success message
       // Conversation saved to history
     } catch (error) {
-      console.error('Error saving conversation:', error);
+      console.error("Error saving conversation:", error);
     }
   };
 
@@ -418,13 +418,13 @@ Como posso ajudá-lo especificamente hoje?`,
   const exportConversation = () => {
     const conversation = messages.map(msg => 
       `[${msg.timestamp.toLocaleTimeString()}] ${msg.role}: ${msg.content}`
-    ).join('\n\n');
+    ).join("\n\n");
     
-    const blob = new Blob([conversation], { type: 'text/plain' });
+    const blob = new Blob([conversation], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `conversa-ia-${new Date().toISOString().split('T')[0]}.txt`;
+    a.download = `conversa-ia-${new Date().toISOString().split("T")[0]}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -537,7 +537,7 @@ Como posso ajudá-lo especificamente hoje?`,
               <div>
                 <h1 className="font-semibold">Chat IA Empresarial</h1>
                 <p className="text-sm text-muted-foreground">
-                  {isLoading ? 'Processando...' : 'Online e pronto para ajudar'}
+                  {isLoading ? "Processando..." : "Online e pronto para ajudar"}
                 </p>
               </div>
             </div>
@@ -560,10 +560,10 @@ Como posso ajudá-lo especificamente hoje?`,
               <div
                 key={message.id}
                 className={`flex gap-3 ${
-                  message.role === 'user' ? 'justify-end' : 'justify-start'
+                  message.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                {message.role === 'assistant' && (
+                {message.role === "assistant" && (
                   <div className="p-2 bg-primary/10 rounded-lg self-start">
                     <Bot className="w-4 h-4 text-primary" />
                   </div>
@@ -571,16 +571,16 @@ Como posso ajudá-lo especificamente hoje?`,
                 
                 <div
                   className={`max-w-[80%] rounded-lg p-4 ${
-                    message.role === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted'
+                    message.role === "user"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
                   }`}
                 >
                   <div className="prose prose-sm dark:prose-invert max-w-none">
-                    {message.content.split('\n').map((line, index) => (
+                    {message.content.split("\n").map((line, index) => (
                       <div key={index}>
                         {line}
-                        {index < message.content.split('\n').length - 1 && <br />}
+                        {index < message.content.split("\n").length - 1 && <br />}
                       </div>
                     ))}
                   </div>
@@ -599,7 +599,7 @@ Como posso ajudá-lo especificamente hoje?`,
                   </div>
                 </div>
 
-                {message.role === 'user' && (
+                {message.role === "user" && (
                   <div className="p-2 bg-primary/10 rounded-lg self-start">
                     <User className="w-4 h-4 text-primary" />
                   </div>
@@ -636,7 +636,7 @@ Como posso ajudá-lo especificamente hoje?`,
                   ref={inputRef}
                   value={currentMessage}
                   onChange={(e) => setCurrentMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                   placeholder="Digite sua mensagem ou escolha uma ação rápida..."
                   className="pr-12"
                   disabled={isLoading}

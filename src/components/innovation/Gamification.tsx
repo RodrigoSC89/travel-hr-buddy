@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Trophy, 
   Target, 
@@ -20,8 +20,8 @@ import {
   Medal,
   Gift,
   Sparkles
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Achievement {
   id: number;
@@ -32,7 +32,7 @@ interface Achievement {
   unlocked: boolean;
   progress: number;
   maxProgress: number;
-  category: 'productivity' | 'collaboration' | 'innovation' | 'leadership';
+  category: "productivity" | "collaboration" | "innovation" | "leadership";
 }
 
 interface UserStats {
@@ -53,14 +53,14 @@ interface LeaderboardEntry {
   level: number;
   avatar: string;
   badges: string[];
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
 }
 
 export const Gamification = () => {
   const [userStats, setUserStats] = useState<UserStats>({
     totalPoints: 2847,
     level: 12,
-    rank: 'Especialista Corporate',
+    rank: "Especialista Corporate",
     streak: 15,
     achievements: 23,
     completedTasks: 156,
@@ -71,117 +71,117 @@ export const Gamification = () => {
   const [achievements, setAchievements] = useState<Achievement[]>([
     {
       id: 1,
-      title: 'Mestre da Colaboração',
-      description: 'Participou de 50 sessões colaborativas',
-      icon: '🤝',
+      title: "Mestre da Colaboração",
+      description: "Participou de 50 sessões colaborativas",
+      icon: "🤝",
       points: 500,
       unlocked: true,
       progress: 50,
       maxProgress: 50,
-      category: 'collaboration'
+      category: "collaboration"
     },
     {
       id: 2,
-      title: 'Inovador Digital',
-      description: 'Utilizou 10 recursos de IA diferentes',
-      icon: '🚀',
+      title: "Inovador Digital",
+      description: "Utilizou 10 recursos de IA diferentes",
+      icon: "🚀",
       points: 750,
       unlocked: true,
       progress: 12,
       maxProgress: 10,
-      category: 'innovation'
+      category: "innovation"
     },
     {
       id: 3,
-      title: 'Workflow Master',
-      description: 'Criou e otimizou 25 workflows',
-      icon: '⚡',
+      title: "Workflow Master",
+      description: "Criou e otimizou 25 workflows",
+      icon: "⚡",
       points: 600,
       unlocked: false,
       progress: 18,
       maxProgress: 25,
-      category: 'productivity'
+      category: "productivity"
     },
     {
       id: 4,
-      title: 'Líder de Insights',
-      description: 'Gerou 100 insights valiosos',
-      icon: '💡',
+      title: "Líder de Insights",
+      description: "Gerou 100 insights valiosos",
+      icon: "💡",
       points: 800,
       unlocked: false,
       progress: 73,
       maxProgress: 100,
-      category: 'leadership'
+      category: "leadership"
     },
     {
       id: 5,
-      title: 'Comunicador Expert',
-      description: 'Sequência de 30 dias ativos',
-      icon: '🔥',
+      title: "Comunicador Expert",
+      description: "Sequência de 30 dias ativos",
+      icon: "🔥",
       points: 300,
       unlocked: true,
       progress: 30,
       maxProgress: 30,
-      category: 'collaboration'
+      category: "collaboration"
     },
     {
       id: 6,
-      title: 'Analytics Guru',
-      description: 'Analisou dados por 100 horas',
-      icon: '📊',
+      title: "Analytics Guru",
+      description: "Analisou dados por 100 horas",
+      icon: "📊",
       points: 1000,
       unlocked: false,
       progress: 67,
       maxProgress: 100,
-      category: 'innovation'
+      category: "innovation"
     }
   ]);
 
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([
     {
       rank: 1,
-      name: 'Rodrigo Silva de Carvalho',
+      name: "Rodrigo Silva de Carvalho",
       points: 2847,
       level: 12,
-      avatar: '',
-      badges: ['🚀', '💡', '🤝'],
-      trend: 'stable'
+      avatar: "",
+      badges: ["🚀", "💡", "🤝"],
+      trend: "stable"
     },
     {
       rank: 2,
-      name: 'Ana Silva Santos',
+      name: "Ana Silva Santos",
       points: 2650,
       level: 11,
-      avatar: '',
-      badges: ['⚡', '📊', '🔥'],
-      trend: 'up'
+      avatar: "",
+      badges: ["⚡", "📊", "🔥"],
+      trend: "up"
     },
     {
       rank: 3,
-      name: 'Carlos Eduardo Lima',
+      name: "Carlos Eduardo Lima",
       points: 2401,
       level: 10,
-      avatar: '',
-      badges: ['🤝', '🎯', '💡'],
-      trend: 'down'
+      avatar: "",
+      badges: ["🤝", "🎯", "💡"],
+      trend: "down"
     },
     {
       rank: 4,
-      name: 'Maria Costa Oliveira',
+      name: "Maria Costa Oliveira",
       points: 2198,
       level: 9,
-      avatar: '',
-      badges: ['📊', '🚀'],
-      trend: 'up'
+      avatar: "",
+      badges: ["📊", "🚀"],
+      trend: "up"
     },
     {
       rank: 5,
-      name: 'João Pedro Souza',
+      name: "João Pedro Souza",
       points: 1995,
       level: 8,
-      avatar: '',
-      badges: ['⚡', '🔥'],
-      trend: 'stable'
+      avatar: "",
+      badges: ["⚡", "🔥"],
+      trend: "stable"
     }
   ]);
 
@@ -199,29 +199,29 @@ export const Gamification = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'productivity': return <Zap className="w-4 h-4" />;
-      case 'collaboration': return <Users className="w-4 h-4" />;
-      case 'innovation': return <Sparkles className="w-4 h-4" />;
-      case 'leadership': return <Crown className="w-4 h-4" />;
-      default: return <Star className="w-4 h-4" />;
+    case "productivity": return <Zap className="w-4 h-4" />;
+    case "collaboration": return <Users className="w-4 h-4" />;
+    case "innovation": return <Sparkles className="w-4 h-4" />;
+    case "leadership": return <Crown className="w-4 h-4" />;
+    default: return <Star className="w-4 h-4" />;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'productivity': return 'bg-blue-100 text-blue-700 border-blue-200';
-      case 'collaboration': return 'bg-green-100 text-green-700 border-green-200';
-      case 'innovation': return 'bg-purple-100 text-purple-700 border-purple-200';
-      case 'leadership': return 'bg-orange-100 text-orange-700 border-orange-200';
-      default: return 'bg-secondary text-secondary-foreground border-border';
+    case "productivity": return "bg-blue-100 text-blue-700 border-blue-200";
+    case "collaboration": return "bg-green-100 text-green-700 border-green-200";
+    case "innovation": return "bg-purple-100 text-purple-700 border-purple-200";
+    case "leadership": return "bg-orange-100 text-orange-700 border-orange-200";
+    default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'down': return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
-      default: return <TrendingUp className="w-4 h-4 text-muted-foreground rotate-90" />;
+    case "up": return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case "down": return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
+    default: return <TrendingUp className="w-4 h-4 text-muted-foreground rotate-90" />;
     }
   };
 
@@ -306,14 +306,14 @@ export const Gamification = () => {
             <ScrollArea className="h-80">
               <div className="space-y-4">
                 {achievements.map((achievement) => (
-                  <div key={achievement.id} className={`p-4 rounded-lg border ${achievement.unlocked ? 'bg-card' : 'bg-muted/50'}`}>
+                  <div key={achievement.id} className={`p-4 rounded-lg border ${achievement.unlocked ? "bg-card" : "bg-muted/50"}`}>
                     <div className="flex items-start gap-3">
-                      <div className={`text-2xl ${achievement.unlocked ? '' : 'grayscale opacity-50'}`}>
+                      <div className={`text-2xl ${achievement.unlocked ? "" : "grayscale opacity-50"}`}>
                         {achievement.icon}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <h4 className={`font-medium ${achievement.unlocked ? '' : 'text-muted-foreground'}`}>
+                          <h4 className={`font-medium ${achievement.unlocked ? "" : "text-muted-foreground"}`}>
                             {achievement.title}
                           </h4>
                           <Badge variant="outline" className={getCategoryColor(achievement.category)}>
@@ -371,19 +371,19 @@ export const Gamification = () => {
           <CardContent>
             <div className="space-y-3">
               {leaderboard.map((entry) => (
-                <div key={entry.rank} className={`p-4 rounded-lg border ${entry.rank === 1 ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200' : 'bg-card'}`}>
+                <div key={entry.rank} className={`p-4 rounded-lg border ${entry.rank === 1 ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200" : "bg-card"}`}>
                   <div className="flex items-center gap-3">
                     <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${
-                      entry.rank === 1 ? 'bg-yellow-500 text-azure-50' :
-                      entry.rank === 2 ? 'bg-gray-400 text-azure-50' :
-                      entry.rank === 3 ? 'bg-orange-600 text-azure-50' :
-                      'bg-muted text-muted-foreground'
+                      entry.rank === 1 ? "bg-yellow-500 text-azure-50" :
+                        entry.rank === 2 ? "bg-gray-400 text-azure-50" :
+                          entry.rank === 3 ? "bg-orange-600 text-azure-50" :
+                            "bg-muted text-muted-foreground"
                     }`}>
                       {entry.rank}
                     </div>
                     
                     <Avatar className="w-10 h-10">
-                      <AvatarFallback>{entry.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      <AvatarFallback>{entry.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
                     </Avatar>
                     
                     <div className="flex-1 min-w-0">

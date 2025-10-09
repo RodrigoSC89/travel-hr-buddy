@@ -12,6 +12,17 @@ dist
 dist-ssr
 *.local
 
+# Build artifacts
+.next
+build
+.vercel
+.netlify
+
+# Environment
+.env
+.env.local
+.env.*.local
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +33,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Temporary files
+tmp
+temp
+*.tmp
+*.swp
+*~
+
+# Archive documentation (kept in repo but not for production package)
+docs/archive/

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Profile {
   id: string;
@@ -27,18 +27,18 @@ export const useProfile = () => {
 
       try {
         const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
           .single();
 
         if (error) {
-          console.error('Error fetching profile:', error);
+          console.error("Error fetching profile:", error);
           // Se não encontrar perfil, criar um básico
           setProfile({
             id: user.id,
-            email: user.email || '',
-            full_name: user.email?.split('@')[0] || 'Usuário',
+            email: user.email || "",
+            full_name: user.email?.split("@")[0] || "Usuário",
             avatar_url: null,
             department: null,
             position: null,
@@ -48,7 +48,7 @@ export const useProfile = () => {
           setProfile(data);
         }
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        console.error("Error fetching profile:", error);
       } finally {
         setIsLoading(false);
       }

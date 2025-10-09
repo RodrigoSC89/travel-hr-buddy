@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Search, 
   Filter, 
@@ -18,7 +18,7 @@ import {
   ArrowUpDown,
   MoreVertical,
   Eye
-} from 'lucide-react';
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,16 +26,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 
 interface DataRow {
   id: string;
   name: string;
-  status: 'active' | 'inactive' | 'warning' | 'expired';
+  status: "active" | "inactive" | "warning" | "expired";
   type: string;
   lastUpdate: string;
   responsible: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
 }
 
 interface AccessibleDataTableProps {
@@ -53,31 +53,31 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
   searchPlaceholder = "Buscar...",
   onRowAction
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState<keyof DataRow>('name');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortField, setSortField] = useState<keyof DataRow>("name");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
 
   const getStatusConfig = (status: string) => {
     const configs = {
       active: {
-        label: 'Ativo',
-        className: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+        label: "Ativo",
+        className: "bg-emerald-100 text-emerald-800 border-emerald-200",
         icon: <CheckCircle2 className="w-3 h-3" />
       },
       inactive: {
-        label: 'Inativo',
-        className: 'bg-slate-100 text-slate-800 border-slate-200',
+        label: "Inativo",
+        className: "bg-slate-100 text-slate-800 border-slate-200",
         icon: <Clock className="w-3 h-3" />
       },
       warning: {
-        label: 'Atenção',
-        className: 'bg-amber-100 text-amber-800 border-amber-200',
+        label: "Atenção",
+        className: "bg-amber-100 text-amber-800 border-amber-200",
         icon: <AlertTriangle className="w-3 h-3" />
       },
       expired: {
-        label: 'Expirado',
-        className: 'bg-red-100 text-red-800 border-red-200',
+        label: "Expirado",
+        className: "bg-red-100 text-red-800 border-red-200",
         icon: <AlertTriangle className="w-3 h-3" />
       }
     };
@@ -87,18 +87,18 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
   const getPriorityConfig = (priority: string) => {
     const configs = {
       high: { 
-        label: 'Alta', 
-        className: 'bg-red-100 text-red-800 border-red-200',
+        label: "Alta", 
+        className: "bg-red-100 text-red-800 border-red-200",
         sortOrder: 3 
       },
       medium: { 
-        label: 'Média', 
-        className: 'bg-amber-100 text-amber-800 border-amber-200',
+        label: "Média", 
+        className: "bg-amber-100 text-amber-800 border-amber-200",
         sortOrder: 2 
       },
       low: { 
-        label: 'Baixa', 
-        className: 'bg-green-100 text-green-800 border-green-200',
+        label: "Baixa", 
+        className: "bg-green-100 text-green-800 border-green-200",
         sortOrder: 1 
       }
     };
@@ -110,15 +110,15 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
       const matchesSearch = row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           row.responsible.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           row.type.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = selectedStatus === 'all' || row.status === selectedStatus;
+      const matchesStatus = selectedStatus === "all" || row.status === selectedStatus;
       return matchesSearch && matchesStatus;
     })
     .sort((a, b) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
-      const direction = sortDirection === 'asc' ? 1 : -1;
+      const direction = sortDirection === "asc" ? 1 : -1;
       
-      if (sortField === 'priority') {
+      if (sortField === "priority") {
         const aPriority = getPriorityConfig(a.priority).sortOrder;
         const bPriority = getPriorityConfig(b.priority).sortOrder;
         return (aPriority - bPriority) * direction;
@@ -129,10 +129,10 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
 
   const handleSort = (field: keyof DataRow) => {
     if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortDirection('asc');
+      setSortDirection("asc");
     }
   };
 
@@ -211,7 +211,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                 <th className="text-left p-4 font-semibold text-foreground">
                   <Button
                     variant="ghost"
-                    onClick={() => handleSort('name')}
+                    onClick={() => handleSort("name")}
                     className="p-0 h-auto font-semibold text-foreground hover:text-primary"
                     aria-label="Ordenar por nome"
                   >
@@ -222,7 +222,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                 <th className="text-left p-4 font-semibold text-foreground">
                   <Button
                     variant="ghost"
-                    onClick={() => handleSort('status')}
+                    onClick={() => handleSort("status")}
                     className="p-0 h-auto font-semibold text-foreground hover:text-primary"
                     aria-label="Ordenar por status"
                   >
@@ -234,7 +234,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                 <th className="text-left p-4 font-semibold text-foreground">
                   <Button
                     variant="ghost"
-                    onClick={() => handleSort('priority')}
+                    onClick={() => handleSort("priority")}
                     className="p-0 h-auto font-semibold text-foreground hover:text-primary"
                     aria-label="Ordenar por prioridade"
                   >
@@ -294,20 +294,20 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                           <DropdownMenuLabel className="text-popover-foreground">Ações</DropdownMenuLabel>
                           <DropdownMenuSeparator className="bg-border" />
                           <DropdownMenuItem 
-                            onClick={() => handleRowAction('view', row)}
+                            onClick={() => handleRowAction("view", row)}
                             className="text-popover-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer"
                           >
                             <Eye className="w-4 h-4 mr-2" />
                             Visualizar
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handleRowAction('edit', row)}
+                            onClick={() => handleRowAction("edit", row)}
                             className="text-popover-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer"
                           >
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handleRowAction('delete', row)}
+                            onClick={() => handleRowAction("delete", row)}
                             className="text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer"
                           >
                             Excluir
@@ -341,7 +341,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                 Mostrando {filteredAndSortedData.length} de {data.length} registros
               </span>
               <span>
-                Última atualização: {new Date().toLocaleString('pt-BR')}
+                Última atualização: {new Date().toLocaleString("pt-BR")}
               </span>
             </div>
           </div>

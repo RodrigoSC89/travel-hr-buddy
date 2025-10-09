@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Bell, 
   X, 
@@ -18,11 +18,11 @@ import {
   Zap,
   Target,
   Settings
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Notification {
   id: string;
-  type: 'info' | 'warning' | 'success' | 'error';
+  type: "info" | "warning" | "success" | "error";
   title: string;
   message: string;
   timestamp: Date;
@@ -36,56 +36,54 @@ interface Notification {
 
 const mockNotifications: Notification[] = [
   {
-    id: '1',
-    type: 'warning',
-    title: 'Certificação Próxima do Vencimento',
-    message: 'Certificado STCW do Oficial João Silva vence em 15 dias',
+    id: "1",
+    type: "warning",
+    title: "Certificação Próxima do Vencimento",
+    message: "Certificado STCW do Oficial João Silva vence em 15 dias",
     timestamp: new Date(Date.now() - 5 * 60 * 1000),
-    module: 'hr',
+    module: "hr",
     isRead: false,
     action: {
-      label: 'Ver Detalhes',
-      callback: () => console.log('Navigate to HR module')
-    }
+      label: "Ver Detalhes",
+      callback: () =>}
   },
   {
-    id: '2',
-    type: 'success',
-    title: 'IA Detectou Economia',
-    message: 'Otimização automática economizou R$ 15.000 em rotações',
+    id: "2",
+    type: "success",
+    title: "IA Detectou Economia",
+    message: "Otimização automática economizou R$ 15.000 em rotações",
     timestamp: new Date(Date.now() - 15 * 60 * 1000),
-    module: 'analytics',
+    module: "analytics",
     isRead: false
   },
   {
-    id: '3',
-    type: 'info',
-    title: 'Nova Embarcação Adicionada',
-    message: 'MV Ocean Pioneer foi registrada no sistema',
+    id: "3",
+    type: "info",
+    title: "Nova Embarcação Adicionada",
+    message: "MV Ocean Pioneer foi registrada no sistema",
     timestamp: new Date(Date.now() - 30 * 60 * 1000),
-    module: 'maritime',
+    module: "maritime",
     isRead: true
   },
   {
-    id: '4',
-    type: 'warning',
-    title: 'Sistema IoT Offline',
-    message: 'Sensor de temperatura do Porto de Santos está offline',
+    id: "4",
+    type: "warning",
+    title: "Sistema IoT Offline",
+    message: "Sensor de temperatura do Porto de Santos está offline",
     timestamp: new Date(Date.now() - 45 * 60 * 1000),
-    module: 'iot',
+    module: "iot",
     isRead: false,
     action: {
-      label: 'Verificar',
-      callback: () => console.log('Navigate to IoT module')
-    }
+      label: "Verificar",
+      callback: () =>}
   },
   {
-    id: '5',
-    type: 'success',
-    title: 'Blockchain Verificado',
-    message: 'Documento de manifesto foi certificado com sucesso',
+    id: "5",
+    type: "success",
+    title: "Blockchain Verificado",
+    message: "Documento de manifesto foi certificado com sucesso",
     timestamp: new Date(Date.now() - 60 * 60 * 1000),
-    module: 'blockchain',
+    module: "blockchain",
     isRead: true
   }
 ];
@@ -93,30 +91,30 @@ const mockNotifications: Notification[] = [
 export const NotificationCenter: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [isOpen, setIsOpen] = useState(false);
-  const [filter, setFilter] = useState<'all' | 'unread'>('all');
+  const [filter, setFilter] = useState<"all" | "unread">("all");
   const { toast } = useToast();
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
   const filteredNotifications = notifications.filter(n => 
-    filter === 'all' || !n.isRead
+    filter === "all" || !n.isRead
   );
 
   const getIcon = (type: string) => {
     switch (type) {
-      case 'warning': return AlertTriangle;
-      case 'success': return CheckCircle;
-      case 'error': return AlertTriangle;
-      default: return Info;
+    case "warning": return AlertTriangle;
+    case "success": return CheckCircle;
+    case "error": return AlertTriangle;
+    default: return Info;
     }
   };
 
   const getIconColor = (type: string) => {
     switch (type) {
-      case 'warning': return 'text-yellow-500';
-      case 'success': return 'text-green-500';
-      case 'error': return 'text-red-500';
-      default: return 'text-blue-500';
+    case "warning": return "text-yellow-500";
+    case "success": return "text-green-500";
+    case "error": return "text-red-500";
+    default: return "text-blue-500";
     }
   };
 
@@ -140,7 +138,7 @@ export const NotificationCenter: React.FC = () => {
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
     
-    if (diffInMinutes < 1) return 'Agora';
+    if (diffInMinutes < 1) return "Agora";
     if (diffInMinutes < 60) return `${diffInMinutes}m atrás`;
     
     const diffInHours = Math.floor(diffInMinutes / 60);
@@ -158,11 +156,11 @@ export const NotificationCenter: React.FC = () => {
       if (shouldShowNotification) {
         const newNotification: Notification = {
           id: Date.now().toString(),
-          type: Math.random() > 0.7 ? 'warning' : 'info',
-          title: 'Nova Atualização do Sistema',
-          message: 'Dados atualizados em tempo real',
+          type: Math.random() > 0.7 ? "warning" : "info",
+          title: "Nova Atualização do Sistema",
+          message: "Dados atualizados em tempo real",
           timestamp: new Date(),
-          module: 'system',
+          module: "system",
           isRead: false
         };
 
@@ -193,7 +191,7 @@ export const NotificationCenter: React.FC = () => {
             variant="destructive" 
             className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
           >
-            {unreadCount > 9 ? '9+' : unreadCount}
+            {unreadCount > 9 ? "9+" : unreadCount}
           </Badge>
         )}
       </Button>
@@ -208,9 +206,9 @@ export const NotificationCenter: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setFilter(filter === 'all' ? 'unread' : 'all')}
+                  onClick={() => setFilter(filter === "all" ? "unread" : "all")}
                 >
-                  {filter === 'all' ? 'Não lidas' : 'Todas'}
+                  {filter === "all" ? "Não lidas" : "Todas"}
                 </Button>
                 <Button
                   variant="ghost"
@@ -249,7 +247,7 @@ export const NotificationCenter: React.FC = () => {
                       <div
                         key={notification.id}
                         className={`p-3 rounded-lg border cursor-pointer transition-colors hover:bg-muted/50 ${
-                          !notification.isRead ? 'bg-blue-50 border-blue-200' : 'bg-background'
+                          !notification.isRead ? "bg-blue-50 border-blue-200" : "bg-background"
                         }`}
                         onClick={() => markAsRead(notification.id)}
                       >

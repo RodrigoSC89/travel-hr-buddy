@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { 
   BarChart3, 
   TrendingUp, 
@@ -17,11 +17,11 @@ import {
   Filter,
   Download,
   RefreshCw
-} from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface MetricData {
   name: string;
@@ -43,7 +43,7 @@ interface PerformanceInsight {
   id: string;
   title: string;
   description: string;
-  impact: 'high' | 'medium' | 'low';
+  impact: "high" | "medium" | "low";
   category: string;
   action?: string;
 }
@@ -53,54 +53,54 @@ export const AdvancedMetricsDashboard: React.FC = () => {
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [insights, setInsights] = useState<PerformanceInsight[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedTimeRange, setSelectedTimeRange] = useState("7d");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const { user } = useAuth();
   const { toast } = useToast();
 
   // Sample data for demonstration
   const sampleMetrics: MetricData[] = [
-    { name: 'Eficiência Operacional', value: 87, target: 90, trend: 5.2, unit: '%', category: 'performance' },
-    { name: 'Satisfação do Cliente', value: 92, target: 95, trend: 2.1, unit: '%', category: 'customer' },
-    { name: 'Tempo de Resposta', value: 1.2, target: 1.0, trend: -8.5, unit: 's', category: 'performance' },
-    { name: 'Taxa de Conversão', value: 15.8, target: 18.0, trend: 12.3, unit: '%', category: 'business' },
-    { name: 'Produtividade da Equipe', value: 94, target: 95, trend: 3.7, unit: '%', category: 'team' },
-    { name: 'Qualidade do Serviço', value: 96, target: 98, trend: 1.5, unit: '%', category: 'quality' }
+    { name: "Eficiência Operacional", value: 87, target: 90, trend: 5.2, unit: "%", category: "performance" },
+    { name: "Satisfação do Cliente", value: 92, target: 95, trend: 2.1, unit: "%", category: "customer" },
+    { name: "Tempo de Resposta", value: 1.2, target: 1.0, trend: -8.5, unit: "s", category: "performance" },
+    { name: "Taxa de Conversão", value: 15.8, target: 18.0, trend: 12.3, unit: "%", category: "business" },
+    { name: "Produtividade da Equipe", value: 94, target: 95, trend: 3.7, unit: "%", category: "team" },
+    { name: "Qualidade do Serviço", value: 96, target: 98, trend: 1.5, unit: "%", category: "quality" }
   ];
 
   const sampleChartData: ChartDataPoint[] = [
-    { name: 'Seg', value: 85, target: 90, date: '2024-01-01' },
-    { name: 'Ter', value: 87, target: 90, date: '2024-01-02' },
-    { name: 'Qua', value: 89, target: 90, date: '2024-01-03' },
-    { name: 'Qui', value: 92, target: 90, date: '2024-01-04' },
-    { name: 'Sex', value: 88, target: 90, date: '2024-01-05' },
-    { name: 'Sáb', value: 90, target: 90, date: '2024-01-06' },
-    { name: 'Dom', value: 87, target: 90, date: '2024-01-07' }
+    { name: "Seg", value: 85, target: 90, date: "2024-01-01" },
+    { name: "Ter", value: 87, target: 90, date: "2024-01-02" },
+    { name: "Qua", value: 89, target: 90, date: "2024-01-03" },
+    { name: "Qui", value: 92, target: 90, date: "2024-01-04" },
+    { name: "Sex", value: 88, target: 90, date: "2024-01-05" },
+    { name: "Sáb", value: 90, target: 90, date: "2024-01-06" },
+    { name: "Dom", value: 87, target: 90, date: "2024-01-07" }
   ];
 
   const sampleInsights: PerformanceInsight[] = [
     {
-      id: '1',
-      title: 'Oportunidade de Otimização',
-      description: 'O tempo de resposta pode ser melhorado em 15% com otimizações no cache',
-      impact: 'high',
-      category: 'performance',
-      action: 'optimize_cache'
+      id: "1",
+      title: "Oportunidade de Otimização",
+      description: "O tempo de resposta pode ser melhorado em 15% com otimizações no cache",
+      impact: "high",
+      category: "performance",
+      action: "optimize_cache"
     },
     {
-      id: '2',
-      title: 'Tendência Positiva',
-      description: 'A satisfação do cliente tem crescido consistentemente nas últimas 2 semanas',
-      impact: 'medium',
-      category: 'customer'
+      id: "2",
+      title: "Tendência Positiva",
+      description: "A satisfação do cliente tem crescido consistentemente nas últimas 2 semanas",
+      impact: "medium",
+      category: "customer"
     },
     {
-      id: '3',
-      title: 'Atenção Necessária',
-      description: 'A taxa de conversão está 12% abaixo do target este mês',
-      impact: 'high',
-      category: 'business',
-      action: 'review_funnel'
+      id: "3",
+      title: "Atenção Necessária",
+      description: "A taxa de conversão está 12% abaixo do target este mês",
+      impact: "high",
+      category: "business",
+      action: "review_funnel"
     }
   ];
 
@@ -117,7 +117,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
       }, 1000);
       
     } catch (error) {
-      console.error('Error loading metrics:', error);
+      console.error("Error loading metrics:", error);
       toast({
         title: "Erro ao carregar métricas",
         description: "Não foi possível carregar os dados das métricas",
@@ -133,9 +133,9 @@ export const AdvancedMetricsDashboard: React.FC = () => {
 
   const generateReport = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('generate-ai-report', {
+      const { data, error } = await supabase.functions.invoke("generate-ai-report", {
         body: {
-          type: 'metrics_analysis',
+          type: "metrics_analysis",
           timeRange: selectedTimeRange,
           category: selectedCategory,
           userId: user?.id
@@ -149,7 +149,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
         description: "O relatório de análise foi gerado com sucesso",
       });
     } catch (error) {
-      console.error('Error generating report:', error);
+      console.error("Error generating report:", error);
       toast({
         title: "Erro ao gerar relatório",
         description: "Não foi possível gerar o relatório",
@@ -159,11 +159,11 @@ export const AdvancedMetricsDashboard: React.FC = () => {
   };
 
   const getMetricColor = (value: number, target?: number) => {
-    if (!target) return 'text-foreground';
+    if (!target) return "text-foreground";
     const percentage = (value / target) * 100;
-    if (percentage >= 95) return 'text-green-600';
-    if (percentage >= 80) return 'text-yellow-600';
-    return 'text-red-600';
+    if (percentage >= 95) return "text-green-600";
+    if (percentage >= 80) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getTrendIcon = (trend: number) => {
@@ -172,25 +172,25 @@ export const AdvancedMetricsDashboard: React.FC = () => {
     return <Activity className="w-4 h-4 text-muted-foreground" />;
   };
 
-  const getImpactColor = (impact: PerformanceInsight['impact']) => {
+  const getImpactColor = (impact: PerformanceInsight["impact"]) => {
     switch (impact) {
-      case 'high': return 'destructive';
-      case 'medium': return 'default';
-      case 'low': return 'secondary';
+    case "high": return "destructive";
+    case "medium": return "default";
+    case "low": return "secondary";
     }
   };
 
-  const filteredMetrics = selectedCategory === 'all' 
+  const filteredMetrics = selectedCategory === "all" 
     ? metrics 
     : metrics.filter(m => m.category === selectedCategory);
 
   const pieChartData = filteredMetrics.map(metric => ({
     name: metric.name,
     value: metric.value,
-    color: metric.value >= (metric.target || 80) ? '#10b981' : '#ef4444'
+    color: metric.value >= (metric.target || 80) ? "#10b981" : "#ef4444"
   }));
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#82ca9d"];
 
   if (isLoading) {
     return (
@@ -292,9 +292,9 @@ export const AdvancedMetricsDashboard: React.FC = () => {
                     </div>
                   )}
                   <p className={`text-xs mt-2 flex items-center ${
-                    metric.trend > 0 ? 'text-green-600' : 'text-red-600'
+                    metric.trend > 0 ? "text-green-600" : "text-red-600"
                   }`}>
-                    {metric.trend > 0 ? '+' : ''}{metric.trend}% vs período anterior
+                    {metric.trend > 0 ? "+" : ""}{metric.trend}% vs período anterior
                   </p>
                 </CardContent>
               </Card>
@@ -377,7 +377,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-sm">{insight.title}</CardTitle>
                     <Badge variant={getImpactColor(insight.impact)}>
-                      {insight.impact === 'high' ? 'Alto' : insight.impact === 'medium' ? 'Médio' : 'Baixo'}
+                      {insight.impact === "high" ? "Alto" : insight.impact === "medium" ? "Médio" : "Baixo"}
                     </Badge>
                   </div>
                 </CardHeader>

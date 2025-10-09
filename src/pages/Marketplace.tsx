@@ -1,8 +1,8 @@
-import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import { IntegrationMarketplace } from '@/components/strategic/IntegrationMarketplace';
-import { Store } from 'lucide-react';
+import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import { IntegrationMarketplace } from "@/components/strategic/IntegrationMarketplace";
+import { Store } from "lucide-react";
 
 
 const Marketplace = () => {

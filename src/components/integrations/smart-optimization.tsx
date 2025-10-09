@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Wand2,
   Sparkles,
@@ -25,15 +25,15 @@ import {
   RefreshCw,
   Eye,
   Download
-} from 'lucide-react';
+} from "lucide-react";
 
 interface OptimizationSuggestion {
   id: string;
-  type: 'performance' | 'security' | 'cost' | 'reliability';
+  type: "performance" | "security" | "cost" | "reliability";
   title: string;
   description: string;
-  impact: 'low' | 'medium' | 'high' | 'critical';
-  effort: 'easy' | 'medium' | 'complex';
+  impact: "low" | "medium" | "high" | "critical";
+  effort: "easy" | "medium" | "complex";
   estimatedImprovement: string;
   implementationSteps: string[];
   isImplemented: boolean;
@@ -44,7 +44,7 @@ interface AutoOptimization {
   id: string;
   name: string;
   description: string;
-  status: 'active' | 'paused' | 'disabled';
+  status: "active" | "paused" | "disabled";
   lastRun: string;
   nextRun: string;
   successRate: number;
@@ -58,69 +58,69 @@ export const SmartOptimization: React.FC = () => {
 
   const [suggestions] = useState<OptimizationSuggestion[]>([
     {
-      id: '1',
-      type: 'performance',
-      title: 'Implementar Cache Inteligente',
-      description: 'Ativar cache automático para endpoints com baixa variação de dados reduzirá latência significativamente.',
-      impact: 'high',
-      effort: 'easy',
-      estimatedImprovement: 'Redução de 45% na latência',
+      id: "1",
+      type: "performance",
+      title: "Implementar Cache Inteligente",
+      description: "Ativar cache automático para endpoints com baixa variação de dados reduzirá latência significativamente.",
+      impact: "high",
+      effort: "easy",
+      estimatedImprovement: "Redução de 45% na latência",
       implementationSteps: [
-        'Analisar padrões de resposta dos últimos 30 dias',
-        'Identificar endpoints candidatos ao cache',
-        'Configurar TTL otimizado baseado em frequência de mudança',
-        'Implementar invalidação inteligente de cache'
+        "Analisar padrões de resposta dos últimos 30 dias",
+        "Identificar endpoints candidatos ao cache",
+        "Configurar TTL otimizado baseado em frequência de mudança",
+        "Implementar invalidação inteligente de cache"
       ],
       isImplemented: false,
       canAutoImplement: true
     },
     {
-      id: '2',
-      type: 'security',
-      title: 'Renovação Automática de Certificados',
-      description: 'Configure renovação automática de certificados SSL e tokens de API para evitar interrupções.',
-      impact: 'critical',
-      effort: 'medium',
-      estimatedImprovement: 'Eliminar 100% dos downtimes por certificados expirados',
+      id: "2",
+      type: "security",
+      title: "Renovação Automática de Certificados",
+      description: "Configure renovação automática de certificados SSL e tokens de API para evitar interrupções.",
+      impact: "critical",
+      effort: "medium",
+      estimatedImprovement: "Eliminar 100% dos downtimes por certificados expirados",
       implementationSteps: [
-        'Implementar monitoramento de expiração',
-        'Configurar webhook para renovação automática',
-        'Criar sistema de fallback em caso de falha',
-        'Implementar alertas preventivos'
+        "Implementar monitoramento de expiração",
+        "Configurar webhook para renovação automática",
+        "Criar sistema de fallback em caso de falha",
+        "Implementar alertas preventivos"
       ],
       isImplemented: false,
       canAutoImplement: true
     },
     {
-      id: '3',
-      type: 'cost',
-      title: 'Otimização de Rate Limits',
-      description: 'Ajustar rate limits baseado em padrões de uso real para reduzir custos de API.',
-      impact: 'medium',
-      effort: 'easy',
-      estimatedImprovement: 'Redução de 30% nos custos de API',
+      id: "3",
+      type: "cost",
+      title: "Otimização de Rate Limits",
+      description: "Ajustar rate limits baseado em padrões de uso real para reduzir custos de API.",
+      impact: "medium",
+      effort: "easy",
+      estimatedImprovement: "Redução de 30% nos custos de API",
       implementationSteps: [
-        'Analisar histórico de uso de APIs',
-        'Identificar picos e vales de tráfego',
-        'Implementar rate limiting dinâmico',
-        'Configurar alertas de limite'
+        "Analisar histórico de uso de APIs",
+        "Identificar picos e vales de tráfego",
+        "Implementar rate limiting dinâmico",
+        "Configurar alertas de limite"
       ],
       isImplemented: false,
       canAutoImplement: true
     },
     {
-      id: '4',
-      type: 'reliability',
-      title: 'Circuit Breaker Adaptativo',
-      description: 'Implementar circuit breaker que aprende padrões de falha e se adapta automaticamente.',
-      impact: 'high',
-      effort: 'complex',
-      estimatedImprovement: 'Aumento de 25% na disponibilidade',
+      id: "4",
+      type: "reliability",
+      title: "Circuit Breaker Adaptativo",
+      description: "Implementar circuit breaker que aprende padrões de falha e se adapta automaticamente.",
+      impact: "high",
+      effort: "complex",
+      estimatedImprovement: "Aumento de 25% na disponibilidade",
       implementationSteps: [
-        'Configurar monitoramento de saúde dos serviços',
-        'Implementar algoritmo de circuit breaker adaptativo',
-        'Definir métricas de recuperação automática',
-        'Configurar fallbacks inteligentes'
+        "Configurar monitoramento de saúde dos serviços",
+        "Implementar algoritmo de circuit breaker adaptativo",
+        "Definir métricas de recuperação automática",
+        "Configurar fallbacks inteligentes"
       ],
       isImplemented: true,
       canAutoImplement: false
@@ -129,78 +129,78 @@ export const SmartOptimization: React.FC = () => {
 
   const [autoOptimizations] = useState<AutoOptimization[]>([
     {
-      id: '1',
-      name: 'Limpeza Automática de Cache',
-      description: 'Remove automaticamente entradas de cache não utilizadas',
-      status: 'active',
-      lastRun: '2024-01-20T16:30:00Z',
-      nextRun: '2024-01-21T02:00:00Z',
+      id: "1",
+      name: "Limpeza Automática de Cache",
+      description: "Remove automaticamente entradas de cache não utilizadas",
+      status: "active",
+      lastRun: "2024-01-20T16:30:00Z",
+      nextRun: "2024-01-21T02:00:00Z",
       successRate: 98.5,
-      improvementAchieved: 'Liberação de 2.3GB de cache desnecessário'
+      improvementAchieved: "Liberação de 2.3GB de cache desnecessário"
     },
     {
-      id: '2',
-      name: 'Balanceamento Dinâmico',
-      description: 'Ajusta distribuição de carga baseado em performance',
-      status: 'active',
-      lastRun: '2024-01-20T15:45:00Z',
-      nextRun: '2024-01-20T17:45:00Z',
+      id: "2",
+      name: "Balanceamento Dinâmico",
+      description: "Ajusta distribuição de carga baseado em performance",
+      status: "active",
+      lastRun: "2024-01-20T15:45:00Z",
+      nextRun: "2024-01-20T17:45:00Z",
       successRate: 94.2,
-      improvementAchieved: 'Redução de 18% no tempo de resposta'
+      improvementAchieved: "Redução de 18% no tempo de resposta"
     },
     {
-      id: '3',
-      name: 'Compressão Adaptativa',
-      description: 'Otimiza compressão baseado no tipo de conteúdo',
-      status: 'active',
-      lastRun: '2024-01-20T14:20:00Z',
-      nextRun: '2024-01-20T20:20:00Z',
+      id: "3",
+      name: "Compressão Adaptativa",
+      description: "Otimiza compressão baseado no tipo de conteúdo",
+      status: "active",
+      lastRun: "2024-01-20T14:20:00Z",
+      nextRun: "2024-01-20T20:20:00Z",
       successRate: 96.8,
-      improvementAchieved: 'Economia de 40% na largura de banda'
+      improvementAchieved: "Economia de 40% na largura de banda"
     },
     {
-      id: '4',
-      name: 'Ajuste de Timeout Inteligente',
-      description: 'Ajusta timeouts baseado em padrões históricos',
-      status: 'paused',
-      lastRun: '2024-01-19T10:15:00Z',
-      nextRun: 'Pausado',
+      id: "4",
+      name: "Ajuste de Timeout Inteligente",
+      description: "Ajusta timeouts baseado em padrões históricos",
+      status: "paused",
+      lastRun: "2024-01-19T10:15:00Z",
+      nextRun: "Pausado",
       successRate: 87.3,
-      improvementAchieved: 'Redução de 12% em timeouts desnecessários'
+      improvementAchieved: "Redução de 12% em timeouts desnecessários"
     }
   ]);
 
-  const getImpactColor = (impact: OptimizationSuggestion['impact']) => {
+  const getImpactColor = (impact: OptimizationSuggestion["impact"]) => {
     switch (impact) {
-      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'high': return 'bg-warning/20 text-warning border-warning/30';
-      case 'medium': return 'bg-primary/20 text-primary border-primary/30';
-      case 'low': return 'bg-muted text-muted-foreground border-border';
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high": return "bg-warning/20 text-warning border-warning/30";
+    case "medium": return "bg-primary/20 text-primary border-primary/30";
+    case "low": return "bg-muted text-muted-foreground border-border";
     }
   };
 
-  const getEffortColor = (effort: OptimizationSuggestion['effort']) => {
+  const getEffortColor = (effort: OptimizationSuggestion["effort"]) => {
     switch (effort) {
-      case 'easy': return 'bg-success/20 text-success border-success/30';
-      case 'medium': return 'bg-warning/20 text-warning border-warning/30';
-      case 'complex': return 'bg-destructive/20 text-destructive border-destructive/30';
+    case "easy": return "bg-success/20 text-success border-success/30";
+    case "medium": return "bg-warning/20 text-warning border-warning/30";
+    case "complex": return "bg-destructive/20 text-destructive border-destructive/30";
     }
   };
 
-  const getTypeIcon = (type: OptimizationSuggestion['type']) => {
+  const getTypeIcon = (type: OptimizationSuggestion["type"]) => {
     switch (type) {
-      case 'performance': return <Gauge className="w-4 h-4" />;
-      case 'security': return <Shield className="w-4 h-4" />;
-      case 'cost': return <BarChart3 className="w-4 h-4" />;
-      case 'reliability': return <CheckCircle className="w-4 h-4" />;
+    case "performance": return <Gauge className="w-4 h-4" />;
+    case "security": return <Shield className="w-4 h-4" />;
+    case "cost": return <BarChart3 className="w-4 h-4" />;
+    case "reliability": return <CheckCircle className="w-4 h-4" />;
     }
   };
 
-  const getStatusColor = (status: AutoOptimization['status']) => {
+  const getStatusColor = (status: AutoOptimization["status"]) => {
     switch (status) {
-      case 'active': return 'bg-success/20 text-success border-success/30';
-      case 'paused': return 'bg-warning/20 text-warning border-warning/30';
-      case 'disabled': return 'bg-muted text-muted-foreground border-border';
+    case "active": return "bg-success/20 text-success border-success/30";
+    case "paused": return "bg-warning/20 text-warning border-warning/30";
+    case "disabled": return "bg-muted text-muted-foreground border-border";
     }
   };
 
@@ -210,11 +210,11 @@ export const SmartOptimization: React.FC = () => {
     
     // Simular análise progressiva
     const steps = [
-      'Analisando padrões de tráfego...',
-      'Verificando performance de endpoints...',
-      'Examinando configurações de segurança...',
-      'Calculando otimizações possíveis...',
-      'Gerando recomendações...'
+      "Analisando padrões de tráfego...",
+      "Verificando performance de endpoints...",
+      "Examinando configurações de segurança...",
+      "Calculando otimizações possíveis...",
+      "Gerando recomendações..."
     ];
     
     for (let i = 0; i < steps.length; i++) {
@@ -433,11 +433,11 @@ export const SmartOptimization: React.FC = () => {
                     <div>
                       <p className="text-muted-foreground">Próxima Execução</p>
                       <p className="font-medium text-foreground">
-                        {auto.nextRun === 'Pausado' ? 'Pausado' : 
-                         new Date(auto.nextRun).toLocaleTimeString('pt-BR', { 
-                           hour: '2-digit', 
-                           minute: '2-digit' 
-                         })}
+                        {auto.nextRun === "Pausado" ? "Pausado" : 
+                          new Date(auto.nextRun).toLocaleTimeString("pt-BR", { 
+                            hour: "2-digit", 
+                            minute: "2-digit" 
+                          })}
                       </p>
                     </div>
                   </div>

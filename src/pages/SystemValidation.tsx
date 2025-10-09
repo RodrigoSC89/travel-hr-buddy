@@ -1,10 +1,10 @@
-import React from 'react';
-import ProductionReadinessValidator from '@/components/testing/production-readiness-validator';
-import AccessibilityAuditor from '@/components/testing/accessibility-auditor';
-import FinalHomologationReport from '@/components/testing/final-homologation-report';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import ProductionReadinessValidator from "@/components/testing/production-readiness-validator";
+import AccessibilityAuditor from "@/components/testing/accessibility-auditor";
+import FinalHomologationReport from "@/components/testing/final-homologation-report";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { 
   Shield, 
   CheckCircle, 
@@ -13,7 +13,7 @@ import {
   Eye,
   Zap,
   Target
-} from 'lucide-react';
+} from "lucide-react";
 
 const SystemValidation: React.FC = () => {
   return (
@@ -189,7 +189,7 @@ const SystemValidation: React.FC = () => {
                         </div>
                         <div className="flex justify-between">
                           <span className="font-medium">Data de Validação:</span>
-                          <span>{new Date().toLocaleDateString('pt-BR')}</span>
+                          <span>{new Date().toLocaleDateString("pt-BR")}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="font-medium">Status:</span>

@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { FileText, Download, Calendar, Filter, BarChart3, TrendingUp, AlertTriangle } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { FileText, Download, Calendar, Filter, BarChart3, TrendingUp, AlertTriangle } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 
 interface ReportData {
   id: string;
   title: string;
-  type: 'compliance' | 'performance' | 'audit' | 'trend';
+  type: "compliance" | "performance" | "audit" | "trend";
   generatedAt: Date;
   period: string;
-  status: 'completed' | 'generating' | 'failed';
+  status: "completed" | "generating" | "failed";
   metrics: {
     totalChecklists: number;
     completedChecklists: number;
@@ -28,12 +28,12 @@ interface ReportData {
 export const ChecklistReports = () => {
   const [reports, setReports] = useState<ReportData[]>([
     {
-      id: '1',
-      title: 'Relatório de Conformidade - Dezembro 2024',
-      type: 'compliance',
-      generatedAt: new Date('2024-12-15'),
-      period: 'Dezembro 2024',
-      status: 'completed',
+      id: "1",
+      title: "Relatório de Conformidade - Dezembro 2024",
+      type: "compliance",
+      generatedAt: new Date("2024-12-15"),
+      period: "Dezembro 2024",
+      status: "completed",
       metrics: {
         totalChecklists: 150,
         completedChecklists: 142,
@@ -42,12 +42,12 @@ export const ChecklistReports = () => {
       },
     },
     {
-      id: '2',
-      title: 'Análise de Performance - Q4 2024',
-      type: 'performance',
-      generatedAt: new Date('2024-12-10'),
-      period: 'Q4 2024',
-      status: 'completed',
+      id: "2",
+      title: "Análise de Performance - Q4 2024",
+      type: "performance",
+      generatedAt: new Date("2024-12-10"),
+      period: "Q4 2024",
+      status: "completed",
       metrics: {
         totalChecklists: 450,
         completedChecklists: 425,
@@ -57,26 +57,26 @@ export const ChecklistReports = () => {
     },
   ]);
 
-  const [filterType, setFilterType] = useState<string>('all');
-  const [dateRange, setDateRange] = useState<string>('last30');
+  const [filterType, setFilterType] = useState<string>("all");
+  const [dateRange, setDateRange] = useState<string>("last30");
   const { toast } = useToast();
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'generating': return 'bg-blue-100 text-blue-800';
-      case 'failed': return 'bg-red-100 text-red-800';
-      default: return 'bg-secondary text-secondary-foreground';
+    case "completed": return "bg-green-100 text-green-800";
+    case "generating": return "bg-blue-100 text-blue-800";
+    case "failed": return "bg-red-100 text-red-800";
+    default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'compliance': return <FileText className="h-4 w-4" />;
-      case 'performance': return <BarChart3 className="h-4 w-4" />;
-      case 'audit': return <AlertTriangle className="h-4 w-4" />;
-      case 'trend': return <TrendingUp className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+    case "compliance": return <FileText className="h-4 w-4" />;
+    case "performance": return <BarChart3 className="h-4 w-4" />;
+    case "audit": return <AlertTriangle className="h-4 w-4" />;
+    case "trend": return <TrendingUp className="h-4 w-4" />;
+    default: return <FileText className="h-4 w-4" />;
     }
   };
 
@@ -95,7 +95,7 @@ export const ChecklistReports = () => {
   };
 
   const filteredReports = reports.filter(report => 
-    filterType === 'all' || report.type === filterType
+    filterType === "all" || report.type === filterType
   );
 
   return (
@@ -165,13 +165,13 @@ export const ChecklistReports = () => {
                       <div>
                         <CardTitle className="text-lg">{report.title}</CardTitle>
                         <CardDescription>
-                          Gerado em {report.generatedAt.toLocaleDateString('pt-BR')} • {report.period}
+                          Gerado em {report.generatedAt.toLocaleDateString("pt-BR")} • {report.period}
                         </CardDescription>
                       </div>
                     </div>
                     <Badge className={getStatusColor(report.status)}>
-                      {report.status === 'completed' ? 'Concluído' : 
-                       report.status === 'generating' ? 'Gerando' : 'Falhou'}
+                      {report.status === "completed" ? "Concluído" : 
+                        report.status === "generating" ? "Gerando" : "Falhou"}
                     </Badge>
                   </div>
                 </CardHeader>

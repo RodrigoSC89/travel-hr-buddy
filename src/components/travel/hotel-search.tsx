@@ -1,9 +1,7 @@
-import React from 'react';
-import { EnhancedHotelSearch } from './enhanced-hotel-search';
+import React from "react";
+import { EnhancedHotelSearch } from "./enhanced-hotel-search";
 
-export const HotelSearch = () => {
-  console.log('HotelSearch component is rendering');
-  return (
+export const HotelSearch = () => {return (
     <div className="hotel-search-wrapper">
       <EnhancedHotelSearch />
     </div>

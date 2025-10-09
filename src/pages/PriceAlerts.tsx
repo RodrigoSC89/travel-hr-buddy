@@ -1,16 +1,16 @@
-import { AdvancedPriceAlerts } from '@/components/price-alerts/advanced-price-alerts';
-import { PriceAnalyticsDashboard } from '@/components/price-alerts/price-analytics-dashboard';
-import { AIPricePredictor } from '@/components/price-alerts/ai-price-predictor';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
-import { ModuleHeader } from '@/components/ui/module-header';
+import { AdvancedPriceAlerts } from "@/components/price-alerts/advanced-price-alerts";
+import { PriceAnalyticsDashboard } from "@/components/price-alerts/price-analytics-dashboard";
+import { AIPricePredictor } from "@/components/price-alerts/ai-price-predictor";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
 import { 
   Brain, 
   BarChart3, 
   Target, 
   TrendingUp,
   Zap
-} from 'lucide-react';
+} from "lucide-react";
 
 const PriceAlerts = () => {
   return (
@@ -21,9 +21,9 @@ const PriceAlerts = () => {
         description="Monitoramento avançado com IA, analytics e insights acionáveis"
         gradient="orange"
         badges={[
-          { icon: Brain, label: 'IA Preditiva' },
-          { icon: Zap, label: 'Tempo Real' },
-          { icon: Target, label: 'Alertas Precisos' }
+          { icon: Brain, label: "IA Preditiva" },
+          { icon: Zap, label: "Tempo Real" },
+          { icon: Target, label: "Alertas Precisos" }
         ]}
       />
 

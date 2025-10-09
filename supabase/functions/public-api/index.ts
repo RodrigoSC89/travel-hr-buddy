@@ -3,20 +3,20 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-api-key',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-api-key",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
 };
 
 // Rate limiting store (in production, use Redis or similar)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
-const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 serve(async (req) => {
   // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
@@ -26,14 +26,14 @@ serve(async (req) => {
     const method = req.method;
 
     // Extract API key from headers
-    const apiKey = req.headers.get('x-api-key') || req.headers.get('authorization')?.replace('Bearer ', '');
+    const apiKey = req.headers.get("x-api-key") || req.headers.get("authorization")?.replace("Bearer ", "");
     
     if (!apiKey) {
       return new Response(
-        JSON.stringify({ error: 'API key required' }),
+        JSON.stringify({ error: "API key required" }),
         { 
           status: 401, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
         }
       );
     }
@@ -43,12 +43,12 @@ serve(async (req) => {
     
     // In a real implementation, you'd validate the API key against a database
     // For demo purposes, we'll use a simple validation
-    if (!apiKey.startsWith('naut_')) {
+    if (!apiKey.startsWith("naut_")) {
       return new Response(
-        JSON.stringify({ error: 'Invalid API key format' }),
+        JSON.stringify({ error: "Invalid API key format" }),
         { 
           status: 401, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
         }
       );
     }
@@ -64,15 +64,15 @@ serve(async (req) => {
       if (now < clientLimits.resetTime) {
         if (clientLimits.count >= limit) {
           return new Response(
-            JSON.stringify({ error: 'Rate limit exceeded' }),
+            JSON.stringify({ error: "Rate limit exceeded" }),
             { 
               status: 429, 
               headers: { 
                 ...corsHeaders, 
-                'Content-Type': 'application/json',
-                'X-RateLimit-Limit': limit.toString(),
-                'X-RateLimit-Remaining': '0',
-                'X-RateLimit-Reset': clientLimits.resetTime.toString()
+                "Content-Type": "application/json",
+                "X-RateLimit-Limit": limit.toString(),
+                "X-RateLimit-Remaining": "0",
+                "X-RateLimit-Reset": clientLimits.resetTime.toString()
               } 
             }
           );
@@ -86,57 +86,57 @@ serve(async (req) => {
     }
 
     // API Routes
-    if (path.startsWith('/api/v1/vessels') && method === 'GET') {
+    if (path.startsWith("/api/v1/vessels") && method === "GET") {
       return await handleVesselsGet(supabase);
     }
 
-    if (path.startsWith('/api/v1/certificates') && method === 'GET') {
+    if (path.startsWith("/api/v1/certificates") && method === "GET") {
       return await handleCertificatesGet(supabase);
     }
 
-    if (path.startsWith('/api/v1/certificates') && method === 'POST') {
+    if (path.startsWith("/api/v1/certificates") && method === "POST") {
       const body = await req.json();
       return await handleCertificatesPost(supabase, body);
     }
 
-    if (path.startsWith('/api/v1/analytics/crew') && method === 'GET') {
+    if (path.startsWith("/api/v1/analytics/crew") && method === "GET") {
       return await handleCrewAnalytics(supabase);
     }
 
-    if (path.startsWith('/api/v1/peotram/reports') && method === 'GET') {
+    if (path.startsWith("/api/v1/peotram/reports") && method === "GET") {
       return await handlePeotramReports(supabase);
     }
 
-    if (path === '/api/v1/status' && method === 'GET') {
+    if (path === "/api/v1/status" && method === "GET") {
       return new Response(
         JSON.stringify({
-          status: 'healthy',
-          version: '1.0.0',
+          status: "healthy",
+          version: "1.0.0",
           timestamp: new Date().toISOString()
         }),
         { 
           status: 200, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
         }
       );
     }
 
     // Route not found
     return new Response(
-      JSON.stringify({ error: 'Endpoint not found' }),
+      JSON.stringify({ error: "Endpoint not found" }),
       { 
         status: 404, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
 
   } catch (error) {
-    console.error('API Error:', error);
+    console.error("API Error:", error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
+      JSON.stringify({ error: "Internal server error" }),
       { 
         status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   }
@@ -145,7 +145,7 @@ serve(async (req) => {
 async function handleVesselsGet(supabase: any) {
   try {
     const { data: vessels, error } = await supabase
-      .from('vessels')
+      .from("vessels")
       .select(`
         id,
         name,
@@ -168,21 +168,21 @@ async function handleVesselsGet(supabase: any) {
         meta: {
           total: vessels?.length || 0,
           limit: 50,
-          endpoint: '/api/v1/vessels'
+          endpoint: "/api/v1/vessels"
         }
       }),
       { 
         status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   } catch (error) {
-    console.error('Vessels API Error:', error);
+    console.error("Vessels API Error:", error);
     return new Response(
-      JSON.stringify({ error: 'Failed to fetch vessels' }),
+      JSON.stringify({ error: "Failed to fetch vessels" }),
       { 
         status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   }
@@ -191,7 +191,7 @@ async function handleVesselsGet(supabase: any) {
 async function handleCertificatesGet(supabase: any) {
   try {
     const { data: certificates, error } = await supabase
-      .from('certificates')
+      .from("certificates")
       .select(`
         id,
         certificate_type,
@@ -213,21 +213,21 @@ async function handleCertificatesGet(supabase: any) {
         meta: {
           total: certificates?.length || 0,
           limit: 100,
-          endpoint: '/api/v1/certificates'
+          endpoint: "/api/v1/certificates"
         }
       }),
       { 
         status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   } catch (error) {
-    console.error('Certificates API Error:', error);
+    console.error("Certificates API Error:", error);
     return new Response(
-      JSON.stringify({ error: 'Failed to fetch certificates' }),
+      JSON.stringify({ error: "Failed to fetch certificates" }),
       { 
         status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   }
@@ -236,7 +236,7 @@ async function handleCertificatesGet(supabase: any) {
 async function handleCertificatesPost(supabase: any, body: any) {
   try {
     const { data: certificate, error } = await supabase
-      .from('certificates')
+      .from("certificates")
       .insert([{
         certificate_type: body.certificate_type,
         certificate_number: body.certificate_number,
@@ -244,7 +244,7 @@ async function handleCertificatesPost(supabase: any, body: any) {
         expiry_date: body.expiry_date,
         issuing_authority: body.issuing_authority,
         employee_id: body.employee_id,
-        status: 'active'
+        status: "active"
       }])
       .select()
       .single();
@@ -254,20 +254,20 @@ async function handleCertificatesPost(supabase: any, body: any) {
     return new Response(
       JSON.stringify({
         data: certificate,
-        message: 'Certificate created successfully'
+        message: "Certificate created successfully"
       }),
       { 
         status: 201, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   } catch (error) {
-    console.error('Certificate Creation Error:', error);
+    console.error("Certificate Creation Error:", error);
     return new Response(
-      JSON.stringify({ error: 'Failed to create certificate' }),
+      JSON.stringify({ error: "Failed to create certificate" }),
       { 
         status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   }
@@ -276,7 +276,7 @@ async function handleCertificatesPost(supabase: any, body: any) {
 async function handleCrewAnalytics(supabase: any) {
   try {
     const { data: crewMembers, error } = await supabase
-      .from('crew_members')
+      .from("crew_members")
       .select(`
         id,
         full_name,
@@ -310,21 +310,21 @@ async function handleCrewAnalytics(supabase: any) {
         crew_details: crewMembers || [],
         meta: {
           generated_at: new Date().toISOString(),
-          endpoint: '/api/v1/analytics/crew'
+          endpoint: "/api/v1/analytics/crew"
         }
       }),
       { 
         status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   } catch (error) {
-    console.error('Crew Analytics Error:', error);
+    console.error("Crew Analytics Error:", error);
     return new Response(
-      JSON.stringify({ error: 'Failed to generate crew analytics' }),
+      JSON.stringify({ error: "Failed to generate crew analytics" }),
       { 
         status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   }
@@ -333,7 +333,7 @@ async function handleCrewAnalytics(supabase: any) {
 async function handlePeotramReports(supabase: any) {
   try {
     const { data: audits, error } = await supabase
-      .from('peotram_audits')
+      .from("peotram_audits")
       .select(`
         id,
         audit_type,
@@ -355,21 +355,21 @@ async function handlePeotramReports(supabase: any) {
         meta: {
           total: audits?.length || 0,
           limit: 25,
-          endpoint: '/api/v1/peotram/reports'
+          endpoint: "/api/v1/peotram/reports"
         }
       }),
       { 
         status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   } catch (error) {
-    console.error('PEOTRAM Reports Error:', error);
+    console.error("PEOTRAM Reports Error:", error);
     return new Response(
-      JSON.stringify({ error: 'Failed to fetch PEOTRAM reports' }),
+      JSON.stringify({ error: "Failed to fetch PEOTRAM reports" }),
       { 
         status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       }
     );
   }

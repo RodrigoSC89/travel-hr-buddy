@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar as CalendarIcon, Plus, Clock, MapPin, Users, Edit, Trash2, Smartphone } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar as CalendarIcon, Plus, Clock, MapPin, Users, Edit, Trash2, Smartphone } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 interface Reservation {
   id: string;
@@ -20,7 +20,7 @@ interface Reservation {
   start_date: string;
   end_date: string;
   location?: string;
-  status: 'pending' | 'confirmed' | 'cancelled';
+  status: "pending" | "confirmed" | "cancelled";
   created_at: string;
 }
 
@@ -30,13 +30,13 @@ export const ReservationsDashboard: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    reservation_type: '',
-    start_date: '',
-    end_date: '',
-    location: '',
-    status: 'confirmed' as 'pending' | 'confirmed' | 'cancelled'
+    title: "",
+    description: "",
+    reservation_type: "",
+    start_date: "",
+    end_date: "",
+    location: "",
+    status: "confirmed" as "pending" | "confirmed" | "cancelled"
   });
 
   const { toast } = useToast();
@@ -51,23 +51,21 @@ export const ReservationsDashboard: React.FC = () => {
   const triggerHaptics = async () => {
     try {
       await Haptics.impact({ style: ImpactStyle.Medium });
-    } catch (error) {
-      console.log('Haptics not available');
-    }
+    } catch (error) {}
   };
 
   const fetchReservations = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('reservations')
-        .select('*')
-        .order('start_date', { ascending: true });
+        .from("reservations")
+        .select("*")
+        .order("start_date", { ascending: true });
 
       if (error) throw error;
       setReservations((data || []) as Reservation[]);
     } catch (error) {
-      console.error('Error fetching reservations:', error);
+      console.error("Error fetching reservations:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar reservas",
@@ -94,9 +92,9 @@ export const ReservationsDashboard: React.FC = () => {
 
       if (selectedReservation) {
         const { error } = await supabase
-          .from('reservations')
+          .from("reservations")
           .update(reservationData)
-          .eq('id', selectedReservation.id);
+          .eq("id", selectedReservation.id);
 
         if (error) throw error;
         toast({
@@ -105,7 +103,7 @@ export const ReservationsDashboard: React.FC = () => {
         });
       } else {
         const { error } = await supabase
-          .from('reservations')
+          .from("reservations")
           .insert([reservationData]);
 
         if (error) throw error;
@@ -119,7 +117,7 @@ export const ReservationsDashboard: React.FC = () => {
       resetForm();
       fetchReservations();
     } catch (error) {
-      console.error('Error saving reservation:', error);
+      console.error("Error saving reservation:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar reserva",
@@ -133,9 +131,9 @@ export const ReservationsDashboard: React.FC = () => {
     
     try {
       const { error } = await supabase
-        .from('reservations')
+        .from("reservations")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
       
@@ -145,7 +143,7 @@ export const ReservationsDashboard: React.FC = () => {
       });
       fetchReservations();
     } catch (error) {
-      console.error('Error deleting reservation:', error);
+      console.error("Error deleting reservation:", error);
       toast({
         title: "Erro",
         description: "Erro ao excluir reserva",
@@ -156,13 +154,13 @@ export const ReservationsDashboard: React.FC = () => {
 
   const resetForm = () => {
     setFormData({
-      title: '',
-      description: '',
-      reservation_type: '',
-      start_date: '',
-      end_date: '',
-      location: '',
-      status: 'confirmed' as 'pending' | 'confirmed' | 'cancelled'
+      title: "",
+      description: "",
+      reservation_type: "",
+      start_date: "",
+      end_date: "",
+      location: "",
+      status: "confirmed" as "pending" | "confirmed" | "cancelled"
     });
     setSelectedReservation(null);
   };
@@ -171,11 +169,11 @@ export const ReservationsDashboard: React.FC = () => {
     setSelectedReservation(reservation);
     setFormData({
       title: reservation.title,
-      description: reservation.description || '',
+      description: reservation.description || "",
       reservation_type: reservation.reservation_type,
       start_date: new Date(reservation.start_date).toISOString().slice(0, 16),
       end_date: new Date(reservation.end_date).toISOString().slice(0, 16),
-      location: reservation.location || '',
+      location: reservation.location || "",
       status: reservation.status
     });
     setIsDialogOpen(true);
@@ -188,19 +186,19 @@ export const ReservationsDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'bg-green-100 text-green-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      default: return 'bg-secondary text-secondary-foreground';
+    case "confirmed": return "bg-green-100 text-green-800";
+    case "pending": return "bg-yellow-100 text-yellow-800";
+    case "cancelled": return "bg-red-100 text-red-800";
+    default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'Confirmada';
-      case 'pending': return 'Pendente';
-      case 'cancelled': return 'Cancelada';
-      default: return 'Desconhecida';
+    case "confirmed": return "Confirmada";
+    case "pending": return "Pendente";
+    case "cancelled": return "Cancelada";
+    default: return "Desconhecida";
     }
   };
 
@@ -238,10 +236,10 @@ export const ReservationsDashboard: React.FC = () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {selectedReservation ? 'Editar Reserva' : 'Nova Reserva'}
+                {selectedReservation ? "Editar Reserva" : "Nova Reserva"}
               </DialogTitle>
               <DialogDescription>
-                {selectedReservation ? 'Edite os detalhes da reserva' : 'Crie uma nova reserva'}
+                {selectedReservation ? "Edite os detalhes da reserva" : "Crie uma nova reserva"}
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -313,7 +311,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Status</label>
                 <Select
                   value={formData.status}
-                  onValueChange={(value: 'pending' | 'confirmed' | 'cancelled') => 
+                  onValueChange={(value: "pending" | "confirmed" | "cancelled") => 
                     setFormData({ ...formData, status: value })
                   }
                 >
@@ -329,7 +327,7 @@ export const ReservationsDashboard: React.FC = () => {
               </div>
               <div className="flex gap-2">
                 <Button type="submit" className="flex-1">
-                  {selectedReservation ? 'Atualizar' : 'Criar'}
+                  {selectedReservation ? "Atualizar" : "Criar"}
                 </Button>
                 <Button
                   type="button"
@@ -364,7 +362,7 @@ export const ReservationsDashboard: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Confirmadas</p>
                 <p className="text-2xl font-bold">
-                  {reservations.filter(r => r.status === 'confirmed').length}
+                  {reservations.filter(r => r.status === "confirmed").length}
                 </p>
               </div>
             </div>
@@ -377,7 +375,7 @@ export const ReservationsDashboard: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
                 <p className="text-2xl font-bold">
-                  {reservations.filter(r => r.status === 'pending').length}
+                  {reservations.filter(r => r.status === "pending").length}
                 </p>
               </div>
             </div>
@@ -390,7 +388,7 @@ export const ReservationsDashboard: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Canceladas</p>
                 <p className="text-2xl font-bold">
-                  {reservations.filter(r => r.status === 'cancelled').length}
+                  {reservations.filter(r => r.status === "cancelled").length}
                 </p>
               </div>
             </div>
@@ -418,8 +416,8 @@ export const ReservationsDashboard: React.FC = () => {
                 <div className="flex items-center gap-2 text-sm">
                   <Clock className="h-4 w-4" />
                   <span>
-                    {new Date(reservation.start_date).toLocaleString('pt-BR')} - 
-                    {new Date(reservation.end_date).toLocaleString('pt-BR')}
+                    {new Date(reservation.start_date).toLocaleString("pt-BR")} - 
+                    {new Date(reservation.end_date).toLocaleString("pt-BR")}
                   </span>
                 </div>
                 {reservation.location && (

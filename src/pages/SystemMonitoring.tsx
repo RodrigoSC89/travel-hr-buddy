@@ -1,6 +1,6 @@
-import React from 'react';
-import SystemMonitoringDashboard from '@/components/monitoring/system-monitoring-dashboard';
-import { BackToDashboard } from '@/components/ui/back-to-dashboard';
+import React from "react";
+import SystemMonitoringDashboard from "@/components/monitoring/system-monitoring-dashboard";
+import { BackToDashboard } from "@/components/ui/back-to-dashboard";
 
 const SystemMonitoring = () => {
   return (

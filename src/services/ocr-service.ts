@@ -1,4 +1,4 @@
-import Tesseract from 'tesseract.js';
+import Tesseract from "tesseract.js";
 
 export interface OCRResult {
   text: string;
@@ -27,13 +27,13 @@ export interface OCRProgress {
 export class OCRService {
   private worker: Tesseract.Worker | null = null;
 
-  async initialize(language: string = 'por+eng'): Promise<void> {
+  async initialize(language: string = "por+eng"): Promise<void> {
     if (this.worker) {
       await this.terminate();
     }
 
     this.worker = await Tesseract.createWorker(language, 1, {
-      logger: (m) => console.log('OCR:', m),
+      logger: (m) => {},
     });
   }
 
@@ -61,7 +61,7 @@ export class OCRService {
     return {
       text: data.text,
       confidence: data.confidence,
-      language: 'por+eng',
+      language: "por+eng",
       processingTime,
       blocks,
     };
@@ -90,7 +90,7 @@ export class OCRService {
     const fields = new Map<string, string>();
 
     // Parse text to extract form fields (basic implementation)
-    const lines = result.text.split('\n');
+    const lines = result.text.split("\n");
     
     for (const line of lines) {
       // Look for key-value patterns like "Field Name: Value"
@@ -113,7 +113,7 @@ export class OCRService {
 
   // Enhance image for better OCR results
   static preprocessImage(canvas: HTMLCanvasElement): void {
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);

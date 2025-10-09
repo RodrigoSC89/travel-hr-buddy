@@ -21,8 +21,8 @@ export async function testWindyConnection(): Promise<WindyTestResult> {
   if (!apiKey) {
     return {
       success: false,
-      message: 'Windy/Weather API key not configured',
-      error: 'Missing VITE_WINDY_API_KEY or VITE_OPENWEATHER_API_KEY',
+      message: "Windy/Weather API key not configured",
+      error: "Missing VITE_WINDY_API_KEY or VITE_OPENWEATHER_API_KEY",
     };
   }
 
@@ -32,7 +32,7 @@ export async function testWindyConnection(): Promise<WindyTestResult> {
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=-22.9068&lon=-43.1729&appid=${apiKey}&units=metric`,
       {
-        method: 'GET',
+        method: "GET",
       }
     );
 
@@ -52,7 +52,7 @@ export async function testWindyConnection(): Promise<WindyTestResult> {
     if (data.weather && data.main) {
       return {
         success: true,
-        message: 'Weather API connection successful',
+        message: "Weather API connection successful",
         responseTime,
         data: {
           location: data.name,
@@ -64,16 +64,16 @@ export async function testWindyConnection(): Promise<WindyTestResult> {
 
     return {
       success: false,
-      message: 'Weather API returned unexpected data',
+      message: "Weather API returned unexpected data",
       responseTime,
-      error: 'Invalid response format',
+      error: "Invalid response format",
     };
   } catch (error) {
     return {
       success: false,
-      message: 'Failed to connect to Weather API',
+      message: "Failed to connect to Weather API",
       responseTime: Date.now() - startTime,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }

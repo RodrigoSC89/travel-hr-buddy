@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
 import {
   Bell,
   Plane,
@@ -23,18 +23,18 @@ import {
   MessageSquare,
   X,
   Filter
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+} from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface TravelNotification {
   id: string;
-  type: 'flight' | 'hotel' | 'car' | 'general' | 'alert' | 'reminder';
+  type: "flight" | "hotel" | "car" | "general" | "alert" | "reminder";
   title: string;
   message: string;
   timestamp: Date;
   read: boolean;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  priority: "low" | "medium" | "high" | "urgent";
   actionRequired?: boolean;
   relatedBooking?: string;
   category: string;
@@ -56,7 +56,7 @@ export const TravelNotifications = () => {
   const { toast } = useToast();
   const [notifications, setNotifications] = useState<TravelNotification[]>([]);
   const [showSettings, setShowSettings] = useState(false);
-  const [filterType, setFilterType] = useState<string>('all');
+  const [filterType, setFilterType] = useState<string>("all");
   const [settings, setSettings] = useState<NotificationSettings>({
     pushNotifications: true,
     emailNotifications: true,
@@ -73,69 +73,69 @@ export const TravelNotifications = () => {
   useEffect(() => {
     const mockNotifications: TravelNotification[] = [
       {
-        id: '1',
-        type: 'flight',
-        title: 'Voo LATAM 8439 - Portão Alterado',
-        message: 'Seu voo para Rio de Janeiro teve o portão alterado para B12. Check-in já disponível.',
+        id: "1",
+        type: "flight",
+        title: "Voo LATAM 8439 - Portão Alterado",
+        message: "Seu voo para Rio de Janeiro teve o portão alterado para B12. Check-in já disponível.",
         timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
         read: false,
-        priority: 'high',
+        priority: "high",
         actionRequired: true,
-        relatedBooking: 'TR-2024-ABC123',
-        category: 'Atualização de Voo'
+        relatedBooking: "TR-2024-ABC123",
+        category: "Atualização de Voo"
       },
       {
-        id: '2',
-        type: 'hotel',
-        title: 'Check-in Antecipado Disponível',
-        message: 'O Marriott Copacabana liberou check-in antecipado para 12:00. Confirme sua chegada.',
+        id: "2",
+        type: "hotel",
+        title: "Check-in Antecipado Disponível",
+        message: "O Marriott Copacabana liberou check-in antecipado para 12:00. Confirme sua chegada.",
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
         read: false,
-        priority: 'medium',
-        relatedBooking: 'TR-2024-DEF456',
-        category: 'Hotel'
+        priority: "medium",
+        relatedBooking: "TR-2024-DEF456",
+        category: "Hotel"
       },
       {
-        id: '3',
-        type: 'alert',
-        title: 'Alerta de Preço - Passagem em Promoção',
-        message: 'O preço da passagem São Paulo → Miami caiu 25%. Aproveite a oportunidade!',
+        id: "3",
+        type: "alert",
+        title: "Alerta de Preço - Passagem em Promoção",
+        message: "O preço da passagem São Paulo → Miami caiu 25%. Aproveite a oportunidade!",
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4), // 4 hours ago
         read: true,
-        priority: 'medium',
-        category: 'Alerta de Preço'
+        priority: "medium",
+        category: "Alerta de Preço"
       },
       {
-        id: '4',
-        type: 'reminder',
-        title: 'Lembrete: Documentação de Viagem',
-        message: 'Não esqueça de verificar se seu passaporte está válido para a viagem internacional.',
+        id: "4",
+        type: "reminder",
+        title: "Lembrete: Documentação de Viagem",
+        message: "Não esqueça de verificar se seu passaporte está válido para a viagem internacional.",
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
         read: true,
-        priority: 'low',
-        relatedBooking: 'TR-2024-GHI789',
-        category: 'Lembrete'
+        priority: "low",
+        relatedBooking: "TR-2024-GHI789",
+        category: "Lembrete"
       },
       {
-        id: '5',
-        type: 'car',
-        title: 'Locadora de Veículo Confirmada',
-        message: 'Sua reserva na Hertz foi confirmada. Retire na chegada do aeroporto Santos Dumont.',
+        id: "5",
+        type: "car",
+        title: "Locadora de Veículo Confirmada",
+        message: "Sua reserva na Hertz foi confirmada. Retire na chegada do aeroporto Santos Dumont.",
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 days ago
         read: true,
-        priority: 'low',
-        relatedBooking: 'TR-2024-JKL012',
-        category: 'Locação de Veículos'
+        priority: "low",
+        relatedBooking: "TR-2024-JKL012",
+        category: "Locação de Veículos"
       },
       {
-        id: '6',
-        type: 'general',
-        title: 'Dica de Viagem: Clima em Destino',
-        message: 'Previsão de chuva no Rio de Janeiro nos próximos 3 dias. Leve guarda-chuva!',
+        id: "6",
+        type: "general",
+        title: "Dica de Viagem: Clima em Destino",
+        message: "Previsão de chuva no Rio de Janeiro nos próximos 3 dias. Leve guarda-chuva!",
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
         read: true,
-        priority: 'low',
-        category: 'Dicas de Viagem'
+        priority: "low",
+        category: "Dicas de Viagem"
       }
     ];
     setNotifications(mockNotifications);
@@ -143,7 +143,7 @@ export const TravelNotifications = () => {
 
   const unreadCount = notifications.filter(n => !n.read).length;
   const filteredNotifications = notifications.filter(n => 
-    filterType === 'all' || n.type === filterType || (filterType === 'unread' && !n.read)
+    filterType === "all" || n.type === filterType || (filterType === "unread" && !n.read)
   );
 
   const markAsRead = (id: string) => {
@@ -172,32 +172,32 @@ export const TravelNotifications = () => {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'flight': return <Plane className="h-5 w-5" />;
-      case 'hotel': return <Hotel className="h-5 w-5" />;
-      case 'car': return <Car className="h-5 w-5" />;
-      case 'alert': return <AlertTriangle className="h-5 w-5" />;
-      case 'reminder': return <Clock className="h-5 w-5" />;
-      default: return <Bell className="h-5 w-5" />;
+    case "flight": return <Plane className="h-5 w-5" />;
+    case "hotel": return <Hotel className="h-5 w-5" />;
+    case "car": return <Car className="h-5 w-5" />;
+    case "alert": return <AlertTriangle className="h-5 w-5" />;
+    case "reminder": return <Clock className="h-5 w-5" />;
+    default: return <Bell className="h-5 w-5" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'destructive';
-      case 'high': return 'default';
-      case 'medium': return 'secondary';
-      case 'low': return 'outline';
-      default: return 'secondary';
+    case "urgent": return "destructive";
+    case "high": return "default";
+    case "medium": return "secondary";
+    case "low": return "outline";
+    default: return "secondary";
     }
   };
 
   const getPriorityText = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'Urgente';
-      case 'high': return 'Alta';
-      case 'medium': return 'Média';
-      case 'low': return 'Baixa';
-      default: return 'Média';
+    case "urgent": return "Urgente";
+    case "high": return "Alta";
+    case "medium": return "Média";
+    case "low": return "Baixa";
+    default: return "Média";
     }
   };
 
@@ -238,21 +238,21 @@ export const TravelNotifications = () => {
           {filteredNotifications.map((notification) => (
             <Card 
               key={notification.id} 
-              className={`hover:shadow-md transition-shadow ${!notification.read ? 'border-l-4 border-l-primary' : ''}`}
+              className={`hover:shadow-md transition-shadow ${!notification.read ? "border-l-4 border-l-primary" : ""}`}
             >
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3 flex-1">
-                    <div className={`p-2 rounded-full ${notification.type === 'alert' ? 'bg-destructive/10 text-destructive' : 
-                      notification.type === 'flight' ? 'bg-blue-50 text-blue-600' :
-                      notification.type === 'hotel' ? 'bg-green-50 text-green-600' :
-                      notification.type === 'car' ? 'bg-purple-50 text-purple-600' :
-                      'bg-muted text-muted-foreground'}`}>
+                    <div className={`p-2 rounded-full ${notification.type === "alert" ? "bg-destructive/10 text-destructive" : 
+                      notification.type === "flight" ? "bg-blue-50 text-blue-600" :
+                        notification.type === "hotel" ? "bg-green-50 text-green-600" :
+                          notification.type === "car" ? "bg-purple-50 text-purple-600" :
+                            "bg-muted text-muted-foreground"}`}>
                       {getNotificationIcon(notification.type)}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className={`font-medium ${!notification.read ? 'font-semibold' : ''}`}>
+                        <h4 className={`font-medium ${!notification.read ? "font-semibold" : ""}`}>
                           {notification.title}
                         </h4>
                         <Badge variant={getPriorityColor(notification.priority)} className="text-xs">

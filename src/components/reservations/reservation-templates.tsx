@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { 
   Bookmark, 
   Plus, 
@@ -19,10 +19,10 @@ import {
   FileText,
   Users,
   Globe
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ReservationTemplate {
   id: string;
@@ -61,18 +61,18 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<ReservationTemplate | null>(null);
   const [formData, setFormData] = useState({
-    name: '',
-    template_type: 'hotel',
-    title: '',
-    description: '',
-    reservation_type: 'hotel' as const,
-    location: '',
-    address: '',
-    contact_info: '',
-    supplier_url: '',
-    room_type: '',
-    currency: 'BRL',
-    notes: '',
+    name: "",
+    template_type: "hotel",
+    title: "",
+    description: "",
+    reservation_type: "hotel" as const,
+    location: "",
+    address: "",
+    contact_info: "",
+    supplier_url: "",
+    room_type: "",
+    currency: "BRL",
+    notes: "",
     is_public: false
   });
 
@@ -89,9 +89,9 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('reservation_templates')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("reservation_templates")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setTemplates((data || []).map(item => ({
@@ -99,7 +99,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         template_data: item.template_data as any
       })));
     } catch (error) {
-      console.error('Error fetching templates:', error);
+      console.error("Error fetching templates:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar templates",
@@ -142,9 +142,9 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
 
       if (editingTemplate) {
         const { error } = await supabase
-          .from('reservation_templates')
+          .from("reservation_templates")
           .update(templateData)
-          .eq('id', editingTemplate.id);
+          .eq("id", editingTemplate.id);
 
         if (error) throw error;
 
@@ -154,7 +154,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         });
       } else {
         const { error } = await supabase
-          .from('reservation_templates')
+          .from("reservation_templates")
           .insert([templateData]);
 
         if (error) throw error;
@@ -170,7 +170,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       setEditingTemplate(null);
       fetchTemplates();
     } catch (error) {
-      console.error('Error saving template:', error);
+      console.error("Error saving template:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar template",
@@ -180,13 +180,13 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
   };
 
   const handleDeleteTemplate = async (templateId: string) => {
-    if (!confirm('Tem certeza que deseja excluir este template?')) return;
+    if (!confirm("Tem certeza que deseja excluir este template?")) return;
 
     try {
       const { error } = await supabase
-        .from('reservation_templates')
+        .from("reservation_templates")
         .delete()
-        .eq('id', templateId);
+        .eq("id", templateId);
 
       if (error) throw error;
 
@@ -197,7 +197,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
 
       fetchTemplates();
     } catch (error) {
-      console.error('Error deleting template:', error);
+      console.error("Error deleting template:", error);
       toast({
         title: "Erro",
         description: "Erro ao excluir template",
@@ -221,15 +221,15 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       name: template.name,
       template_type: template.template_type,
       title: template.template_data.title,
-      description: template.template_data.description || '',
+      description: template.template_data.description || "",
       reservation_type: template.template_data.reservation_type as any,
-      location: template.template_data.location || '',
-      address: template.template_data.address || '',
-      contact_info: template.template_data.contact_info || '',
-      supplier_url: template.template_data.supplier_url || '',
-      room_type: template.template_data.room_type || '',
-      currency: template.template_data.currency || 'BRL',
-      notes: template.template_data.notes || '',
+      location: template.template_data.location || "",
+      address: template.template_data.address || "",
+      contact_info: template.template_data.contact_info || "",
+      supplier_url: template.template_data.supplier_url || "",
+      room_type: template.template_data.room_type || "",
+      currency: template.template_data.currency || "BRL",
+      notes: template.template_data.notes || "",
       is_public: template.is_public
     });
     setShowCreateDialog(true);
@@ -237,40 +237,40 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      template_type: 'hotel',
-      title: '',
-      description: '',
-      reservation_type: 'hotel',
-      location: '',
-      address: '',
-      contact_info: '',
-      supplier_url: '',
-      room_type: '',
-      currency: 'BRL',
-      notes: '',
+      name: "",
+      template_type: "hotel",
+      title: "",
+      description: "",
+      reservation_type: "hotel",
+      location: "",
+      address: "",
+      contact_info: "",
+      supplier_url: "",
+      room_type: "",
+      currency: "BRL",
+      notes: "",
       is_public: false
     });
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'hotel': return <Building className="h-4 w-4" />;
-      case 'flight': return <Plane className="h-4 w-4" />;
-      case 'transport': return <Car className="h-4 w-4" />;
-      case 'embarkation': return <Ship className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+    case "hotel": return <Building className="h-4 w-4" />;
+    case "flight": return <Plane className="h-4 w-4" />;
+    case "transport": return <Car className="h-4 w-4" />;
+    case "embarkation": return <Ship className="h-4 w-4" />;
+    default: return <FileText className="h-4 w-4" />;
     }
   };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'hotel': return 'Hotel';
-      case 'flight': return 'Voo';
-      case 'transport': return 'Transporte';
-      case 'embarkation': return 'Embarque';
-      case 'other': return 'Outro';
-      default: return type;
+    case "hotel": return "Hotel";
+    case "flight": return "Voo";
+    case "transport": return "Transporte";
+    case "embarkation": return "Embarque";
+    case "other": return "Outro";
+    default: return type;
     }
   };
 
@@ -421,7 +421,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {editingTemplate ? 'Editar Template' : 'Novo Template'}
+              {editingTemplate ? "Editar Template" : "Novo Template"}
             </DialogTitle>
             <DialogDescription>
               Configure um template para reutilizar em futuras reservas
@@ -549,7 +549,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
 
           <div className="flex gap-2">
             <Button onClick={handleSaveTemplate} className="flex-1">
-              {editingTemplate ? 'Atualizar Template' : 'Criar Template'}
+              {editingTemplate ? "Atualizar Template" : "Criar Template"}
             </Button>
             <Button
               variant="outline"

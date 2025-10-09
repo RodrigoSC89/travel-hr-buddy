@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   LineChart, 
   Line, 
@@ -21,7 +21,7 @@ import {
   RadialBarChart,
   RadialBar,
   Legend
-} from 'recharts';
+} from "recharts";
 import { 
   TrendingUp, 
   BarChart3, 
@@ -36,8 +36,8 @@ import {
   Ship,
   Settings,
   Award
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ChartData {
   name: string;
@@ -55,11 +55,11 @@ interface TimeSeriesData {
 
 interface AIInsight {
   id: string;
-  type: 'prediction' | 'recommendation' | 'alert' | 'optimization';
+  type: "prediction" | "recommendation" | "alert" | "optimization";
   title: string;
   description: string;
   confidence: number;
-  impact: 'high' | 'medium' | 'low';
+  impact: "high" | "medium" | "low";
   actionable: boolean;
   metadata?: any;
 }
@@ -70,25 +70,25 @@ const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {
   // Generate sample data based on profile
   const getChartData = () => {
     const performanceData: TimeSeriesData[] = [
-      { date: '01/01', value: 85, category: 'performance' },
-      { date: '01/02', value: 87, category: 'performance' },
-      { date: '01/03', value: 92, category: 'performance' },
-      { date: '01/04', value: 88, category: 'performance' },
-      { date: '01/05', value: 94, category: 'performance' },
-      { date: '01/06', value: 96, category: 'performance' },
-      { date: '01/07', value: 93, category: 'performance' }
+      { date: "01/01", value: 85, category: "performance" },
+      { date: "01/02", value: 87, category: "performance" },
+      { date: "01/03", value: 92, category: "performance" },
+      { date: "01/04", value: 88, category: "performance" },
+      { date: "01/05", value: 94, category: "performance" },
+      { date: "01/06", value: 96, category: "performance" },
+      { date: "01/07", value: 93, category: "performance" }
     ];
 
     const distributionData: ChartData[] = [
-      { name: 'Conformes', value: 75, color: '#22c55e' },
-      { name: 'Pendentes', value: 15, color: '#f59e0b' },
-      { name: 'Não Conformes', value: 10, color: '#ef4444' }
+      { name: "Conformes", value: 75, color: "#22c55e" },
+      { name: "Pendentes", value: 15, color: "#f59e0b" },
+      { name: "Não Conformes", value: 10, color: "#ef4444" }
     ];
 
     const comparisonData: ChartData[] = [
-      { name: 'Meta', value: 95, percentage: 95 },
-      { name: 'Atual', value: 87, percentage: 87 },
-      { name: 'Anterior', value: 82, percentage: 82 }
+      { name: "Meta", value: 95, percentage: 95 },
+      { name: "Atual", value: 87, percentage: 87 },
+      { name: "Anterior", value: 82, percentage: 82 }
     ];
 
     return { performanceData, distributionData, comparisonData };
@@ -96,7 +96,7 @@ const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {
 
   const { performanceData, distributionData, comparisonData } = getChartData();
 
-  const COLORS = ['#22c55e', '#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6'];
+  const COLORS = ["#22c55e", "#f59e0b", "#ef4444", "#3b82f6", "#8b5cf6"];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -118,17 +118,17 @@ const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {
               <XAxis 
                 dataKey="date" 
                 fontSize={12}
-                tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fill: "hsl(var(--muted-foreground))" }}
               />
               <YAxis 
                 fontSize={12}
-                tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fill: "hsl(var(--muted-foreground))" }}
               />
               <Tooltip 
                 contentStyle={{
-                  backgroundColor: 'hsl(var(--background))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px'
+                  backgroundColor: "hsl(var(--background))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px"
                 }}
               />
               <Area 
@@ -217,44 +217,44 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
     setTimeout(() => {
       const sampleInsights: AIInsight[] = [
         {
-          id: '1',
-          type: 'prediction',
-          title: 'Previsão de Não Conformidade',
-          description: 'Baseado nos padrões históricos, há 78% de chance de não conformidade na Embarcação MV Beta nos próximos 15 dias.',
+          id: "1",
+          type: "prediction",
+          title: "Previsão de Não Conformidade",
+          description: "Baseado nos padrões históricos, há 78% de chance de não conformidade na Embarcação MV Beta nos próximos 15 dias.",
           confidence: 78,
-          impact: 'high',
+          impact: "high",
           actionable: true,
-          metadata: { vessel: 'MV Beta', days: 15 }
+          metadata: { vessel: "MV Beta", days: 15 }
         },
         {
-          id: '2',
-          type: 'recommendation',
-          title: 'Otimização de Treinamentos',
-          description: 'Recomenda-se focar treinamentos em segurança para tripulação com baixa performance (< 85%).',
+          id: "2",
+          type: "recommendation",
+          title: "Otimização de Treinamentos",
+          description: "Recomenda-se focar treinamentos em segurança para tripulação com baixa performance (< 85%).",
           confidence: 92,
-          impact: 'medium',
+          impact: "medium",
           actionable: true,
-          metadata: { threshold: 85, module: 'training' }
+          metadata: { threshold: 85, module: "training" }
         },
         {
-          id: '3',
-          type: 'optimization',
-          title: 'Eficiência Operacional',
-          description: 'Redistribuindo 3 membros da tripulação, é possível aumentar a eficiência geral em 12%.',
+          id: "3",
+          type: "optimization",
+          title: "Eficiência Operacional",
+          description: "Redistribuindo 3 membros da tripulação, é possível aumentar a eficiência geral em 12%.",
           confidence: 85,
-          impact: 'medium',
+          impact: "medium",
           actionable: true,
           metadata: { efficiency_gain: 12, crew_moves: 3 }
         },
         {
-          id: '4',
-          type: 'alert',
-          title: 'Padrão Anômalo Detectado',
-          description: 'Detectado aumento de 34% em falhas de equipamentos na última semana. Investigação recomendada.',
+          id: "4",
+          type: "alert",
+          title: "Padrão Anômalo Detectado",
+          description: "Detectado aumento de 34% em falhas de equipamentos na última semana. Investigação recomendada.",
           confidence: 89,
-          impact: 'high',
+          impact: "high",
           actionable: true,
-          metadata: { increase: 34, period: '7_days' }
+          metadata: { increase: 34, period: "7_days" }
         }
       ];
 
@@ -272,23 +272,23 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
     generateInsights();
   }, [profile]);
 
-  const getInsightIcon = (type: AIInsight['type']) => {
+  const getInsightIcon = (type: AIInsight["type"]) => {
     switch (type) {
-      case 'prediction': return <TrendingUp className="h-4 w-4" />;
-      case 'recommendation': return <Target className="h-4 w-4" />;
-      case 'optimization': return <Zap className="h-4 w-4" />;
-      case 'alert': return <AlertTriangle className="h-4 w-4" />;
-      default: return <Brain className="h-4 w-4" />;
+    case "prediction": return <TrendingUp className="h-4 w-4" />;
+    case "recommendation": return <Target className="h-4 w-4" />;
+    case "optimization": return <Zap className="h-4 w-4" />;
+    case "alert": return <AlertTriangle className="h-4 w-4" />;
+    default: return <Brain className="h-4 w-4" />;
     }
   };
 
-  const getInsightColor = (type: AIInsight['type']) => {
+  const getInsightColor = (type: AIInsight["type"]) => {
     switch (type) {
-      case 'prediction': return 'text-info';
-      case 'recommendation': return 'text-success';
-      case 'optimization': return 'text-warning';
-      case 'alert': return 'text-destructive';
-      default: return 'text-primary';
+    case "prediction": return "text-info";
+    case "recommendation": return "text-success";
+    case "optimization": return "text-warning";
+    case "alert": return "text-destructive";
+    default: return "text-primary";
     }
   };
 
@@ -316,7 +316,7 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
             ) : (
               <Brain className="h-4 w-4" />
             )}
-            {isGenerating ? 'Gerando...' : 'Atualizar'}
+            {isGenerating ? "Gerando..." : "Atualizar"}
           </Button>
         </div>
       </CardHeader>
@@ -335,7 +335,7 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
                   <h4 className="font-medium text-sm">{insight.title}</h4>
                   <div className="flex items-center gap-2">
                     <Badge 
-                      variant={insight.impact === 'high' ? 'destructive' : insight.impact === 'medium' ? 'default' : 'secondary'}
+                      variant={insight.impact === "high" ? "destructive" : insight.impact === "medium" ? "default" : "secondary"}
                       className="text-xs"
                     >
                       {insight.impact}

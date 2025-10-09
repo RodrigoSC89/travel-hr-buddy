@@ -1,5 +1,5 @@
-import React from 'react';
-import AdvancedReportsSystem from '@/components/reports/advanced-reports-system';
+import React from "react";
+import AdvancedReportsSystem from "@/components/reports/advanced-reports-system";
 
 const Reports = () => {
   return (

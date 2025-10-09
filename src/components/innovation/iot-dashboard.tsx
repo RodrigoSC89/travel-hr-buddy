@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { 
   Wifi, 
   WifiOff, 
@@ -17,7 +17,7 @@ import {
   Zap,
   Droplets,
   Wind
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SensorData {
   id: string;
@@ -25,7 +25,7 @@ interface SensorData {
   type: string;
   value: number;
   unit: string;
-  status: 'online' | 'offline' | 'warning';
+  status: "online" | "offline" | "warning";
   lastUpdate: string;
   location: string;
   battery?: number;
@@ -35,7 +35,7 @@ interface DeviceStatus {
   id: string;
   name: string;
   type: string;
-  status: 'online' | 'offline' | 'maintenance';
+  status: "online" | "offline" | "maintenance";
   location: string;
   lastSeen: string;
   signalStrength: number;
@@ -44,77 +44,77 @@ interface DeviceStatus {
 export const IoTDashboard: React.FC = () => {
   const [sensors, setSensors] = useState<SensorData[]>([
     {
-      id: '1',
-      name: 'Temperatura Sala Principal',
-      type: 'temperature',
+      id: "1",
+      name: "Temperatura Sala Principal",
+      type: "temperature",
       value: 24.5,
-      unit: '°C',
-      status: 'online',
-      lastUpdate: '2 min ago',
-      location: 'Deck Principal',
+      unit: "°C",
+      status: "online",
+      lastUpdate: "2 min ago",
+      location: "Deck Principal",
       battery: 85
     },
     {
-      id: '2',
-      name: 'Pressão Hidráulica',
-      type: 'pressure',
+      id: "2",
+      name: "Pressão Hidráulica",
+      type: "pressure",
       value: 120.3,
-      unit: 'PSI',
-      status: 'online',
-      lastUpdate: '1 min ago',
-      location: 'Sala de Máquinas',
+      unit: "PSI",
+      status: "online",
+      lastUpdate: "1 min ago",
+      location: "Sala de Máquinas",
       battery: 92
     },
     {
-      id: '3',
-      name: 'Umidade do Ar',
-      type: 'humidity',
+      id: "3",
+      name: "Umidade do Ar",
+      type: "humidity",
       value: 65.2,
-      unit: '%',
-      status: 'warning',
-      lastUpdate: '5 min ago',
-      location: 'Ponte de Comando',
+      unit: "%",
+      status: "warning",
+      lastUpdate: "5 min ago",
+      location: "Ponte de Comando",
       battery: 45
     },
     {
-      id: '4',
-      name: 'Velocidade do Vento',
-      type: 'wind',
+      id: "4",
+      name: "Velocidade do Vento",
+      type: "wind",
       value: 15.8,
-      unit: 'kt',
-      status: 'online',
-      lastUpdate: '30 sec ago',
-      location: 'Deck Superior',
+      unit: "kt",
+      status: "online",
+      lastUpdate: "30 sec ago",
+      location: "Deck Superior",
       battery: 78
     }
   ]);
 
   const [devices, setDevices] = useState<DeviceStatus[]>([
     {
-      id: 'dev1',
-      name: 'Gateway Principal',
-      type: 'gateway',
-      status: 'online',
-      location: 'Ponte de Comando',
-      lastSeen: '30 sec ago',
+      id: "dev1",
+      name: "Gateway Principal",
+      type: "gateway",
+      status: "online",
+      location: "Ponte de Comando",
+      lastSeen: "30 sec ago",
       signalStrength: 95
     },
     {
-      id: 'dev2',
-      name: 'Repetidor Deck',
-      type: 'repeater',
-      status: 'online',
-      location: 'Deck Principal',
-      lastSeen: '1 min ago',
+      id: "dev2",
+      name: "Repetidor Deck",
+      type: "repeater",
+      status: "online",
+      location: "Deck Principal",
+      lastSeen: "1 min ago",
       signalStrength: 87
     },
     {
-      id: 'dev3',
-      name: 'Sensor Node A',
-      type: 'sensor_node',
-      status: 'maintenance',
-      location: 'Sala de Máquinas',
-      lastSeen: '2 hours ago',
+      id: "dev3",
+      name: "Sensor Node A",
+      type: "sensor_node",
+      status: "maintenance",
+      location: "Sala de Máquinas",
+      lastSeen: "2 hours ago",
       signalStrength: 0
     }
   ]);
@@ -125,7 +125,7 @@ export const IoTDashboard: React.FC = () => {
       setSensors(prev => prev.map(sensor => ({
         ...sensor,
         value: sensor.value + (Math.random() - 0.5) * 2,
-        lastUpdate: Math.random() > 0.7 ? 'just now' : sensor.lastUpdate
+        lastUpdate: Math.random() > 0.7 ? "just now" : sensor.lastUpdate
       })));
     }, 3000);
 
@@ -134,35 +134,35 @@ export const IoTDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'online':
-        return <CheckCircle className="h-4 w-4 text-success" />;
-      case 'warning':
-        return <AlertTriangle className="h-4 w-4 text-warning" />;
-      case 'offline':
-        return <WifiOff className="h-4 w-4 text-destructive" />;
-      default:
-        return <Activity className="h-4 w-4 text-muted-foreground" />;
+    case "online":
+      return <CheckCircle className="h-4 w-4 text-success" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-warning" />;
+    case "offline":
+      return <WifiOff className="h-4 w-4 text-destructive" />;
+    default:
+      return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getSensorIcon = (type: string) => {
     switch (type) {
-      case 'temperature':
-        return <Thermometer className="h-4 w-4" />;
-      case 'pressure':
-        return <Gauge className="h-4 w-4" />;
-      case 'humidity':
-        return <Droplets className="h-4 w-4" />;
-      case 'wind':
-        return <Wind className="h-4 w-4" />;
-      default:
-        return <Activity className="h-4 w-4" />;
+    case "temperature":
+      return <Thermometer className="h-4 w-4" />;
+    case "pressure":
+      return <Gauge className="h-4 w-4" />;
+    case "humidity":
+      return <Droplets className="h-4 w-4" />;
+    case "wind":
+      return <Wind className="h-4 w-4" />;
+    default:
+      return <Activity className="h-4 w-4" />;
     }
   };
 
-  const onlineSensors = sensors.filter(s => s.status === 'online').length;
+  const onlineSensors = sensors.filter(s => s.status === "online").length;
   const totalSensors = sensors.length;
-  const onlineDevices = devices.filter(d => d.status === 'online').length;
+  const onlineDevices = devices.filter(d => d.status === "online").length;
   const totalDevices = devices.length;
 
   return (
@@ -291,7 +291,7 @@ export const IoTDashboard: React.FC = () => {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{device.name}</CardTitle>
-                    <Badge variant={device.status === 'online' ? 'default' : 'destructive'}>
+                    <Badge variant={device.status === "online" ? "default" : "destructive"}>
                       {device.status}
                     </Badge>
                   </div>

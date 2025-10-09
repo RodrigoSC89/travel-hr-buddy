@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Wifi, 
   WifiOff, 
@@ -9,7 +9,7 @@ import {
   Signal,
   Clock,
   Zap
-} from 'lucide-react';
+} from "lucide-react";
 
 interface VoiceConnectionMonitorProps {
   isConnected: boolean;
@@ -24,38 +24,38 @@ const VoiceConnectionMonitor: React.FC<VoiceConnectionMonitorProps> = ({
   signalStrength = 0,
   sessionDuration = 0
 }) => {
-  const [networkType, setNetworkType] = useState<string>('unknown');
-  const [effectiveType, setEffectiveType] = useState<string>('unknown');
+  const [networkType, setNetworkType] = useState<string>("unknown");
+  const [effectiveType, setEffectiveType] = useState<string>("unknown");
 
   useEffect(() => {
     // Check network connection info if available
-    if ('connection' in navigator) {
+    if ("connection" in navigator) {
       const connection = (navigator as any).connection;
-      setNetworkType(connection.type || 'unknown');
-      setEffectiveType(connection.effectiveType || 'unknown');
+      setNetworkType(connection.type || "unknown");
+      setEffectiveType(connection.effectiveType || "unknown");
       
       const updateConnection = () => {
-        setNetworkType(connection.type || 'unknown');
-        setEffectiveType(connection.effectiveType || 'unknown');
+        setNetworkType(connection.type || "unknown");
+        setEffectiveType(connection.effectiveType || "unknown");
       };
 
-      connection.addEventListener('change', updateConnection);
-      return () => connection.removeEventListener('change', updateConnection);
+      connection.addEventListener("change", updateConnection);
+      return () => connection.removeEventListener("change", updateConnection);
     }
   }, []);
 
   const getConnectionQuality = () => {
-    if (!isConnected) return { label: 'Desconectado', color: 'text-muted-foreground', value: 0 };
-    if (latency < 100 && signalStrength > 80) return { label: 'Excelente', color: 'text-green-500', value: 95 };
-    if (latency < 200 && signalStrength > 60) return { label: 'Boa', color: 'text-yellow-500', value: 75 };
-    if (latency < 500 && signalStrength > 40) return { label: 'Regular', color: 'text-orange-500', value: 50 };
-    return { label: 'Ruim', color: 'text-red-500', value: 25 };
+    if (!isConnected) return { label: "Desconectado", color: "text-muted-foreground", value: 0 };
+    if (latency < 100 && signalStrength > 80) return { label: "Excelente", color: "text-green-500", value: 95 };
+    if (latency < 200 && signalStrength > 60) return { label: "Boa", color: "text-yellow-500", value: 75 };
+    if (latency < 500 && signalStrength > 40) return { label: "Regular", color: "text-orange-500", value: 50 };
+    return { label: "Ruim", color: "text-red-500", value: 25 };
   };
 
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const quality = getConnectionQuality();
@@ -78,7 +78,7 @@ const VoiceConnectionMonitor: React.FC<VoiceConnectionMonitorProps> = ({
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Status</span>
           <Badge variant={isConnected ? "default" : "secondary"}>
-            {isConnected ? 'Conectado' : 'Desconectado'}
+            {isConnected ? "Conectado" : "Desconectado"}
           </Badge>
         </div>
 
@@ -137,7 +137,7 @@ const VoiceConnectionMonitor: React.FC<VoiceConnectionMonitorProps> = ({
                   <span className="text-xs text-muted-foreground">Rede</span>
                 </div>
                 <div className="text-sm font-semibold capitalize">
-                  {effectiveType !== 'unknown' ? effectiveType : networkType}
+                  {effectiveType !== "unknown" ? effectiveType : networkType}
                 </div>
               </div>
             </div>
@@ -161,8 +161,8 @@ const VoiceConnectionMonitor: React.FC<VoiceConnectionMonitorProps> = ({
                     💡 Dica para Melhorar
                   </div>
                   <div className="text-yellow-700 dark:text-yellow-300">
-                    {latency > 500 ? 'Alta latência detectada. ' : ''}
-                    {signalStrength < 50 ? 'Sinal fraco. ' : ''}
+                    {latency > 500 ? "Alta latência detectada. " : ""}
+                    {signalStrength < 50 ? "Sinal fraco. " : ""}
                     Tente se aproximar do roteador ou usar uma conexão cabeada.
                   </div>
                 </div>

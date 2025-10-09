@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Slider } from '@/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import VoiceHistory from '@/components/voice/VoiceHistory';
-import VoiceAnalytics from '@/components/voice/VoiceAnalytics';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
-import { ModuleHeader } from '@/components/ui/module-header';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import VoiceHistory from "@/components/voice/VoiceHistory";
+import VoiceAnalytics from "@/components/voice/VoiceAnalytics";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
 import { 
   Mic, 
   Settings, 
@@ -27,21 +27,21 @@ import {
   X,
   Sparkles,
   Zap
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Voice() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [audioPermission, setAudioPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
+  const [audioPermission, setAudioPermission] = useState<"granted" | "denied" | "prompt">("prompt");
   const [voiceSettings, setVoiceSettings] = useState({
     autoListen: true,
     volume: 0.8,
     sensitivity: 0.5,
-    voice: 'alloy',
-    language: 'pt-BR',
+    voice: "alloy",
+    language: "pt-BR",
     wakeWord: true,
     noiseReduction: true
   });
@@ -53,7 +53,7 @@ export default function Voice() {
   const requestMicrophonePermission = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      setAudioPermission('granted');
+      setAudioPermission("granted");
       // Stop the stream immediately as we just needed permission
       stream.getTracks().forEach(track => track.stop());
       
@@ -63,7 +63,7 @@ export default function Voice() {
         duration: 3000
       });
     } catch (error) {
-      setAudioPermission('denied');
+      setAudioPermission("denied");
       toast({
         title: "Permissão Negada",
         description: "Microfone é necessário para usar comandos de voz",
@@ -81,19 +81,19 @@ export default function Voice() {
   // Handle ESC key to close modals
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         setShowAdvancedSettings(false);
         setIsListening(false);
         setIsSpeaking(false);
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, []);
 
   const handleVoiceToggle = () => {
-    if (audioPermission !== 'granted') {
+    if (audioPermission !== "granted") {
       requestMicrophonePermission();
       return;
     }
@@ -132,14 +132,14 @@ export default function Voice() {
 
   const handleNavigation = (module: string) => {
     const routes: { [key: string]: string } = {
-      'dashboard': '/',
-      'analytics': '/analytics',
-      'reports': '/reports',
-      'settings': '/settings',
-      'travel': '/travel',
-      'maritime': '/maritime',
-      'communication': '/communication',
-      'admin': '/admin'
+      "dashboard": "/",
+      "analytics": "/analytics",
+      "reports": "/reports",
+      "settings": "/settings",
+      "travel": "/travel",
+      "maritime": "/maritime",
+      "communication": "/communication",
+      "admin": "/admin"
     };
     
     const route = routes[module.toLowerCase()];
@@ -183,9 +183,9 @@ export default function Voice() {
         description="Controle o sistema usando comandos de voz inteligentes com IA avançada"
         gradient="purple"
         badges={[
-          { icon: Mic, label: 'Comandos de Voz' },
-          { icon: Sparkles, label: 'IA Conversacional' },
-          { icon: Zap, label: 'Tempo Real' }
+          { icon: Mic, label: "Comandos de Voz" },
+          { icon: Sparkles, label: "IA Conversacional" },
+          { icon: Zap, label: "Tempo Real" }
         ]}
       />
 
@@ -202,11 +202,11 @@ export default function Voice() {
         
         <Button
           onClick={handleVoiceToggle}
-          disabled={audioPermission === 'denied'}
+          disabled={audioPermission === "denied"}
           className={`flex items-center gap-2 ${
             isListening 
-              ? 'bg-destructive hover:bg-destructive/90' 
-              : 'bg-primary hover:bg-primary/90'
+              ? "bg-destructive hover:bg-destructive/90" 
+              : "bg-primary hover:bg-primary/90"
           }`}
         >
           {isListening ? (
@@ -224,7 +224,7 @@ export default function Voice() {
       </div>
 
       {/* Permission Alert */}
-      {audioPermission === 'denied' && (
+      {audioPermission === "denied" && (
         <Card className="border-destructive bg-destructive/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
@@ -265,10 +265,10 @@ export default function Voice() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center">
               <div className={`text-2xl font-bold ${
-                isListening ? 'text-destructive' : 
-                isSpeaking ? 'text-success' : 'text-muted-foreground'
+                isListening ? "text-destructive" : 
+                  isSpeaking ? "text-success" : "text-muted-foreground"
               }`}>
-                {isListening ? 'ATIVO' : isSpeaking ? 'FALANDO' : 'STANDBY'}
+                {isListening ? "ATIVO" : isSpeaking ? "FALANDO" : "STANDBY"}
               </div>
               <div className="text-sm text-muted-foreground">Status Atual</div>
             </div>

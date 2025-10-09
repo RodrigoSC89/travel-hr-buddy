@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Globe, 
   Zap, 
@@ -19,15 +19,15 @@ import {
   MessageSquare,
   CreditCard,
   BarChart3
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Integration {
   id: string;
   name: string;
   description: string;
-  category: 'data' | 'communication' | 'payment' | 'analytics' | 'automation';
-  status: 'connected' | 'disconnected' | 'error';
+  category: "data" | "communication" | "payment" | "analytics" | "automation";
+  status: "connected" | "disconnected" | "error";
   icon: React.ElementType;
   isEnabled: boolean;
   lastSync?: string;
@@ -35,55 +35,55 @@ interface Integration {
 }
 
 export const IntegrationsHub: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [integrations, setIntegrations] = useState<Integration[]>([
     {
-      id: '1',
-      name: 'Supabase Database',
-      description: 'Sistema de banco de dados principal para armazenamento e sincronização',
-      category: 'data',
-      status: 'connected',
+      id: "1",
+      name: "Supabase Database",
+      description: "Sistema de banco de dados principal para armazenamento e sincronização",
+      category: "data",
+      status: "connected",
       icon: Database,
       isEnabled: true,
-      lastSync: '2024-01-15T10:30:00Z'
+      lastSync: "2024-01-15T10:30:00Z"
     },
     {
-      id: '2',
-      name: 'WhatsApp Business',
-      description: 'Comunicação direta com tripulação via WhatsApp',
-      category: 'communication',
-      status: 'disconnected',
+      id: "2",
+      name: "WhatsApp Business",
+      description: "Comunicação direta com tripulação via WhatsApp",
+      category: "communication",
+      status: "disconnected",
       icon: MessageSquare,
       isEnabled: false
     },
     {
-      id: '3',
-      name: 'Google Analytics',
-      description: 'Análise de uso e performance do sistema',
-      category: 'analytics',
-      status: 'connected',
+      id: "3",
+      name: "Google Analytics",
+      description: "Análise de uso e performance do sistema",
+      category: "analytics",
+      status: "connected",
       icon: BarChart3,
       isEnabled: true,
-      lastSync: '2024-01-15T11:00:00Z'
+      lastSync: "2024-01-15T11:00:00Z"
     },
     {
-      id: '4',
-      name: 'Stripe Payments',
-      description: 'Processamento de pagamentos e faturas',
-      category: 'payment',
-      status: 'error',
+      id: "4",
+      name: "Stripe Payments",
+      description: "Processamento de pagamentos e faturas",
+      category: "payment",
+      status: "error",
       icon: CreditCard,
       isEnabled: false
     },
     {
-      id: '5',
-      name: 'OpenAI API',
-      description: 'Assistente de IA e análise preditiva',
-      category: 'automation',
-      status: 'connected',
+      id: "5",
+      name: "OpenAI API",
+      description: "Assistente de IA e análise preditiva",
+      category: "automation",
+      status: "connected",
       icon: Zap,
       isEnabled: true,
-      lastSync: '2024-01-15T10:45:00Z'
+      lastSync: "2024-01-15T10:45:00Z"
     }
   ]);
 
@@ -91,30 +91,30 @@ export const IntegrationsHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected': return 'text-green-600 bg-green-100';
-      case 'disconnected': return 'text-muted-foreground bg-muted';
-      case 'error': return 'text-destructive bg-destructive/10';
-      default: return 'text-muted-foreground bg-muted';
+    case "connected": return "text-green-600 bg-green-100";
+    case "disconnected": return "text-muted-foreground bg-muted";
+    case "error": return "text-destructive bg-destructive/10";
+    default: return "text-muted-foreground bg-muted";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'connected': return 'Conectado';
-      case 'disconnected': return 'Desconectado';
-      case 'error': return 'Erro';
-      default: return 'Desconhecido';
+    case "connected": return "Conectado";
+    case "disconnected": return "Desconectado";
+    case "error": return "Erro";
+    default: return "Desconhecido";
     }
   };
 
   const getCategoryLabel = (category: string) => {
     switch (category) {
-      case 'data': return 'Dados';
-      case 'communication': return 'Comunicação';
-      case 'payment': return 'Pagamentos';
-      case 'analytics': return 'Analytics';
-      case 'automation': return 'Automação';
-      default: return 'Outros';
+    case "data": return "Dados";
+    case "communication": return "Comunicação";
+    case "payment": return "Pagamentos";
+    case "analytics": return "Analytics";
+    case "automation": return "Automação";
+    default: return "Outros";
     }
   };
 
@@ -128,7 +128,7 @@ export const IntegrationsHub: React.FC = () => {
     const integration = integrations.find(i => i.id === id);
     toast({
       title: "Integração Atualizada",
-      description: `${integration?.name} foi ${integration?.isEnabled ? 'desabilitada' : 'habilitada'}`,
+      description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
     });
   };
 
@@ -144,8 +144,8 @@ export const IntegrationsHub: React.FC = () => {
     return integrations.filter(integration => integration.category === category);
   };
 
-  const connectedCount = integrations.filter(i => i.status === 'connected').length;
-  const errorCount = integrations.filter(i => i.status === 'error').length;
+  const connectedCount = integrations.filter(i => i.status === "connected").length;
+  const errorCount = integrations.filter(i => i.status === "error").length;
 
   return (
     <div className="space-y-6">
@@ -254,7 +254,7 @@ export const IntegrationsHub: React.FC = () => {
                       
                       {integration.lastSync && (
                         <p className="text-xs text-muted-foreground">
-                          Última sincronização: {new Date(integration.lastSync).toLocaleString('pt-BR')}
+                          Última sincronização: {new Date(integration.lastSync).toLocaleString("pt-BR")}
                         </p>
                       )}
                       
@@ -284,7 +284,7 @@ export const IntegrationsHub: React.FC = () => {
 
         <TabsContent value="data" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {getIntegrationsByCategory('data').map((integration) => {
+            {getIntegrationsByCategory("data").map((integration) => {
               const Icon = integration.icon;
               return (
                 <Card key={integration.id}>
@@ -316,7 +316,7 @@ export const IntegrationsHub: React.FC = () => {
 
         <TabsContent value="communication" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {getIntegrationsByCategory('communication').map((integration) => {
+            {getIntegrationsByCategory("communication").map((integration) => {
               const Icon = integration.icon;
               return (
                 <Card key={integration.id}>
@@ -348,7 +348,7 @@ export const IntegrationsHub: React.FC = () => {
 
         <TabsContent value="analytics" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {getIntegrationsByCategory('analytics').map((integration) => {
+            {getIntegrationsByCategory("analytics").map((integration) => {
               const Icon = integration.icon;
               return (
                 <Card key={integration.id}>

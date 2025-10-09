@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   FileText, 
   Plus, 
@@ -23,7 +23,7 @@ import {
   User,
   Tag,
   Folder
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Document {
   id: string;
@@ -33,7 +33,7 @@ interface Document {
   file_size: number;
   file_type: string;
   uploaded_by: string;
-  access_level: 'public' | 'organization' | 'restricted';
+  access_level: "public" | "organization" | "restricted";
   category: string;
   tags: string[];
   version: number;
@@ -54,8 +54,8 @@ export const DocumentManagement: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [categories, setCategories] = useState<DocumentCategory[]>([]);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState<string>("all");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showAddCategoryDialog, setShowAddCategoryDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,19 +63,19 @@ export const DocumentManagement: React.FC = () => {
 
   // Form state for new document
   const [newDocument, setNewDocument] = useState({
-    title: '',
-    description: '',
-    category: '',
-    access_level: 'organization' as 'public' | 'organization' | 'restricted',
+    title: "",
+    description: "",
+    category: "",
+    access_level: "organization" as "public" | "organization" | "restricted",
     tags: [] as string[],
-    expires_at: ''
+    expires_at: ""
   });
 
   // Form state for new category
   const [newCategory, setNewCategory] = useState({
-    name: '',
-    description: '',
-    color: '#3b82f6'
+    name: "",
+    description: "",
+    color: "#3b82f6"
   });
 
   useEffect(() => {
@@ -88,72 +88,72 @@ export const DocumentManagement: React.FC = () => {
       // Mock data for demonstration
       const mockDocuments: Document[] = [
         {
-          id: '1',
-          title: 'Manual de Segurança Marítima',
-          description: 'Procedimentos de segurança para todas as embarcações da frota',
-          file_path: '/docs/manual-seguranca.pdf',
+          id: "1",
+          title: "Manual de Segurança Marítima",
+          description: "Procedimentos de segurança para todas as embarcações da frota",
+          file_path: "/docs/manual-seguranca.pdf",
           file_size: 2567890,
-          file_type: 'application/pdf',
-          uploaded_by: 'Carlos Silva',
-          access_level: 'organization',
-          category: 'Segurança',
-          tags: ['segurança', 'manual', 'procedimentos'],
+          file_type: "application/pdf",
+          uploaded_by: "Carlos Silva",
+          access_level: "organization",
+          category: "Segurança",
+          tags: ["segurança", "manual", "procedimentos"],
           version: 3,
-          expires_at: '2024-12-31T23:59:59Z',
-          created_at: '2024-01-01T10:00:00Z',
-          updated_at: '2024-01-15T14:30:00Z'
+          expires_at: "2024-12-31T23:59:59Z",
+          created_at: "2024-01-01T10:00:00Z",
+          updated_at: "2024-01-15T14:30:00Z"
         },
         {
-          id: '2',
-          title: 'Certificado ISM - MV Atlântico',
-          description: 'Certificado de Gestão de Segurança Internacional',
-          file_path: '/docs/ism-atlantico.pdf',
+          id: "2",
+          title: "Certificado ISM - MV Atlântico",
+          description: "Certificado de Gestão de Segurança Internacional",
+          file_path: "/docs/ism-atlantico.pdf",
           file_size: 1234567,
-          file_type: 'application/pdf',
-          uploaded_by: 'Maria Oliveira',
-          access_level: 'organization',
-          category: 'Certificações',
-          tags: ['ism', 'certificado', 'mv-atlantico'],
+          file_type: "application/pdf",
+          uploaded_by: "Maria Oliveira",
+          access_level: "organization",
+          category: "Certificações",
+          tags: ["ism", "certificado", "mv-atlantico"],
           version: 1,
-          expires_at: '2025-06-15T23:59:59Z',
-          created_at: '2024-01-10T09:00:00Z',
-          updated_at: '2024-01-10T09:00:00Z'
+          expires_at: "2025-06-15T23:59:59Z",
+          created_at: "2024-01-10T09:00:00Z",
+          updated_at: "2024-01-10T09:00:00Z"
         },
         {
-          id: '3',
-          title: 'Plano de Manutenção Preventiva',
-          description: 'Cronograma e procedimentos de manutenção preventiva da frota',
-          file_path: '/docs/plano-manutencao.xlsx',
+          id: "3",
+          title: "Plano de Manutenção Preventiva",
+          description: "Cronograma e procedimentos de manutenção preventiva da frota",
+          file_path: "/docs/plano-manutencao.xlsx",
           file_size: 987654,
-          file_type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          uploaded_by: 'João Santos',
-          access_level: 'organization',
-          category: 'Manutenção',
-          tags: ['manutenção', 'preventiva', 'cronograma'],
+          file_type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          uploaded_by: "João Santos",
+          access_level: "organization",
+          category: "Manutenção",
+          tags: ["manutenção", "preventiva", "cronograma"],
           version: 2,
-          created_at: '2024-01-05T11:00:00Z',
-          updated_at: '2024-01-20T16:00:00Z'
+          created_at: "2024-01-05T11:00:00Z",
+          updated_at: "2024-01-20T16:00:00Z"
         },
         {
-          id: '4',
-          title: 'Relatório de Inspeção - Porto de Santos',
-          description: 'Relatório detalhado da última inspeção portuária',
-          file_path: '/docs/inspecao-santos.docx',
+          id: "4",
+          title: "Relatório de Inspeção - Porto de Santos",
+          description: "Relatório detalhado da última inspeção portuária",
+          file_path: "/docs/inspecao-santos.docx",
           file_size: 567890,
-          file_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          uploaded_by: 'Ana Costa',
-          access_level: 'restricted',
-          category: 'Relatórios',
-          tags: ['inspeção', 'porto', 'santos'],
+          file_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          uploaded_by: "Ana Costa",
+          access_level: "restricted",
+          category: "Relatórios",
+          tags: ["inspeção", "porto", "santos"],
           version: 1,
-          created_at: '2024-01-18T13:00:00Z',
-          updated_at: '2024-01-18T13:00:00Z'
+          created_at: "2024-01-18T13:00:00Z",
+          updated_at: "2024-01-18T13:00:00Z"
         }
       ];
       
       setDocuments(mockDocuments);
     } catch (error) {
-      console.error('Erro ao carregar documentos:', error);
+      console.error("Erro ao carregar documentos:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os documentos",
@@ -167,16 +167,16 @@ export const DocumentManagement: React.FC = () => {
     try {
       // Mock categories
       const mockCategories: DocumentCategory[] = [
-        { id: '1', name: 'Segurança', description: 'Documentos relacionados à segurança', color: '#ef4444', count: 5 },
-        { id: '2', name: 'Certificações', description: 'Certificados e licenças', color: '#3b82f6', count: 8 },
-        { id: '3', name: 'Manutenção', description: 'Documentos de manutenção', color: '#f59e0b', count: 3 },
-        { id: '4', name: 'Relatórios', description: 'Relatórios operacionais', color: '#10b981', count: 12 },
-        { id: '5', name: 'Contratos', description: 'Contratos e acordos', color: '#8b5cf6', count: 6 }
+        { id: "1", name: "Segurança", description: "Documentos relacionados à segurança", color: "#ef4444", count: 5 },
+        { id: "2", name: "Certificações", description: "Certificados e licenças", color: "#3b82f6", count: 8 },
+        { id: "3", name: "Manutenção", description: "Documentos de manutenção", color: "#f59e0b", count: 3 },
+        { id: "4", name: "Relatórios", description: "Relatórios operacionais", color: "#10b981", count: 12 },
+        { id: "5", name: "Contratos", description: "Contratos e acordos", color: "#8b5cf6", count: 6 }
       ];
       
       setCategories(mockCategories);
     } catch (error) {
-      console.error('Erro ao carregar categorias:', error);
+      console.error("Erro ao carregar categorias:", error);
     }
   };
 
@@ -185,10 +185,10 @@ export const DocumentManagement: React.FC = () => {
       const document: Document = {
         id: Math.random().toString(),
         ...newDocument,
-        file_path: `/docs/${newDocument.title.toLowerCase().replace(/\s+/g, '-')}.pdf`,
+        file_path: `/docs/${newDocument.title.toLowerCase().replace(/\s+/g, "-")}.pdf`,
         file_size: Math.floor(Math.random() * 5000000) + 100000,
-        file_type: 'application/pdf',
-        uploaded_by: 'Current User',
+        file_type: "application/pdf",
+        uploaded_by: "Current User",
         version: 1,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -196,12 +196,12 @@ export const DocumentManagement: React.FC = () => {
       
       setDocuments([...documents, document]);
       setNewDocument({
-        title: '',
-        description: '',
-        category: '',
-        access_level: 'organization',
+        title: "",
+        description: "",
+        category: "",
+        access_level: "organization",
         tags: [],
-        expires_at: ''
+        expires_at: ""
       });
       setShowAddDialog(false);
       
@@ -228,9 +228,9 @@ export const DocumentManagement: React.FC = () => {
       
       setCategories([...categories, category]);
       setNewCategory({
-        name: '',
-        description: '',
-        color: '#3b82f6'
+        name: "",
+        description: "",
+        color: "#3b82f6"
       });
       setShowAddCategoryDialog(false);
       
@@ -248,36 +248,36 @@ export const DocumentManagement: React.FC = () => {
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const getFileTypeIcon = (fileType: string) => {
-    if (fileType.includes('pdf')) return '📄';
-    if (fileType.includes('word')) return '📝';
-    if (fileType.includes('excel') || fileType.includes('spreadsheet')) return '📊';
-    if (fileType.includes('image')) return '🖼️';
-    return '📁';
+    if (fileType.includes("pdf")) return "📄";
+    if (fileType.includes("word")) return "📝";
+    if (fileType.includes("excel") || fileType.includes("spreadsheet")) return "📊";
+    if (fileType.includes("image")) return "🖼️";
+    return "📁";
   };
 
   const getAccessLevelColor = (level: string) => {
     switch (level) {
-      case 'public': return 'bg-green-500 text-azure-50';
-      case 'organization': return 'bg-blue-500 text-azure-50';
-      case 'restricted': return 'bg-red-500 text-azure-50';
-      default: return 'bg-gray-500 text-azure-50';
+    case "public": return "bg-green-500 text-azure-50";
+    case "organization": return "bg-blue-500 text-azure-50";
+    case "restricted": return "bg-red-500 text-azure-50";
+    default: return "bg-gray-500 text-azure-50";
     }
   };
 
   const getAccessLevelText = (level: string) => {
     switch (level) {
-      case 'public': return 'Público';
-      case 'organization': return 'Organização';
-      case 'restricted': return 'Restrito';
-      default: return 'Desconhecido';
+    case "public": return "Público";
+    case "organization": return "Organização";
+    case "restricted": return "Restrito";
+    default: return "Desconhecido";
     }
   };
 
@@ -285,7 +285,7 @@ export const DocumentManagement: React.FC = () => {
     const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          doc.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = filterCategory === 'all' || doc.category === filterCategory;
+    const matchesCategory = filterCategory === "all" || doc.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -406,7 +406,7 @@ export const DocumentManagement: React.FC = () => {
                     <Label htmlFor="access">Nível de Acesso</Label>
                     <Select 
                       value={newDocument.access_level} 
-                      onValueChange={(value: 'public' | 'organization' | 'restricted') => 
+                      onValueChange={(value: "public" | "organization" | "restricted") => 
                         setNewDocument({ ...newDocument, access_level: value })
                       }
                     >
@@ -559,7 +559,7 @@ export const DocumentManagement: React.FC = () => {
                       <div 
                         key={doc.id}
                         className={`p-4 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${
-                          selectedDocument?.id === doc.id ? 'border-primary bg-primary/5' : ''
+                          selectedDocument?.id === doc.id ? "border-primary bg-primary/5" : ""
                         }`}
                         onClick={() => setSelectedDocument(doc)}
                       >
@@ -603,7 +603,7 @@ export const DocumentManagement: React.FC = () => {
                             </div>
                             <div className="flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
-                              {new Date(doc.created_at).toLocaleDateString('pt-BR')}
+                              {new Date(doc.created_at).toLocaleDateString("pt-BR")}
                             </div>
                           </div>
                           <div className="flex gap-1">
@@ -661,14 +661,14 @@ export const DocumentManagement: React.FC = () => {
                       <div className="flex justify-between">
                         <span className="text-sm">Criado em:</span>
                         <span className="text-sm font-medium">
-                          {new Date(selectedDocument.created_at).toLocaleDateString('pt-BR')}
+                          {new Date(selectedDocument.created_at).toLocaleDateString("pt-BR")}
                         </span>
                       </div>
                       {selectedDocument.expires_at && (
                         <div className="flex justify-between">
                           <span className="text-sm">Expira em:</span>
                           <span className="text-sm font-medium">
-                            {new Date(selectedDocument.expires_at).toLocaleDateString('pt-BR')}
+                            {new Date(selectedDocument.expires_at).toLocaleDateString("pt-BR")}
                           </span>
                         </div>
                       )}

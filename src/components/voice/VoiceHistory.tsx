@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
+import React, { useEffect } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 import { 
   MessageSquare, 
   Bot, 
@@ -11,12 +11,12 @@ import {
   Download,
   Trash2,
   Clock
-} from 'lucide-react';
-import { useVoiceRecording } from '@/hooks/use-voice-conversation';
+} from "lucide-react";
+import { useVoiceRecording } from "@/hooks/use-voice-conversation";
 
 interface Message {
   id: string;
-  type: 'user' | 'assistant' | 'system';
+  type: "user" | "assistant" | "system";
   content: string;
   timestamp: Date;
   action?: string;
@@ -35,48 +35,48 @@ const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
   
   const exportConversation = () => {
     const data = JSON.stringify(messages, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
+    const blob = new Blob([data], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `conversation-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `conversation-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
   
   const loadConversationHistory = (id: string) => {
     // Implementation would load from localStorage or API
-    console.log('Loading conversation:', id);
   };
+  
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('pt-BR', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return date.toLocaleTimeString("pt-BR", { 
+      hour: "2-digit", 
+      minute: "2-digit" 
     });
   };
 
   const getMessageIcon = (type: string) => {
     switch (type) {
-      case 'user': return <User className="h-3 w-3" />;
-      case 'assistant': return <Bot className="h-3 w-3" />;
-      default: return <MessageSquare className="h-3 w-3" />;
+    case "user": return <User className="h-3 w-3" />;
+    case "assistant": return <Bot className="h-3 w-3" />;
+    default: return <MessageSquare className="h-3 w-3" />;
     }
   };
 
   const getMessageStyle = (type: string) => {
     switch (type) {
-      case 'user': 
-        return 'bg-primary text-primary-foreground ml-8';
-      case 'assistant': 
-        return 'bg-muted text-foreground mr-8';
-      case 'system':
-        return 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 mx-4 border border-yellow-200 dark:border-yellow-800';
-      default: 
-        return 'bg-muted text-foreground';
+    case "user": 
+      return "bg-primary text-primary-foreground ml-8";
+    case "assistant": 
+      return "bg-muted text-foreground mr-8";
+    case "system":
+      return "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 mx-4 border border-yellow-200 dark:border-yellow-800";
+    default: 
+      return "bg-muted text-foreground";
     }
   };
 

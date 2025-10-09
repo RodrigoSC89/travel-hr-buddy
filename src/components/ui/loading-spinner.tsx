@@ -7,4 +7,4 @@
 export { 
   Loading as LoadingSpinner,
   type LoadingProps as LoadingSpinnerProps
-} from './Loading';
+} from "./Loading";

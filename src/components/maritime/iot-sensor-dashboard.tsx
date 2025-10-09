@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Thermometer, 
   Zap, 
@@ -16,8 +16,8 @@ import {
   Battery,
   Waves,
   Settings
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SensorReading {
   id: string;
@@ -25,7 +25,7 @@ interface SensorReading {
   value: number;
   unit: string;
   timestamp: Date;
-  status: 'normal' | 'warning' | 'critical';
+  status: "normal" | "warning" | "critical";
   location: string;
 }
 
@@ -34,7 +34,7 @@ interface VesselSensors {
   vesselName: string;
   sensors: SensorReading[];
   lastUpdate: Date;
-  connectionStatus: 'online' | 'offline' | 'unstable';
+  connectionStatus: "online" | "offline" | "unstable";
 }
 
 export const IoTSensorDashboard = () => {
@@ -58,90 +58,90 @@ export const IoTSensorDashboard = () => {
     // Mock sensor data - in real implementation, this would come from IoT sensors
     const mockData: VesselSensors[] = [
       {
-        vesselId: '1',
-        vesselName: 'MV Atlantic Explorer',
+        vesselId: "1",
+        vesselName: "MV Atlantic Explorer",
         lastUpdate: new Date(),
-        connectionStatus: 'online',
+        connectionStatus: "online",
         sensors: [
           {
-            id: 'temp_001',
-            sensorType: 'engine_temperature',
+            id: "temp_001",
+            sensorType: "engine_temperature",
             value: 78,
-            unit: '°C',
+            unit: "°C",
             timestamp: new Date(),
-            status: 'normal',
-            location: 'Motor Principal'
+            status: "normal",
+            location: "Motor Principal"
           },
           {
-            id: 'vib_001',
-            sensorType: 'vibration',
+            id: "vib_001",
+            sensorType: "vibration",
             value: 3.2,
-            unit: 'mm/s',
+            unit: "mm/s",
             timestamp: new Date(),
-            status: 'normal',
-            location: 'Eixo Principal'
+            status: "normal",
+            location: "Eixo Principal"
           },
           {
-            id: 'fuel_001',
-            sensorType: 'fuel_level',
+            id: "fuel_001",
+            sensorType: "fuel_level",
             value: 75,
-            unit: '%',
+            unit: "%",
             timestamp: new Date(),
-            status: 'normal',
-            location: 'Tanque Principal'
+            status: "normal",
+            location: "Tanque Principal"
           },
           {
-            id: 'oil_001',
-            sensorType: 'oil_pressure',
+            id: "oil_001",
+            sensorType: "oil_pressure",
             value: 3.8,
-            unit: 'bar',
+            unit: "bar",
             timestamp: new Date(),
-            status: 'normal',
-            location: 'Sistema de Lubrificação'
+            status: "normal",
+            location: "Sistema de Lubrificação"
           },
           {
-            id: 'bat_001',
-            sensorType: 'battery_voltage',
+            id: "bat_001",
+            sensorType: "battery_voltage",
             value: 12.6,
-            unit: 'V',
+            unit: "V",
             timestamp: new Date(),
-            status: 'normal',
-            location: 'Bateria Principal'
+            status: "normal",
+            location: "Bateria Principal"
           }
         ]
       },
       {
-        vesselId: '2',
-        vesselName: 'MV Pacific Navigator',
+        vesselId: "2",
+        vesselName: "MV Pacific Navigator",
         lastUpdate: new Date(Date.now() - 120000), // 2 minutes ago
-        connectionStatus: 'unstable',
+        connectionStatus: "unstable",
         sensors: [
           {
-            id: 'temp_002',
-            sensorType: 'engine_temperature',
+            id: "temp_002",
+            sensorType: "engine_temperature",
             value: 92,
-            unit: '°C',
+            unit: "°C",
             timestamp: new Date(),
-            status: 'warning',
-            location: 'Motor Principal'
+            status: "warning",
+            location: "Motor Principal"
           },
           {
-            id: 'vib_002',
-            sensorType: 'vibration',
+            id: "vib_002",
+            sensorType: "vibration",
             value: 6.1,
-            unit: 'mm/s',
+            unit: "mm/s",
             timestamp: new Date(),
-            status: 'warning',
-            location: 'Eixo Principal'
+            status: "warning",
+            location: "Eixo Principal"
           },
           {
-            id: 'fuel_002',
-            sensorType: 'fuel_level',
+            id: "fuel_002",
+            sensorType: "fuel_level",
             value: 15,
-            unit: '%',
+            unit: "%",
             timestamp: new Date(),
-            status: 'critical',
-            location: 'Tanque Principal'
+            status: "critical",
+            location: "Tanque Principal"
           }
         ]
       }
@@ -162,26 +162,26 @@ export const IoTSensorDashboard = () => {
         let newStatus = sensor.status;
         
         switch (sensor.sensorType) {
-          case 'engine_temperature':
-            newValue = Math.max(60, Math.min(100, sensor.value + (Math.random() - 0.5) * 4));
-            newStatus = newValue > 85 ? 'warning' : newValue > 95 ? 'critical' : 'normal';
-            break;
-          case 'vibration':
-            newValue = Math.max(0, Math.min(10, sensor.value + (Math.random() - 0.5) * 1));
-            newStatus = newValue > 5 ? 'warning' : newValue > 8 ? 'critical' : 'normal';
-            break;
-          case 'fuel_level':
-            newValue = Math.max(0, sensor.value - Math.random() * 0.5);
-            newStatus = newValue < 20 ? 'warning' : newValue < 10 ? 'critical' : 'normal';
-            break;
-          case 'oil_pressure':
-            newValue = Math.max(1, Math.min(5, sensor.value + (Math.random() - 0.5) * 0.3));
-            newStatus = newValue < 2.5 ? 'warning' : newValue < 1.5 ? 'critical' : 'normal';
-            break;
-          case 'battery_voltage':
-            newValue = Math.max(10, Math.min(14, sensor.value + (Math.random() - 0.5) * 0.2));
-            newStatus = newValue < 12 ? 'warning' : newValue < 11.5 ? 'critical' : 'normal';
-            break;
+        case "engine_temperature":
+          newValue = Math.max(60, Math.min(100, sensor.value + (Math.random() - 0.5) * 4));
+          newStatus = newValue > 85 ? "warning" : newValue > 95 ? "critical" : "normal";
+          break;
+        case "vibration":
+          newValue = Math.max(0, Math.min(10, sensor.value + (Math.random() - 0.5) * 1));
+          newStatus = newValue > 5 ? "warning" : newValue > 8 ? "critical" : "normal";
+          break;
+        case "fuel_level":
+          newValue = Math.max(0, sensor.value - Math.random() * 0.5);
+          newStatus = newValue < 20 ? "warning" : newValue < 10 ? "critical" : "normal";
+          break;
+        case "oil_pressure":
+          newValue = Math.max(1, Math.min(5, sensor.value + (Math.random() - 0.5) * 0.3));
+          newStatus = newValue < 2.5 ? "warning" : newValue < 1.5 ? "critical" : "normal";
+          break;
+        case "battery_voltage":
+          newValue = Math.max(10, Math.min(14, sensor.value + (Math.random() - 0.5) * 0.2));
+          newStatus = newValue < 12 ? "warning" : newValue < 11.5 ? "critical" : "normal";
+          break;
         }
 
         return {
@@ -196,7 +196,7 @@ export const IoTSensorDashboard = () => {
 
   const processSensorData = async (vesselId: string, sensorData: any) => {
     try {
-      const { data, error } = await supabase.functions.invoke('iot-sensor-processing', {
+      const { data, error } = await supabase.functions.invoke("iot-sensor-processing", {
         body: {
           sensorData,
           vesselId,
@@ -211,45 +211,45 @@ export const IoTSensorDashboard = () => {
       }
       
     } catch (error) {
-      console.error('Error processing sensor data:', error);
+      console.error("Error processing sensor data:", error);
     }
   };
 
   const getSensorIcon = (type: string) => {
     switch (type) {
-      case 'engine_temperature': return <Thermometer className="h-5 w-5" />;
-      case 'vibration': return <Activity className="h-5 w-5" />;
-      case 'fuel_level': return <Fuel className="h-5 w-5" />;
-      case 'oil_pressure': return <Gauge className="h-5 w-5" />;
-      case 'battery_voltage': return <Battery className="h-5 w-5" />;
-      default: return <Settings className="h-5 w-5" />;
+    case "engine_temperature": return <Thermometer className="h-5 w-5" />;
+    case "vibration": return <Activity className="h-5 w-5" />;
+    case "fuel_level": return <Fuel className="h-5 w-5" />;
+    case "oil_pressure": return <Gauge className="h-5 w-5" />;
+    case "battery_voltage": return <Battery className="h-5 w-5" />;
+    default: return <Settings className="h-5 w-5" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'normal': return 'bg-green-100 text-green-800';
-      case 'warning': return 'bg-yellow-100 text-yellow-800';
-      case 'critical': return 'bg-red-100 text-red-800';
-      default: return 'bg-secondary text-secondary-foreground';
+    case "normal": return "bg-green-100 text-green-800";
+    case "warning": return "bg-yellow-100 text-yellow-800";
+    case "critical": return "bg-red-100 text-red-800";
+    default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getConnectionColor = (status: string) => {
     switch (status) {
-      case 'online': return 'text-green-500';
-      case 'unstable': return 'text-yellow-500';
-      case 'offline': return 'text-red-500';
-      default: return 'text-muted-foreground';
+    case "online": return "text-green-500";
+    case "unstable": return "text-yellow-500";
+    case "offline": return "text-red-500";
+    default: return "text-muted-foreground";
     }
   };
 
   const getSensorValueColor = (sensor: SensorReading) => {
     switch (sensor.status) {
-      case 'critical': return 'text-red-600';
-      case 'warning': return 'text-yellow-600';
-      case 'normal': return 'text-green-600';
-      default: return 'text-muted-foreground';
+    case "critical": return "text-red-600";
+    case "warning": return "text-yellow-600";
+    case "normal": return "text-green-600";
+    default: return "text-muted-foreground";
     }
   };
 
@@ -290,7 +290,7 @@ export const IoTSensorDashboard = () => {
           <Card 
             key={vessel.vesselId}
             className={`cursor-pointer transition-all hover:shadow-md ${
-              selectedVessel === vessel.vesselId ? 'ring-2 ring-primary' : ''
+              selectedVessel === vessel.vesselId ? "ring-2 ring-primary" : ""
             }`}
             onClick={() => setSelectedVessel(vessel.vesselId)}
           >
@@ -305,7 +305,7 @@ export const IoTSensorDashboard = () => {
                 </Badge>
               </div>
               <CardDescription>
-                Última atualização: {vessel.lastUpdate.toLocaleTimeString('pt-BR')}
+                Última atualização: {vessel.lastUpdate.toLocaleTimeString("pt-BR")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -315,14 +315,14 @@ export const IoTSensorDashboard = () => {
                     <div className="flex items-center gap-2">
                       {getSensorIcon(sensor.sensorType)}
                       <span className="capitalize">
-                        {sensor.sensorType.replace('_', ' ')}
+                        {sensor.sensorType.replace("_", " ")}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`font-medium ${getSensorValueColor(sensor)}`}>
                         {sensor.value} {sensor.unit}
                       </span>
-                      <Badge className={getStatusColor(sensor.status)} style={{ fontSize: '10px' }}>
+                      <Badge className={getStatusColor(sensor.status)} style={{ fontSize: "10px" }}>
                         {sensor.status}
                       </Badge>
                     </div>
@@ -362,7 +362,7 @@ export const IoTSensorDashboard = () => {
                       <CardHeader className="pb-3">
                         <CardTitle className="text-base flex items-center gap-2">
                           {getSensorIcon(sensor.sensorType)}
-                          {sensor.sensorType.replace('_', ' ').toUpperCase()}
+                          {sensor.sensorType.replace("_", " ").toUpperCase()}
                         </CardTitle>
                         <CardDescription>{sensor.location}</CardDescription>
                       </CardHeader>
@@ -382,7 +382,7 @@ export const IoTSensorDashboard = () => {
                               {sensor.status.toUpperCase()}
                             </Badge>
                             <span className="text-xs text-muted-foreground">
-                              {sensor.timestamp.toLocaleTimeString('pt-BR')}
+                              {sensor.timestamp.toLocaleTimeString("pt-BR")}
                             </span>
                           </div>
 
@@ -393,10 +393,10 @@ export const IoTSensorDashboard = () => {
                               <span>Max</span>
                             </div>
                             <Progress 
-                              value={sensor.sensorType === 'fuel_level' ? sensor.value : 
-                                     sensor.sensorType === 'battery_voltage' ? (sensor.value / 14) * 100 :
-                                     sensor.sensorType === 'engine_temperature' ? (sensor.value / 120) * 100 :
-                                     (sensor.value / 10) * 100} 
+                              value={sensor.sensorType === "fuel_level" ? sensor.value : 
+                                sensor.sensorType === "battery_voltage" ? (sensor.value / 14) * 100 :
+                                  sensor.sensorType === "engine_temperature" ? (sensor.value / 120) * 100 :
+                                    (sensor.value / 10) * 100} 
                               className="h-2" 
                             />
                           </div>
@@ -463,34 +463,34 @@ export const IoTSensorDashboard = () => {
               <TabsContent value="alerts" className="space-y-4">
                 <div className="space-y-3">
                   {selectedVesselData.sensors
-                    .filter(s => s.status !== 'normal')
+                    .filter(s => s.status !== "normal")
                     .map((sensor) => (
-                    <Card key={sensor.id} className="border-l-4 border-l-red-500">
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <AlertTriangle className="h-5 w-5 text-red-500" />
-                            <div>
-                              <div className="font-medium">
-                                {sensor.sensorType.replace('_', ' ').toUpperCase()}
-                              </div>
-                              <div className="text-sm text-muted-foreground">
-                                {sensor.location}
+                      <Card key={sensor.id} className="border-l-4 border-l-red-500">
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <AlertTriangle className="h-5 w-5 text-red-500" />
+                              <div>
+                                <div className="font-medium">
+                                  {sensor.sensorType.replace("_", " ").toUpperCase()}
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                  {sensor.location}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="text-right">
-                            <div className={`text-lg font-bold ${getSensorValueColor(sensor)}`}>
-                              {sensor.value} {sensor.unit}
+                            <div className="text-right">
+                              <div className={`text-lg font-bold ${getSensorValueColor(sensor)}`}>
+                                {sensor.value} {sensor.unit}
+                              </div>
+                              <Badge className={getStatusColor(sensor.status)}>
+                                {sensor.status.toUpperCase()}
+                              </Badge>
                             </div>
-                            <Badge className={getStatusColor(sensor.status)}>
-                              {sensor.status.toUpperCase()}
-                            </Badge>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    ))}
                 </div>
               </TabsContent>
 

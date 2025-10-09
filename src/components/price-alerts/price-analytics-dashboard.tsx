@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -16,7 +16,7 @@ import {
   Download,
   Filter,
   RefreshCw
-} from 'lucide-react';
+} from "lucide-react";
 
 interface PriceData {
   date: string;
@@ -38,13 +38,13 @@ interface AnalyticsData {
   };
 }
 
-const COLORS = ['#0EA5E9', '#38BDF8', '#7DD3FC', '#BAE6FD', '#E0F2FE'];
+const COLORS = ["#0EA5E9", "#38BDF8", "#7DD3FC", "#BAE6FD", "#E0F2FE"];
 
 export const PriceAnalyticsDashboard: React.FC = () => {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [timeRange, setTimeRange] = useState('30d');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [timeRange, setTimeRange] = useState("30d");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
     loadAnalytics();
@@ -57,33 +57,33 @@ export const PriceAnalyticsDashboard: React.FC = () => {
     setTimeout(() => {
       const mockAnalytics: AnalyticsData = {
         categoryDistribution: [
-          { name: 'Viagens', value: 35, color: COLORS[0] },
-          { name: 'Hospedagem', value: 28, color: COLORS[1] },
-          { name: 'Combustível', value: 20, color: COLORS[2] },
-          { name: 'Suprimentos', value: 12, color: COLORS[3] },
-          { name: 'Equipamentos', value: 5, color: COLORS[4] }
+          { name: "Viagens", value: 35, color: COLORS[0] },
+          { name: "Hospedagem", value: 28, color: COLORS[1] },
+          { name: "Combustível", value: 20, color: COLORS[2] },
+          { name: "Suprimentos", value: 12, color: COLORS[3] },
+          { name: "Equipamentos", value: 5, color: COLORS[4] }
         ],
         priceHistory: [
-          { date: '2024-01', viagens: 1200, hospedagem: 800, combustivel: 600 },
-          { date: '2024-02', viagens: 1150, hospedagem: 750, combustivel: 580 },
-          { date: '2024-03', viagens: 1100, hospedagem: 720, combustivel: 620 },
-          { date: '2024-04', viagens: 1250, hospedagem: 780, combustivel: 640 },
-          { date: '2024-05', viagens: 1180, hospedagem: 760, combustivel: 590 },
-          { date: '2024-06', viagens: 1080, hospedagem: 700, combustivel: 570 }
+          { date: "2024-01", viagens: 1200, hospedagem: 800, combustivel: 600 },
+          { date: "2024-02", viagens: 1150, hospedagem: 750, combustivel: 580 },
+          { date: "2024-03", viagens: 1100, hospedagem: 720, combustivel: 620 },
+          { date: "2024-04", viagens: 1250, hospedagem: 780, combustivel: 640 },
+          { date: "2024-05", viagens: 1180, hospedagem: 760, combustivel: 590 },
+          { date: "2024-06", viagens: 1080, hospedagem: 700, combustivel: 570 }
         ],
         savingsOverTime: [
-          { month: 'Jan', savings: 2450, alerts: 12 },
-          { month: 'Fev', savings: 1890, alerts: 8 },
-          { month: 'Mar', savings: 3200, alerts: 15 },
-          { month: 'Abr', savings: 2100, alerts: 10 },
-          { month: 'Mai', savings: 2800, alerts: 13 },
-          { month: 'Jun', savings: 3450, alerts: 16 }
+          { month: "Jan", savings: 2450, alerts: 12 },
+          { month: "Fev", savings: 1890, alerts: 8 },
+          { month: "Mar", savings: 3200, alerts: 15 },
+          { month: "Abr", savings: 2100, alerts: 10 },
+          { month: "Mai", savings: 2800, alerts: 13 },
+          { month: "Jun", savings: 3450, alerts: 16 }
         ],
         topProducts: [
-          { name: 'Passagem SP-RJ', savings: 850, frequency: 5 },
-          { name: 'Hotel Copacabana', savings: 650, frequency: 3 },
-          { name: 'Combustível MGO', savings: 420, frequency: 8 },
-          { name: 'Lubrificante Motor', savings: 280, frequency: 4 }
+          { name: "Passagem SP-RJ", savings: 850, frequency: 5 },
+          { name: "Hotel Copacabana", savings: 650, frequency: 3 },
+          { name: "Combustível MGO", savings: 420, frequency: 8 },
+          { name: "Lubrificante Motor", savings: 280, frequency: 4 }
         ],
         trends: {
           totalAlerts: 47,
@@ -98,7 +98,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
     }, 1000);
   };
 
-  const formatCurrency = (value: number) => `R$ ${value.toLocaleString('pt-BR')}`;
+  const formatCurrency = (value: number) => `R$ ${value.toLocaleString("pt-BR")}`;
   const formatPercentage = (value: number) => `${value}%`;
 
   if (isLoading) {
@@ -247,11 +247,11 @@ export const PriceAnalyticsDashboard: React.FC = () => {
                 />
                 <Tooltip 
                   contentStyle={{
-                    backgroundColor: 'hsl(var(--background))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px"
                   }}
-                  formatter={(value: any) => [`R$ ${value}`, '']}
+                  formatter={(value: any) => [`R$ ${value}`, ""]}
                 />
                 <Line 
                   type="monotone" 
@@ -306,9 +306,9 @@ export const PriceAnalyticsDashboard: React.FC = () => {
                 </Pie>
                 <Tooltip 
                   contentStyle={{
-                    backgroundColor: 'hsl(var(--background))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px"
                   }}
                 />
               </PieChart>
@@ -340,13 +340,13 @@ export const PriceAnalyticsDashboard: React.FC = () => {
                 />
                 <Tooltip 
                   contentStyle={{
-                    backgroundColor: 'hsl(var(--background))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px"
                   }}
                   formatter={(value: any, name: string) => [
-                    name === 'savings' ? `R$ ${value}` : `${value} alertas`,
-                    name === 'savings' ? 'Economia' : 'Alertas'
+                    name === "savings" ? `R$ ${value}` : `${value} alertas`,
+                    name === "savings" ? "Economia" : "Alertas"
                   ]}
                 />
                 <Bar 

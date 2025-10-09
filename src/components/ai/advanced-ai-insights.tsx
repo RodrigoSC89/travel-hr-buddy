@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Brain, 
   TrendingUp, 
@@ -24,60 +24,60 @@ import {
   RefreshCw,
   Play,
   Download
-} from 'lucide-react';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
+import { useToast } from "@/hooks/use-toast";
 
 const AdvancedAIInsights = () => {
   const { toast } = useToast();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [activeTab, setActiveTab] = useState('insights');
+  const [activeTab, setActiveTab] = useState("insights");
 
   const [aiInsights, setAiInsights] = useState([
     {
       id: 1,
-      title: 'Otimização de Processos',
-      description: 'Identificadas oportunidades de melhoria no fluxo de trabalho',
+      title: "Otimização de Processos",
+      description: "Identificadas oportunidades de melhoria no fluxo de trabalho",
       confidence: 92,
-      impact: 'high',
-      category: 'efficiency',
+      impact: "high",
+      category: "efficiency",
       recommendations: [
-        'Automatizar aprovações de documentos',
-        'Implementar notificações inteligentes',
-        'Otimizar roteamento de tarefas'
+        "Automatizar aprovações de documentos",
+        "Implementar notificações inteligentes",
+        "Otimizar roteamento de tarefas"
       ],
-      estimatedSavings: '25% tempo',
-      status: 'new'
+      estimatedSavings: "25% tempo",
+      status: "new"
     },
     {
       id: 2,
-      title: 'Padrões de Uso',
-      description: 'Análise comportamental dos usuários revela insights importantes',
+      title: "Padrões de Uso",
+      description: "Análise comportamental dos usuários revela insights importantes",
       confidence: 87,
-      impact: 'medium',
-      category: 'user_behavior',
+      impact: "medium",
+      category: "user_behavior",
       recommendations: [
-        'Personalizar interface por usuário',
-        'Melhorar onboarding',
-        'Criar dashboards específicos'
+        "Personalizar interface por usuário",
+        "Melhorar onboarding",
+        "Criar dashboards específicos"
       ],
-      estimatedSavings: '15% engajamento',
-      status: 'active'
+      estimatedSavings: "15% engajamento",
+      status: "active"
     },
     {
       id: 3,
-      title: 'Predição de Demanda',
-      description: 'Modelo preditivo identifica picos de utilização',
+      title: "Predição de Demanda",
+      description: "Modelo preditivo identifica picos de utilização",
       confidence: 95,
-      impact: 'high',
-      category: 'prediction',
+      impact: "high",
+      category: "prediction",
       recommendations: [
-        'Escalar recursos automaticamente',
-        'Preparar equipe para picos',
-        'Otimizar cache preditivo'
+        "Escalar recursos automaticamente",
+        "Preparar equipe para picos",
+        "Otimizar cache preditivo"
       ],
-      estimatedSavings: '30% recursos',
-      status: 'implemented'
+      estimatedSavings: "30% recursos",
+      status: "implemented"
     }
   ]);
 
@@ -90,22 +90,22 @@ const AdvancedAIInsights = () => {
   });
 
   const predictiveData = [
-    { day: 'Seg', atual: 45, previsto: 48, usuarios: 120 },
-    { day: 'Ter', atual: 52, previsto: 55, usuarios: 145 },
-    { day: 'Qua', atual: 48, previsto: 50, usuarios: 135 },
-    { day: 'Qui', atual: 61, previsto: 58, usuarios: 160 },
-    { day: 'Sex', atual: 55, previsto: 57, usuarios: 155 },
-    { day: 'Sab', atual: 33, previsto: 35, usuarios: 90 },
-    { day: 'Dom', atual: 28, previsto: 30, usuarios: 75 }
+    { day: "Seg", atual: 45, previsto: 48, usuarios: 120 },
+    { day: "Ter", atual: 52, previsto: 55, usuarios: 145 },
+    { day: "Qua", atual: 48, previsto: 50, usuarios: 135 },
+    { day: "Qui", atual: 61, previsto: 58, usuarios: 160 },
+    { day: "Sex", atual: 55, previsto: 57, usuarios: 155 },
+    { day: "Sab", atual: 33, previsto: 35, usuarios: 90 },
+    { day: "Dom", atual: 28, previsto: 30, usuarios: 75 }
   ];
 
   const radarData = [
-    { subject: 'Eficiência', A: 120, fullMark: 150 },
-    { subject: 'Qualidade', A: 98, fullMark: 150 },
-    { subject: 'Velocidade', A: 86, fullMark: 150 },
-    { subject: 'Precisão', A: 99, fullMark: 150 },
-    { subject: 'Inovação', A: 85, fullMark: 150 },
-    { subject: 'Custo', A: 65, fullMark: 150 }
+    { subject: "Eficiência", A: 120, fullMark: 150 },
+    { subject: "Qualidade", A: 98, fullMark: 150 },
+    { subject: "Velocidade", A: 86, fullMark: 150 },
+    { subject: "Precisão", A: 99, fullMark: 150 },
+    { subject: "Inovação", A: 85, fullMark: 150 },
+    { subject: "Custo", A: 65, fullMark: 150 }
   ];
 
   const runAIAnalysis = async () => {
@@ -121,18 +121,18 @@ const AdvancedAIInsights = () => {
     // Simular novos insights
     const newInsight = {
       id: Date.now(),
-      title: 'Novo Insight Descoberto',
-      description: 'IA identificou padrão emergente nos dados',
+      title: "Novo Insight Descoberto",
+      description: "IA identificou padrão emergente nos dados",
       confidence: 88,
-      impact: 'medium',
-      category: 'emerging',
+      impact: "medium",
+      category: "emerging",
       recommendations: [
-        'Implementar nova estratégia',
-        'Monitorar tendência',
-        'Ajustar parâmetros'
+        "Implementar nova estratégia",
+        "Monitorar tendência",
+        "Ajustar parâmetros"
       ],
-      estimatedSavings: '18% melhoria',
-      status: 'new'
+      estimatedSavings: "18% melhoria",
+      status: "new"
     };
 
     setAiInsights(prev => [newInsight, ...prev]);
@@ -146,28 +146,28 @@ const AdvancedAIInsights = () => {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'high': return 'text-red-600 bg-red-50 border-red-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-green-600 bg-green-50 border-green-200';
-      default: return 'text-muted-foreground bg-gray-50 border-gray-200';
+    case "high": return "text-red-600 bg-red-50 border-red-200";
+    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    case "low": return "text-green-600 bg-green-50 border-green-200";
+    default: return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'implemented': return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'active': return <Activity className="w-4 h-4 text-blue-600" />;
-      case 'new': return <Sparkles className="w-4 h-4 text-purple-600" />;
-      default: return <Clock className="w-4 h-4 text-muted-foreground" />;
+    case "implemented": return <CheckCircle className="w-4 h-4 text-green-600" />;
+    case "active": return <Activity className="w-4 h-4 text-blue-600" />;
+    case "new": return <Sparkles className="w-4 h-4 text-purple-600" />;
+    default: return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'efficiency': return <Zap className="w-4 h-4" />;
-      case 'user_behavior': return <Users className="w-4 h-4" />;
-      case 'prediction': return <TrendingUp className="w-4 h-4" />;
-      default: return <Brain className="w-4 h-4" />;
+    case "efficiency": return <Zap className="w-4 h-4" />;
+    case "user_behavior": return <Users className="w-4 h-4" />;
+    case "prediction": return <TrendingUp className="w-4 h-4" />;
+    default: return <Brain className="w-4 h-4" />;
     }
   };
 
@@ -465,25 +465,25 @@ const AdvancedAIInsights = () => {
           <div className="space-y-4">
             {[
               {
-                title: 'Implementar Cache Inteligente',
-                description: 'IA sugere estratégia de cache baseada em padrões de uso',
-                priority: 'high',
-                effort: 'medium',
-                impact: 'high'
+                title: "Implementar Cache Inteligente",
+                description: "IA sugere estratégia de cache baseada em padrões de uso",
+                priority: "high",
+                effort: "medium",
+                impact: "high"
               },
               {
-                title: 'Otimizar Fluxo de Trabalho',
-                description: 'Reorganizar processos com base em análise de eficiência',
-                priority: 'medium',
-                effort: 'high',
-                impact: 'high'
+                title: "Otimizar Fluxo de Trabalho",
+                description: "Reorganizar processos com base em análise de eficiência",
+                priority: "medium",
+                effort: "high",
+                impact: "high"
               },
               {
-                title: 'Personalizar Interface',
-                description: 'Adaptar UI baseado no comportamento do usuário',
-                priority: 'medium',
-                effort: 'low',
-                impact: 'medium'
+                title: "Personalizar Interface",
+                description: "Adaptar UI baseado no comportamento do usuário",
+                priority: "medium",
+                effort: "low",
+                impact: "medium"
               }
             ].map((rec, index) => (
               <Card key={index} className="hover-lift">
@@ -493,13 +493,13 @@ const AdvancedAIInsights = () => {
                       <h3 className="font-semibold text-lg">{rec.title}</h3>
                       <p className="text-muted-foreground">{rec.description}</p>
                       <div className="flex items-center gap-2">
-                        <Badge variant={rec.priority === 'high' ? 'destructive' : 'secondary'}>
+                        <Badge variant={rec.priority === "high" ? "destructive" : "secondary"}>
                           {rec.priority} priority
                         </Badge>
                         <Badge variant="outline">
                           {rec.effort} effort
                         </Badge>
-                        <Badge variant={rec.impact === 'high' ? 'default' : 'secondary'}>
+                        <Badge variant={rec.impact === "high" ? "default" : "secondary"}>
                           {rec.impact} impact
                         </Badge>
                       </div>

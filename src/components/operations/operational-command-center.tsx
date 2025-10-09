@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   AlertCircle, 
   TrendingUp, 
@@ -16,9 +16,9 @@ import {
   Clock,
   BarChart3,
   Settings
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface OperationalMetric {
   id: string;
@@ -26,7 +26,7 @@ interface OperationalMetric {
   current_value: number;
   target_value: number;
   unit: string;
-  trend: 'increasing' | 'decreasing' | 'stable';
+  trend: "increasing" | "decreasing" | "stable";
   last_calculation: string;
 }
 
@@ -35,8 +35,8 @@ interface OperationalAlert {
   alert_type: string;
   title: string;
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  status: 'active' | 'acknowledged' | 'resolved';
+  severity: "low" | "medium" | "high" | "critical";
+  status: "active" | "acknowledged" | "resolved";
   created_at: string;
   affected_crew_member_id?: string;
   affected_vessel_id?: string;
@@ -84,7 +84,7 @@ export const OperationalCommandCenter: React.FC = () => {
         loadStats()
       ]);
     } catch (error) {
-      console.error('Error loading dashboard data:', error);
+      console.error("Error loading dashboard data:", error);
       toast({
         title: "Erro ao carregar dados",
         description: "Não foi possível carregar os dados do centro de comando.",
@@ -97,31 +97,31 @@ export const OperationalCommandCenter: React.FC = () => {
 
   const loadMetrics = async () => {
     const { data, error } = await supabase
-      .from('operational_metrics')
-      .select('*')
-      .order('last_calculation', { ascending: false })
+      .from("operational_metrics")
+      .select("*")
+      .order("last_calculation", { ascending: false })
       .limit(8);
 
     if (error) throw error;
     setMetrics((data || []).map((metric: any) => ({
       ...metric,
-      trend: metric.trend as 'increasing' | 'decreasing' | 'stable'
+      trend: metric.trend as "increasing" | "decreasing" | "stable"
     })));
   };
 
   const loadAlerts = async () => {
     const { data, error } = await supabase
-      .from('operational_alerts')
-      .select('*')
-      .neq('status', 'resolved')
-      .order('created_at', { ascending: false })
+      .from("operational_alerts")
+      .select("*")
+      .neq("status", "resolved")
+      .order("created_at", { ascending: false })
       .limit(10);
 
     if (error) throw error;
     setAlerts((data || []).map((alert: any) => ({
       ...alert,
-      severity: alert.severity as 'low' | 'medium' | 'high' | 'critical',
-      status: alert.status as 'active' | 'acknowledged' | 'resolved'
+      severity: alert.severity as "low" | "medium" | "high" | "critical",
+      status: alert.status as "active" | "acknowledged" | "resolved"
     })));
   };
 
@@ -132,7 +132,7 @@ export const OperationalCommandCenter: React.FC = () => {
       available_crew: 132,
       active_vessels: 24,
       compliance_rate: 94.5,
-      pending_alerts: alerts.filter(a => a.status === 'active').length
+      pending_alerts: alerts.filter(a => a.status === "active").length
     };
     setStats(mockStats);
   };
@@ -140,26 +140,22 @@ export const OperationalCommandCenter: React.FC = () => {
   const setupRealTimeSubscriptions = () => {
     // Setup real-time subscriptions for alerts and metrics
     const alertsChannel = supabase
-      .channel('operational-alerts')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'operational_alerts'
-      }, (payload) => {
-        console.log('Real-time alert update:', payload);
-        loadAlerts();
+      .channel("operational-alerts")
+      .on("postgres_changes", {
+        event: "*",
+        schema: "public",
+        table: "operational_alerts"
+      }, (payload) => {loadAlerts();
       })
       .subscribe();
 
     const metricsChannel = supabase
-      .channel('operational-metrics')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'operational_metrics'
-      }, (payload) => {
-        console.log('Real-time metric update:', payload);
-        loadMetrics();
+      .channel("operational-metrics")
+      .on("postgres_changes", {
+        event: "*",
+        schema: "public",
+        table: "operational_metrics"
+      }, (payload) => {loadMetrics();
       })
       .subscribe();
 
@@ -172,9 +168,9 @@ export const OperationalCommandCenter: React.FC = () => {
   const acknowledgeAlert = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('operational_alerts')
-        .update({ status: 'acknowledged' })
-        .eq('id', alertId);
+        .from("operational_alerts")
+        .update({ status: "acknowledged" })
+        .eq("id", alertId);
 
       if (error) throw error;
 
@@ -185,7 +181,7 @@ export const OperationalCommandCenter: React.FC = () => {
 
       loadAlerts();
     } catch (error) {
-      console.error('Error acknowledging alert:', error);
+      console.error("Error acknowledging alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível reconhecer o alerta.",
@@ -197,12 +193,12 @@ export const OperationalCommandCenter: React.FC = () => {
   const resolveAlert = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('operational_alerts')
+        .from("operational_alerts")
         .update({ 
-          status: 'resolved',
+          status: "resolved",
           resolved_at: new Date().toISOString()
         })
-        .eq('id', alertId);
+        .eq("id", alertId);
 
       if (error) throw error;
 
@@ -213,7 +209,7 @@ export const OperationalCommandCenter: React.FC = () => {
 
       loadAlerts();
     } catch (error) {
-      console.error('Error resolving alert:', error);
+      console.error("Error resolving alert:", error);
       toast({
         title: "Erro",
         description: "Não foi possível resolver o alerta.",
@@ -224,19 +220,19 @@ export const OperationalCommandCenter: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-600 bg-red-50 border-red-200';
-      case 'high': return 'text-orange-600 bg-orange-50 border-orange-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-blue-600 bg-blue-50 border-blue-200';
-      default: return 'text-muted-foreground bg-gray-50 border-gray-200';
+    case "critical": return "text-red-600 bg-red-50 border-red-200";
+    case "high": return "text-orange-600 bg-orange-50 border-orange-200";
+    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    case "low": return "text-blue-600 bg-blue-50 border-blue-200";
+    default: return "text-muted-foreground bg-gray-50 border-gray-200";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'increasing': return <TrendingUp className="h-4 w-4 text-green-600" />;
-      case 'decreasing': return <TrendingUp className="h-4 w-4 text-red-600 rotate-180" />;
-      default: return <Activity className="h-4 w-4 text-blue-600" />;
+    case "increasing": return <TrendingUp className="h-4 w-4 text-green-600" />;
+    case "decreasing": return <TrendingUp className="h-4 w-4 text-red-600 rotate-180" />;
+    default: return <Activity className="h-4 w-4 text-blue-600" />;
     }
   };
 
@@ -322,7 +318,7 @@ export const OperationalCommandCenter: React.FC = () => {
                     <p className="text-sm text-muted-foreground">{alert.description}</p>
                   </div>
                   <div className="flex gap-2 ml-4">
-                    {alert.status === 'active' && (
+                    {alert.status === "active" && (
                       <>
                         <Button
                           size="sm"
@@ -432,7 +428,7 @@ export const OperationalCommandCenter: React.FC = () => {
 
           <div className="border-t pt-4">
             <Button onClick={loadDashboardData} disabled={isLoading}>
-              {isLoading ? 'Atualizando...' : 'Atualizar Dados'}
+              {isLoading ? "Atualizando..." : "Atualizar Dados"}
             </Button>
           </div>
         </CardContent>

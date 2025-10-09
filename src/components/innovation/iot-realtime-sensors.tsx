@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Thermometer, Zap, Waves, Activity, Radio, Gauge, 
   AlertTriangle, CheckCircle, TrendingUp, TrendingDown 
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SensorData {
   id: string;
   name: string;
-  type: 'temperature' | 'pressure' | 'vibration' | 'energy' | 'connectivity' | 'flow';
+  type: "temperature" | "pressure" | "vibration" | "energy" | "connectivity" | "flow";
   value: number;
   unit: string;
-  status: 'normal' | 'warning' | 'critical' | 'offline';
-  trend: 'up' | 'down' | 'stable';
+  status: "normal" | "warning" | "critical" | "offline";
+  trend: "up" | "down" | "stable";
   lastUpdate: string;
   minRange: number;
   maxRange: number;
@@ -25,88 +25,88 @@ interface SensorData {
 const IoTRealtimeSensors: React.FC = () => {
   const [sensors, setSensors] = useState<SensorData[]>([
     {
-      id: 'TEMP_001',
-      name: 'Motor Principal',
-      type: 'temperature',
+      id: "TEMP_001",
+      name: "Motor Principal",
+      type: "temperature",
       value: 78,
-      unit: '°C',
-      status: 'normal',
-      trend: 'stable',
-      lastUpdate: 'Agora',
+      unit: "°C",
+      status: "normal",
+      trend: "stable",
+      lastUpdate: "Agora",
       minRange: 60,
       maxRange: 85,
       icon: Thermometer,
-      color: 'text-red-500'
+      color: "text-red-500"
     },
     {
-      id: 'PRESS_001',
-      name: 'Sistema Hidráulico',
-      type: 'pressure',
+      id: "PRESS_001",
+      name: "Sistema Hidráulico",
+      type: "pressure",
       value: 3.2,
-      unit: 'bar',
-      status: 'warning',
-      trend: 'up',
-      lastUpdate: 'Há 5s',
+      unit: "bar",
+      status: "warning",
+      trend: "up",
+      lastUpdate: "Há 5s",
       minRange: 2.0,
       maxRange: 3.5,
       icon: Waves,
-      color: 'text-blue-500'
+      color: "text-blue-500"
     },
     {
-      id: 'VIB_001',
-      name: 'Motor Auxiliar',
-      type: 'vibration',
+      id: "VIB_001",
+      name: "Motor Auxiliar",
+      type: "vibration",
       value: 2.1,
-      unit: 'mm/s',
-      status: 'normal',
-      trend: 'down',
-      lastUpdate: 'Há 2s',
+      unit: "mm/s",
+      status: "normal",
+      trend: "down",
+      lastUpdate: "Há 2s",
       minRange: 0,
       maxRange: 4,
       icon: Activity,
-      color: 'text-green-500'
+      color: "text-green-500"
     },
     {
-      id: 'POW_001',
-      name: 'Consumo Energia',
-      type: 'energy',
+      id: "POW_001",
+      name: "Consumo Energia",
+      type: "energy",
       value: 245,
-      unit: 'kW',
-      status: 'normal',
-      trend: 'stable',
-      lastUpdate: 'Agora',
+      unit: "kW",
+      status: "normal",
+      trend: "stable",
+      lastUpdate: "Agora",
       minRange: 200,
       maxRange: 300,
       icon: Zap,
-      color: 'text-yellow-500'
+      color: "text-yellow-500"
     },
     {
-      id: 'CONN_001',
-      name: 'Conectividade 5G',
-      type: 'connectivity',
+      id: "CONN_001",
+      name: "Conectividade 5G",
+      type: "connectivity",
       value: -65,
-      unit: 'dBm',
-      status: 'normal',
-      trend: 'stable',
-      lastUpdate: 'Há 1s',
+      unit: "dBm",
+      status: "normal",
+      trend: "stable",
+      lastUpdate: "Há 1s",
       minRange: -80,
       maxRange: -50,
       icon: Radio,
-      color: 'text-purple-500'
+      color: "text-purple-500"
     },
     {
-      id: 'FLOW_001',
-      name: 'Fluxo Combustível',
-      type: 'flow',
+      id: "FLOW_001",
+      name: "Fluxo Combustível",
+      type: "flow",
       value: 12.5,
-      unit: 'L/min',
-      status: 'normal',
-      trend: 'up',
-      lastUpdate: 'Há 3s',
+      unit: "L/min",
+      status: "normal",
+      trend: "up",
+      lastUpdate: "Há 3s",
       minRange: 10,
       maxRange: 15,
       icon: Gauge,
-      color: 'text-cyan-500'
+      color: "text-cyan-500"
     }
   ]);
 
@@ -117,10 +117,10 @@ const IoTRealtimeSensors: React.FC = () => {
         prevSensors.map(sensor => ({
           ...sensor,
           value: sensor.value + (Math.random() - 0.5) * 2,
-          trend: Math.random() > 0.5 ? 'up' : 'down',
-          lastUpdate: Math.random() > 0.7 ? 'Agora' : `Há ${Math.floor(Math.random() * 10)}s`,
-          status: sensor.value > sensor.maxRange * 0.9 ? 'warning' : 
-                   sensor.value > sensor.maxRange ? 'critical' : 'normal'
+          trend: Math.random() > 0.5 ? "up" : "down",
+          lastUpdate: Math.random() > 0.7 ? "Agora" : `Há ${Math.floor(Math.random() * 10)}s`,
+          status: sensor.value > sensor.maxRange * 0.9 ? "warning" : 
+            sensor.value > sensor.maxRange ? "critical" : "normal"
         }))
       );
     }, 3000);
@@ -130,29 +130,29 @@ const IoTRealtimeSensors: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'normal': return 'text-green-500';
-      case 'warning': return 'text-orange-500';
-      case 'critical': return 'text-red-500';
-      case 'offline': return 'text-muted-foreground';
-      default: return 'text-muted-foreground';
+    case "normal": return "text-green-500";
+    case "warning": return "text-orange-500";
+    case "critical": return "text-red-500";
+    case "offline": return "text-muted-foreground";
+    default: return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'normal': return <Badge className="bg-green-100 text-green-700">Normal</Badge>;
-      case 'warning': return <Badge className="bg-orange-100 text-orange-700">Atenção</Badge>;
-      case 'critical': return <Badge variant="destructive">Crítico</Badge>;
-      case 'offline': return <Badge variant="outline">Offline</Badge>;
-      default: return <Badge variant="outline">Desconhecido</Badge>;
+    case "normal": return <Badge className="bg-green-100 text-green-700">Normal</Badge>;
+    case "warning": return <Badge className="bg-orange-100 text-orange-700">Atenção</Badge>;
+    case "critical": return <Badge variant="destructive">Crítico</Badge>;
+    case "offline": return <Badge variant="outline">Offline</Badge>;
+    default: return <Badge variant="outline">Desconhecido</Badge>;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-3 w-3 text-green-500" />;
-      case 'down': return <TrendingDown className="h-3 w-3 text-red-500" />;
-      default: return null;
+    case "up": return <TrendingUp className="h-3 w-3 text-green-500" />;
+    case "down": return <TrendingDown className="h-3 w-3 text-red-500" />;
+    default: return null;
     }
   };
 
@@ -213,14 +213,14 @@ const IoTRealtimeSensors: React.FC = () => {
                   </span>
                 </div>
 
-                {sensor.status === 'warning' && (
+                {sensor.status === "warning" && (
                   <div className="flex items-center gap-2 p-2 bg-orange-50 rounded text-xs text-orange-700">
                     <AlertTriangle className="h-3 w-3" />
                     Valor próximo ao limite máximo
                   </div>
                 )}
 
-                {sensor.status === 'critical' && (
+                {sensor.status === "critical" && (
                   <div className="flex items-center gap-2 p-2 bg-red-50 rounded text-xs text-red-700">
                     <AlertTriangle className="h-3 w-3" />
                     Valor acima do limite - Verificação necessária
@@ -241,7 +241,7 @@ const IoTRealtimeSensors: React.FC = () => {
               <div>
                 <div className="text-sm font-medium text-green-700">Normais</div>
                 <div className="text-lg font-bold text-green-600">
-                  {sensors.filter(s => s.status === 'normal').length}
+                  {sensors.filter(s => s.status === "normal").length}
                 </div>
               </div>
             </div>
@@ -255,7 +255,7 @@ const IoTRealtimeSensors: React.FC = () => {
               <div>
                 <div className="text-sm font-medium text-orange-700">Atenção</div>
                 <div className="text-lg font-bold text-orange-600">
-                  {sensors.filter(s => s.status === 'warning').length}
+                  {sensors.filter(s => s.status === "warning").length}
                 </div>
               </div>
             </div>
@@ -269,7 +269,7 @@ const IoTRealtimeSensors: React.FC = () => {
               <div>
                 <div className="text-sm font-medium text-red-700">Críticos</div>
                 <div className="text-lg font-bold text-red-600">
-                  {sensors.filter(s => s.status === 'critical').length}
+                  {sensors.filter(s => s.status === "critical").length}
                 </div>
               </div>
             </div>
@@ -283,7 +283,7 @@ const IoTRealtimeSensors: React.FC = () => {
               <div>
                 <div className="text-sm font-medium text-gray-700">Offline</div>
                 <div className="text-lg font-bold text-muted-foreground">
-                  {sensors.filter(s => s.status === 'offline').length}
+                  {sensors.filter(s => s.status === "offline").length}
                 </div>
               </div>
             </div>

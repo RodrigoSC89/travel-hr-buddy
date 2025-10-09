@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React from "react";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Activity, 
   Clock, 
@@ -9,14 +9,14 @@ import {
   Zap,
   TrendingUp,
   Volume2
-} from 'lucide-react';
+} from "lucide-react";
 
 interface VoiceAnalyticsProps {
   isConnected: boolean;
   totalMessages: number;
   sessionDuration: number;
   responseTime: number;
-  connectionQuality: 'excellent' | 'good' | 'poor';
+  connectionQuality: "excellent" | "good" | "poor";
 }
 
 const VoiceAnalytics: React.FC<VoiceAnalyticsProps> = ({
@@ -29,24 +29,24 @@ const VoiceAnalytics: React.FC<VoiceAnalyticsProps> = ({
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const getQualityColor = (quality: string) => {
     switch (quality) {
-      case 'excellent': return 'text-emerald-500';
-      case 'good': return 'text-yellow-500';
-      case 'poor': return 'text-red-500';
-      default: return 'text-muted-foreground';
+    case "excellent": return "text-emerald-500";
+    case "good": return "text-yellow-500";
+    case "poor": return "text-red-500";
+    default: return "text-muted-foreground";
     }
   };
 
   const getQualityProgress = (quality: string) => {
     switch (quality) {
-      case 'excellent': return 95;
-      case 'good': return 70;
-      case 'poor': return 30;
-      default: return 0;
+    case "excellent": return 95;
+    case "good": return 70;
+    case "poor": return 30;
+    default: return 0;
     }
   };
 
@@ -109,7 +109,7 @@ const VoiceAnalytics: React.FC<VoiceAnalyticsProps> = ({
       </div>
 
       {/* Performance Tips */}
-      {connectionQuality === 'poor' && (
+      {connectionQuality === "poor" && (
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
           <div className="flex items-start gap-2">
             <TrendingUp className="h-4 w-4 text-yellow-600 mt-0.5" />

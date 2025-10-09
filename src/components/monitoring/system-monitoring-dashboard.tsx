@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Activity, 
   AlertTriangle, 
@@ -24,12 +24,12 @@ import {
   Rocket,
   Heart,
   MessageCircle
-} from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+} from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface SystemStatus {
   module: string;
-  status: 'operational' | 'warning' | 'error' | 'maintenance';
+  status: "operational" | "warning" | "error" | "maintenance";
   uptime: number;
   performance: number;
   users: number;
@@ -39,7 +39,7 @@ interface SystemStatus {
 
 const SystemMonitoringDashboard: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedTimeframe, setSelectedTimeframe] = useState('24h');
+  const [selectedTimeframe, setSelectedTimeframe] = useState("24h");
 
   useEffect(() => {
     setIsLoaded(true);
@@ -47,106 +47,106 @@ const SystemMonitoringDashboard: React.FC = () => {
 
   const systemModules: SystemStatus[] = [
     {
-      module: 'Dashboard Principal',
-      status: 'operational',
+      module: "Dashboard Principal",
+      status: "operational",
       uptime: 99.8,
       performance: 95,
       users: 142,
-      lastUpdate: '2 min atrás',
-      description: 'Dashboard executivo funcionando perfeitamente'
+      lastUpdate: "2 min atrás",
+      description: "Dashboard executivo funcionando perfeitamente"
     },
     {
-      module: 'Sistema de Viagens',
-      status: 'operational',
+      module: "Sistema de Viagens",
+      status: "operational",
       uptime: 99.5,
       performance: 92,
       users: 89,
-      lastUpdate: '5 min atrás',
-      description: 'Reservas e planejamento de viagens operacional'
+      lastUpdate: "5 min atrás",
+      description: "Reservas e planejamento de viagens operacional"
     },
     {
-      module: 'Gestão Logística',
-      status: 'warning',
+      module: "Gestão Logística",
+      status: "warning",
       uptime: 98.2,
       performance: 87,
       users: 76,
-      lastUpdate: '1 min atrás',
-      description: 'Lentidão detectada no rastreamento de cargas'
+      lastUpdate: "1 min atrás",
+      description: "Lentidão detectada no rastreamento de cargas"
     },
     {
-      module: 'RH Marítimos',
-      status: 'operational',
+      module: "RH Marítimos",
+      status: "operational",
       uptime: 99.9,
       performance: 96,
       users: 54,
-      lastUpdate: '3 min atrás',
-      description: 'Gestão de certificados e conformidade ativa'
+      lastUpdate: "3 min atrás",
+      description: "Gestão de certificados e conformidade ativa"
     },
     {
-      module: 'Checklists Técnicos',
-      status: 'operational',
+      module: "Checklists Técnicos",
+      status: "operational",
       uptime: 99.7,
       performance: 94,
       users: 123,
-      lastUpdate: '1 min atrás',
-      description: 'Sistema de DP, Máquinas e Náutica funcional'
+      lastUpdate: "1 min atrás",
+      description: "Sistema de DP, Máquinas e Náutica funcional"
     },
     {
-      module: 'PEOTRAM',
-      status: 'operational',
+      module: "PEOTRAM",
+      status: "operational",
       uptime: 100,
       performance: 98,
       users: 34,
-      lastUpdate: 'agora',
-      description: 'Auditoria Petrobras completamente operacional'
+      lastUpdate: "agora",
+      description: "Auditoria Petrobras completamente operacional"
     },
     {
-      module: 'Assistente IA',
-      status: 'operational',
+      module: "Assistente IA",
+      status: "operational",
       uptime: 99.9,
       performance: 97,
       users: 167,
-      lastUpdate: 'tempo real',
-      description: 'Chatbot e comando de voz funcionando perfeitamente'
+      lastUpdate: "tempo real",
+      description: "Chatbot e comando de voz funcionando perfeitamente"
     },
     {
-      module: 'Sistema de Busca',
-      status: 'operational',
+      module: "Sistema de Busca",
+      status: "operational",
       uptime: 99.6,
       performance: 93,
       users: 145,
-      lastUpdate: '2 min atrás',
-      description: 'Busca avançada e filtros operacionais'
+      lastUpdate: "2 min atrás",
+      description: "Busca avançada e filtros operacionais"
     }
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'operational': return 'success';
-      case 'warning': return 'warning';
-      case 'error': return 'destructive';
-      case 'maintenance': return 'info';
-      default: return 'secondary';
+    case "operational": return "success";
+    case "warning": return "warning";
+    case "error": return "destructive";
+    case "maintenance": return "info";
+    default: return "secondary";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'operational': return CheckCircle;
-      case 'warning': return AlertTriangle;
-      case 'error': return AlertTriangle;
-      case 'maintenance': return Clock;
-      default: return Activity;
+    case "operational": return CheckCircle;
+    case "warning": return AlertTriangle;
+    case "error": return AlertTriangle;
+    case "maintenance": return Clock;
+    default: return Activity;
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'operational': return 'Operacional';
-      case 'warning': return 'Atenção';
-      case 'error': return 'Erro';
-      case 'maintenance': return 'Manutenção';
-      default: return 'Desconhecido';
+    case "operational": return "Operacional";
+    case "warning": return "Atenção";
+    case "error": return "Erro";
+    case "maintenance": return "Manutenção";
+    default: return "Desconhecido";
     }
   };
 
@@ -154,9 +154,9 @@ const SystemMonitoringDashboard: React.FC = () => {
     totalUsers: systemModules.reduce((sum, module) => sum + module.users, 0),
     avgUptime: systemModules.reduce((sum, module) => sum + module.uptime, 0) / systemModules.length,
     avgPerformance: systemModules.reduce((sum, module) => sum + module.performance, 0) / systemModules.length,
-    operationalModules: systemModules.filter(module => module.status === 'operational').length,
-    warningModules: systemModules.filter(module => module.status === 'warning').length,
-    errorModules: systemModules.filter(module => module.status === 'error').length
+    operationalModules: systemModules.filter(module => module.status === "operational").length,
+    warningModules: systemModules.filter(module => module.status === "warning").length,
+    errorModules: systemModules.filter(module => module.status === "error").length
   };
 
   return (
@@ -170,12 +170,12 @@ const SystemMonitoringDashboard: React.FC = () => {
         <div className="relative z-10 container mx-auto p-6 space-y-8">
           {/* Enhanced Hero Section */}
           <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-success via-success/90 to-success-glow p-8 text-success-foreground 
-            transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             
             {/* Animated Background Pattern */}
             <div className="absolute inset-0 bg-mesh opacity-20" />
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/15 to-transparent rounded-full blur-2xl animate-pulse" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-info/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-info/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: "1s" }} />
             
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-6">

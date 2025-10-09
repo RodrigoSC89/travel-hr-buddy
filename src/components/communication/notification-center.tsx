@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import {
   Bell,
   BellOff,
@@ -33,16 +33,16 @@ import {
   User,
   Building,
   Globe
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Notification {
   id: string;
   title: string;
   message: string;
-  type: 'info' | 'warning' | 'error' | 'success' | 'urgent';
-  priority: 'low' | 'normal' | 'high' | 'critical';
-  category: 'system' | 'message' | 'reminder' | 'alert' | 'update';
-  source: 'system' | 'user' | 'ai' | 'external';
+  type: "info" | "warning" | "error" | "success" | "urgent";
+  priority: "low" | "normal" | "high" | "critical";
+  category: "system" | "message" | "reminder" | "alert" | "update";
+  source: "system" | "user" | "ai" | "external";
   is_read: boolean;
   is_important: boolean;
   created_at: string;
@@ -71,8 +71,8 @@ export const NotificationCenter = () => {
     sms_enabled: false,
     sound_enabled: true,
     quiet_hours_enabled: false,
-    quiet_start: '22:00',
-    quiet_end: '08:00',
+    quiet_start: "22:00",
+    quiet_end: "08:00",
     categories: {
       system: true,
       message: true,
@@ -88,9 +88,9 @@ export const NotificationCenter = () => {
     }
   });
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('all');
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [selectedPriority, setSelectedPriority] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState("all");
+  const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedPriority, setSelectedPriority] = useState<string>("all");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -110,65 +110,65 @@ export const NotificationCenter = () => {
       // Mock notifications data
       const mockNotifications: Notification[] = [
         {
-          id: '1',
-          title: 'Nova mensagem de RH',
-          message: 'Ana Silva enviou uma mensagem sobre atualização de dossiê',
-          type: 'info',
-          priority: 'normal',
-          category: 'message',
-          source: 'user',
+          id: "1",
+          title: "Nova mensagem de RH",
+          message: "Ana Silva enviou uma mensagem sobre atualização de dossiê",
+          type: "info",
+          priority: "normal",
+          category: "message",
+          source: "user",
           is_read: false,
           is_important: false,
           created_at: new Date().toISOString(),
           action_required: true
         },
         {
-          id: '2',
-          title: 'Certificação expirando',
-          message: 'Sua certificação STCW Basic Safety Training expira em 15 dias',
-          type: 'warning',
-          priority: 'high',
-          category: 'reminder',
-          source: 'system',
+          id: "2",
+          title: "Certificação expirando",
+          message: "Sua certificação STCW Basic Safety Training expira em 15 dias",
+          type: "warning",
+          priority: "high",
+          category: "reminder",
+          source: "system",
           is_read: false,
           is_important: true,
           created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
           action_required: true
         },
         {
-          id: '3',
-          title: 'Alerta de Emergência',
-          message: 'Tempestade severa detectada na rota Santos-Rio. Alteração de curso necessária.',
-          type: 'error',
-          priority: 'critical',
-          category: 'alert',
-          source: 'system',
+          id: "3",
+          title: "Alerta de Emergência",
+          message: "Tempestade severa detectada na rota Santos-Rio. Alteração de curso necessária.",
+          type: "error",
+          priority: "critical",
+          category: "alert",
+          source: "system",
           is_read: true,
           is_important: true,
           created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
           action_required: false
         },
         {
-          id: '4',
-          title: 'Sugestão da IA',
-          message: 'Detectei padrões que sugerem otimização na programação de embarques',
-          type: 'info',
-          priority: 'normal',
-          category: 'update',
-          source: 'ai',
+          id: "4",
+          title: "Sugestão da IA",
+          message: "Detectei padrões que sugerem otimização na programação de embarques",
+          type: "info",
+          priority: "normal",
+          category: "update",
+          source: "ai",
           is_read: false,
           is_important: false,
           created_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
           action_required: false
         },
         {
-          id: '5',
-          title: 'Sistema atualizado',
-          message: 'O módulo de comunicação foi atualizado com novas funcionalidades',
-          type: 'success',
-          priority: 'low',
-          category: 'system',
-          source: 'system',
+          id: "5",
+          title: "Sistema atualizado",
+          message: "O módulo de comunicação foi atualizado com novas funcionalidades",
+          type: "success",
+          priority: "low",
+          category: "system",
+          source: "system",
           is_read: true,
           is_important: false,
           created_at: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
@@ -178,7 +178,7 @@ export const NotificationCenter = () => {
 
       setNotifications(mockNotifications);
     } catch (error) {
-      console.error('Error loading notifications:', error);
+      console.error("Error loading notifications:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar notificações",
@@ -194,7 +194,7 @@ export const NotificationCenter = () => {
       // Mock settings loading - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-      console.error('Error loading settings:', error);
+      console.error("Error loading settings:", error);
     }
   };
 
@@ -205,12 +205,12 @@ export const NotificationCenter = () => {
       if (Math.random() < 0.1) { // 10% chance every 30 seconds
         const newNotification: Notification = {
           id: Date.now().toString(),
-          title: 'Nova notificação',
-          message: 'Esta é uma notificação de exemplo em tempo real',
-          type: 'info',
-          priority: 'normal',
-          category: 'system',
-          source: 'system',
+          title: "Nova notificação",
+          message: "Esta é uma notificação de exemplo em tempo real",
+          type: "info",
+          priority: "normal",
+          category: "system",
+          source: "system",
           is_read: false,
           is_important: false,
           created_at: new Date().toISOString(),
@@ -234,28 +234,28 @@ export const NotificationCenter = () => {
 
     // Filter by tab
     switch (activeTab) {
-      case 'unread':
-        filtered = filtered.filter(n => !n.is_read);
-        break;
-      case 'important':
-        filtered = filtered.filter(n => n.is_important);
-        break;
-      case 'action':
-        filtered = filtered.filter(n => n.action_required);
-        break;
-      case 'archived':
-        // Mock archived filter
-        filtered = [];
-        break;
+    case "unread":
+      filtered = filtered.filter(n => !n.is_read);
+      break;
+    case "important":
+      filtered = filtered.filter(n => n.is_important);
+      break;
+    case "action":
+      filtered = filtered.filter(n => n.action_required);
+      break;
+    case "archived":
+      // Mock archived filter
+      filtered = [];
+      break;
     }
 
     // Filter by type
-    if (selectedType !== 'all') {
+    if (selectedType !== "all") {
       filtered = filtered.filter(n => n.type === selectedType);
     }
 
     // Filter by priority
-    if (selectedPriority !== 'all') {
+    if (selectedPriority !== "all") {
       filtered = filtered.filter(n => n.priority === selectedPriority);
     }
 
@@ -272,7 +272,7 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
-      console.error('Error marking as read:', error);
+      console.error("Error marking as read:", error);
     }
   };
 
@@ -287,7 +287,7 @@ export const NotificationCenter = () => {
         description: "Todas as notificações foram marcadas como lidas"
       });
     } catch (error) {
-      console.error('Error marking all as read:', error);
+      console.error("Error marking all as read:", error);
     }
   };
 
@@ -301,7 +301,7 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
-      console.error('Error toggling important:', error);
+      console.error("Error toggling important:", error);
     }
   };
 
@@ -314,7 +314,7 @@ export const NotificationCenter = () => {
         description: "Notificação removida"
       });
     } catch (error) {
-      console.error('Error deleting notification:', error);
+      console.error("Error deleting notification:", error);
     }
   };
 
@@ -327,38 +327,38 @@ export const NotificationCenter = () => {
         description: "Configurações atualizadas"
       });
     } catch (error) {
-      console.error('Error updating settings:', error);
+      console.error("Error updating settings:", error);
     }
   };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'error': return AlertTriangle;
-      case 'warning': return AlertTriangle;
-      case 'success': return CheckCircle2;
-      case 'urgent': return Zap;
-      default: return Info;
+    case "error": return AlertTriangle;
+    case "warning": return AlertTriangle;
+    case "success": return CheckCircle2;
+    case "urgent": return Zap;
+    default: return Info;
     }
   };
 
   const getNotificationColor = (type: string, priority: string) => {
-    if (priority === 'critical') return 'border-l-destructive bg-destructive/5';
+    if (priority === "critical") return "border-l-destructive bg-destructive/5";
     
     switch (type) {
-      case 'error': return 'border-l-destructive bg-destructive/5';
-      case 'warning': return 'border-l-warning bg-warning/5';
-      case 'success': return 'border-l-success bg-success/5';
-      case 'urgent': return 'border-l-warning bg-warning/5';
-      default: return 'border-l-info bg-info/5';
+    case "error": return "border-l-destructive bg-destructive/5";
+    case "warning": return "border-l-warning bg-warning/5";
+    case "success": return "border-l-success bg-success/5";
+    case "urgent": return "border-l-warning bg-warning/5";
+    default: return "border-l-info bg-info/5";
     }
   };
 
   const getSourceIcon = (source: string) => {
     switch (source) {
-      case 'user': return User;
-      case 'ai': return Zap;
-      case 'external': return Globe;
-      default: return Shield;
+    case "user": return User;
+    case "ai": return Zap;
+    case "external": return Globe;
+    default: return Shield;
     }
   };
 
@@ -367,7 +367,7 @@ export const NotificationCenter = () => {
     const date = new Date(dateString);
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
     
-    if (diffInHours < 1) return 'Agora mesmo';
+    if (diffInHours < 1) return "Agora mesmo";
     if (diffInHours < 24) return `${diffInHours}h atrás`;
     return `${Math.floor(diffInHours / 24)}d atrás`;
   };
@@ -471,7 +471,7 @@ export const NotificationCenter = () => {
         </TabsList>
 
         {/* Notifications List */}
-        {['all', 'unread', 'important', 'action'].map(tab => (
+        {["all", "unread", "important", "action"].map(tab => (
           <TabsContent key={tab} value={tab} className="mt-6">
             <div className="space-y-2">
               {filteredNotifications.length === 0 ? (
@@ -480,10 +480,10 @@ export const NotificationCenter = () => {
                     <Bell className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                     <h3 className="text-lg font-medium mb-2">Nenhuma notificação</h3>
                     <p className="text-muted-foreground">
-                      {tab === 'unread' && "Todas as notificações foram lidas"}
-                      {tab === 'important' && "Nenhuma notificação marcada como importante"}
-                      {tab === 'action' && "Nenhuma ação pendente"}
-                      {tab === 'all' && "Nenhuma notificação encontrada"}
+                      {tab === "unread" && "Todas as notificações foram lidas"}
+                      {tab === "important" && "Nenhuma notificação marcada como importante"}
+                      {tab === "action" && "Nenhuma ação pendente"}
+                      {tab === "all" && "Nenhuma notificação encontrada"}
                     </p>
                   </CardContent>
                 </Card>
@@ -496,37 +496,37 @@ export const NotificationCenter = () => {
                     <Card 
                       key={notification.id}
                       className={`border-l-4 ${getNotificationColor(notification.type, notification.priority)} ${
-                        !notification.is_read ? 'shadow-md' : ''
+                        !notification.is_read ? "shadow-md" : ""
                       }`}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start gap-4">
                           <div className={`p-2 rounded-lg ${
-                            notification.type === 'error' ? 'bg-destructive/10' :
-                            notification.type === 'warning' ? 'bg-warning/10' :
-                            notification.type === 'success' ? 'bg-success/10' :
-                            'bg-info/10'
+                            notification.type === "error" ? "bg-destructive/10" :
+                              notification.type === "warning" ? "bg-warning/10" :
+                                notification.type === "success" ? "bg-success/10" :
+                                  "bg-info/10"
                           }`}>
                             <NotificationIcon className={`h-4 w-4 ${
-                              notification.type === 'error' ? 'text-destructive' :
-                              notification.type === 'warning' ? 'text-warning' :
-                              notification.type === 'success' ? 'text-success' :
-                              'text-info'
+                              notification.type === "error" ? "text-destructive" :
+                                notification.type === "warning" ? "text-warning" :
+                                  notification.type === "success" ? "text-success" :
+                                    "text-info"
                             }`} />
                           </div>
                           
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
-                                <h4 className={`font-medium ${!notification.is_read ? 'font-semibold' : ''}`}>
+                                <h4 className={`font-medium ${!notification.is_read ? "font-semibold" : ""}`}>
                                   {notification.title}
                                 </h4>
                                 <Badge 
                                   variant={
-                                    notification.priority === 'critical' ? 'destructive' :
-                                    notification.priority === 'high' ? 'warning' :
-                                    notification.priority === 'normal' ? 'secondary' :
-                                    'outline'
+                                    notification.priority === "critical" ? "destructive" :
+                                      notification.priority === "high" ? "warning" :
+                                        notification.priority === "normal" ? "secondary" :
+                                          "outline"
                                   }
                                   className="text-xs"
                                 >
@@ -545,7 +545,7 @@ export const NotificationCenter = () => {
                               </div>
                             </div>
                             
-                            <p className={`text-sm ${!notification.is_read ? 'font-medium' : 'text-muted-foreground'} mb-3`}>
+                            <p className={`text-sm ${!notification.is_read ? "font-medium" : "text-muted-foreground"} mb-3`}>
                               {notification.message}
                             </p>
                             
@@ -574,7 +574,7 @@ export const NotificationCenter = () => {
                                   size="sm"
                                   onClick={() => toggleImportant(notification.id)}
                                 >
-                                  <Star className={`h-4 w-4 ${notification.is_important ? 'fill-current text-yellow-500' : ''}`} />
+                                  <Star className={`h-4 w-4 ${notification.is_important ? "fill-current text-yellow-500" : ""}`} />
                                 </Button>
                                 <Button
                                   variant="ghost"
@@ -679,7 +679,7 @@ export const NotificationCenter = () => {
                         </SelectTrigger>
                         <SelectContent>
                           {Array.from({ length: 24 }, (_, i) => {
-                            const hour = i.toString().padStart(2, '0');
+                            const hour = i.toString().padStart(2, "0");
                             return (
                               <SelectItem key={hour} value={`${hour}:00`}>
                                 {hour}:00
@@ -701,7 +701,7 @@ export const NotificationCenter = () => {
                         </SelectTrigger>
                         <SelectContent>
                           {Array.from({ length: 24 }, (_, i) => {
-                            const hour = i.toString().padStart(2, '0');
+                            const hour = i.toString().padStart(2, "0");
                             return (
                               <SelectItem key={hour} value={`${hour}:00`}>
                                 {hour}:00

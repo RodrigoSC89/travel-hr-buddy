@@ -1,26 +1,26 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { cn } from "@/lib/utils";
 
 interface ProgressBarProps {
   value: number;
   max?: number;
   className?: string;
   showLabel?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'success' | 'warning' | 'danger';
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "success" | "warning" | "danger";
 }
 
 const sizeClasses = {
-  sm: 'h-2',
-  md: 'h-3',
-  lg: 'h-4'
+  sm: "h-2",
+  md: "h-3",
+  lg: "h-4"
 };
 
 const variantClasses = {
-  default: 'bg-primary',
-  success: 'bg-green-500',
-  warning: 'bg-yellow-500',
-  danger: 'bg-red-500'
+  default: "bg-primary",
+  success: "bg-green-500",
+  warning: "bg-yellow-500",
+  danger: "bg-red-500"
 };
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -28,8 +28,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   max = 100,
   className,
   showLabel = false,
-  size = 'md',
-  variant = 'default'
+  size = "md",
+  variant = "default"
 }) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 

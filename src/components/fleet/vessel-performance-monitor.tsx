@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { 
   Activity, 
   Fuel, 
@@ -14,8 +14,8 @@ import {
   CheckCircle,
   Clock,
   BarChart3
-} from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+} from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
 
 interface VesselPerformanceData {
   id: string;
@@ -31,7 +31,7 @@ interface VesselPerformanceData {
 
 interface Alert {
   id: string;
-  type: 'warning' | 'critical' | 'info';
+  type: "warning" | "critical" | "info";
   message: string;
   timestamp: string;
 }
@@ -45,7 +45,7 @@ interface PerformancePoint {
 
 const VesselPerformanceMonitor = () => {
   const [vessels, setVessels] = useState<VesselPerformanceData[]>([]);
-  const [selectedVessel, setSelectedVessel] = useState<string>('');
+  const [selectedVessel, setSelectedVessel] = useState<string>("");
 
   useEffect(() => {
     loadPerformanceData();
@@ -57,8 +57,8 @@ const VesselPerformanceMonitor = () => {
     // Simulate real-time performance data
     const mockData: VesselPerformanceData[] = [
       {
-        id: '1',
-        name: 'Nautilus Explorer',
+        id: "1",
+        name: "Nautilus Explorer",
         fuelConsumption: 12.5,
         speed: 18.2,
         engineTemp: 82,
@@ -66,17 +66,17 @@ const VesselPerformanceMonitor = () => {
         maintenanceScore: 92,
         alerts: [
           {
-            id: '1',
-            type: 'warning',
-            message: 'Consumo de combustível acima da média',
+            id: "1",
+            type: "warning",
+            message: "Consumo de combustível acima da média",
             timestamp: new Date().toISOString()
           }
         ],
         performanceHistory: generateMockHistory()
       },
       {
-        id: '2',
-        name: 'Atlantic Pioneer',
+        id: "2",
+        name: "Atlantic Pioneer",
         fuelConsumption: 15.8,
         speed: 14.5,
         engineTemp: 75,
@@ -84,17 +84,17 @@ const VesselPerformanceMonitor = () => {
         maintenanceScore: 88,
         alerts: [
           {
-            id: '2',
-            type: 'info',
-            message: 'Manutenção preventiva agendada para próxima semana',
+            id: "2",
+            type: "info",
+            message: "Manutenção preventiva agendada para próxima semana",
             timestamp: new Date().toISOString()
           }
         ],
         performanceHistory: generateMockHistory()
       },
       {
-        id: '3',
-        name: 'Pacific Star',
+        id: "3",
+        name: "Pacific Star",
         fuelConsumption: 11.2,
         speed: 20.1,
         engineTemp: 78,
@@ -118,7 +118,7 @@ const VesselPerformanceMonitor = () => {
     for (let i = 23; i >= 0; i--) {
       const time = new Date(now.getTime() - i * 60 * 60 * 1000);
       points.push({
-        time: time.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        time: time.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
         speed: 15 + Math.random() * 8,
         fuel: 10 + Math.random() * 8,
         efficiency: 85 + Math.random() * 10
@@ -132,19 +132,19 @@ const VesselPerformanceMonitor = () => {
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case 'critical':
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      case 'warning':
-        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
-      default:
-        return <CheckCircle className="h-4 w-4 text-blue-500" />;
+    case "critical":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    case "warning":
+      return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+    default:
+      return <CheckCircle className="h-4 w-4 text-blue-500" />;
     }
   };
 
   const getPerformanceColor = (value: number, threshold: number = 90) => {
-    if (value >= threshold) return 'text-green-600';
-    if (value >= threshold - 20) return 'text-yellow-600';
-    return 'text-red-600';
+    if (value >= threshold) return "text-green-600";
+    if (value >= threshold - 20) return "text-yellow-600";
+    return "text-red-600";
   };
 
   return (
@@ -162,7 +162,7 @@ const VesselPerformanceMonitor = () => {
             {vessels.map(vessel => (
               <Button
                 key={vessel.id}
-                variant={selectedVessel === vessel.id ? 'default' : 'outline'}
+                variant={selectedVessel === vessel.id ? "default" : "outline"}
                 onClick={() => setSelectedVessel(vessel.id)}
                 className="mb-2"
               >
@@ -333,7 +333,7 @@ const VesselPerformanceMonitor = () => {
                           <div className="flex-1">
                             <p className="font-medium">{alert.message}</p>
                             <p className="text-sm text-muted-foreground">
-                              {new Date(alert.timestamp).toLocaleString('pt-BR')}
+                              {new Date(alert.timestamp).toLocaleString("pt-BR")}
                             </p>
                           </div>
                           <Button size="sm" variant="outline">

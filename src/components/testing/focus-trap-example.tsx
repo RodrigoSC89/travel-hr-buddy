@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { useFocusTrap } from '@/hooks/use-focus-trap';
-import { Code, Lock, X } from 'lucide-react';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
+import { Code, Lock, X } from "lucide-react";
 
 /**
  * Example demonstrating the useFocusTrap hook
  */
 export const FocusTrapExample: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '' });
+  const [formData, setFormData] = useState({ name: "", email: "" });
   const [submitted, setSubmitted] = useState(false);
 
   const modalRef = useFocusTrap(isModalOpen);
@@ -161,7 +161,7 @@ export const FocusTrapExample: React.FC = () => {
             </CardHeader>
             <CardContent>
               <pre className="text-xs overflow-x-auto p-4 bg-background rounded-md border">
-{`import { useFocusTrap } from '@/hooks/use-focus-trap';
+                {`import { useFocusTrap } from '@/hooks/use-focus-trap';
 
 const MyModal = ({ isOpen, onClose }) => {
   const modalRef = useFocusTrap(isOpen);

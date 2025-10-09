@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Slider } from '@/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Volume2, Mic, Settings } from 'lucide-react';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Volume2, Mic, Settings } from "lucide-react";
 
 interface VoiceSettingsProps {
   isOpen: boolean;
@@ -59,18 +59,18 @@ const VoiceSettings: React.FC<VoiceSettingsProps> = ({ isOpen, onClose }) => {
                 <Volume2 className="h-4 w-4 text-primary" />
                 <Label className="text-card-foreground">Volume da Resposta</Label>
               </div>
-            <Slider
-              value={volume}
-              onValueChange={setVolume}
-              max={1}
-              min={0}
-              step={0.1}
-              className="w-full"
-            />
-            <div className="text-sm text-muted-foreground text-right">
-              {Math.round(volume[0] * 100)}%
+              <Slider
+                value={volume}
+                onValueChange={setVolume}
+                max={1}
+                min={0}
+                step={0.1}
+                className="w-full"
+              />
+              <div className="text-sm text-muted-foreground text-right">
+                {Math.round(volume[0] * 100)}%
+              </div>
             </div>
-          </div>
 
             <Separator />
 
@@ -80,53 +80,53 @@ const VoiceSettings: React.FC<VoiceSettingsProps> = ({ isOpen, onClose }) => {
                 <Mic className="h-4 w-4 text-primary" />
                 <Label className="text-card-foreground">Sensibilidade do Microfone</Label>
               </div>
-            <Slider
-              value={sensitivity}
-              onValueChange={setSensitivity}
-              max={1}
-              min={0}
-              step={0.1}
-              className="w-full"
-            />
-            <div className="text-sm text-muted-foreground text-right">
-              {Math.round(sensitivity[0] * 100)}%
+              <Slider
+                value={sensitivity}
+                onValueChange={setSensitivity}
+                max={1}
+                min={0}
+                step={0.1}
+                className="w-full"
+              />
+              <div className="text-sm text-muted-foreground text-right">
+                {Math.round(sensitivity[0] * 100)}%
+              </div>
             </div>
-          </div>
 
             <Separator />
 
             {/* Voice Selection */}
             <div className="space-y-3">
               <Label className="text-card-foreground">Voz do Assistente</Label>
-            <Select value={voice} onValueChange={setVoice}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="alloy">Alloy (Neutro)</SelectItem>
-                <SelectItem value="echo">Echo (Masculino)</SelectItem>
-                <SelectItem value="fable">Fable (Feminino)</SelectItem>
-                <SelectItem value="onyx">Onyx (Profundo)</SelectItem>
-                <SelectItem value="nova">Nova (Jovem)</SelectItem>
-                <SelectItem value="shimmer">Shimmer (Suave)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+              <Select value={voice} onValueChange={setVoice}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="alloy">Alloy (Neutro)</SelectItem>
+                  <SelectItem value="echo">Echo (Masculino)</SelectItem>
+                  <SelectItem value="fable">Fable (Feminino)</SelectItem>
+                  <SelectItem value="onyx">Onyx (Profundo)</SelectItem>
+                  <SelectItem value="nova">Nova (Jovem)</SelectItem>
+                  <SelectItem value="shimmer">Shimmer (Suave)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
             {/* Language */}
             <div className="space-y-3">
               <Label className="text-card-foreground">Idioma</Label>
-            <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="pt-BR">Português (Brasil)</SelectItem>
-                <SelectItem value="en-US">English (US)</SelectItem>
-                <SelectItem value="es-ES">Español</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+              <Select value={language} onValueChange={setLanguage}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pt-BR">Português (Brasil)</SelectItem>
+                  <SelectItem value="en-US">English (US)</SelectItem>
+                  <SelectItem value="es-ES">Español</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="flex gap-2 pt-4">

@@ -1,8 +1,8 @@
-import React from 'react';
-import { EnhancedMobileSupport } from '@/components/mobile/enhanced-mobile-support';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { EnhancedMobileSupport } from "@/components/mobile/enhanced-mobile-support";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Smartphone, 
   Download, 
@@ -17,7 +17,7 @@ import {
   Settings,
   CheckCircle,
   ArrowRight
-} from 'lucide-react';
+} from "lucide-react";
 
 const MobileAppPage = () => {
   const features = [
@@ -228,7 +228,7 @@ const MobileAppPage = () => {
             {/* Features after installation */}
             <div className="border-t pt-6">
               <h3 className="text-lg font-semibold mb-4">Após a Instalação</h3>
-                <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid gap-3 md:grid-cols-2">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
                   <span className="text-sm">Ícone na tela inicial</span>

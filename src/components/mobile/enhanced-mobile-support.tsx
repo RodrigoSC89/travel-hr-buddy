@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Progress } from "@/components/ui/progress";
 import { 
   Smartphone, 
   Wifi, 
@@ -32,15 +32,15 @@ import {
   Clock,
   Zap,
   X
-} from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useToast } from "@/hooks/use-toast";
 
 interface DeviceInfo {
   platform: string;
   userAgent: string;
   screenSize: { width: number; height: number };
-  orientation: 'portrait' | 'landscape';
+  orientation: "portrait" | "landscape";
   isOnline: boolean;
   batteryLevel?: number;
   isCharging?: boolean;
@@ -68,8 +68,8 @@ interface MobileSettings {
   darkMode: boolean;
   offlineMode: boolean;
   autoSync: boolean;
-  compressionLevel: 'low' | 'medium' | 'high';
-  dataUsage: 'minimal' | 'normal' | 'unlimited';
+  compressionLevel: "low" | "medium" | "high";
+  dataUsage: "minimal" | "normal" | "unlimited";
 }
 
 export const EnhancedMobileSupport: React.FC = () => {
@@ -89,8 +89,8 @@ export const EnhancedMobileSupport: React.FC = () => {
     darkMode: false,
     offlineMode: true,
     autoSync: true,
-    compressionLevel: 'medium',
-    dataUsage: 'normal'
+    compressionLevel: "medium",
+    dataUsage: "normal"
   });
   const [isLoading, setIsLoading] = useState(true);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
@@ -115,35 +115,33 @@ export const EnhancedMobileSupport: React.FC = () => {
           width: window.screen.width,
           height: window.screen.height
         },
-        orientation: window.screen.orientation?.type.includes('portrait') ? 'portrait' : 'landscape',
+        orientation: window.screen.orientation?.type.includes("portrait") ? "portrait" : "landscape",
         isOnline: navigator.onLine,
-        touchSupport: 'ontouchstart' in window,
+        touchSupport: "ontouchstart" in window,
         cameraSupport: !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia),
-        geolocationSupport: 'geolocation' in navigator,
-        notificationSupport: 'Notification' in window,
-        vibrationSupport: 'vibrate' in navigator
+        geolocationSupport: "geolocation" in navigator,
+        notificationSupport: "Notification" in window,
+        vibrationSupport: "vibrate" in navigator
       };
 
       // Battery API (se disponível)
-      if ('getBattery' in navigator) {
+      if ("getBattery" in navigator) {
         try {
           const battery = await (navigator as any).getBattery();
           info.batteryLevel = Math.round(battery.level * 100);
           info.isCharging = battery.charging;
-        } catch (error) {
-          console.log('Battery API não disponível');
-        }
+        } catch (error) {}
       }
 
       // Connection API (se disponível)
-      if ('connection' in navigator) {
+      if ("connection" in navigator) {
         const connection = (navigator as any).connection;
         info.connection = connection.effectiveType;
       }
 
       setDeviceInfo(info);
     } catch (error) {
-      console.error('Erro ao detectar capacidades do dispositivo:', error);
+      console.error("Erro ao detectar capacidades do dispositivo:", error);
     } finally {
       setIsLoading(false);
     }
@@ -151,14 +149,14 @@ export const EnhancedMobileSupport: React.FC = () => {
 
   const setupPWAListeners = () => {
     // Listener para o evento beforeinstallprompt
-    window.addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       setInstallPrompt(e);
       setPwaStatus(prev => ({ ...prev, canInstall: true }));
     });
 
     // Verificar se está rodando como PWA
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+    const isStandalone = window.matchMedia("(display-mode: standalone)").matches ||
                         (window.navigator as any).standalone === true;
     
     setPwaStatus(prev => ({ 
@@ -168,9 +166,9 @@ export const EnhancedMobileSupport: React.FC = () => {
     }));
 
     // Listener para atualizações do service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.addEventListener("message", (event) => {
+        if (event.data && event.data.type === "UPDATE_AVAILABLE") {
           setPwaStatus(prev => ({ ...prev, updateAvailable: true }));
         }
       });
@@ -178,7 +176,7 @@ export const EnhancedMobileSupport: React.FC = () => {
   };
 
   const loadMobileSettings = () => {
-    const savedSettings = localStorage.getItem('mobileSettings');
+    const savedSettings = localStorage.getItem("mobileSettings");
     if (savedSettings) {
       setMobileSettings(JSON.parse(savedSettings));
     }
@@ -187,7 +185,7 @@ export const EnhancedMobileSupport: React.FC = () => {
   const saveMobileSettings = (newSettings: Partial<MobileSettings>) => {
     const updated = { ...mobileSettings, ...newSettings };
     setMobileSettings(updated);
-    localStorage.setItem('mobileSettings', JSON.stringify(updated));
+    localStorage.setItem("mobileSettings", JSON.stringify(updated));
   };
 
   const installPWA = async () => {
@@ -195,7 +193,7 @@ export const EnhancedMobileSupport: React.FC = () => {
       installPrompt.prompt();
       const result = await installPrompt.userChoice;
       
-      if (result.outcome === 'accepted') {
+      if (result.outcome === "accepted") {
         toast({
           title: "App instalado",
           description: "O app foi instalado na sua tela inicial"
@@ -210,92 +208,92 @@ export const EnhancedMobileSupport: React.FC = () => {
   const requestPermission = async (permission: keyof MobileSettings) => {
     try {
       switch (permission) {
-        case 'notifications':
-          if ('Notification' in window) {
-            const result = await Notification.requestPermission();
-            const granted = result === 'granted';
-            saveMobileSettings({ notifications: granted });
-            toast({
-              title: granted ? "Notificações ativadas" : "Notificações negadas",
-              description: granted ? "Você receberá notificações importantes" : "Ative nas configurações do navegador"
-            });
-          }
-          break;
+      case "notifications":
+        if ("Notification" in window) {
+          const result = await Notification.requestPermission();
+          const granted = result === "granted";
+          saveMobileSettings({ notifications: granted });
+          toast({
+            title: granted ? "Notificações ativadas" : "Notificações negadas",
+            description: granted ? "Você receberá notificações importantes" : "Ative nas configurações do navegador"
+          });
+        }
+        break;
           
-        case 'location':
-          if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(
-              () => {
-                saveMobileSettings({ location: true });
-                toast({
-                  title: "Localização ativada",
-                  description: "O app pode acessar sua localização"
-                });
-              },
-              () => {
-                saveMobileSettings({ location: false });
-                toast({
-                  title: "Localização negada",
-                  description: "Ative nas configurações do navegador",
-                  variant: "destructive"
-                });
-              }
-            );
-          }
-          break;
-          
-        case 'camera':
-          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            try {
-              const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-              stream.getTracks().forEach(track => track.stop());
-              saveMobileSettings({ camera: true });
+      case "location":
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            () => {
+              saveMobileSettings({ location: true });
               toast({
-                title: "Câmera ativada",
-                description: "O app pode acessar a câmera"
+                title: "Localização ativada",
+                description: "O app pode acessar sua localização"
               });
-            } catch (error) {
-              saveMobileSettings({ camera: false });
+            },
+            () => {
+              saveMobileSettings({ location: false });
               toast({
-                title: "Câmera negada",
+                title: "Localização negada",
                 description: "Ative nas configurações do navegador",
                 variant: "destructive"
               });
             }
-          }
-          break;
+          );
+        }
+        break;
           
-        case 'microphone':
-          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            try {
-              const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-              stream.getTracks().forEach(track => track.stop());
-              saveMobileSettings({ microphone: true });
-              toast({
-                title: "Microfone ativado",
-                description: "O app pode acessar o microfone"
-              });
-            } catch (error) {
-              saveMobileSettings({ microphone: false });
-              toast({
-                title: "Microfone negado",
-                description: "Ative nas configurações do navegador",
-                variant: "destructive"
-              });
-            }
-          }
-          break;
-          
-        case 'vibration':
-          if ('vibrate' in navigator) {
-            navigator.vibrate(200);
-            saveMobileSettings({ vibration: true });
+      case "camera":
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            stream.getTracks().forEach(track => track.stop());
+            saveMobileSettings({ camera: true });
             toast({
-              title: "Vibração ativada",
-              description: "O app pode usar vibração"
+              title: "Câmera ativada",
+              description: "O app pode acessar a câmera"
+            });
+          } catch (error) {
+            saveMobileSettings({ camera: false });
+            toast({
+              title: "Câmera negada",
+              description: "Ative nas configurações do navegador",
+              variant: "destructive"
             });
           }
-          break;
+        }
+        break;
+          
+      case "microphone":
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(track => track.stop());
+            saveMobileSettings({ microphone: true });
+            toast({
+              title: "Microfone ativado",
+              description: "O app pode acessar o microfone"
+            });
+          } catch (error) {
+            saveMobileSettings({ microphone: false });
+            toast({
+              title: "Microfone negado",
+              description: "Ative nas configurações do navegador",
+              variant: "destructive"
+            });
+          }
+        }
+        break;
+          
+      case "vibration":
+        if ("vibrate" in navigator) {
+          navigator.vibrate(200);
+          saveMobileSettings({ vibration: true });
+          toast({
+            title: "Vibração ativada",
+            description: "O app pode usar vibração"
+          });
+        }
+        break;
       }
     } catch (error) {
       console.error(`Erro ao solicitar permissão ${permission}:`, error);
@@ -308,7 +306,7 @@ export const EnhancedMobileSupport: React.FC = () => {
   };
 
   const updateServiceWorker = () => {
-    if ('serviceWorker' in navigator) {
+    if ("serviceWorker" in navigator) {
       navigator.serviceWorker.ready.then((registration) => {
         registration.update();
         toast({
@@ -320,25 +318,25 @@ export const EnhancedMobileSupport: React.FC = () => {
   };
 
   const triggerVibration = () => {
-    if ('vibrate' in navigator && mobileSettings.vibration) {
+    if ("vibrate" in navigator && mobileSettings.vibration) {
       navigator.vibrate([100, 50, 100]);
     }
   };
 
   const getConnectionIcon = (connection?: string) => {
     switch (connection) {
-      case '4g': return <Signal className="h-4 w-4 text-green-500" />;
-      case '3g': return <Signal className="h-4 w-4 text-yellow-500" />;
-      case '2g': return <Signal className="h-4 w-4 text-red-500" />;
-      default: return <Wifi className="h-4 w-4" />;
+    case "4g": return <Signal className="h-4 w-4 text-green-500" />;
+    case "3g": return <Signal className="h-4 w-4 text-yellow-500" />;
+    case "2g": return <Signal className="h-4 w-4 text-red-500" />;
+    default: return <Wifi className="h-4 w-4" />;
     }
   };
 
   const getBatteryColor = (level?: number) => {
-    if (!level) return 'text-muted-foreground';
-    if (level > 50) return 'text-green-500';
-    if (level > 20) return 'text-yellow-500';
-    return 'text-red-500';
+    if (!level) return "text-muted-foreground";
+    if (level > 50) return "text-green-500";
+    if (level > 20) return "text-yellow-500";
+    return "text-red-500";
   };
 
   if (isLoading) {
@@ -370,7 +368,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 <div>
                   <div className="text-sm font-medium">Conexão</div>
                   <div className="text-xs text-muted-foreground">
-                    {deviceInfo.connection || 'Wi-Fi'}
+                    {deviceInfo.connection || "Wi-Fi"}
                   </div>
                 </div>
               </div>
@@ -382,7 +380,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                     <div className="text-sm font-medium">Bateria</div>
                     <div className="text-xs text-muted-foreground">
                       {deviceInfo.batteryLevel}%
-                      {deviceInfo.isCharging && ' (carregando)'}
+                      {deviceInfo.isCharging && " (carregando)"}
                     </div>
                   </div>
                 </div>
@@ -429,7 +427,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 <Clock className="h-4 w-4 text-yellow-500" />
               )}
               <span className="text-sm">
-                {pwaStatus.isInstalled ? 'App instalado' : 'App no navegador'}
+                {pwaStatus.isInstalled ? "App instalado" : "App no navegador"}
               </span>
             </div>
             {pwaStatus.canInstall && (
@@ -474,7 +472,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.notifications}
-                  onCheckedChange={() => requestPermission('notifications')}
+                  onCheckedChange={() => requestPermission("notifications")}
                 />
               </div>
               
@@ -485,7 +483,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.location}
-                  onCheckedChange={() => requestPermission('location')}
+                  onCheckedChange={() => requestPermission("location")}
                 />
               </div>
               
@@ -496,7 +494,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.camera}
-                  onCheckedChange={() => requestPermission('camera')}
+                  onCheckedChange={() => requestPermission("camera")}
                 />
               </div>
               
@@ -507,7 +505,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.microphone}
-                  onCheckedChange={() => requestPermission('microphone')}
+                  onCheckedChange={() => requestPermission("microphone")}
                 />
               </div>
               
@@ -518,7 +516,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.vibration}
-                  onCheckedChange={() => requestPermission('vibration')}
+                  onCheckedChange={() => requestPermission("vibration")}
                 />
               </div>
             </div>

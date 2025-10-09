@@ -1,14 +1,14 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { StatusBadge } from '@/components/ui/StatusBadge';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StatusBadge } from "@/components/ui/StatusBadge";
+import { cn } from "@/lib/utils";
 
 export interface InfoCardProps {
   title: string;
   description?: string;
   status?: string;
   children?: React.ReactNode;
-  variant?: 'default' | 'success' | 'warning' | 'error' | 'info';
+  variant?: "default" | "success" | "warning" | "error" | "info";
   className?: string;
 }
 
@@ -31,21 +31,21 @@ export const InfoCard: React.FC<InfoCardProps> = ({
   description,
   status,
   children,
-  variant = 'default',
+  variant = "default",
   className
 }) => {
   const getVariantClasses = () => {
     switch (variant) {
-      case 'success':
-        return 'border-success/50 bg-success/5';
-      case 'warning':
-        return 'border-warning/50 bg-warning/5';
-      case 'error':
-        return 'border-destructive/50 bg-destructive/5';
-      case 'info':
-        return 'border-blue-500/50 bg-blue-500/5';
-      default:
-        return 'border-border bg-card';
+    case "success":
+      return "border-success/50 bg-success/5";
+    case "warning":
+      return "border-warning/50 bg-warning/5";
+    case "error":
+      return "border-destructive/50 bg-destructive/5";
+    case "info":
+      return "border-blue-500/50 bg-blue-500/5";
+    default:
+      return "border-border bg-card";
     }
   };
 

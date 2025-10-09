@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Ship, 
   Plus, 
@@ -20,7 +20,7 @@ import {
   Activity,
   AlertTriangle,
   CheckCircle
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Vessel {
   id: string;
@@ -39,19 +39,19 @@ interface Vessel {
 const VesselManagement: React.FC = () => {
   const [vessels, setVessels] = useState<Vessel[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const { toast } = useToast();
 
   // Form state for new vessel
   const [newVessel, setNewVessel] = useState({
-    name: '',
-    imo_number: '',
-    vessel_type: '',
-    flag_state: '',
-    next_port: '',
-    eta: ''
+    name: "",
+    imo_number: "",
+    vessel_type: "",
+    flag_state: "",
+    next_port: "",
+    eta: ""
   });
 
   useEffect(() => {
@@ -64,58 +64,58 @@ const VesselManagement: React.FC = () => {
       
       // Try to load from database, fallback to mock data
       const { data: vessels, error } = await supabase
-        .from('vessels')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("vessels")
+        .select("*")
+        .order("created_at", { ascending: false });
       
       if (error) {
         // Database fallback to mock data
         // Fallback mock data
         const mockVessels: Vessel[] = [
-        {
-          id: '1',
-          name: 'MV Atlântico',
-          imo_number: '1234567',
-          vessel_type: 'Container Ship',
-          flag_state: 'Brasil',
-          status: 'active',
-          current_location: 'Santos, Brasil',
-          next_port: 'Rio de Janeiro',
-          eta: '2024-01-15T10:00:00Z',
-          created_at: '2024-01-01T00:00:00Z'
-        },
-        {
-          id: '2',
-          name: 'MV Pacífico',
-          imo_number: '2345678',
-          vessel_type: 'Bulk Carrier',
-          flag_state: 'Brasil',
-          status: 'active',
-          current_location: 'Paranaguá, Brasil',
-          next_port: 'Salvador',
-          eta: '2024-01-18T14:30:00Z',
-          created_at: '2024-01-01T00:00:00Z'
-        },
-        {
-          id: '3',
-          name: 'MV Índico',
-          imo_number: '3456789',
-          vessel_type: 'Tanker',
-          flag_state: 'Brasil',
-          status: 'maintenance',
-          current_location: 'Suape, Brasil',
-          next_port: 'Fortaleza',
-          eta: '2024-01-22T08:00:00Z',
-          created_at: '2024-01-01T00:00:00Z'
-        }
-      ];
+          {
+            id: "1",
+            name: "MV Atlântico",
+            imo_number: "1234567",
+            vessel_type: "Container Ship",
+            flag_state: "Brasil",
+            status: "active",
+            current_location: "Santos, Brasil",
+            next_port: "Rio de Janeiro",
+            eta: "2024-01-15T10:00:00Z",
+            created_at: "2024-01-01T00:00:00Z"
+          },
+          {
+            id: "2",
+            name: "MV Pacífico",
+            imo_number: "2345678",
+            vessel_type: "Bulk Carrier",
+            flag_state: "Brasil",
+            status: "active",
+            current_location: "Paranaguá, Brasil",
+            next_port: "Salvador",
+            eta: "2024-01-18T14:30:00Z",
+            created_at: "2024-01-01T00:00:00Z"
+          },
+          {
+            id: "3",
+            name: "MV Índico",
+            imo_number: "3456789",
+            vessel_type: "Tanker",
+            flag_state: "Brasil",
+            status: "maintenance",
+            current_location: "Suape, Brasil",
+            next_port: "Fortaleza",
+            eta: "2024-01-22T08:00:00Z",
+            created_at: "2024-01-01T00:00:00Z"
+          }
+        ];
       
-      setVessels(mockVessels);
+        setVessels(mockVessels);
       } else {
         setVessels(vessels || []);
       }
     } catch (error) {
-      console.error('Erro ao carregar embarcações:', error);
+      console.error("Erro ao carregar embarcações:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as embarcações",
@@ -136,12 +136,12 @@ const VesselManagement: React.FC = () => {
         flag_state: newVessel.flag_state,
         next_port: newVessel.next_port,
         eta: newVessel.eta ? new Date(newVessel.eta).toISOString() : null,
-        status: 'active',
-        current_location: 'Unknown Location'
+        status: "active",
+        current_location: "Unknown Location"
       };
 
       const { data, error } = await supabase
-        .from('vessels')
+        .from("vessels")
         .insert([vesselData])
         .select()
         .single();
@@ -152,7 +152,7 @@ const VesselManagement: React.FC = () => {
         const vessel: Vessel = {
           id: Math.random().toString(),
           ...newVessel,
-          status: 'active',
+          status: "active",
           created_at: new Date().toISOString()
         };
         setVessels([...vessels, vessel]);
@@ -162,12 +162,12 @@ const VesselManagement: React.FC = () => {
       }
       
       setNewVessel({
-        name: '',
-        imo_number: '',
-        vessel_type: '',
-        flag_state: '',
-        next_port: '',
-        eta: ''
+        name: "",
+        imo_number: "",
+        vessel_type: "",
+        flag_state: "",
+        next_port: "",
+        eta: ""
       });
       setShowAddDialog(false);
       
@@ -186,19 +186,19 @@ const VesselManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500 text-azure-50';
-      case 'maintenance': return 'bg-yellow-500 text-azure-900';
-      case 'inactive': return 'bg-red-500 text-azure-50';
-      default: return 'bg-gray-500 text-azure-50';
+    case "active": return "bg-green-500 text-azure-50";
+    case "maintenance": return "bg-yellow-500 text-azure-900";
+    case "inactive": return "bg-red-500 text-azure-50";
+    default: return "bg-gray-500 text-azure-50";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'active': return 'Ativa';
-      case 'maintenance': return 'Manutenção';
-      case 'inactive': return 'Inativa';
-      default: return 'Desconhecido';
+    case "active": return "Ativa";
+    case "maintenance": return "Manutenção";
+    case "inactive": return "Inativa";
+    default: return "Desconhecido";
     }
   };
 
@@ -330,7 +330,7 @@ const VesselManagement: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Ativas</p>
                 <p className="text-3xl font-bold text-green-600">
-                  {vessels.filter(v => v.status === 'active').length}
+                  {vessels.filter(v => v.status === "active").length}
                 </p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-600" />
@@ -344,7 +344,7 @@ const VesselManagement: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Em Manutenção</p>
                 <p className="text-3xl font-bold text-yellow-600">
-                  {vessels.filter(v => v.status === 'maintenance').length}
+                  {vessels.filter(v => v.status === "maintenance").length}
                 </p>
               </div>
               <Settings className="h-8 w-8 text-yellow-600" />
@@ -393,7 +393,7 @@ const VesselManagement: React.FC = () => {
                     <div 
                       key={vessel.id}
                       className={`p-4 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${
-                        selectedVessel?.id === vessel.id ? 'border-primary bg-primary/5' : ''
+                        selectedVessel?.id === vessel.id ? "border-primary bg-primary/5" : ""
                       }`}
                       onClick={() => setSelectedVessel(vessel)}
                     >
@@ -416,13 +416,13 @@ const VesselManagement: React.FC = () => {
                         <div className="flex items-center gap-1">
                           <MapPin className="h-4 w-4 text-muted-foreground" />
                           <span>
-                            {vessel.current_location || 'Localização não informada'}
+                            {vessel.current_location || "Localização não informada"}
                           </span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
                           <span>
-                            ETA: {vessel.eta ? new Date(vessel.eta).toLocaleDateString('pt-BR') : 'N/A'}
+                            ETA: {vessel.eta ? new Date(vessel.eta).toLocaleDateString("pt-BR") : "N/A"}
                           </span>
                         </div>
                       </div>
@@ -474,7 +474,7 @@ const VesselManagement: React.FC = () => {
                 <div>
                   <p className="text-sm font-medium mb-2">Localização Atual</p>
                   <p className="text-sm text-muted-foreground">
-                    {selectedVessel.current_location || 'Localização não informada'}
+                    {selectedVessel.current_location || "Localização não informada"}
                   </p>
                 </div>
 

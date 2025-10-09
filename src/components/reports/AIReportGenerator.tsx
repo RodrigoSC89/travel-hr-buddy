@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { FileText, Download, Loader2, Calendar, Settings, Sparkles } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { FileText, Download, Loader2, Calendar, Settings, Sparkles } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface AIReportGeneratorProps {
   onReportGenerated?: (report: any) => void;
@@ -15,36 +15,36 @@ interface AIReportGeneratorProps {
 
 const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated }) => {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [reportType, setReportType] = useState<string>('');
-  const [format, setFormat] = useState<string>('summary');
+  const [reportType, setReportType] = useState<string>("");
+  const [format, setFormat] = useState<string>("summary");
   const [dateRange, setDateRange] = useState({
-    start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    end: new Date().toISOString().split('T')[0]
+    start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+    end: new Date().toISOString().split("T")[0]
   });
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
-  const [customPrompt, setCustomPrompt] = useState('');
+  const [customPrompt, setCustomPrompt] = useState("");
   const [lastReport, setLastReport] = useState<any>(null);
   const { toast } = useToast();
 
   const reportTypes = [
-    { value: 'hr', label: 'Recursos Humanos', icon: '👥' },
-    { value: 'operational', label: 'Operacional', icon: '⚙️' },
-    { value: 'analytics', label: 'Analytics', icon: '📊' },
-    { value: 'custom', label: 'Personalizado', icon: '🎯' }
+    { value: "hr", label: "Recursos Humanos", icon: "👥" },
+    { value: "operational", label: "Operacional", icon: "⚙️" },
+    { value: "analytics", label: "Analytics", icon: "📊" },
+    { value: "custom", label: "Personalizado", icon: "🎯" }
   ];
 
   const formats = [
-    { value: 'summary', label: 'Resumo Executivo' },
-    { value: 'detailed', label: 'Detalhado' },
-    { value: 'executive', label: 'Executivo' }
+    { value: "summary", label: "Resumo Executivo" },
+    { value: "detailed", label: "Detalhado" },
+    { value: "executive", label: "Executivo" }
   ];
 
   const availableModules = [
-    { id: 'hr', label: 'Recursos Humanos' },
-    { id: 'certificates', label: 'Certificados' },
-    { id: 'analytics', label: 'Analytics' },
-    { id: 'operational', label: 'Operacional' },
-    { id: 'alerts', label: 'Alertas de Preço' }
+    { id: "hr", label: "Recursos Humanos" },
+    { id: "certificates", label: "Certificados" },
+    { id: "analytics", label: "Analytics" },
+    { id: "operational", label: "Operacional" },
+    { id: "alerts", label: "Alertas de Preço" }
   ];
 
   const generateReport = async () => {
@@ -60,7 +60,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     setIsGenerating(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('generate-ai-report', {
+      const { data, error } = await supabase.functions.invoke("generate-ai-report", {
         body: {
           type: reportType,
           dateRange,
@@ -81,13 +81,13 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
           description: "Relatório criado com sucesso usando IA",
         });
       } else {
-        throw new Error(data.error || 'Erro ao gerar relatório');
+        throw new Error(data.error || "Erro ao gerar relatório");
       }
     } catch (error) {
-      console.error('Error generating report:', error);
+      console.error("Error generating report:", error);
       toast({
         title: "Erro",
-        description: error instanceof Error ? error.message : 'Falha ao gerar relatório',
+        description: error instanceof Error ? error.message : "Falha ao gerar relatório",
         variant: "destructive",
       });
     } finally {
@@ -98,11 +98,11 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
   const downloadReport = () => {
     if (!lastReport) return;
 
-    const blob = new Blob([lastReport.content], { type: 'text/markdown' });
+    const blob = new Blob([lastReport.content], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `relatorio-${lastReport.type}-${new Date().toISOString().split('T')[0]}.md`;
+    a.download = `relatorio-${lastReport.type}-${new Date().toISOString().split("T")[0]}.md`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -204,7 +204,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
           </div>
 
           {/* Custom Prompt */}
-          {reportType === 'custom' && (
+          {reportType === "custom" && (
             <div className="space-y-2">
               <Label>Instruções Personalizadas</Label>
               <Textarea
@@ -257,7 +257,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span>Tipo: {lastReport.type}</span>
                     <span>Formato: {lastReport.format}</span>
-                    <span>Gerado: {new Date(lastReport.generatedAt).toLocaleString('pt-BR')}</span>
+                    <span>Gerado: {new Date(lastReport.generatedAt).toLocaleString("pt-BR")}</span>
                   </div>
                   <div className="bg-background rounded p-4 max-h-40 overflow-y-auto">
                     <pre className="whitespace-pre-wrap text-sm">

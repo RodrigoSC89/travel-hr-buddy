@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   MessageSquare, 
   ThumbsUp, 
@@ -18,15 +18,15 @@ import {
   Plus,
   CheckCircle,
   Clock
-} from 'lucide-react';
+} from "lucide-react";
 
 interface FeedbackItem {
   id: string;
   title: string;
   description: string;
-  category: 'feature' | 'bug' | 'improvement' | 'general';
-  priority: 'high' | 'medium' | 'low';
-  status: 'pending' | 'in-review' | 'planned' | 'completed' | 'rejected';
+  category: "feature" | "bug" | "improvement" | "general";
+  priority: "high" | "medium" | "low";
+  status: "pending" | "in-review" | "planned" | "completed" | "rejected";
   author: string;
   department: string;
   votes: number;
@@ -39,136 +39,134 @@ interface UserSatisfaction {
   module: string;
   rating: number;
   responses: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
 }
 
 export const FeedbackSystem = () => {
   const [newFeedback, setNewFeedback] = useState({
-    title: '',
-    description: '',
-    category: '',
-    module: ''
+    title: "",
+    description: "",
+    category: "",
+    module: ""
   });
 
   const feedbackItems: FeedbackItem[] = [
     {
-      id: '1',
-      title: 'Integração com WhatsApp Business',
-      description: 'Adicionar integração nativa com WhatsApp para comunicação com tripulação em alto mar',
-      category: 'feature',
-      priority: 'high',
-      status: 'planned',
-      author: 'Carlos Silva',
-      department: 'Operações',
+      id: "1",
+      title: "Integração com WhatsApp Business",
+      description: "Adicionar integração nativa com WhatsApp para comunicação com tripulação em alto mar",
+      category: "feature",
+      priority: "high",
+      status: "planned",
+      author: "Carlos Silva",
+      department: "Operações",
       votes: 23,
       comments: 8,
-      createdAt: '2024-01-15',
-      module: 'Comunicação'
+      createdAt: "2024-01-15",
+      module: "Comunicação"
     },
     {
-      id: '2',
-      title: 'Dashboard Mobile Responsivo',
-      description: 'Melhorar a responsividade do dashboard principal para dispositivos móveis',
-      category: 'improvement',
-      priority: 'medium',
-      status: 'in-review',
-      author: 'Ana Costa',
-      department: 'TI',
+      id: "2",
+      title: "Dashboard Mobile Responsivo",
+      description: "Melhorar a responsividade do dashboard principal para dispositivos móveis",
+      category: "improvement",
+      priority: "medium",
+      status: "in-review",
+      author: "Ana Costa",
+      department: "TI",
       votes: 18,
       comments: 5,
-      createdAt: '2024-01-12',
-      module: 'Dashboard'
+      createdAt: "2024-01-12",
+      module: "Dashboard"
     },
     {
-      id: '3',
-      title: 'Bug no Cálculo de Combustível',
-      description: 'Erro no cálculo automático de consumo de combustível para embarcações diesel',
-      category: 'bug',
-      priority: 'high',
-      status: 'completed',
-      author: 'Roberto Lima',
-      department: 'Logística',
+      id: "3",
+      title: "Bug no Cálculo de Combustível",
+      description: "Erro no cálculo automático de consumo de combustível para embarcações diesel",
+      category: "bug",
+      priority: "high",
+      status: "completed",
+      author: "Roberto Lima",
+      department: "Logística",
       votes: 15,
       comments: 12,
-      createdAt: '2024-01-10',
-      module: 'Logística'
+      createdAt: "2024-01-10",
+      module: "Logística"
     },
     {
-      id: '4',
-      title: 'Modo Escuro (Dark Mode)',
-      description: 'Implementar tema escuro para melhor experiência durante operações noturnas',
-      category: 'feature',
-      priority: 'low',
-      status: 'pending',
-      author: 'Marina Santos',
-      department: 'UX',
+      id: "4",
+      title: "Modo Escuro (Dark Mode)",
+      description: "Implementar tema escuro para melhor experiência durante operações noturnas",
+      category: "feature",
+      priority: "low",
+      status: "pending",
+      author: "Marina Santos",
+      department: "UX",
       votes: 31,
       comments: 3,
-      createdAt: '2024-01-08',
-      module: 'Geral'
+      createdAt: "2024-01-08",
+      module: "Geral"
     }
   ];
 
   const userSatisfaction: UserSatisfaction[] = [
-    { module: 'Dashboard', rating: 4.7, responses: 156, trend: 'up' },
-    { module: 'RH Marítimo', rating: 4.5, responses: 89, trend: 'stable' },
-    { module: 'Logística', rating: 4.3, responses: 124, trend: 'up' },
-    { module: 'Viagens', rating: 4.1, responses: 67, trend: 'down' },
-    { module: 'Comunicação', rating: 4.6, responses: 94, trend: 'up' },
-    { module: 'Reservas', rating: 4.4, responses: 73, trend: 'stable' }
+    { module: "Dashboard", rating: 4.7, responses: 156, trend: "up" },
+    { module: "RH Marítimo", rating: 4.5, responses: 89, trend: "stable" },
+    { module: "Logística", rating: 4.3, responses: 124, trend: "up" },
+    { module: "Viagens", rating: 4.1, responses: 67, trend: "down" },
+    { module: "Comunicação", rating: 4.6, responses: 94, trend: "up" },
+    { module: "Reservas", rating: 4.4, responses: 73, trend: "stable" }
   ];
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'feature': return 'bg-primary text-primary-foreground';
-      case 'bug': return 'bg-danger text-danger-foreground';
-      case 'improvement': return 'bg-warning text-warning-foreground';
-      case 'general': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "feature": return "bg-primary text-primary-foreground";
+    case "bug": return "bg-danger text-danger-foreground";
+    case "improvement": return "bg-warning text-warning-foreground";
+    case "general": return "bg-info text-info-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-success text-success-foreground';
-      case 'planned': return 'bg-primary text-primary-foreground';
-      case 'in-review': return 'bg-warning text-warning-foreground';
-      case 'pending': return 'bg-muted text-muted-foreground';
-      case 'rejected': return 'bg-danger text-danger-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "completed": return "bg-success text-success-foreground";
+    case "planned": return "bg-primary text-primary-foreground";
+    case "in-review": return "bg-warning text-warning-foreground";
+    case "pending": return "bg-muted text-muted-foreground";
+    case "rejected": return "bg-danger text-danger-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'bg-danger text-danger-foreground';
-      case 'medium': return 'bg-warning text-warning-foreground';
-      case 'low': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "high": return "bg-danger text-danger-foreground";
+    case "medium": return "bg-warning text-warning-foreground";
+    case "low": return "bg-info text-info-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="h-4 w-4" />;
-      case 'planned': return <Flag className="h-4 w-4" />;
-      case 'in-review': return <Clock className="h-4 w-4" />;
-      default: return <MessageSquare className="h-4 w-4" />;
+    case "completed": return <CheckCircle className="h-4 w-4" />;
+    case "planned": return <Flag className="h-4 w-4" />;
+    case "in-review": return <Clock className="h-4 w-4" />;
+    default: return <MessageSquare className="h-4 w-4" />;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-success" />;
-      case 'down': return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
-      default: return <TrendingUp className="h-4 w-4 text-muted-foreground" />;
+    case "up": return <TrendingUp className="h-4 w-4 text-success" />;
+    case "down": return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
+    default: return <TrendingUp className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const handleSubmitFeedback = () => {
-    // Implementar lógica de envio do feedback
-    console.log('Novo feedback:', newFeedback);
-    setNewFeedback({ title: '', description: '', category: '', module: '' });
+    // Implementar lógica de envio do feedbacksetNewFeedback({ title: "", description: "", category: "", module: "" });
   };
 
   return (
@@ -367,8 +365,8 @@ export const FeedbackSystem = () => {
                         key={star}
                         className={`h-4 w-4 ${
                           star <= module.rating
-                            ? 'text-warning fill-warning'
-                            : 'text-muted-foreground'
+                            ? "text-warning fill-warning"
+                            : "text-muted-foreground"
                         }`}
                       />
                     ))}

@@ -8,7 +8,7 @@ export {
   NotificationCenter,
   type Notification,
   type NotificationCenterProps
-} from '@/components/ui/NotificationCenter';
+} from "@/components/ui/NotificationCenter";
 
 // Export default for backward compatibility
-export { NotificationCenter as default } from '@/components/ui/NotificationCenter';
+export { NotificationCenter as default } from "@/components/ui/NotificationCenter";
