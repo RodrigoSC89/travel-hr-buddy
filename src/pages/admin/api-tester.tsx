@@ -20,6 +20,7 @@ import {
   Ship,
   AlertCircle,
   Clock,
+  Database,
 } from "lucide-react";
 import { testMapboxConnection } from "@/services/mapbox";
 import { testOpenAIConnection } from "@/services/openai";
@@ -28,6 +29,8 @@ import { testSkyscannerConnection } from "@/services/skyscanner";
 import { testBookingConnection } from "@/services/booking";
 import { testWindyConnection } from "@/services/windy";
 import { testMarineTrafficConnection } from "@/services/marinetraffic";
+import { testAmadeusConnection } from "@/services/amadeus";
+import { testSupabaseConnection } from "@/services/supabase";
 
 interface APITest {
   id: string;
@@ -47,14 +50,6 @@ interface APITest {
 const APITester = () => {
   const [tests, setTests] = useState<APITest[]>([
     {
-      id: "mapbox",
-      name: "Mapbox",
-      description: "Test geolocation or static map load",
-      icon: MapPin,
-      testFn: testMapboxConnection,
-      status: "idle",
-    },
-    {
       id: "openai",
       name: "OpenAI (Chat)",
       description: "Test simple chat response",
@@ -63,17 +58,49 @@ const APITester = () => {
       status: "idle",
     },
     {
+      id: "mapbox",
+      name: "Mapbox",
+      description: "Test geolocation or static map load",
+      icon: MapPin,
+      testFn: testMapboxConnection,
+      status: "idle",
+    },
+    {
+      id: "amadeus",
+      name: "Amadeus",
+      description: "Test OAuth2 authentication and travel API",
+      icon: Plane,
+      testFn: testAmadeusConnection,
+      status: "idle",
+    },
+    {
+      id: "supabase",
+      name: "Supabase",
+      description: "Test database and auth connection",
+      icon: Database,
+      testFn: testSupabaseConnection,
+      status: "idle",
+    },
+    {
       id: "whisper",
       name: "Whisper",
-      description: "Test audio transcription",
+      description: "Test audio transcription API",
       icon: Mic,
       testFn: testWhisperConnection,
       status: "idle",
     },
     {
+      id: "windy",
+      name: "Weather (Windy/OpenWeather)",
+      description: "Weather data by coordinates",
+      icon: Cloud,
+      testFn: testWindyConnection,
+      status: "idle",
+    },
+    {
       id: "skyscanner",
       name: "Skyscanner",
-      description: "Search flight sample",
+      description: "Flight search sample",
       icon: Plane,
       testFn: testSkyscannerConnection,
       status: "idle",
@@ -81,23 +108,15 @@ const APITester = () => {
     {
       id: "booking",
       name: "Booking.com",
-      description: "Fetch hotels for a city",
+      description: "Hotel search functionality",
       icon: Hotel,
       testFn: testBookingConnection,
       status: "idle",
     },
     {
-      id: "windy",
-      name: "Windy",
-      description: "Weather data by coordinates",
-      icon: Cloud,
-      testFn: testWindyConnection,
-      status: "idle",
-    },
-    {
       id: "marinetraffic",
       name: "MarineTraffic",
-      description: "Ship location by ID",
+      description: "Vessel tracking and location",
       icon: Ship,
       testFn: testMarineTrafficConnection,
       status: "idle",
