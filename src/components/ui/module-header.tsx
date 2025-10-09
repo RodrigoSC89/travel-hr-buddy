@@ -26,7 +26,7 @@ const gradientClasses = {
   indigo: "from-indigo-600 via-indigo-600/90 to-indigo-700",
 };
 
-export const ModuleHeader: React.FC<ModuleHeaderProps> = ({
+export const ModuleHeader: React.FC<ModuleHeaderProps> = React.memo(({
   icon: Icon,
   title,
   description,
@@ -82,4 +82,4 @@ export const ModuleHeader: React.FC<ModuleHeaderProps> = ({
       </div>
     </>
   );
-};
+});

@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Plus, Search, Edit, Trash2, Save, Eye, 
-  BookOpen, Video, FileText, Users, Settings,
-  Upload, Download, Tag, Filter, BarChart3
+  BookOpen, Video, FileText, Users,
+  Download, BarChart3
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,7 +26,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 interface KnowledgeItem {

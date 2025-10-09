@@ -91,17 +91,6 @@ export const HealthStatusDashboard: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: "healthy" | "degraded" | "down") => {
-    switch (status) {
-    case "healthy":
-      return "bg-green-500";
-    case "degraded":
-      return "bg-yellow-500";
-    case "down":
-      return "bg-red-500";
-    }
-  };
-
   const getStatusBadge = (status: "healthy" | "degraded" | "down") => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       healthy: "default",

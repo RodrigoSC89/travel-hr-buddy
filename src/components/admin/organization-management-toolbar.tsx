@@ -9,7 +9,6 @@ import {
   Users, 
   Settings, 
   BarChart3, 
-  Shield,
   Crown
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,6 @@ export const OrganizationManagementToolbar: React.FC = () => {
   const { currentOrganization, userRole } = useOrganization();
   const { 
     isAdmin, 
-    isManager, 
     canManageUsers, 
     canManageSettings, 
     canViewAnalytics 

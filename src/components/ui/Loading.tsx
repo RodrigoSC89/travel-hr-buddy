@@ -26,7 +26,7 @@ const iconSizes = {
  * Unified Loading component with multiple variants
  * Consolidates loading-state, loading-spinner, and maritime-loading
  */
-export const Loading: React.FC<LoadingProps> = ({
+export const Loading: React.FC<LoadingProps> = React.memo(({
   message = "Carregando...",
   size = "md",
   variant = "default",
@@ -98,7 +98,7 @@ export const Loading: React.FC<LoadingProps> = ({
   }
 
   return content;
-};
+});
 
 export interface LoadingOverlayProps {
   isLoading: boolean;
@@ -111,7 +111,7 @@ export interface LoadingOverlayProps {
 /**
  * Loading overlay that wraps content and shows loading state
  */
-export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
+export const LoadingOverlay: React.FC<LoadingOverlayProps> = React.memo(({
   isLoading,
   message,
   children,
@@ -128,7 +128,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
       )}
     </div>
   );
-};
+});
 
 export interface LoadingSkeletonProps {
   className?: string;
@@ -137,7 +137,7 @@ export interface LoadingSkeletonProps {
 /**
  * Basic skeleton loading component for content placeholders
  */
-export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ className }) => {
+export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = React.memo(({ className }) => {
   return (
     <div
       className={cn(
@@ -147,7 +147,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ className }) =
       aria-hidden="true"
     />
   );
-};
+});
 
 export interface LoadingCardProps {
   variant?: "default" | "maritime";
