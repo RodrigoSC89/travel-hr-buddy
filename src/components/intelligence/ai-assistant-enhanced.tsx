@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Brain, 
   MessageCircle, 
@@ -27,14 +27,14 @@ import {
   Heart,
   Crown,
   Diamond
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Message {
   id: string;
-  type: 'user' | 'ai';
+  type: "user" | "ai";
   content: string;
   timestamp: Date;
-  category?: 'general' | 'analysis' | 'prediction' | 'recommendation';
+  category?: "general" | "analysis" | "prediction" | "recommendation";
 }
 
 interface AICapability {
@@ -48,10 +48,10 @@ interface AICapability {
 
 const AIAssistantEnhanced: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const [isVoiceActive, setIsVoiceActive] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [selectedCapability, setSelectedCapability] = useState<string>('general');
+  const [selectedCapability, setSelectedCapability] = useState<string>("general");
   const [isLoaded, setIsLoaded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -60,61 +60,61 @@ const AIAssistantEnhanced: React.FC = () => {
     // Mensagem de boas-vindas
     setMessages([
       {
-        id: 'welcome',
-        type: 'ai',
-        content: 'Olá! Sou seu assistente de IA avançado do Nautilus One. Como posso ajudá-lo hoje? Posso analisar dados, fazer previsões, dar recomendações e muito mais!',
+        id: "welcome",
+        type: "ai",
+        content: "Olá! Sou seu assistente de IA avançado do Nautilus One. Como posso ajudá-lo hoje? Posso analisar dados, fazer previsões, dar recomendações e muito mais!",
         timestamp: new Date(),
-        category: 'general'
+        category: "general"
       }
     ]);
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const aiCapabilities: AICapability[] = [
     {
-      id: 'general',
-      name: 'Assistente Geral',
-      description: 'Perguntas gerais e navegação do sistema',
+      id: "general",
+      name: "Assistente Geral",
+      description: "Perguntas gerais e navegação do sistema",
       icon: MessageCircle,
-      color: 'primary',
+      color: "primary",
       active: true
     },
     {
-      id: 'analysis',
-      name: 'Análise de Dados',
-      description: 'Análise profunda de métricas e KPIs',
+      id: "analysis",
+      name: "Análise de Dados",
+      description: "Análise profunda de métricas e KPIs",
       icon: BarChart3,
-      color: 'info',
+      color: "info",
       active: true
     },
     {
-      id: 'prediction',
-      name: 'IA Preditiva',
-      description: 'Previsões baseadas em machine learning',
+      id: "prediction",
+      name: "IA Preditiva",
+      description: "Previsões baseadas em machine learning",
       icon: Brain,
-      color: 'success',
+      color: "success",
       active: true
     },
     {
-      id: 'recommendation',
-      name: 'Recomendações',
-      description: 'Sugestões inteligentes e otimizações',
+      id: "recommendation",
+      name: "Recomendações",
+      description: "Sugestões inteligentes e otimizações",
       icon: Star,
-      color: 'warning',
+      color: "warning",
       active: true
     }
   ];
 
   const quickActions = [
-    { text: 'Analise o desempenho da equipe', category: 'analysis' },
-    { text: 'Previsão de demanda para próximo mês', category: 'prediction' },
-    { text: 'Como otimizar o workflow de checklists?', category: 'recommendation' },
-    { text: 'Relatório de conformidade PEOTRAM', category: 'analysis' },
-    { text: 'Tendências de viagens corporativas', category: 'prediction' },
-    { text: 'Sugestões para reduzir custos', category: 'recommendation' }
+    { text: "Analise o desempenho da equipe", category: "analysis" },
+    { text: "Previsão de demanda para próximo mês", category: "prediction" },
+    { text: "Como otimizar o workflow de checklists?", category: "recommendation" },
+    { text: "Relatório de conformidade PEOTRAM", category: "analysis" },
+    { text: "Tendências de viagens corporativas", category: "prediction" },
+    { text: "Sugestões para reduzir custos", category: "recommendation" }
   ];
 
   const handleSendMessage = async () => {
@@ -122,14 +122,14 @@ const AIAssistantEnhanced: React.FC = () => {
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
-      type: 'user',
+      type: "user",
       content: inputMessage,
       timestamp: new Date(),
       category: selectedCapability as any
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
+    setInputMessage("");
     setIsProcessing(true);
 
     // Simular processamento da IA
@@ -137,7 +137,7 @@ const AIAssistantEnhanced: React.FC = () => {
       const aiResponse = generateAIResponse(inputMessage, selectedCapability);
       const aiMessage: Message = {
         id: `ai-${Date.now()}`,
-        type: 'ai',
+        type: "ai",
         content: aiResponse,
         timestamp: new Date(),
         category: selectedCapability as any
@@ -151,24 +151,24 @@ const AIAssistantEnhanced: React.FC = () => {
   const generateAIResponse = (input: string, capability: string): string => {
     const responses = {
       general: [
-        'Entendi sua pergunta. Com base nos dados do sistema Nautilus One, posso fornecer informações detalhadas sobre esse tópico.',
-        'Excelente pergunta! O sistema possui recursos avançados para isso. Vou analisar as informações disponíveis.',
-        'Baseado na sua consulta, posso ajudar com análises específicas e recomendações personalizadas.'
+        "Entendi sua pergunta. Com base nos dados do sistema Nautilus One, posso fornecer informações detalhadas sobre esse tópico.",
+        "Excelente pergunta! O sistema possui recursos avançados para isso. Vou analisar as informações disponíveis.",
+        "Baseado na sua consulta, posso ajudar com análises específicas e recomendações personalizadas."
       ],
       analysis: [
-        'Analisando os dados... Identifiquei padrões interessantes nos últimos 30 dias. A performance geral está 12% acima da média.',
-        'Com base na análise de dados históricos, observo uma tendência de crescimento sustentável em 85% dos indicadores.',
-        'Os dados mostram eficiência operacional de 94%, com oportunidades de melhoria em processos de aprovação.'
+        "Analisando os dados... Identifiquei padrões interessantes nos últimos 30 dias. A performance geral está 12% acima da média.",
+        "Com base na análise de dados históricos, observo uma tendência de crescimento sustentável em 85% dos indicadores.",
+        "Os dados mostram eficiência operacional de 94%, com oportunidades de melhoria em processos de aprovação."
       ],
       prediction: [
-        'Usando algoritmos de machine learning, prevejo um aumento de 18% na demanda para o próximo trimestre.',
-        'As previsões indicam uma probabilidade de 87% de atingimento das metas estabelecidas, com base em tendências atuais.',
-        'Modelo preditivo sugere otimização de recursos em 23% se implementadas as recomendações propostas.'
+        "Usando algoritmos de machine learning, prevejo um aumento de 18% na demanda para o próximo trimestre.",
+        "As previsões indicam uma probabilidade de 87% de atingimento das metas estabelecidas, com base em tendências atuais.",
+        "Modelo preditivo sugere otimização de recursos em 23% se implementadas as recomendações propostas."
       ],
       recommendation: [
-        'Recomendo implementar automação em 3 processos chave que resultará em economia de 35% do tempo.',
-        'Sugiro ajustes na estratégia atual que podem aumentar a eficiência em 28% e reduzir custos em 15%.',
-        'Baseado na análise, recomendo priorizar a otimização do workflow de aprovações para melhor performance.'
+        "Recomendo implementar automação em 3 processos chave que resultará em economia de 35% do tempo.",
+        "Sugiro ajustes na estratégia atual que podem aumentar a eficiência em 28% e reduzir custos em 15%.",
+        "Baseado na análise, recomendo priorizar a otimização do workflow de aprovações para melhor performance."
       ]
     };
 
@@ -181,7 +181,7 @@ const AIAssistantEnhanced: React.FC = () => {
     if (!isVoiceActive) {
       // Simular reconhecimento de voz
       setTimeout(() => {
-        setInputMessage('Como está o desempenho das operações hoje?');
+        setInputMessage("Como está o desempenho das operações hoje?");
         setIsVoiceActive(false);
       }, 3000);
     }
@@ -202,12 +202,12 @@ const AIAssistantEnhanced: React.FC = () => {
       <div className="relative z-10 container mx-auto p-6 space-y-8">
         {/* Enhanced Hero Section */}
         <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary-glow p-8 text-primary-foreground 
-          transition-all duration-1000 transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           
           {/* Animated Background Pattern */}
           <div className="absolute inset-0 bg-mesh opacity-20" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-success/15 to-transparent rounded-full blur-2xl animate-pulse" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: "1s" }} />
           
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-6">
@@ -253,7 +253,7 @@ const AIAssistantEnhanced: React.FC = () => {
             <Card 
               key={capability.id} 
               className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
-                ${selectedCapability === capability.id ? 'ring-2 ring-primary shadow-primary/25' : ''}
+                ${selectedCapability === capability.id ? "ring-2 ring-primary shadow-primary/25" : ""}
                 bg-gradient-to-br from-card via-card/95 to-${capability.color}/5 border-${capability.color}/20 hover:border-${capability.color}/40`}
               onClick={() => setSelectedCapability(capability.id)}
             >
@@ -301,24 +301,24 @@ const AIAssistantEnhanced: React.FC = () => {
                       <div
                         key={message.id}
                         className={`flex items-start gap-3 ${
-                          message.type === 'user' ? 'flex-row-reverse' : 'flex-row'
+                          message.type === "user" ? "flex-row-reverse" : "flex-row"
                         }`}
                       >
                         <div className={`p-2 rounded-xl ${
-                          message.type === 'user' 
-                            ? 'bg-primary text-primary-foreground' 
-                            : 'bg-gradient-to-br from-success/20 to-success/10 border border-success/30'
+                          message.type === "user" 
+                            ? "bg-primary text-primary-foreground" 
+                            : "bg-gradient-to-br from-success/20 to-success/10 border border-success/30"
                         }`}>
-                          {message.type === 'user' ? (
+                          {message.type === "user" ? (
                             <User className="w-4 h-4" />
                           ) : (
                             <Bot className="w-4 h-4 text-success" />
                           )}
                         </div>
                         <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
-                          message.type === 'user'
-                            ? 'bg-primary text-primary-foreground ml-auto'
-                            : 'bg-card border border-border shadow-sm'
+                          message.type === "user"
+                            ? "bg-primary text-primary-foreground ml-auto"
+                            : "bg-card border border-border shadow-sm"
                         }`}>
                           <p className="text-sm">{message.content}</p>
                           <span className="text-xs opacity-70 mt-2 block">
@@ -336,8 +336,8 @@ const AIAssistantEnhanced: React.FC = () => {
                         <div className="bg-card border border-border shadow-sm px-4 py-3 rounded-2xl">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
-                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.4s" }} />
                             <span className="text-sm text-muted-foreground ml-2">IA processando...</span>
                           </div>
                         </div>
@@ -355,7 +355,7 @@ const AIAssistantEnhanced: React.FC = () => {
                         value={inputMessage}
                         onChange={(e) => setInputMessage(e.target.value)}
                         placeholder="Digite sua pergunta para a IA..."
-                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                         className="bg-background/50 backdrop-blur-sm"
                       />
                     </div>

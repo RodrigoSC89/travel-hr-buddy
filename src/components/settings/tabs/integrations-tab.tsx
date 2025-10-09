@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
-import { ServiceStatusPanel } from '@/components/integration/service-status-panel';
-import { ConnectionTestPanel } from '@/components/integration/connection-test-panel';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { ServiceStatusPanel } from "@/components/integration/service-status-panel";
+import { ConnectionTestPanel } from "@/components/integration/connection-test-panel";
 import { 
   Link2, 
   Key, 
@@ -23,7 +23,7 @@ import {
   Settings,
   Eye,
   EyeOff
-} from 'lucide-react';
+} from "lucide-react";
 
 interface IntegrationSettings {
   apiKeys: Record<string, string>;
@@ -44,56 +44,56 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
 }) => {
   const { toast } = useToast();
   const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
-  const [newWebhook, setNewWebhook] = useState({ name: '', url: '' });
+  const [newWebhook, setNewWebhook] = useState({ name: "", url: "" });
 
   const apiServices = [
     {
-      id: 'google_oauth',
-      name: 'Google OAuth',
-      description: 'Autenticação com Google',
-      icon: '🔐',
-      status: 'connected',
-      required: ['client_id', 'client_secret']
+      id: "google_oauth",
+      name: "Google OAuth",
+      description: "Autenticação com Google",
+      icon: "🔐",
+      status: "connected",
+      required: ["client_id", "client_secret"]
     },
     {
-      id: 'microsoft_graph',
-      name: 'Microsoft Graph',
-      description: 'Integração com Microsoft 365',
-      icon: '📧',
-      status: 'disconnected',
-      required: ['app_id', 'app_secret', 'tenant_id']
+      id: "microsoft_graph",
+      name: "Microsoft Graph",
+      description: "Integração com Microsoft 365",
+      icon: "📧",
+      status: "disconnected",
+      required: ["app_id", "app_secret", "tenant_id"]
     },
     {
-      id: 'openweather',
-      name: 'OpenWeather API',
-      description: 'Dados meteorológicos',
-      icon: '🌤️',
-      status: 'connected',
-      required: ['api_key']
+      id: "openweather",
+      name: "OpenWeather API",
+      description: "Dados meteorológicos",
+      icon: "🌤️",
+      status: "connected",
+      required: ["api_key"]
     },
     {
-      id: 'amadeus',
-      name: 'Amadeus Travel API',
-      description: 'Serviços de viagem',
-      icon: '✈️',
-      status: 'connected',
-      required: ['api_key', 'api_secret']
+      id: "amadeus",
+      name: "Amadeus Travel API",
+      description: "Serviços de viagem",
+      icon: "✈️",
+      status: "connected",
+      required: ["api_key", "api_secret"]
     },
     {
-      id: 'mapbox',
-      name: 'Mapbox',
-      description: 'Mapas e geolocalização',
-      icon: '🗺️',
-      status: 'connected',
-      required: ['access_token']
+      id: "mapbox",
+      name: "Mapbox",
+      description: "Mapas e geolocalização",
+      icon: "🗺️",
+      status: "connected",
+      required: ["access_token"]
     },
     {
-      id: 'supabase',
-      name: 'Supabase',
-      description: 'Backend e banco de dados',
-      icon: '⚡',
-      status: 'connected',
-      required: ['url', 'anon_key', 'service_role_key']
+      id: "supabase",
+      name: "Supabase",
+      description: "Backend e banco de dados",
+      icon: "⚡",
+      status: "connected",
+      required: ["url", "anon_key", "service_role_key"]
     }
   ];
 
@@ -125,7 +125,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
       webhooks: [...settings.webhooks, webhook]
     });
 
-    setNewWebhook({ name: '', url: '' });
+    setNewWebhook({ name: "", url: "" });
     
     toast({
       title: "Webhook Adicionado",
@@ -160,7 +160,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
   };
 
   const getStatusBadge = (status: string) => {
-    if (status === 'connected') {
+    if (status === "connected") {
       return (
         <Badge className="bg-green-100 text-green-800">
           <CheckCircle className="w-3 h-3 mr-1" />
@@ -238,14 +238,14 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                       {service.required.map((field) => (
                         <div key={field} className="space-y-2">
                           <Label htmlFor={`${service.id}_${field}`}>
-                            {field.replace(/_/g, ' ').toUpperCase()}
+                            {field.replace(/_/g, " ").toUpperCase()}
                           </Label>
                           <div className="relative">
                             <Input
                               id={`${service.id}_${field}`}
-                              type={showKeys[`${service.id}_${field}`] ? 'text' : 'password'}
-                              placeholder={`Digite ${field.replace(/_/g, ' ')}`}
-                              defaultValue={field.includes('key') || field.includes('secret') ? '••••••••••••••••' : ''}
+                              type={showKeys[`${service.id}_${field}`] ? "text" : "password"}
+                              placeholder={`Digite ${field.replace(/_/g, " ")}`}
+                              defaultValue={field.includes("key") || field.includes("secret") ? "••••••••••••••••" : ""}
                             />
                             <Button
                               type="button"
@@ -378,7 +378,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {apiServices.filter(s => s.status === 'connected').map((service) => (
+                {apiServices.filter(s => s.status === "connected").map((service) => (
                   <div key={service.id} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-2xl">{service.icon}</span>

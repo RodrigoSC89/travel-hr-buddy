@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
 import { 
   Upload, 
   Download, 
@@ -34,13 +34,13 @@ import {
   Tags,
   FolderOpen,
   Archive
-} from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+} from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Document {
   id: string;
   name: string;
-  type: 'evidence' | 'procedure' | 'report' | 'certificate' | 'photo' | 'video' | 'audio';
+  type: "evidence" | "procedure" | "report" | "certificate" | "photo" | "video" | "audio";
   format: string;
   size: number;
   uploadedBy: string;
@@ -51,7 +51,7 @@ interface Document {
   tags: string[];
   description: string;
   version: string;
-  status: 'pending' | 'approved' | 'rejected' | 'archived';
+  status: "pending" | "approved" | "rejected" | "archived";
   reviewedBy?: string;
   reviewedAt?: string;
   reviewComments?: string;
@@ -76,33 +76,33 @@ interface DocumentCategory {
 
 const DOCUMENT_CATEGORIES: DocumentCategory[] = [
   {
-    id: 'evidence',
-    name: 'Evidências de Auditoria',
-    description: 'Fotos, vídeos e documentos que comprovam conformidade',
+    id: "evidence",
+    name: "Evidências de Auditoria",
+    description: "Fotos, vídeos e documentos que comprovam conformidade",
     required: true,
     documents: [],
     completionRate: 0
   },
   {
-    id: 'procedures',
-    name: 'Procedimentos e Políticas',
-    description: 'Documentos normativos e procedimentos operacionais',
+    id: "procedures",
+    name: "Procedimentos e Políticas",
+    description: "Documentos normativos e procedimentos operacionais",
     required: true,
     documents: [],
     completionRate: 0
   },
   {
-    id: 'certificates',
-    name: 'Certificações',
-    description: 'Certificados de conformidade e qualificações',
+    id: "certificates",
+    name: "Certificações",
+    description: "Certificados de conformidade e qualificações",
     required: true,
     documents: [],
     completionRate: 0
   },
   {
-    id: 'reports',
-    name: 'Relatórios',
-    description: 'Relatórios de auditoria e análises técnicas',
+    id: "reports",
+    name: "Relatórios",
+    description: "Relatórios de auditoria e análises técnicas",
     required: false,
     documents: [],
     completionRate: 0
@@ -112,21 +112,21 @@ const DOCUMENT_CATEGORIES: DocumentCategory[] = [
 export const PeotramDocumentManager: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [categories, setCategories] = useState<DocumentCategory[]>(DOCUMENT_CATEGORIES);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
   const [newDocument, setNewDocument] = useState({
-    name: '',
-    type: 'evidence' as Document['type'],
-    description: '',
-    tags: '',
-    auditId: '',
-    elementId: '',
-    requirementId: ''
+    name: "",
+    type: "evidence" as Document["type"],
+    description: "",
+    tags: "",
+    auditId: "",
+    elementId: "",
+    requirementId: ""
   });
 
   useEffect(() => {
@@ -138,72 +138,72 @@ export const PeotramDocumentManager: React.FC = () => {
       // Simular carregamento de documentos
       const mockDocuments: Document[] = [
         {
-          id: 'DOC_001',
-          name: 'Política de Segurança SMS.pdf',
-          type: 'procedure',
-          format: 'pdf',
+          id: "DOC_001",
+          name: "Política de Segurança SMS.pdf",
+          type: "procedure",
+          format: "pdf",
           size: 2048576,
-          uploadedBy: 'João Silva',
-          uploadedAt: '2024-12-15T10:30:00Z',
-          auditId: 'AUDIT_001',
-          elementId: 'ELEMENTO_01',
-          requirementId: '1.1.1',
-          tags: ['política', 'SMS', 'segurança'],
-          description: 'Política corporativa de Segurança, Meio Ambiente e Saúde',
-          version: '2.1',
-          status: 'approved',
-          reviewedBy: 'Maria Santos',
-          reviewedAt: '2024-12-15T14:00:00Z',
+          uploadedBy: "João Silva",
+          uploadedAt: "2024-12-15T10:30:00Z",
+          auditId: "AUDIT_001",
+          elementId: "ELEMENTO_01",
+          requirementId: "1.1.1",
+          tags: ["política", "SMS", "segurança"],
+          description: "Política corporativa de Segurança, Meio Ambiente e Saúde",
+          version: "2.1",
+          status: "approved",
+          reviewedBy: "Maria Santos",
+          reviewedAt: "2024-12-15T14:00:00Z",
           metadata: {
-            inspector: 'João Silva',
-            timestamp: '2024-12-15T10:30:00Z'
+            inspector: "João Silva",
+            timestamp: "2024-12-15T10:30:00Z"
           }
         },
         {
-          id: 'DOC_002',
-          name: 'Evidência_Treinamento_NR34.jpg',
-          type: 'photo',
-          format: 'jpg',
+          id: "DOC_002",
+          name: "Evidência_Treinamento_NR34.jpg",
+          type: "photo",
+          format: "jpg",
           size: 1024768,
-          uploadedBy: 'Carlos Eduardo',
-          uploadedAt: '2024-12-14T16:45:00Z',
-          auditId: 'AUDIT_001',
-          elementId: 'ELEMENTO_02',
-          requirementId: '2.1.1',
-          tags: ['evidência', 'treinamento', 'NR-34'],
-          description: 'Foto do certificado de treinamento NR-34',
-          version: '1.0',
-          status: 'pending',
-          thumbnail: '/api/placeholder/150/150',
+          uploadedBy: "Carlos Eduardo",
+          uploadedAt: "2024-12-14T16:45:00Z",
+          auditId: "AUDIT_001",
+          elementId: "ELEMENTO_02",
+          requirementId: "2.1.1",
+          tags: ["evidência", "treinamento", "NR-34"],
+          description: "Foto do certificado de treinamento NR-34",
+          version: "1.0",
+          status: "pending",
+          thumbnail: "/api/placeholder/150/150",
           metadata: {
-            location: 'Sala de Treinamento - Base Santos',
-            timestamp: '2024-12-14T16:45:00Z',
-            equipment: 'iPhone 14 Pro',
-            inspector: 'Carlos Eduardo'
+            location: "Sala de Treinamento - Base Santos",
+            timestamp: "2024-12-14T16:45:00Z",
+            equipment: "iPhone 14 Pro",
+            inspector: "Carlos Eduardo"
           }
         },
         {
-          id: 'DOC_003',
-          name: 'Inspeção_Equipamentos_Video.mp4',
-          type: 'video',
-          format: 'mp4',
+          id: "DOC_003",
+          name: "Inspeção_Equipamentos_Video.mp4",
+          type: "video",
+          format: "mp4",
           size: 15728640,
-          uploadedBy: 'Ana Costa',
-          uploadedAt: '2024-12-13T09:15:00Z',
-          auditId: 'AUDIT_001',
-          elementId: 'ELEMENTO_06',
-          tags: ['inspeção', 'equipamentos', 'manutenção'],
-          description: 'Vídeo da inspeção de equipamentos de segurança',
-          version: '1.0',
-          status: 'approved',
-          reviewedBy: 'José Santos',
-          reviewedAt: '2024-12-13T15:30:00Z',
-          thumbnail: '/api/placeholder/150/100',
+          uploadedBy: "Ana Costa",
+          uploadedAt: "2024-12-13T09:15:00Z",
+          auditId: "AUDIT_001",
+          elementId: "ELEMENTO_06",
+          tags: ["inspeção", "equipamentos", "manutenção"],
+          description: "Vídeo da inspeção de equipamentos de segurança",
+          version: "1.0",
+          status: "approved",
+          reviewedBy: "José Santos",
+          reviewedAt: "2024-12-13T15:30:00Z",
+          thumbnail: "/api/placeholder/150/100",
           metadata: {
-            location: 'Convés Principal - MV Atlantic Explorer',
-            timestamp: '2024-12-13T09:15:00Z',
-            equipment: 'GoPro Hero 11',
-            inspector: 'Ana Costa'
+            location: "Convés Principal - MV Atlantic Explorer",
+            timestamp: "2024-12-13T09:15:00Z",
+            equipment: "GoPro Hero 11",
+            inspector: "Ana Costa"
           }
         }
       ];
@@ -211,17 +211,17 @@ export const PeotramDocumentManager: React.FC = () => {
       setDocuments(mockDocuments);
       updateCategoryCompletion(mockDocuments);
     } catch (error) {
-      console.error('Erro ao carregar documentos:', error);
+      console.error("Erro ao carregar documentos:", error);
     }
   };
 
   const updateCategoryCompletion = (docs: Document[]) => {
     setCategories(prev => prev.map(category => {
       const categoryDocs = docs.filter(doc => {
-        if (category.id === 'evidence') return ['photo', 'video', 'audio'].includes(doc.type);
-        if (category.id === 'procedures') return doc.type === 'procedure';
-        if (category.id === 'certificates') return doc.type === 'certificate';
-        if (category.id === 'reports') return doc.type === 'report';
+        if (category.id === "evidence") return ["photo", "video", "audio"].includes(doc.type);
+        if (category.id === "procedures") return doc.type === "procedure";
+        if (category.id === "certificates") return doc.type === "certificate";
+        if (category.id === "reports") return doc.type === "report";
         return false;
       });
 
@@ -252,22 +252,22 @@ export const PeotramDocumentManager: React.FC = () => {
         id: `DOC_${Date.now()}_${i}`,
         name: file.name,
         type: getDocumentType(file.type),
-        format: file.name.split('.').pop() || '',
+        format: file.name.split(".").pop() || "",
         size: file.size,
-        uploadedBy: 'Usuário Atual',
+        uploadedBy: "Usuário Atual",
         uploadedAt: new Date().toISOString(),
         auditId: newDocument.auditId,
         elementId: newDocument.elementId,
         requirementId: newDocument.requirementId,
-        tags: newDocument.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        tags: newDocument.tags.split(",").map(tag => tag.trim()).filter(Boolean),
         description: newDocument.description,
-        version: '1.0',
-        status: 'pending',
+        version: "1.0",
+        status: "pending",
         url: URL.createObjectURL(file),
-        thumbnail: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
+        thumbnail: file.type.startsWith("image/") ? URL.createObjectURL(file) : undefined,
         metadata: {
           timestamp: new Date().toISOString(),
-          inspector: 'Usuário Atual'
+          inspector: "Usuário Atual"
         }
       };
 
@@ -278,73 +278,73 @@ export const PeotramDocumentManager: React.FC = () => {
     setUploadProgress(0);
     setIsUploadOpen(false);
     setNewDocument({
-      name: '',
-      type: 'evidence',
-      description: '',
-      tags: '',
-      auditId: '',
-      elementId: '',
-      requirementId: ''
+      name: "",
+      type: "evidence",
+      description: "",
+      tags: "",
+      auditId: "",
+      elementId: "",
+      requirementId: ""
     });
   };
 
-  const getDocumentType = (mimeType: string): Document['type'] => {
-    if (mimeType.startsWith('image/')) return 'photo';
-    if (mimeType.startsWith('video/')) return 'video';
-    if (mimeType.startsWith('audio/')) return 'audio';
-    if (mimeType === 'application/pdf') return 'report';
-    return 'evidence';
+  const getDocumentType = (mimeType: string): Document["type"] => {
+    if (mimeType.startsWith("image/")) return "photo";
+    if (mimeType.startsWith("video/")) return "video";
+    if (mimeType.startsWith("audio/")) return "audio";
+    if (mimeType === "application/pdf") return "report";
+    return "evidence";
   };
 
-  const getFileIcon = (type: Document['type'], format: string) => {
+  const getFileIcon = (type: Document["type"], format: string) => {
     switch (type) {
-      case 'photo': return Image;
-      case 'video': return Video;
-      case 'audio': return Mic;
-      case 'procedure':
-      case 'report':
-      case 'certificate':
-        return FileText;
-      default: return Paperclip;
+    case "photo": return Image;
+    case "video": return Video;
+    case "audio": return Mic;
+    case "procedure":
+    case "report":
+    case "certificate":
+      return FileText;
+    default: return Paperclip;
     }
   };
 
-  const getStatusColor = (status: Document['status']) => {
+  const getStatusColor = (status: Document["status"]) => {
     switch (status) {
-      case 'approved': return 'bg-success/20 text-success border-success/30';
-      case 'pending': return 'bg-warning/20 text-warning border-warning/30';
-      case 'rejected': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'archived': return 'bg-muted/20 text-muted-foreground border-muted/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "approved": return "bg-success/20 text-success border-success/30";
+    case "pending": return "bg-warning/20 text-warning border-warning/30";
+    case "rejected": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "archived": return "bg-muted/20 text-muted-foreground border-muted/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
-  const getStatusIcon = (status: Document['status']) => {
+  const getStatusIcon = (status: Document["status"]) => {
     switch (status) {
-      case 'approved': return CheckCircle;
-      case 'pending': return Clock;
-      case 'rejected': return AlertTriangle;
-      case 'archived': return Archive;
-      default: return Clock;
+    case "approved": return CheckCircle;
+    case "pending": return Clock;
+    case "rejected": return AlertTriangle;
+    case "archived": return Archive;
+    default: return Clock;
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const filteredDocuments = documents.filter(doc => {
-    const matchesCategory = selectedCategory === 'all' || 
-      (selectedCategory === 'evidence' && ['photo', 'video', 'audio'].includes(doc.type)) ||
-      (selectedCategory === 'procedures' && doc.type === 'procedure') ||
-      (selectedCategory === 'certificates' && doc.type === 'certificate') ||
-      (selectedCategory === 'reports' && doc.type === 'report');
+    const matchesCategory = selectedCategory === "all" || 
+      (selectedCategory === "evidence" && ["photo", "video", "audio"].includes(doc.type)) ||
+      (selectedCategory === "procedures" && doc.type === "procedure") ||
+      (selectedCategory === "certificates" && doc.type === "certificate") ||
+      (selectedCategory === "reports" && doc.type === "report");
     
-    const matchesSearch = searchTerm === '' || 
+    const matchesSearch = searchTerm === "" || 
       doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       doc.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -386,7 +386,7 @@ export const PeotramDocumentManager: React.FC = () => {
                       <Label>Tipo de Documento</Label>
                       <Select 
                         value={newDocument.type} 
-                        onValueChange={(value: Document['type']) => 
+                        onValueChange={(value: Document["type"]) => 
                           setNewDocument(prev => ({ ...prev, type: value }))
                         }
                       >
@@ -480,7 +480,7 @@ export const PeotramDocumentManager: React.FC = () => {
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="font-medium text-sm">{category.name}</h3>
                   <Badge variant={category.required ? "default" : "secondary"}>
-                    {category.required ? 'Obrigatório' : 'Opcional'}
+                    {category.required ? "Obrigatório" : "Opcional"}
                   </Badge>
                 </div>
                 <div className="space-y-2">
@@ -548,9 +548,9 @@ export const PeotramDocumentManager: React.FC = () => {
                     <div className="flex items-center gap-1 ml-2">
                       <Badge variant="outline" className={getStatusColor(doc.status)}>
                         <StatusIcon className="w-3 h-3 mr-1" />
-                        {doc.status === 'approved' ? 'Aprovado' :
-                         doc.status === 'pending' ? 'Pendente' :
-                         doc.status === 'rejected' ? 'Rejeitado' : 'Arquivado'}
+                        {doc.status === "approved" ? "Aprovado" :
+                          doc.status === "pending" ? "Pendente" :
+                            doc.status === "rejected" ? "Rejeitado" : "Arquivado"}
                       </Badge>
                     </div>
                   </div>
@@ -578,7 +578,7 @@ export const PeotramDocumentManager: React.FC = () => {
                       </span>
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        {new Date(doc.uploadedAt).toLocaleDateString('pt-BR')}
+                        {new Date(doc.uploadedAt).toLocaleDateString("pt-BR")}
                       </span>
                     </div>
 
@@ -644,7 +644,7 @@ export const PeotramDocumentManager: React.FC = () => {
               <FolderOpen className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">Nenhum documento encontrado</h3>
               <p className="text-muted-foreground mb-4">
-                {searchTerm ? 'Nenhum documento corresponde aos filtros aplicados.' : 'Não há documentos nesta categoria.'}
+                {searchTerm ? "Nenhum documento corresponde aos filtros aplicados." : "Não há documentos nesta categoria."}
               </p>
               <Button onClick={() => setIsUploadOpen(true)}>
                 <Plus className="w-4 h-4 mr-2" />

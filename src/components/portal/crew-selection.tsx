@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Search, User, Users } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Search, User, Users } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface CrewMember {
   id: string;
@@ -26,7 +26,7 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     loadCrewMembers();
@@ -35,9 +35,9 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
   const loadCrewMembers = async () => {
     try {
       const { data, error } = await supabase
-        .from('crew_members')
-        .select('*')
-        .order('full_name');
+        .from("crew_members")
+        .select("*")
+        .order("full_name");
 
       if (error) throw error;
       setCrewMembers(data || []);
@@ -60,16 +60,16 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'available':
-        return <Badge variant="default" className="bg-success text-success-foreground">Disponível</Badge>;
-      case 'embarked':
-        return <Badge variant="secondary">Embarcado</Badge>;
-      case 'leave':
-        return <Badge variant="outline">Folga</Badge>;
-      case 'training':
-        return <Badge variant="secondary">Treinamento</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "available":
+      return <Badge variant="default" className="bg-success text-success-foreground">Disponível</Badge>;
+    case "embarked":
+      return <Badge variant="secondary">Embarcado</Badge>;
+    case "leave":
+      return <Badge variant="outline">Folga</Badge>;
+    case "training":
+      return <Badge variant="secondary">Treinamento</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
@@ -120,7 +120,7 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
                       <Avatar>
                         <AvatarImage src="" />
                         <AvatarFallback>
-                          {member.full_name.split(' ').map(n => n[0]).join('')}
+                          {member.full_name.split(" ").map(n => n[0]).join("")}
                         </AvatarFallback>
                       </Avatar>
                       
@@ -156,7 +156,7 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
               <div className="text-center py-8">
                 <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                 <p className="text-muted-foreground">
-                  {searchTerm ? 'Nenhum tripulante encontrado para a busca' : 'Nenhum tripulante cadastrado'}
+                  {searchTerm ? "Nenhum tripulante encontrado para a busca" : "Nenhum tripulante cadastrado"}
                 </p>
               </div>
             )}

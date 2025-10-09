@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -31,8 +31,8 @@ import {
   ArrowUp,
   ArrowDown,
   Minus
-} from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart as RechartsPieChart, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Pie } from 'recharts';
+} from "lucide-react";
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart as RechartsPieChart, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Pie } from "recharts";
 
 interface KPIMetric {
   id: string;
@@ -40,10 +40,10 @@ interface KPIMetric {
   value: number;
   previousValue: number;
   unit: string;
-  format: 'currency' | 'percentage' | 'number' | 'decimal';
-  trend: 'up' | 'down' | 'stable';
+  format: "currency" | "percentage" | "number" | "decimal";
+  trend: "up" | "down" | "stable";
   target?: number;
-  category: 'financial' | 'operational' | 'safety' | 'hr' | 'environmental';
+  category: "financial" | "operational" | "safety" | "hr" | "environmental";
   icon: React.ReactNode;
   color: string;
 }
@@ -52,8 +52,8 @@ interface BusinessInsight {
   id: string;
   title: string;
   description: string;
-  impact: 'high' | 'medium' | 'low';
-  category: 'opportunity' | 'risk' | 'optimization' | 'compliance';
+  impact: "high" | "medium" | "low";
+  category: "opportunity" | "risk" | "optimization" | "compliance";
   priority: number;
   actionable: boolean;
   estimatedROI?: number;
@@ -71,134 +71,134 @@ interface DepartmentPerformance {
   projects: number;
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8", "#82CA9D"];
 
 export const AdvancedBusinessDashboard: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'financial' | 'operational' | 'safety' | 'hr' | 'environmental'>('all');
+  const [selectedPeriod, setSelectedPeriod] = useState<"7d" | "30d" | "90d" | "1y">("30d");
+  const [selectedCategory, setSelectedCategory] = useState<"all" | "financial" | "operational" | "safety" | "hr" | "environmental">("all");
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(new Date());
 
   // Mock data - em produção viria de APIs
   const kpiMetrics: KPIMetric[] = [
     {
-      id: 'revenue',
-      title: 'Receita Total',
+      id: "revenue",
+      title: "Receita Total",
       value: 12500000,
       previousValue: 11800000,
-      unit: 'BRL',
-      format: 'currency',
-      trend: 'up',
+      unit: "BRL",
+      format: "currency",
+      trend: "up",
       target: 13000000,
-      category: 'financial',
+      category: "financial",
       icon: <DollarSign className="h-4 w-4" />,
-      color: '#10B981'
+      color: "#10B981"
     },
     {
-      id: 'profit_margin',
-      title: 'Margem de Lucro',
+      id: "profit_margin",
+      title: "Margem de Lucro",
       value: 23.5,
       previousValue: 21.2,
-      unit: '%',
-      format: 'percentage',
-      trend: 'up',
+      unit: "%",
+      format: "percentage",
+      trend: "up",
       target: 25,
-      category: 'financial',
+      category: "financial",
       icon: <TrendingUp className="h-4 w-4" />,
-      color: '#059669'
+      color: "#059669"
     },
     {
-      id: 'fleet_utilization',
-      title: 'Utilização da Frota',
+      id: "fleet_utilization",
+      title: "Utilização da Frota",
       value: 87.3,
       previousValue: 84.1,
-      unit: '%',
-      format: 'percentage',
-      trend: 'up',
+      unit: "%",
+      format: "percentage",
+      trend: "up",
       target: 90,
-      category: 'operational',
+      category: "operational",
       icon: <Ship className="h-4 w-4" />,
-      color: '#3B82F6'
+      color: "#3B82F6"
     },
     {
-      id: 'safety_incidents',
-      title: 'Incidentes de Segurança',
+      id: "safety_incidents",
+      title: "Incidentes de Segurança",
       value: 2,
       previousValue: 5,
-      unit: 'incidentes',
-      format: 'number',
-      trend: 'down',
+      unit: "incidentes",
+      format: "number",
+      trend: "down",
       target: 0,
-      category: 'safety',
+      category: "safety",
       icon: <AlertTriangle className="h-4 w-4" />,
-      color: '#EF4444'
+      color: "#EF4444"
     },
     {
-      id: 'employee_satisfaction',
-      title: 'Satisfação Funcionários',
+      id: "employee_satisfaction",
+      title: "Satisfação Funcionários",
       value: 8.7,
       previousValue: 8.2,
-      unit: '/10',
-      format: 'decimal',
-      trend: 'up',
+      unit: "/10",
+      format: "decimal",
+      trend: "up",
       target: 9,
-      category: 'hr',
+      category: "hr",
       icon: <Users className="h-4 w-4" />,
-      color: '#8B5CF6'
+      color: "#8B5CF6"
     },
     {
-      id: 'carbon_footprint',
-      title: 'Pegada de Carbono',
+      id: "carbon_footprint",
+      title: "Pegada de Carbono",
       value: 1240,
       previousValue: 1380,
-      unit: 'tCO2',
-      format: 'number',
-      trend: 'down',
+      unit: "tCO2",
+      format: "number",
+      trend: "down",
       target: 1000,
-      category: 'environmental',
+      category: "environmental",
       icon: <Globe className="h-4 w-4" />,
-      color: '#10B981'
+      color: "#10B981"
     }
   ];
 
   const businessInsights: BusinessInsight[] = [
     {
-      id: '1',
-      title: 'Oportunidade de Otimização de Rotas',
-      description: 'Análise de dados mostra potencial de redução de 15% no consumo de combustível através de otimização de rotas.',
-      impact: 'high',
-      category: 'opportunity',
+      id: "1",
+      title: "Oportunidade de Otimização de Rotas",
+      description: "Análise de dados mostra potencial de redução de 15% no consumo de combustível através de otimização de rotas.",
+      impact: "high",
+      category: "opportunity",
       priority: 1,
       actionable: true,
       estimatedROI: 850000,
-      timeframe: '3-6 meses'
+      timeframe: "3-6 meses"
     },
     {
-      id: '2',
-      title: 'Risco de Não Conformidade Ambiental',
-      description: 'Novas regulamentações ambientais exigem adequação dos sistemas de monitoramento até dezembro.',
-      impact: 'high',
-      category: 'risk',
+      id: "2",
+      title: "Risco de Não Conformidade Ambiental",
+      description: "Novas regulamentações ambientais exigem adequação dos sistemas de monitoramento até dezembro.",
+      impact: "high",
+      category: "risk",
       priority: 2,
       actionable: true,
-      timeframe: '1-3 meses'
+      timeframe: "1-3 meses"
     },
     {
-      id: '3',
-      title: 'Melhoria na Gestão de Estoque',
-      description: 'Implementação de sistema preditivo pode reduzir custos de estoque em 12%.',
-      impact: 'medium',
-      category: 'optimization',
+      id: "3",
+      title: "Melhoria na Gestão de Estoque",
+      description: "Implementação de sistema preditivo pode reduzir custos de estoque em 12%.",
+      impact: "medium",
+      category: "optimization",
       priority: 3,
       actionable: true,
       estimatedROI: 320000,
-      timeframe: '2-4 meses'
+      timeframe: "2-4 meses"
     }
   ];
 
   const departmentData: DepartmentPerformance[] = [
     {
-      department: 'Operações Marítimas',
+      department: "Operações Marítimas",
       performance: 92,
       budget: 5000000,
       budgetUsed: 4200000,
@@ -208,7 +208,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       projects: 8
     },
     {
-      department: 'Recursos Humanos',
+      department: "Recursos Humanos",
       performance: 87,
       budget: 2500000,
       budgetUsed: 2100000,
@@ -218,7 +218,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       projects: 12
     },
     {
-      department: 'Financeiro',
+      department: "Financeiro",
       performance: 95,
       budget: 1500000,
       budgetUsed: 1300000,
@@ -228,7 +228,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
       projects: 5
     },
     {
-      department: 'TI',
+      department: "TI",
       performance: 89,
       budget: 3000000,
       budgetUsed: 2700000,
@@ -240,80 +240,80 @@ export const AdvancedBusinessDashboard: React.FC = () => {
   ];
 
   const performanceData = [
-    { month: 'Jan', revenue: 11200000, costs: 8400000, profit: 2800000 },
-    { month: 'Fev', revenue: 11800000, costs: 8900000, profit: 2900000 },
-    { month: 'Mar', revenue: 12500000, costs: 9200000, profit: 3300000 },
-    { month: 'Abr', revenue: 12100000, costs: 8800000, profit: 3300000 },
-    { month: 'Mai', revenue: 13200000, costs: 9600000, profit: 3600000 },
-    { month: 'Jun', revenue: 12800000, costs: 9100000, profit: 3700000 }
+    { month: "Jan", revenue: 11200000, costs: 8400000, profit: 2800000 },
+    { month: "Fev", revenue: 11800000, costs: 8900000, profit: 2900000 },
+    { month: "Mar", revenue: 12500000, costs: 9200000, profit: 3300000 },
+    { month: "Abr", revenue: 12100000, costs: 8800000, profit: 3300000 },
+    { month: "Mai", revenue: 13200000, costs: 9600000, profit: 3600000 },
+    { month: "Jun", revenue: 12800000, costs: 9100000, profit: 3700000 }
   ];
 
   const fleetUtilizationData = [
-    { vessel: 'Navio A', utilization: 95, efficiency: 88, maintenance: 5 },
-    { vessel: 'Navio B', utilization: 87, efficiency: 92, maintenance: 8 },
-    { vessel: 'Navio C', utilization: 92, efficiency: 85, maintenance: 12 },
-    { vessel: 'Navio D', utilization: 78, efficiency: 79, maintenance: 18 },
-    { vessel: 'Navio E', utilization: 89, efficiency: 91, maintenance: 7 }
+    { vessel: "Navio A", utilization: 95, efficiency: 88, maintenance: 5 },
+    { vessel: "Navio B", utilization: 87, efficiency: 92, maintenance: 8 },
+    { vessel: "Navio C", utilization: 92, efficiency: 85, maintenance: 12 },
+    { vessel: "Navio D", utilization: 78, efficiency: 79, maintenance: 18 },
+    { vessel: "Navio E", utilization: 89, efficiency: 91, maintenance: 7 }
   ];
 
   const formatValue = (value: number, format: string, unit: string) => {
     switch (format) {
-      case 'currency':
-        return new Intl.NumberFormat('pt-BR', { 
-          style: 'currency', 
-          currency: 'BRL',
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0
-        }).format(value);
-      case 'percentage':
-        return `${value.toFixed(1)}${unit}`;
-      case 'decimal':
-        return `${value.toFixed(1)}${unit}`;
-      default:
-        return `${value.toLocaleString('pt-BR')} ${unit}`;
+    case "currency":
+      return new Intl.NumberFormat("pt-BR", { 
+        style: "currency", 
+        currency: "BRL",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(value);
+    case "percentage":
+      return `${value.toFixed(1)}${unit}`;
+    case "decimal":
+      return `${value.toFixed(1)}${unit}`;
+    default:
+      return `${value.toLocaleString("pt-BR")} ${unit}`;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
-        return <ArrowUp className="h-3 w-3 text-green-500" />;
-      case 'down':
-        return <ArrowDown className="h-3 w-3 text-red-500" />;
-      default:
-        return <Minus className="h-3 w-3 text-muted-foreground" />;
+    case "up":
+      return <ArrowUp className="h-3 w-3 text-green-500" />;
+    case "down":
+      return <ArrowDown className="h-3 w-3 text-red-500" />;
+    default:
+      return <Minus className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'high':
-        return 'border-red-200 bg-red-50';
-      case 'medium':
-        return 'border-yellow-200 bg-yellow-50';
-      case 'low':
-        return 'border-blue-200 bg-blue-50';
-      default:
-        return 'border-gray-200 bg-gray-50';
+    case "high":
+      return "border-red-200 bg-red-50";
+    case "medium":
+      return "border-yellow-200 bg-yellow-50";
+    case "low":
+      return "border-blue-200 bg-blue-50";
+    default:
+      return "border-gray-200 bg-gray-50";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'opportunity':
-        return <Target className="h-4 w-4 text-green-500" />;
-      case 'risk':
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'optimization':
-        return <Zap className="h-4 w-4 text-blue-500" />;
-      case 'compliance':
-        return <CheckCircle className="h-4 w-4 text-purple-500" />;
-      default:
-        return <Briefcase className="h-4 w-4 text-muted-foreground" />;
+    case "opportunity":
+      return <Target className="h-4 w-4 text-green-500" />;
+    case "risk":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "optimization":
+      return <Zap className="h-4 w-4 text-blue-500" />;
+    case "compliance":
+      return <CheckCircle className="h-4 w-4 text-purple-500" />;
+    default:
+      return <Briefcase className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
-  const filteredKPIs = selectedCategory === 'all' 
+  const filteredKPIs = selectedCategory === "all" 
     ? kpiMetrics 
     : kpiMetrics.filter(kpi => kpi.category === selectedCategory);
 
@@ -332,7 +332,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
         <div>
           <h1 className="text-3xl font-bold">Dashboard Executivo</h1>
           <p className="text-muted-foreground">
-            Visão estratégica completa do negócio • Última atualização: {lastUpdated.toLocaleTimeString('pt-BR')}
+            Visão estratégica completa do negócio • Última atualização: {lastUpdated.toLocaleTimeString("pt-BR")}
           </p>
         </div>
         
@@ -349,7 +349,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
           </select>
           
           <Button onClick={refreshData} disabled={isLoading} variant="outline" className="gap-2">
-            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
           
@@ -409,7 +409,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                 </div>
                 
                 <div className="mt-2 text-xs text-muted-foreground">
-                  {kpi.trend === 'up' ? '+' : kpi.trend === 'down' ? '-' : ''}
+                  {kpi.trend === "up" ? "+" : kpi.trend === "down" ? "-" : ""}
                   {Math.abs(((kpi.value - kpi.previousValue) / kpi.previousValue) * 100).toFixed(1)}% 
                   vs período anterior
                 </div>
@@ -442,7 +442,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                     <XAxis dataKey="month" />
                     <YAxis tickFormatter={(value) => `R$ ${(value / 1000000).toFixed(1)}M`} />
                     <Tooltip 
-                      formatter={(value: number) => [`R$ ${(value / 1000000).toFixed(1)}M`, '']}
+                      formatter={(value: number) => [`R$ ${(value / 1000000).toFixed(1)}M`, ""]}
                     />
                     <Area type="monotone" dataKey="revenue" stackId="1" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.6} />
                     <Area type="monotone" dataKey="costs" stackId="2" stroke="#EF4444" fill="#EF4444" fillOpacity={0.6} />
@@ -461,10 +461,10 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                   <RechartsPieChart>
                     <Pie
                       data={[
-                        { name: 'Transporte de Carga', value: 45, color: '#3B82F6' },
-                        { name: 'Serviços Portuários', value: 30, color: '#10B981' },
-                        { name: 'Logística', value: 15, color: '#F59E0B' },
-                        { name: 'Outros', value: 10, color: '#EF4444' }
+                        { name: "Transporte de Carga", value: 45, color: "#3B82F6" },
+                        { name: "Serviços Portuários", value: 30, color: "#10B981" },
+                        { name: "Logística", value: 15, color: "#F59E0B" },
+                        { name: "Outros", value: 10, color: "#EF4444" }
                       ]}
                       cx="50%"
                       cy="50%"
@@ -473,10 +473,10 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                       dataKey="value"
                     >
                       {[
-                        { name: 'Transporte de Carga', value: 45, color: '#3B82F6' },
-                        { name: 'Serviços Portuários', value: 30, color: '#10B981' },
-                        { name: 'Logística', value: 15, color: '#F59E0B' },
-                        { name: 'Outros', value: 10, color: '#EF4444' }
+                        { name: "Transporte de Carga", value: 45, color: "#3B82F6" },
+                        { name: "Serviços Portuários", value: 30, color: "#10B981" },
+                        { name: "Logística", value: 15, color: "#F59E0B" },
+                        { name: "Outros", value: 10, color: "#EF4444" }
                       ].map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
@@ -584,7 +584,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
                           {insight.estimatedROI && (
                             <div className="flex items-center gap-1">
                               <DollarSign className="h-3 w-3" />
-                              ROI estimado: {formatValue(insight.estimatedROI, 'currency', 'BRL')}
+                              ROI estimado: {formatValue(insight.estimatedROI, "currency", "BRL")}
                             </div>
                           )}
                         </div>

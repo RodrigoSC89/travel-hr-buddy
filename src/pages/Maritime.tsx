@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
-import { ModuleHeader } from '@/components/ui/module-header';
-import { DashboardSkeleton } from '@/components/ui/loading-skeleton';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Ship, 
   Users, 
@@ -26,18 +26,18 @@ import {
   QrCode,
   Bell,
   Wrench
-} from 'lucide-react';
-import { ChecklistScheduler } from '../components/maritime/checklist-scheduler';
-import { ChecklistReports } from '../components/maritime/checklist-reports';
-import { QREquipmentManager } from '../components/maritime/qr-equipment-manager';
-import { ChecklistDashboard } from '../components/maritime/checklist-dashboard';
-import { NotificationCenter } from '../components/maritime/notification-center';
-import { RealTimeFleetMonitor } from '../components/maritime/real-time-fleet-monitor';
-import { VesselPerformanceDashboard } from '../components/maritime/vessel-performance-dashboard';
-import { IoTSensorDashboard } from '../components/maritime/iot-sensor-dashboard';
-import { PredictiveMaintenanceSystem } from '../components/maritime/predictive-maintenance-system';
-import { toast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
+} from "lucide-react";
+import { ChecklistScheduler } from "../components/maritime/checklist-scheduler";
+import { ChecklistReports } from "../components/maritime/checklist-reports";
+import { QREquipmentManager } from "../components/maritime/qr-equipment-manager";
+import { ChecklistDashboard } from "../components/maritime/checklist-dashboard";
+import { NotificationCenter } from "../components/maritime/notification-center";
+import { RealTimeFleetMonitor } from "../components/maritime/real-time-fleet-monitor";
+import { VesselPerformanceDashboard } from "../components/maritime/vessel-performance-dashboard";
+import { IoTSensorDashboard } from "../components/maritime/iot-sensor-dashboard";
+import { PredictiveMaintenanceSystem } from "../components/maritime/predictive-maintenance-system";
+import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardStats {
   totalVessels: number;
@@ -72,9 +72,9 @@ export default function Maritime() {
       
       // Carregar dados dos navios
       const { data: vesselsData, error: vesselsError } = await supabase
-        .from('vessels')
-        .select('*')
-        .eq('organization_id', '550e8400-e29b-41d4-a716-446655440000')
+        .from("vessels")
+        .select("*")
+        .eq("organization_id", "550e8400-e29b-41d4-a716-446655440000")
         .limit(10);
 
       if (!vesselsError && vesselsData) {
@@ -93,7 +93,7 @@ export default function Maritime() {
       });
       
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
+      console.error("Erro ao carregar dados:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados do dashboard",
@@ -111,9 +111,9 @@ export default function Maritime() {
           <div>
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
             <p className={`text-2xl font-bold ${
-              variant === 'danger' ? 'text-red-600' : 
-              variant === 'warning' ? 'text-yellow-600' : 
-              variant === 'success' ? 'text-green-600' : ''
+              variant === "danger" ? "text-red-600" : 
+                variant === "warning" ? "text-yellow-600" : 
+                  variant === "success" ? "text-green-600" : ""
             }`}>
               {value}
             </p>
@@ -124,10 +124,10 @@ export default function Maritime() {
             )}
           </div>
           <Icon className={`h-8 w-8 ${
-            variant === 'danger' ? 'text-red-600' : 
-            variant === 'warning' ? 'text-yellow-600' : 
-            variant === 'success' ? 'text-green-600' : 
-            'text-muted-foreground'
+            variant === "danger" ? "text-red-600" : 
+              variant === "warning" ? "text-yellow-600" : 
+                variant === "success" ? "text-green-600" : 
+                  "text-muted-foreground"
           }`} />
         </div>
       </CardContent>
@@ -152,7 +152,7 @@ export default function Maritime() {
         badges={[
           { icon: Users, label: `${stats.activeCrew} Tripulação` },
           { icon: CheckCircle, label: `${stats.complianceScore}% Compliance` },
-          { icon: TrendingUp, label: 'Performance' }
+          { icon: TrendingUp, label: "Performance" }
         ]}
       />
 
@@ -163,7 +163,7 @@ export default function Maritime() {
           value={stats.totalVessels}
           icon={Ship}
           trend="+2 este mês"
-          onClick={() => navigate('/fleet-dashboard')}
+          onClick={() => navigate("/fleet-dashboard")}
         />
         <StatCard
           title="Tripulação Ativa"
@@ -171,7 +171,7 @@ export default function Maritime() {
           icon={Users}
           variant="success"
           trend="100% operacional"
-          onClick={() => navigate('/crew-management')}
+          onClick={() => navigate("/crew-management")}
         />
         <StatCard
           title="Certificações Pendentes"
@@ -179,7 +179,7 @@ export default function Maritime() {
           icon={AlertTriangle}
           variant="warning"
           trend="3 vencem em 30 dias"
-          onClick={() => navigate('/maritime-certifications')}
+          onClick={() => navigate("/maritime-certifications")}
         />
         <StatCard
           title="Auditorias Completas"
@@ -187,7 +187,7 @@ export default function Maritime() {
           icon={CheckCircle}
           variant="success"
           trend="+4 este mês"
-          onClick={() => navigate('/peotram')}
+          onClick={() => navigate("/peotram")}
         />
         <StatCard
           title="Alertas Ativos"
@@ -195,7 +195,7 @@ export default function Maritime() {
           icon={AlertTriangle}
           variant="danger"
           trend="2 críticos"
-          onClick={() => navigate('/intelligent-alerts')}
+          onClick={() => navigate("/intelligent-alerts")}
         />
         <StatCard
           title="Compliance Score"
@@ -257,7 +257,7 @@ export default function Maritime() {
                     <Badge variant="outline">Operacional</Badge>
                   </div>
                 ))}
-                <Button variant="outline" className="w-full" onClick={() => navigate('/fleet-dashboard')}>
+                <Button variant="outline" className="w-full" onClick={() => navigate("/fleet-dashboard")}>
                   Ver Todas as Embarcações
                 </Button>
               </CardContent>
@@ -275,51 +275,51 @@ export default function Maritime() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/peotram')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/peotram")}>
                   <FileText className="h-4 w-4 mr-2" />
                   Nova Auditoria PEOTRAM
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/crew-management')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/crew-management")}>
                   <Users className="h-4 w-4 mr-2" />
                   Gerenciar Tripulação
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate('/maritime-certifications')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maritime-certifications")}>
                   <Shield className="h-4 w-4 mr-2" />
                   Verificar Certificações
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('dashboard')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("dashboard")}>
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Dashboard de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('scheduler')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("scheduler")}>
                   <Calendar className="h-4 w-4 mr-2" />
                   Agendamento de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('reports')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("reports")}>
                   <FileText className="h-4 w-4 mr-2" />
                   Relatórios de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('qr-equipment')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("qr-equipment")}>
                   <QrCode className="h-4 w-4 mr-2" />
                   QR Equipamentos
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('notifications')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("notifications")}>
                   <Bell className="h-4 w-4 mr-2" />
                   Central de Notificações
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('fleet-monitor')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("fleet-monitor")}>
                   <Activity className="h-4 w-4 mr-2" />
                   Monitor Tempo Real
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('performance')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("performance")}>
                   <TrendingUp className="h-4 w-4 mr-2" />
                   Performance de Navios
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('iot-sensors')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("iot-sensors")}>
                   <Activity className="h-4 w-4 mr-2" />
                   Sensores IoT
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature('predictive-maintenance')}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("predictive-maintenance")}>
                   <Wrench className="h-4 w-4 mr-2" />
                   Manutenção Preditiva
                 </Button>
@@ -388,7 +388,7 @@ export default function Maritime() {
                 <p className="text-muted-foreground mb-4">
                   Acesse a gestão completa da frota através do menu dedicado
                 </p>
-                <Button onClick={() => navigate('/fleet-dashboard')}>Ir para Gestão de Frota</Button>
+                <Button onClick={() => navigate("/fleet-dashboard")}>Ir para Gestão de Frota</Button>
               </div>
             </CardContent>
           </Card>
@@ -409,7 +409,7 @@ export default function Maritime() {
                 <p className="text-muted-foreground mb-4">
                   Sistema completo de auditorias e gestão de conformidade
                 </p>
-                <Button onClick={() => navigate('/peotram')}>Acessar PEOTRAM</Button>
+                <Button onClick={() => navigate("/peotram")}>Acessar PEOTRAM</Button>
               </div>
             </CardContent>
           </Card>
@@ -425,12 +425,12 @@ export default function Maritime() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate('/task-management')}>
+                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate("/task-management")}>
                   <Calendar className="h-8 w-8 mx-auto mb-2 text-blue-600" />
                   <h4 className="font-semibold">Planejamento</h4>
                   <p className="text-sm text-muted-foreground">Cronogramas e roteiros</p>
                 </div>
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate('/fleet-tracking')}>
+                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate("/fleet-tracking")}>
                   <Activity className="h-8 w-8 mx-auto mb-2 text-green-600" />
                   <h4 className="font-semibold">Monitoramento</h4>
                   <p className="text-sm text-muted-foreground">Tempo real</p>
@@ -440,7 +440,7 @@ export default function Maritime() {
                   <h4 className="font-semibold">Manutenção</h4>
                   <p className="text-sm text-muted-foreground">Preventiva e corretiva</p>
                 </div>
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate('/analytics')}>
+                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate("/analytics")}>
                   <BarChart3 className="h-8 w-8 mx-auto mb-2 text-purple-600" />
                   <h4 className="font-semibold">Analytics</h4>
                   <p className="text-sm text-muted-foreground">KPIs operacionais</p>
@@ -452,7 +452,7 @@ export default function Maritime() {
       </Tabs>
 
       {/* Feature Components */}
-      {activeFeature === 'dashboard' && (
+      {activeFeature === "dashboard" && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
@@ -460,7 +460,7 @@ export default function Maritime() {
           <ChecklistDashboard userId="user-123" />
         </div>
       )}
-      {activeFeature === 'scheduler' && (
+      {activeFeature === "scheduler" && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
@@ -468,7 +468,7 @@ export default function Maritime() {
           <ChecklistScheduler />
         </div>
       )}
-      {activeFeature === 'reports' && (
+      {activeFeature === "reports" && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
@@ -476,7 +476,7 @@ export default function Maritime() {
           <ChecklistReports />
         </div>
       )}
-      {activeFeature === 'qr-equipment' && (
+      {activeFeature === "qr-equipment" && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
@@ -484,7 +484,7 @@ export default function Maritime() {
           <QREquipmentManager />
         </div>
       )}
-      {activeFeature === 'notifications' && (
+      {activeFeature === "notifications" && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
@@ -492,7 +492,7 @@ export default function Maritime() {
           <NotificationCenter userId="user-123" />
         </div>
       )}
-      {activeFeature === 'fleet-monitor' && (
+      {activeFeature === "fleet-monitor" && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
@@ -500,7 +500,7 @@ export default function Maritime() {
           <RealTimeFleetMonitor />
         </div>
       )}
-      {activeFeature === 'performance' && (
+      {activeFeature === "performance" && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
@@ -508,7 +508,7 @@ export default function Maritime() {
           <VesselPerformanceDashboard />
         </div>
       )}
-      {activeFeature === 'iot-sensors' && (
+      {activeFeature === "iot-sensors" && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
@@ -516,7 +516,7 @@ export default function Maritime() {
           <IoTSensorDashboard />
         </div>
       )}
-      {activeFeature === 'predictive-maintenance' && (
+      {activeFeature === "predictive-maintenance" && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard

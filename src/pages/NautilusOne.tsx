@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Ship, 
   Brain,
@@ -14,18 +14,18 @@ import {
   Zap,
   Activity,
   Shield
-} from 'lucide-react';
-import InsightEngine from '@/components/maritime/insight-engine';
-import PatternRecognition from '@/components/maritime/pattern-recognition';
-import RealTimeRouteOptimizer from '@/components/maritime/route-optimizer';
-import CarbonFootprintTracker from '@/components/maritime/carbon-tracker';
-import CompetencyHeatmap from '@/components/crew/competency-heatmap';
-import CrewManagement2 from '@/components/crew/crew-management-2';
-import APIHubNautilus from '@/components/integration/api-hub-nautilus';
-import AIThreatDetection from '@/components/security/ai-threat-detection';
+} from "lucide-react";
+import InsightEngine from "@/components/maritime/insight-engine";
+import PatternRecognition from "@/components/maritime/pattern-recognition";
+import RealTimeRouteOptimizer from "@/components/maritime/route-optimizer";
+import CarbonFootprintTracker from "@/components/maritime/carbon-tracker";
+import CompetencyHeatmap from "@/components/crew/competency-heatmap";
+import CrewManagement2 from "@/components/crew/crew-management-2";
+import APIHubNautilus from "@/components/integration/api-hub-nautilus";
+import AIThreatDetection from "@/components/security/ai-threat-detection";
 
 const NautilusOne: React.FC = () => {
-  const [activeModule, setActiveModule] = useState('overview');
+  const [activeModule, setActiveModule] = useState("overview");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100 dark:from-gray-900 dark:via-blue-950 dark:to-gray-900">
@@ -59,7 +59,7 @@ const NautilusOne: React.FC = () => {
 
         {/* Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          <Card className="bg-gradient-to-br from-blue-500 to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule('insights')}>
+          <Card className="bg-gradient-to-br from-blue-500 to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("insights")}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Brain className="h-5 w-5" />
@@ -72,7 +72,7 @@ const NautilusOne: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple-500 to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule('patterns')}>
+          <Card className="bg-gradient-to-br from-purple-500 to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("patterns")}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Network className="h-5 w-5" />
@@ -85,7 +85,7 @@ const NautilusOne: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-500 to-emerald-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule('routes')}>
+          <Card className="bg-gradient-to-br from-green-500 to-emerald-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("routes")}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Navigation className="h-5 w-5" />
@@ -98,7 +98,7 @@ const NautilusOne: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-yellow-500 to-orange-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule('carbon')}>
+          <Card className="bg-gradient-to-br from-yellow-500 to-orange-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("carbon")}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Leaf className="h-5 w-5" />
@@ -111,7 +111,7 @@ const NautilusOne: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-indigo-500 to-blue-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule('crew')}>
+          <Card className="bg-gradient-to-br from-indigo-500 to-blue-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("crew")}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Users className="h-5 w-5" />

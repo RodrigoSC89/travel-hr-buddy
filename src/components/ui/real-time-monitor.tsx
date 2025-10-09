@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 import { 
   Activity, 
   Wifi, 
@@ -11,17 +11,17 @@ import {
   Wind,
   Compass,
   Gauge
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface SensorData {
   id: string;
   name: string;
-  type: 'temperature' | 'fuel' | 'pressure' | 'speed' | 'power' | 'heading';
+  type: "temperature" | "fuel" | "pressure" | "speed" | "power" | "heading";
   value: number;
   unit: string;
-  status: 'normal' | 'warning' | 'critical' | 'offline';
+  status: "normal" | "warning" | "critical" | "offline";
   lastUpdate: Date;
   min?: number;
   max?: number;
@@ -46,113 +46,113 @@ const sensorIcons = {
 };
 
 const statusColors = {
-  normal: 'text-success',
-  warning: 'text-warning',
-  critical: 'text-danger',
-  offline: 'text-muted-foreground'
+  normal: "text-success",
+  warning: "text-warning",
+  critical: "text-danger",
+  offline: "text-muted-foreground"
 };
 
 const statusBadgeColors = {
-  normal: 'bg-success/10 text-success border-success/20',
-  warning: 'bg-warning/10 text-warning border-warning/20',
-  critical: 'bg-danger/10 text-danger border-danger/20',
-  offline: 'bg-muted text-muted-foreground border-muted'
+  normal: "bg-success/10 text-success border-success/20",
+  warning: "bg-warning/10 text-warning border-warning/20",
+  critical: "bg-danger/10 text-danger border-danger/20",
+  offline: "bg-muted text-muted-foreground border-muted"
 };
 
 // Mock data para demonstração
 const mockVessels: VesselMonitor[] = [
   {
-    vesselId: 'atlantida',
-    vesselName: 'Atlântida',
+    vesselId: "atlantida",
+    vesselName: "Atlântida",
     isOnline: true,
     lastSeen: new Date(),
     sensors: [
       {
-        id: 'temp_engine',
-        name: 'Temperatura Motor',
-        type: 'temperature',
+        id: "temp_engine",
+        name: "Temperatura Motor",
+        type: "temperature",
         value: 87.5,
-        unit: '°C',
-        status: 'normal',
+        unit: "°C",
+        status: "normal",
         lastUpdate: new Date(),
         min: 70,
         max: 95,
         target: 85
       },
       {
-        id: 'fuel_level',
-        name: 'Nível Combustível',
-        type: 'fuel',
+        id: "fuel_level",
+        name: "Nível Combustível",
+        type: "fuel",
         value: 15.2,
-        unit: '%',
-        status: 'critical',
+        unit: "%",
+        status: "critical",
         lastUpdate: new Date(),
         min: 0,
         max: 100,
         target: 50
       },
       {
-        id: 'speed',
-        name: 'Velocidade',
-        type: 'speed',
+        id: "speed",
+        name: "Velocidade",
+        type: "speed",
         value: 12.8,
-        unit: 'kts',
-        status: 'normal',
+        unit: "kts",
+        status: "normal",
         lastUpdate: new Date()
       },
       {
-        id: 'heading',
-        name: 'Rumo',
-        type: 'heading',
+        id: "heading",
+        name: "Rumo",
+        type: "heading",
         value: 285,
-        unit: '°',
-        status: 'normal',
+        unit: "°",
+        status: "normal",
         lastUpdate: new Date()
       }
     ]
   },
   {
-    vesselId: 'pacifico',
-    vesselName: 'Pacífico',
+    vesselId: "pacifico",
+    vesselName: "Pacífico",
     isOnline: true,
     lastSeen: new Date(Date.now() - 2 * 60 * 1000),
     sensors: [
       {
-        id: 'dp_power',
-        name: 'Potência DP',
-        type: 'power',
+        id: "dp_power",
+        name: "Potência DP",
+        type: "power",
         value: 1250,
-        unit: 'kW',
-        status: 'warning',
+        unit: "kW",
+        status: "warning",
         lastUpdate: new Date(),
         min: 0,
         max: 2000,
         target: 1500
       },
       {
-        id: 'fuel_level',
-        name: 'Nível Combustível',
-        type: 'fuel',
+        id: "fuel_level",
+        name: "Nível Combustível",
+        type: "fuel",
         value: 78.5,
-        unit: '%',
-        status: 'normal',
+        unit: "%",
+        status: "normal",
         lastUpdate: new Date()
       }
     ]
   },
   {
-    vesselId: 'artico',
-    vesselName: 'Ártico',
+    vesselId: "artico",
+    vesselName: "Ártico",
     isOnline: false,
     lastSeen: new Date(Date.now() - 15 * 60 * 1000),
     sensors: [
       {
-        id: 'dp_offline',
-        name: 'Sistema DP',
-        type: 'power',
+        id: "dp_offline",
+        name: "Sistema DP",
+        type: "power",
         value: 0,
-        unit: 'kW',
-        status: 'offline',
+        unit: "kW",
+        status: "offline",
         lastUpdate: new Date(Date.now() - 15 * 60 * 1000)
       }
     ]
@@ -179,7 +179,7 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
           lastSeen: new Date(),
           sensors: vessel.sensors.map(sensor => {
             // Se sensor está offline, manter como está
-            if (sensor.status === 'offline') {
+            if (sensor.status === "offline") {
               return sensor;
             }
             
@@ -188,35 +188,35 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
             const variation = (Math.random() - 0.5) * 2; // -1 a +1
             
             switch (sensor.type) {
-              case 'temperature':
-                newValue = Math.max(70, Math.min(100, sensor.value + variation));
-                break;
-              case 'fuel':
-                newValue = Math.max(0, Math.min(100, sensor.value + variation * 0.1));
-                break;
-              case 'speed':
-                newValue = Math.max(0, Math.min(20, sensor.value + variation * 0.5));
-                break;
-              case 'power':
-                newValue = Math.max(0, Math.min(2000, sensor.value + variation * 50));
-                break;
-              case 'heading':
-                newValue = (sensor.value + variation * 2 + 360) % 360;
-                break;
+            case "temperature":
+              newValue = Math.max(70, Math.min(100, sensor.value + variation));
+              break;
+            case "fuel":
+              newValue = Math.max(0, Math.min(100, sensor.value + variation * 0.1));
+              break;
+            case "speed":
+              newValue = Math.max(0, Math.min(20, sensor.value + variation * 0.5));
+              break;
+            case "power":
+              newValue = Math.max(0, Math.min(2000, sensor.value + variation * 50));
+              break;
+            case "heading":
+              newValue = (sensor.value + variation * 2 + 360) % 360;
+              break;
             }
             
             // Determinar novo status baseado no valor
-            let newStatus: SensorData['status'] = 'normal';
-            if (sensor.type === 'fuel' && newValue < 20) {
-              newStatus = 'critical';
-            } else if (sensor.type === 'fuel' && newValue < 30) {
-              newStatus = 'warning';
-            } else if (sensor.type === 'temperature' && (newValue > 95 || newValue < 70)) {
-              newStatus = 'critical';
-            } else if (sensor.type === 'temperature' && newValue > 90) {
-              newStatus = 'warning';
+            let newStatus: SensorData["status"] = "normal";
+            if (sensor.type === "fuel" && newValue < 20) {
+              newStatus = "critical";
+            } else if (sensor.type === "fuel" && newValue < 30) {
+              newStatus = "warning";
+            } else if (sensor.type === "temperature" && (newValue > 95 || newValue < 70)) {
+              newStatus = "critical";
+            } else if (sensor.type === "temperature" && newValue > 90) {
+              newStatus = "warning";
             } else {
-              newStatus = 'normal';
+              newStatus = "normal";
             }
             
             return {
@@ -256,7 +256,7 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
 
   const onlineVessels = vessels.filter(v => v.isOnline).length;
   const criticalAlerts = vessels.reduce((count, vessel) => 
-    count + vessel.sensors.filter(s => s.status === 'critical').length, 0
+    count + vessel.sensors.filter(s => s.status === "critical").length, 0
   );
 
   return (
@@ -289,7 +289,7 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
               <p className="text-sm text-muted-foreground">Sensores Ativos</p>
               <p className="text-2xl font-bold text-primary">
                 {vessels.reduce((count, vessel) => 
-                  count + vessel.sensors.filter(s => s.status !== 'offline').length, 0
+                  count + vessel.sensors.filter(s => s.status !== "offline").length, 0
                 )}
               </p>
             </div>
@@ -348,7 +348,7 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
                         : "bg-danger/10 text-danger border-danger/20"
                     )}
                   >
-                    {vessel.isOnline ? 'Online' : 'Offline'}
+                    {vessel.isOnline ? "Online" : "Offline"}
                   </Badge>
                 </div>
               </div>
@@ -388,10 +388,10 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
                             <div 
                               className={cn(
                                 "h-1.5 rounded-full transition-all duration-300",
-                                sensor.status === 'normal' && "bg-success",
-                                sensor.status === 'warning' && "bg-warning",
-                                sensor.status === 'critical' && "bg-danger",
-                                sensor.status === 'offline' && "bg-muted-foreground"
+                                sensor.status === "normal" && "bg-success",
+                                sensor.status === "warning" && "bg-warning",
+                                sensor.status === "critical" && "bg-danger",
+                                sensor.status === "offline" && "bg-muted-foreground"
                               )}
                               style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
                             />

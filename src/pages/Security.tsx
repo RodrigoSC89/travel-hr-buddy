@@ -1,8 +1,8 @@
-import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import { CompleteSecurity } from '@/components/security/complete-security';
-import { Shield } from 'lucide-react';
+import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import { CompleteSecurity } from "@/components/security/complete-security";
+import { Shield } from "lucide-react";
 
 
 const Security = () => {

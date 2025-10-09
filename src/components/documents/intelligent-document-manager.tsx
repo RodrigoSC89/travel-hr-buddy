@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useRef } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Dialog, 
   DialogContent, 
@@ -13,13 +13,13 @@ import {
   DialogHeader, 
   DialogTitle,
   DialogTrigger 
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import { 
   FileText, 
   Upload, 
@@ -48,8 +48,8 @@ import {
   List,
   SortAsc,
   Calendar
-} from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface Document {
   id: string;
@@ -58,7 +58,7 @@ interface Document {
   size: string;
   lastModified: Date;
   author: string;
-  status: 'processing' | 'completed' | 'error' | 'pending';
+  status: "processing" | "completed" | "error" | "pending";
   category: string;
   tags: string[];
   favorite: boolean;
@@ -73,7 +73,7 @@ interface Document {
 interface AIAnalysis {
   summary: string;
   keyPoints: string[];
-  sentiment: 'positive' | 'neutral' | 'negative';
+  sentiment: "positive" | "neutral" | "negative";
   topics: string[];
   confidence: number;
 }
@@ -81,107 +81,107 @@ interface AIAnalysis {
 const IntelligentDocumentManager = () => {
   const [documents, setDocuments] = useState<Document[]>([
     {
-      id: '1',
-      name: 'Contrato_Fornecedor_2024.pdf',
-      type: 'PDF',
-      size: '2.4 MB',
+      id: "1",
+      name: "Contrato_Fornecedor_2024.pdf",
+      type: "PDF",
+      size: "2.4 MB",
       lastModified: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      author: 'João Silva',
-      status: 'completed',
-      category: 'Contratos',
-      tags: ['contrato', 'fornecedor', '2024'],
+      author: "João Silva",
+      status: "completed",
+      category: "Contratos",
+      tags: ["contrato", "fornecedor", "2024"],
       favorite: true,
-      aiSummary: 'Contrato de fornecimento de materiais com prazo de 12 meses...',
+      aiSummary: "Contrato de fornecimento de materiais com prazo de 12 meses...",
       confidence: 95,
       version: 1,
-      permissions: ['read', 'write', 'share']
+      permissions: ["read", "write", "share"]
     },
     {
-      id: '2',
-      name: 'Relatório_Vendas_Q1.xlsx',
-      type: 'Excel',
-      size: '1.8 MB',
+      id: "2",
+      name: "Relatório_Vendas_Q1.xlsx",
+      type: "Excel",
+      size: "1.8 MB",
       lastModified: new Date(Date.now() - 5 * 60 * 60 * 1000),
-      author: 'Maria Santos',
-      status: 'processing',
-      category: 'Relatórios',
-      tags: ['vendas', 'Q1', 'análise'],
+      author: "Maria Santos",
+      status: "processing",
+      category: "Relatórios",
+      tags: ["vendas", "Q1", "análise"],
       favorite: false,
       confidence: 87,
       version: 2,
-      permissions: ['read', 'write']
+      permissions: ["read", "write"]
     },
     {
-      id: '3',
-      name: 'Política_Segurança.docx',
-      type: 'Word',
-      size: '856 KB',
+      id: "3",
+      name: "Política_Segurança.docx",
+      type: "Word",
+      size: "856 KB",
       lastModified: new Date(Date.now() - 8 * 60 * 60 * 1000),
-      author: 'Carlos Tech',
-      status: 'completed',
-      category: 'Políticas',
-      tags: ['segurança', 'política', 'TI'],
+      author: "Carlos Tech",
+      status: "completed",
+      category: "Políticas",
+      tags: ["segurança", "política", "TI"],
       favorite: false,
-      aiSummary: 'Documento define diretrizes de segurança da informação...',
+      aiSummary: "Documento define diretrizes de segurança da informação...",
       confidence: 92,
       version: 3,
-      permissions: ['read']
+      permissions: ["read"]
     }
   ]);
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [sortBy, setSortBy] = useState('lastModified');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [sortBy, setSortBy] = useState("lastModified");
   const [showUploadDialog, setShowUploadDialog] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const categories = ['all', 'Contratos', 'Relatórios', 'Políticas', 'Financeiro', 'RH'];
+  const categories = ["all", "Contratos", "Relatórios", "Políticas", "Financeiro", "RH"];
 
   const filteredDocuments = documents.filter(doc => {
     const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || doc.category === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || doc.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'processing':
-        return <Zap className="w-4 h-4 text-blue-500 animate-pulse" />;
-      case 'error':
-        return <FileX className="w-4 h-4 text-red-500" />;
-      default:
-        return <AlertCircle className="w-4 h-4 text-yellow-500" />;
+    case "completed":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "processing":
+      return <Zap className="w-4 h-4 text-blue-500 animate-pulse" />;
+    case "error":
+      return <FileX className="w-4 h-4 text-red-500" />;
+    default:
+      return <AlertCircle className="w-4 h-4 text-yellow-500" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'processing':
-        return 'bg-blue-100 text-blue-800';
-      case 'error':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-yellow-100 text-yellow-800';
+    case "completed":
+      return "bg-green-100 text-green-800";
+    case "processing":
+      return "bg-blue-100 text-blue-800";
+    case "error":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-yellow-100 text-yellow-800";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type.toLowerCase()) {
-      case 'pdf':
-        return <FileText className="w-8 h-8 text-red-500" />;
-      case 'excel':
-        return <FileText className="w-8 h-8 text-green-500" />;
-      case 'word':
-        return <FileText className="w-8 h-8 text-blue-500" />;
-      default:
-        return <FileText className="w-8 h-8 text-muted-foreground" />;
+    case "pdf":
+      return <FileText className="w-8 h-8 text-red-500" />;
+    case "excel":
+      return <FileText className="w-8 h-8 text-green-500" />;
+    case "word":
+      return <FileText className="w-8 h-8 text-blue-500" />;
+    default:
+      return <FileText className="w-8 h-8 text-muted-foreground" />;
     }
   };
 
@@ -211,17 +211,17 @@ const IntelligentDocumentManager = () => {
           const newDoc: Document = {
             id: (documents.length + 1).toString(),
             name: files[0].name,
-            type: files[0].name.split('.').pop()?.toUpperCase() || 'Unknown',
+            type: files[0].name.split(".").pop()?.toUpperCase() || "Unknown",
             size: `${(files[0].size / (1024 * 1024)).toFixed(1)} MB`,
             lastModified: new Date(),
-            author: 'Usuário Atual',
-            status: 'processing',
-            category: 'Sem categoria',
+            author: "Usuário Atual",
+            status: "processing",
+            category: "Sem categoria",
             tags: [],
             favorite: false,
             confidence: 0,
             version: 1,
-            permissions: ['read', 'write', 'share']
+            permissions: ["read", "write", "share"]
           };
           
           setDocuments(prev => [newDoc, ...prev]);
@@ -246,7 +246,7 @@ const IntelligentDocumentManager = () => {
 
   const analyzeDocument = (id: string) => {
     setDocuments(prev => prev.map(doc => 
-      doc.id === id ? { ...doc, status: 'processing' } : doc
+      doc.id === id ? { ...doc, status: "processing" } : doc
     ));
     
     // Simulate AI analysis
@@ -254,8 +254,8 @@ const IntelligentDocumentManager = () => {
       setDocuments(prev => prev.map(doc => 
         doc.id === id ? { 
           ...doc, 
-          status: 'completed',
-          aiSummary: 'Análise IA concluída. Documento contém informações importantes sobre...',
+          status: "completed",
+          aiSummary: "Análise IA concluída. Documento contém informações importantes sobre...",
           confidence: Math.floor(Math.random() * 20) + 80
         } : doc
       ));
@@ -324,7 +324,7 @@ const IntelligentDocumentManager = () => {
         >
           {categories.map(category => (
             <option key={category} value={category}>
-              {category === 'all' ? 'Todas as categorias' : category}
+              {category === "all" ? "Todas as categorias" : category}
             </option>
           ))}
         </select>
@@ -337,13 +337,13 @@ const IntelligentDocumentManager = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => setSortBy('lastModified')}>
+            <DropdownMenuItem onClick={() => setSortBy("lastModified")}>
               Última modificação
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy('name')}>
+            <DropdownMenuItem onClick={() => setSortBy("name")}>
               Nome
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy('size')}>
+            <DropdownMenuItem onClick={() => setSortBy("size")}>
               Tamanho
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -351,16 +351,16 @@ const IntelligentDocumentManager = () => {
         
         <div className="flex items-center gap-2">
           <Button
-            variant={viewMode === 'grid' ? 'default' : 'outline'}
+            variant={viewMode === "grid" ? "default" : "outline"}
             size="sm"
-            onClick={() => setViewMode('grid')}
+            onClick={() => setViewMode("grid")}
           >
             <Grid className="w-4 h-4" />
           </Button>
           <Button
-            variant={viewMode === 'list' ? 'default' : 'outline'}
+            variant={viewMode === "list" ? "default" : "outline"}
             size="sm"
-            onClick={() => setViewMode('list')}
+            onClick={() => setViewMode("list")}
           >
             <List className="w-4 h-4" />
           </Button>
@@ -386,7 +386,7 @@ const IntelligentDocumentManager = () => {
               <span className="text-sm font-medium">Processando</span>
             </div>
             <div className="text-2xl font-bold">
-              {documents.filter(d => d.status === 'processing').length}
+              {documents.filter(d => d.status === "processing").length}
             </div>
           </CardContent>
         </Card>
@@ -417,13 +417,13 @@ const IntelligentDocumentManager = () => {
       </div>
 
       {/* Documents Grid/List */}
-      <div className={viewMode === 'grid' ? 
-        'grid gap-4 md:grid-cols-2 lg:grid-cols-3' : 
-        'space-y-2'
+      <div className={viewMode === "grid" ? 
+        "grid gap-4 md:grid-cols-2 lg:grid-cols-3" : 
+        "space-y-2"
       }>
         {filteredDocuments.map((document) => (
           <Card key={document.id} className="border-border hover:shadow-md transition-shadow">
-            {viewMode === 'grid' ? (
+            {viewMode === "grid" ? (
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">

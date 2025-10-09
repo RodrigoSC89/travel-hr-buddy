@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Keyboard, Mouse, Check, Info } from 'lucide-react';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Keyboard, Mouse, Check, Info } from "lucide-react";
 
 /**
  * Keyboard Accessibility Demo Component
@@ -17,7 +17,7 @@ import { Keyboard, Mouse, Check, Info } from 'lucide-react';
  * implemented across the application.
  */
 export const KeyboardAccessibilityDemo: React.FC = () => {
-  const [selectedAction, setSelectedAction] = useState<string>('');
+  const [selectedAction, setSelectedAction] = useState<string>("");
 
   return (
     <div className="container mx-auto p-6 space-y-8">
@@ -97,7 +97,7 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel (Esc)</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => setSelectedAction('Confirmed!')}>
+                  <AlertDialogAction onClick={() => setSelectedAction("Confirmed!")}>
                     Continue (Enter)
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -124,17 +124,17 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setSelectedAction('Profile selected')}>
+                <DropdownMenuItem onSelect={() => setSelectedAction("Profile selected")}>
                   Profile (Arrow + Enter)
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setSelectedAction('Billing selected')}>
+                <DropdownMenuItem onSelect={() => setSelectedAction("Billing selected")}>
                   Billing
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setSelectedAction('Team selected')}>
+                <DropdownMenuItem onSelect={() => setSelectedAction("Team selected")}>
                   Team
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setSelectedAction('Logout selected')}>
+                <DropdownMenuItem onSelect={() => setSelectedAction("Logout selected")}>
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -212,7 +212,7 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
                 <SelectItem value="option4">Option 4</SelectItem>
               </SelectContent>
             </Select>
-            {selectedAction.startsWith('Selected') && (
+            {selectedAction.startsWith("Selected") && (
               <Badge variant="default" className="ml-2">
                 <Check className="h-3 w-3 mr-1" />
                 {selectedAction}

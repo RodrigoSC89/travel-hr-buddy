@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Activity,
   Cpu,
@@ -18,7 +18,7 @@ import {
   Zap,
   BarChart3,
   RefreshCw
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SystemMetrics {
   cpu: number;
@@ -34,7 +34,7 @@ interface SystemMetrics {
 
 interface SystemAlert {
   id: string;
-  type: 'warning' | 'error' | 'info';
+  type: "warning" | "error" | "info";
   message: string;
   timestamp: Date;
 }
@@ -59,7 +59,7 @@ export const SystemHealthMonitor: React.FC = () => {
         database: Math.floor(Math.random() * 100),
         activeUsers: Math.floor(Math.random() * 150) + 50,
         responseTime: Math.floor(Math.random() * 500) + 100,
-        uptime: '15d 8h 42m',
+        uptime: "15d 8h 42m",
         lastUpdate: new Date()
       };
 
@@ -71,7 +71,7 @@ export const SystemHealthMonitor: React.FC = () => {
       if (newMetrics.cpu > 80) {
         newAlerts.push({
           id: Date.now().toString(),
-          type: 'warning',
+          type: "warning",
           message: `Alto uso de CPU: ${newMetrics.cpu}%`,
           timestamp: new Date()
         });
@@ -80,7 +80,7 @@ export const SystemHealthMonitor: React.FC = () => {
       if (newMetrics.memory > 85) {
         newAlerts.push({
           id: (Date.now() + 1).toString(),
-          type: 'error',
+          type: "error",
           message: `Memória crítica: ${newMetrics.memory}%`,
           timestamp: new Date()
         });
@@ -89,7 +89,7 @@ export const SystemHealthMonitor: React.FC = () => {
       if (newMetrics.responseTime > 400) {
         newAlerts.push({
           id: (Date.now() + 2).toString(),
-          type: 'warning',
+          type: "warning",
           message: `Tempo de resposta alto: ${newMetrics.responseTime}ms`,
           timestamp: new Date()
         });
@@ -122,22 +122,22 @@ export const SystemHealthMonitor: React.FC = () => {
   }, []);
 
   const getStatusColor = (value: number) => {
-    if (value < 50) return 'text-green-600';
-    if (value < 80) return 'text-yellow-600';
-    return 'text-red-600';
+    if (value < 50) return "text-green-600";
+    if (value < 80) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getProgressColor = (value: number) => {
-    if (value < 50) return 'bg-green-500';
-    if (value < 80) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (value < 50) return "bg-green-500";
+    if (value < 80) return "bg-yellow-500";
+    return "bg-red-500";
   };
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case 'error': return <AlertTriangle className="w-4 h-4 text-red-500" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      default: return <CheckCircle className="w-4 h-4 text-blue-500" />;
+    case "error": return <AlertTriangle className="w-4 h-4 text-red-500" />;
+    case "warning": return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+    default: return <CheckCircle className="w-4 h-4 text-blue-500" />;
     }
   };
 
@@ -178,10 +178,10 @@ export const SystemHealthMonitor: React.FC = () => {
             Online
           </Badge>
           <span className="text-sm text-muted-foreground">
-            Atualizado: {metrics.lastUpdate.toLocaleTimeString('pt-BR')}
+            Atualizado: {metrics.lastUpdate.toLocaleTimeString("pt-BR")}
           </span>
           <Button onClick={loadSystemMetrics} disabled={isLoading} variant="outline">
-            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
         </div>
@@ -203,7 +203,7 @@ export const SystemHealthMonitor: React.FC = () => {
             <Progress 
               value={metrics.cpu} 
               className="mt-2"
-              style={{ '--progress-foreground': getProgressColor(metrics.cpu) } as any}
+              style={{ "--progress-foreground": getProgressColor(metrics.cpu) } as any}
             />
             <p className="text-xs text-muted-foreground mt-1">
               Processamento
@@ -225,7 +225,7 @@ export const SystemHealthMonitor: React.FC = () => {
             <Progress 
               value={metrics.memory} 
               className="mt-2"
-              style={{ '--progress-foreground': getProgressColor(metrics.memory) } as any}
+              style={{ "--progress-foreground": getProgressColor(metrics.memory) } as any}
             />
             <p className="text-xs text-muted-foreground mt-1">
               RAM em uso
@@ -247,7 +247,7 @@ export const SystemHealthMonitor: React.FC = () => {
             <Progress 
               value={metrics.database} 
               className="mt-2"
-              style={{ '--progress-foreground': getProgressColor(metrics.database) } as any}
+              style={{ "--progress-foreground": getProgressColor(metrics.database) } as any}
             />
             <p className="text-xs text-muted-foreground mt-1">
               Conexões ativas
@@ -269,7 +269,7 @@ export const SystemHealthMonitor: React.FC = () => {
             <Progress 
               value={metrics.network} 
               className="mt-2"
-              style={{ '--progress-foreground': getProgressColor(metrics.network) } as any}
+              style={{ "--progress-foreground": getProgressColor(metrics.network) } as any}
             />
             <p className="text-xs text-muted-foreground mt-1">
               Banda utilizada
@@ -305,7 +305,7 @@ export const SystemHealthMonitor: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${metrics.responseTime > 400 ? 'text-red-600' : metrics.responseTime > 200 ? 'text-yellow-600' : 'text-green-600'}`}>
+            <div className={`text-2xl font-bold ${metrics.responseTime > 400 ? "text-red-600" : metrics.responseTime > 200 ? "text-yellow-600" : "text-green-600"}`}>
               {metrics.responseTime}ms
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -353,7 +353,7 @@ export const SystemHealthMonitor: React.FC = () => {
                   <div className="flex-1">
                     <p className="text-sm font-medium">{alert.message}</p>
                     <p className="text-xs text-muted-foreground">
-                      {alert.timestamp.toLocaleTimeString('pt-BR')}
+                      {alert.timestamp.toLocaleTimeString("pt-BR")}
                     </p>
                   </div>
                   <Button variant="ghost" size="sm">

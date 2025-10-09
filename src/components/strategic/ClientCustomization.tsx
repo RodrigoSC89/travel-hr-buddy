@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Palette, 
   Building, 
@@ -19,13 +19,13 @@ import {
   Upload,
   Eye,
   Save
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface CustomField {
   id: string;
   name: string;
-  type: 'text' | 'number' | 'date' | 'select' | 'boolean';
+  type: "text" | "number" | "date" | "select" | "boolean";
   required: boolean;
   options?: string[];
   module: string;
@@ -45,100 +45,100 @@ interface Organization {
   name: string;
   subdomain: string;
   users: number;
-  plan: 'basic' | 'premium' | 'enterprise';
+  plan: "basic" | "premium" | "enterprise";
   customFields: number;
   theme: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
 }
 
 export const ClientCustomization = () => {
-  const [selectedTheme, setSelectedTheme] = useState('default');
+  const [selectedTheme, setSelectedTheme] = useState("default");
   const [customFields, setCustomFields] = useState<CustomField[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const { toast } = useToast();
 
   const themes: Theme[] = [
     {
-      id: 'default',
-      name: 'Nautilus Padrão',
-      primaryColor: '#2563eb',
-      secondaryColor: '#0ea5e9'
+      id: "default",
+      name: "Nautilus Padrão",
+      primaryColor: "#2563eb",
+      secondaryColor: "#0ea5e9"
     },
     {
-      id: 'corporate',
-      name: 'Corporativo',
-      primaryColor: '#1f2937',
-      secondaryColor: '#374151'
+      id: "corporate",
+      name: "Corporativo",
+      primaryColor: "#1f2937",
+      secondaryColor: "#374151"
     },
     {
-      id: 'ocean',
-      name: 'Oceano Profundo',
-      primaryColor: '#0c4a6e',
-      secondaryColor: '#0369a1'
+      id: "ocean",
+      name: "Oceano Profundo",
+      primaryColor: "#0c4a6e",
+      secondaryColor: "#0369a1"
     },
     {
-      id: 'sunset',
-      name: 'Pôr do Sol',
-      primaryColor: '#dc2626',
-      secondaryColor: '#ea580c'
+      id: "sunset",
+      name: "Pôr do Sol",
+      primaryColor: "#dc2626",
+      secondaryColor: "#ea580c"
     }
   ];
 
   const mockOrganizations: Organization[] = [
     {
-      id: '1',
-      name: 'Petrobras Transporte S.A.',
-      subdomain: 'petrobras',
+      id: "1",
+      name: "Petrobras Transporte S.A.",
+      subdomain: "petrobras",
       users: 450,
-      plan: 'enterprise',
+      plan: "enterprise",
       customFields: 12,
-      theme: 'corporate',
-      status: 'active'
+      theme: "corporate",
+      status: "active"
     },
     {
-      id: '2',
-      name: 'Log-In Logística Intermodal',
-      subdomain: 'login',
+      id: "2",
+      name: "Log-In Logística Intermodal",
+      subdomain: "login",
       users: 180,
-      plan: 'premium',
+      plan: "premium",
       customFields: 8,
-      theme: 'ocean',
-      status: 'active'
+      theme: "ocean",
+      status: "active"
     },
     {
-      id: '3',
-      name: 'Norsul Navegação',
-      subdomain: 'norsul',
+      id: "3",
+      name: "Norsul Navegação",
+      subdomain: "norsul",
       users: 95,
-      plan: 'basic',
+      plan: "basic",
       customFields: 3,
-      theme: 'default',
-      status: 'active'
+      theme: "default",
+      status: "active"
     }
   ];
 
   const defaultCustomFields: CustomField[] = [
     {
-      id: '1',
-      name: 'Número do DPC',
-      type: 'text',
+      id: "1",
+      name: "Número do DPC",
+      type: "text",
       required: true,
-      module: 'crew'
+      module: "crew"
     },
     {
-      id: '2',
-      name: 'Categoria de Navegação',
-      type: 'select',
+      id: "2",
+      name: "Categoria de Navegação",
+      type: "select",
       required: true,
-      options: ['Cabotagem', 'Longo Curso', 'Interior', 'Apoio Marítimo'],
-      module: 'vessels'
+      options: ["Cabotagem", "Longo Curso", "Interior", "Apoio Marítimo"],
+      module: "vessels"
     },
     {
-      id: '3',
-      name: 'Centro de Custo',
-      type: 'text',
+      id: "3",
+      name: "Centro de Custo",
+      type: "text",
       required: false,
-      module: 'voyages'
+      module: "voyages"
     }
   ];
 
@@ -150,10 +150,10 @@ export const ClientCustomization = () => {
   const addCustomField = () => {
     const newField: CustomField = {
       id: `field_${Date.now()}`,
-      name: 'Novo Campo',
-      type: 'text',
+      name: "Novo Campo",
+      type: "text",
       required: false,
-      module: 'crew'
+      module: "crew"
     };
     setCustomFields([...customFields, newField]);
   };
@@ -185,7 +185,7 @@ export const ClientCustomization = () => {
         id: `clone_${Date.now()}`,
         name: `${org.name} (Cópia)`,
         subdomain: `${org.subdomain}-copy`,
-        status: 'inactive'
+        status: "inactive"
       };
       setOrganizations([...organizations, newOrg]);
       toast({
@@ -197,17 +197,17 @@ export const ClientCustomization = () => {
 
   const getPlanColor = (plan: string) => {
     switch (plan) {
-      case 'enterprise': return 'bg-primary text-primary-foreground';
-      case 'premium': return 'bg-warning text-warning-foreground';
-      case 'basic': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "enterprise": return "bg-primary text-primary-foreground";
+    case "premium": return "bg-warning text-warning-foreground";
+    case "basic": return "bg-info text-info-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusColor = (status: string) => {
-    return status === 'active' 
-      ? 'bg-success text-success-foreground' 
-      : 'bg-muted text-muted-foreground';
+    return status === "active" 
+      ? "bg-success text-success-foreground" 
+      : "bg-muted text-muted-foreground";
   };
 
   return (
@@ -255,8 +255,8 @@ export const ClientCustomization = () => {
                         key={theme.id}
                         className={`border-2 rounded-lg p-3 cursor-pointer transition-all ${
                           selectedTheme === theme.id 
-                            ? 'border-primary bg-primary/5' 
-                            : 'border-muted hover:border-border'
+                            ? "border-primary bg-primary/5" 
+                            : "border-muted hover:border-border"
                         }`}
                         onClick={() => setSelectedTheme(theme.id)}
                       >
@@ -428,14 +428,14 @@ export const ClientCustomization = () => {
                       </div>
                     </div>
                     
-                    {field.type === 'select' && (
+                    {field.type === "select" && (
                       <div className="mt-3">
                         <Label>Opções (separadas por vírgula)</Label>
                         <Input 
                           placeholder="Opção 1, Opção 2, Opção 3"
-                          value={field.options?.join(', ') || ''}
+                          value={field.options?.join(", ") || ""}
                           onChange={(e) => updateCustomField(field.id, { 
-                            options: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
+                            options: e.target.value.split(",").map(s => s.trim()).filter(Boolean)
                           })}
                           className="mt-1"
                         />
@@ -540,7 +540,7 @@ export const ClientCustomization = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {['Dashboard', 'RH Marítimo', 'Logística', 'Reservas', 'Relatórios'].map((module) => (
+                    {["Dashboard", "RH Marítimo", "Logística", "Reservas", "Relatórios"].map((module) => (
                       <tr key={module} className="border-b">
                         <td className="p-2 font-medium">{module}</td>
                         <td className="text-center p-2">
@@ -550,14 +550,14 @@ export const ClientCustomization = () => {
                           <Check className="h-4 w-4 text-success mx-auto" />
                         </td>
                         <td className="text-center p-2">
-                          {module !== 'Relatórios' ? (
+                          {module !== "Relatórios" ? (
                             <Check className="h-4 w-4 text-warning mx-auto" />
                           ) : (
                             <span className="text-muted-foreground">—</span>
                           )}
                         </td>
                         <td className="text-center p-2">
-                          {module === 'Dashboard' ? (
+                          {module === "Dashboard" ? (
                             <Check className="h-4 w-4 text-info mx-auto" />
                           ) : (
                             <span className="text-muted-foreground">—</span>
@@ -585,19 +585,19 @@ export const ClientCustomization = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[
                   {
-                    name: 'Armador Padrão',
-                    description: 'Configuração para empresas de navegação tradicionais',
-                    modules: ['Dashboard', 'RH', 'Logística', 'Viagens']
+                    name: "Armador Padrão",
+                    description: "Configuração para empresas de navegação tradicionais",
+                    modules: ["Dashboard", "RH", "Logística", "Viagens"]
                   },
                   {
-                    name: 'Offshore Premium',
-                    description: 'Template especializado para operações offshore',
-                    modules: ['Dashboard', 'RH', 'Logística', 'Segurança', 'Compliance']
+                    name: "Offshore Premium",
+                    description: "Template especializado para operações offshore",
+                    modules: ["Dashboard", "RH", "Logística", "Segurança", "Compliance"]
                   },
                   {
-                    name: 'Turismo Náutico',
-                    description: 'Configuração para turismo e embarcações de recreio',
-                    modules: ['Dashboard', 'Reservas', 'Clientes', 'Rotas']
+                    name: "Turismo Náutico",
+                    description: "Configuração para turismo e embarcações de recreio",
+                    modules: ["Dashboard", "Reservas", "Clientes", "Rotas"]
                   }
                 ].map((template, index) => (
                   <div key={index} className="border rounded-lg p-4 hover-lift">

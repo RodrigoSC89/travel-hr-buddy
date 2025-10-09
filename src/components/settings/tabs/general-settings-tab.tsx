@@ -1,11 +1,11 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { 
   Building2, 
   Globe, 
@@ -14,7 +14,7 @@ import {
   Calendar,
   TestTube,
   InfoIcon
-} from 'lucide-react';
+} from "lucide-react";
 
 interface GeneralSettings {
   companyName: string;
@@ -36,31 +36,31 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
   testMode
 }) => {
   const timezones = [
-    { value: 'America/Sao_Paulo', label: 'São Paulo (UTC-3)' },
-    { value: 'America/New_York', label: 'Nova York (UTC-5)' },
-    { value: 'Europe/London', label: 'Londres (UTC+0)' },
-    { value: 'Asia/Tokyo', label: 'Tóquio (UTC+9)' },
-    { value: 'Australia/Sydney', label: 'Sydney (UTC+10)' },
+    { value: "America/Sao_Paulo", label: "São Paulo (UTC-3)" },
+    { value: "America/New_York", label: "Nova York (UTC-5)" },
+    { value: "Europe/London", label: "Londres (UTC+0)" },
+    { value: "Asia/Tokyo", label: "Tóquio (UTC+9)" },
+    { value: "Australia/Sydney", label: "Sydney (UTC+10)" },
   ];
 
   const languages = [
-    { value: 'pt-BR', label: 'Português (Brasil)', flag: '🇧🇷' },
-    { value: 'en-US', label: 'English (United States)', flag: '🇺🇸' },
-    { value: 'es-ES', label: 'Español (España)', flag: '🇪🇸' },
-    { value: 'fr-FR', label: 'Français (France)', flag: '🇫🇷' },
+    { value: "pt-BR", label: "Português (Brasil)", flag: "🇧🇷" },
+    { value: "en-US", label: "English (United States)", flag: "🇺🇸" },
+    { value: "es-ES", label: "Español (España)", flag: "🇪🇸" },
+    { value: "fr-FR", label: "Français (France)", flag: "🇫🇷" },
   ];
 
   const themes = [
-    { value: 'system', label: 'Automático (Sistema)', icon: '🔄' },
-    { value: 'light', label: 'Modo Claro', icon: '☀️' },
-    { value: 'dark', label: 'Modo Escuro', icon: '🌙' },
+    { value: "system", label: "Automático (Sistema)", icon: "🔄" },
+    { value: "light", label: "Modo Claro", icon: "☀️" },
+    { value: "dark", label: "Modo Escuro", icon: "🌙" },
   ];
 
   const dateFormats = [
-    { value: 'DD/MM/YYYY HH:mm', label: '31/12/2024 14:30' },
-    { value: 'MM/DD/YYYY HH:mm', label: '12/31/2024 2:30 PM' },
-    { value: 'YYYY-MM-DD HH:mm', label: '2024-12-31 14:30' },
-    { value: 'DD.MM.YYYY HH:mm', label: '31.12.2024 14:30' },
+    { value: "DD/MM/YYYY HH:mm", label: "31/12/2024 14:30" },
+    { value: "MM/DD/YYYY HH:mm", label: "12/31/2024 2:30 PM" },
+    { value: "YYYY-MM-DD HH:mm", label: "2024-12-31 14:30" },
+    { value: "DD.MM.YYYY HH:mm", label: "31.12.2024 14:30" },
   ];
 
   return (

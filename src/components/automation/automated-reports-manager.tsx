@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { 
   FileText, 
   Mail, 
@@ -23,9 +23,9 @@ import {
   BarChart3,
   CheckCircle,
   AlertCircle
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AutomatedReport {
   id: string;
@@ -35,7 +35,7 @@ interface AutomatedReport {
   schedule_cron: string;
   recipients: string[];
   filters: any;
-  format: 'pdf' | 'excel' | 'html';
+  format: "pdf" | "excel" | "html";
   is_active: boolean;
   last_generated_at?: string;
   next_scheduled_at?: string;
@@ -44,49 +44,49 @@ interface AutomatedReport {
 
 const reportTypes = {
   weekly_summary: {
-    name: 'Resumo Semanal',
-    description: 'Resumo das principais atividades da semana',
+    name: "Resumo Semanal",
+    description: "Resumo das principais atividades da semana",
     icon: Calendar,
-    defaultSchedule: '0 8 * * MON'
+    defaultSchedule: "0 8 * * MON"
   },
   monthly_analysis: {
-    name: 'Análise Mensal',
-    description: 'Relatório completo de performance mensal',
+    name: "Análise Mensal",
+    description: "Relatório completo de performance mensal",
     icon: BarChart3,
-    defaultSchedule: '0 9 1 * *'
+    defaultSchedule: "0 9 1 * *"
   },
   compliance_check: {
-    name: 'Verificação de Compliance',
-    description: 'Status de conformidade e certificações',
+    name: "Verificação de Compliance",
+    description: "Status de conformidade e certificações",
     icon: CheckCircle,
-    defaultSchedule: '0 10 * * *'
+    defaultSchedule: "0 10 * * *"
   },
   crew_report: {
-    name: 'Relatório de Tripulação',
-    description: 'Escalas, certificações e performance da tripulação',
+    name: "Relatório de Tripulação",
+    description: "Escalas, certificações e performance da tripulação",
     icon: Users,
-    defaultSchedule: '0 7 * * FRI'
+    defaultSchedule: "0 7 * * FRI"
   },
   financial_summary: {
-    name: 'Resumo Financeiro',
-    description: 'Custos operacionais e indicadores financeiros',
+    name: "Resumo Financeiro",
+    description: "Custos operacionais e indicadores financeiros",
     icon: BarChart3,
-    defaultSchedule: '0 9 * * MON'
+    defaultSchedule: "0 9 * * MON"
   },
   maintenance_report: {
-    name: 'Relatório de Manutenção',
-    description: 'Status de manutenções e programações',
+    name: "Relatório de Manutenção",
+    description: "Status de manutenções e programações",
     icon: Settings,
-    defaultSchedule: '0 8 * * *'
+    defaultSchedule: "0 8 * * *"
   }
 };
 
 const cronPatterns = {
-  'daily': { label: 'Diário (9:00)', cron: '0 9 * * *' },
-  'weekly_mon': { label: 'Semanal (Segunda 8:00)', cron: '0 8 * * MON' },
-  'weekly_fri': { label: 'Semanal (Sexta 17:00)', cron: '0 17 * * FRI' },
-  'monthly': { label: 'Mensal (Dia 1 às 9:00)', cron: '0 9 1 * *' },
-  'custom': { label: 'Personalizado', cron: '' }
+  "daily": { label: "Diário (9:00)", cron: "0 9 * * *" },
+  "weekly_mon": { label: "Semanal (Segunda 8:00)", cron: "0 8 * * MON" },
+  "weekly_fri": { label: "Semanal (Sexta 17:00)", cron: "0 17 * * FRI" },
+  "monthly": { label: "Mensal (Dia 1 às 9:00)", cron: "0 9 1 * *" },
+  "custom": { label: "Personalizado", cron: "" }
 };
 
 export const AutomatedReportsManager: React.FC = () => {
@@ -97,26 +97,26 @@ export const AutomatedReportsManager: React.FC = () => {
 
   // Form state
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    report_type: '',
-    schedule_cron: '0 9 * * *',
-    recipients: [''],
-    format: 'pdf' as const,
+    name: "",
+    description: "",
+    report_type: "",
+    schedule_cron: "0 9 * * *",
+    recipients: [""],
+    format: "pdf" as const,
     filters: {}
   });
 
   const loadReports = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from('automated_reports')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("automated_reports")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setReports(data as AutomatedReport[] || []);
     } catch (error) {
-      console.error('Erro ao carregar relatórios:', error);
+      console.error("Erro ao carregar relatórios:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os relatórios automáticos.",
@@ -136,10 +136,10 @@ export const AutomatedReportsManager: React.FC = () => {
       const { data: user } = await supabase.auth.getUser();
       
       const { error } = await supabase
-        .from('automated_reports')
+        .from("automated_reports")
         .insert({
           ...formData,
-          recipients: formData.recipients.filter(email => email.trim() !== ''),
+          recipients: formData.recipients.filter(email => email.trim() !== ""),
           created_by: user.user?.id,
           organization_id: user.user?.id // Temporário para demo
         });
@@ -155,7 +155,7 @@ export const AutomatedReportsManager: React.FC = () => {
         description: "Relatório automático configurado com sucesso.",
       });
     } catch (error) {
-      console.error('Erro ao criar relatório:', error);
+      console.error("Erro ao criar relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o relatório automático.",
@@ -167,9 +167,9 @@ export const AutomatedReportsManager: React.FC = () => {
   const toggleReport = async (report: AutomatedReport) => {
     try {
       const { error } = await supabase
-        .from('automated_reports')
+        .from("automated_reports")
         .update({ is_active: !report.is_active })
-        .eq('id', report.id);
+        .eq("id", report.id);
 
       if (error) throw error;
 
@@ -183,10 +183,10 @@ export const AutomatedReportsManager: React.FC = () => {
 
       toast({
         title: report.is_active ? "Relatório pausado" : "Relatório ativado",
-        description: `${report.name} foi ${report.is_active ? 'pausado' : 'ativado'}.`,
+        description: `${report.name} foi ${report.is_active ? "pausado" : "ativado"}.`,
       });
     } catch (error) {
-      console.error('Erro ao atualizar relatório:', error);
+      console.error("Erro ao atualizar relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o relatório.",
@@ -200,9 +200,9 @@ export const AutomatedReportsManager: React.FC = () => {
 
     try {
       const { error } = await supabase
-        .from('automated_reports')
+        .from("automated_reports")
         .delete()
-        .eq('id', report.id);
+        .eq("id", report.id);
 
       if (error) throw error;
 
@@ -212,7 +212,7 @@ export const AutomatedReportsManager: React.FC = () => {
         description: `${report.name} foi removido.`,
       });
     } catch (error) {
-      console.error('Erro ao excluir relatório:', error);
+      console.error("Erro ao excluir relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível excluir o relatório.",
@@ -233,7 +233,7 @@ export const AutomatedReportsManager: React.FC = () => {
       // Por exemplo, chamar uma edge function que gera o relatório
       
     } catch (error) {
-      console.error('Erro ao gerar relatório:', error);
+      console.error("Erro ao gerar relatório:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar o relatório.",
@@ -244,12 +244,12 @@ export const AutomatedReportsManager: React.FC = () => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      description: '',
-      report_type: '',
-      schedule_cron: '0 9 * * *',
-      recipients: [''],
-      format: 'pdf',
+      name: "",
+      description: "",
+      report_type: "",
+      schedule_cron: "0 9 * * *",
+      recipients: [""],
+      format: "pdf",
       filters: {}
     });
   };
@@ -257,7 +257,7 @@ export const AutomatedReportsManager: React.FC = () => {
   const addRecipient = () => {
     setFormData(prev => ({
       ...prev,
-      recipients: [...prev.recipients, '']
+      recipients: [...prev.recipients, ""]
     }));
   };
 
@@ -278,9 +278,9 @@ export const AutomatedReportsManager: React.FC = () => {
   const getReportTypeInfo = (type: string) => {
     return reportTypes[type as keyof typeof reportTypes] || {
       name: type,
-      description: 'Relatório personalizado',
+      description: "Relatório personalizado",
       icon: FileText,
-      defaultSchedule: '0 9 * * *'
+      defaultSchedule: "0 9 * * *"
     };
   };
 
@@ -386,9 +386,9 @@ export const AutomatedReportsManager: React.FC = () => {
                 <div className="space-y-2">
                   <Label htmlFor="schedule">Frequência</Label>
                   <Select 
-                    value={Object.entries(cronPatterns).find(([_, p]) => p.cron === formData.schedule_cron)?.[0] || 'custom'}
+                    value={Object.entries(cronPatterns).find(([_, p]) => p.cron === formData.schedule_cron)?.[0] || "custom"}
                     onValueChange={(value) => {
-                      if (value === 'custom') return;
+                      if (value === "custom") return;
                       setFormData(prev => ({ 
                         ...prev, 
                         schedule_cron: cronPatterns[value as keyof typeof cronPatterns].cron 
@@ -541,8 +541,8 @@ export const AutomatedReportsManager: React.FC = () => {
                       <TableCell>
                         <div className="text-sm">
                           {report.last_generated_at 
-                            ? new Date(report.last_generated_at).toLocaleString('pt-BR')
-                            : 'Nunca'
+                            ? new Date(report.last_generated_at).toLocaleString("pt-BR")
+                            : "Nunca"
                           }
                         </div>
                       </TableCell>

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import React, { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
   CreditCard, 
   Download, 
@@ -17,8 +17,8 @@ import {
   Users,
   Ship,
   Database
-} from 'lucide-react';
-import { useTenant } from '@/contexts/TenantContext';
+} from "lucide-react";
+import { useTenant } from "@/contexts/TenantContext";
 
 interface Invoice {
   id: string;
@@ -26,7 +26,7 @@ interface Invoice {
   date: string;
   due_date: string;
   amount: number;
-  status: 'paid' | 'pending' | 'overdue';
+  status: "paid" | "pending" | "overdue";
   download_url?: string;
 }
 
@@ -40,28 +40,28 @@ interface UsageMetric {
 
 const mockInvoices: Invoice[] = [
   {
-    id: '1',
-    number: 'INV-2024-001',
-    date: '2024-01-01',
-    due_date: '2024-01-15',
+    id: "1",
+    number: "INV-2024-001",
+    date: "2024-01-01",
+    due_date: "2024-01-15",
     amount: 299.00,
-    status: 'paid'
+    status: "paid"
   },
   {
-    id: '2',
-    number: 'INV-2024-002',
-    date: '2024-02-01',
-    due_date: '2024-02-15',
+    id: "2",
+    number: "INV-2024-002",
+    date: "2024-02-01",
+    due_date: "2024-02-15",
     amount: 299.00,
-    status: 'paid'
+    status: "paid"
   },
   {
-    id: '3',
-    number: 'INV-2024-003',
-    date: '2024-03-01',
-    due_date: '2024-03-15',
+    id: "3",
+    number: "INV-2024-003",
+    date: "2024-03-01",
+    due_date: "2024-03-15",
     amount: 299.00,
-    status: 'pending'
+    status: "pending"
   }
 ];
 
@@ -83,50 +83,50 @@ export const BillingManagement: React.FC = () => {
   
   const usageMetrics: UsageMetric[] = [
     {
-      name: 'Usuários',
+      name: "Usuários",
       current: tenantUsage?.active_users || 0,
       limit: currentTenant.max_users,
-      unit: 'usuários',
+      unit: "usuários",
       icon: Users
     },
     {
-      name: 'Embarcações',
+      name: "Embarcações",
       current: 3,
       limit: currentTenant.max_vessels,
-      unit: 'embarcações',
+      unit: "embarcações",
       icon: Ship
     },
     {
-      name: 'Armazenamento',
+      name: "Armazenamento",
       current: tenantUsage?.storage_used_gb || 0,
       limit: currentTenant.max_storage_gb,
-      unit: 'GB',
+      unit: "GB",
       icon: Database
     }
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'paid': return 'bg-green-100 text-green-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'overdue': return 'bg-red-100 text-red-800';
-      default: return 'bg-secondary text-secondary-foreground';
+    case "paid": return "bg-green-100 text-green-800";
+    case "pending": return "bg-yellow-100 text-yellow-800";
+    case "overdue": return "bg-red-100 text-red-800";
+    default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'paid': return 'Pago';
-      case 'pending': return 'Pendente';
-      case 'overdue': return 'Vencido';
-      default: return status;
+    case "paid": return "Pago";
+    case "pending": return "Pendente";
+    case "overdue": return "Vencido";
+    default: return status;
     }
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL"
     }).format(amount);
   };
 
@@ -135,9 +135,9 @@ export const BillingManagement: React.FC = () => {
   };
 
   const getUsageColor = (percentage: number) => {
-    if (percentage >= 90) return 'bg-red-500';
-    if (percentage >= 75) return 'bg-yellow-500';
-    return 'bg-green-500';
+    if (percentage >= 90) return "bg-red-500";
+    if (percentage >= 75) return "bg-yellow-500";
+    return "bg-green-500";
   };
 
   return (
@@ -259,8 +259,8 @@ export const BillingManagement: React.FC = () => {
                   {mockInvoices.map((invoice) => (
                     <TableRow key={invoice.id}>
                       <TableCell className="font-medium">{invoice.number}</TableCell>
-                      <TableCell>{new Date(invoice.date).toLocaleDateString('pt-BR')}</TableCell>
-                      <TableCell>{new Date(invoice.due_date).toLocaleDateString('pt-BR')}</TableCell>
+                      <TableCell>{new Date(invoice.date).toLocaleDateString("pt-BR")}</TableCell>
+                      <TableCell>{new Date(invoice.due_date).toLocaleDateString("pt-BR")}</TableCell>
                       <TableCell>{formatCurrency(invoice.amount)}</TableCell>
                       <TableCell>
                         <Badge className={getStatusColor(invoice.status)}>
@@ -359,7 +359,7 @@ export const BillingManagement: React.FC = () => {
               <Card
                 key={plan.id}
                 className={`cursor-pointer transition-colors ${
-                  plan.slug === currentTenant.plan_type ? 'ring-2 ring-primary' : 'hover:bg-muted/50'
+                  plan.slug === currentTenant.plan_type ? "ring-2 ring-primary" : "hover:bg-muted/50"
                 }`}
               >
                 <CardContent className="p-6">
@@ -384,7 +384,7 @@ export const BillingManagement: React.FC = () => {
                       <div className="text-sm text-muted-foreground">/mês</div>
                       {plan.slug !== currentTenant.plan_type && (
                         <Button>
-                          {plan.price_monthly > (currentPlan?.price_monthly || 0) ? 'Upgrade' : 'Downgrade'}
+                          {plan.price_monthly > (currentPlan?.price_monthly || 0) ? "Upgrade" : "Downgrade"}
                         </Button>
                       )}
                     </div>

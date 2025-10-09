@@ -1,33 +1,33 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { useServiceIntegrations } from '@/hooks/use-service-integrations';
-import { CheckCircle2, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useServiceIntegrations } from "@/hooks/use-service-integrations";
+import { CheckCircle2, XCircle, AlertCircle, RefreshCw } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const ServiceStatusPanel: React.FC = () => {
   const { services, isChecking, checkServiceHealth, checkAllServices } = useServiceIntegrations();
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected':
-        return <CheckCircle2 className="h-5 w-5 text-success" />;
-      case 'error':
-        return <XCircle className="h-5 w-5 text-destructive" />;
-      default:
-        return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
+    case "connected":
+      return <CheckCircle2 className="h-5 w-5 text-success" />;
+    case "error":
+      return <XCircle className="h-5 w-5 text-destructive" />;
+    default:
+      return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'connected':
-        return <Badge variant="outline" className="bg-success/10 text-success border-success">Conectado</Badge>;
-      case 'error':
-        return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive">Erro</Badge>;
-      default:
-        return <Badge variant="outline" className="bg-muted text-muted-foreground">Desconectado</Badge>;
+    case "connected":
+      return <Badge variant="outline" className="bg-success/10 text-success border-success">Conectado</Badge>;
+    case "error":
+      return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive">Erro</Badge>;
+    default:
+      return <Badge variant="outline" className="bg-muted text-muted-foreground">Desconectado</Badge>;
     }
   };
 
@@ -71,8 +71,8 @@ export const ServiceStatusPanel: React.FC = () => {
                   <p className="font-medium text-sm">{service.name}</p>
                   {service.lastCheck && (
                     <p className="text-xs text-muted-foreground">
-                      Última verificação:{' '}
-                      {new Date(service.lastCheck).toLocaleTimeString('pt-BR')}
+                      Última verificação:{" "}
+                      {new Date(service.lastCheck).toLocaleTimeString("pt-BR")}
                     </p>
                   )}
                 </div>

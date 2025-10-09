@@ -1,12 +1,12 @@
-import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { RiskManagementDashboard } from '@/components/bcp/risk-management-dashboard';
-import { BackupRecoverySystem } from '@/components/bcp/backup-recovery-system';
-import { ComplianceAuditCenter } from '@/components/bcp/compliance-audit-center';
-import { ContinuousTestingMonitoring } from '@/components/bcp/continuous-testing-monitoring';
-import { Shield } from 'lucide-react';
+import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RiskManagementDashboard } from "@/components/bcp/risk-management-dashboard";
+import { BackupRecoverySystem } from "@/components/bcp/backup-recovery-system";
+import { ComplianceAuditCenter } from "@/components/bcp/compliance-audit-center";
+import { ContinuousTestingMonitoring } from "@/components/bcp/continuous-testing-monitoring";
+import { Shield } from "lucide-react";
 
 
 const BusinessContinuityPlan = () => {

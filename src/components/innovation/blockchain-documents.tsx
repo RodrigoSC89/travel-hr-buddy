@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Shield, 
   FileText, 
@@ -21,16 +21,16 @@ import {
   Calendar,
   Award,
   Eye
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface BlockchainDocument {
   id: string;
   name: string;
-  type: 'certificate' | 'contract' | 'license' | 'audit' | 'permit';
+  type: "certificate" | "contract" | "license" | "audit" | "permit";
   hash: string;
   timestamp: string;
-  status: 'verified' | 'pending' | 'invalid' | 'expired';
+  status: "verified" | "pending" | "invalid" | "expired";
   issuer: string;
   owner: string;
   expiryDate?: string;
@@ -44,105 +44,105 @@ interface VerificationLog {
   documentId: string;
   verifier: string;
   timestamp: string;
-  result: 'success' | 'failure';
+  result: "success" | "failure";
   details: string;
 }
 
 export const BlockchainDocuments: React.FC = () => {
   const { toast } = useToast();
-  const [searchHash, setSearchHash] = useState('');
+  const [searchHash, setSearchHash] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
 
   const [documents] = useState<BlockchainDocument[]>([
     {
-      id: '1',
-      name: 'Certificado STCW Basic Safety',
-      type: 'certificate',
-      hash: '0x1a2b3c4d5e6f7890abcdef1234567890abcdef12',
-      timestamp: '2024-01-15T10:30:00Z',
-      status: 'verified',
-      issuer: 'IMO - International Maritime Organization',
-      owner: 'João Silva',
-      expiryDate: '2026-01-15',
+      id: "1",
+      name: "Certificado STCW Basic Safety",
+      type: "certificate",
+      hash: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
+      timestamp: "2024-01-15T10:30:00Z",
+      status: "verified",
+      issuer: "IMO - International Maritime Organization",
+      owner: "João Silva",
+      expiryDate: "2026-01-15",
       verifications: 12,
-      smartContractAddress: '0xabcdef1234567890abcdef1234567890abcdef12',
-      ipfsHash: 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG'
+      smartContractAddress: "0xabcdef1234567890abcdef1234567890abcdef12",
+      ipfsHash: "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"
     },
     {
-      id: '2',
-      name: 'Licença de Operação Portuária',
-      type: 'license',
-      hash: '0x2b3c4d5e6f7890abcdef1234567890abcdef1234',
-      timestamp: '2024-01-10T14:20:00Z',
-      status: 'verified',
-      issuer: 'ANTAQ - Agência Nacional de Transportes Aquaviários',
-      owner: 'Empresa Marítima S.A.',
-      expiryDate: '2025-12-31',
+      id: "2",
+      name: "Licença de Operação Portuária",
+      type: "license",
+      hash: "0x2b3c4d5e6f7890abcdef1234567890abcdef1234",
+      timestamp: "2024-01-10T14:20:00Z",
+      status: "verified",
+      issuer: "ANTAQ - Agência Nacional de Transportes Aquaviários",
+      owner: "Empresa Marítima S.A.",
+      expiryDate: "2025-12-31",
       verifications: 8,
-      smartContractAddress: '0xbcdef1234567890abcdef1234567890abcdef123',
-      ipfsHash: 'QmZwBPKzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdH'
+      smartContractAddress: "0xbcdef1234567890abcdef1234567890abcdef123",
+      ipfsHash: "QmZwBPKzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdH"
     },
     {
-      id: '3',
-      name: 'Contrato de Fretamento',
-      type: 'contract',
-      hash: '0x3c4d5e6f7890abcdef1234567890abcdef123456',
-      timestamp: '2024-01-12T09:15:00Z',
-      status: 'pending',
-      issuer: 'Smart Contract System',
-      owner: 'Nautilus Shipping Co.',
+      id: "3",
+      name: "Contrato de Fretamento",
+      type: "contract",
+      hash: "0x3c4d5e6f7890abcdef1234567890abcdef123456",
+      timestamp: "2024-01-12T09:15:00Z",
+      status: "pending",
+      issuer: "Smart Contract System",
+      owner: "Nautilus Shipping Co.",
       verifications: 3,
-      smartContractAddress: '0xcdef1234567890abcdef1234567890abcdef1234',
-      ipfsHash: 'QmXvAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdI'
+      smartContractAddress: "0xcdef1234567890abcdef1234567890abcdef1234",
+      ipfsHash: "QmXvAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdI"
     }
   ]);
 
   const [verificationLogs] = useState<VerificationLog[]>([
     {
-      id: '1',
-      documentId: '1',
-      verifier: 'Sistema Portuário Santos',
-      timestamp: '2024-01-16T08:30:00Z',
-      result: 'success',
-      details: 'Certificado válido e reconhecido'
+      id: "1",
+      documentId: "1",
+      verifier: "Sistema Portuário Santos",
+      timestamp: "2024-01-16T08:30:00Z",
+      result: "success",
+      details: "Certificado válido e reconhecido"
     },
     {
-      id: '2',
-      documentId: '1',
-      verifier: 'Inspeção Marítima RJ',
-      timestamp: '2024-01-14T15:45:00Z',
-      result: 'success',
-      details: 'Verificação completa aprovada'
+      id: "2",
+      documentId: "1",
+      verifier: "Inspeção Marítima RJ",
+      timestamp: "2024-01-14T15:45:00Z",
+      result: "success",
+      details: "Verificação completa aprovada"
     },
     {
-      id: '3',
-      documentId: '2',
-      verifier: 'Autoridade Portuária SP',
-      timestamp: '2024-01-13T11:20:00Z',
-      result: 'success',
-      details: 'Licença válida para operações'
+      id: "3",
+      documentId: "2",
+      verifier: "Autoridade Portuária SP",
+      timestamp: "2024-01-13T11:20:00Z",
+      result: "success",
+      details: "Licença válida para operações"
     }
   ]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'verified': return 'text-green-600 bg-green-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'invalid': return 'text-red-600 bg-red-100';
-      case 'expired': return 'text-muted-foreground bg-gray-100';
-      default: return 'text-muted-foreground bg-gray-100';
+    case "verified": return "text-green-600 bg-green-100";
+    case "pending": return "text-yellow-600 bg-yellow-100";
+    case "invalid": return "text-red-600 bg-red-100";
+    case "expired": return "text-muted-foreground bg-gray-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'certificate': return <Award className="h-5 w-5" />;
-      case 'contract': return <FileText className="h-5 w-5" />;
-      case 'license': return <Key className="h-5 w-5" />;
-      case 'audit': return <Eye className="h-5 w-5" />;
-      case 'permit': return <Shield className="h-5 w-5" />;
-      default: return <FileText className="h-5 w-5" />;
+    case "certificate": return <Award className="h-5 w-5" />;
+    case "contract": return <FileText className="h-5 w-5" />;
+    case "license": return <Key className="h-5 w-5" />;
+    case "audit": return <Eye className="h-5 w-5" />;
+    case "permit": return <Shield className="h-5 w-5" />;
+    default: return <FileText className="h-5 w-5" />;
     }
   };
 
@@ -214,7 +214,7 @@ export const BlockchainDocuments: React.FC = () => {
                 <Check className="h-6 w-6 text-green-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{documents.filter(d => d.status === 'verified').length}</div>
+                <div className="text-2xl font-bold">{documents.filter(d => d.status === "verified").length}</div>
                 <div className="text-sm text-muted-foreground">Verificados</div>
               </div>
             </div>
@@ -301,7 +301,7 @@ export const BlockchainDocuments: React.FC = () => {
         <TabsContent value="documents" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {documents.map((document) => (
-              <Card key={document.id} className={selectedDocument === document.id ? 'ring-2 ring-primary' : ''}>
+              <Card key={document.id} className={selectedDocument === document.id ? "ring-2 ring-primary" : ""}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-2">
@@ -309,9 +309,9 @@ export const BlockchainDocuments: React.FC = () => {
                       <CardTitle className="text-lg">{document.name}</CardTitle>
                     </div>
                     <Badge className={getStatusColor(document.status)}>
-                      {document.status === 'verified' ? 'Verificado' :
-                       document.status === 'pending' ? 'Pendente' :
-                       document.status === 'invalid' ? 'Inválido' : 'Expirado'}
+                      {document.status === "verified" ? "Verificado" :
+                        document.status === "pending" ? "Pendente" :
+                          document.status === "invalid" ? "Inválido" : "Expirado"}
                     </Badge>
                   </div>
                   <CardDescription>
@@ -412,9 +412,9 @@ export const BlockchainDocuments: React.FC = () => {
                     <div key={log.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center space-x-4">
                         <div className={`p-2 rounded-full ${
-                          log.result === 'success' ? 'bg-green-100' : 'bg-red-100'
+                          log.result === "success" ? "bg-green-100" : "bg-red-100"
                         }`}>
-                          {log.result === 'success' ? (
+                          {log.result === "success" ? (
                             <Check className="h-4 w-4 text-green-600" />
                           ) : (
                             <AlertTriangle className="h-4 w-4 text-red-600" />

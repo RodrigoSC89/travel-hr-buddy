@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { 
   Bell, 
   Settings, 
@@ -16,14 +16,14 @@ import {
   Clock,
   Trash2,
   RotateCcw
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SystemNotification {
   id: string;
   title: string;
   message: string;
-  type: 'info' | 'warning' | 'error' | 'success';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  type: "info" | "warning" | "error" | "success";
+  priority: "low" | "medium" | "high" | "urgent";
   is_read: boolean;
   created_at: string;
   action_type?: string;
@@ -34,26 +34,26 @@ interface SystemNotification {
 export const EnhancedNotificationCenter: React.FC = () => {
   const [notifications, setNotifications] = useState<SystemNotification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'unread' | 'high' | 'urgent'>('all');
+  const [filter, setFilter] = useState<"all" | "unread" | "high" | "urgent">("all");
   const { toast } = useToast();
 
   const loadNotifications = async () => {
     try {
       setIsLoading(true);
       const { data, error } = await supabase
-        .from('intelligent_notifications')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("intelligent_notifications")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
       setNotifications((data || []).map(item => ({
         ...item,
-        type: (item.type as 'info' | 'warning' | 'error' | 'success') || 'info',
-        priority: (item.priority as 'low' | 'medium' | 'high' | 'urgent') || 'medium'
+        type: (item.type as "info" | "warning" | "error" | "success") || "info",
+        priority: (item.priority as "low" | "medium" | "high" | "urgent") || "medium"
       })));
     } catch (error) {
-      console.error('Erro ao carregar notificações:', error);
+      console.error("Erro ao carregar notificações:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar notificações",
@@ -67,9 +67,9 @@ export const EnhancedNotificationCenter: React.FC = () => {
   const markAsRead = async (notificationId: string) => {
     try {
       const { error } = await supabase
-        .from('intelligent_notifications')
+        .from("intelligent_notifications")
         .update({ is_read: true })
-        .eq('id', notificationId);
+        .eq("id", notificationId);
 
       if (error) throw error;
 
@@ -95,9 +95,9 @@ export const EnhancedNotificationCenter: React.FC = () => {
   const markAllAsRead = async () => {
     try {
       const { error } = await supabase
-        .from('intelligent_notifications')
+        .from("intelligent_notifications")
         .update({ is_read: true })
-        .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
+        .eq("user_id", (await supabase.auth.getUser()).data.user?.id);
 
       if (error) throw error;
 
@@ -119,9 +119,9 @@ export const EnhancedNotificationCenter: React.FC = () => {
   const deleteNotification = async (notificationId: string) => {
     try {
       const { error } = await supabase
-        .from('intelligent_notifications')
+        .from("intelligent_notifications")
         .delete()
-        .eq('id', notificationId);
+        .eq("id", notificationId);
 
       if (error) throw error;
 
@@ -142,40 +142,40 @@ export const EnhancedNotificationCenter: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'error':
-        return <AlertTriangle className="w-4 h-4 text-destructive" />;
-      case 'warning':
-        return <AlertTriangle className="w-4 h-4 text-warning" />;
-      case 'success':
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      default:
-        return <Bell className="w-4 h-4 text-info" />;
+    case "error":
+      return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "success":
+      return <CheckCircle className="w-4 h-4 text-success" />;
+    default:
+      return <Bell className="w-4 h-4 text-info" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent':
-        return 'bg-destructive text-destructive-foreground';
-      case 'high':
-        return 'bg-warning text-warning-foreground';
-      case 'medium':
-        return 'bg-info text-info-foreground';
-      default:
-        return 'bg-muted text-muted-foreground';
+    case "urgent":
+      return "bg-destructive text-destructive-foreground";
+    case "high":
+      return "bg-warning text-warning-foreground";
+    case "medium":
+      return "bg-info text-info-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const filteredNotifications = notifications.filter(notif => {
     switch (filter) {
-      case 'unread':
-        return !notif.is_read;
-      case 'high':
-        return notif.priority === 'high';
-      case 'urgent':
-        return notif.priority === 'urgent';
-      default:
-        return true;
+    case "unread":
+      return !notif.is_read;
+    case "high":
+      return notif.priority === "high";
+    case "urgent":
+      return notif.priority === "urgent";
+    default:
+      return true;
     }
   });
 
@@ -186,13 +186,13 @@ export const EnhancedNotificationCenter: React.FC = () => {
 
     // Subscription para notificações em tempo real
     const subscription = supabase
-      .channel('notifications_realtime')
+      .channel("notifications_realtime")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'intelligent_notifications'
+          event: "*",
+          schema: "public",
+          table: "intelligent_notifications"
         },
         () => {
           loadNotifications();
@@ -266,17 +266,17 @@ export const EnhancedNotificationCenter: React.FC = () => {
         </div>
         
         <div className="flex gap-2 mt-4">
-          {['all', 'unread', 'high', 'urgent'].map(filterType => (
+          {["all", "unread", "high", "urgent"].map(filterType => (
             <Button
               key={filterType}
-              variant={filter === filterType ? 'default' : 'outline'}
+              variant={filter === filterType ? "default" : "outline"}
               size="sm"
               onClick={() => setFilter(filterType as any)}
             >
-              {filterType === 'all' && 'Todas'}
-              {filterType === 'unread' && 'Não lidas'}
-              {filterType === 'high' && 'Alta prioridade'}
-              {filterType === 'urgent' && 'Urgente'}
+              {filterType === "all" && "Todas"}
+              {filterType === "unread" && "Não lidas"}
+              {filterType === "high" && "Alta prioridade"}
+              {filterType === "urgent" && "Urgente"}
             </Button>
           ))}
         </div>
@@ -295,8 +295,8 @@ export const EnhancedNotificationCenter: React.FC = () => {
                 key={notification.id}
                 className={`p-4 rounded-lg border transition-all hover:shadow-md ${
                   !notification.is_read 
-                    ? 'bg-primary/5 border-primary/20' 
-                    : 'bg-background border-border'
+                    ? "bg-primary/5 border-primary/20" 
+                    : "bg-background border-border"
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -323,7 +323,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        {new Date(notification.created_at).toLocaleString('pt-BR')}
+                        {new Date(notification.created_at).toLocaleString("pt-BR")}
                       </span>
                       {notification.action_type && (
                         <span className="flex items-center gap-1">

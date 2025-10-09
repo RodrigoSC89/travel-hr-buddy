@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Settings,
   Building2,
@@ -40,17 +40,17 @@ import {
   Cpu,
   Database,
   Server
-} from 'lucide-react';
+} from "lucide-react";
 
 // Import category components
-import { GeneralSettingsTab } from './tabs/general-settings-tab';
-import { SecurityAccessTab } from './tabs/security-access-tab';
-import { UsersProfilesTab } from './tabs/users-profiles-tab';
-import { NotificationsAlertsTab } from './tabs/notifications-alerts-tab';
-import { IntegrationsTab } from './tabs/integrations-tab';
-import { DocumentationLogsTab } from './tabs/documentation-logs-tab';
-import { AdvancedFeaturesTab } from './tabs/advanced-features-tab';
-import { SystemMonitoringTab } from './tabs/system-monitoring-tab';
+import { GeneralSettingsTab } from "./tabs/general-settings-tab";
+import { SecurityAccessTab } from "./tabs/security-access-tab";
+import { UsersProfilesTab } from "./tabs/users-profiles-tab";
+import { NotificationsAlertsTab } from "./tabs/notifications-alerts-tab";
+import { IntegrationsTab } from "./tabs/integrations-tab";
+import { DocumentationLogsTab } from "./tabs/documentation-logs-tab";
+import { AdvancedFeaturesTab } from "./tabs/advanced-features-tab";
+import { SystemMonitoringTab } from "./tabs/system-monitoring-tab";
 
 interface SettingsData {
   general: {
@@ -127,16 +127,16 @@ export const EnhancedSettingsHub: React.FC = () => {
   
   const [settings, setSettings] = useState<SettingsData>({
     general: {
-      companyName: 'Nautilus One',
-      defaultLanguage: 'pt-BR',
-      timezone: 'America/Sao_Paulo',
-      systemTheme: 'system',
-      dateTimeFormat: 'DD/MM/YYYY HH:mm',
-      companyLogo: '',
+      companyName: "Nautilus One",
+      defaultLanguage: "pt-BR",
+      timezone: "America/Sao_Paulo",
+      systemTheme: "system",
+      dateTimeFormat: "DD/MM/YYYY HH:mm",
+      companyLogo: "",
       brandColors: {
-        primary: '#2563eb',
-        secondary: '#64748b',
-        accent: '#f59e0b'
+        primary: "#2563eb",
+        secondary: "#64748b",
+        accent: "#f59e0b"
       }
     },
     security: {
@@ -160,8 +160,8 @@ export const EnhancedSettingsHub: React.FC = () => {
       emailAlerts: true,
       pushNotifications: true,
       systemAlerts: true,
-      scheduleStart: '08:00',
-      scheduleEnd: '18:00',
+      scheduleStart: "08:00",
+      scheduleEnd: "18:00",
       moduleSettings: {
         communication: true,
         crew: true,
@@ -202,10 +202,10 @@ export const EnhancedSettingsHub: React.FC = () => {
 
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState('general');
+  const [activeTab, setActiveTab] = useState("general");
   const [testMode, setTestMode] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [settingsHealth, setSettingsHealth] = useState(85);
   const [autoSave, setAutoSave] = useState(false);
   const [changeHistory, setChangeHistory] = useState<Array<{
@@ -269,8 +269,8 @@ export const EnhancedSettingsHub: React.FC = () => {
     setChangeHistory(prev => [{
       timestamp: new Date(),
       action: `Updated ${category}`,
-      user: user?.email || 'sistema',
-      details: `Modified ${Object.keys(updates).join(', ')}`
+      user: user?.email || "sistema",
+      details: `Modified ${Object.keys(updates).join(", ")}`
     }, ...prev.slice(0, 49)]); // Keep last 50 changes
   };
 
@@ -284,7 +284,7 @@ export const EnhancedSettingsHub: React.FC = () => {
       if (validationErrors.length > 0) {
         toast({
           title: "❌ Erro de Validação",
-          description: `Corrija os seguintes erros: ${validationErrors.join(', ')}`,
+          description: `Corrija os seguintes erros: ${validationErrors.join(", ")}`,
           variant: "destructive",
         });
         setIsSaving(false);
@@ -295,7 +295,7 @@ export const EnhancedSettingsHub: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Log the action for audit trail
-      await logSettingsChange('save', settings);
+      await logSettingsChange("save", settings);
       
       setHasChanges(false);
       setLastSaved(new Date());
@@ -319,15 +319,15 @@ export const EnhancedSettingsHub: React.FC = () => {
     const errors: string[] = [];
     
     if (!settings.general.companyName.trim()) {
-      errors.push('Nome da empresa é obrigatório');
+      errors.push("Nome da empresa é obrigatório");
     }
     
     if (settings.security.passwordRules.minLength < 6) {
-      errors.push('Comprimento mínimo da senha deve ser pelo menos 6');
+      errors.push("Comprimento mínimo da senha deve ser pelo menos 6");
     }
     
     if (settings.security.sessionExpiry < 5) {
-      errors.push('Tempo de expiração da sessão deve ser pelo menos 5 minutos');
+      errors.push("Tempo de expiração da sessão deve ser pelo menos 5 minutos");
     }
     
     return errors;
@@ -336,16 +336,16 @@ export const EnhancedSettingsHub: React.FC = () => {
   const resetToDefaults = async () => {
     const defaultSettings: SettingsData = {
       general: {
-        companyName: 'Nautilus One',
-        defaultLanguage: 'pt-BR',
-        timezone: 'America/Sao_Paulo',
-        systemTheme: 'system',
-        dateTimeFormat: 'DD/MM/YYYY HH:mm',
-        companyLogo: '',
+        companyName: "Nautilus One",
+        defaultLanguage: "pt-BR",
+        timezone: "America/Sao_Paulo",
+        systemTheme: "system",
+        dateTimeFormat: "DD/MM/YYYY HH:mm",
+        companyLogo: "",
         brandColors: {
-          primary: '#2563eb',
-          secondary: '#64748b',
-          accent: '#f59e0b'
+          primary: "#2563eb",
+          secondary: "#64748b",
+          accent: "#f59e0b"
         }
       },
       security: {
@@ -369,8 +369,8 @@ export const EnhancedSettingsHub: React.FC = () => {
         emailAlerts: true,
         pushNotifications: true,
         systemAlerts: true,
-        scheduleStart: '08:00',
-        scheduleEnd: '18:00',
+        scheduleStart: "08:00",
+        scheduleEnd: "18:00",
         moduleSettings: {
           communication: true,
           crew: true,
@@ -412,7 +412,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     setSettings(defaultSettings);
     setHasChanges(true);
     
-    await logSettingsChange('reset', defaultSettings);
+    await logSettingsChange("reset", defaultSettings);
     
     toast({
       title: "🔄 Configurações Restauradas",
@@ -426,17 +426,17 @@ export const EnhancedSettingsHub: React.FC = () => {
       metadata: {
         exportedAt: new Date().toISOString(),
         exportedBy: user?.email,
-        version: '2.1.4',
+        version: "2.1.4",
         health: settingsHealth
       }
     };
     
     const dataStr = JSON.stringify(exportData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = `nautilus-settings-${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `nautilus-settings-${new Date().toISOString().split("T")[0]}.json`;
     link.click();
     
     toast({
@@ -456,7 +456,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         
         // Validate imported data structure
         if (!importedData.settings || !importedData.metadata) {
-          throw new Error('Formato de arquivo inválido');
+          throw new Error("Formato de arquivo inválido");
         }
         
         setSettings(importedData.settings);
@@ -464,7 +464,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         
         toast({
           title: "📤 Configurações Importadas",
-          description: `Configurações de ${importedData.metadata.exportedBy || 'usuário desconhecido'} carregadas. Clique em 'Salvar' para aplicar.`,
+          description: `Configurações de ${importedData.metadata.exportedBy || "usuário desconhecido"} carregadas. Clique em 'Salvar' para aplicar.`,
         });
       } catch (error) {
         toast({
@@ -488,19 +488,19 @@ export const EnhancedSettingsHub: React.FC = () => {
       const recommendations = [];
       
       if (!settings.security.twoFactorRequired) {
-        recommendations.push('Ativar 2FA obrigatório para maior segurança');
+        recommendations.push("Ativar 2FA obrigatório para maior segurança");
       }
       
       if (settings.security.sessionExpiry > 60) {
-        recommendations.push('Reduzir tempo de expiração de sessão');
+        recommendations.push("Reduzir tempo de expiração de sessão");
       }
       
       if (Object.keys(settings.integrations.webhooks).length === 0) {
-        recommendations.push('Configurar webhooks para automação');
+        recommendations.push("Configurar webhooks para automação");
       }
       
       if (!settings.monitoring.enableMetrics) {
-        recommendations.push('Ativar monitoramento de métricas');
+        recommendations.push("Ativar monitoramento de métricas");
       }
       
       toast({
@@ -521,8 +521,8 @@ export const EnhancedSettingsHub: React.FC = () => {
   const shareSettings = async () => {
     try {
       const shareData = {
-        title: 'Configurações Nautilus One',
-        text: 'Compartilhando configurações do sistema',
+        title: "Configurações Nautilus One",
+        text: "Compartilhando configurações do sistema",
         url: window.location.href
       };
       
@@ -537,21 +537,21 @@ export const EnhancedSettingsHub: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error('Error sharing:', error);
+      console.error("Error sharing:", error);
     }
   };
 
   const logSettingsChange = async (action: string, data: any) => {
     const logEntry = {
       timestamp: new Date().toISOString(),
-      user: user?.email || 'sistema',
+      user: user?.email || "sistema",
       action,
-      module: 'settings',
+      module: "settings",
       details: data,
-      ipAddress: 'auto-detect' // In real app, get actual IP
+      ipAddress: "auto-detect" // In real app, get actual IP
     };
     
-    console.log('Settings audit log:', logEntry);
+    console.log("Settings audit log:", logEntry);
     // In real app, save to audit_logs table
   };
 
@@ -576,26 +576,26 @@ export const EnhancedSettingsHub: React.FC = () => {
   };
 
   const getHealthColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 70) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 90) return "text-green-600";
+    if (score >= 70) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getHealthBadge = (score: number) => {
-    if (score >= 90) return { text: 'Excelente', className: 'bg-green-100 text-green-800' };
-    if (score >= 70) return { text: 'Bom', className: 'bg-yellow-100 text-yellow-800' };
-    return { text: 'Precisa Atenção', className: 'bg-red-100 text-red-800' };
+    if (score >= 90) return { text: "Excelente", className: "bg-green-100 text-green-800" };
+    if (score >= 70) return { text: "Bom", className: "bg-yellow-100 text-yellow-800" };
+    return { text: "Precisa Atenção", className: "bg-red-100 text-red-800" };
   };
 
   const tabsData = [
-    { id: 'general', label: 'Geral', icon: Building2, description: 'Configurações básicas' },
-    { id: 'security', label: 'Segurança', icon: Shield, description: 'Políticas de segurança' },
-    { id: 'users', label: 'Usuários', icon: Users, description: 'Gestão de usuários' },
-    { id: 'notifications', label: 'Notificações', icon: Bell, description: 'Alertas e notificações' },
-    { id: 'integrations', label: 'Integrações', icon: Link2, description: 'APIs e webhooks' },
-    { id: 'advanced', label: 'Avançado', icon: Zap, description: 'Recursos avançados' },
-    { id: 'monitoring', label: 'Monitoramento', icon: Activity, description: 'Métricas e logs' },
-    { id: 'documentation', label: 'Docs', icon: FileText, description: 'Documentação' }
+    { id: "general", label: "Geral", icon: Building2, description: "Configurações básicas" },
+    { id: "security", label: "Segurança", icon: Shield, description: "Políticas de segurança" },
+    { id: "users", label: "Usuários", icon: Users, description: "Gestão de usuários" },
+    { id: "notifications", label: "Notificações", icon: Bell, description: "Alertas e notificações" },
+    { id: "integrations", label: "Integrações", icon: Link2, description: "APIs e webhooks" },
+    { id: "advanced", label: "Avançado", icon: Zap, description: "Recursos avançados" },
+    { id: "monitoring", label: "Monitoramento", icon: Activity, description: "Métricas e logs" },
+    { id: "documentation", label: "Docs", icon: FileText, description: "Documentação" }
   ];
 
   return (
@@ -669,7 +669,7 @@ export const EnhancedSettingsHub: React.FC = () => {
                 {hasChanges && (
                   <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 animate-pulse">
                     <Clock className="w-3 h-3 mr-1" />
-                    {autoSave ? 'Auto-salvando...' : 'Alterações Pendentes'}
+                    {autoSave ? "Auto-salvando..." : "Alterações Pendentes"}
                   </Badge>
                 )}
                 {lastSaved && (
@@ -683,18 +683,18 @@ export const EnhancedSettingsHub: React.FC = () => {
               {/* Action Buttons */}
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" onClick={() => setAutoSave(!autoSave)}>
-                  <Zap className={`w-4 h-4 mr-2 ${autoSave ? 'text-yellow-500' : ''}`} />
-                  {autoSave ? 'Auto-Save ON' : 'Auto-Save OFF'}
+                  <Zap className={`w-4 h-4 mr-2 ${autoSave ? "text-yellow-500" : ""}`} />
+                  {autoSave ? "Auto-Save ON" : "Auto-Save OFF"}
                 </Button>
                 
                 <Button variant="outline" size="sm" onClick={togglePreviewMode}>
                   <Eye className="w-4 h-4 mr-2" />
-                  {previewMode ? 'Sair Prévia' : 'Prévia'}
+                  {previewMode ? "Sair Prévia" : "Prévia"}
                 </Button>
                 
                 <Button variant="outline" size="sm" onClick={toggleTestMode}>
                   <TestTube className="w-4 h-4 mr-2" />
-                  {testMode ? 'Sair Teste' : 'Modo Teste'}
+                  {testMode ? "Sair Teste" : "Modo Teste"}
                 </Button>
                 
                 <Button variant="outline" size="sm" onClick={shareSettings}>
@@ -808,7 +808,7 @@ export const EnhancedSettingsHub: React.FC = () => {
                         className="opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <Bookmark 
-                          className={`w-3 h-3 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`} 
+                          className={`w-3 h-3 ${isFavorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`} 
                         />
                       </button>
                     </div>
@@ -823,7 +823,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           </div>
 
           {/* Smart Contextual Alerts */}
-          {activeTab === 'security' && settingsHealth < 80 && (
+          {activeTab === "security" && settingsHealth < 80 && (
             <Alert className="border-amber-200 bg-amber-50 dark:bg-amber-900/20">
               <AlertTriangle className="h-4 w-4 text-amber-600" />
               <AlertDescription className="text-amber-800 dark:text-amber-200">
@@ -846,7 +846,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="general" className="space-y-6">
             <GeneralSettingsTab 
               settings={settings.general}
-              onUpdate={(updates) => updateSettings('general', updates)}
+              onUpdate={(updates) => updateSettings("general", updates)}
               testMode={testMode}
             />
           </TabsContent>
@@ -854,7 +854,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="security" className="space-y-6">
             <SecurityAccessTab 
               settings={settings.security}
-              onUpdate={(updates) => updateSettings('security', updates)}
+              onUpdate={(updates) => updateSettings("security", updates)}
               testMode={testMode}
             />
           </TabsContent>
@@ -866,7 +866,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="notifications" className="space-y-6">
             <NotificationsAlertsTab 
               settings={settings.notifications}
-              onUpdate={(updates) => updateSettings('notifications', updates)}
+              onUpdate={(updates) => updateSettings("notifications", updates)}
               testMode={testMode}
             />
           </TabsContent>
@@ -874,7 +874,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="integrations" className="space-y-6">
             <IntegrationsTab 
               settings={settings.integrations}
-              onUpdate={(updates) => updateSettings('integrations', updates)}
+              onUpdate={(updates) => updateSettings("integrations", updates)}
               testMode={testMode}
             />
           </TabsContent>
@@ -882,7 +882,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="advanced" className="space-y-6">
             <AdvancedFeaturesTab 
               settings={settings.advanced}
-              onUpdate={(updates) => updateSettings('advanced', updates)}
+              onUpdate={(updates) => updateSettings("advanced", updates)}
               testMode={testMode}
             />
           </TabsContent>
@@ -890,7 +890,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="monitoring" className="space-y-6">
             <SystemMonitoringTab 
               settings={settings.monitoring}
-              onUpdate={(updates) => updateSettings('monitoring', updates)}
+              onUpdate={(updates) => updateSettings("monitoring", updates)}
               testMode={testMode}
             />
           </TabsContent>

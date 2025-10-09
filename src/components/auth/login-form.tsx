@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 export const LoginForm: React.FC = () => {
   const { signIn, signUp } = useAuth();
@@ -20,15 +20,15 @@ export const LoginForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   
   const [loginData, setLoginData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: ""
   });
   
   const [signupData, setSignupData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    fullName: ''
+    email: "",
+    password: "",
+    confirmPassword: "",
+    fullName: ""
   });
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -51,10 +51,10 @@ export const LoginForm: React.FC = () => {
           title: "Login realizado",
           description: "Bem-vindo de volta!",
         });
-        navigate('/');
+        navigate("/");
       }
     } catch (err) {
-      setError('Erro inesperado durante o login');
+      setError("Erro inesperado durante o login");
     } finally {
       setIsLoading(false);
     }

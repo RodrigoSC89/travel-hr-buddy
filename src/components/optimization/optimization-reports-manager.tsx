@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   FileText, 
   Download, 
@@ -17,16 +17,16 @@ import {
   CheckCircle,
   Zap,
   BarChart3
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from 'recharts';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
 
 interface OptimizationReport {
   id: string;
   title: string;
   date: Date;
-  type: 'weekly' | 'monthly' | 'quarterly';
-  status: 'generating' | 'ready' | 'exported';
+  type: "weekly" | "monthly" | "quarterly";
+  status: "generating" | "ready" | "exported";
   insights: number;
   improvements: number;
   performanceGain: number;
@@ -39,7 +39,7 @@ interface OptimizationHistory {
   appliedAt: Date;
   impactAchieved: string;
   performanceGain: number;
-  status: 'success' | 'partial' | 'failed';
+  status: "success" | "partial" | "failed";
 }
 
 export const OptimizationReportsManager = () => {
@@ -47,31 +47,31 @@ export const OptimizationReportsManager = () => {
   
   const [reports, setReports] = useState<OptimizationReport[]>([
     {
-      id: 'weekly_001',
-      title: 'Relatório Semanal de Otimização',
+      id: "weekly_001",
+      title: "Relatório Semanal de Otimização",
       date: new Date(),
-      type: 'weekly',
-      status: 'ready',
+      type: "weekly",
+      status: "ready",
       insights: 12,
       improvements: 8,
       performanceGain: 15.3
     },
     {
-      id: 'monthly_001',
-      title: 'Análise Mensal de Performance',
+      id: "monthly_001",
+      title: "Análise Mensal de Performance",
       date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-      type: 'monthly',
-      status: 'ready',
+      type: "monthly",
+      status: "ready",
       insights: 45,
       improvements: 23,
       performanceGain: 28.7
     },
     {
-      id: 'quarterly_001',
-      title: 'Relatório Trimestral Executivo',
+      id: "quarterly_001",
+      title: "Relatório Trimestral Executivo",
       date: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-      type: 'quarterly',
-      status: 'generating',
+      type: "quarterly",
+      status: "generating",
       insights: 0,
       improvements: 0,
       performanceGain: 0
@@ -80,59 +80,59 @@ export const OptimizationReportsManager = () => {
 
   const [optimizationHistory, setOptimizationHistory] = useState<OptimizationHistory[]>([
     {
-      id: 'opt_001',
-      title: 'Cache de Consultas Implementado',
-      category: 'Database',
+      id: "opt_001",
+      title: "Cache de Consultas Implementado",
+      category: "Database",
       appliedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-      impactAchieved: '+25% na performance de consultas',
+      impactAchieved: "+25% na performance de consultas",
       performanceGain: 25,
-      status: 'success'
+      status: "success"
     },
     {
-      id: 'opt_002',
-      title: 'Otimização de Bundle Frontend',
-      category: 'Frontend',
+      id: "opt_002",
+      title: "Otimização de Bundle Frontend",
+      category: "Frontend",
       appliedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-      impactAchieved: '+40% velocidade de carregamento',
+      impactAchieved: "+40% velocidade de carregamento",
       performanceGain: 40,
-      status: 'success'
+      status: "success"
     },
     {
-      id: 'opt_003',
-      title: 'Compressão de Assets',
-      category: 'Assets',
+      id: "opt_003",
+      title: "Compressão de Assets",
+      category: "Assets",
       appliedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-      impactAchieved: '+18% economia de bandwidth',
+      impactAchieved: "+18% economia de bandwidth",
       performanceGain: 18,
-      status: 'partial'
+      status: "partial"
     },
     {
-      id: 'opt_004',
-      title: 'Headers de Segurança',
-      category: 'Security',
+      id: "opt_004",
+      title: "Headers de Segurança",
+      category: "Security",
       appliedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-      impactAchieved: '+15% security score',
+      impactAchieved: "+15% security score",
       performanceGain: 15,
-      status: 'success'
+      status: "success"
     }
   ]);
 
   const performanceTrend = [
-    { month: 'Jan', score: 65, optimizations: 5 },
-    { month: 'Fev', score: 68, optimizations: 8 },
-    { month: 'Mar', score: 72, optimizations: 12 },
-    { month: 'Abr', score: 75, optimizations: 15 },
-    { month: 'Mai', score: 78, optimizations: 18 },
-    { month: 'Jun', score: 82, optimizations: 21 }
+    { month: "Jan", score: 65, optimizations: 5 },
+    { month: "Fev", score: 68, optimizations: 8 },
+    { month: "Mar", score: 72, optimizations: 12 },
+    { month: "Abr", score: 75, optimizations: 15 },
+    { month: "Mai", score: 78, optimizations: 18 },
+    { month: "Jun", score: 82, optimizations: 21 }
   ];
 
-  const generateReport = (type: 'weekly' | 'monthly' | 'quarterly') => {
+  const generateReport = (type: "weekly" | "monthly" | "quarterly") => {
     const newReport: OptimizationReport = {
       id: `${type}_${Date.now()}`,
-      title: `Relatório ${type === 'weekly' ? 'Semanal' : type === 'monthly' ? 'Mensal' : 'Trimestral'} de Otimização`,
+      title: `Relatório ${type === "weekly" ? "Semanal" : type === "monthly" ? "Mensal" : "Trimestral"} de Otimização`,
       date: new Date(),
       type,
-      status: 'generating',
+      status: "generating",
       insights: 0,
       improvements: 0,
       performanceGain: 0
@@ -151,12 +151,12 @@ export const OptimizationReportsManager = () => {
       setReports(prev => prev.map(report => 
         report.id === newReport.id 
           ? {
-              ...report,
-              status: 'ready' as const,
-              insights: Math.floor(Math.random() * 20) + 10,
-              improvements: Math.floor(Math.random() * 15) + 5,
-              performanceGain: Math.floor(Math.random() * 30) + 10
-            }
+            ...report,
+            status: "ready" as const,
+            insights: Math.floor(Math.random() * 20) + 10,
+            improvements: Math.floor(Math.random() * 15) + 5,
+            performanceGain: Math.floor(Math.random() * 30) + 10
+          }
           : report
       ));
       
@@ -171,7 +171,7 @@ export const OptimizationReportsManager = () => {
   const exportReport = (reportId: string) => {
     setReports(prev => prev.map(report => 
       report.id === reportId 
-        ? { ...report, status: 'exported' as const }
+        ? { ...report, status: "exported" as const }
         : report
     ));
     
@@ -184,28 +184,28 @@ export const OptimizationReportsManager = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'success': return CheckCircle;
-      case 'partial': return AlertTriangle;
-      case 'failed': return AlertTriangle;
-      default: return Activity;
+    case "success": return CheckCircle;
+    case "partial": return AlertTriangle;
+    case "failed": return AlertTriangle;
+    default: return Activity;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'success': return 'text-success';
-      case 'partial': return 'text-warning';
-      case 'failed': return 'text-destructive';
-      default: return 'text-muted-foreground';
+    case "success": return "text-success";
+    case "partial": return "text-warning";
+    case "failed": return "text-destructive";
+    default: return "text-muted-foreground";
     }
   };
 
   const getReportTypeColor = (type: string) => {
     switch (type) {
-      case 'weekly': return 'bg-primary/10 text-primary border-primary/20';
-      case 'monthly': return 'bg-info/10 text-info border-info/20';
-      case 'quarterly': return 'bg-success/10 text-success border-success/20';
-      default: return 'bg-muted text-muted-foreground border-muted';
+    case "weekly": return "bg-primary/10 text-primary border-primary/20";
+    case "monthly": return "bg-info/10 text-info border-info/20";
+    case "quarterly": return "bg-success/10 text-success border-success/20";
+    default: return "bg-muted text-muted-foreground border-muted";
     }
   };
 
@@ -220,7 +220,7 @@ export const OptimizationReportsManager = () => {
         
         <div className="flex gap-2">
           <Button
-            onClick={() => generateReport('weekly')}
+            onClick={() => generateReport("weekly")}
             variant="outline"
             className="flex items-center gap-2"
           >
@@ -228,7 +228,7 @@ export const OptimizationReportsManager = () => {
             Relatório Semanal
           </Button>
           <Button
-            onClick={() => generateReport('monthly')}
+            onClick={() => generateReport("monthly")}
             variant="outline"
             className="flex items-center gap-2"
           >
@@ -236,7 +236,7 @@ export const OptimizationReportsManager = () => {
             Relatório Mensal
           </Button>
           <Button
-            onClick={() => generateReport('quarterly')}
+            onClick={() => generateReport("quarterly")}
             className="flex items-center gap-2"
           >
             <FileText className="h-4 w-4" />
@@ -268,7 +268,7 @@ export const OptimizationReportsManager = () => {
                   dataKey="score"
                   stroke="hsl(var(--primary))"
                   strokeWidth={3}
-                  dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 6 }}
+                  dot={{ fill: "hsl(var(--primary))", strokeWidth: 2, r: 6 }}
                 />
                 <Line
                   yAxisId="right"
@@ -276,7 +276,7 @@ export const OptimizationReportsManager = () => {
                   dataKey="optimizations"
                   stroke="hsl(var(--success))"
                   strokeWidth={2}
-                  dot={{ fill: 'hsl(var(--success))', strokeWidth: 2, r: 4 }}
+                  dot={{ fill: "hsl(var(--success))", strokeWidth: 2, r: 4 }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -317,7 +317,7 @@ export const OptimizationReportsManager = () => {
                             {report.date.toLocaleDateString()}
                           </span>
                           
-                          {report.status === 'ready' && (
+                          {report.status === "ready" && (
                             <>
                               <span>{report.insights} insights</span>
                               <span>{report.improvements} melhorias</span>
@@ -329,12 +329,12 @@ export const OptimizationReportsManager = () => {
                     </div>
                     
                     <div className="flex items-center gap-2">
-                      {report.status === 'generating' ? (
+                      {report.status === "generating" ? (
                         <Badge className="bg-warning/10 text-warning border-warning/20">
                           <Activity className="h-3 w-3 mr-1 animate-spin" />
                           Gerando...
                         </Badge>
-                      ) : report.status === 'exported' ? (
+                      ) : report.status === "exported" ? (
                         <Badge className="bg-success/10 text-success border-success/20">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Exportado
@@ -424,11 +424,11 @@ export const OptimizationReportsManager = () => {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={[
-                { category: 'Database', impact: 25, optimizations: 3 },
-                { category: 'Frontend', impact: 40, optimizations: 5 },
-                { category: 'Backend', impact: 20, optimizations: 2 },
-                { category: 'Security', impact: 15, optimizations: 4 },
-                { category: 'Assets', impact: 18, optimizations: 2 }
+                { category: "Database", impact: 25, optimizations: 3 },
+                { category: "Frontend", impact: 40, optimizations: 5 },
+                { category: "Backend", impact: 20, optimizations: 2 },
+                { category: "Security", impact: 15, optimizations: 4 },
+                { category: "Assets", impact: 18, optimizations: 2 }
               ]}>
                 <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                 <XAxis dataKey="category" />

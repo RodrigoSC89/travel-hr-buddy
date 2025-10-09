@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   BarChart3, 
   TrendingUp, 
@@ -16,164 +16,164 @@ import {
   Mail,
   Calendar,
   FileText
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface KPIMetric {
   id: string;
   name: string;
   value: string | number;
   change: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   unit?: string;
   target?: number;
-  category: 'operational' | 'financial' | 'hr' | 'safety';
+  category: "operational" | "financial" | "hr" | "safety";
 }
 
 interface Report {
   id: string;
   name: string;
   description: string;
-  frequency: 'daily' | 'weekly' | 'monthly';
+  frequency: "daily" | "weekly" | "monthly";
   lastGenerated: string;
   recipients: string[];
-  format: 'pdf' | 'excel' | 'powerbi';
+  format: "pdf" | "excel" | "powerbi";
   enabled: boolean;
 }
 
 export const AnalyticsDashboard = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const [selectedPeriod, setSelectedPeriod] = useState("month");
   const { toast } = useToast();
 
   const kpiMetrics: KPIMetric[] = [
     {
-      id: '1',
-      name: 'Utilização de Frota',
+      id: "1",
+      name: "Utilização de Frota",
       value: 78.5,
       change: 5.2,
-      trend: 'up',
-      unit: '%',
+      trend: "up",
+      unit: "%",
       target: 85,
-      category: 'operational'
+      category: "operational"
     },
     {
-      id: '2',
-      name: 'Receita por Viagem',
+      id: "2",
+      name: "Receita por Viagem",
       value: 125000,
       change: 8.7,
-      trend: 'up',
-      unit: 'R$',
+      trend: "up",
+      unit: "R$",
       target: 130000,
-      category: 'financial'
+      category: "financial"
     },
     {
-      id: '3',
-      name: 'Tempo Médio de Turnaround',
+      id: "3",
+      name: "Tempo Médio de Turnaround",
       value: 4.2,
       change: -12.3,
-      trend: 'down',
-      unit: 'horas',
+      trend: "down",
+      unit: "horas",
       target: 3.5,
-      category: 'operational'
+      category: "operational"
     },
     {
-      id: '4',
-      name: 'Satisfação da Tripulação',
+      id: "4",
+      name: "Satisfação da Tripulação",
       value: 4.6,
       change: 3.1,
-      trend: 'up',
-      unit: '/5',
+      trend: "up",
+      unit: "/5",
       target: 4.8,
-      category: 'hr'
+      category: "hr"
     },
     {
-      id: '5',
-      name: 'Incidentes de Segurança',
+      id: "5",
+      name: "Incidentes de Segurança",
       value: 2,
       change: -40,
-      trend: 'down',
-      unit: 'ocorrências',
+      trend: "down",
+      unit: "ocorrências",
       target: 0,
-      category: 'safety'
+      category: "safety"
     },
     {
-      id: '6',
-      name: 'Economia de Combustível',
+      id: "6",
+      name: "Economia de Combustível",
       value: 15.8,
       change: 12.4,
-      trend: 'up',
-      unit: '%',
+      trend: "up",
+      unit: "%",
       target: 20,
-      category: 'operational'
+      category: "operational"
     }
   ];
 
   const reports: Report[] = [
     {
-      id: '1',
-      name: 'Relatório Operacional Diário',
-      description: 'Performance da frota, alertas e indicadores operacionais.',
-      frequency: 'daily',
-      lastGenerated: '2025-01-16 08:00',
-      recipients: ['operacoes@empresa.com', 'gerencia@empresa.com'],
-      format: 'pdf',
+      id: "1",
+      name: "Relatório Operacional Diário",
+      description: "Performance da frota, alertas e indicadores operacionais.",
+      frequency: "daily",
+      lastGenerated: "2025-01-16 08:00",
+      recipients: ["operacoes@empresa.com", "gerencia@empresa.com"],
+      format: "pdf",
       enabled: true
     },
     {
-      id: '2',
-      name: 'Dashboard Executivo Semanal',
-      description: 'KPIs consolidados e análises estratégicas.',
-      frequency: 'weekly',
-      lastGenerated: '2025-01-13 09:00',
-      recipients: ['diretoria@empresa.com', 'ceo@empresa.com'],
-      format: 'powerbi',
+      id: "2",
+      name: "Dashboard Executivo Semanal",
+      description: "KPIs consolidados e análises estratégicas.",
+      frequency: "weekly",
+      lastGenerated: "2025-01-13 09:00",
+      recipients: ["diretoria@empresa.com", "ceo@empresa.com"],
+      format: "powerbi",
       enabled: true
     },
     {
-      id: '3',
-      name: 'Relatório de RH Marítimo',
-      description: 'Certificações, escalas e bem-estar da tripulação.',
-      frequency: 'monthly',
-      lastGenerated: '2025-01-01 10:00',
-      recipients: ['rh@empresa.com', 'capitania@empresa.com'],
-      format: 'excel',
+      id: "3",
+      name: "Relatório de RH Marítimo",
+      description: "Certificações, escalas e bem-estar da tripulação.",
+      frequency: "monthly",
+      lastGenerated: "2025-01-01 10:00",
+      recipients: ["rh@empresa.com", "capitania@empresa.com"],
+      format: "excel",
       enabled: true
     },
     {
-      id: '4',
-      name: 'Análise Financeira Mensal',
-      description: 'Custos operacionais, receitas e margem por rota.',
-      frequency: 'monthly',
-      lastGenerated: '2025-01-01 11:00',
-      recipients: ['financeiro@empresa.com', 'controladoria@empresa.com'],
-      format: 'excel',
+      id: "4",
+      name: "Análise Financeira Mensal",
+      description: "Custos operacionais, receitas e margem por rota.",
+      frequency: "monthly",
+      lastGenerated: "2025-01-01 11:00",
+      recipients: ["financeiro@empresa.com", "controladoria@empresa.com"],
+      format: "excel",
       enabled: false
     }
   ];
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
-        return <TrendingUp className="h-4 w-4 text-success" />;
-      case 'down':
-        return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
-      default:
-        return <div className="h-4 w-4 rounded-full bg-muted" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-success" />;
+    case "down":
+      return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
+    default:
+      return <div className="h-4 w-4 rounded-full bg-muted" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'operational':
-        return <Ship className="h-4 w-4 text-primary" />;
-      case 'financial':
-        return <DollarSign className="h-4 w-4 text-success" />;
-      case 'hr':
-        return <Users className="h-4 w-4 text-info" />;
-      case 'safety':
-        return <AlertTriangle className="h-4 w-4 text-warning" />;
-      default:
-        return <BarChart3 className="h-4 w-4" />;
+    case "operational":
+      return <Ship className="h-4 w-4 text-primary" />;
+    case "financial":
+      return <DollarSign className="h-4 w-4 text-success" />;
+    case "hr":
+      return <Users className="h-4 w-4 text-info" />;
+    case "safety":
+      return <AlertTriangle className="h-4 w-4 text-warning" />;
+    default:
+      return <BarChart3 className="h-4 w-4" />;
     }
   };
 
@@ -222,15 +222,15 @@ export const AnalyticsDashboard = () => {
               Dashboards dinâmicos, KPIs e relatórios automáticos para gestão estratégica.
             </p>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => exportDashboard('pdf')}>
+              <Button variant="outline" size="sm" onClick={() => exportDashboard("pdf")}>
                 <Download className="h-4 w-4 mr-2" />
                 PDF
               </Button>
-              <Button variant="outline" size="sm" onClick={() => exportDashboard('excel')}>
+              <Button variant="outline" size="sm" onClick={() => exportDashboard("excel")}>
                 <Download className="h-4 w-4 mr-2" />
                 Excel
               </Button>
-              <Button variant="outline" size="sm" onClick={() => exportDashboard('powerbi')}>
+              <Button variant="outline" size="sm" onClick={() => exportDashboard("powerbi")}>
                 <Download className="h-4 w-4 mr-2" />
                 Power BI
               </Button>
@@ -263,16 +263,16 @@ export const AnalyticsDashboard = () => {
                 <CardContent>
                   <div className="space-y-2">
                     <div className="text-2xl font-bold">
-                      {typeof metric.value === 'number' && metric.unit === 'R$' 
+                      {typeof metric.value === "number" && metric.unit === "R$" 
                         ? `R$ ${metric.value.toLocaleString()}`
-                        : `${metric.value}${metric.unit || ''}`
+                        : `${metric.value}${metric.unit || ""}`
                       }
                     </div>
                     <div className="flex items-center justify-between">
                       <span className={`text-sm font-medium ${
-                        metric.change > 0 ? 'text-success' : metric.change < 0 ? 'text-danger' : 'text-muted-foreground'
+                        metric.change > 0 ? "text-success" : metric.change < 0 ? "text-danger" : "text-muted-foreground"
                       }`}>
-                        {metric.change > 0 ? '+' : ''}{metric.change}%
+                        {metric.change > 0 ? "+" : ""}{metric.change}%
                       </span>
                       {metric.target && (
                         <span className="text-sm text-muted-foreground">
@@ -329,7 +329,7 @@ export const AnalyticsDashboard = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge variant={report.enabled ? "default" : "secondary"}>
-                        {report.enabled ? 'Ativo' : 'Inativo'}
+                        {report.enabled ? "Ativo" : "Inativo"}
                       </Badge>
                       <Badge variant="outline">
                         {report.frequency}

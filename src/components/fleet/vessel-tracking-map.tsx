@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Ship, MapPin, Navigation, Activity, AlertTriangle } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useEffect, useRef, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Ship, MapPin, Navigation, Activity, AlertTriangle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface VesselLocation {
   id: string;
@@ -16,7 +16,7 @@ interface VesselLocation {
   longitude: number;
   course: number;
   speed: number;
-  status: 'active' | 'anchored' | 'maintenance' | 'emergency';
+  status: "active" | "anchored" | "maintenance" | "emergency";
   last_update: string;
   captain: string;
   destination?: string;
@@ -27,18 +27,18 @@ const VesselTrackingMap = () => {
   const map = useRef<mapboxgl.Map | null>(null);
   const [vessels, setVessels] = useState<VesselLocation[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselLocation | null>(null);
-  const [mapboxToken, setMapboxToken] = useState<string>('');
+  const [mapboxToken, setMapboxToken] = useState<string>("");
   const { toast } = useToast();
 
   useEffect(() => {
     // Fetch Mapbox token from edge function
     const fetchMapboxToken = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('mapbox-token');
+        const { data, error } = await supabase.functions.invoke("mapbox-token");
         if (error) throw error;
         setMapboxToken(data.token);
       } catch (error) {
-        console.error('Error fetching Mapbox token:', error);
+        console.error("Error fetching Mapbox token:", error);
         toast({
           title: "Erro de Configuração",
           description: "Token do Mapbox não configurado",
@@ -58,18 +58,18 @@ const VesselTrackingMap = () => {
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/satellite-streets-v12',
-      projection: 'globe',
+      style: "mapbox://styles/mapbox/satellite-streets-v12",
+      projection: "globe",
       zoom: 2,
       center: [-40, -15], // Centro do Brasil
       pitch: 45,
     });
 
     // Add navigation controls
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
 
     // Add scale control
-    map.current.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+    map.current.addControl(new mapboxgl.ScaleControl(), "bottom-left");
 
     // Load vessel data
     loadVesselData();
@@ -88,56 +88,56 @@ const VesselTrackingMap = () => {
       // Simulate vessel data - in real app, this would come from GPS trackers
       const mockVessels: VesselLocation[] = [
         {
-          id: '1',
-          name: 'Nautilus Explorer',
-          type: 'Cargo',
+          id: "1",
+          name: "Nautilus Explorer",
+          type: "Cargo",
           latitude: -23.5505,
           longitude: -46.6333,
           course: 45,
           speed: 12.5,
-          status: 'active',
+          status: "active",
           last_update: new Date().toISOString(),
-          captain: 'Capitão Silva',
-          destination: 'Porto de Santos'
+          captain: "Capitão Silva",
+          destination: "Porto de Santos"
         },
         {
-          id: '2',
-          name: 'Atlantic Pioneer',
-          type: 'Tanker',
+          id: "2",
+          name: "Atlantic Pioneer",
+          type: "Tanker",
           latitude: -22.9068,
           longitude: -43.1729,
           course: 180,
           speed: 0,
-          status: 'anchored',
+          status: "anchored",
           last_update: new Date().toISOString(),
-          captain: 'Capitão Costa',
-          destination: 'Porto do Rio de Janeiro'
+          captain: "Capitão Costa",
+          destination: "Porto do Rio de Janeiro"
         },
         {
-          id: '3',
-          name: 'Pacific Star',
-          type: 'Container',
+          id: "3",
+          name: "Pacific Star",
+          type: "Container",
           latitude: -8.0476,
           longitude: -34.8770,
           course: 270,
           speed: 15.2,
-          status: 'active',
+          status: "active",
           last_update: new Date().toISOString(),
-          captain: 'Capitão Oliveira',
-          destination: 'Porto de Recife'
+          captain: "Capitão Oliveira",
+          destination: "Porto de Recife"
         },
         {
-          id: '4',
-          name: 'Ocean Guardian',
-          type: 'Fishing',
+          id: "4",
+          name: "Ocean Guardian",
+          type: "Fishing",
           latitude: -25.4284,
           longitude: -49.2733,
           course: 90,
           speed: 8.0,
-          status: 'maintenance',
+          status: "maintenance",
           last_update: new Date().toISOString(),
-          captain: 'Capitão Santos',
-          destination: 'Porto de Paranaguá'
+          captain: "Capitão Santos",
+          destination: "Porto de Paranaguá"
         }
       ];
 
@@ -147,7 +147,7 @@ const VesselTrackingMap = () => {
         updateVesselMarkers(mockVessels);
       }
     } catch (error) {
-      console.error('Error loading vessel data:', error);
+      console.error("Error loading vessel data:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados das embarcações",
@@ -160,13 +160,13 @@ const VesselTrackingMap = () => {
     if (!map.current) return;
 
     // Remove existing markers
-    const existingMarkers = document.querySelectorAll('.vessel-marker');
+    const existingMarkers = document.querySelectorAll(".vessel-marker");
     existingMarkers.forEach(marker => marker.remove());
 
     // Add new markers
     vesselData.forEach(vessel => {
-      const el = document.createElement('div');
-      el.className = 'vessel-marker';
+      const el = document.createElement("div");
+      el.className = "vessel-marker";
       el.style.cssText = `
         width: 30px;
         height: 30px;
@@ -183,10 +183,10 @@ const VesselTrackingMap = () => {
         transform: rotate(${vessel.course}deg);
       `;
       
-      el.innerHTML = '⛵';
+      el.innerHTML = "⛵";
       el.title = vessel.name;
 
-      el.addEventListener('click', () => {
+      el.addEventListener("click", () => {
         setSelectedVessel(vessel);
         map.current?.flyTo({
           center: [vessel.longitude, vessel.latitude],
@@ -203,25 +203,25 @@ const VesselTrackingMap = () => {
 
   const getVesselMarkerStyle = (status: string) => {
     switch (status) {
-      case 'active':
-        return 'background-color: #10b981;';
-      case 'anchored':
-        return 'background-color: #f59e0b;';
-      case 'maintenance':
-        return 'background-color: #ef4444;';
-      case 'emergency':
-        return 'background-color: #dc2626; animation: pulse 1s infinite;';
-      default:
-        return 'background-color: #6b7280;';
+    case "active":
+      return "background-color: #10b981;";
+    case "anchored":
+      return "background-color: #f59e0b;";
+    case "maintenance":
+      return "background-color: #ef4444;";
+    case "emergency":
+      return "background-color: #dc2626; animation: pulse 1s infinite;";
+    default:
+      return "background-color: #6b7280;";
     }
   };
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      active: { label: 'Ativa', variant: 'default' as const, color: 'bg-green-500' },
-      anchored: { label: 'Ancorada', variant: 'secondary' as const, color: 'bg-yellow-500' },
-      maintenance: { label: 'Manutenção', variant: 'destructive' as const, color: 'bg-red-500' },
-      emergency: { label: 'Emergência', variant: 'destructive' as const, color: 'bg-red-600' }
+      active: { label: "Ativa", variant: "default" as const, color: "bg-green-500" },
+      anchored: { label: "Ancorada", variant: "secondary" as const, color: "bg-yellow-500" },
+      maintenance: { label: "Manutenção", variant: "destructive" as const, color: "bg-red-500" },
+      emergency: { label: "Emergência", variant: "destructive" as const, color: "bg-red-600" }
     };
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
@@ -255,7 +255,7 @@ const VesselTrackingMap = () => {
               <Card 
                 key={vessel.id} 
                 className={`cursor-pointer transition-all hover:shadow-md ${
-                  selectedVessel?.id === vessel.id ? 'ring-2 ring-primary' : ''
+                  selectedVessel?.id === vessel.id ? "ring-2 ring-primary" : ""
                 }`}
                 onClick={() => centerOnVessel(vessel)}
               >
@@ -326,7 +326,7 @@ const VesselTrackingMap = () => {
 
               <div>
                 <span className="text-muted-foreground">Última atualização:</span>
-                <p className="text-sm">{new Date(selectedVessel.last_update).toLocaleString('pt-BR')}</p>
+                <p className="text-sm">{new Date(selectedVessel.last_update).toLocaleString("pt-BR")}</p>
               </div>
 
               <div className="space-y-2 pt-2">

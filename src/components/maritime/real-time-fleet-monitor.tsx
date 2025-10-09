@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Ship, 
   Navigation, 
@@ -15,8 +15,8 @@ import {
   Activity,
   TrendingUp,
   Anchor
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VesselMetrics {
   id: string;
@@ -44,11 +44,11 @@ export const RealTimeFleetMonitor = () => {
     
     // Set up real-time subscription
     const channel = supabase
-      .channel('fleet-updates')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'vessels'
+      .channel("fleet-updates")
+      .on("postgres_changes", {
+        event: "*",
+        schema: "public",
+        table: "vessels"
       }, handleFleetUpdate)
       .subscribe();
 
@@ -68,8 +68,8 @@ export const RealTimeFleetMonitor = () => {
       setLoading(true);
       
       const { data: vesselsData, error } = await supabase
-        .from('vessels')
-        .select('*')
+        .from("vessels")
+        .select("*")
         .limit(10);
 
       if (error) throw error;
@@ -78,13 +78,13 @@ export const RealTimeFleetMonitor = () => {
       const transformedVessels: VesselMetrics[] = vesselsData?.map(vessel => ({
         id: vessel.id,
         name: vessel.name,
-        status: vessel.status || 'operational',
+        status: vessel.status || "operational",
         location: vessel.current_location && 
-                 typeof vessel.current_location === 'object'
+                 typeof vessel.current_location === "object"
           ? { 
-              lat: (vessel.current_location as any).lat || -23.5505, 
-              lon: (vessel.current_location as any).lon || -46.6333 
-            }
+            lat: (vessel.current_location as any).lat || -23.5505, 
+            lon: (vessel.current_location as any).lon || -46.6333 
+          }
           : { lat: -23.5505, lon: -46.6333 },
         speed: Math.random() * 20 + 5, // Mock speed 5-25 knots
         heading: Math.random() * 360, // Mock heading 0-360 degrees
@@ -98,16 +98,16 @@ export const RealTimeFleetMonitor = () => {
       setVessels(transformedVessels);
       
     } catch (error) {
-      console.error('Error loading fleet data:', error);
+      console.error("Error loading fleet data:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleFleetUpdate = (payload: any) => {
-    console.log('Fleet update received:', payload);
+    console.log("Fleet update received:", payload);
     // Update specific vessel data
-    if (payload.eventType === 'UPDATE') {
+    if (payload.eventType === "UPDATE") {
       setVessels(prev => prev.map(vessel => 
         vessel.id === payload.new.id 
           ? { ...vessel, ...payload.new }
@@ -131,7 +131,7 @@ export const RealTimeFleetMonitor = () => {
 
   const updateWeatherForVessel = async (vesselId: string, location: { lat: number; lon: number }) => {
     try {
-      const { data, error } = await supabase.functions.invoke('maritime-weather', {
+      const { data, error } = await supabase.functions.invoke("maritime-weather", {
         body: { location, vesselId }
       });
 
@@ -139,24 +139,24 @@ export const RealTimeFleetMonitor = () => {
 
       setWeatherData(data.weather);
     } catch (error) {
-      console.error('Error fetching weather:', error);
+      console.error("Error fetching weather:", error);
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'operational': return 'bg-green-100 text-green-800';
-      case 'maintenance': return 'bg-yellow-100 text-yellow-800';
-      case 'emergency': return 'bg-red-100 text-red-800';
-      case 'docked': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-secondary text-secondary-foreground';
+    case "operational": return "bg-green-100 text-green-800";
+    case "maintenance": return "bg-yellow-100 text-yellow-800";
+    case "emergency": return "bg-red-100 text-red-800";
+    case "docked": return "bg-blue-100 text-blue-800";
+    default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getFuelLevelColor = (level: number) => {
-    if (level > 50) return 'text-green-600';
-    if (level > 25) return 'text-yellow-600';
-    return 'text-red-600';
+    if (level > 50) return "text-green-600";
+    if (level > 25) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const selectedVesselData = vessels.find(v => v.id === selectedVessel);
@@ -196,7 +196,7 @@ export const RealTimeFleetMonitor = () => {
           <Card 
             key={vessel.id} 
             className={`cursor-pointer transition-all hover:shadow-md ${
-              selectedVessel === vessel.id ? 'ring-2 ring-primary' : ''
+              selectedVessel === vessel.id ? "ring-2 ring-primary" : ""
             }`}
             onClick={() => {
               setSelectedVessel(vessel.id);
@@ -333,7 +333,7 @@ export const RealTimeFleetMonitor = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="text-lg font-semibold">
-                        {selectedVesselData.lastMaintenance.toLocaleDateString('pt-BR')}
+                        {selectedVesselData.lastMaintenance.toLocaleDateString("pt-BR")}
                       </div>
                       <p className="text-sm text-muted-foreground">
                         {Math.floor((Date.now() - selectedVesselData.lastMaintenance.getTime()) / (1000 * 60 * 60 * 24))} dias atrás
@@ -349,7 +349,7 @@ export const RealTimeFleetMonitor = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="text-lg font-semibold">
-                        {selectedVesselData.nextMaintenance.toLocaleDateString('pt-BR')}
+                        {selectedVesselData.nextMaintenance.toLocaleDateString("pt-BR")}
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Em {Math.floor((selectedVesselData.nextMaintenance.getTime() - Date.now()) / (1000 * 60 * 60 * 24))} dias

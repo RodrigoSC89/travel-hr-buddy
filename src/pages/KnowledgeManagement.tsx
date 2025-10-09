@@ -1,5 +1,5 @@
-import React from 'react';
-import KnowledgeManagement from '@/components/admin/knowledge-management';
+import React from "react";
+import KnowledgeManagement from "@/components/admin/knowledge-management";
 
 const KnowledgeManagementPage: React.FC = () => {
   return <KnowledgeManagement />;

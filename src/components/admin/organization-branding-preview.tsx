@@ -1,8 +1,8 @@
-import React from 'react';
-import { useOrganization } from '@/contexts/OrganizationContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Building2, Palette, Globe, Calendar } from 'lucide-react';
+import React from "react";
+import { useOrganization } from "@/contexts/OrganizationContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Building2, Palette, Globe, Calendar } from "lucide-react";
 
 export const OrganizationBrandingPreview: React.FC = () => {
   const { currentOrganization, currentBranding } = useOrganization();

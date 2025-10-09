@@ -1,30 +1,30 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { cn } from "@/lib/utils";
 
 interface ModulePageWrapperProps {
   children: React.ReactNode;
   className?: string;
-  gradient?: 'blue' | 'purple' | 'green' | 'orange' | 'neutral';
+  gradient?: "blue" | "purple" | "green" | "orange" | "neutral";
   withBackButton?: boolean;
 }
 
 const gradientClasses = {
-  blue: 'from-background via-primary/5 to-blue-500/10',
-  purple: 'from-background via-purple-500/5 to-pink-500/10',
-  green: 'from-background via-green-500/5 to-emerald-500/10',
-  orange: 'from-background via-orange-500/5 to-amber-500/10',
-  neutral: 'from-background via-muted/20 to-background',
+  blue: "from-background via-primary/5 to-blue-500/10",
+  purple: "from-background via-purple-500/5 to-pink-500/10",
+  green: "from-background via-green-500/5 to-emerald-500/10",
+  orange: "from-background via-orange-500/5 to-amber-500/10",
+  neutral: "from-background via-muted/20 to-background",
 };
 
 export const ModulePageWrapper: React.FC<ModulePageWrapperProps> = ({
   children,
   className,
-  gradient = 'neutral',
+  gradient = "neutral",
   withBackButton = true,
 }) => {
   return (
     <div className={cn(
-      'min-h-screen bg-gradient-to-br relative overflow-hidden',
+      "min-h-screen bg-gradient-to-br relative overflow-hidden",
       gradientClasses[gradient],
       className
     )}>

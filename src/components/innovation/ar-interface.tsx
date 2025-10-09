@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useRef, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Camera,
   Scan,
@@ -21,16 +21,16 @@ import {
   CheckCircle,
   Zap,
   Anchor
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ARObject {
   id: string;
   name: string;
-  type: 'equipment' | 'safety' | 'navigation' | 'maintenance' | 'info';
+  type: "equipment" | "safety" | "navigation" | "maintenance" | "info";
   position: { x: number; y: number; z: number };
   description: string;
-  status: 'active' | 'warning' | 'maintenance' | 'normal';
+  status: "active" | "warning" | "maintenance" | "normal";
   details: string;
   actions: string[];
   qrCode?: string;
@@ -39,9 +39,9 @@ interface ARObject {
 interface ARSession {
   id: string;
   name: string;
-  type: 'vessel_inspection' | 'maintenance' | 'training' | 'navigation' | 'cargo_check';
-  device: 'phone' | 'tablet' | 'hololens';
-  status: 'active' | 'paused' | 'completed';
+  type: "vessel_inspection" | "maintenance" | "training" | "navigation" | "cargo_check";
+  device: "phone" | "tablet" | "hololens";
+  status: "active" | "paused" | "completed";
   duration: number;
   objectsScanned: number;
   accuracy: number;
@@ -57,78 +57,78 @@ export const ARInterface: React.FC = () => {
 
   const [arObjects] = useState<ARObject[]>([
     {
-      id: '1',
-      name: 'Motor Principal',
-      type: 'equipment',
+      id: "1",
+      name: "Motor Principal",
+      type: "equipment",
       position: { x: 0.5, y: 0.3, z: 0.8 },
-      description: 'Motor diesel principal 2000HP',
-      status: 'active',
-      details: 'Temperatura: 78°C, RPM: 1200, Pressão: 12 bar',
-      actions: ['Verificar Óleo', 'Medir Temperatura', 'Inspeção Visual'],
-      qrCode: 'QR_MOTOR_001'
+      description: "Motor diesel principal 2000HP",
+      status: "active",
+      details: "Temperatura: 78°C, RPM: 1200, Pressão: 12 bar",
+      actions: ["Verificar Óleo", "Medir Temperatura", "Inspeção Visual"],
+      qrCode: "QR_MOTOR_001"
     },
     {
-      id: '2',
-      name: 'Extintor de Incêndio',
-      type: 'safety',
+      id: "2",
+      name: "Extintor de Incêndio",
+      type: "safety",
       position: { x: 0.2, y: 0.6, z: 0.4 },
-      description: 'Extintor CO2 5kg',
-      status: 'normal',
-      details: 'Última inspeção: 15/01/2024, Pressão: OK',
-      actions: ['Verificar Pressão', 'Testar Válvula', 'Verificar Validade'],
-      qrCode: 'QR_EXT_002'
+      description: "Extintor CO2 5kg",
+      status: "normal",
+      details: "Última inspeção: 15/01/2024, Pressão: OK",
+      actions: ["Verificar Pressão", "Testar Válvula", "Verificar Validade"],
+      qrCode: "QR_EXT_002"
     },
     {
-      id: '3',
-      name: 'Painel de Navegação',
-      type: 'navigation',
+      id: "3",
+      name: "Painel de Navegação",
+      type: "navigation",
       position: { x: 0.7, y: 0.4, z: 0.6 },
-      description: 'Sistema GPS e radar',
-      status: 'active',
-      details: 'GPS: Ativo, Radar: Funcionando, Bússola: Calibrada',
-      actions: ['Calibrar Bússola', 'Testar GPS', 'Verificar Radar'],
-      qrCode: 'QR_NAV_003'
+      description: "Sistema GPS e radar",
+      status: "active",
+      details: "GPS: Ativo, Radar: Funcionando, Bússola: Calibrada",
+      actions: ["Calibrar Bússola", "Testar GPS", "Verificar Radar"],
+      qrCode: "QR_NAV_003"
     },
     {
-      id: '4',
-      name: 'Válvula de Combustível',
-      type: 'maintenance',
+      id: "4",
+      name: "Válvula de Combustível",
+      type: "maintenance",
       position: { x: 0.4, y: 0.7, z: 0.3 },
-      description: 'Válvula principal linha de combustível',
-      status: 'warning',
-      details: 'Possível vazamento detectado - Verificar urgente',
-      actions: ['Inspeção Detalhada', 'Teste de Vazamento', 'Substituir Vedações'],
-      qrCode: 'QR_VAL_004'
+      description: "Válvula principal linha de combustível",
+      status: "warning",
+      details: "Possível vazamento detectado - Verificar urgente",
+      actions: ["Inspeção Detalhada", "Teste de Vazamento", "Substituir Vedações"],
+      qrCode: "QR_VAL_004"
     }
   ]);
 
   const [arSessions] = useState<ARSession[]>([
     {
-      id: '1',
-      name: 'Inspeção Sala de Máquinas',
-      type: 'vessel_inspection',
-      device: 'tablet',
-      status: 'active',
+      id: "1",
+      name: "Inspeção Sala de Máquinas",
+      type: "vessel_inspection",
+      device: "tablet",
+      status: "active",
       duration: 25,
       objectsScanned: 12,
       accuracy: 94
     },
     {
-      id: '2',
-      name: 'Manutenção Preventiva Motor',
-      type: 'maintenance',
-      device: 'phone',
-      status: 'completed',
+      id: "2",
+      name: "Manutenção Preventiva Motor",
+      type: "maintenance",
+      device: "phone",
+      status: "completed",
       duration: 45,
       objectsScanned: 8,
       accuracy: 98
     },
     {
-      id: '3',
-      name: 'Treinamento Segurança',
-      type: 'training',
-      device: 'hololens',
-      status: 'paused',
+      id: "3",
+      name: "Treinamento Segurança",
+      type: "training",
+      device: "hololens",
+      status: "paused",
       duration: 18,
       objectsScanned: 5,
       accuracy: 91
@@ -161,7 +161,7 @@ export const ARInterface: React.FC = () => {
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' } 
+        video: { facingMode: "environment" } 
       });
       
       if (videoRef.current) {
@@ -211,31 +211,31 @@ export const ARInterface: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'text-green-600 bg-green-100';
-      case 'normal': return 'text-blue-600 bg-blue-100';
-      case 'warning': return 'text-yellow-600 bg-yellow-100';
-      case 'maintenance': return 'text-red-600 bg-red-100';
-      default: return 'text-muted-foreground bg-gray-100';
+    case "active": return "text-green-600 bg-green-100";
+    case "normal": return "text-blue-600 bg-blue-100";
+    case "warning": return "text-yellow-600 bg-yellow-100";
+    case "maintenance": return "text-red-600 bg-red-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getObjectIcon = (type: string) => {
     switch (type) {
-      case 'equipment': return <Zap className="h-5 w-5" />;
-      case 'safety': return <AlertTriangle className="h-5 w-5" />;
-      case 'navigation': return <Navigation className="h-5 w-5" />;
-      case 'maintenance': return <Wrench className="h-5 w-5" />;
-      case 'info': return <Info className="h-5 w-5" />;
-      default: return <Info className="h-5 w-5" />;
+    case "equipment": return <Zap className="h-5 w-5" />;
+    case "safety": return <AlertTriangle className="h-5 w-5" />;
+    case "navigation": return <Navigation className="h-5 w-5" />;
+    case "maintenance": return <Wrench className="h-5 w-5" />;
+    case "info": return <Info className="h-5 w-5" />;
+    default: return <Info className="h-5 w-5" />;
     }
   };
 
   const getDeviceIcon = (device: string) => {
     switch (device) {
-      case 'phone': return <Smartphone className="h-4 w-4" />;
-      case 'tablet': return <Tablet className="h-4 w-4" />;
-      case 'hololens': return <Monitor className="h-4 w-4" />;
-      default: return <Smartphone className="h-4 w-4" />;
+    case "phone": return <Smartphone className="h-4 w-4" />;
+    case "tablet": return <Tablet className="h-4 w-4" />;
+    case "hololens": return <Monitor className="h-4 w-4" />;
+    default: return <Smartphone className="h-4 w-4" />;
     }
   };
 
@@ -445,16 +445,16 @@ export const ARInterface: React.FC = () => {
                       <div>
                         <h3 className="font-semibold">{session.name}</h3>
                         <p className="text-sm text-muted-foreground capitalize">
-                          {session.type.replace('_', ' ')}
+                          {session.type.replace("_", " ")}
                         </p>
                       </div>
                     </div>
                     <Badge variant={
-                      session.status === 'active' ? 'default' :
-                      session.status === 'paused' ? 'secondary' : 'outline'
+                      session.status === "active" ? "default" :
+                        session.status === "paused" ? "secondary" : "outline"
                     }>
-                      {session.status === 'active' ? 'Ativo' :
-                       session.status === 'paused' ? 'Pausado' : 'Concluído'}
+                      {session.status === "active" ? "Ativo" :
+                        session.status === "paused" ? "Pausado" : "Concluído"}
                     </Badge>
                   </div>
                   
@@ -478,12 +478,12 @@ export const ARInterface: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2 mt-4">
-                    {session.status === 'active' && (
+                    {session.status === "active" && (
                       <Button size="sm" variant="outline">
                         Pausar Sessão
                       </Button>
                     )}
-                    {session.status === 'paused' && (
+                    {session.status === "paused" && (
                       <Button size="sm">
                         Continuar
                       </Button>
@@ -509,10 +509,10 @@ export const ARInterface: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {[
-                  { title: 'Segurança Marítima Básica', duration: '30 min', level: 'Iniciante' },
-                  { title: 'Manutenção de Motores', duration: '45 min', level: 'Intermediário' },
-                  { title: 'Navegação Avançada', duration: '60 min', level: 'Avançado' },
-                  { title: 'Procedimentos de Emergência', duration: '40 min', level: 'Intermediário' }
+                  { title: "Segurança Marítima Básica", duration: "30 min", level: "Iniciante" },
+                  { title: "Manutenção de Motores", duration: "45 min", level: "Intermediário" },
+                  { title: "Navegação Avançada", duration: "60 min", level: "Avançado" },
+                  { title: "Procedimentos de Emergência", duration: "40 min", level: "Intermediário" }
                 ].map((module, index) => (
                   <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
                     <div>
@@ -537,17 +537,17 @@ export const ARInterface: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   {[
-                    { name: 'Segurança Básica', progress: 100, status: 'completed' },
-                    { name: 'Manutenção Motores', progress: 65, status: 'in_progress' },
-                    { name: 'Navegação', progress: 0, status: 'not_started' },
-                    { name: 'Emergências', progress: 25, status: 'in_progress' }
+                    { name: "Segurança Básica", progress: 100, status: "completed" },
+                    { name: "Manutenção Motores", progress: 65, status: "in_progress" },
+                    { name: "Navegação", progress: 0, status: "not_started" },
+                    { name: "Emergências", progress: 25, status: "in_progress" }
                   ].map((course, index) => (
                     <div key={index} className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-medium">{course.name}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-sm">{course.progress}%</span>
-                          {course.status === 'completed' && (
+                          {course.status === "completed" && (
                             <CheckCircle className="h-4 w-4 text-green-500" />
                           )}
                         </div>
@@ -555,7 +555,7 @@ export const ARInterface: React.FC = () => {
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className={`h-2 rounded-full ${
-                            course.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
+                            course.status === "completed" ? "bg-green-500" : "bg-blue-500"
                           }`}
                           style={{ width: `${course.progress}%` }}
                         />

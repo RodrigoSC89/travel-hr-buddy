@@ -1,5 +1,5 @@
-import React, { Suspense, memo } from 'react';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import React, { Suspense, memo } from "react";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 interface LazyComponentProps {
   loader: () => Promise<{ default: React.ComponentType<any> }>;
@@ -34,7 +34,7 @@ export const LazyComponent: React.FC<LazyComponentProps> = memo(({
   );
 });
 
-LazyComponent.displayName = 'LazyComponent';
+LazyComponent.displayName = "LazyComponent";
 
 // Hook para monitoramento de performance
 export const usePerformanceMonitor = (componentName: string) => {
@@ -61,4 +61,4 @@ export const OptimizedCard = memo(({ children, className, ...props }: any) => {
   );
 });
 
-OptimizedCard.displayName = 'OptimizedCard';
+OptimizedCard.displayName = "OptimizedCard";

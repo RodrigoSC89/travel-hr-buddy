@@ -1,5 +1,5 @@
-import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { 
   Home, 
   BarChart3, 
@@ -11,37 +11,37 @@ import {
   Plane,
   Bot,
   Trophy
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-import { useEnhancedNotifications } from '@/hooks/use-enhanced-notifications';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { useEnhancedNotifications } from "@/hooks/use-enhanced-notifications";
 
 const navigationItems = [
   {
-    href: '/',
+    href: "/",
     icon: Home,
-    label: 'Início',
+    label: "Início",
     end: true
   },
   {
-    href: '/portal',
+    href: "/portal",
     icon: User,
-    label: 'Portal'
+    label: "Portal"
   },
   {
-    href: '/innovation',
+    href: "/innovation",
     icon: Bot,
-    label: 'IA'
+    label: "IA"
   },
   {
-    href: '/gamification',
+    href: "/gamification",
     icon: Trophy,
-    label: 'Ranking'
+    label: "Ranking"
   },
   {
-    href: '/price-alerts',
+    href: "/price-alerts",
     icon: AlertTriangle,
-    label: 'Alertas'
+    label: "Alertas"
   }
 ];
 
@@ -85,12 +85,12 @@ export const MobileNavigation: React.FC = () => {
               </span>
               
               {/* Badge para notificações na navegação de alertas */}
-              {item.href === '/price-alerts' && unreadCount > 0 && (
+              {item.href === "/price-alerts" && unreadCount > 0 && (
                 <Badge 
                   variant="destructive" 
                   className="absolute -top-1 -right-1 h-4 w-4 text-xs p-0 flex items-center justify-center scale-75"
                 >
-                  {unreadCount > 9 ? '9+' : unreadCount}
+                  {unreadCount > 9 ? "9+" : unreadCount}
                 </Badge>
               )}
               

@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { ResponsiveDashboard } from './responsive-dashboard';
-import { EnhancedDashboard } from './enhanced-dashboard';
-import PersonalizedRecommendations from '../intelligence/PersonalizedRecommendations';
-import IntelligentNotificationCenter from '../intelligence/IntelligentNotificationCenter';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Brain, Bell, BarChart3, Sparkles, Users, Target, Trophy, Activity, Lightbulb, LineChart, Star } from 'lucide-react';
+import React, { useState } from "react";
+import { ResponsiveDashboard } from "./responsive-dashboard";
+import { EnhancedDashboard } from "./enhanced-dashboard";
+import PersonalizedRecommendations from "../intelligence/PersonalizedRecommendations";
+import IntelligentNotificationCenter from "../intelligence/IntelligentNotificationCenter";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Brain, Bell, BarChart3, Sparkles, Users, Target, Trophy, Activity, Lightbulb, LineChart, Star } from "lucide-react";
 
-import { RealTimeCollaboration } from '@/components/innovation/RealTimeCollaboration';
-import { AIAssistantPanel } from '@/components/innovation/AIAssistantPanel';
-import { SmartWorkflow } from '@/components/innovation/SmartWorkflow';
-import { SystemHealthDashboard } from '@/components/innovation/SystemHealthDashboard';
-import { Gamification } from '@/components/innovation/Gamification';
-import { AdvancedAIAssistant } from '@/components/innovation/AdvancedAIAssistant';
-import { BusinessIntelligence } from '@/components/innovation/BusinessIntelligence';
+import { RealTimeCollaboration } from "@/components/innovation/RealTimeCollaboration";
+import { AIAssistantPanel } from "@/components/innovation/AIAssistantPanel";
+import { SmartWorkflow } from "@/components/innovation/SmartWorkflow";
+import { SystemHealthDashboard } from "@/components/innovation/SystemHealthDashboard";
+import { Gamification } from "@/components/innovation/Gamification";
+import { AdvancedAIAssistant } from "@/components/innovation/AdvancedAIAssistant";
+import { BusinessIntelligence } from "@/components/innovation/BusinessIntelligence";
 
 interface GlobalDashboardProps {
   onNavigate?: (module: string) => void;
@@ -102,12 +102,12 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                       className={`
                         relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 min-w-fit
                         ${isActive 
-                          ? 'bg-primary text-primary-foreground shadow-lg transform scale-105' 
-                          : 'text-foreground/80 hover:text-foreground hover:bg-accent/50 hover:scale-102'
-                        }
+                      ? "bg-primary text-primary-foreground shadow-lg transform scale-105" 
+                      : "text-foreground/80 hover:text-foreground hover:bg-accent/50 hover:scale-102"
+                    }
                       `}
                     >
-                      <IconComponent className={`w-5 h-5 ${isActive ? 'animate-pulse' : ''}`} />
+                      <IconComponent className={`w-5 h-5 ${isActive ? "animate-pulse" : ""}`} />
                       <span className="font-medium whitespace-nowrap">{tab.label}</span>
                       {isActive && (
                         <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-primary-foreground rounded-full" />

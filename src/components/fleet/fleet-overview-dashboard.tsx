@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Ship, 
   Activity, 
@@ -16,9 +16,9 @@ import {
   Users,
   Clock,
   BarChart3
-} from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell } from 'recharts';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell } from "recharts";
+import { useToast } from "@/hooks/use-toast";
 
 interface FleetStats {
   totalVessels: number;
@@ -46,56 +46,56 @@ const FleetOverviewDashboard: React.FC<FleetOverviewProps> = ({ stats, onRefresh
   const loadDashboardData = () => {
     // Performance data for the last 7 days
     const performance = [
-      { day: 'Seg', efficiency: 85, fuel: 120, speed: 18 },
-      { day: 'Ter', efficiency: 87, fuel: 115, speed: 19 },
-      { day: 'Qua', efficiency: 90, fuel: 110, speed: 20 },
-      { day: 'Qui', efficiency: 88, fuel: 118, speed: 18.5 },
-      { day: 'Sex', efficiency: 92, fuel: 108, speed: 21 },
-      { day: 'Sáb', efficiency: 89, fuel: 112, speed: 19.5 },
-      { day: 'Dom', efficiency: 91, fuel: 105, speed: 20.5 }
+      { day: "Seg", efficiency: 85, fuel: 120, speed: 18 },
+      { day: "Ter", efficiency: 87, fuel: 115, speed: 19 },
+      { day: "Qua", efficiency: 90, fuel: 110, speed: 20 },
+      { day: "Qui", efficiency: 88, fuel: 118, speed: 18.5 },
+      { day: "Sex", efficiency: 92, fuel: 108, speed: 21 },
+      { day: "Sáb", efficiency: 89, fuel: 112, speed: 19.5 },
+      { day: "Dom", efficiency: 91, fuel: 105, speed: 20.5 }
     ];
 
     // Fleet distribution by type
     const distribution = [
-      { name: 'Porta-contêineres', value: 8, color: '#22c55e' },
-      { name: 'Graneleiros', value: 5, color: '#3b82f6' },
-      { name: 'Petroleiros', value: 3, color: '#f59e0b' },
-      { name: 'Cargueiros', value: 2, color: '#8b5cf6' }
+      { name: "Porta-contêineres", value: 8, color: "#22c55e" },
+      { name: "Graneleiros", value: 5, color: "#3b82f6" },
+      { name: "Petroleiros", value: 3, color: "#f59e0b" },
+      { name: "Cargueiros", value: 2, color: "#8b5cf6" }
     ];
 
     // Recent activities
     const activities = [
       {
-        id: '1',
-        type: 'arrival',
-        vessel: 'MV Atlântico',
-        location: 'Porto de Santos',
-        time: '2 horas atrás',
-        status: 'success'
+        id: "1",
+        type: "arrival",
+        vessel: "MV Atlântico",
+        location: "Porto de Santos",
+        time: "2 horas atrás",
+        status: "success"
       },
       {
-        id: '2',
-        type: 'departure',
-        vessel: 'MV Pacífico',
-        location: 'Porto de Paranaguá',
-        time: '4 horas atrás',
-        status: 'info'
+        id: "2",
+        type: "departure",
+        vessel: "MV Pacífico",
+        location: "Porto de Paranaguá",
+        time: "4 horas atrás",
+        status: "info"
       },
       {
-        id: '3',
-        type: 'maintenance',
-        vessel: 'MV Índico',
-        location: 'Estaleiro Suape',
-        time: '6 horas atrás',
-        status: 'warning'
+        id: "3",
+        type: "maintenance",
+        vessel: "MV Índico",
+        location: "Estaleiro Suape",
+        time: "6 horas atrás",
+        status: "warning"
       },
       {
-        id: '4',
-        type: 'alert',
-        vessel: 'MV Mediterrâneo',
-        location: 'Alto Mar',
-        time: '8 horas atrás',
-        status: 'error'
+        id: "4",
+        type: "alert",
+        vessel: "MV Mediterrâneo",
+        location: "Alto Mar",
+        time: "8 horas atrás",
+        status: "error"
       }
     ];
 
@@ -106,31 +106,31 @@ const FleetOverviewDashboard: React.FC<FleetOverviewProps> = ({ stats, onRefresh
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'arrival':
-        return <MapPin className="h-4 w-4 text-success" />;
-      case 'departure':
-        return <Ship className="h-4 w-4 text-info" />;
-      case 'maintenance':
-        return <Clock className="h-4 w-4 text-warning" />;
-      case 'alert':
-        return <AlertTriangle className="h-4 w-4 text-destructive" />;
-      default:
-        return <Activity className="h-4 w-4" />;
+    case "arrival":
+      return <MapPin className="h-4 w-4 text-success" />;
+    case "departure":
+      return <Ship className="h-4 w-4 text-info" />;
+    case "maintenance":
+      return <Clock className="h-4 w-4 text-warning" />;
+    case "alert":
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    default:
+      return <Activity className="h-4 w-4" />;
     }
   };
 
   const getActivityStatus = (status: string) => {
     switch (status) {
-      case 'success':
-        return 'bg-success/10 border-success/20';
-      case 'info':
-        return 'bg-info/10 border-info/20';
-      case 'warning':
-        return 'bg-warning/10 border-warning/20';
-      case 'error':
-        return 'bg-destructive/10 border-destructive/20';
-      default:
-        return 'bg-muted/10 border-muted/20';
+    case "success":
+      return "bg-success/10 border-success/20";
+    case "info":
+      return "bg-info/10 border-info/20";
+    case "warning":
+      return "bg-warning/10 border-warning/20";
+    case "error":
+      return "bg-destructive/10 border-destructive/20";
+    default:
+      return "bg-muted/10 border-muted/20";
     }
   };
 
@@ -223,17 +223,17 @@ const FleetOverviewDashboard: React.FC<FleetOverviewProps> = ({ stats, onRefresh
                 <XAxis 
                   dataKey="day" 
                   fontSize={12}
-                  tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                  tick={{ fill: "hsl(var(--muted-foreground))" }}
                 />
                 <YAxis 
                   fontSize={12}
-                  tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                  tick={{ fill: "hsl(var(--muted-foreground))" }}
                 />
                 <Tooltip 
                   contentStyle={{
-                    backgroundColor: 'hsl(var(--background))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px"
                   }}
                 />
                 <Line 

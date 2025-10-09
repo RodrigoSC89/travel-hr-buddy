@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Wrench, 
   Settings, 
@@ -24,26 +24,26 @@ import {
   Fuel,
   Activity,
   MapPin
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Equipment {
   id: string;
   name: string;
-  type: 'safety' | 'navigation' | 'communication' | 'propulsion' | 'electrical' | 'fire-safety';
+  type: "safety" | "navigation" | "communication" | "propulsion" | "electrical" | "fire-safety";
   model: string;
   serialNumber: string;
   location: string;
-  status: 'operational' | 'maintenance' | 'failure' | 'offline';
+  status: "operational" | "maintenance" | "failure" | "offline";
   lastMaintenance: string;
   nextMaintenance: string;
   condition: number; // 0-100
-  criticality: 'low' | 'medium' | 'high' | 'critical';
+  criticality: "low" | "medium" | "high" | "critical";
 }
 
 interface MaintenanceRecord {
   id: string;
   equipmentId: string;
-  type: 'preventive' | 'corrective' | 'emergency' | 'inspection';
+  type: "preventive" | "corrective" | "emergency" | "inspection";
   description: string;
   performedBy: string;
   performedAt: string;
@@ -62,43 +62,43 @@ export const PeotramEquipmentManager: React.FC = () => {
   function getDemoEquipment(): Equipment[] {
     return [
       {
-        id: 'EQ001',
-        name: 'Radar de Navegação Principal',
-        type: 'navigation',
-        model: 'NavTech 5000X',
-        serialNumber: 'NT5000X-2024-001',
-        location: 'Ponte de Comando',
-        status: 'operational',
-        lastMaintenance: '2024-01-15',
-        nextMaintenance: '2024-04-15',
+        id: "EQ001",
+        name: "Radar de Navegação Principal",
+        type: "navigation",
+        model: "NavTech 5000X",
+        serialNumber: "NT5000X-2024-001",
+        location: "Ponte de Comando",
+        status: "operational",
+        lastMaintenance: "2024-01-15",
+        nextMaintenance: "2024-04-15",
         condition: 92,
-        criticality: 'critical'
+        criticality: "critical"
       },
       {
-        id: 'EQ002',
-        name: 'Motor Principal Port',
-        type: 'propulsion',
-        model: 'MarineEngine 2000HP',
-        serialNumber: 'ME2000-2023-015',
-        location: 'Praça de Máquinas',
-        status: 'maintenance',
-        lastMaintenance: '2024-01-20',
-        nextMaintenance: '2024-02-20',
+        id: "EQ002",
+        name: "Motor Principal Port",
+        type: "propulsion",
+        model: "MarineEngine 2000HP",
+        serialNumber: "ME2000-2023-015",
+        location: "Praça de Máquinas",
+        status: "maintenance",
+        lastMaintenance: "2024-01-20",
+        nextMaintenance: "2024-02-20",
         condition: 78,
-        criticality: 'critical'
+        criticality: "critical"
       },
       {
-        id: 'EQ003',
-        name: 'Sistema de Combate a Incêndio',
-        type: 'fire-safety',
-        model: 'FireSafe Pro',
-        serialNumber: 'FSP-2024-008',
-        location: 'Distribuído',
-        status: 'operational',
-        lastMaintenance: '2024-01-10',
-        nextMaintenance: '2024-07-10',
+        id: "EQ003",
+        name: "Sistema de Combate a Incêndio",
+        type: "fire-safety",
+        model: "FireSafe Pro",
+        serialNumber: "FSP-2024-008",
+        location: "Distribuído",
+        status: "operational",
+        lastMaintenance: "2024-01-10",
+        nextMaintenance: "2024-07-10",
         condition: 95,
-        criticality: 'critical'
+        criticality: "critical"
       }
     ];
   }
@@ -106,68 +106,68 @@ export const PeotramEquipmentManager: React.FC = () => {
   function getDemoMaintenanceRecords(): MaintenanceRecord[] {
     return [
       {
-        id: 'MR001',
-        equipmentId: 'EQ001',
-        type: 'preventive',
-        description: 'Inspeção geral e calibração do radar',
-        performedBy: 'Carlos Silva',
-        performedAt: '2024-01-15',
+        id: "MR001",
+        equipmentId: "EQ001",
+        type: "preventive",
+        description: "Inspeção geral e calibração do radar",
+        performedBy: "Carlos Silva",
+        performedAt: "2024-01-15",
         duration: 4,
         cost: 1200,
-        partsUsed: ['Filtro de ar', 'Óleo lubrificante'],
-        nextAction: 'Verificar alinhamento em 3 meses'
+        partsUsed: ["Filtro de ar", "Óleo lubrificante"],
+        nextAction: "Verificar alinhamento em 3 meses"
       },
       {
-        id: 'MR002',
-        equipmentId: 'EQ002',
-        type: 'corrective',
-        description: 'Substituição de válvula de pressão',
-        performedBy: 'João Santos',
-        performedAt: '2024-01-20',
+        id: "MR002",
+        equipmentId: "EQ002",
+        type: "corrective",
+        description: "Substituição de válvula de pressão",
+        performedBy: "João Santos",
+        performedAt: "2024-01-20",
         duration: 6,
         cost: 2500,
-        partsUsed: ['Válvula pressão', 'Vedações', 'Parafusos'],
-        nextAction: 'Monitorar pressão por 2 semanas'
+        partsUsed: ["Válvula pressão", "Vedações", "Parafusos"],
+        nextAction: "Monitorar pressão por 2 semanas"
       }
     ];
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'operational': return 'bg-success/20 text-success border-success/30';
-      case 'maintenance': return 'bg-warning/20 text-warning border-warning/30';
-      case 'failure': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'offline': return 'bg-muted/20 text-muted-foreground border-muted/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "operational": return "bg-success/20 text-success border-success/30";
+    case "maintenance": return "bg-warning/20 text-warning border-warning/30";
+    case "failure": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "offline": return "bg-muted/20 text-muted-foreground border-muted/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getCriticalityColor = (criticality: string) => {
     switch (criticality) {
-      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-      case 'high': return 'bg-warning/20 text-warning border-warning/30';
-      case 'medium': return 'bg-info/20 text-info border-info/30';
-      case 'low': return 'bg-muted/20 text-muted-foreground border-muted/30';
-      default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high": return "bg-warning/20 text-warning border-warning/30";
+    case "medium": return "bg-info/20 text-info border-info/30";
+    case "low": return "bg-muted/20 text-muted-foreground border-muted/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'navigation': return <MapPin className="w-4 h-4" />;
-      case 'propulsion': return <Fuel className="w-4 h-4" />;
-      case 'electrical': return <Zap className="w-4 h-4" />;
-      case 'fire-safety': return <AlertTriangle className="w-4 h-4" />;
-      case 'communication': return <Activity className="w-4 h-4" />;
-      case 'safety': return <CheckCircle className="w-4 h-4" />;
-      default: return <Settings className="w-4 h-4" />;
+    case "navigation": return <MapPin className="w-4 h-4" />;
+    case "propulsion": return <Fuel className="w-4 h-4" />;
+    case "electrical": return <Zap className="w-4 h-4" />;
+    case "fire-safety": return <AlertTriangle className="w-4 h-4" />;
+    case "communication": return <Activity className="w-4 h-4" />;
+    case "safety": return <CheckCircle className="w-4 h-4" />;
+    default: return <Settings className="w-4 h-4" />;
     }
   };
 
   const getConditionColor = (condition: number) => {
-    if (condition >= 90) return 'text-success';
-    if (condition >= 70) return 'text-warning';
-    return 'text-destructive';
+    if (condition >= 90) return "text-success";
+    if (condition >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   return (
@@ -274,7 +274,7 @@ export const PeotramEquipmentManager: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-8 h-8 text-success" />
                   <div>
-                    <p className="text-2xl font-bold">{equipment.filter(e => e.status === 'operational').length}</p>
+                    <p className="text-2xl font-bold">{equipment.filter(e => e.status === "operational").length}</p>
                     <p className="text-sm text-muted-foreground">Operacionais</p>
                   </div>
                 </div>
@@ -286,7 +286,7 @@ export const PeotramEquipmentManager: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Wrench className="w-8 h-8 text-warning" />
                   <div>
-                    <p className="text-2xl font-bold">{equipment.filter(e => e.status === 'maintenance').length}</p>
+                    <p className="text-2xl font-bold">{equipment.filter(e => e.status === "maintenance").length}</p>
                     <p className="text-sm text-muted-foreground">Em Manutenção</p>
                   </div>
                 </div>
@@ -298,7 +298,7 @@ export const PeotramEquipmentManager: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <AlertTriangle className="w-8 h-8 text-destructive" />
                   <div>
-                    <p className="text-2xl font-bold">{equipment.filter(e => e.status === 'failure').length}</p>
+                    <p className="text-2xl font-bold">{equipment.filter(e => e.status === "failure").length}</p>
                     <p className="text-sm text-muted-foreground">Com Falha</p>
                   </div>
                 </div>
@@ -312,7 +312,7 @@ export const PeotramEquipmentManager: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {equipment.filter(e => e.criticality === 'critical').map((eq) => (
+                {equipment.filter(e => e.criticality === "critical").map((eq) => (
                   <div key={eq.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                     <div className="flex items-center gap-3">
                       {getTypeIcon(eq.type)}
@@ -378,8 +378,8 @@ export const PeotramEquipmentManager: React.FC = () => {
                     <div className="w-full bg-muted rounded-full h-2">
                       <div 
                         className={`h-2 rounded-full transition-all duration-300 ${
-                          eq.condition >= 90 ? 'bg-success' :
-                          eq.condition >= 70 ? 'bg-warning' : 'bg-destructive'
+                          eq.condition >= 90 ? "bg-success" :
+                            eq.condition >= 70 ? "bg-warning" : "bg-destructive"
                         }`}
                         style={{ width: `${eq.condition}%` }}
                       />
@@ -415,9 +415,9 @@ export const PeotramEquipmentManager: React.FC = () => {
                       </CardDescription>
                     </div>
                     <Badge variant="outline" className={
-                      record.type === 'emergency' ? 'bg-destructive/20 text-destructive border-destructive/30' :
-                      record.type === 'corrective' ? 'bg-warning/20 text-warning border-warning/30' :
-                      'bg-info/20 text-info border-info/30'
+                      record.type === "emergency" ? "bg-destructive/20 text-destructive border-destructive/30" :
+                        record.type === "corrective" ? "bg-warning/20 text-warning border-warning/30" :
+                          "bg-info/20 text-info border-info/30"
                     }>
                       {record.type}
                     </Badge>

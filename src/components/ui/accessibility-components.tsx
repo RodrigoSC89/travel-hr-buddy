@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /**
  * Screen Reader Only Text
@@ -17,12 +17,12 @@ export const SrOnly: React.FC<{ children: React.ReactNode }> = ({ children }) =>
  */
 export const AccessibleLoading: React.FC<{ 
   message?: string;
-  size?: 'sm' | 'md' | 'lg';
-}> = ({ message = 'Carregando...', size = 'md' }) => {
+  size?: "sm" | "md" | "lg";
+}> = ({ message = "Carregando...", size = "md" }) => {
   const sizeClasses = {
-    sm: 'w-8 h-8',
-    md: 'w-12 h-12',
-    lg: 'w-16 h-16'
+    sm: "w-8 h-8",
+    md: "w-12 h-12",
+    lg: "w-16 h-16"
   };
 
   return (
@@ -52,7 +52,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
   ariaLabel,
   isLoading,
   onClick,
-  className = '',
+  className = "",
   disabled = false,
   ...props
 }) => {
@@ -88,9 +88,9 @@ export const SkipToMain: React.FC = () => {
  */
 export const LiveRegion: React.FC<{
   children: React.ReactNode;
-  politeness?: 'polite' | 'assertive';
+  politeness?: "polite" | "assertive";
   atomic?: boolean;
-}> = ({ children, politeness = 'polite', atomic = true }) => {
+}> = ({ children, politeness = "polite", atomic = true }) => {
   return (
     <div 
       role="status" 

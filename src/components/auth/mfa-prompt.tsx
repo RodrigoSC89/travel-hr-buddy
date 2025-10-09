@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from "react";
 import { 
   Shield, 
   Key, 
@@ -7,15 +7,15 @@ import {
   Smartphone,
   Clock,
   CheckCircle
-} from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface MFAPromptProps {
   onSuccess: () => void;
@@ -24,10 +24,10 @@ interface MFAPromptProps {
 
 export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => {
   const { toast } = useToast();
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [challenge, setChallenge] = useState<any>(null);
-  const [factorId, setFactorId] = useState<string>('');
+  const [factorId, setFactorId] = useState<string>("");
 
   const initiateMFAChallenge = useCallback(async () => {
     try {
@@ -35,7 +35,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
       const { data: factorsData, error: factorsError } = await supabase.auth.mfa.listFactors();
       if (factorsError) throw factorsError;
 
-      const verifiedFactor = factorsData?.all?.find(f => f.status === 'verified');
+      const verifiedFactor = factorsData?.all?.find(f => f.status === "verified");
       if (!verifiedFactor) {
         toast({
           title: "2FA não configurado",
@@ -101,7 +101,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
         description: "Verifique o código e tente novamente",
         variant: "destructive"
       });
-      setCode('');
+      setCode("");
     } finally {
       setIsLoading(false);
     }
@@ -132,13 +132,13 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
             <Input
               id="mfa-code"
               value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
               placeholder="000000"
               className="text-center font-mono text-xl tracking-widest"
               maxLength={6}
               autoFocus
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && code.length === 6) {
+                if (e.key === "Enter" && code.length === 6) {
                   verifyMFA();
                 }
               }}
@@ -170,7 +170,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
 
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
-              Não consegue acessar seu app autenticador?{' '}
+              Não consegue acessar seu app autenticador?{" "}
               <button 
                 className="text-primary hover:underline"
                 onClick={onCancel}
@@ -190,7 +190,7 @@ export const useMFA = () => {
   const [showMFAPrompt, setShowMFAPrompt] = useState(false);
   const [mfaResolver, setMfaResolver] = useState<{
     resolve: (success: boolean) => void;
-  } | null>(null);
+      } | null>(null);
 
   const requireMFA = (): Promise<boolean> => {
     return new Promise((resolve) => {

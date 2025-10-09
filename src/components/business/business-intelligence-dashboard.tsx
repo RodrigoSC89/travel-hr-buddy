@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   BarChart, 
   Bar, 
@@ -20,7 +20,7 @@ import {
   ResponsiveContainer,
   Area,
   AreaChart
-} from 'recharts';
+} from "recharts";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -36,9 +36,9 @@ import {
   Download,
   RefreshCw,
   Filter
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface BusinessMetric {
   id: string;
@@ -47,10 +47,10 @@ interface BusinessMetric {
   previousValue: number;
   target: number;
   unit: string;
-  category: 'financial' | 'operational' | 'customer' | 'hr';
-  trend: 'up' | 'down' | 'stable';
+  category: "financial" | "operational" | "customer" | "hr";
+  trend: "up" | "down" | "stable";
   change: number;
-  status: 'healthy' | 'warning' | 'critical';
+  status: "healthy" | "warning" | "critical";
 }
 
 interface ChartData {
@@ -66,83 +66,83 @@ export const BusinessIntelligenceDashboard: React.FC = () => {
   
   const [metrics, setMetrics] = useState<BusinessMetric[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedPeriod, setSelectedPeriod] = useState('30d');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedPeriod, setSelectedPeriod] = useState("30d");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   // Dados simulados para demonstração
   const generateMockData = () => {
     const mockMetrics: BusinessMetric[] = [
       {
-        id: '1',
-        name: 'Receita Total',
+        id: "1",
+        name: "Receita Total",
         value: 2850000,
         previousValue: 2650000,
         target: 3000000,
-        unit: 'BRL',
-        category: 'financial',
-        trend: 'up',
+        unit: "BRL",
+        category: "financial",
+        trend: "up",
         change: 7.5,
-        status: 'healthy'
+        status: "healthy"
       },
       {
-        id: '2',
-        name: 'Lucro Líquido',
+        id: "2",
+        name: "Lucro Líquido",
         value: 450000,
         previousValue: 380000,
         target: 500000,
-        unit: 'BRL',
-        category: 'financial',
-        trend: 'up',
+        unit: "BRL",
+        category: "financial",
+        trend: "up",
         change: 18.4,
-        status: 'healthy'
+        status: "healthy"
       },
       {
-        id: '3',
-        name: 'Clientes Ativos',
+        id: "3",
+        name: "Clientes Ativos",
         value: 1240,
         previousValue: 1180,
         target: 1500,
-        unit: 'unidades',
-        category: 'customer',
-        trend: 'up',
+        unit: "unidades",
+        category: "customer",
+        trend: "up",
         change: 5.1,
-        status: 'warning'
+        status: "warning"
       },
       {
-        id: '4',
-        name: 'Taxa de Conversão',
+        id: "4",
+        name: "Taxa de Conversão",
         value: 12.8,
         previousValue: 11.2,
         target: 15.0,
-        unit: '%',
-        category: 'operational',
-        trend: 'up',
+        unit: "%",
+        category: "operational",
+        trend: "up",
         change: 14.3,
-        status: 'healthy'
+        status: "healthy"
       },
       {
-        id: '5',
-        name: 'Produtividade Média',
+        id: "5",
+        name: "Produtividade Média",
         value: 87.5,
         previousValue: 89.2,
         target: 90.0,
-        unit: '%',
-        category: 'hr',
-        trend: 'down',
+        unit: "%",
+        category: "hr",
+        trend: "down",
         change: -1.9,
-        status: 'warning'
+        status: "warning"
       },
       {
-        id: '6',
-        name: 'Satisfação do Cliente',
+        id: "6",
+        name: "Satisfação do Cliente",
         value: 4.6,
         previousValue: 4.4,
         target: 4.8,
-        unit: 'estrelas',
-        category: 'customer',
-        trend: 'up',
+        unit: "estrelas",
+        category: "customer",
+        trend: "up",
         change: 4.5,
-        status: 'healthy'
+        status: "healthy"
       }
     ];
 
@@ -155,46 +155,46 @@ export const BusinessIntelligenceDashboard: React.FC = () => {
   }, [selectedPeriod]);
 
   const revenueData: ChartData[] = [
-    { name: 'Jan', value: 2100000, target: 2200000 },
-    { name: 'Fev', value: 2300000, target: 2300000 },
-    { name: 'Mar', value: 2500000, target: 2400000 },
-    { name: 'Abr', value: 2650000, target: 2600000 },
-    { name: 'Mai', value: 2850000, target: 2800000 },
-    { name: 'Jun', value: 3100000, target: 3000000 }
+    { name: "Jan", value: 2100000, target: 2200000 },
+    { name: "Fev", value: 2300000, target: 2300000 },
+    { name: "Mar", value: 2500000, target: 2400000 },
+    { name: "Abr", value: 2650000, target: 2600000 },
+    { name: "Mai", value: 2850000, target: 2800000 },
+    { name: "Jun", value: 3100000, target: 3000000 }
   ];
 
   const customerData: ChartData[] = [
-    { name: 'Novos', value: 245 },
-    { name: 'Recorrentes', value: 680 },
-    { name: 'Reativados', value: 315 }
+    { name: "Novos", value: 245 },
+    { name: "Recorrentes", value: 680 },
+    { name: "Reativados", value: 315 }
   ];
 
   const operationalData: ChartData[] = [
-    { name: 'Seg', value: 89 },
-    { name: 'Ter', value: 92 },
-    { name: 'Qua', value: 87 },
-    { name: 'Qui', value: 94 },
-    { name: 'Sex', value: 88 },
-    { name: 'Sab', value: 85 },
-    { name: 'Dom', value: 82 }
+    { name: "Seg", value: 89 },
+    { name: "Ter", value: 92 },
+    { name: "Qua", value: 87 },
+    { name: "Qui", value: 94 },
+    { name: "Sex", value: 88 },
+    { name: "Sab", value: 85 },
+    { name: "Dom", value: 82 }
   ];
 
-  const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--accent))'];
+  const COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "hsl(var(--accent))"];
 
   const formatValue = (value: number, unit: string) => {
-    if (unit === 'BRL') {
-      return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
+    if (unit === "BRL") {
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL"
       }).format(value);
     }
     
-    if (unit === '%') {
+    if (unit === "%") {
       return `${value.toFixed(1)}%`;
     }
     
-    if (unit === 'unidades') {
-      return new Intl.NumberFormat('pt-BR').format(value);
+    if (unit === "unidades") {
+      return new Intl.NumberFormat("pt-BR").format(value);
     }
     
     return `${value} ${unit}`;
@@ -202,32 +202,32 @@ export const BusinessIntelligenceDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy': return 'text-green-600';
-      case 'warning': return 'text-yellow-600';
-      case 'critical': return 'text-red-600';
-      default: return 'text-muted-foreground';
+    case "healthy": return "text-green-600";
+    case "warning": return "text-yellow-600";
+    case "critical": return "text-red-600";
+    default: return "text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'healthy': return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
-      case 'critical': return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      default: return <Clock className="h-4 w-4 text-muted-foreground" />;
+    case "healthy": return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
+    case "critical": return <AlertTriangle className="h-4 w-4 text-red-600" />;
+    default: return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-green-600" />;
-      case 'down': return <TrendingDown className="h-4 w-4 text-red-600" />;
-      default: return <div className="h-4 w-4" />;
+    case "up": return <TrendingUp className="h-4 w-4 text-green-600" />;
+    case "down": return <TrendingDown className="h-4 w-4 text-red-600" />;
+    default: return <div className="h-4 w-4" />;
     }
   };
 
   const filteredMetrics = metrics.filter(metric => 
-    selectedCategory === 'all' || metric.category === selectedCategory
+    selectedCategory === "all" || metric.category === selectedCategory
   );
 
   const handleExportData = () => {
@@ -294,9 +294,9 @@ export const BusinessIntelligenceDashboard: React.FC = () => {
               </div>
               <div className="flex items-center justify-between mt-2">
                 <p className={`text-xs flex items-center ${
-                  metric.change >= 0 ? 'text-green-600' : 'text-red-600'
+                  metric.change >= 0 ? "text-green-600" : "text-red-600"
                 }`}>
-                  {metric.change >= 0 ? '+' : ''}{metric.change.toFixed(1)}%
+                  {metric.change >= 0 ? "+" : ""}{metric.change.toFixed(1)}%
                   <span className="text-muted-foreground ml-1">vs período anterior</span>
                 </p>
               </div>
@@ -338,8 +338,8 @@ export const BusinessIntelligenceDashboard: React.FC = () => {
                     <YAxis />
                     <Tooltip 
                       formatter={(value) => [
-                        new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value as number),
-                        ''
+                        new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value as number),
+                        ""
                       ]}
                     />
                     <Legend />
@@ -389,7 +389,7 @@ export const BusinessIntelligenceDashboard: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
-                    <Tooltip formatter={(value) => [`${value}%`, 'Produtividade']} />
+                    <Tooltip formatter={(value) => [`${value}%`, "Produtividade"]} />
                     <Line 
                       type="monotone" 
                       dataKey="value" 

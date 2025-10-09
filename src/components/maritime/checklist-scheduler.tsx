@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { Calendar, Clock, Plus, Settings, Bell } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Calendar, Clock, Plus, Settings, Bell } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
 
 interface ScheduledChecklist {
   id: string;
   title: string;
   type: string;
-  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
+  frequency: "daily" | "weekly" | "monthly" | "quarterly" | "annually";
   nextDue: Date;
   vesselId?: string;
   isActive: boolean;
@@ -25,22 +25,22 @@ interface ScheduledChecklist {
 export const ChecklistScheduler = () => {
   const [schedules, setSchedules] = useState<ScheduledChecklist[]>([
     {
-      id: '1',
-      title: 'Daily Safety Inspection',
-      type: 'safety',
-      frequency: 'daily',
-      nextDue: new Date('2024-01-15'),
-      vesselId: 'vessel-1',
+      id: "1",
+      title: "Daily Safety Inspection",
+      type: "safety",
+      frequency: "daily",
+      nextDue: new Date("2024-01-15"),
+      vesselId: "vessel-1",
       isActive: true,
       notifications: true,
     },
     {
-      id: '2',
-      title: 'Weekly Equipment Check',
-      type: 'machine_routine',
-      frequency: 'weekly',
-      nextDue: new Date('2024-01-20'),
-      vesselId: 'vessel-1',
+      id: "2",
+      title: "Weekly Equipment Check",
+      type: "machine_routine",
+      frequency: "weekly",
+      nextDue: new Date("2024-01-20"),
+      vesselId: "vessel-1",
       isActive: true,
       notifications: true,
     },
@@ -51,17 +51,17 @@ export const ChecklistScheduler = () => {
 
   const getFrequencyColor = (frequency: string) => {
     switch (frequency) {
-      case 'daily': return 'bg-red-100 text-red-800';
-      case 'weekly': return 'bg-orange-100 text-orange-800';
-      case 'monthly': return 'bg-blue-100 text-blue-800';
-      case 'quarterly': return 'bg-purple-100 text-purple-800';
-      case 'annually': return 'bg-green-100 text-green-800';
-      default: return 'bg-secondary text-secondary-foreground';
+    case "daily": return "bg-red-100 text-red-800";
+    case "weekly": return "bg-orange-100 text-orange-800";
+    case "monthly": return "bg-blue-100 text-blue-800";
+    case "quarterly": return "bg-purple-100 text-purple-800";
+    case "annually": return "bg-green-100 text-green-800";
+    default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusColor = (isActive: boolean) => {
-    return isActive ? 'bg-green-100 text-green-800' : 'bg-secondary text-secondary-foreground';
+    return isActive ? "bg-green-100 text-green-800" : "bg-secondary text-secondary-foreground";
   };
 
   const handleCreateSchedule = () => {
@@ -171,7 +171,7 @@ export const ChecklistScheduler = () => {
                     <div>
                       <CardTitle className="text-lg">{schedule.title}</CardTitle>
                       <CardDescription>
-                        Próxima execução: {schedule.nextDue.toLocaleDateString('pt-BR')}
+                        Próxima execução: {schedule.nextDue.toLocaleDateString("pt-BR")}
                       </CardDescription>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -179,7 +179,7 @@ export const ChecklistScheduler = () => {
                         {schedule.frequency}
                       </Badge>
                       <Badge className={getStatusColor(schedule.isActive)}>
-                        {schedule.isActive ? 'Ativo' : 'Inativo'}
+                        {schedule.isActive ? "Ativo" : "Inativo"}
                       </Badge>
                       {schedule.notifications && (
                         <Bell className="h-4 w-4 text-orange-500" />
@@ -211,7 +211,7 @@ export const ChecklistScheduler = () => {
                         size="sm"
                         onClick={() => toggleSchedule(schedule.id)}
                       >
-                        {schedule.isActive ? 'Desativar' : 'Ativar'}
+                        {schedule.isActive ? "Desativar" : "Ativar"}
                       </Button>
                     </div>
                   </div>
@@ -271,7 +271,7 @@ export const ChecklistScheduler = () => {
               <div className="grid grid-cols-7 gap-2 mt-2">
                 {Array.from({ length: 35 }, (_, i) => (
                   <div key={i} className="aspect-square p-2 border rounded-lg flex items-center justify-center text-sm">
-                    {i + 1 <= 31 ? i + 1 : ''}
+                    {i + 1 <= 31 ? i + 1 : ""}
                   </div>
                 ))}
               </div>

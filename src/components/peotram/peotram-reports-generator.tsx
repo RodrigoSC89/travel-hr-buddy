@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Separator } from '@/components/ui/separator';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   FileText, 
   Download, 
@@ -26,13 +26,13 @@ import {
   Share2,
   Clock,
   Target
-} from 'lucide-react';
+} from "lucide-react";
 
 interface ReportConfig {
-  type: 'audit' | 'compliance' | 'dashboard' | 'non-conformities' | 'performance';
-  format: 'pdf' | 'excel' | 'word' | 'html';
+  type: "audit" | "compliance" | "dashboard" | "non-conformities" | "performance";
+  format: "pdf" | "excel" | "word" | "html";
   period: string;
-  auditType: 'all' | 'vessel' | 'shore';
+  auditType: "all" | "vessel" | "shore";
   includeCharts: boolean;
   includeEvidence: boolean;
   includeRecommendations: boolean;
@@ -44,7 +44,7 @@ interface ReportTemplate {
   id: string;
   name: string;
   description: string;
-  type: ReportConfig['type'];
+  type: ReportConfig["type"];
   icon: React.ElementType;
   sections: Array<{
     id: string;
@@ -56,71 +56,71 @@ interface ReportTemplate {
 
 const REPORT_TEMPLATES: ReportTemplate[] = [
   {
-    id: 'audit-complete',
-    name: 'Relatório Completo de Auditoria PEOTRAM',
-    description: 'Relatório detalhado com todos os elementos, evidências e não conformidades',
-    type: 'audit',
+    id: "audit-complete",
+    name: "Relatório Completo de Auditoria PEOTRAM",
+    description: "Relatório detalhado com todos os elementos, evidências e não conformidades",
+    type: "audit",
     icon: FileCheck,
     sections: [
-      { id: 'cover', name: 'Capa e Identificação', description: 'Informações básicas da auditoria', required: true },
-      { id: 'executive-summary', name: 'Sumário Executivo', description: 'Resumo dos principais achados', required: true },
-      { id: 'audit-scope', name: 'Escopo e Metodologia', description: 'Detalhes do escopo e método de auditoria', required: true },
-      { id: 'elements-evaluation', name: 'Avaliação por Elementos', description: 'Análise detalhada dos 10 elementos PEOTRAM', required: true },
-      { id: 'non-conformities', name: 'Não Conformidades', description: 'Lista e classificação das não conformidades', required: true },
-      { id: 'evidence', name: 'Evidências Coletadas', description: 'Documentos e registros verificados', required: false },
-      { id: 'recommendations', name: 'Recomendações', description: 'Sugestões de melhoria', required: false },
-      { id: 'action-plan', name: 'Plano de Ação', description: 'Cronograma de correções', required: false }
+      { id: "cover", name: "Capa e Identificação", description: "Informações básicas da auditoria", required: true },
+      { id: "executive-summary", name: "Sumário Executivo", description: "Resumo dos principais achados", required: true },
+      { id: "audit-scope", name: "Escopo e Metodologia", description: "Detalhes do escopo e método de auditoria", required: true },
+      { id: "elements-evaluation", name: "Avaliação por Elementos", description: "Análise detalhada dos 10 elementos PEOTRAM", required: true },
+      { id: "non-conformities", name: "Não Conformidades", description: "Lista e classificação das não conformidades", required: true },
+      { id: "evidence", name: "Evidências Coletadas", description: "Documentos e registros verificados", required: false },
+      { id: "recommendations", name: "Recomendações", description: "Sugestões de melhoria", required: false },
+      { id: "action-plan", name: "Plano de Ação", description: "Cronograma de correções", required: false }
     ]
   },
   {
-    id: 'compliance-dashboard',
-    name: 'Dashboard de Conformidade',
-    description: 'Indicadores visuais de performance e conformidade',
-    type: 'compliance',
+    id: "compliance-dashboard",
+    name: "Dashboard de Conformidade",
+    description: "Indicadores visuais de performance e conformidade",
+    type: "compliance",
     icon: BarChart3,
     sections: [
-      { id: 'kpis', name: 'Indicadores Chave', description: 'KPIs de conformidade e performance', required: true },
-      { id: 'trends', name: 'Tendências', description: 'Gráficos de evolução temporal', required: true },
-      { id: 'benchmarks', name: 'Benchmarks', description: 'Comparação com metas e padrões', required: false },
-      { id: 'risk-matrix', name: 'Matriz de Riscos', description: 'Visualização de riscos por criticidade', required: false }
+      { id: "kpis", name: "Indicadores Chave", description: "KPIs de conformidade e performance", required: true },
+      { id: "trends", name: "Tendências", description: "Gráficos de evolução temporal", required: true },
+      { id: "benchmarks", name: "Benchmarks", description: "Comparação com metas e padrões", required: false },
+      { id: "risk-matrix", name: "Matriz de Riscos", description: "Visualização de riscos por criticidade", required: false }
     ]
   },
   {
-    id: 'performance-analysis',
-    name: 'Análise de Performance',
-    description: 'Relatório de performance operacional e indicadores TASO/IDEMB',
-    type: 'performance',
+    id: "performance-analysis",
+    name: "Análise de Performance",
+    description: "Relatório de performance operacional e indicadores TASO/IDEMB",
+    type: "performance",
     icon: TrendingUp,
     sections: [
-      { id: 'taso-analysis', name: 'Análise TASO', description: 'Taxa de Acidentes de Segurança Operacional', required: true },
-      { id: 'idemb-analysis', name: 'Análise IDEMB', description: 'Índice de Disponibilidade de Embarcação', required: true },
-      { id: 'efficiency', name: 'Eficiência Energética', description: 'Métricas de consumo e emissões', required: false },
-      { id: 'innovation', name: 'Inovação', description: 'Práticas inovadoras implementadas', required: false }
+      { id: "taso-analysis", name: "Análise TASO", description: "Taxa de Acidentes de Segurança Operacional", required: true },
+      { id: "idemb-analysis", name: "Análise IDEMB", description: "Índice de Disponibilidade de Embarcação", required: true },
+      { id: "efficiency", name: "Eficiência Energética", description: "Métricas de consumo e emissões", required: false },
+      { id: "innovation", name: "Inovação", description: "Práticas inovadoras implementadas", required: false }
     ]
   },
   {
-    id: 'nc-detailed',
-    name: 'Relatório Detalhado de Não Conformidades',
-    description: 'Análise detalhada das não conformidades e ações corretivas',
-    type: 'non-conformities',
+    id: "nc-detailed",
+    name: "Relatório Detalhado de Não Conformidades",
+    description: "Análise detalhada das não conformidades e ações corretivas",
+    type: "non-conformities",
     icon: AlertTriangle,
     sections: [
-      { id: 'nc-summary', name: 'Resumo das NC', description: 'Estatísticas gerais das não conformidades', required: true },
-      { id: 'nc-classification', name: 'Classificação por Criticidade', description: 'Distribuição por níveis de criticidade', required: true },
-      { id: 'nc-root-cause', name: 'Análise de Causa Raiz', description: 'Investigação das causas fundamentais', required: false },
-      { id: 'corrective-actions', name: 'Ações Corretivas', description: 'Planos de correção e prazos', required: true },
-      { id: 'effectiveness', name: 'Eficácia das Ações', description: 'Acompanhamento da eficácia', required: false }
+      { id: "nc-summary", name: "Resumo das NC", description: "Estatísticas gerais das não conformidades", required: true },
+      { id: "nc-classification", name: "Classificação por Criticidade", description: "Distribuição por níveis de criticidade", required: true },
+      { id: "nc-root-cause", name: "Análise de Causa Raiz", description: "Investigação das causas fundamentais", required: false },
+      { id: "corrective-actions", name: "Ações Corretivas", description: "Planos de correção e prazos", required: true },
+      { id: "effectiveness", name: "Eficácia das Ações", description: "Acompanhamento da eficácia", required: false }
     ]
   }
 ];
 
 export const PeotramReportsGenerator: React.FC = () => {
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('');
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [reportConfig, setReportConfig] = useState<ReportConfig>({
-    type: 'audit',
-    format: 'pdf',
-    period: '2024-Q4',
-    auditType: 'all',
+    type: "audit",
+    format: "pdf",
+    period: "2024-Q4",
+    auditType: "all",
     includeCharts: true,
     includeEvidence: false,
     includeRecommendations: true,
@@ -158,12 +158,12 @@ export const PeotramReportsGenerator: React.FC = () => {
 
     // Simular geração do relatório
     const steps = [
-      'Coletando dados da auditoria...',
-      'Processando indicadores...',
-      'Gerando gráficos e tabelas...',
-      'Compilando evidências...',
-      'Formatando documento...',
-      'Finalizando relatório...'
+      "Coletando dados da auditoria...",
+      "Processando indicadores...",
+      "Gerando gráficos e tabelas...",
+      "Compilando evidências...",
+      "Formatando documento...",
+      "Finalizando relatório..."
     ];
 
     for (let i = 0; i < steps.length; i++) {
@@ -174,9 +174,9 @@ export const PeotramReportsGenerator: React.FC = () => {
     setIsGenerating(false);
     
     // Simular download
-    const blob = new Blob(['Relatório PEOTRAM gerado'], { type: 'text/plain' });
+    const blob = new Blob(["Relatório PEOTRAM gerado"], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `relatorio-peotram-${reportConfig.period}.${reportConfig.format}`;
     a.click();
@@ -184,11 +184,11 @@ export const PeotramReportsGenerator: React.FC = () => {
   };
 
   const scheduleReport = () => {
-    alert('Funcionalidade de agendamento de relatórios será implementada em breve.');
+    alert("Funcionalidade de agendamento de relatórios será implementada em breve.");
   };
 
   const previewReport = () => {
-    alert('Visualização do relatório será implementada em breve.');
+    alert("Visualização do relatório será implementada em breve.");
   };
 
   return (
@@ -235,14 +235,14 @@ export const PeotramReportsGenerator: React.FC = () => {
                     key={template.id}
                     className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                       selectedTemplate === template.id 
-                        ? 'border-primary bg-primary/5' 
-                        : 'border-border hover:bg-accent/50'
+                        ? "border-primary bg-primary/5" 
+                        : "border-border hover:bg-accent/50"
                     }`}
                     onClick={() => handleTemplateSelect(template.id)}
                   >
                     <div className="flex items-start gap-3">
                       <TemplateIcon className={`w-5 h-5 mt-1 ${
-                        selectedTemplate === template.id ? 'text-primary' : 'text-muted-foreground'
+                        selectedTemplate === template.id ? "text-primary" : "text-muted-foreground"
                       }`} />
                       <div>
                         <h4 className="font-medium text-sm">{template.name}</h4>
@@ -482,7 +482,7 @@ export const PeotramReportsGenerator: React.FC = () => {
                       
                       <Button onClick={generateReport} disabled={isGenerating || reportConfig.sections.length === 0}>
                         <Download className="w-4 h-4 mr-2" />
-                        {isGenerating ? 'Gerando...' : 'Gerar Relatório'}
+                        {isGenerating ? "Gerando..." : "Gerar Relatório"}
                       </Button>
                     </div>
                   </div>
@@ -502,9 +502,9 @@ export const PeotramReportsGenerator: React.FC = () => {
             <CardContent>
               <div className="space-y-3">
                 {[
-                  { name: 'Relatório Auditoria Q4 2024', date: '2024-12-20', format: 'PDF', size: '2.3 MB' },
-                  { name: 'Dashboard Conformidade Nov 2024', date: '2024-12-18', format: 'Excel', size: '1.8 MB' },
-                  { name: 'Análise Não Conformidades Q4', date: '2024-12-15', format: 'Word', size: '3.1 MB' }
+                  { name: "Relatório Auditoria Q4 2024", date: "2024-12-20", format: "PDF", size: "2.3 MB" },
+                  { name: "Dashboard Conformidade Nov 2024", date: "2024-12-18", format: "Excel", size: "1.8 MB" },
+                  { name: "Análise Não Conformidades Q4", date: "2024-12-15", format: "Word", size: "3.1 MB" }
                 ].map((report, index) => (
                   <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">

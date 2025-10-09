@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LucideIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface MetricCardProps {
   title: string;
@@ -12,43 +12,43 @@ export interface MetricCardProps {
     value: number;
     isPositive: boolean;
     period?: string;
-    type?: 'increase' | 'decrease';
+    type?: "increase" | "decrease";
   };
-  variant?: 'default' | 'ocean' | 'success' | 'warning' | 'danger';
+  variant?: "default" | "ocean" | "success" | "warning" | "danger";
   className?: string;
   iconClassName?: string;
 }
 
 const variantStyles = {
-  default: 'bg-card border border-border hover:shadow-md',
-  ocean: 'gradient-ocean text-azure-50 border-0 hover:shadow-nautical',
-  success: 'bg-success/10 border border-success/20 hover:shadow-lg',
-  warning: 'bg-warning/10 border border-warning/20 hover:shadow-lg',
-  danger: 'bg-danger/10 border border-danger/20 hover:shadow-lg',
+  default: "bg-card border border-border hover:shadow-md",
+  ocean: "gradient-ocean text-azure-50 border-0 hover:shadow-nautical",
+  success: "bg-success/10 border border-success/20 hover:shadow-lg",
+  warning: "bg-warning/10 border border-warning/20 hover:shadow-lg",
+  danger: "bg-danger/10 border border-danger/20 hover:shadow-lg",
 };
 
 const iconVariantStyles = {
-  default: 'bg-primary/10 text-primary',
-  ocean: 'bg-azure-100/20 text-azure-50',
-  success: 'bg-success/20 text-success',
-  warning: 'bg-warning/20 text-warning',
-  danger: 'bg-danger/20 text-danger',
+  default: "bg-primary/10 text-primary",
+  ocean: "bg-azure-100/20 text-azure-50",
+  success: "bg-success/20 text-success",
+  warning: "bg-warning/20 text-warning",
+  danger: "bg-danger/20 text-danger",
 };
 
 const valueVariantStyles = {
-  default: 'text-foreground',
-  ocean: 'text-azure-50',
-  success: 'text-success-foreground',
-  warning: 'text-warning-foreground',
-  danger: 'text-danger-foreground',
+  default: "text-foreground",
+  ocean: "text-azure-50",
+  success: "text-success-foreground",
+  warning: "text-warning-foreground",
+  danger: "text-danger-foreground",
 };
 
 const descriptionVariantStyles = {
-  default: 'text-muted-foreground',
-  ocean: 'text-azure-50/80',
-  success: 'text-success-foreground/80',
-  warning: 'text-warning-foreground/80',
-  danger: 'text-danger-foreground/80',
+  default: "text-muted-foreground",
+  ocean: "text-azure-50/80",
+  success: "text-success-foreground/80",
+  warning: "text-warning-foreground/80",
+  danger: "text-danger-foreground/80",
 };
 
 /**
@@ -89,12 +89,12 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   description,
   icon: Icon,
   trend,
-  variant = 'default',
-  className = '',
-  iconClassName = ''
+  variant = "default",
+  className = "",
+  iconClassName = ""
 }) => {
   // For ocean variant, use a different layout
-  if (variant === 'ocean') {
+  if (variant === "ocean") {
     return (
       <div className={cn(
         "p-6 rounded-xl shadow-wave transition-all duration-300",
@@ -112,10 +112,10 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           {trend && (
             <div className={cn(
               "flex items-center text-sm font-medium",
-              trend.isPositive || trend.type === 'increase' ? 'text-azure-50/90' : 'text-red-200',
+              trend.isPositive || trend.type === "increase" ? "text-azure-50/90" : "text-red-200",
             )}>
               <span className="mr-1">
-                {(trend.isPositive || trend.type === 'increase') ? '↗' : '↘'}
+                {(trend.isPositive || trend.type === "increase") ? "↗" : "↘"}
               </span>
               {Math.abs(trend.value)}%
             </div>
@@ -181,12 +181,12 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             <span 
               className={cn(
                 "text-xs font-medium",
-                trend.isPositive || trend.type === 'increase' 
-                  ? 'text-success' 
-                  : 'text-destructive'
+                trend.isPositive || trend.type === "increase" 
+                  ? "text-success" 
+                  : "text-destructive"
               )}
             >
-              {(trend.isPositive || trend.type === 'increase') ? '+' : ''}{trend.value}%
+              {(trend.isPositive || trend.type === "increase") ? "+" : ""}{trend.value}%
             </span>
             {trend.period && (
               <span className="text-xs text-muted-foreground ml-1">

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import UserManagementDashboard from '@/components/admin/user-management-dashboard';
-import { HealthStatusDashboard } from '@/components/admin/health-status-dashboard';
-import { RoleBasedAccess } from './role-based-access';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UserManagementDashboard from "@/components/admin/user-management-dashboard";
+import { HealthStatusDashboard } from "@/components/admin/health-status-dashboard";
+import { RoleBasedAccess } from "./role-based-access";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Settings, 
   Users, 
@@ -13,14 +13,14 @@ import {
   Database, 
   Activity,
   RefreshCw
-} from 'lucide-react';
-import { usePermissions } from '@/hooks/use-permissions';
-import { useUsers } from '@/hooks/use-users';
+} from "lucide-react";
+import { usePermissions } from "@/hooks/use-permissions";
+import { useUsers } from "@/hooks/use-users";
 
 export const AdminPanel: React.FC = () => {
   const { userRole, isLoading } = usePermissions();
   const { getRoleStats } = useUsers();
-  const [activeTab, setActiveTab] = useState('users');
+  const [activeTab, setActiveTab] = useState("users");
 
   const stats = getRoleStats();
 
@@ -33,7 +33,7 @@ export const AdminPanel: React.FC = () => {
   }
 
   return (
-    <RoleBasedAccess roles={['admin', 'hr_manager']}>
+    <RoleBasedAccess roles={["admin", "hr_manager"]}>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
@@ -43,7 +43,7 @@ export const AdminPanel: React.FC = () => {
             </p>
           </div>
           <Badge variant="secondary" className="px-3 py-1">
-            Role: {userRole === 'admin' ? 'Administrador' : 'Gerente de RH'}
+            Role: {userRole === "admin" ? "Administrador" : "Gerente de RH"}
           </Badge>
         </div>
 

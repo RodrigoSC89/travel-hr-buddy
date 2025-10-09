@@ -1,6 +1,6 @@
-import React from 'react';
-import { DropdownTestCenter } from '@/components/ui/dropdown-test-center';
-import { SEOHead } from '@/components/seo/seo-head';
+import React from "react";
+import { DropdownTestCenter } from "@/components/ui/dropdown-test-center";
+import { SEOHead } from "@/components/seo/seo-head";
 
 const DropdownTests: React.FC = () => {
   return (
