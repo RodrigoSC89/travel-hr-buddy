@@ -36,6 +36,7 @@ const Blockchain = React.lazy(() => import('./pages/Blockchain'));
 const Gamification = React.lazy(() => import('./pages/Gamification'));
 const PredictiveAnalytics = React.lazy(() => import('./pages/PredictiveAnalytics'));
 const Admin = React.lazy(() => import('./pages/Admin'));
+const APITester = React.lazy(() => import('./pages/admin/api-tester'));
 const HealthMonitorDemo = React.lazy(() => import('./pages/HealthMonitorDemo'));
 
 // Create QueryClient
@@ -132,6 +133,7 @@ function App() {
                     <Route path="/gamification" element={<Gamification />} />
                     <Route path="/predictive" element={<PredictiveAnalytics />} />
                     <Route path="/admin" element={<Admin />} />
+                    <Route path="/admin/api-tester" element={<APITester />} />
                     <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                   </Routes>
                 </React.Suspense>
