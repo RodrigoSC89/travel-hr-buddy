@@ -57,7 +57,9 @@ export const OrganizationCustomization: React.FC = () => {
         timezone: currentBranding.timezone || 'America/Sao_Paulo',
         custom_fields: currentBranding.custom_fields || {},
         business_rules: currentBranding.business_rules || {},
-        enabled_modules: currentBranding.enabled_modules || ['fleet', 'crew', 'certificates', 'analytics'],
+        enabled_modules: Array.isArray(currentBranding.enabled_modules) 
+          ? currentBranding.enabled_modules 
+          : ['fleet', 'crew', 'certificates', 'analytics'],
         module_settings: currentBranding.module_settings || {}
       });
     }
@@ -440,17 +442,21 @@ export const OrganizationCustomization: React.FC = () => {
                       <p className="text-sm text-muted-foreground">{module.description}</p>
                     </div>
                     <Switch
-                      checked={customization.enabled_modules.includes(module.id)}
+                      checked={Array.isArray(customization.enabled_modules) && customization.enabled_modules.includes(module.id)}
                       onCheckedChange={(checked) => {
+                        const currentModules = Array.isArray(customization.enabled_modules) 
+                          ? customization.enabled_modules 
+                          : [];
+                        
                         if (checked) {
                           setCustomization({
                             ...customization,
-                            enabled_modules: [...customization.enabled_modules, module.id]
+                            enabled_modules: [...currentModules, module.id]
                           });
                         } else {
                           setCustomization({
                             ...customization,
-                            enabled_modules: customization.enabled_modules.filter(m => m !== module.id)
+                            enabled_modules: currentModules.filter(m => m !== module.id)
                           });
                         }
                       }}
