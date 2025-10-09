@@ -251,7 +251,7 @@ netlify deploy --prod --dir=dist
 #### **Opção 4: Docker**
 ```dockerfile
 # Dockerfile
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
@@ -485,7 +485,7 @@ Super Admin (sistema)
 #### **1. Preparação do Ambiente**
 ```bash
 # Verificar pré-requisitos
-node --version  # >= 18.0.0
+node --version  # >= 22.0.0
 npm --version   # >= 9.0.0
 
 # Clonar repositório
@@ -1505,7 +1505,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '22'
         cache: 'npm'
     
     - name: Install dependencies

@@ -1,7 +1,7 @@
 # 🚀 Quick Deployment Guide
 
 ## Prerequisites
-- Node.js >= 18.0.0
+- Node.js >= 22.0.0
 - npm >= 8.0.0
 
 ## Option 1: Deploy to Vercel (Recommended)
@@ -68,7 +68,7 @@ All routes should work without 404 errors thanks to the SPA routing configuratio
 - Ensure environment variables are set
 
 ### Build Fails
-- Check Node.js version: `node --version` (must be >= 18)
+- Check Node.js version: `node --version` (must be >= 22)
 - Clear cache: `rm -rf node_modules package-lock.json && npm install`
 - Check build logs for specific errors
 
