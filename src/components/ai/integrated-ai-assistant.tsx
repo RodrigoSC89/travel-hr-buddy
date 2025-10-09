@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -11,23 +11,17 @@ import {
   Mic, 
   MicOff, 
   Settings, 
-  History, 
   Download,
-  Star,
-  BookOpen,
   Zap,
   Brain,
   User,
-  MessageSquare,
   Clock,
   TrendingUp,
-  FileText,
   BarChart3,
   Users,
   DollarSign
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface Message {
@@ -74,7 +68,7 @@ const IntegratedAIAssistant = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [conversations, setConversations] = useState<Conversation[]>([
+  const [conversations] = useState<Conversation[]>([
     {
       id: "1",
       title: "Análise de Performance Q4",
@@ -383,7 +377,7 @@ Como posso ajudá-lo especificamente hoje?`,
     };
   };
 
-  const saveConversation = async (userMessage: Message, assistantMessage: Message) => {
+  const saveConversation = async () => {
     try {
       // This would integrate with the actual conversations table
       // For now, we'll just show a success message
