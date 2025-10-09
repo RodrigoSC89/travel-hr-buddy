@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { 
   Shield, 
   Key, 
@@ -29,11 +29,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
   const [challenge, setChallenge] = useState<any>(null);
   const [factorId, setFactorId] = useState<string>('');
 
-  React.useEffect(() => {
-    initiateMFAChallenge();
-  }, []);
-
-  const initiateMFAChallenge = async () => {
+  const initiateMFAChallenge = useCallback(async () => {
     try {
       // Get available factors
       const { data: factorsData, error: factorsError } = await supabase.auth.mfa.listFactors();
@@ -67,7 +63,11 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
       });
       onCancel();
     }
-  };
+  }, [toast, onCancel]);
+
+  React.useEffect(() => {
+    initiateMFAChallenge();
+  }, [initiateMFAChallenge]);
 
   const verifyMFA = async () => {
     if (!code || code.length !== 6) {

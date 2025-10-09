@@ -265,7 +265,7 @@ const ModuleRecommendationStep: React.FC<{ data: any; onNext: (data: any) => voi
 
   useEffect(() => {
     setSelectedModules(recommendedModules);
-  }, []);
+  }, [recommendedModules]);
 
   return (
     <div className="space-y-6">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -104,11 +104,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
     }
   ];
 
-  useEffect(() => {
-    loadMetricsData();
-  }, [selectedTimeRange, selectedCategory]);
-
-  const loadMetricsData = async () => {
+  const loadMetricsData = useCallback(async () => {
     setIsLoading(true);
     try {
       // In a real implementation, this would fetch from Supabase
@@ -129,7 +125,11 @@ export const AdvancedMetricsDashboard: React.FC = () => {
       });
       setIsLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    loadMetricsData();
+  }, [selectedTimeRange, selectedCategory, loadMetricsData]);
 
   const generateReport = async () => {
     try {
