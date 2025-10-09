@@ -29,3 +29,5 @@ export {
 export { EmptyState } from '@/components/ui/EmptyState';
 export { StatusBadge, StatusIndicator } from '@/components/ui/StatusBadge';
 export { NotificationCenter } from '@/components/ui/NotificationCenter';
+export { MetricCard, KPICard, StatsCard } from '@/components/ui/MetricCard';
+export { InfoCard } from '@/components/ui/InfoCard';
