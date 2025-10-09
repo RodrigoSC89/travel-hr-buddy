@@ -97,10 +97,9 @@ node_modules
 .env.local
 .DS_Store
 *.sw?
-dist
-src
-public
 ```
+
+**Importante:** Não ignore `src` e `public` pois Vite precisa desses diretórios durante o processo de build.
 
 ### 6. Node.js Version
 Atualizado `package.json`:
