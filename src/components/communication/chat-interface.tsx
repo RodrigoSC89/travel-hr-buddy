@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -95,7 +95,7 @@ export const ChatInterface = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const loadAllUsers = async () => {
+  const loadAllUsers = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -107,9 +107,9 @@ export const ChatInterface = () => {
     } catch (error) {
       console.error('Erro ao carregar usuários:', error);
     }
-  };
+  }, [currentUser?.id]);
 
-  const loadConversations = async () => {
+  const loadConversations = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -189,9 +189,9 @@ export const ChatInterface = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentUser?.id, toast]);
 
-  const loadMessages = async (conversationId: string) => {
+  const loadMessages = useCallback(async (conversationId: string) => {
     try {
       const { data, error } = await supabase
         .from('messages')
@@ -222,7 +222,27 @@ export const ChatInterface = () => {
     } catch (error) {
       console.error('Erro ao carregar mensagens:', error);
     }
-  };
+  }, [currentUser?.id]);
+
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setCurrentUser(user);
+        await loadConversations();
+        await loadAllUsers();
+      }
+    };
+
+    getCurrentUser();
+  }, [loadConversations, loadAllUsers]);
+
+  useEffect(() => {
+    if (selectedConversation) {
+      loadMessages(selectedConversation);
+      setupMessageRealtime(selectedConversation);
+    }
+  }, [selectedConversation, loadMessages]);
 
   const markMessagesAsRead = async (conversationId: string) => {
     try {
