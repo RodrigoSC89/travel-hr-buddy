@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
+    "start": "vite preview --host",
+    "lint": "eslint . --fix",
     "build:dev": "vite build --mode development",
-    "lint": "eslint .",
     "preview": "vite preview --host",
     "deploy:vercel": "vercel --prod",
     "deploy:netlify": "netlify deploy --prod --dir=dist"
