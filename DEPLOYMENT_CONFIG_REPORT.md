@@ -4,10 +4,11 @@
 
 ### 1. **vercel.json** (NEW)
 Created Vercel deployment configuration with:
-- SPA routing support (all routes redirect to `/`)
+- SPA routing support using `rewrites` (all routes rewrite to `/index.html`)
 - Build command: `npm run build`
 - Output directory: `dist`
 - Framework detection: Vite
+- Security headers for enhanced protection
 
 ### 2. **public/_redirects** (NEW)
 Created Netlify redirect rules for SPA support:
