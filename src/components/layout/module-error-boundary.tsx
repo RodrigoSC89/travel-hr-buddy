@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { ErrorBoundary } from "./error-boundary";
+import * as Sentry from "@sentry/react";
 
 interface ModuleErrorBoundaryProps {
   children: ReactNode;
@@ -15,10 +16,11 @@ export const ModuleErrorBoundary: React.FC<ModuleErrorBoundaryProps> = ({
   moduleName = "Módulo" 
 }) => {
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
-    // Log error to monitoring service (if available)
-    
-    // Could send to error tracking service here
-    // Example: Sentry.captureException(error, { tags: { module: moduleName } });
+    // Log error to Sentry monitoring service
+    Sentry.captureException(error, { 
+      tags: { module: moduleName },
+      contexts: { react: { componentStack: errorInfo.componentStack } }
+    });
   };
 
   return (
