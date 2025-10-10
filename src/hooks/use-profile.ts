@@ -47,6 +47,7 @@ export const useProfile = () => {
           setProfile(data);
         }
       } catch (error) {
+        // Error fetching profile
       } finally {
         setIsLoading(false);
       }

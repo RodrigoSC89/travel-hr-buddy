@@ -21,8 +21,8 @@ interface SaasTenant {
   subscription_ends_at?: string;
   custom_domain?: string;
   subdomain?: string;
-  metadata: any;
-  features: any;
+  metadata: Record<string, unknown>;
+  features: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }

@@ -45,8 +45,8 @@ export const useExpenses = () => {
       if (fetchError) throw fetchError;
 
       setExpenses(data || []);
-    } catch (err: any) {
-      const errorMessage = err.message || "Erro ao carregar despesas";
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro ao carregar despesas";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {

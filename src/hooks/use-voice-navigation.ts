@@ -6,7 +6,7 @@ import { useSidebarActions } from "@/hooks/use-sidebar-actions";
 interface NavigationIntent {
   module: string;
   action?: string;
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
   confidence: number;
 }
 

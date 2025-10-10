@@ -61,11 +61,13 @@ export const usePermissions = () => {
             .eq("role", roleData.role);
 
           if (permissionsError) {
+            // Error fetching permissions, will use empty array
           } else {
             setPermissions(permissionsData as RolePermission[] || []);
           }
         }
       } catch (error) {
+        // Error fetching user role and permissions
       } finally {
         setIsLoading(false);
       }

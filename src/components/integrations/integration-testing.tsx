@@ -27,7 +27,7 @@ interface TestResult {
   status: "success" | "error" | "warning";
   duration: number;
   details: string;
-  response?: any;
+  response?: Record<string, unknown>;
   timestamp: string;
 }
 

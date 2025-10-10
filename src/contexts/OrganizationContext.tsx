@@ -11,7 +11,7 @@ interface Organization {
   max_users: number;
   max_vessels: number;
   max_storage_gb: number;
-  features: any;
+  features: Record<string, unknown>;
   trial_ends_at?: string;
   subscription_ends_at?: string;
   created_at: string;
@@ -29,10 +29,10 @@ interface OrganizationBranding {
   default_language: string;
   default_currency: string;
   timezone: string;
-  custom_fields: any;
-  business_rules: Record<string, any>;
-  enabled_modules: any;
-  module_settings: any;
+  custom_fields: Record<string, unknown>;
+  business_rules: Record<string, unknown>;
+  enabled_modules: Record<string, unknown>;
+  module_settings: Record<string, unknown>;
 }
 
 interface OrganizationContextType {

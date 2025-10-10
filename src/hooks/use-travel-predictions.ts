@@ -35,7 +35,7 @@ interface PriceData {
   roomType?: string;
   guestCount?: number;
   rating?: number;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export const useTravelPredictions = () => {

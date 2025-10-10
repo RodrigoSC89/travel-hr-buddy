@@ -7,7 +7,7 @@ export interface MarineTrafficTestResult {
   success: boolean;
   message: string;
   responseTime?: number;
-  data?: any;
+  data?: Record<string, unknown>;
   error?: string;
 }
 
