@@ -23,7 +23,7 @@ const localStorageMock = {
   setItem: vi.fn(),
   clear: vi.fn(),
 };
-global.localStorage = localStorageMock as any;
+global.localStorage = localStorageMock as Storage;
 
 describe("AdminWallPage Component", () => {
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe("AdminWallPage Component", () => {
   });
 
   it("should render the wall title", () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
     render(<AdminWallPage />);
     
     const title = screen.getByText(/CI\/CD TV Wall/i);
@@ -40,7 +40,7 @@ describe("AdminWallPage Component", () => {
   });
 
   it("should display monitoring subtitle", () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
     render(<AdminWallPage />);
     
     const subtitle = screen.getByText(/Monitoramento em tempo real de builds e testes/i);
@@ -48,7 +48,7 @@ describe("AdminWallPage Component", () => {
   });
 
   it("should render stats cards for success, failures and in progress", () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
     render(<AdminWallPage />);
     
     expect(screen.getByText(/Sucesso/i)).toBeInTheDocument();
@@ -57,7 +57,7 @@ describe("AdminWallPage Component", () => {
   });
 
   it("should display mute/unmute button", () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
     render(<AdminWallPage />);
     
     const muteButton = screen.getByRole("button");
@@ -79,7 +79,7 @@ describe("AdminWallPage Component", () => {
     ]);
     
     localStorageMock.getItem.mockReturnValue(cachedData);
-    (global.fetch as any).mockRejectedValueOnce(new Error("Network error"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Network error"));
     
     render(<AdminWallPage />);
     
@@ -88,7 +88,7 @@ describe("AdminWallPage Component", () => {
   });
 
   it("should display empty state when no data available", () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
     localStorageMock.getItem.mockReturnValue(null);
     
     render(<AdminWallPage />);
