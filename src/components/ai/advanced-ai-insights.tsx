@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,13 +14,9 @@ import {
   Zap,
   BarChart3,
   Users,
-  DollarSign,
   Activity,
   Clock,
   Sparkles,
-  Cpu,
-  Database,
-  Wifi,
   RefreshCw,
   Play,
   Download
@@ -81,7 +77,7 @@ const AdvancedAIInsights = () => {
     }
   ]);
 
-  const [performanceMetrics, setPerformanceMetrics] = useState({
+  const [performanceMetrics] = useState({
     aiAccuracy: 94.5,
     predictionReliability: 91.2,
     automationEfficiency: 87.8,
