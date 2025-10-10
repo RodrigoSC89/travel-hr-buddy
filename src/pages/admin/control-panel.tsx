@@ -189,6 +189,15 @@ const ControlPanel = () => {
                         <ExternalLink className="h-4 w-4" />
                       </Button>
                     </Link>
+                    <Link to="/admin/wall">
+                      <Button variant="outline" className="w-full justify-between">
+                        <span className="flex items-center gap-2">
+                          <Activity className="h-4 w-4" />
+                          CI/CD TV Wall
+                        </span>
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    </Link>
                     <Link to="/admin/api-tester">
                       <Button variant="outline" className="w-full justify-between">
                         <span className="flex items-center gap-2">
@@ -252,6 +261,24 @@ const ControlPanel = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Link to="/admin/wall">
+                      <Card className="hover:shadow-lg transition-all cursor-pointer border-2 hover:border-purple-500">
+                        <CardContent className="p-4">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 bg-purple-500/10 rounded-lg">
+                              <Activity className="h-6 w-6 text-purple-500" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold mb-1">CI/CD TV Wall</h4>
+                              <p className="text-sm text-muted-foreground">
+                                Monitoramento em tempo real de builds e testes
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+
                     <Link to="/admin/api-tester">
                       <Card className="hover:shadow-lg transition-all cursor-pointer border-2 hover:border-primary">
                         <CardContent className="p-4">
@@ -288,43 +315,23 @@ const ControlPanel = () => {
                       </Card>
                     </Link>
 
-                    <Card className="opacity-60 cursor-not-allowed">
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="p-2 bg-muted rounded-lg">
-                            <FileText className="h-6 w-6 text-muted-foreground" />
+                    <Link to="/admin/ci-history">
+                      <Card className="hover:shadow-lg transition-all cursor-pointer border-2 hover:border-blue-500">
+                        <CardContent className="p-4">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 bg-blue-500/10 rounded-lg">
+                              <FileText className="h-6 w-6 text-blue-500" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold mb-1">CI History</h4>
+                              <p className="text-sm text-muted-foreground">
+                                Histórico completo de execuções CI/CD
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="font-semibold mb-1 flex items-center gap-2">
-                              System Logs
-                              <Badge variant="outline">Em Breve</Badge>
-                            </h4>
-                            <p className="text-sm text-muted-foreground">
-                              Visualizar logs do sistema em tempo real
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="opacity-60 cursor-not-allowed">
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="p-2 bg-muted rounded-lg">
-                            <BarChart3 className="h-6 w-6 text-muted-foreground" />
-                          </div>
-                          <div>
-                            <h4 className="font-semibold mb-1 flex items-center gap-2">
-                              Performance Analyzer
-                              <Badge variant="outline">Em Breve</Badge>
-                            </h4>
-                            <p className="text-sm text-muted-foreground">
-                              Análise profunda de performance
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </CardContent>
+                      </Card>
+                    </Link>
                   </div>
 
                   <div className="border-t pt-4 mt-4">
