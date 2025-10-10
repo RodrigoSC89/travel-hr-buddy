@@ -1,11 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
-import { CheckCircle, XCircle, Clock } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Download, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 type Status = "checking" | "valid" | "invalid" | "missing";
 
@@ -14,6 +37,11 @@ interface Service {
   envKey: string;
   endpoint: string;
   validate: () => Promise<boolean>;
+}
+
+interface HistorySnapshot {
+  timestamp: string;
+  [key: string]: string | Status;
 }
 
 const services: Service[] = [
@@ -94,20 +122,88 @@ const services: Service[] = [
 
 export default function ApiStatusPage() {
   const [status, setStatus] = useState<Record<string, Status>>({});
+  const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState<HistorySnapshot[]>([]);
+
+  const checkAll = async () => {
+    setLoading(true);
+    const results: Record<string, Status> = {};
+    
+    for (const service of services) {
+      results[service.name] = "checking";
+      setStatus({ ...results });
+      
+      const ok = await service.validate();
+      results[service.name] = ok ? "valid" : "invalid";
+      setStatus({ ...results });
+    }
+    
+    // Add to history
+    const snapshot: HistorySnapshot = {
+      timestamp: new Date().toISOString(),
+      ...results,
+    };
+    setHistory((prev) => [...prev, snapshot]);
+    
+    setLoading(false);
+  };
 
   useEffect(() => {
-    (async () => {
-      const results: Record<string, Status> = {};
-      for (const service of services) {
-        results[service.name] = "checking";
-        setStatus({ ...results });
-        
-        const ok = await service.validate();
-        results[service.name] = ok ? "valid" : "invalid";
-        setStatus({ ...results });
-      }
-    })();
+    checkAll();
   }, []);
+
+  const downloadLog = () => {
+    const blob = new Blob([JSON.stringify(history, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "api-status-log.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Prepare chart data
+  const labels = history.map((h) => new Date(h.timestamp).toLocaleTimeString());
+  
+  const chartData = {
+    labels,
+    datasets: services.map((s, i) => ({
+      label: s.name,
+      data: history.map((h) => (h[s.name] === "valid" ? 1 : 0)),
+      borderColor: `hsl(${(i * 80) % 360}, 70%, 50%)`,
+      backgroundColor: `hsla(${(i * 80) % 360}, 70%, 50%, 0.1)`,
+      fill: false,
+      tension: 0.1,
+    })),
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "API Availability Over Time",
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 1,
+        ticks: {
+          stepSize: 1,
+          callback: function(value: number | string) {
+            return value === 1 ? "✅ Valid" : "❌ Invalid";
+          },
+        },
+      },
+    },
+  };
 
   return (
     <MultiTenantWrapper>
@@ -134,6 +230,31 @@ export default function ApiStatusPage() {
         />
 
         <div className="space-y-6">
+          {/* Action Buttons */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex gap-3">
+                <Button 
+                  onClick={checkAll} 
+                  disabled={loading}
+                  className="flex items-center gap-2"
+                >
+                  <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+                  {loading ? "Checking..." : "🔁 Retest APIs"}
+                </Button>
+                <Button 
+                  onClick={downloadLog}
+                  variant="outline"
+                  className="flex items-center gap-2"
+                  disabled={history.length === 0}
+                >
+                  <Download className="w-4 h-4" />
+                  📁 Download Log
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle>API Services Status</CardTitle>
@@ -163,6 +284,23 @@ export default function ApiStatusPage() {
               </ul>
             </CardContent>
           </Card>
+
+          {/* Chart */}
+          {history.length > 1 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>📊 Availability History</CardTitle>
+                <CardDescription>
+                  Visual representation of API status over time
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div style={{ height: "300px" }}>
+                  <Line data={chartData} options={chartOptions} />
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <Card>
             <CardHeader>
