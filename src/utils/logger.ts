@@ -9,43 +9,48 @@ export const logger = {
   /**
    * Log informational messages (only in development)
    */
-  log: (...args: any[]) => {
+  log: (...args: unknown[]) => {
     if (isDevelopment) {
+      console.log(...args);
     }
   },
 
   /**
    * Log informational messages (only in development)
    */
-  info: (...args: any[]) => {
+  info: (...args: unknown[]) => {
     if (isDevelopment) {
+      console.info(...args);
     }
   },
 
   /**
    * Log warnings (always shown)
    */
-  warn: (...args: any[]) => {
+  warn: (...args: unknown[]) => {
+    console.warn(...args);
   },
 
   /**
    * Log errors (always shown)
    */
-  error: (...args: any[]) => {
+  error: (...args: unknown[]) => {
+    console.error(...args);
   },
 
   /**
    * Log debug messages (only in development)
    */
-  debug: (...args: any[]) => {
+  debug: (...args: unknown[]) => {
     if (isDevelopment) {
+      console.debug(...args);
     }
   },
 
   /**
    * Log table (only in development)
    */
-  table: (data: any) => {
+  table: (data: unknown) => {
     if (isDevelopment) {
       console.table(data);
     }

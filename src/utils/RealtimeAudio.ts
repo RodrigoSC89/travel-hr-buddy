@@ -76,7 +76,7 @@ export class RealtimeChat {
   private connectionCheckInterval: ReturnType<typeof setInterval> | null = null;
 
   constructor(
-    private onMessage: (message: any) => void,
+    private onMessage: (message: Record<string, unknown>) => void,
     private onNavigate?: (module: string) => void,
     private onConnectionStateChange?: (state: string) => void
   ) {

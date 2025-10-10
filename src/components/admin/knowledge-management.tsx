@@ -211,11 +211,11 @@ export const KnowledgeManagement: React.FC = () => {
             content: editingItem.content,
             type: editingItem.type,
             module: editingItem.module,
-            tags: editingItem.tags as any,
+            tags: editingItem.tags as string[],
             difficulty: editingItem.difficulty,
             status: editingItem.status,
-            steps: (editingItem.steps || []) as any,
-            metadata: (editingItem.metadata || {}) as any,
+            steps: (editingItem.steps || []) as Record<string, unknown>[],
+            metadata: (editingItem.metadata || {}) as Record<string, unknown>,
             updated_at: new Date().toISOString()
           })
           .eq("id", editingItem.id);
@@ -235,12 +235,12 @@ export const KnowledgeManagement: React.FC = () => {
             content: editingItem.content,
             type: editingItem.type,
             module: editingItem.module,
-            tags: editingItem.tags as any,
+            tags: editingItem.tags as string[],
             difficulty: editingItem.difficulty,
             status: editingItem.status,
             author_id: null,
-            steps: (editingItem.steps || []) as any,
-            metadata: (editingItem.metadata || {}) as any
+            steps: (editingItem.steps || []) as Record<string, unknown>[],
+            metadata: (editingItem.metadata || {}) as Record<string, unknown>
           });
 
         if (error) throw error;
