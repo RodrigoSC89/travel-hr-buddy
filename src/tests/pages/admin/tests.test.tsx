@@ -1,25 +1,25 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import TestDashboard from '@/pages/admin/tests';
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
+import TestDashboard from "@/pages/admin/tests";
 
 // Mock fetch
 global.fetch = vi.fn();
 
-describe('TestDashboard Component', () => {
+describe("TestDashboard Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should render the dashboard title', () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error('Not found'));
+  it("should render the dashboard title", () => {
+    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
     render(<TestDashboard />);
     
     const title = screen.getByText(/🧪 Painel de Testes Automatizados/i);
     expect(title).toBeInTheDocument();
   });
 
-  it('should display fallback message when coverage report is not available', async () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error('Not found'));
+  it("should display fallback message when coverage report is not available", async () => {
+    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
     
     render(<TestDashboard />);
     
@@ -28,7 +28,7 @@ describe('TestDashboard Component', () => {
     });
   });
 
-  it('should display coverage percentage when report is available', async () => {
+  it("should display coverage percentage when report is available", async () => {
     const mockHtml = "<span class='strong'>85%</span>";
     (global.fetch as any).mockResolvedValueOnce({
       text: () => Promise.resolve(mockHtml),
@@ -41,14 +41,14 @@ describe('TestDashboard Component', () => {
     });
   });
 
-  it('should render link to full coverage report', () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error('Not found'));
+  it("should render link to full coverage report", () => {
+    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
     
     render(<TestDashboard />);
     
-    const link = screen.getByRole('link', { name: /Ver relatório de cobertura HTML completo/i });
+    const link = screen.getByRole("link", { name: /Ver relatório de cobertura HTML completo/i });
     expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', '/coverage/index.html');
-    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute("href", "/coverage/index.html");
+    expect(link).toHaveAttribute("target", "_blank");
   });
 });

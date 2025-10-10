@@ -125,9 +125,9 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
             default_currency: "BRL",
             timezone: "America/Sao_Paulo",
             custom_fields: {},
-          business_rules: {} as any,
-          enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as any,
-          module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as any
+            business_rules: {} as any,
+            enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as any,
+            module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as any
           };
           
           setCurrentBranding(demoBranding);
