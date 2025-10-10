@@ -194,25 +194,25 @@ function renderStatus(state: Status | undefined) {
   case "valid":
     return (
       <Badge variant="default" className="bg-green-600 text-white">
-        ✅ Valid
+          ✅ Valid
       </Badge>
     );
   case "invalid":
     return (
       <Badge variant="destructive" className="bg-red-600 text-white">
-        ❌ Invalid
+          ❌ Invalid
       </Badge>
     );
   case "missing":
     return (
       <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
-        ⚠️ Missing Key
+          ⚠️ Missing Key
       </Badge>
     );
   case "checking":
     return (
       <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
-        ⏳ Checking...
+          ⏳ Checking...
       </Badge>
     );
   default:
