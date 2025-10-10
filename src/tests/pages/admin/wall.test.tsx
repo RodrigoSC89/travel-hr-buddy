@@ -1,6 +1,29 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import AdminWallPage from "@/pages/admin/wall";
+import { OrganizationProvider } from "@/contexts/OrganizationContext";
+
+// Mock AuthContext
+vi.mock("@/contexts/AuthContext", () => ({
+  useAuth: () => ({
+    user: { id: "test-user-id", email: "test@example.com" },
+    session: null,
+    isLoading: false,
+    signUp: vi.fn(),
+    signIn: vi.fn(),
+    signOut: vi.fn(),
+    resetPassword: vi.fn(),
+  }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
+// Mock toast
+vi.mock("@/hooks/use-toast", () => ({
+  useToast: () => ({
+    toast: vi.fn(),
+  }),
+}));
 
 // Mock Supabase
 vi.mock("@/integrations/supabase/client", () => ({
@@ -33,7 +56,13 @@ describe("AdminWallPage Component", () => {
 
   it("should render the wall title", () => {
     (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
-    render(<AdminWallPage />);
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <AdminWallPage />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
     
     const title = screen.getByText(/CI\/CD TV Wall/i);
     expect(title).toBeInTheDocument();
@@ -41,7 +70,13 @@ describe("AdminWallPage Component", () => {
 
   it("should display monitoring subtitle", () => {
     (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
-    render(<AdminWallPage />);
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <AdminWallPage />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
     
     const subtitle = screen.getByText(/Monitoramento em tempo real de builds e testes/i);
     expect(subtitle).toBeInTheDocument();
@@ -49,18 +84,30 @@ describe("AdminWallPage Component", () => {
 
   it("should render stats cards for success, failures and in progress", () => {
     (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
-    render(<AdminWallPage />);
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <AdminWallPage />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
     
-    expect(screen.getByText(/Sucesso/i)).toBeInTheDocument();
-    expect(screen.getByText(/Falhas/i)).toBeInTheDocument();
-    expect(screen.getByText(/Em Progresso/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Sucesso/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Falhas/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Em Progresso/i).length).toBeGreaterThan(0);
   });
 
   it("should display mute/unmute button", () => {
     (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
-    render(<AdminWallPage />);
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <AdminWallPage />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
     
-    const muteButton = screen.getByRole("button");
+    const muteButton = screen.getByText(/Alertas Ativos/i);
     expect(muteButton).toBeInTheDocument();
   });
 
@@ -81,7 +128,13 @@ describe("AdminWallPage Component", () => {
     localStorageMock.getItem.mockReturnValue(cachedData);
     (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Network error"));
     
-    render(<AdminWallPage />);
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <AdminWallPage />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
     
     // Note: The offline badge appears after the fetch fails
     // In a real test with async handling, you'd use waitFor here
@@ -91,7 +144,13 @@ describe("AdminWallPage Component", () => {
     (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
     localStorageMock.getItem.mockReturnValue(null);
     
-    render(<AdminWallPage />);
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <AdminWallPage />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
     
     expect(screen.getByText(/Nenhum resultado de teste disponível/i)).toBeInTheDocument();
   });

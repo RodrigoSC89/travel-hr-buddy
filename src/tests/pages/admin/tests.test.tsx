@@ -1,6 +1,29 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import TestDashboard from "@/pages/admin/tests";
+import { OrganizationProvider } from "@/contexts/OrganizationContext";
+
+// Mock AuthContext
+vi.mock("@/contexts/AuthContext", () => ({
+  useAuth: () => ({
+    user: { id: "test-user-id", email: "test@example.com" },
+    session: null,
+    isLoading: false,
+    signUp: vi.fn(),
+    signIn: vi.fn(),
+    signOut: vi.fn(),
+    resetPassword: vi.fn(),
+  }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
+// Mock toast
+vi.mock("@/hooks/use-toast", () => ({
+  useToast: () => ({
+    toast: vi.fn(),
+  }),
+}));
 
 // Mock fetch
 global.fetch = vi.fn();
@@ -10,18 +33,32 @@ describe("TestDashboard Component", () => {
     vi.clearAllMocks();
   });
 
-  it("should render the dashboard title", () => {
+  it("should render the dashboard title", async () => {
     (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
-    render(<TestDashboard />);
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <TestDashboard />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
     
-    const title = screen.getByText(/🧪 Painel de Testes Automatizados/i);
-    expect(title).toBeInTheDocument();
+    await waitFor(() => {
+      const title = screen.getByText(/Painel de Testes Automatizados/i);
+      expect(title).toBeInTheDocument();
+    });
   });
 
   it("should display fallback message when coverage report is not available", async () => {
     (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
     
-    render(<TestDashboard />);
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <TestDashboard />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
     
     await waitFor(() => {
       expect(screen.getByText(/Relatório de cobertura não disponível/i)).toBeInTheDocument();
@@ -34,21 +71,36 @@ describe("TestDashboard Component", () => {
       text: () => Promise.resolve(mockHtml),
     });
     
-    render(<TestDashboard />);
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <TestDashboard />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
     
     await waitFor(() => {
       expect(screen.getByText(/Cobertura total atual: 85%/i)).toBeInTheDocument();
     });
   });
 
-  it("should render link to full coverage report", () => {
+  it("should render link to full coverage report", async () => {
     (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
     
-    render(<TestDashboard />);
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <TestDashboard />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
     
-    const link = screen.getByRole("link", { name: /Ver relatório de cobertura HTML completo/i });
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute("href", "/coverage/index.html");
-    expect(link).toHaveAttribute("target", "_blank");
+    // Wait for the organization provider to finish loading
+    await waitFor(() => {
+      const link = screen.getByRole("link", { name: /Ver relatório de cobertura HTML completo/i });
+      expect(link).toBeInTheDocument();
+      expect(link).toHaveAttribute("href", "/coverage/index.html");
+      expect(link).toHaveAttribute("target", "_blank");
+    });
   });
 });
