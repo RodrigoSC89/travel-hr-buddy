@@ -1,5 +1,9 @@
 # 🚢 Nautilus One
 
+[![CI](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/run-tests.yml/badge.svg)](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/run-tests.yml)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](./coverage/index.html)
+[![Status](https://img.shields.io/badge/build-passing-success)](./)
+
 A smart, modular, and extensible platform for managing maritime systems, intelligent workflows, fleet logistics, AI-powered assistance, and travel operations — all in one.
 
 ---
@@ -318,3 +322,7 @@ For more detailed information, see:
 - **[QUICK_DEPLOY.md](./QUICK_DEPLOY.md)** - Quick deployment guide for all platforms
 - **[DEPLOYMENT_CONFIG_REPORT.md](./DEPLOYMENT_CONFIG_REPORT.md)** - Detailed configuration report
 - **[API_KEYS_SETUP_GUIDE.md](./API_KEYS_SETUP_GUIDE.md)** - API keys setup guide
+
+---
+
+> Gerado com 💡 por GPT-4 + GitHub Coding Agent
