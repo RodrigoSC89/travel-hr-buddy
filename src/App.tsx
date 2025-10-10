@@ -42,6 +42,7 @@ const APIStatus = React.lazy(() => import("./pages/admin/api-status"));
 const ControlPanel = React.lazy(() => import("./pages/admin/control-panel"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
+const Offline = React.lazy(() => import("./pages/Offline"));
 
 // Create QueryClient
 const queryClient = new QueryClient();
@@ -143,6 +144,7 @@ function App() {
                         <Route path="/admin/control-panel" element={<ControlPanel />} />
                         <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                         <Route path="/health" element={<Health />} />
+                        <Route path="/_offline" element={<Offline />} />
                       </Routes>
                     </React.Suspense>
                   </main>
