@@ -2,12 +2,15 @@ import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { CheckCircle, XCircle, Clock, GitBranch, Calendar, Filter } from "lucide-react";
 import { format } from "date-fns";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 
 interface WorkflowRun {
   id: string;
@@ -19,10 +22,9 @@ interface WorkflowRun {
   updated_at: string;
   duration: number;
   triggeredBy: string;
-  commit: {
-    message: string;
-    sha: string;
-  };
+  commit_hash: string;
+  coverage_percent: number | null;
+  triggered_by: string;
 }
 
 // Mock data for demonstration
@@ -37,10 +39,9 @@ const mockWorkflowRuns: WorkflowRun[] = [
     updated_at: "2025-10-10T02:35:00Z",
     duration: 300,
     triggeredBy: "push",
-    commit: {
-      message: "feat: Add CI history page",
-      sha: "abc1234"
-    }
+    commit_hash: "abc1234567",
+    coverage_percent: 85,
+    triggered_by: "push"
   },
   {
     id: "2",
@@ -52,10 +53,9 @@ const mockWorkflowRuns: WorkflowRun[] = [
     updated_at: "2025-10-09T18:48:00Z",
     duration: 180,
     triggeredBy: "pull_request",
-    commit: {
-      message: "fix: Update dependencies",
-      sha: "def5678"
-    }
+    commit_hash: "def5678901",
+    coverage_percent: 72,
+    triggered_by: "pull_request"
   },
   {
     id: "3",
@@ -67,10 +67,9 @@ const mockWorkflowRuns: WorkflowRun[] = [
     updated_at: "2025-10-09T14:24:00Z",
     duration: 240,
     triggeredBy: "push",
-    commit: {
-      message: "docs: Update README",
-      sha: "ghi9012"
-    }
+    commit_hash: "ghi9012345",
+    coverage_percent: 83,
+    triggered_by: "push"
   },
   {
     id: "4",
@@ -82,10 +81,9 @@ const mockWorkflowRuns: WorkflowRun[] = [
     updated_at: "2025-10-09T10:19:00Z",
     duration: 240,
     triggeredBy: "push",
-    commit: {
-      message: "refactor: Improve performance",
-      sha: "jkl3456"
-    }
+    commit_hash: "jkl3456789",
+    coverage_percent: 80,
+    triggered_by: "push"
   },
   {
     id: "5",
@@ -97,10 +95,9 @@ const mockWorkflowRuns: WorkflowRun[] = [
     updated_at: "2025-10-08T22:32:00Z",
     duration: 120,
     triggeredBy: "pull_request",
-    commit: {
-      message: "fix: Critical security patch",
-      sha: "mno7890"
-    }
+    commit_hash: "mno7890123",
+    coverage_percent: 68,
+    triggered_by: "pull_request"
   },
   {
     id: "6",
@@ -112,96 +109,126 @@ const mockWorkflowRuns: WorkflowRun[] = [
     updated_at: "2025-10-08T16:50:00Z",
     duration: 300,
     triggeredBy: "push",
-    commit: {
-      message: "feat: Add new feature",
-      sha: "pqr1234"
-    }
+    commit_hash: "pqr1234567",
+    coverage_percent: 78,
+    triggered_by: "push"
   },
   {
     id: "7",
     name: "Run Tests",
     branch: "feature/ui-improvements",
-    status: "in_progress",
-    conclusion: "in_progress",
+    status: "success",
+    conclusion: "success",
     created_at: "2025-10-10T03:00:00Z",
-    updated_at: "2025-10-10T03:00:00Z",
-    duration: 0,
+    updated_at: "2025-10-10T03:02:00Z",
+    duration: 120,
     triggeredBy: "push",
-    commit: {
-      message: "ui: Improve admin interface",
-      sha: "stu5678"
-    }
+    commit_hash: "stu5678901",
+    coverage_percent: 87,
+    triggered_by: "push"
+  },
+  {
+    id: "8",
+    name: "Run Tests",
+    branch: "main",
+    status: "success",
+    conclusion: "success",
+    created_at: "2025-10-07T14:20:00Z",
+    updated_at: "2025-10-07T14:24:00Z",
+    duration: 240,
+    triggeredBy: "push",
+    commit_hash: "vwx2345678",
+    coverage_percent: 75,
+    triggered_by: "push"
   }
 ];
 
 export default function CIHistoryPage() {
-  const [branchFilter, setBranchFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [branch, setBranch] = useState("");
+  const [status, setStatus] = useState("all");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [page, setPage] = useState(0);
+  const pageSize = 10;
 
-  // Filter and sort workflow runs
-  const filteredRuns = useMemo(() => {
-    let filtered = mockWorkflowRuns;
+  // Filter workflow runs
+  const filtered = useMemo(() => {
+    let result = mockWorkflowRuns;
 
     // Filter by branch
-    if (branchFilter) {
-      filtered = filtered.filter(run => 
-        run.branch.toLowerCase().includes(branchFilter.toLowerCase())
+    if (branch) {
+      result = result.filter(run => 
+        run.branch.toLowerCase().includes(branch.toLowerCase())
       );
     }
 
     // Filter by status
-    if (statusFilter !== "all") {
-      filtered = filtered.filter(run => run.status === statusFilter);
+    if (status && status !== "all") {
+      result = result.filter(run => run.status === status);
+    }
+
+    // Filter by date range
+    if (startDate) {
+      result = result.filter(run => 
+        new Date(run.created_at) >= new Date(startDate)
+      );
+    }
+    if (endDate) {
+      result = result.filter(run => 
+        new Date(run.created_at) <= new Date(endDate + "T23:59:59Z")
+      );
     }
 
     // Sort by date (descending - newest first)
-    return filtered.sort((a, b) => 
+    return result.sort((a, b) => 
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
-  }, [branchFilter, statusFilter]);
+  }, [branch, status, startDate, endDate]);
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-    case "success":
-      return (
-        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-          <CheckCircle className="w-3 h-3 mr-1" />
-            Success
-        </Badge>
-      );
-    case "failure":
-      return (
-        <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
-          <XCircle className="w-3 h-3 mr-1" />
-            Failure
-        </Badge>
-      );
-    case "in_progress":
-      return (
-        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-          <Clock className="w-3 h-3 mr-1" />
-            In Progress
-        </Badge>
-      );
-    default:
-      return <Badge variant="outline">{status}</Badge>;
-    }
-  };
+  // Paginate results
+  const paginated = useMemo(() => {
+    const start = page * pageSize;
+    return filtered.slice(start, start + pageSize);
+  }, [filtered, page]);
 
-  const formatDuration = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}m ${remainingSeconds}s`;
-  };
-
-  const stats = useMemo(() => {
-    const total = mockWorkflowRuns.length;
-    const successful = mockWorkflowRuns.filter(r => r.status === "success").length;
-    const failed = mockWorkflowRuns.filter(r => r.status === "failure").length;
-    const successRate = total > 0 ? Math.round((successful / total) * 100) : 0;
-
-    return { total, successful, failed, successRate };
+  // Prepare chart data for coverage evolution
+  const chartData = useMemo(() => {
+    return mockWorkflowRuns
+      .filter(run => run.coverage_percent !== null && run.status === "success")
+      .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+      .map(run => ({
+        name: format(new Date(run.created_at), "dd/MM"),
+        coverage: run.coverage_percent
+      }));
   }, []);
+
+  // Export to CSV
+  const exportCSV = () => {
+    const headers = ["Commit", "Branch", "Status", "Coverage", "Disparado por", "Data"];
+    const rows = filtered.map(r => [
+      r.commit_hash.slice(0, 7),
+      r.branch,
+      r.status,
+      r.coverage_percent ? `${r.coverage_percent}%` : "—",
+      r.triggered_by,
+      format(new Date(r.created_at), "dd/MM/yyyy HH:mm")
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `ci-history-${format(new Date(), "yyyy-MM-dd")}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <MultiTenantWrapper>
@@ -213,160 +240,87 @@ export default function CIHistoryPage() {
         />
 
         <div className="space-y-6">
-          {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Total de Execuções
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.total}</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Sucesso
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">{stats.successful}</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Falhas
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-red-600">{stats.failed}</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Taxa de Sucesso
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-blue-600">{stats.successRate}%</div>
-              </CardContent>
-            </Card>
+          {/* Filters */}
+          <div className="flex gap-4 mb-4 items-center flex-wrap">
+            <Input 
+              type="text" 
+              placeholder="Filtrar por branch..." 
+              value={branch} 
+              onChange={(e) => setBranch(e.target.value)} 
+            />
+            <Select value={status || "all"} onValueChange={(val) => setStatus(val === "all" ? "" : val)}>
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos</SelectItem>
+                <SelectItem value="success">✅ Sucesso</SelectItem>
+                <SelectItem value="failure">❌ Falha</SelectItem>
+              </SelectContent>
+            </Select>
+            <Input 
+              type="date" 
+              value={startDate} 
+              onChange={(e) => setStartDate(e.target.value)} 
+            />
+            <Input 
+              type="date" 
+              value={endDate} 
+              onChange={(e) => setEndDate(e.target.value)} 
+            />
+            <Button onClick={exportCSV}>📤 Exportar CSV</Button>
           </div>
 
-          {/* Filters */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Filter className="w-5 h-5" />
-                Filtros
-              </CardTitle>
-              <CardDescription>
-                Filtre o histórico por branch e status
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1">
-                  <label className="text-sm font-medium mb-2 block">
-                    Branch
-                  </label>
-                  <Input
-                    placeholder="Digite o nome da branch..."
-                    value={branchFilter}
-                    onChange={(e) => setBranchFilter(e.target.value)}
-                    className="w-full"
-                  />
-                </div>
-                <div className="w-full sm:w-48">
-                  <label className="text-sm font-medium mb-2 block">
-                    Status
-                  </label>
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos</SelectItem>
-                      <SelectItem value="success">Success</SelectItem>
-                      <SelectItem value="failure">Failure</SelectItem>
-                      <SelectItem value="in_progress">Em Progresso</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+          {/* Coverage Evolution Chart */}
+          <Card className="mb-6">
+            <CardContent className="p-6">
+              <h2 className="font-semibold mb-2">📈 Evolução da Cobertura</h2>
+              <ResponsiveContainer width="100%" height={220}>
+                <LineChart data={chartData}>
+                  <XAxis dataKey="name" />
+                  <YAxis domain={[0, 100]} />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="coverage" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} />
+                </LineChart>
+              </ResponsiveContainer>
             </CardContent>
           </Card>
 
-          {/* Workflow Runs List */}
+          {/* Table */}
           <Card>
-            <CardHeader>
-              <CardTitle>Execuções do Workflow</CardTitle>
-              <CardDescription>
-                Ordenado por data (mais recente primeiro) • {filteredRuns.length} resultado(s)
-              </CardDescription>
-            </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {filteredRuns.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
-                    Nenhuma execução encontrada com os filtros aplicados.
-                  </div>
-                ) : (
-                  filteredRuns.map((run) => (
-                    <Card key={run.id} className="border-l-4" style={{
-                      borderLeftColor: run.status === "success" ? "#22c55e" : 
-                        run.status === "failure" ? "#ef4444" : "#eab308"
-                    }}>
-                      <CardContent className="p-4">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                          <div className="flex-1 space-y-2">
-                            <div className="flex items-center gap-3">
-                              <h3 className="font-semibold">{run.name}</h3>
-                              {getStatusBadge(run.status)}
-                            </div>
-                            
-                            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                              <div className="flex items-center gap-1">
-                                <GitBranch className="w-4 h-4" />
-                                <span className="font-mono">{run.branch}</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
-                                <span>
-                                  {format(new Date(run.created_at), "dd/MM/yyyy HH:mm")}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
-                                <span>{formatDuration(run.duration)}</span>
-                              </div>
-                            </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Commit</TableHead>
+                    <TableHead>Branch</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Coverage</TableHead>
+                    <TableHead>Disparado por</TableHead>
+                    <TableHead>Data</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paginated.map((r) => (
+                    <TableRow key={r.id}>
+                      <TableCell className="font-mono text-xs">{r.commit_hash.slice(0, 7)}</TableCell>
+                      <TableCell>{r.branch}</TableCell>
+                      <TableCell>
+                        <span className={`text-sm font-medium ${r.status === "success" ? "text-green-600" : "text-red-500"}`}>
+                          {r.status}
+                        </span>
+                      </TableCell>
+                      <TableCell>{r.coverage_percent ?? "—"}%</TableCell>
+                      <TableCell>{r.triggered_by}</TableCell>
+                      <TableCell>{format(new Date(r.created_at), "dd/MM/yyyy HH:mm")}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
 
-                            <div className="text-sm">
-                              <span className="text-muted-foreground">Commit:</span>{" "}
-                              <code className="bg-muted px-2 py-0.5 rounded text-xs">
-                                {run.commit.sha}
-                              </code>{" "}
-                              <span className="text-muted-foreground">-</span>{" "}
-                              {run.commit.message}
-                            </div>
-
-                            <div className="text-xs text-muted-foreground">
-                              Triggered by: {run.triggeredBy}
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))
-                )}
+              <div className="flex justify-between pt-4">
+                <Button variant="outline" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>⬅️ Anterior</Button>
+                <Button variant="outline" disabled={(page + 1) * pageSize >= filtered.length} onClick={() => setPage((p) => p + 1)}>Próxima ➡️</Button>
               </div>
             </CardContent>
           </Card>
